@@ -4,8 +4,9 @@
    "timing": {
        "totalTime": 150,
        "timeTransitions": {
-           "135": 1,
-           "30": 2,
+           "150": {"layer": 0, "displayText": "Auto"},
+           "135": {"layer": 1, "displayText": "Teleop"},
+           "30": {"layer": 1, "displayText": "Endgame"}
        }
    },
    "layout": {

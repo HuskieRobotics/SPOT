@@ -5,7 +5,7 @@ let router = express.Router();
 router.use(express.static("public"));
 
 router.get("/", (req,res) => {
-    res.render("./views/index.ejs");
+    res.render(__dirname + "/views/index.ejs");
 })
 
 router.use("/api", require("./routes/api.js"));

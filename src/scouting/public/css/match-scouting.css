@@ -1,0 +1,32 @@
+#match-scouting {
+    background-color: var(--bg, #EFEFEF);
+}
+
+#match-scouting .grid-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+
+#match-scouting .button-grid {
+    margin-top: 5vh;
+    width: 95%;
+    height: 90%;
+    display: grid;
+    grid-gap: .5vw;
+    border: 1px solid var(--light-gray);
+    border-radius: var(--border-radius, 16px);
+}
+
+#match-scouting .grid-button {
+    background-color: #757575;
+    border-radius: var(--border-radius, 16px);
+    color: var(--light-alt, #FEFEFE);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 2.5em;
+}

@@ -1,0 +1,21 @@
+:root {
+    --bg: #EFEFEF;
+    --text: #232323;
+    --bg-alt: #FEFEFE;
+    --accent: #30a2ff;
+    --light-gray: #bebebe;
+    --placeholder: #a3a3a3;
+    --border-radius: 16px;
+    --font: Cairo, sans-serif
+}
+
+.debug-switcher {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 9999;
+}
+
+* {
+    font-family: var(--font, sans-serif)
+}

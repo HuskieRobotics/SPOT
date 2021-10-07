@@ -3,10 +3,27 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width">
-    <title>repl.it</title>
-    <link href="style.css" rel="stylesheet" type="text/css" />
+    <title>Scouting</title>
+    <link rel="shortcut icon" type="image/x-icon"  href="./img/favicon.ico">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.0/css/all.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;700&family=Saira:wght@300;400;700&family=Tajawal:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="./css/global.css" rel="stylesheet" type="text/css" />
+    <link href="./css/internal.css" rel="stylesheet" type="text/css" />
   </head>
   <body>
-    <script src="script.js"></script>
+    <div class="debug-switcher">
+        <button class="landing">landing</button>
+        <button class="match-scouting">match-scouting</button>
+    </div>
+
+    <% for (let filename of pages) { %>
+        <div id=<%=filename.replace(".ejs","")%> style="display: <%= filename === landingPage + ".ejs" ? "block" : "none"%>" class="page">
+            <%- include(`pages/${filename}`) %>
+        </div>
+    <% } %>
+    <script src="./js/internal.js"></script>
+    <script src="./js/global.js"></script>
   </body>
 </html>
