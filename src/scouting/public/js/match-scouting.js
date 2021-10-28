@@ -5,6 +5,7 @@ var actionQueue = [];
     
     //initiate timing
     let time = config.timing.totalTime;
+    let timerActive = false;
     //create grid
     const grid = document.querySelector("#match-scouting .button-grid");
     grid.style.gridTemplateColumns = `repeat(${config.layout.gridColumns}, 1fr)`;
@@ -20,44 +21,75 @@ var actionQueue = [];
             button.element.addEventListener("click", () => { 
                 actionQueue.push({
                     "id": button.id,
-                    "ts": Date.now()
+                    "ts": time,
                 })
             })
         },
 
         "undo": (button) => {
-            //undo a button press that changes the action queue
-            const undoneId = actionQueue.pop().id //remove the last action from the action queue 
-            const undoneButton = buttons.find(x => x.id === undoneId);
-            for (const executable of undoneButton.executables) {
-                executable.reverse(...executable.args) //reverse any executables associated with the undone button
-            }
+            button.element.addEventListener("click", () => {
+                const undoneId = actionQueue.pop().id //remove the last action from the action queue 
+                const undoneButton = buttons.find(x => x.id === undoneId);
+
+                //special case for match-control buttons which have extra undo funcitonality without executables
+                if (undoneButton.type === "match-control") {
+                    time = config.timing.totalTime; //reset timer
+                    clearInterval(undoneButton.timerInterval); //clear the timing interval
+                    undoneButton.element.innerText = "Start Match";
+                    timerActive = false;
+                    showLayer(0);
+                }
+
+                for (const executable of undoneButton.executables) {
+                    executable.reverse(...executable.args) //reverse any executables associated with the undone button
+                }
+            })
         },
 
         "none": (button) => {
-            //do nothing
+            //add a temporary event to the action queue with no id which will be removed before the action queue is sent
+            button.element.addEventListener("click", () => { 
+                actionQueue.push({
+                    "id": button.id,
+                    "ts": time,
+                    "temp": true
+                })
+            })
         },
 
         "match-control": (button) => {
             button.element.innerText = "Start Match";
             button.element.addEventListener("click", () => {
+                if (timerActive) return;
+                
+                actionQueue.push({ //create a temporary action queue so you can undo it
+                    "id": button.id,
+                    "ts": time,
+                    "temp": true
+                })
+
                 let displayText = "";
                 const start = Date.now()
                 const transitions = Object.keys(config.timing.timeTransitions).map(x => Number(x)).sort((a,b) => b - a);
-                const timeInterval = setInterval(() => {
-                    if (time <= transitions[0]) {
+                timerActive = true;
+                button.timerInterval = setInterval(() => {
+                    if (time <= transitions[0]) { //move to the next transition if it is time
                         displayText = config.timing.timeTransitions[transitions[0]].displayText;
+                        showLayer(config.timing.timeTransitions[transitions[0]].layer)
                         transitions.shift()
                     }
                     if (time <= 0) {
-                        clearInterval(timeInterval);
+                        b.element.innerText = "Match Complete"
+                        time = 0 //make sure we dont go into negative time
+                        clearInterval(button.timerInterval); //clear the timing interval
                     }
                     time = config.timing.totalTime - (Date.now() - start);
-                    buttons.filter(x => x.type === "match-control").forEach((b) => {
+                    buttons.filter(x => x.type === "match-control").forEach((b) => { //update all match-control buttons (even those in different layers)
                         b.element.innerText = `${(time / 1000).toFixed(2)} | ${displayText}`;
                     });
                 }, 10)
-            }, {once: true})
+                console.log(button)
+            })
         }
     }
 

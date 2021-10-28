@@ -8,9 +8,9 @@ function switchPage(pageName) {
     const pages = document.body.querySelectorAll(".page")
     for (const page of pages) {
         if (page.id == pageName) {
-            page.style.display = "block"
+            page.classList.add("visible")
         } else {
-            page.style.display = "none"
+            page.classList.remove("visible")
         }
     }
 }

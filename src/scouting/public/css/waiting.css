@@ -1,0 +1,88 @@
+#waiting {
+    background-color: var(--bg);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 12px 5vh 12px;
+    line-height: 1.4;
+}
+
+
+/* scale text based on height */
+#waiting {
+    font-size: 1.2em;
+}
+
+@media screen and (min-height: 500px) {
+    #waiting {
+        font-size: 1.5em;
+    }
+}
+
+
+#waiting .title {
+    background-color: var(--bg-alt);
+    max-width: 75%;
+    padding: 0.5em calc(0.5em + var(--border-radius));
+    border-radius: 0 0 var(--border-radius) var(--border-radius);
+    text-align: center;
+}
+
+#waiting .animation {
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    margin: 1em 0;
+    user-select: none;
+    pointer-events: none;
+}
+
+#waiting .animation .gear {
+    animation: spin 3200ms ease-in-out infinite;
+    height: 100%;
+    filter: invert(1) brightness(.35) sepia(1) hue-rotate(180deg) saturate(2);
+    max-height: 500px;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg) scale(1)
+    }
+    50% {
+        transform: rotate(180deg) scale(0.9)
+        
+    }
+    100% {
+        transform: rotate(360deg) scale(1)
+    }
+}
+
+#waiting .hint {
+    width: 100%;
+    position: relative;
+    color: transparent;
+    transition: 0.2s
+}
+
+#waiting .hint .hint-text {
+    position: absolute;
+    color: black;
+    bottom: 0;
+    left: 50%;
+    transform: translate(-50%,0);
+    background-color: var(--bg-alt);
+    max-width: 75%;
+    padding: 0.5em var(--border-radius);
+    border-radius: 0 var(--border-radius);
+    text-align: center;
+    visibility: hidden;
+    transition: visibility 0.2s, opacity 0.2s;
+    opacity: 0;
+    
+}
+
+#waiting .hint .hint-text.visible {
+    visibility: unset;
+    opacity: 1;
+    transition: visibility 0s 0s, opacity 0.2s 0s;
+}

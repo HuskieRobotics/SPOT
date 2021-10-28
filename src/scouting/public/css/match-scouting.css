@@ -16,8 +16,8 @@
     height: 90%;
     display: grid;
     grid-gap: .5vw;
-    border: 1px solid var(--light-gray);
     border-radius: var(--border-radius, 16px);
+    padding: .5vmin
 }
 
 #match-scouting .grid-button {
@@ -29,4 +29,20 @@
     justify-content: center;
     align-items: center;
     font-size: 2.5em;
+    cursor: pointer;
+    user-select: none;
+    overflow: hidden;
+    box-shadow: 0 0 5px black;
+}
+#match-scouting .grid-button:active {
+    box-shadow: 0 0 7px black;
+    font-size: 2.55em
+}
+
+#match-scouting .grid-button.gray {
+    background-color: var(--gray)
+}
+
+#match-scouting .grid-button.green {
+    background-color: var(--green)
 }

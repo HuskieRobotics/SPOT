@@ -14,14 +14,15 @@
   </head>
   <body>
     <div class="debug-switcher">
-        <button class="landing">landing</button>
-        <button class="match-scouting">match-scouting</button>
+        <% for (let filename of pages) { %>
+            <button class=<%=filename.replace(".ejs","")%>>
+                <%=filename.replace(".ejs","")%>
+            </button>
+        <% } %>
     </div>
 
     <% for (let filename of pages) { %>
-        <div id=<%=filename.replace(".ejs","")%> style="display: <%= filename === landingPage + ".ejs" ? "block" : "none"%>" class="page">
-            <%- include(`pages/${filename}`) %>
-        </div>
+        <div id=<%=filename.replace(".ejs","")%> class="page <%= filename === landingPage + ".ejs" ? "visible" : ""%>"><%- include(`pages/${filename}`) %></div>
     <% } %>
     <script src="./js/internal.js"></script>
     <script src="./js/global.js"></script>

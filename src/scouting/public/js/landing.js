@@ -1,58 +1,65 @@
-// let currentUser
-// gapi.load('auth2', async () => {
-//     await gapi.auth2.init({
-//         client_id: ''
-//     })
-//     if (!gapi.getAuthInstance().isSignedIn.get()) {
-//       //if not signed in
-//     }
+const clientId = "800684505201-pfg5ddut06emg4l4ch4b8u0jco05vluh.apps.googleusercontent.com"
 
-//     gapi.signin2.render('login-btn', {
-//         'scope': 'profile email',
-//         'width': 240,
-//         'height': 50,
-//         'longtitle': true,
-//         'theme': 'dark'
-//     })
+let auth2
+let currentUser
+gapi.load('auth2', () => {
+  auth2 = gapi.auth2.init({
+    client_id: clientId
+  })
 
-//     auth2.attachClickHandler('login-btn', {})
+  auth2.then(() => {
+    if (!auth2.isSignedIn.get()) {
+    //   showFade(loginContainer)
+    //   endLoad()
+    }
+  })
 
-//     auth2.isSignedIn.listen(signinChanged)
-//     auth2.currentUser.listen(userChanged)
-// })
+  auth2.attachClickHandler(document.querySelector(".auth-buttons .google"), {})
 
-// function signinChanged(val) {
-//     if (!val) {
-//             signOut()
-//     }
-// }
+  auth2.isSignedIn.listen(signinChanged)
+  auth2.currentUser.listen(userChanged)
+})
 
-// async function signOut() {
-//     loadAround(async () => {
-//             await auth2.signOut()
-//     })
-// }
+function signinChanged(val) {
+  if (!val) {
+    signOut()
+  }
+}
 
-// async function userChanged(user) {
-//   if (auth2.isSignedIn.get() && state.mode == 0) {
-//     await loadAround(async () => {
-//       const verification = await verify(user)
-//       if (verification.status) {
-        
-//       }
-//     })
-//   }
-// }
+async function signOut() {
+  loadAround(async () => {
+    await auth2.signOut()
+    // hideFade(app)
+    // showFade(loginContainer)
+    // setState(0)
+    // setTimeout(() => {
+    //   resetApp()
+    // }, 300)
+  })
+}
 
-// async function verify(user) {
-//   const res = await fetch("/login", {
-//     method: "GET",
-//     headers: {
-//       "Content-Type": "application/json",
-//       token: user.getAuthResponse().id_token
-//     }
-//   }).then(res => res.json())
-//   return res
-// }
+async function userChanged(user) {
+  if (auth2.isSignedIn.get() && state.mode == 0) {
+    await loadAround(async () => {
+      const verification = await verify(user)
+      if (verification.status) {
+        currentUser = verification.user
+        // hideFade(loginContainer)
+        // showFade(app)
+      }
+    })
+  }
+}
+
+async function verify(user) {
+  const res = await fetch("/login", {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      token: user.getAuthResponse().id_token
+    }
+  }).then(res => res.json())
+  return res
+}
 
 // signOutBtn.addEventListener("click", signOut)

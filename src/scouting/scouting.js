@@ -9,7 +9,7 @@ router.use(express.static(__dirname + "/public"));
 router.get("/", (req,res) => {
     res.render(__dirname + "/views/index.ejs", {
         pages: fs.readdirSync(__dirname + "/views/pages"), //include all of the pages in the pages folder
-        landingPage: "landing" //the landing page of your app, the first think a user sees when they open it
+        landingPage: "landing" //the landing page of your app, the first thing a user sees when they open it
     });
 })
 
