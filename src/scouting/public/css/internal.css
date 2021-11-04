@@ -20,7 +20,7 @@ body > .page {
     position: absolute;
     width: 100%;
     height: 100vh;
-    transition: 0.2s all;
+    transition: 0.2s visibility, 0.2s opacity;
     visibility: hidden;
     overflow: hidden;
     opacity: 0;
@@ -29,5 +29,5 @@ body > .page {
 body > .page.visible {
     visibility: unset;
     opacity: 1;
-    transition: visibility 0s 0s, opacity 0.2s 0s;
+    transition: visibility 0s 0s, opacity 0.3s 0s;
 }

@@ -12,7 +12,8 @@ function shuffleArray(array) {
 function toggleHintElement(hintElement) {
     //resize hint container to be the element's height if it is active
     setTimeout(() => {
-        document.querySelector("#waiting .hint").style.height = activeHint.offsetHeight + "px";
+        document.querySelector("#waiting .hint").style.height = Math.max(activeHint.offsetHeight, document.querySelector("#waiting .hint").offsetHeight) + "px";
+        document.querySelector("#waiting").style.paddingBottom = Math.max(activeHint.offsetHeight, document.querySelector("#waiting .hint").offsetHeight) + 45 + "px";
     }, 250)
     
     //toggle the hint element's visibility
@@ -31,7 +32,15 @@ toggleHintElement(activeHint);
 //resize the hint container's height on page height change
 window.addEventListener("resize", () => {
     document.querySelector("#waiting .hint").style.height = activeHint.offsetHeight + "px";
+    console.log()
+    document.querySelector("#waiting").style.paddingBottom = activeHint.offsetHeight + 45 + "px";
 })
+
+window.addEventListener("orientationchange", function() {
+    document.querySelector("#waiting .hint").style.height = activeHint.offsetHeight + "px";
+    console.log()
+    document.querySelector("#waiting").style.paddingBottom = activeHint.offsetHeight + 45 + "px";
+}, false);
 
 //cycle through the hints
 let hintNum = 1;

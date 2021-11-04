@@ -23,6 +23,7 @@ var actionQueue = [];
                     "id": button.id,
                     "ts": time,
                 })
+                doExecutables(button)
             })
         },
 
@@ -41,8 +42,9 @@ var actionQueue = [];
                 }
 
                 for (const executable of undoneButton.executables) {
-                    executable.reverse(...executable.args) //reverse any executables associated with the undone button
+                    executables[executable.type].reverse(button,layers,...executable.args) //reverse any executables associated with the undone button
                 }
+                doExecutables(button)
             })
         },
 
@@ -54,6 +56,7 @@ var actionQueue = [];
                     "ts": time,
                     "temp": true
                 })
+                doExecutables(button)
             })
         },
 
@@ -79,7 +82,9 @@ var actionQueue = [];
                         transitions.shift()
                     }
                     if (time <= 0) {
-                        b.element.innerText = "Match Complete"
+                        buttons.filter(x => x.type === "match-control").forEach((b) => { //update all match-control buttons (even those in different layers)
+                            b.element.innerText = "Match Complete";
+                        });
                         time = 0 //make sure we dont go into negative time
                         clearInterval(button.timerInterval); //clear the timing interval
                     }
@@ -88,7 +93,6 @@ var actionQueue = [];
                         b.element.innerText = `${(time / 1000).toFixed(2)} | ${displayText}`;
                     });
                 }, 10)
-                console.log(button)
             })
         }
     }
@@ -110,7 +114,12 @@ var actionQueue = [];
         }
     }
     showLayer(0);
-    
+    function doExecutables(button) {
+        for (const executable of button.executables) {
+            console.log(executable)
+            executables[executable.type].execute(button, layers, ...executable.args);
+        }
+    }
     function showLayer(layer) {
         for (const b of buttons) {
             b.element.style.display = "none";

@@ -35,7 +35,7 @@
                "gridArea": ["3","2","4","5"],
                "class": "gray",
                "type": "action",
-               "executables": []
+               "executables": [{"type":"hide","args":[]}]
            },
            {
                "id": "undo",

@@ -1,58 +1,56 @@
-const clientId = "800684505201-pfg5ddut06emg4l4ch4b8u0jco05vluh.apps.googleusercontent.com"
+const spinner = document.querySelector("#landing .spinner-container")
 
+const clientId = "800684505201-pfg5ddut06emg4l4ch4b8u0jco05vluh.apps.googleusercontent.com"
 let auth2
 let currentUser
+
 gapi.load('auth2', () => {
-  auth2 = gapi.auth2.init({
-    client_id: clientId
-  })
+    setTimeout(() => {
+        auth2 = gapi.auth2.init({
+            client_id: clientId
+        })
 
-  auth2.then(() => {
-    if (!auth2.isSignedIn.get()) {
-    //   showFade(loginContainer)
-    //   endLoad()
-    }
-  })
+        auth2.then(() => {
+            if (!auth2.isSignedIn.get()) {
+                spinner.classList.remove("visible")
+            }
+        })
 
-  auth2.attachClickHandler(document.querySelector(".auth-buttons .google"), {})
+        auth2.attachClickHandler(document.querySelector(".auth-buttons .google"), {})
 
-  auth2.isSignedIn.listen(signinChanged)
-  auth2.currentUser.listen(userChanged)
+        auth2.isSignedIn.listen(signinChanged)
+        auth2.currentUser.listen(userChanged)
+    }, 200)
 })
 
 function signinChanged(val) {
-  if (!val) {
-    signOut()
-  }
+    if (!val) {
+        signOut()
+    }
 }
 
 async function signOut() {
-  loadAround(async () => {
     await auth2.signOut()
-    // hideFade(app)
-    // showFade(loginContainer)
-    // setState(0)
-    // setTimeout(() => {
-    //   resetApp()
-    // }, 300)
-  })
+    switchPage("landing")
+    spinner.classList.remove("visible")
 }
 
 async function userChanged(user) {
-  if (auth2.isSignedIn.get() && state.mode == 0) {
-    await loadAround(async () => {
-      const verification = await verify(user)
-      if (verification.status) {
+  if (auth2.isSignedIn.get()/* && state.mode == 0*/) {
+    const verification = await verify(user)
+    console.log(verification)
+    if (verification.status) {
         currentUser = verification.user
-        // hideFade(loginContainer)
-        // showFade(app)
-      }
-    })
+        switchPage("waiting")
+        setTimeout(() => {
+            spinner.classList.remove("visible")
+        }, 200)
+    }
   }
 }
 
 async function verify(user) {
-  const res = await fetch("/login", {
+  const res = await fetch("/auth/verify", {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -61,5 +59,9 @@ async function verify(user) {
   }).then(res => res.json())
   return res
 }
+
+document.querySelector("#landing > div.auth.landing-screen > div > div.manual").addEventListener("click", () => {
+    switchPage("form")
+})
 
 // signOutBtn.addEventListener("click", signOut)

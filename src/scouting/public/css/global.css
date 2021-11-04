@@ -10,6 +10,17 @@
     --border-radius: 16px;
     --font: Cairo, sans-serif
 }
+html {
+      overflow: hidden;
+      height: 100%;
+      position: fixed;
+}
+
+body {
+    overflow: auto;
+    height: 100%;
+    position: relative;
+}
 
 .debug-switcher {
     position: absolute;
