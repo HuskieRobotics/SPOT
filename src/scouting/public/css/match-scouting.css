@@ -28,7 +28,9 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    font-size: 2.5em;
+    font-size: 4.5vw;
+    line-height: 5vw;
+    text-align: center;
     cursor: pointer;
     user-select: none;
     overflow: hidden;
