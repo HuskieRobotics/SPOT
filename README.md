@@ -1,7 +1,7 @@
-# ScoutingCore
-ScoutingCore is an open source modular scouting app framework developed by Team 3061 Huskie Robotics. ScoutingCore provides a simple platform upon which a team can build a scouting app with little to no prior experience.
+# SPOT
+SPOT (Scouting Platforms On Time) is an open source modular scouting app framework developed by Team 3061 Huskie Robotics. SPOT provides a simple platform upon which a team can build a scouting app with little to no prior experience.
 
-ScoutingCore is built with HTML, JS, CSS, and Node.js and operates with a MongoDB database.
+SPOT is built with HTML, JS, CSS, and Node.js and operates with a MongoDB database.
 
 
 ## Features

@@ -1,5 +1,5 @@
 {
-  "name": "scoutingcore",
+  "name": "spot",
   "version": "1.0.0",
   "description": "",
   "main": "./src/app.js",
@@ -8,14 +8,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/HuskieRobotics/ScoutingCore.git"
+    "url": "git+https://github.com/HuskieRobotics/spot.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/HuskieRobotics/ScoutingCore/issues"
+    "url": "https://github.com/HuskieRobotics/spot/issues"
   },
-  "homepage": "https://github.com/HuskieRobotics/ScoutingCore#readme",
+  "homepage": "https://github.com/HuskieRobotics/spot#readme",
   "dependencies": {
     "body-parser": "^1.19.0",
     "dotenv": "^10.0.0",
