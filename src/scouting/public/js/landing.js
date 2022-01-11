@@ -9,14 +9,19 @@ gapi.load('auth2', () => {
         auth2 = gapi.auth2.init({
             client_id: clientId
         })
+        
 
         auth2.then(() => {
             if (!auth2.isSignedIn.get()) {
+                auth2.attachClickHandler(document.querySelector(".auth-buttons .google"), {})
                 spinner.classList.remove("visible")
             }
+        }).catch(() => {
+            document.querySelector(".auth-buttons .google").classList.remove("active")
+            spinner.classList.remove("visible")
         })
 
-        auth2.attachClickHandler(document.querySelector(".auth-buttons .google"), {})
+        
 
         auth2.isSignedIn.listen(signinChanged)
         auth2.currentUser.listen(userChanged)

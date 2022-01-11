@@ -94,7 +94,7 @@
 }
 
 #landing .auth-buttons > div {
-    border: 2px solid var(--accent);
+    border: 2px solid var(--light-gray);
     border-radius: var(--border-radius, 16px);
     background-color: var(--bg-alt);
     width: 100%;
@@ -102,6 +102,9 @@
     margin-bottom: 10px;
 }
 
+#landing .auth-buttons > div.active {
+    border: 2px solid var(--accent);
+}
 
 
 #landing .auth-buttons > div,  #landing .auth-buttons > div * {
@@ -111,23 +114,31 @@
 
 #landing .auth-buttons > div > i {
     color: var(--bg-alt, #FEFEFE);
-    background-color: #30a2ff;
+    background-color: var(--light-gray);
     font-size: 1.75em;
     padding: 14px;
     border-radius: 12px 0 0 12px;
     margin-right: 10px;
 }
 
+#landing .auth-buttons > div.active > i {
+    background-color: #30a2ff;
+}
+
 #landing .auth-buttons > div > span {
-    color: var(--text, #bebebe);
+    color: var(--gray, #bebebe);
     font-size: 1.75em;
     line-height: 0;
 }
 
-#landing .auth-buttons > div:hover > span {
+#landing .auth-buttons > div.active > span {
+    color: var(--text, #bebebe);
+}
+
+#landing .auth-buttons > div.active:hover > span {
     color: var(--bg-alt);
 }
 
-#landing .auth-buttons > div:hover {
+#landing .auth-buttons > div.active:hover {
     background-color: var(--accent);
 }
