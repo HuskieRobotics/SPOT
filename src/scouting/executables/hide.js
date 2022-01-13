@@ -8,6 +8,7 @@ executables["hide"] = {
     },
     reverse(button) {
         //when the button is undone, do this. This should undo EVERYTHING done by execute
-        button.element.style.display = "block"
+        console.log(button)
+        button.element.style.display = "flex"
     }
 }
