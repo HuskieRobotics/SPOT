@@ -4,6 +4,7 @@
   "description": "",
   "main": "./src/app.js",
   "scripts": {
+    "start": "node src/app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -26,6 +27,7 @@
     "google-auth-library": "^7.10.2",
     "jsdoc": "^3.6.7",
     "mongoose": "^6.0.6",
-    "nodemon": "^2.0.12"
+    "nodemon": "^2.0.15",
+    "socket.io": "^4.4.1"
   }
 }

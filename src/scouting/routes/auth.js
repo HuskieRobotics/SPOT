@@ -1,6 +1,5 @@
-const clientId = "800684505201-pfg5ddut06emg4l4ch4b8u0jco05vluh.apps.googleusercontent.com"
 const {OAuth2Client} = require('google-auth-library')
-const oAuth2Client = new OAuth2Client(clientId)
+const oAuth2Client = new OAuth2Client(process.env.CLIENT_ID)
 const { Router } = require("express");
 
 let router = Router();

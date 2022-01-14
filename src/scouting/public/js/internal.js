@@ -3,6 +3,7 @@
                EVERYTHING HERE IS VERY IMPORTANT
 DO NOT REMOVE OR MODIFY ANYTHING UNLESS YOU KNOW WHAT YOU'RE DOING
 *****************************************************************/
+let config = fetch(`/config.json`).then(res => res.json());
 
 function switchPage(pageName) {
     const pages = document.body.querySelectorAll(".page")

@@ -41,11 +41,12 @@ async function signOut() {
 }
 
 async function userChanged(user) {
-  if (auth2.isSignedIn.get()/* && state.mode == 0*/) {
+  if (auth2.isSignedIn.get()) {
     const verification = await verify(user)
     console.log(verification)
     if (verification.status) {
         currentUser = verification.user
+        //TODO: update ScoutingSync.scouterId
         switchPage("waiting")
         setTimeout(() => {
             spinner.classList.remove("visible")

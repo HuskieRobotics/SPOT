@@ -4,7 +4,6 @@
 
 #match-scouting .grid-container {
     display: flex;
-    align-items: center;
     justify-content: center;
     width: 100%;
     height: 100%;
@@ -12,10 +11,10 @@
 
 #match-scouting .button-grid {
     margin-top: 5vh;
-    width: 95%;
-    height: 90%;
+    width: 99%;
+    height: 94%;
     display: grid;
-    grid-gap: .5vw;
+    grid-gap: .75vw;
     border-radius: var(--border-radius, 16px);
     padding: .5vmin
 }
@@ -28,8 +27,8 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    font-size: 4.5vw;
-    line-height: 5vw;
+    font-size: 3.2vw;
+    line-height: 3.5vw;
     text-align: center;
     cursor: pointer;
     user-select: none;
@@ -38,7 +37,7 @@
 }
 #match-scouting .grid-button:active {
     box-shadow: 0 0 7px black;
-    font-size: 2.55em
+    font-size: 3.3vw;
 }
 
 #match-scouting .grid-button.gray {

@@ -27,7 +27,7 @@
                     "id": "startGame",
                     "displayText": "Start",
                     "gridArea": ["1", "2", "2", "5"],
-                    "class": "gray",
+                    "class": "gray timer",
                     "type": "match-control",
                     "executables": []
                 }
@@ -37,7 +37,7 @@
                     "id": "startGame",
                     "displayText": "Start",
                     "gridArea": ["1", "2", "2", "5"],
-                    "class": "gray",
+                    "class": "gray timer",
                     "type": "match-control",
                     "executables": []
                 },
@@ -45,7 +45,7 @@
                     "id": "leaveTarmac",
                     "displayText": "Leave Tarmac Zone",
                     "gridArea": ["3", "2", "4", "5"],
-                    "class": "gray",
+                    "class": "gray largeAction",
                     "type": "action",
                     "executables": [{"type": "hide", "args": []}]
                 },
