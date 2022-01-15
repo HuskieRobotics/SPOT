@@ -43,14 +43,23 @@ class ScoutingSync {
             console.log("State Update:", stateUpdate)
             ScoutingSync.updateState(stateUpdate)  
         })
+
+        ScoutingSync.socket.on("syncRequest", () => {
+            ScoutingSync.sync()
+        })
     }
 
     static updateState(stateUpdate) {
         Object.assign(ScoutingSync.state, stateUpdate)
     }
 
-    static uploadMatchTeamPerformance(matchTeamPerformance) {
+    static async sync() {
+        const teamMatchPerformances = await LocalData.getAllTeamMatchPerformances()
+        const teamMatchPerformanceIds = teamMatchPerformances.map(teamMatchPerformance => teamMatchPerformance.matchId)
 
+        ScoutingSync.socket.emit("syncData", teamMatchPerformanceIds, (requestedTeamMatchPerformanceIds) => {
+            ScoutingSync.socket.emit("teamMatchPerformances", teamMatchPerformances.filter(teamMatchPerformance => requestedTeamMatchPerformanceIds.includes(teamMatchPerformance.matchId)))
+        })
     }
 }
 

@@ -97,13 +97,27 @@ class Scouter {
             this.state = Object.assign(this.state, stateUpdate);
         })
 
-        this.socket.on("matchTeamPerformance", (matchTeamPerformance) => {
-            TeamMatchPerformance.create(matchTeamPerformance);
+        this.socket.on("teamMatchPerformances", (teamMatchPerformances) => {
+            TeamMatchPerformance.create(teamMatchPerformances);
+        })
+
+        this.socket.on("syncData", async (clientTeamMatchPerformanceIds, requestTeamMatchPerformances) => {
+            const serverTeamMatchPerformanceIds = (await TeamMatchPerformance.find()).map(teamMatchPerformance => teamMatchPerformance.matchId)
+            requestTeamMatchPerformances(clientTeamMatchPerformanceIds.filter(clientTeamMatchPerformanceId => !serverTeamMatchPerformanceIds.includes(clientTeamMatchPerformanceId)))
+        })
+
+        this.socket.on("clearData", async () => {
+            await TeamMatchPerformance.deleteMany()
+            console.log("all data cleared")
         })
     }
 
     updateState(stateUpdate) {
         this.state = Object.assign(this.state, stateUpdate);
         this.socket.emit("updateState", stateUpdate);
+    }
+
+    sync() {
+        this.socket.emit("syncRequest")
     }
 }

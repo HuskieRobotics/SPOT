@@ -28,20 +28,42 @@ class LocalData {
             let objectStore
             if (!LocalData.db.objectStoreNames.contains(LocalData.dbName)) {
                 objectStore = LocalData.db.createObjectStore(LocalData.dbName, { keyPath: "matchId" });
-                // objectStore.createIndex('matchTeamPerformance', 'matchTeamPerformance', { unique: false });
+                // objectStore.createIndex('teamMatchPerformance', 'teamMatchPerformance', { unique: false });
             } else {
                 objectStore = LocalData.db.transaction(LocalData.dbName, 'readwrite').objectStore(LocalData.dbName);
             }
         } 
     }
 
-    static storeMatchTeamPerformance(matchTeamPerformance) {
-        let objectStore = LocalData.db.transaction(LocalData.dbName, "readwrite").objectStore(LocalData.dbName)
-        console.log(matchTeamPerformance)
-        let request = objectStore.add(matchTeamPerformance)
+    static async getAllTeamMatchPerformances() {
+        return await new Promise(async resolve => {
+            let objectStore = LocalData.db.transaction(LocalData.dbName, "readwrite").objectStore(LocalData.dbName)
+            const request = await objectStore.getAll()
+            
+            request.onsuccess = () => {
+                resolve(request.result)
+            }
+        })
+    }
 
-        request.onsuccess = () => {
-            console.log("IndexedDB add success")
+    static async storeTeamMatchPerformance(teamMatchPerformance) {
+        //Sync with local
+        const storedMatchIds = (await LocalData.getAllTeamMatchPerformances()).map(teamMatchPerformance => teamMatchPerformance.matchId)
+        let objectStore = LocalData.db.transaction(LocalData.dbName, "readwrite").objectStore(LocalData.dbName)
+
+        if (!storedMatchIds.includes(teamMatchPerformance.matchId)) {
+            await new Promise(resolve => {
+                let addRequest = objectStore.add(teamMatchPerformance)
+
+                addRequest.onsuccess = () => {
+                    resolve()
+                }
+
+                addRequest.onerror = function(event) {
+                    console.log("IndexedDB Error:", addRequest.error.name)
+                    resolve()
+                }
+            })
         }
     }
 }
