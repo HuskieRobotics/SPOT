@@ -63,11 +63,12 @@ let devEnd
 
         "match-control": (button) => {
             button.element.innerText = "Start Match";
-            button.element.addEventListener("click", () => {
+            button.element.addEventListener("click", async () => {
                 // Handle click after timer runs out
                 if (time <= 0) {
                     console.log("submitting")
-                    LocalData.storeMatchTeamPerformance(new MatchTeamPerformance(actionQueue).data)
+                    await LocalData.storeTeamMatchPerformance(new TeamMatchPerformance(actionQueue).data)
+                    ScoutingSync.sync()
                 }
                 
                 if (timerActive) return;
@@ -146,7 +147,7 @@ let devEnd
     }
 
     // DATA
-    class MatchTeamPerformance {
+    class TeamMatchPerformance {
         data;
 
         constructor(actionQueue) {
