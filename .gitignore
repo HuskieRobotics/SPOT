@@ -1,3 +1,6 @@
+#gitpod files
+.gitpod.yml
+
 #replit files
 .replit
 .breakpoints
