@@ -133,3 +133,38 @@ function showFade(element) {
 function hideFade(element) {
   element.classList.remove("visible")
 }
+
+class Popup {
+  static types = {
+    "error": {
+      "prefix": "Error: ",
+      "color": "var(--error)"
+    },
+
+    "notice": {
+      "prefix": "",
+      "color": "var(--accent)"
+    },
+
+    "success": {
+      "prefix": "",
+      "color": "var(--green)"
+    },
+  }
+
+  constructor(type, text, duration=5000) {
+    const popupElement = document.createElement("p")
+    popupElement.classList = "popup"
+    popupElement.style.backgroundColor = Popup.types[type].color
+    popupElement.innerText = Popup.types[type].prefix + text
+    document.body.appendChild(popupElement)
+    popupElement.offsetHeight
+    popupElement.style.top = "55px"
+    setTimeout(() => {
+      popupElement.style.top = "0"
+      setTimeout(() => {
+        document.body.removeChild(popupElement)
+      }, 600)
+    }, duration)
+  }
+}
