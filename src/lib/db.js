@@ -17,7 +17,10 @@ const teamMatchPerformanceSchema = new mongoose.Schema({
     serverVersion: String,
     scouterId: String,
     teamNumber: String,
+    matchNumber: String,
+    eventNumber: Number,
     matchId: String,
+    matchId_rand: String,
     actionQueue: [
         {
             id: String, //button id

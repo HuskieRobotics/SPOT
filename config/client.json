@@ -18,6 +18,12 @@
             }
         }
     },
+    "qrConfig": {
+        "ACTION_SCHEMA": [
+            {"key": "id", "bits": 8},
+            {"key": "ts", "bits": 8}
+        ]
+    },
     "layout": {
         "gridRows": 5,
         "gridColumns": 5,

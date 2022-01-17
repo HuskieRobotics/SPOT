@@ -31,3 +31,29 @@ body > .page.visible {
     opacity: 1;
     transition: visibility 0s 0s, opacity 0.3s 0s;
 }
+
+.qr-container {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100vh;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 69;
+}
+
+.qr-img {
+    width: 100vmin;
+    image-rendering: pixelated;
+}
+
+.qr-text {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translate(-50%,0)
+}

@@ -43,8 +43,6 @@ class ScoutingSync {
         io.on("connection", (socket) => {
             ScoutingSync.scouters.push(new Scouter(socket));
         })
-        
-        setInterval(() => ScoutingSync.assignScouters(), 5000); //assign scouters every 5 seconds
     }
     static assignScouters() {
         let nextRobots = new Set(ScoutingSync.match.robots.red.concat(ScoutingSync.match.robots.blue)); //the robots that are next in line to be assigned to scouters
@@ -91,10 +89,13 @@ class Scouter {
 
         this.socket.on("disconnect", () => {
             this.updateState({connected: false}); //the scouter should probably get killed here
+            ScoutingSync.assignScouters(); //reassign scouters, this matters if there are two scouters on one robot and a scouter scouting 1 robot leaves
         })
 
         this.socket.on("updateState", (stateUpdate) => {
+            let oldStatus = this.state.status;
             this.state = Object.assign(this.state, stateUpdate);
+            if (oldStatus != ScoutingSync.SCOUTER_STATUS.WAITING && this.state.status == ScoutingSync.SCOUTER_STATUS.WAITING) ScoutingSync.assignScouters(); //reassign scouters when someone starts waiting
         })
 
         this.socket.on("matchTeamPerformance", (matchTeamPerformance) => {
