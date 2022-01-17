@@ -152,11 +152,12 @@ let devEnd
 
         constructor(actionQueue) {
             this.data = {
-                matchId: `${ScoutingSync.state.matchNumber}-${ScoutingSync.state.robotNumber}-${ScoutingSync.state.scouterId}-${Math.random().toString(36).slice(-6)}`,
+                matchId: `${ScoutingSync.state.matchNumber}-${ScoutingSync.state.robotNumber}-${ScoutingSync.state.scouterId}-${Math.floor((Math.random() * 2 ** 32))}`,
                 timestamp: Date.now(),
                 clientVersion: config.version,
                 scouterId: ScoutingSync.state.scouterId, // from scouting-sync.js
                 robotNumber: ScoutingSync.state.robotNumber, // from scouting-sync.js
+                matchNumber: ScoutingSync.state.matchNumber,
                 actionQueue: actionQueue
             }
         }

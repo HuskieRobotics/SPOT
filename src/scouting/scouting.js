@@ -6,6 +6,10 @@ let router = express.Router();
 
 router.use(express.static(__dirname + "/public"));
 
+router.get("/build/qrcode.js", (req,res) => {
+    res.sendFile(path.resolve(__dirname, "../../node_modules/qrcode/build/qrcode.js"));
+})
+
 router.get("/", (req,res) => {
     res.render(__dirname + "/views/index.ejs", {
         pages: fs.readdirSync(__dirname + "/views/pages"), //include all of the pages in the pages folder
