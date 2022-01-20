@@ -14,7 +14,6 @@ db.once('open', function() {
 const teamMatchPerformanceSchema = new mongoose.Schema({
     timestamp: Number,
     clientVersion: String,
-    serverVersion: String,
     scouterId: String,
     robotNumber: Number,
     matchNumber: Number,

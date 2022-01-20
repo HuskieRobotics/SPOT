@@ -123,7 +123,6 @@ async function decodeQRCodeUrl(image_url) {
     let teamMatchPerformance = {
         timestamp: Date.now(),
         clientVersion: `${parseInt(matchInfo.slice(0,8),2)}.${parseInt(matchInfo.slice(8,16),2)}`, //major.minor
-        serverVersion: "qrcode",
         scouterId: "qrcode",
         eventNumber: parseInt(bits.slice(16,24),2),
         matchNumber: String(parseInt(bits.slice(24,32),2)),
