@@ -43,7 +43,7 @@ class QREncoder {
         out += QREncoder.encodeValue(minorVersion, 255, 0, 8); // minor version (8 bits)
         out += QREncoder.encodeValue(teamMatchPerformance.eventNumber, 255, 0, 8) //event number (8 bits)
         out += QREncoder.encodeValue(parseInt(teamMatchPerformance.matchNumber), 255, 0, 8) // match number (8 bits)
-        out += QREncoder.encodeValue(parseInt(teamMatchPerformance.teamNumber), 65535, 0, 16) // team number (16 bits)
+        out += QREncoder.encodeValue(parseInt(teamMatchPerformance.robotNumber), 65535, 0, 16) // team number (16 bits)
         out += QREncoder.encodeValue(parseInt(teamMatchPerformance.matchId_rand,"32"),2 ** 32 - 1, 0, 32); // matchId_rand (32 bits)
         
         /****** Action Queue ******/
@@ -127,11 +127,11 @@ async function decodeQRCodeUrl(image_url) {
         scouterId: "qrcode",
         eventNumber: parseInt(bits.slice(16,24),2),
         matchNumber: String(parseInt(bits.slice(24,32),2)),
-        teamNumber: String(parseInt(bits.slice(32,48),2)),
+        robotNumber: String(parseInt(bits.slice(32,48),2)),
         matchId_rand: parseInt(bits.slice(48,80),2).toString(32),
         actionQueue: []
     };
-    teamMatchPerformance.matchId = `${teamMatchPerformance.eventNumber}-${teamMatchPerformance.matchNumber}-${teamMatchPerformance.teamNumber}-${teamMatchPerformance.matchId_rand}`;
+    teamMatchPerformance.matchId = `${teamMatchPerformance.eventNumber}-${teamMatchPerformance.matchNumber}-${teamMatchPerformance.robotNumber}-${teamMatchPerformance.matchId_rand}`;
     
     let actionSize = ACTION_SCHEMA.reduce((acc,x) => acc+x.bits, 0);
     
