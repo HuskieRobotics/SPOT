@@ -1,0 +1,10 @@
+#header {
+    position: fixed;
+    height: 10vh;
+    width: 100%;
+    top: 0;
+    left: 0;
+    background: var(--theme-orange);
+    z-index: 2;
+    border-bottom: 0.25vh solid white;
+  }

@@ -1,0 +1,33 @@
+/*****************************************************************
+                        !!!WARNING!!!
+               EVERYTHING HERE IS VERY IMPORTANT
+DO NOT REMOVE OR MODIFY ANYTHING UNLESS YOU KNOW WHAT YOU'RE DOING
+*****************************************************************/
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+}
+
+html {
+    height: 100%;
+    width: 100%;
+}
+
+body > .page {
+    position: absolute;
+    width: 100%;
+    height: 100vh;
+    transition: 0.2s visibility, 0.2s opacity;
+    visibility: hidden;
+    overflow: hidden;
+    opacity: 0;
+}
+
+body > .page.visible {
+    visibility: unset;
+    opacity: 1;
+    transition: visibility 0s 0s, opacity 0.3s 0s;
+}

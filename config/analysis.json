@@ -1,0 +1,18 @@
+[
+    {
+        "type": "team",
+        "name": "countActionIds",
+        "outputPath": "counts",
+        "options": {"all": true}
+    },
+    {
+        "type": "team",
+        "name": "ratio",
+        "outputPath": "accuracy",
+        "options": {
+            "numerator": ["counts.lowerHub","counts.upperHub"],
+            "denominator": ["counts.lowerHub","counts.upperHub","miss"],
+            "divByZero": 0
+        }
+    }
+]

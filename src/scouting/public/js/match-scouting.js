@@ -152,7 +152,7 @@ let devEnd
         constructor(actionQueue) {
             filteredActionQueue = actionQueue.filter(action=>!action.temp);
             this.data = {
-                matchId: `${ScoutingSync.state.matchNumber}-${ScoutingSync.state.robotNumber}-${ScoutingSync.state.scouterId}-${Math.floor((Math.random() * 2 ** 32))}`,
+                matchId: `${ScoutingSync.state.matchNumber}-${ScoutingSync.state.robotNumber}-${ScoutingSync.state.scouterId}-${Math.floor((Math.random() * 2 ** 32)).toString(32)}`,
                 timestamp: Date.now(),
                 clientVersion: config.version,
                 scouterId: ScoutingSync.state.scouterId, // from scouting-sync.js
