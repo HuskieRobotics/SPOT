@@ -1,7 +1,41 @@
 [
     {
+        "type": "tmp",
+        "name": "cycle",
+        "outputPath": "cycle",
+        "options": {
+            "pickups": ["groundPickup","terminalPickup"],
+            "scores": ["upperHub","lowerHub"],
+            "misses": ["miss"]
+        }
+    },
+    {
         "type": "team",
-        "name": "countActionIds",
+        "name": "aggregateArray",
+        "outputPath": "cycle.all",
+        "options": {
+            "path": "cycle.all"
+        }
+    },
+    {
+        "type": "team",
+        "name": "average",
+        "outputPath": "cycle.averageTime",
+        "options": {
+            "path": "cycle.averageTime"
+        }
+    },
+    {
+        "type": "team",
+        "name": "average",
+        "outputPath": "cycle.averageTimeComplete",
+        "options": {
+            "path": "cycle.averageTimeComplete"
+        }
+    },
+    {
+        "type": "team",
+        "name": "countActions",
         "outputPath": "counts",
         "options": {"all": true}
     },
@@ -11,8 +45,16 @@
         "outputPath": "accuracy",
         "options": {
             "numerator": ["counts.lowerHub","counts.upperHub"],
-            "denominator": ["counts.lowerHub","counts.upperHub","miss"],
+            "denominator": ["counts.lowerHub","counts.upperHub","counts.miss"],
             "divByZero": 0
+        }
+    },
+    {
+        "type": "team",
+        "name": "sum",
+        "outputPath": "scoreCount",
+        "options": {
+            "addends": ["counts.upperHub","counts.lowerHub"]
         }
     }
 ]

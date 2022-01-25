@@ -27,8 +27,6 @@ for (let executableFile of fs.readdirSync(__dirname + "/transformers")) {
             throw new Error(`${transformers.team.name} - transformer name duplicated! Transformer names must be unique.\nOther transformers loaded: [${Object.keys(transformers.tmp)}]`);
         transformers.team[transformer.team.name] = transformer.team;
     }
-
-    console.log(`${transformer.team.name} - finished!`)
 }
 console.log("loaded all transformers!");
 console.log(transformers);
@@ -36,7 +34,7 @@ console.log(transformers);
 
 async function execute() {
     /* get tmps from database */
-    let dataset = new Dataset(await TeamMatchPerformance.find());
+    let dataset = new Dataset((await TeamMatchPerformance.find()).map((o) => o.toObject()));
     
     for (let tfConfig of pipelineConfig) {
         console.log(`running ${tfConfig.name}...`)

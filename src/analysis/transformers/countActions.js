@@ -8,7 +8,7 @@ module.exports = {
     /**
      * @type {DataTransformer}
      */
-    tmp: new DataTransformer("countActionIds",(dataset,outputPath,options) => { //options {all: Boolean, ids: String[]}
+    tmp: new DataTransformer("countActions",(dataset,outputPath,options) => { //options {all: Boolean, ids: String[]}
         /* find which action ids should be counted */
         if (!options) throw new Error("no options provided! Please provide an array of ids or set all to true")
         let countedIds = options.ids;
@@ -31,7 +31,7 @@ module.exports = {
         }
         return dataset;
     }),
-    team: new DataTransformer("countActionIds",(dataset,outputPath,options) => {
+    team: new DataTransformer("countActions",(dataset,outputPath,options) => {
         /* find which action ids should be counted */
         if (!options) throw new Error("no options provided! Please provide an array of ids or set all to true")
         let countedIds = options.ids;
