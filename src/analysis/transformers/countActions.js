@@ -1,6 +1,6 @@
 const config = require("../../../config/client.json");
 const { setPath } = require("../../lib/util");
-const {DataTransformer,Dataset} = require("../DataTransformer");
+const {DataTransformer} = require("../DataTransformer");
 
 const actionIds = config.layout.layers.flat().reduce((acc,button) => acc.includes(button.id) ? acc : acc.concat(button.id), []); //get list of unique actionIds from the buttons in config.json
 
