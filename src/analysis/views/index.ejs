@@ -5,7 +5,7 @@
     <meta name='viewport' content='width=device-width, initial-scale=1, user-scalable=no, viewport-fit=cover'>
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>Scouting</title>
+    <title>SPOT - Analysis</title>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.0/css/all.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -33,11 +33,43 @@
     <script src="/socket.io/socket.io.js"></script>
   </head>
   <body>
-    <div id="header">
-      <img src="/analysis/logo.png" id="logo">
-      <div id="search" class="autoCompleteWrapper" options="3061;qf1;qf2;111;213;qf213;all"></div>
-      <span id="search-icon">&#9906;</span>
+    <div id="loading-bar-container">
+      <div id="loading-bar"></div>
     </div>
+
+    <img id="spinner" src="./img/spinner.svg">
+
+
+    <div id="app">
+      <div id="logo">
+        <img src="./img/logo.png" id="logo-img">
+        <div id="logo-text">SPOT</div>
+      </div>
+
+      <div id="sidebar">
+        <div id="search-container">
+          <div id="search">
+            <input placeholder="Team" id="search-input" />
+            <i id="search-icon" class="fa fa-search"></i>
+          </div>
+        </div>
+
+        <div id="team-list">
+          
+        </div>
+      </div> 
+
+      <div id="header">
+        
+      </div>
+
+      <div id="dashboard">
+
+      </div>
+    </div>
+    <script src="./js/elements.js"></script>
+    <script src="./js/ui.js"></script>
+    <script src="https://cdn.plot.ly/plotly-2.8.3.min.js"></script>
     <script src="./js/script.js"></script>
   </body>
 </html>

@@ -98,7 +98,7 @@
     border-radius: var(--border-radius, 16px);
     background-color: var(--bg-alt);
     width: 100%;
-    padding-right: 20px;
+    padding: 2px 20px 2px 2px;
     margin-bottom: 10px;
 }
 

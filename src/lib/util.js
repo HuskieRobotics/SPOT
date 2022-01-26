@@ -8,7 +8,7 @@ class ThrowError {} //this is probably not best practice, I tried to find a bett
  * @returns 
  */
 function getPath(obj,path,ifnone=ThrowError) {
-    if (!obj) {  
+    if (typeof obj === "undefined") {  
         if (ifnone == ThrowError)  {
             throw new Error("path not traversable!");
         } else {  

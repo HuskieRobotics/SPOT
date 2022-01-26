@@ -1,0 +1,6 @@
+const spinner = document.getElementById("spinner")
+const app = document.getElementById("app")
+const loadingBar = document.getElementById("loading-bar")
+const header = document.getElementById("header")
+const sidebar = document.getElementById("sidebar")
+const teamList = document.getElementById("team-list")

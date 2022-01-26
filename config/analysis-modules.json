@@ -1,0 +1,61 @@
+[
+    {
+        "type": "team",
+        "module": "stats",
+        "options": {
+            "list": {
+                "Average Cycle Time": {
+                    "path": "cycle.averageTime",
+                    "multiplier": 1000,
+                    "decimals": 2
+                },
+                "Average Completed Cycle Time": {
+                    "path": "cycle.averageTimeComplete",
+                    "multiplier": 1000,
+                    "decimals": 2
+                },
+                "Average Accuracy": {
+                    "path": "accuracy",
+                    "multiplier": 100,
+                    "decimals": 1
+                },
+                "Average Scores": {
+                    "path": "scoreCount"
+                }
+            }
+        }
+    },
+    {
+        "type": "team",
+        "module": "bar",
+        "name": "Shot Distribution",
+        "options": {
+            "bars": {
+                "Upper Hub": {
+                    "path": "counts.upperHub"
+                },
+                "Lower Hub": {
+                    "path": "counts.upperHub"
+                },
+                "Miss": {
+                    "path": "counts.miss"
+                }
+            }
+        }
+    },
+    {
+        "type": "team",
+        "module": "pie",
+        "name": "Pickup Distribution",
+        "options": {
+            "slices": {
+                "Ground": {
+                    "path": "counts.groundPickup"
+                },
+                "Terminal": {
+                    "path": "counts.terminalPickup"
+                }
+            }
+        }
+    }
+]

@@ -34,10 +34,50 @@
         }
     },
     {
-        "type": "team",
+        "type": "tmp",
         "name": "countActions",
         "outputPath": "counts",
         "options": {"all": true}
+    },
+    {
+        "type": "team",
+        "name": "average",
+        "outputPath": "counts.upperHub",
+        "options": {
+            "path": "counts.upperHub"
+        }
+    },
+    {
+        "type": "team",
+        "name": "average",
+        "outputPath": "counts.lowerHub",
+        "options": {
+            "path": "counts.lowerHub"
+        }
+    },
+    {
+        "type": "team",
+        "name": "average",
+        "outputPath": "counts.groundPickup",
+        "options": {
+            "path": "counts.groundPickup"
+        }
+    },
+    {
+        "type": "team",
+        "name": "average",
+        "outputPath": "counts.terminalPickup",
+        "options": {
+            "path": "counts.terminalPickup"
+        }
+    },
+    {
+        "type": "team",
+        "name": "average",
+        "outputPath": "counts.miss",
+        "options": {
+            "path": "counts.miss"
+        }
     },
     {
         "type": "team",

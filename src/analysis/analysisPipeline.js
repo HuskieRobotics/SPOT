@@ -34,7 +34,7 @@ console.log(transformers);
 
 async function execute(dataset) {
     /* get tmps from database */
-    let dataset = new Dataset((await TeamMatchPerformance.find()).map((o) => o.toObject()));
+    dataset = new Dataset((await TeamMatchPerformance.find()).map((o) => o.toObject()));
     
     for (let tfConfig of pipelineConfig) {
         console.log(`running ${tfConfig.name}...`)
@@ -45,4 +45,6 @@ async function execute(dataset) {
     return dataset
 }
 
-(async () => console.log((await execute()).teams["3061"] ) )();
+module.exports = execute
+
+// (async () => console.log((await execute()).teams["3061"] ) )();
