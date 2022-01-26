@@ -2,6 +2,8 @@
     {
         "type": "team",
         "module": "stats",
+        "position": "side",
+        "name": "Team Stats",
         "options": {
             "list": {
                 "Average Cycle Time": {
@@ -28,6 +30,7 @@
     {
         "type": "team",
         "module": "bar",
+        "position": "main",
         "name": "Shot Distribution",
         "options": {
             "bars": {
@@ -46,6 +49,7 @@
     {
         "type": "team",
         "module": "pie",
+        "position": "main",
         "name": "Pickup Distribution",
         "options": {
             "slices": {

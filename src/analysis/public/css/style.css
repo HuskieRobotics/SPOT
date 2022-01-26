@@ -42,6 +42,26 @@ body {
   grid-area: 2 / 2 / 4 / 4;
 }
 
+#team-view {
+  height: 100%;
+  width: 100%;
+  display: grid;
+  grid-template-rows: 1fr;
+  grid-template-columns: 1fr;
+}
+
+#team-view.side-enabled {
+  grid-template-columns: 7fr 3fr;
+}
+
+#main-list {
+  grid-area: 1 / 1 / 2 / 2;
+}
+
+#side-list {
+  grid-area: 1 / 2 / 2 / 3;
+}
+
 #logo {
   height: 100%;
   width: 100%;

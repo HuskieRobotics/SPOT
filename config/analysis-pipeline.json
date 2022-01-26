@@ -41,8 +41,14 @@
     },
     {
         "type": "team",
+        "name": "countActions",
+        "outputPath": "counts",
+        "options": {"all": true}
+    },
+    {
+        "type": "team",
         "name": "average",
-        "outputPath": "counts.upperHub",
+        "outputPath": "averages.upperHub",
         "options": {
             "path": "counts.upperHub"
         }
@@ -50,15 +56,15 @@
     {
         "type": "team",
         "name": "average",
-        "outputPath": "counts.lowerHub",
+        "outputPath": "averages.lowerHub",
         "options": {
-            "path": "counts.lowerHub"
+            "path": "counts.upperHub"
         }
     },
     {
         "type": "team",
         "name": "average",
-        "outputPath": "counts.groundPickup",
+        "outputPath": "averages.groundPickup",
         "options": {
             "path": "counts.groundPickup"
         }
@@ -66,7 +72,7 @@
     {
         "type": "team",
         "name": "average",
-        "outputPath": "counts.terminalPickup",
+        "outputPath": "averages.terminalPickup",
         "options": {
             "path": "counts.terminalPickup"
         }
@@ -74,7 +80,7 @@
     {
         "type": "team",
         "name": "average",
-        "outputPath": "counts.miss",
+        "outputPath": "averages.miss",
         "options": {
             "path": "counts.miss"
         }

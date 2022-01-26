@@ -12,8 +12,11 @@ module.exports = {
         for (let tmp of dataset.tmps) {
             let out = {
                 all: [],
-                averageTimeComplete: null,
+                allComplete: null,
                 averageTime: null,
+                averageTimeComplete: null,
+                cycleCount: null,
+                cycleCountComplete: null
             }
 
             options = Object.assign({
@@ -46,6 +49,11 @@ module.exports = {
             //exclude misses
             out.allComplete = out.all.filter(x=>!options.misses.includes(x.ending.id));
             out.averageTimeComplete = out.allComplete.reduce((acc,x) => acc+x.timeDifferential, 0) / out.allComplete.length;
+
+            //counts
+            out.cycleCount = out.all.length;
+            out.cycleCountComplete = out.allComplete.length;
+
             setPath(tmp,outputPath,out);
         }
 

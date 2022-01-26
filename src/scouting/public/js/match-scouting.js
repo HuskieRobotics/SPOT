@@ -68,7 +68,8 @@ let devEnd
                 if (time <= 0) {
                     console.log("submitting")
                     await LocalData.storeTeamMatchPerformance(new TeamMatchPerformance(actionQueue).data)
-                    ScoutingSync.sync()
+                    await ScoutingSync.sync();
+                    window.location.reload();
                 }
                 
                 if (timerActive) return;

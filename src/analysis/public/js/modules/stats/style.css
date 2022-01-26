@@ -1,0 +1,21 @@
+.stats .container {
+    width: 100%;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--bg-alt);
+}
+
+.stats .header {
+    font-size: 2rem;
+    line-height: 2rem;
+    text-align: center;
+    color: var(--accent);
+}
+
+.stats .list {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    color: var(--text);
+}
