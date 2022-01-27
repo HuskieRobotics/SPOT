@@ -24,3 +24,7 @@ html {
     transform: translate(-50%, -50%);
     z-index: -1;
 }
+
+.main-svg {
+    border-radius: var(--border-radius);
+}

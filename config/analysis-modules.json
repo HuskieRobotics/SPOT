@@ -1,25 +1,28 @@
 [
     {
         "type": "team",
-        "module": "stats",
+        "module": "Stats",
         "position": "side",
         "name": "Team Stats",
         "options": {
             "list": {
                 "Average Cycle Time": {
                     "path": "cycle.averageTime",
-                    "multiplier": 1000,
-                    "decimals": 2
+                    "multiplier": 0.001,
+                    "decimals": 2,
+                    "unit": "s"
                 },
                 "Average Completed Cycle Time": {
                     "path": "cycle.averageTimeComplete",
-                    "multiplier": 1000,
-                    "decimals": 2
+                    "multiplier": 0.001,
+                    "decimals": 2,
+                    "unit": "s"
                 },
                 "Average Accuracy": {
                     "path": "accuracy",
                     "multiplier": 100,
-                    "decimals": 1
+                    "decimals": 1,
+                    "unit": "%"
                 },
                 "Average Scores": {
                     "path": "scoreCount"
@@ -29,7 +32,38 @@
     },
     {
         "type": "team",
-        "module": "bar",
+        "module": "Stats",
+        "position": "side",
+        "name": "Team Stats",
+        "options": {
+            "list": {
+                "Average Cycle Time": {
+                    "path": "cycle.averageTime",
+                    "multiplier": 0.001,
+                    "decimals": 2,
+                    "unit": "s"
+                },
+                "Average Completed Cycle Time": {
+                    "path": "cycle.averageTimeComplete",
+                    "multiplier": 0.001,
+                    "decimals": 2,
+                    "unit": "s"
+                },
+                "Average Accuracy": {
+                    "path": "accuracy",
+                    "multiplier": 100,
+                    "decimals": 1,
+                    "unit": "%"
+                },
+                "Average Scores": {
+                    "path": "scoreCount"
+                }
+            }
+        }
+    },
+    {
+        "type": "team",
+        "module": "Bar",
         "position": "main",
         "name": "Shot Distribution",
         "options": {
@@ -38,7 +72,7 @@
                     "path": "counts.upperHub"
                 },
                 "Lower Hub": {
-                    "path": "counts.upperHub"
+                    "path": "counts.lowerHub"
                 },
                 "Miss": {
                     "path": "counts.miss"
@@ -48,7 +82,7 @@
     },
     {
         "type": "team",
-        "module": "pie",
+        "module": "Pie",
         "position": "main",
         "name": "Pickup Distribution",
         "options": {

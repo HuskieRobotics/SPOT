@@ -1,4 +1,4 @@
-class Bar {
+class Plot {
     container;
 
     constructor(options) {

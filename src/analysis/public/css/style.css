@@ -51,15 +51,24 @@ body {
 }
 
 #team-view.side-enabled {
-  grid-template-columns: 7fr 3fr;
+  grid-template-columns: 65% 35%;
 }
 
 #main-list {
   grid-area: 1 / 1 / 2 / 2;
+  margin: 40px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
 }
 
 #side-list {
   grid-area: 1 / 2 / 2 / 3;
+  padding: 40px 0px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
 #logo {

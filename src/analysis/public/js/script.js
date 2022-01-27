@@ -3,10 +3,11 @@
     const TBA_API_KEY = "35YGkhzv98FQInv2qLCZ6C9sixyhgU4hawV0oOS3jY0JikXVgAW2fKsAIKgZP8zx";
     //TODO: put api key into a server config and request
     const modulesConfig = await fetch(`/analysis/analysis-modules.json`).then(res => res.json());
-    const moduleClasses = []
+    const modules = []
+    let dataset
 
     await loadAround(async () => {
-        const dataset = await fetchDataset()
+        dataset = await fetchDataset()
         console.log(dataset)
         loadTeams(dataset)
         initDashboard(modulesConfig)
@@ -45,25 +46,35 @@
             teamNameDisplay.innerText = allTeams[teamNumber]
             teamContainer.appendChild(teamNameDisplay)
         }
+
+        teamContainer.addEventListener("click", () => {
+            displayTeam(teamNumber)
+        })
         
         return teamContainer
     }
 
     function initDashboard(modulesConfig) {
         if (modulesConfig.map(m => m.position).includes("side")) {
-            teamView.classList.add("sidebar-enabled")
+            teamView.classList.add("side-enabled")
+        } else {
+            teamView.classList.remove("side-enabled")
         }
 
         for (const module of modulesConfig) {
-            if (module.type == "stats") {
-                module.classes.push(new Stats(module.position))
+            const moduleObject = new moduleClasses[module.module](module)
+            if (module.position == "main") {
+                mainList.appendChild(moduleObject.container)
+            } else {
+                sideList.appendChild(moduleObject.container)
             }
+            modules.push(moduleObject)
         }
     }
 
     function displayTeam(teamNumber) {
-        for (const module of moduleClasses) {
-            module.setData(teamNumber)
+        for (const module of modules) {
+            module.setData(teamNumber, dataset)
         }
     }
 })()
