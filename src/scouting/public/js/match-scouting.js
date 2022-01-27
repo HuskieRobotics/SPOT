@@ -133,8 +133,12 @@ let devEnd
 
     function doExecutables(button) {
         for (const executable of button.executables) {
-            console.log(executable,layers)
-            executables[executable.type].execute(button, layers, ...executable.args);
+            try {
+                executables[executable.type].execute(button, layers, ...executable.args);
+            } catch (e) {
+                console.error(e);
+                throw new Error(`Error occured within ${executable.type} executable!`)
+            }
         }
     }
 
