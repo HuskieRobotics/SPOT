@@ -26,37 +26,9 @@
                 },
                 "Average Scores": {
                     "path": "scoreCount"
-                }
-            }
-        }
-    },
-    {
-        "type": "team",
-        "module": "Stats",
-        "position": "side",
-        "name": "Team Stats",
-        "options": {
-            "list": {
-                "Average Cycle Time": {
-                    "path": "cycle.averageTime",
-                    "multiplier": 0.001,
-                    "decimals": 2,
-                    "unit": "s"
                 },
-                "Average Completed Cycle Time": {
-                    "path": "cycle.averageTimeComplete",
-                    "multiplier": 0.001,
-                    "decimals": 2,
-                    "unit": "s"
-                },
-                "Average Accuracy": {
-                    "path": "accuracy",
-                    "multiplier": 100,
-                    "decimals": 1,
-                    "unit": "%"
-                },
-                "Average Scores": {
-                    "path": "scoreCount"
+                "Average Misses": {
+                    "path": "counts.miss"
                 }
             }
         }

@@ -49,6 +49,9 @@
 
         teamContainer.addEventListener("click", () => {
             displayTeam(teamNumber)
+            hideFade(welcomeView)
+            showFade(teamView)
+            teamContainer.classList.add("selected")
         })
         
         return teamContainer

@@ -40,6 +40,8 @@ body {
 
 #dashboard {
   grid-area: 2 / 2 / 4 / 4;
+  overflow: hidden;
+  position: relative;
 }
 
 #team-view {
@@ -47,6 +49,7 @@ body {
   width: 100%;
   display: grid;
   grid-template-rows: 1fr;
+  overflow: scroll;
   grid-template-columns: 1fr;
 }
 
@@ -186,4 +189,41 @@ body {
   display: flex;
   flex-direction: column;
   gap: 20px;
+}
+
+#welcome {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 32px;
+}
+
+#welcome-text {
+  font-size: 4rem;
+  line-height: 1em;
+  color: var(--accent-alt)
+}
+
+#welcome-subtext {
+  font-size: 2.5rem;
+  line-height: 1em;
+  margin-bottom: 40px;
+}
+
+#dashboard > div {
+  width: 100%;
+  transition: 0.3s visibility, opacity;
+  opacity: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  visibility: hidden;
+}
+
+#dashboard > div.visible {
+  visibility: unset;
+  height: calc(100vh - 50px);
+  opacity: 1;
+  transition: visibility 0s 0s, opacity 0.3s 0s;
 }
