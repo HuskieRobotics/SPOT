@@ -2,12 +2,89 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width">
-    <title>repl.it</title>
-    <link href="style.css" rel="stylesheet" type="text/css" />
+    <meta name='viewport' content='width=device-width, initial-scale=1, user-scalable=no, viewport-fit=cover'>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>SPOT - Analysis</title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.0/css/all.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;700&family=Saira:wght@300;400;700&family=Tajawal:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="./css/global.css" rel="stylesheet" type="text/css" />
+    <link href="./css/internal.css" rel="stylesheet" type="text/css" />
+    <link href="./modules.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="./css/style.css">
+    <link rel="apple-touch-icon" sizes="57x57" href="./icons/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="./icons/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="./icons/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="./icons/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="./icons/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="./icons/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="./icons/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="./icons/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="./icons/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="./icons/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="./icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="./icons/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="./icons/favicon-16x16.png">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="./icons/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+    <script src="/socket.io/socket.io.js"></script>
   </head>
   <body>
-    <h1>Analysis</h1>
-    <script src="script.js"></script>
+    <div id="loading-bar-container">
+      <div id="loading-bar"></div>
+    </div>
+
+    <img id="spinner" src="./img/spinner.svg">
+
+
+    <div id="app">
+      <div id="logo">
+        <img src="./img/logo.png" id="logo-img">
+        <div id="logo-text">SPOT</div>
+      </div>
+
+      <div id="sidebar">
+        <div id="search-container">
+          <div id="search">
+            <input placeholder="Team" id="search-input" />
+            <i id="search-icon" class="fa fa-search"></i>
+          </div>
+        </div>
+
+        <div id="team-list">
+          
+        </div>
+      </div> 
+
+      <div id="header">
+        
+      </div>
+
+      <div id="dashboard">
+        <div id="welcome" class="visible">
+          <div id="welcome-text">SPOT Analysis</div>
+          <div id="welcome-subtext">Select a Team</div>
+        </div>
+        <div id="team-view">
+          <div id="main-list">
+
+          </div>
+
+          <div id="side-list">
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="./js/util.js"></script>
+    <script src="./js/ui.js"></script>
+    <script src="./js/elements.js"></script>
+    <script src="https://cdn.plot.ly/plotly-2.8.3.min.js"></script>
+    <script src="./modules.js"></script>
+    <script src="./js/script.js"></script>
   </body>
 </html>
