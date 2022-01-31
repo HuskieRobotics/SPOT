@@ -20,7 +20,6 @@
 }
 
 #match-scouting .grid-button {
-    background-color: #757575;
     border-radius: var(--border-radius, 16px);
     color: var(--light-alt, #FEFEFE);
     display: flex;
@@ -41,9 +40,25 @@
 }
 
 #match-scouting .grid-button.gray {
-    background-color: var(--gray)
+    background-color: #2D2D2D
 }
 
-#match-scouting .grid-button.green {
-    background-color: var(--green)
+.green {
+    background-color: #4caf50
+}
+
+.orange {
+    background-color: #ef6c00   
+}
+
+.red {
+    background-color: #ff4436
+}
+
+.navy {
+    background-color: #3f51b5
+}
+
+.pink {
+    background-color: #f06292
 }

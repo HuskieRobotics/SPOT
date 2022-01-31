@@ -1,0 +1,106 @@
+[
+    {
+        "type": "tmp",
+        "name": "cycle",
+        "outputPath": "cycle",
+        "options": {
+            "pickups": ["groundPickup","terminalPickup"],
+            "scores": ["upperHub","lowerHub"],
+            "misses": ["miss"]
+        }
+    },
+    {
+        "type": "team",
+        "name": "aggregateArray",
+        "outputPath": "cycle.all",
+        "options": {
+            "path": "cycle.all"
+        }
+    },
+    {
+        "type": "team",
+        "name": "average",
+        "outputPath": "cycle.averageTime",
+        "options": {
+            "path": "cycle.averageTime"
+        }
+    },
+    {
+        "type": "team",
+        "name": "average",
+        "outputPath": "cycle.averageTimeComplete",
+        "options": {
+            "path": "cycle.averageTimeComplete"
+        }
+    },
+    {
+        "type": "tmp",
+        "name": "countActions",
+        "outputPath": "counts",
+        "options": {"all": true}
+    },
+    {
+        "type": "team",
+        "name": "countActions",
+        "outputPath": "counts",
+        "options": {"all": true}
+    },
+    {
+        "type": "team",
+        "name": "average",
+        "outputPath": "averages.upperHub",
+        "options": {
+            "path": "counts.upperHub"
+        }
+    },
+    {
+        "type": "team",
+        "name": "average",
+        "outputPath": "averages.lowerHub",
+        "options": {
+            "path": "counts.upperHub"
+        }
+    },
+    {
+        "type": "team",
+        "name": "average",
+        "outputPath": "averages.groundPickup",
+        "options": {
+            "path": "counts.groundPickup"
+        }
+    },
+    {
+        "type": "team",
+        "name": "average",
+        "outputPath": "averages.terminalPickup",
+        "options": {
+            "path": "counts.terminalPickup"
+        }
+    },
+    {
+        "type": "team",
+        "name": "average",
+        "outputPath": "averages.miss",
+        "options": {
+            "path": "counts.miss"
+        }
+    },
+    {
+        "type": "team",
+        "name": "ratio",
+        "outputPath": "accuracy",
+        "options": {
+            "numerator": ["counts.lowerHub","counts.upperHub"],
+            "denominator": ["counts.lowerHub","counts.upperHub","counts.miss"],
+            "divByZero": 0
+        }
+    },
+    {
+        "type": "team",
+        "name": "sum",
+        "outputPath": "scoreCount",
+        "options": {
+            "addends": ["counts.upperHub","counts.lowerHub"]
+        }
+    }
+]
