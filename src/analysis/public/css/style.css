@@ -49,7 +49,7 @@ body {
   width: 100%;
   display: grid;
   grid-template-rows: 1fr;
-  overflow: scroll;
+  overflow: hidden;
   grid-template-columns: 1fr;
 }
 
@@ -59,20 +59,37 @@ body {
 
 #main-list {
   grid-area: 1 / 1 / 2 / 2;
-  margin: 40px 0;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 20px;
+  overflow-y: scroll;
+}
+
+#main-list > div:first-child {
+  margin-top: 40px;
+}
+
+#main-list > div:last-child {
+  margin-bottom: 40px;
 }
 
 #side-list {
   grid-area: 1 / 2 / 2 / 3;
-  padding: 40px 0px;
   display: flex;
   flex-direction: column;
   gap: 20px;
+  overflow-y: scroll;
 }
+
+#side-list > div:first-child {
+  margin-top: 40px;
+}
+
+#side-list > div:last-child {
+  margin-bottom: 40px;
+}
+
 
 #logo {
   height: 100%;
@@ -223,7 +240,7 @@ body {
 
 #dashboard > div.visible {
   visibility: unset;
-  height: calc(100vh - 50px);
+  height: calc(100vh - 75px);
   opacity: 1;
   transition: visibility 0s 0s, opacity 0.3s 0s;
 }
