@@ -68,7 +68,8 @@ let devEnd
                 if (time <= 0) {
                     console.log("submitting")
                     await LocalData.storeTeamMatchPerformance(new TeamMatchPerformance(actionQueue).data)
-                    ScoutingSync.sync()
+                    await ScoutingSync.sync();
+                    window.location.reload();
                 }
                 
                 if (timerActive) return;
@@ -132,8 +133,12 @@ let devEnd
 
     function doExecutables(button) {
         for (const executable of button.executables) {
-            console.log(executable,layers)
-            executables[executable.type].execute(button, layers, ...executable.args);
+            try {
+                executables[executable.type].execute(button, layers, ...executable.args);
+            } catch (e) {
+                console.error(e);
+                throw new Error(`Error occured within ${executable.type} executable!`)
+            }
         }
     }
 
@@ -149,15 +154,20 @@ let devEnd
     // DATA
     class TeamMatchPerformance {
         data;
-
         constructor(actionQueue) {
+            let filteredActionQueue = actionQueue.filter(action=>!action.temp);
+            filteredActionQueue = filteredActionQueue.map(x => {
+                x.ts = Math.max(x.ts,0);
+                return x;
+            })
             this.data = {
-                matchId: `${ScoutingSync.state.matchNumber}-${ScoutingSync.state.robotNumber}-${ScoutingSync.state.scouterId}-${Math.random().toString(36).slice(-6)}`,
+                matchId: `${ScoutingSync.state.matchNumber}-${ScoutingSync.state.robotNumber}-${ScoutingSync.state.scouterId}-${Math.floor((Math.random() * 2 ** 32)).toString(32)}`,
                 timestamp: Date.now(),
                 clientVersion: config.version,
                 scouterId: ScoutingSync.state.scouterId, // from scouting-sync.js
-                robotNumber: ScoutingSync.state.robotNumber, // from scouting-sync.js
-                actionQueue: actionQueue
+                robotNumber: Number(ScoutingSync.state.robotNumber), // from scouting-sync.js
+                matchNumber: Number(ScoutingSync.state.matchNumber),
+                actionQueue: filteredActionQueue,
             }
         }
     }

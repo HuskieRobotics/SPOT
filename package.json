@@ -27,6 +27,7 @@
     "google-auth-library": "^7.10.2",
     "mongoose": "^6.0.6",
     "nodemon": "^2.0.15",
+    "qrcode": "^1.4.4",
     "socket.io": "^4.4.1"
   }
 }

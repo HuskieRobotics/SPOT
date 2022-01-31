@@ -11,13 +11,42 @@ db.once('open', function() {
     console.log("Connected to Database")
 })
 
+/*
+example tmp
+tmp = {
+    "matchId": "0-0-3061-asdfghjk-b89qcn",
+"matchId_rand": "b89qcn",
+    "timestamp": 1642448833182,
+    "clientVersion": "0.1",
+    "scouterId": "asdfghjk",
+    "robotNumber": 3061,
+"eventNumber":0,
+    "actionQueue": [
+        {
+            "id": "startGame",
+            "ts": 150,
+            "temp": true
+        },
+        {
+            "id": "startClimb",
+            "ts": 0
+        },
+        {
+            "id": "climbF",
+            "ts": 0
+        }
+    ]
+}
+*/
 const teamMatchPerformanceSchema = new mongoose.Schema({
     timestamp: Number,
     clientVersion: String,
-    serverVersion: String,
     scouterId: String,
-    teamNumber: String,
+    robotNumber: Number,
+    matchNumber: Number,
+    eventNumber: Number,
     matchId: String,
+    matchId_rand: String,
     actionQueue: [
         {
             id: String, //button id
