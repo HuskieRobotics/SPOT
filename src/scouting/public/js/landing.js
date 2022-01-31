@@ -67,7 +67,8 @@ async function verify(user) {
 }
 
 document.querySelector("#landing > div.auth.landing-screen > div > div.manual").addEventListener("click", () => {
-    switchPage("form")
-})
+    updateForm();
+    switchPage("form");
+});
 
 // signOutBtn.addEventListener("click", signOut)

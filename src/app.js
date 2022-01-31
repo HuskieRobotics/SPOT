@@ -18,3 +18,4 @@ app.use(session({secret: process.env.SESSION_SECRET}));
 //routes
 app.use("/", require("./scouting/scouting.js"));
 app.use("/analysis", require("./analysis/analysis.js"));
+app.use("/admin", require("./admin/admin.js"));

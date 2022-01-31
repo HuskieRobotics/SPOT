@@ -1,0 +1,46 @@
+#adminPanel {
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+}
+#scoutersContainer {
+    display: flex;
+    flex-wrap: wrap;
+    width: 90%;
+    min-height: 200px;
+    gap: 2px;
+}
+
+.scouter {
+    width: 15%;
+    height: 100px;
+    border-radius: 10px;
+    border: 1px solid red;
+    position: relative;
+    color: white;
+    background: black;
+    font: 1em/1.2em "Cairo";
+}
+.scouter > .scouterId {
+    position: absolute;
+    left: 50%;
+    top: 10px;
+    transform: translateX(-50%);
+}
+.scouter > .robotNumber {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+}
+.scouter > .matchNumber {
+    position: absolute;
+    left: 10px;
+    top: 10px;
+}
+.scouter > .scouterStatus {
+    position: absolute;
+    left: 50%;
+    bottom: 10px;
+    transform: translateX(-50%);
+}

@@ -2,15 +2,16 @@ class ScoutingSync {
     static socket;
 
     static SCOUTER_STATUS = {
-        "WAITING": 0, //scouters not actively in the process of scouting (up to when they click the start button)
-        "SCOUTING": 1, //scouters actively scouting a match
-        "NEW": 2, //scouters who have connected but have not sent their state data
+        "NEW": 0, //scouters who have connected but have not sent their state data
+        "WAITING": 1, //scouters not actively in the process of scouting (up to when they click the start button)
+        "SCOUTING": 2, //scouters actively scouting a match
+        "COMPLETE": 3,
     }
 
     static state = {
         connected: false, 
         offlineMode: true, //offline mode is for users who never connect to the server and access the app without internet.
-        status: this.SCOUTER_STATUS.WAITING,
+        status: ScoutingSync.SCOUTER_STATUS.NEW,
         scouterId: "",
         robotNumber: "",
         matchNumber: 0
@@ -31,26 +32,28 @@ class ScoutingSync {
             console.log("disconnected");
         })
 
-        ScoutingSync.socket.on("reconnect", () => {
-
-        })
-
         ScoutingSync.socket.on("err", (msg) => {
-            console.error(msg)
+            console.error(msg);
         })
 
         ScoutingSync.socket.on("updateState", (stateUpdate) => {
-            console.log("State Update:", stateUpdate)
-            ScoutingSync.updateState(stateUpdate)  
+            console.log("State Update:", stateUpdate);
+            ScoutingSync.updateState(stateUpdate,true);
         })
 
         ScoutingSync.socket.on("syncRequest", () => {
-            ScoutingSync.sync()
+            ScoutingSync.sync();
+        })
+
+        ScoutingSync.socket.on("enterMatch", () => {
+            switchPage("match-scouting");
         })
     }
-
-    static updateState(stateUpdate) {
-        Object.assign(ScoutingSync.state, stateUpdate)
+    static updateState(stateUpdate,incoming=false) {
+        Object.assign(ScoutingSync.state, stateUpdate);
+        if (!incoming) {
+            ScoutingSync.socket.emit("updateState", ScoutingSync.state);
+        }
     }
 
     static async sync() {

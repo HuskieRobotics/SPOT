@@ -29,9 +29,10 @@ class ScoutingSync {
         }
     }
     static SCOUTER_STATUS = {
-        "WAITING": 0, //scouters not actively in the process of scouting (dont have the scouting ui open)
-        "SCOUTING": 1, //scouters actively scouting a match
-        "NEW": 2, //scouters who have connected but have not sent their state data
+        "NEW": 0, //scouters who have connected but have not sent their state data
+        "WAITING": 1, //scouters not actively in the process of scouting (dont have the scouting ui open)
+        "SCOUTING": 2, //scouters actively scouting a match
+        "COMPLETE": 3,
     }
 
     static initialize(server) {
@@ -39,11 +40,25 @@ class ScoutingSync {
             throw new Error("ScoutingSync already initialized!")
         }
         io = require("socket.io")(server);
-    
+        
+        //new scouter flow
         io.on("connection", (socket) => {
-            ScoutingSync.scouters.push(new Scouter(socket));
+            let newScouter = new Scouter(socket);
+            newScouter.socket.on("disconnect", () => {
+                setTimeout(() => {
+                    if (!newScouter.connected) {
+                        //remove it
+                        console.log("removing inactive scouter...")
+                        ScoutingSync.scouters = ScoutingSync.scouters.filter(x=>!( !x.connected && x.timestamp == newScouter.timestamp ) )
+                    }
+                },60000)
+            })
+            ScoutingSync.scouters.push(newScouter);
         })
     }
+    /**
+     * assign all current scouters to a robot
+     */
     static assignScouters() {
         let nextRobots = new Set(ScoutingSync.match.robots.red.concat(ScoutingSync.match.robots.blue)); //the robots that are next in line to be assigned to scouters
         
@@ -64,13 +79,21 @@ class ScoutingSync {
                 
                 //notify the scouter of their match assignment
                 scouter.updateState({
-                    state: ScoutingSync.SCOUTER_STATUS.SCOUTING,
                     matchNumber: ScoutingSync.match.number,
                     robotNumber,
                 })
             }
         }
-
+    }
+    static getScouters() {
+        let out = ScoutingSync.scouters.map(x => {return { ...x }} );
+        for (let scouter of out) { //remove sockets from all the scouters so there isn't circular dependency
+            delete scouter.socket;
+        }
+        return out;
+    }
+    static setMatch(match) {
+        ScoutingSync.match = match;
     }
 }
 
@@ -81,9 +104,11 @@ class Scouter {
         offlineMode: false, //they are connected to the server, they can't be offline
     };
     socket;
+    timestamp;
 
     constructor(socket) {
         this.socket = socket;
+        this.timestamp = Date.now();
         
         //socket listeners below
 

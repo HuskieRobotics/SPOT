@@ -104,6 +104,7 @@
 
 #landing .auth-buttons > div.active {
     border: 2px solid var(--accent);
+    cursor: pointer;
 }
 
 
