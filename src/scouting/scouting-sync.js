@@ -62,12 +62,15 @@ class ScoutingSync {
     static assignScouters() {
         let nextRobots = new Set(ScoutingSync.match.robots.red.concat(ScoutingSync.match.robots.blue)); //the robots that are next in line to be assigned to scouters
         
+
+        //if someone is ACTIVELY scouting the robot, remove it from the set of robots to be scouted
         for (let scouter of ScoutingSync.scouters) {
             if (scouter.state.connected && scouter.state.status === ScoutingSync.SCOUTER_STATUS.SCOUTING) { 
-                nextRobots.delete(scouter.status.robotNumber); //if someone is scouting the robot, remove it from the set of robots to be scouted
+                nextRobots.delete(scouter.state.robotNumber); 
             }
         }
 
+        //assign the rest of the robots to waiting scouters
         for (let scouter of ScoutingSync.scouters) {
             if (scouter.state.connected && scouter.state.status === ScoutingSync.SCOUTER_STATUS.WAITING) {
                 //check to see if nextRobots is empty, if so repopulate it with all the robots in the match
@@ -82,6 +85,25 @@ class ScoutingSync {
                     matchNumber: ScoutingSync.match.number,
                     robotNumber,
                 })
+            }
+        }
+
+        let currentMatchWaitingScouters = ScoutingSync.scouters.filter(x=>
+            x.state.matchNumber == ScoutingSync.match.number && 
+            x.state.status == ScoutingSync.SCOUTER_STATUS.WAITING &&
+            x.state.connected);
+        
+        //if anyone is scouting the match, tell all waiting scouters to start
+        if (ScoutingSync.scouters.filter(x=>
+            x.state.matchNumber == ScoutingSync.match.number && 
+            x.state.status == ScoutingSync.SCOUTER_STATUS.SCOUTING
+            ).length > 0) {
+            for (let scouter of currentMatchWaitingScouters) {
+                scouter.socket.emit("enterMatch");
+            }
+        } else if (currentMatchWaitingScouters.length >= 6) { //if there are 6 scouters waiting, enter match.
+            for (let scouter of currentMatchWaitingScouters) {
+                scouter.socket.emit("enterMatch");
             }
         }
     }
@@ -117,14 +139,15 @@ class Scouter {
             ScoutingSync.assignScouters(); //reassign scouters, this matters if there are two scouters on one robot and a scouter scouting 1 robot leaves
         })
 
-        this.socket.on("updateState", (stateUpdate) => {
-            let oldStatus = this.state.status;
+        this.socket.on("updateState", (stateUpdate,ack) => {
             this.state = Object.assign(this.state, stateUpdate);
-            if (oldStatus != ScoutingSync.SCOUTER_STATUS.WAITING && this.state.status == ScoutingSync.SCOUTER_STATUS.WAITING) ScoutingSync.assignScouters(); //reassign scouters when someone starts waiting
+            ScoutingSync.assignScouters(); //reassign scouters, just to be sure it's all correct
+            if(ack) ack(); //acknowledge the status update
         })
 
-        this.socket.on("teamMatchPerformances", (teamMatchPerformances) => {
+        this.socket.on("teamMatchPerformances", (teamMatchPerformances,ack) => {
             TeamMatchPerformance.create(teamMatchPerformances);
+            if (ack) ack(true);
         })
 
         this.socket.on("syncData", async (clientTeamMatchPerformanceIds, requestTeamMatchPerformances) => {

@@ -13,16 +13,36 @@ const SCOUTER_STATUS_REVERSE = {
 
 const scouters = {};
 
-setInterval(async () => { //scouter fetch interval (every 2.5s)
+async function fetchScouters() { //scouter fetch interval (every 2.5s)
     let scouterList = await (await fetch("./api/scouters")).json();
     for (let scouter of scouterList) {
         if (scouter.timestamp in scouters) {
             scouters[scouter.timestamp].updateScouterElement(scouter.state);
         } else {
+            if (scouter.state.status == SCOUTER_STATUS.COMPLETE || !scouter.state.connected) continue; //it's already submitted/disconnected, dont show it.
             scouters[scouter.timestamp] = new ScouterDisplay(scouter);
         }
+        if (scouter.state.status == SCOUTER_STATUS.COMPLETE || !scouter.state.connected) { //prune offline/complete scouters from the list
+            setTimeout(() => {
+                if (scouters[scouter.timestamp] && (scouters[scouter.timestamp].scouter.state.status == SCOUTER_STATUS.COMPLETE || !scouters[scouter.timestamp].scouter.state.connected)) {
+                    scouters[scouter.timestamp].destruct();
+                    delete scouters[scouter.timestamp]
+                }
+            },15000)
+        }
     }
-},2500)
+
+    //prune scouters that no longer exist
+    for (let timestamp in scouters) {
+        if (!scouterList.find(x=>x.timestamp = timestamp)) { //they no longer exist
+            scouters[timestamp].destruct();
+            delete scouters[timestamp];
+        }
+    }
+}
+
+fetchScouters();
+setInterval(fetchScouters, 2500);
 
 class ScouterDisplay {
     scouterElement;
@@ -71,5 +91,8 @@ class ScouterDisplay {
             this.scouterElement.querySelector(".scouterStatus").style.color = SCOUTER_STATUS_COLOR[this.scouter.state.status];
             this.scouterElement.querySelector(".scouterStatus").innerText = SCOUTER_STATUS_REVERSE[this.scouter.state.status];
         }
+    }
+    destruct() {
+        this.scouterElement.parentElement.removeChild(this.scouterElement);
     }
 }

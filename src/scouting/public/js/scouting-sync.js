@@ -25,6 +25,7 @@ class ScoutingSync {
             ScoutingSync.state.connected = true;
             ScoutingSync.socket.emit("updateState", ScoutingSync.state) //send the server your initial state
             console.log("connected");
+            ScoutingSync.sync();
         })
 
         ScoutingSync.socket.on("disconnect", () => {
@@ -46,22 +47,47 @@ class ScoutingSync {
         })
 
         ScoutingSync.socket.on("enterMatch", () => {
-            switchPage("match-scouting");
+            setTimeout(() => { //wait an extra 100ms to guarantee you are on the waiting screen
+                console.log("enter match!");
+                switchPage("match-scouting");
+                new Modal("small").header("Match Information").text(`
+                You have been assigned team ${ScoutingSync.state.robotNumber} in match ${ScoutingSync.state.matchNumber}.
+                `).dismiss("OK")
+            },100)
         })
     }
     static updateState(stateUpdate,incoming=false) {
-        Object.assign(ScoutingSync.state, stateUpdate);
-        if (!incoming) {
-            ScoutingSync.socket.emit("updateState", ScoutingSync.state);
-        }
+        return new Promise((res,rej) => {
+            Object.assign(ScoutingSync.state, stateUpdate);
+            if (!incoming) {
+                ScoutingSync.socket.emit("updateState", ScoutingSync.state, () => {
+                    res(true);
+                });
+            } else {
+                res(true);
+            }
+        })
     }
 
     static async sync() {
-        const teamMatchPerformances = await LocalData.getAllTeamMatchPerformances()
-        const teamMatchPerformanceIds = teamMatchPerformances.map(teamMatchPerformance => teamMatchPerformance.matchId)
+        if (ScoutingSync.state.offlineMode) return false; //if in offline mode, just continue
 
-        ScoutingSync.socket.emit("syncData", teamMatchPerformanceIds, (requestedTeamMatchPerformanceIds) => {
-            ScoutingSync.socket.emit("teamMatchPerformances", teamMatchPerformances.filter(teamMatchPerformance => requestedTeamMatchPerformanceIds.includes(teamMatchPerformance.matchId)))
+        return new Promise(async (res,rej) => {
+            let timeout = setTimeout(() => {
+                new Popup("error", "failed to sync data!")
+                res(false) //resolve, just so that the program can continue
+            },10000);
+            const teamMatchPerformances = await LocalData.getAllTeamMatchPerformances()
+            const teamMatchPerformanceIds = teamMatchPerformances.map(teamMatchPerformance => teamMatchPerformance.matchId)
+            new Popup("notice","Syncing Data...",1000);
+            await ScoutingSync.updateState({status: ScoutingSync.SCOUTER_STATUS.COMPLETE});
+            ScoutingSync.socket.emit("syncData", teamMatchPerformanceIds, (requestedTeamMatchPerformanceIds) => {
+                ScoutingSync.socket.emit("teamMatchPerformances", teamMatchPerformances.filter(teamMatchPerformance => requestedTeamMatchPerformanceIds.includes(teamMatchPerformance.matchId)), () => {
+                    new Popup("success","Data Sync Complete!",2000);
+                    clearTimeout(timeout);
+                    res(true)
+                });
+            })
         })
     }
 }

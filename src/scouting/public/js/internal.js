@@ -151,20 +151,29 @@ class Popup {
       "color": "var(--green)"
     },
   }
+  popupElement;
 
   constructor(type, text, duration=5000) {
-    const popupElement = document.createElement("p")
-    popupElement.classList = "popup"
-    popupElement.style.backgroundColor = Popup.types[type].color
-    popupElement.innerText = Popup.types[type].prefix + text
-    document.body.appendChild(popupElement)
-    popupElement.offsetHeight
-    popupElement.style.top = "55px"
+    this.popupElement = document.createElement("p")
+    this.popupElement.classList = "popup"
+    this.popupElement.style.backgroundColor = Popup.types[type].color
+    this.popupElement.innerText = Popup.types[type].prefix + text
+    document.body.appendChild(this.popupElement)
+    this.popupElement.offsetHeight
+    this.popupElement.style.top = "55px"
     setTimeout(() => {
-      popupElement.style.top = "0"
+      this.popupElement.style.top = "0"
       setTimeout(() => {
-        document.body.removeChild(popupElement)
+        document.body.removeChild(this.popupElement)
       }, 600)
     }, duration)
+  }
+  setText(text) {
+    this.popupElement.innerText = text;
+    return this;
+  }
+  setType(type) {
+    this.popupElement.style.backgroundColor = Popup.types[type].color;
+    return this;
   }
 }
