@@ -19,6 +19,14 @@
     },
     {
         "type": "team",
+        "name": "aggregateArray",
+        "outputPath": "aggregatedActions",
+        "options": {
+            "path": "actionQueue"
+        }
+    },
+    {
+        "type": "team",
         "name": "average",
         "outputPath": "cycle.averageTime",
         "options": {

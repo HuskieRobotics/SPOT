@@ -2,11 +2,11 @@
     const EVENT_ID = "2020ilch"
     const TBA_API_KEY = "35YGkhzv98FQInv2qLCZ6C9sixyhgU4hawV0oOS3jY0JikXVgAW2fKsAIKgZP8zx";
     //TODO: put api key into a server config and request
-    const modulesConfig = await fetch(`/analysis/analysis-modules.json`).then(res => res.json());
     const modules = []
     let dataset
 
     await loadAround(async () => {
+        const modulesConfig = await fetch(`/analysis/analysis-modules.json`).then(res => res.json());
         dataset = await fetchDataset()
         console.log(dataset)
         loadTeams(dataset)
@@ -48,10 +48,8 @@
         }
 
         teamContainer.addEventListener("click", () => {
-            displayTeam(teamNumber)
-            hideFade(welcomeView)
-            showFade(teamView)
-            teamContainer.classList.add("selected")
+            setTeamModules(teamNumber)
+            displayTeam(teamContainer)
         })
         
         return teamContainer
@@ -75,7 +73,14 @@
         }
     }
 
-    function displayTeam(teamNumber) {
+    function displayTeam(teamContainer) {
+        hideFade(welcomeView)
+        showFade(teamView)
+        Array.from(document.querySelector("#team-list").children).map(t => t.classList.remove("selected"))
+        teamContainer.classList.add("selected")
+    }
+
+    function setTeamModules(teamNumber) {
         for (const module of modules) {
             module.setData(teamNumber, dataset)
         }

@@ -1,6 +1,33 @@
 [
     {
         "type": "team",
+        "module": "HeatmapScatterPlots",
+        "name": "Action Plot",
+        "position": "main",
+        "options": {
+            "coordinatePath": "other.pos",
+            "aggregatedActionsPath": "aggregatedActions",
+            "actionGroups": [
+                {
+                    "label": "Shots",
+                    "actions": ["upperHub", "lowerHub", "miss"]
+                },
+                {
+                    "label": "Pickups",
+                    "actions": ["groundPickup", "terminalPickup"]
+                }
+            ],
+            "actionLabels": {
+                "upperHub": "Upper Hub",
+                "lowerHub": "Lower Hub",
+                "miss": "Miss",
+                "groundPickup": "Ground Pickup",
+                "terminalPickup": "Terminal Pickup"
+            }
+        }
+    },
+    {
+        "type": "team",
         "module": "Stats",
         "position": "side",
         "name": "Team Stats",

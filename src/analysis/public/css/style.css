@@ -132,6 +132,7 @@ body {
   padding: 0 40px 0 12px;
   background-color: var(--bg);
   border: 2px solid var(--accent-alt);
+  outline: none;
 }
 
 #search-icon {
@@ -140,11 +141,11 @@ body {
   right: 12px;
   font-size: 1.2rem;
   transform: translateY(-50%);
-  transition: 0.4s transform;
+  transition: 0.3s color;
 }
 
-#search-input:focus + #search-icon {
-  transform: translateY(-50%) rotate(360deg);
+#search-input:focus + #search-icon, #search-input:valid + #search-icon {
+  color: var(--accent)
 }
 
 #loading-bar-container {
@@ -219,7 +220,8 @@ body {
 #welcome-text {
   font-size: 4rem;
   line-height: 1em;
-  color: var(--accent-alt)
+  color: var(--accent-alt);
+  text-align: center;
 }
 
 #welcome-subtext {
