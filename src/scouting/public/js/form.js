@@ -1,4 +1,7 @@
 document.querySelector("#form .save").addEventListener("click", async () => {
+    localStorage.setItem("firstName",document.querySelector("#form .first-name").value); //store form values in localstorage
+    localStorage.setItem("lastName",document.querySelector("#form .last-name").value);
+
     if (ScoutingSync.state.offlineMode) {
         ScoutingSync.updateState({ //dont await, the network is going to fail
             matchNumber: document.querySelector("#form .match-number").value,
@@ -17,6 +20,9 @@ document.querySelector("#form .save").addEventListener("click", async () => {
 })
 
 function updateForm() {
+    document.querySelector("#form .first-name").value = localStorage.getItem("firstName") || "";
+    document.querySelector("#form .last-name").value = localStorage.getItem("lastName") || "";
+    
     if (ScoutingSync.state.offlineMode || !ScoutingSync.state.connected) { //only show manual entry for robot and match number when permenantly offline or temporarily disconnected
         document.querySelector("#form .match-number").parentElement.style.display = "inline";
         document.querySelector("#form .robot-number").parentElement.style.display = "inline";

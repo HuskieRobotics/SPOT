@@ -5,6 +5,33 @@ DO NOT REMOVE OR MODIFY ANYTHING UNLESS YOU KNOW WHAT YOU'RE DOING
 *****************************************************************/
 let config = fetch(`/config.json`).then(res => res.json());
 
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function() {
+    navigator.serviceWorker.register('/sw.js').then(function(registration) {
+      // Registration was successful
+      console.log('ServiceWorker registration successful with scope: ', registration.scope);
+    }, function(err) {
+      // registration failed
+      console.log('ServiceWorker registration failed: ', err);
+    });
+  });
+}
+
+let attemptedPWA
+window.addEventListener("beforeinstallprompt", (e) => {
+  if (attemptedPWA) return;
+  attemptedPWA = true;
+  e.preventDefault();
+  let prompt = e;
+  let modal = new Modal("small")
+  modal.text("SPOT is better when you install the app!").action("Install", () => {
+    prompt.prompt();
+    prompt.userChoice.then(() => {
+      modal.modalExit();
+    })
+  }).dismiss("Maybe Later")
+})
+
 function switchPage(pageName) {
   const pages = document.body.querySelectorAll(".page")
   for (const page of pages) {
@@ -122,6 +149,14 @@ class Modal {
     this.cancel ? buttonElement.addEventListener("click", this.cancel) : null
     this.element.appendChild(buttonElement)
 
+    return this
+  }
+
+  action(buttonText,func) {
+    const buttonElement = document.createElement("button")
+    buttonElement.innerText = buttonText
+    buttonElement.addEventListener("click", func);
+    this.element.appendChild(buttonElement);
     return this
   }
 }
