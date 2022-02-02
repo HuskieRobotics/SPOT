@@ -31,7 +31,7 @@ async function fetchScouters() { //scouter fetch interval (every 2.5s)
             },15000)
         }
     }
-
+    console.log(scouters)
     //prune scouters that no longer exist
     for (let timestamp in scouters) {
         if (!scouterList.find(x=>x.timestamp = timestamp)) { //they no longer exist
@@ -41,8 +41,77 @@ async function fetchScouters() { //scouter fetch interval (every 2.5s)
     }
 }
 
+async function updateMatches() {
+    let {allMatches, currentMatch} = await (await fetch(`/admin/api/matches`)).json();
+
+    //clear matches view
+    document.querySelector("#matches").innerHTML = "";
+
+    //rebuild matches view
+    for (let match of allMatches) {
+        let matchElement = document.createElement("div");
+        matchElement.classList.add("match");
+        matchElement.innerHTML = `
+        <div class="match-header">${match.number} - ${match.match_string.toUpperCase()}</div>
+        <input type="checkbox" class="match-select">
+        <div class="match-teams red"></div>
+        <div class="match-teams blue"></div>
+        `
+        document.querySelector("#matches").appendChild(matchElement);
+
+        if (currentMatch.match_string == match.match_string) { //check the box if it is selected
+            matchElement.querySelector(".match-select").checked = true;
+            matchElement.scrollIntoView({
+                block: "center"
+            });
+        }
+
+        //add the robot numbers to match
+        for (let color of ["red","blue"]) {
+            for (let robotNumber of match.robots[color]) {
+                let text = document.createElement("div");
+                text.innerText = robotNumber;
+                matchElement.querySelector(`.match-teams.${color}`).appendChild(text)
+            }
+        }
+
+        //checkbox functionality
+        let checkbox = matchElement.querySelector(".match-select")
+        checkbox.addEventListener("input", () => {
+            if (!checkbox.checked) { //if its already selected, do nothing
+                checkbox.checked = true;
+                return;
+            }
+            
+            checkbox.checked = false; //set it to unchecked while processing the request
+
+            //send a post request with the new match
+            fetch("/admin/api/setMatch", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(match),
+            }).then((res) => res.json()).then((success) => {
+                if (success === true) { //if the match is successfully updated on the server-side
+                    new Popup("success", `Match ${match.number} - ${match.match_string.toUpperCase()} Selected!`,2000);
+                    for (let box of document.querySelectorAll(".match .match-select")) { //deselect all boxes
+                        box.checked = false;
+                    }
+                    checkbox.checked = true; //select the correct box
+                } else {
+                    new Popup("error", "Failed to Select Match!");
+                }
+            }).catch(e => new Popup("error", "Failed to Select Match!"));
+        })
+    }
+}
+
 fetchScouters();
 setInterval(fetchScouters, 2500);
+
+updateMatches()
+// setInterval(updateMatches, 2500);
 
 class ScouterDisplay {
     scouterElement;
@@ -60,7 +129,7 @@ class ScouterDisplay {
         `;
         this.scouterElement.classList.add("scouter");
 
-        document.querySelector("#scoutersContainer").appendChild(this.scouterElement);
+        document.querySelector("#scouters").appendChild(this.scouterElement);
 
         this.updateScouterElement();
         

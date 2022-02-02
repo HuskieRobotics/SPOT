@@ -1,13 +1,29 @@
+body {
+    margin: 0
+}
 #adminPanel {
     width: 100vw;
+    height: 100vh;
     display: flex;
     justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    color: var(--text);
+    background: var(--bg);
 }
-#scoutersContainer {
+
+#adminPanel .title {
+    width: 95%;
+    font: 1.5em/1.7em "Cairo";
+    margin-top: 10px;
+    height: 1.7em;
+}
+
+#scouters {
     display: flex;
     flex-wrap: wrap;
     width: 90%;
-    min-height: 200px;
+    height: 200px;
     gap: 2px;
 }
 
@@ -43,4 +59,72 @@
     left: 50%;
     bottom: 10px;
     transform: translateX(-50%);
+}
+
+#matches {
+    width: 90%;
+    min-height: 500px;
+    flex-grow: 1;
+    padding-right: 25px;
+    margin-bottom: 25px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+#matches .match {
+    display: grid;
+    width: 100%;
+    height: 80px;
+    grid-template-columns: calc(.75 * 80px) repeat(2,1fr);
+    grid-template-rows: 25% 75%;
+    border: 1px solid black;
+    border-radius: 10px;
+    padding: 5px;
+    background: var(--light-gray);
+    margin-bottom: 5px;
+}
+
+.match .match-select {
+    width: calc(.75 * 80px);
+    height: calc(.75 * 80px);
+    margin: 0;
+    appearance: none;
+    background-color: var(--bg-alt);
+    display: grid;
+    place-content: center;
+}
+
+
+.match .match-select::before {
+    content: "";
+    width: calc(.5 * 80px);
+    height: calc(.5 * 80px);
+    transform: scale(0);
+    transition: 120ms transform ease-in-out;
+    box-shadow: inset calc(.75 * 80px) calc(.75 * 80px) var(--accent);
+}
+  
+.match .match-select:checked::before {
+    transform: scale(1);
+}
+
+.match .match-header {
+    grid-area: 1 / 1 / 2 / 4;
+    font: 1em/1.2em "Cairo";
+}
+
+.match .match-teams {
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    gap: 2px;
+    text-align: center;
+    font: 1.8em/calc(80px * .75) "Cairo";
+}
+
+.match .match-teams.red {
+    background: #ff6666;
+}
+
+.match .match-teams.blue {
+    background: #6666ff;
 }

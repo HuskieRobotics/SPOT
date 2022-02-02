@@ -7,10 +7,16 @@ router.get("/scouters", (req,res) => {
     res.json(ScoutingSync.getScouters())
 });
 
-router.post("/match", (req,res) => {
+router.post("/setMatch", (req,res) => {
     ScoutingSync.setMatch(req.body);
     ScoutingSync.assignScouters();
     res.json(true);
 });
 
+router.get("/matches", async (req,res) => {
+    res.json({
+        "allMatches": await ScoutingSync.getMatches(),
+        "currentMatch": ScoutingSync.match
+    })
+})
 module.exports = router;

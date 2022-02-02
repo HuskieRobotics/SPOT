@@ -5,7 +5,9 @@ Socket-IO communication to synchronize many aspects of the client and server. Se
 
 
 let io;
-const {TeamMatchPerformance} = require("../lib/db.js")
+const {TeamMatchPerformance} = require("../lib/db.js");
+const axios = require('axios');
+const config = require("../../config/client.json");
 
 module.exports = (server) => {
     if (!ScoutingSync.initialized) {
@@ -21,13 +23,7 @@ module.exports = (server) => {
 class ScoutingSync {
     static initialized = false;
     static scouters = [];
-    static match = {
-        number: 0,
-        robots: {
-            red: ["3061","111","254"],
-            blue: ["3062","112","255"],
-        }
-    }
+    static match;
     static SCOUTER_STATUS = {
         "NEW": 0, //scouters who have connected but have not sent their state data
         "WAITING": 1, //scouters not actively in the process of scouting (dont have the scouting ui open)
@@ -55,7 +51,53 @@ class ScoutingSync {
             })
             ScoutingSync.scouters.push(newScouter);
         })
+
+        ScoutingSync.getMatches().then(matches => ScoutingSync.match = matches[0]);
     }
+    
+    /**
+     * get the matches present in thebluealliance api
+     */
+    static async getMatches() {
+        let tbaMatches = (await axios.get(`https://www.thebluealliance.com/api/v3/event/${config.tbaEventKey}/matches`, {
+            headers: {
+                "X-TBA-Auth-Key": process.env.TBA_API_KEY
+            }
+        }).catch(e => console.log("axios error fetching matches!"))).data;
+        
+        //determine match numbers linearly (eg. if there are 10 quals, qf1 would be match 11)
+        const matchLevels = ["qm", "ef", "qf", "sf", "f"];
+        let levelCounts = {};
+        for (let level of matchLevels) {
+            levelCounts[level] = tbaMatches.filter(x=>x.comp_level == level).length
+        }
+
+        //find the offset to apply to each level of match
+        let levelOffsets = {};
+        for (let [index,level] of matchLevels.entries()) {
+            levelOffsets[level] = matchLevels.slice(0,index).reduce((acc,level) => acc+levelCounts[level],0);
+        }
+        
+        let processedMatches = [];
+
+        //add the level offset to each match and simplify structure
+        for (let match of tbaMatches) {
+            processedMatches.push({
+                number: match.match_number + levelOffsets[match.comp_level], //adjust match number with the offset
+                match_string: match.key,
+                robots: {
+                    red: match.alliances.red.team_keys.map(x=>x.replace("frc","")),
+                    blue: match.alliances.blue.team_keys.map(x=>x.replace("frc",""))
+                }
+            });
+        }
+
+        //sort the processed matches by number
+        processedMatches = processedMatches.sort((a,b) => a.number - b.number);
+
+        return processedMatches;
+    }
+
     /**
      * assign all current scouters to a robot
      */
