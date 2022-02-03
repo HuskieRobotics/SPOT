@@ -7,14 +7,23 @@ class Pie {
         this.container = createDOMElement("div", "container pie")
     }
 
-    setData(team, dataset) {
+    formatData(teams, dataset) {
         let slices = this.moduleConfig.options.slices
+
+        const values = Object.entries(slices).map((slice) => {
+            const [sliceName, sliceInfo] = slice
+            const summed = teams.map(team => getPath(dataset.teams[team], sliceInfo.path)).flat().reduce((acc, i) => acc + i, 0)
+            if (sliceInfo.aggrMethod == "sum") { //optionally summed
+                return summed
+            } else { //default is average
+                return summed / teams.length
+            }
+        })
+
         const data = [
             {
                 labels: Object.keys(slices),
-                values: Object.entries(slices).map((slice) => {
-                    return getPath(dataset.teams[team], slice[1].path)
-                }),
+                values: values,
                 type: "pie",
                 hole: 0.4,
                 textfont: {
@@ -26,6 +35,10 @@ class Pie {
             }
         ]
 
+        return data
+    }
+
+    setData(data) {
         const layout = {
             margin: {
                 pad: 12,
@@ -57,6 +70,7 @@ class Pie {
             modeBarButtonsToRemove: ["zoom2d", "pan2d", ""]
         }
 
-        Plotly.react(this.container, data, layout, config)
+        Plotly.purge(this.container)
+        Plotly.newPlot(this.container, data, layout, config)
     }
 }

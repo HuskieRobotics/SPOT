@@ -1,6 +1,6 @@
 /*
  * when the button is pressed, this executable collects position data from the user using a field map (src/scouting/public/img/field.png). 
- * That data is then attached to the action in the "pos" field as percentages of an axis length (eg. action.pos = {x:0,y:0})
+ * That data is then attached to the action in the "other.pos" field as percentages of an axis length (eg. action.other.pos = {x:0,y:0})
  */
 
 let positionConfig = {
@@ -16,7 +16,8 @@ executables["position"] = {
     execute(button, layers) {
         //position lock check
         if (lockedTime + positionConfig.POSITION_LOCK_DELAY_MS > Date.now()) { // if there's a position in lockedPosition, put it in the action.
-            actionQueue[actionQueue.length - 1].pos = lockedPosition;
+            if (!actionQueue[actionQueue.length - 1].other) actionQueue[actionQueue.length - 1].other = {}
+            actionQueue[actionQueue.length - 1].other.pos = lockedPosition;
 
             //set the border color and position lock time
             setAllButtonBorders(layers,positionConfig.LOCK_BORDER_COLOR);
@@ -74,7 +75,8 @@ executables["position"] = {
             y = Math.round(Math.max(Math.min(y,100),0));
             
             //add the pos to the last action of the action queue (SHOULD be the action from the button that triggered this)
-            let pos = actionQueue[actionQueue.length - 1].pos = {x,y};
+            if (!actionQueue[actionQueue.length - 1].other) actionQueue[actionQueue.length - 1].other = {}
+            let pos = actionQueue[actionQueue.length - 1].other.pos = {x,y};
 
             /* position lock */
             if (positionConfig.POSITION_LOCK_DELAY_MS != 0) { //position lock is enabled,

@@ -175,3 +175,23 @@ let devEnd
         }
     }
 })()
+
+class TeamMatchPerformance {
+    data;
+    constructor(actionQueue) {
+        let filteredActionQueue = actionQueue.filter(action=>!action.temp);
+        filteredActionQueue = filteredActionQueue.map(x => {
+            x.ts = Math.max(x.ts,0);
+            return x;
+        })
+        this.data = {
+            matchId: `${ScoutingSync.state.matchNumber}-${ScoutingSync.state.robotNumber}-${ScoutingSync.state.scouterId}-${Math.floor((Math.random() * 2 ** 32)).toString(32)}`,
+            timestamp: Date.now(),
+            clientVersion: config.version,
+            scouterId: ScoutingSync.state.scouterId, // from scouting-sync.js
+            robotNumber: Number(ScoutingSync.state.robotNumber), // from scouting-sync.js
+            matchNumber: Number(ScoutingSync.state.matchNumber),
+            actionQueue: filteredActionQueue,
+        }
+    }
+}

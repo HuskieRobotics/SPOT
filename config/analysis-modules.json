@@ -1,6 +1,33 @@
 [
     {
-        "type": "team",
+        "view": "team",
+        "module": "HeatmapScatterPlots",
+        "name": "Action Plot",
+        "position": "main",
+        "options": {
+            "coordinatePath": "other.pos",
+            "aggregatedActionsPath": "aggregatedActions",
+            "actionGroups": [
+                {
+                    "label": "Shots",
+                    "actions": ["upperHub", "lowerHub", "miss"]
+                },
+                {
+                    "label": "Pickups",
+                    "actions": ["groundPickup", "terminalPickup"]
+                }
+            ],
+            "actionLabels": {
+                "upperHub": "UpperH",
+                "lowerHub": "LowerH",
+                "miss": "Miss",
+                "groundPickup": "GroundP",
+                "terminalPickup": "TerminalP"
+            }
+        }
+    },
+    {
+        "view": "team",
         "module": "Stats",
         "position": "side",
         "name": "Team Stats",
@@ -34,7 +61,7 @@
         }
     },
     {
-        "type": "team",
+        "view": "team",
         "module": "Bar",
         "position": "main",
         "name": "Shot Distribution",
@@ -53,7 +80,7 @@
         }
     },
     {
-        "type": "team",
+        "view": "team",
         "module": "Pie",
         "position": "main",
         "name": "Pickup Distribution",
@@ -64,6 +91,67 @@
                 },
                 "Terminal": {
                     "path": "counts.terminalPickup"
+                }
+            }
+        }
+    },
+    {
+        "view": "match",
+        "module": "HeatmapScatterPlots",
+        "name": "Action Plot",
+        "position": "main",
+        "options": {
+            "coordinatePath": "other.pos",
+            "aggregatedActionsPath": "aggregatedActions",
+            "actionGroups": [
+                {
+                    "label": "Shots",
+                    "actions": ["upperHub", "lowerHub", "miss"]
+                },
+                {
+                    "label": "Pickups",
+                    "actions": ["groundPickup", "terminalPickup"]
+                }
+            ],
+            "actionLabels": {
+                "upperHub": "UpperH",
+                "lowerHub": "LowerH",
+                "miss": "Miss",
+                "groundPickup": "GroundP",
+                "terminalPickup": "TerminalP"
+            }
+        }
+    },
+    {
+        "view": "match",
+        "module": "Stats",
+        "position": "side",
+        "name": "Alliance Stats",
+        "options": {
+            "list": {
+                "Average Cycle Time": {
+                    "path": "cycle.averageTime",
+                    "multiplier": 0.001,
+                    "decimals": 2,
+                    "unit": "s"
+                },
+                "Average Completed Cycle Time": {
+                    "path": "cycle.averageTimeComplete",
+                    "multiplier": 0.001,
+                    "decimals": 2,
+                    "unit": "s"
+                },
+                "Average Accuracy": {
+                    "path": "accuracy",
+                    "multiplier": 100,
+                    "decimals": 1,
+                    "unit": "%"
+                },
+                "Average Scores": {
+                    "path": "scoreCount"
+                },
+                "Average Misses": {
+                    "path": "counts.miss"
                 }
             }
         }
