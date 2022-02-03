@@ -8,6 +8,7 @@ let io;
 const {TeamMatchPerformance} = require("../lib/db.js");
 const axios = require('axios');
 const config = require("../../config/client.json");
+const chalk = require("chalk");
 
 module.exports = (server) => {
     if (!ScoutingSync.initialized) {
@@ -35,6 +36,9 @@ class ScoutingSync {
         if (ScoutingSync.initialized) {
             throw new Error("ScoutingSync already initialized!")
         }
+        if (!process.env.TBA_API_KEY) {
+            console.log(chalk.white.bgRed.bold.underline("TBA_API_KEY not found in .env file! SPOT will not properly function without this."))
+        }
         io = require("socket.io")(server);
         
         //new scouter flow
@@ -56,14 +60,17 @@ class ScoutingSync {
     }
     
     /**
-     * get the matches present in thebluealliance api
+     * get a regional's matches from thebluealliance api
      */
     static async getMatches() {
+        if (!process.env.TBA_API_KEY) {
+            return []; //no key, no matches
+        }
         let tbaMatches = (await axios.get(`https://www.thebluealliance.com/api/v3/event/${config.tbaEventKey}/matches`, {
             headers: {
                 "X-TBA-Auth-Key": process.env.TBA_API_KEY
             }
-        }).catch(e => console.log("axios error fetching matches!"))).data;
+        }).catch(e => console.log(e,chalk.bold.red("\Error fetching matches from blue alliance api!")))).data;
         
         //determine match numbers linearly (eg. if there are 10 quals, qf1 would be match 11)
         const matchLevels = ["qm", "ef", "qf", "sf", "f"];

@@ -4,7 +4,7 @@ const chalk = require("chalk");
 // const dotenv = require('dotenv').config()
 
 mongoose.connect(process.env.DB_URL, {useNewUrlParser: true, useUnifiedTopology: true}).catch(e => {
-    console.log(e,chalk.whiteBright.bgRed.bold(`\nError connecting to MongoDB. This could be because your DB_URL is incorrect. SPOT will not properly function without a database.`))
+    console.log(e,chalk.whiteBright.bgRed.bold(`\nError connecting to MongoDB! This could be because DB_URL is incorrect in your .env file. SPOT will not properly function without a database.`))
 })
 
 
