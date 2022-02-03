@@ -78,6 +78,7 @@ body {
   grid-area: 1 / 2 / 2 / 3;
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 20px;
   overflow-y: scroll;
 }
@@ -89,7 +90,6 @@ body {
 #side-list > div:last-child {
   margin-bottom: 40px;
 }
-
 
 #logo {
   height: 100%;
@@ -117,11 +117,12 @@ body {
 }
 
 #search-container {
-  padding-bottom: 20px;
+  padding: 20px 0;
+  border-top: 1px solid var(--accent-alt);
   border-bottom: 1px solid var(--accent-alt);
-  box-shadow: 0 7px 10px -10px var(--accent-alt);
-  border-radius: 8px;
-  margin-bottom: 20px;
+  box-shadow: 0 -7px 10px -10px var(--accent-alt);
+  border-radius: 8px 8px 0 0;
+  margin: 20px 0;
 }
 
 #search-input {
@@ -245,4 +246,95 @@ body {
   height: calc(100vh - 75px);
   opacity: 1;
   transition: visibility 0s 0s, opacity 0.3s 0s;
+}
+
+#match-view-switch {
+  background-color: var(--bg);
+  border: 3px solid var(--accent);
+  border-radius: var(--border-radius);
+  font-size: 1.3rem;
+  width: 100%;
+  color: var(--text);
+  cursor: pointer;
+  transition: 0.3s color, 0.3s background-color
+}
+
+#match-view-switch.selected {
+  background-color: var(--accent);
+  color: var(--bg-alt)
+}
+
+#match-view {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+#select-teams-text {
+  font-size: 3rem;
+  line-height: 1em;
+  color: var(--accent-alt);
+  margin-top: 32px;
+}
+
+#team-selects {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+  align-items: center;
+}
+
+#alliance-vs {
+  font-size: 1.5rem;
+}
+
+.alliance-selects {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+}
+
+.alliance-selects > select {
+  border-radius: var(--border-radius);
+  border: 2px solid var(--text);
+  width: 90px;
+  font-size: 1.2rem;
+  text-align: center;
+  color: var(--text);
+  background-color: var(--bg-alt);
+  outline: none;
+  transition: 0.2s border-color;
+}
+
+.alliance-selects > select > option {
+  text-align: center;
+}
+
+.alliance-selects > select.filled {
+  border-color: var(--accent-alt);
+}
+
+#alliance-module-container {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  overflow-y: scroll;
+}
+
+.alliance-modules {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  overflow-y: scroll;
+}
+
+.alliance-modules.hidden {
+  visibility: hidden;
+}
+
+.alliance-modules > div:last-child {
+  margin-bottom: 20px;
 }

@@ -13,14 +13,22 @@ class Stats {
         this.container.appendChild(this.list)
     }
 
-    setData(team, dataset) {
-        this.header.innerText = this.moduleConfig.name
-        clearDiv(this.list)
-        console.log(this.moduleConfig)
+    formatData(teams, dataset) {
+        const data = []
         for (const [statName, stat] of Object.entries(this.moduleConfig.options.list)) {
-            this.stat = createDOMElement("div", "stat")
-            let formattedStat = getPath(dataset.teams[team], stat.path)
-           
+            let formattedStat
+            let summed = teams.map(team => getPath(dataset.teams[team], stat.path)).flat().reduce((acc, i) => acc + i, 0)
+            
+            console.log(summed)
+
+            if (stat.aggrMethod == "sum") { //optionally summed
+                formattedStat = summed
+            } else { //default is average
+                formattedStat = summed / teams.length
+            }
+
+            // console.log(formattedStat)
+            
             if (stat.multiplier !== undefined) {
                 formattedStat *= stat.multiplier
             }
@@ -33,8 +41,22 @@ class Stats {
                 formattedStat += stat.unit
             }
 
-            this.stat.innerHTML = `<strong>${statName}:</strong> ${formattedStat}`
-            this.list.appendChild(this.stat)
+            data.push({
+                name: statName,
+                value: formattedStat
+            })
+        }
+
+        return data
+    }
+
+    setData(data) {
+        this.header.innerText = this.moduleConfig.name
+        clearDiv(this.list)
+        for (const stat of data) {
+            const statElement = createDOMElement("div", "stat")
+            statElement.innerHTML = `<strong>${stat.name}:</strong> ${stat.value}`
+            this.list.appendChild(statElement)
         }
     }
 }

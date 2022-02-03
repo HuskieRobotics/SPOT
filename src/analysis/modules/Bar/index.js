@@ -7,14 +7,25 @@ class Bar {
         this.container = createDOMElement("div", "container bar")
     }
 
-    setData(team, dataset) {
+    formatData(teams, dataset) {
         let bars = this.moduleConfig.options.bars
+
+        
+
+        const values = Object.entries(bars).map((bar) => {
+            const [barName, barInfo] = bar
+            const summed = teams.map(team => getPath(dataset.teams[team], barInfo.path)).flat().reduce((acc, i) => acc + i, 0)
+            if (barInfo.aggrMethod == "sum") { //optionally summed
+                return summed
+            } else { //default is average
+                return summed / teams.length
+            }
+        })
+
         const data = [
             {
                 x: Object.keys(bars),
-                y: Object.entries(bars).map((bar) => {
-                    return getPath(dataset.teams[team], bar[1].path)
-                }),
+                y: values,
                 type: "bar",
                 marker: {
                     color: "#30a2ff"
@@ -22,6 +33,10 @@ class Bar {
             }
         ]
 
+        return data
+    }
+
+    setData(data) {
         const layout = {
             margin: {
                 pad: 12
@@ -56,6 +71,7 @@ class Bar {
             modeBarButtonsToRemove: ["zoom2d", "pan2d", ""]
         }
 
-        Plotly.react(this.container, data, layout, config)
+        Plotly.purge(this.container)
+        Plotly.newPlot(this.container, data, layout, config)
     }
 }

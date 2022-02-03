@@ -1,20 +1,19 @@
 .stats.container {
-    width: 100%;
+    width: 90%;
     padding: 30px 40px;
     display: flex;
     flex-direction: column;
     background-color: var(--bg-alt);
-    border-radius: var(--border-radius) 0 0 var(--border-radius);
+    border-radius: var(--border-radius);
     border: 2px solid var(--accent-alt);
-    border-right: none;
 }
 
 .stats .header {
     font-size: 2rem;
     line-height: 2rem;
     text-align: center;
-    color: var(--accent-alt);
-    margin-bottom: 10px;
+    color: var(--text);
+    margin-bottom: 12px;
 }
 
 .stats .list {

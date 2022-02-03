@@ -48,9 +48,10 @@
       </div>
 
       <div id="sidebar">
+        <button id="match-view-switch">Simulate Match</button>
         <div id="search-container">
           <div id="search">
-            <input placeholder="Team" id="search-input" required />
+            <input placeholder="Search Teams" id="search-input" required />
             <i id="search-icon" class="fa fa-search"></i>
           </div>
         </div>
@@ -76,6 +77,45 @@
 
           <div id="side-list">
 
+          </div>
+        </div>
+
+        <div id="match-view">
+          <div id="select-teams-text">Select Teams</div>
+          <div id="team-selects">
+            <div id="left-alliance-selects" class="alliance-selects">
+              <select>
+                <option selected value="none">None</option>
+              </select>
+              <select>
+                <option selected value="none">None</option>
+              </select>
+              <select>
+                <option selected value="none">None</option>
+              </select>
+            </div>
+            <div id="alliance-vs">vs</div>
+            <div id="right-alliance-selects" class="alliance-selects">
+              <select>
+                <option selected value="none">None</option>
+              </select>
+              <select>
+                <option selected value="none">None</option>
+              </select>
+              <select>
+                <option selected value="none">None</option>
+              </select>
+            </div>
+          </div>
+
+          <div id="alliance-module-container">
+            <div id="left-alliance-modules" class="alliance-modules hidden">
+
+            </div>
+            
+            <div id="right-alliance-modules" class="alliance-modules hidden">
+
+            </div>
           </div>
         </div>
       </div>
