@@ -1,14 +1,19 @@
-const mongoose = require('mongoose')
-const dotenv = require('dotenv').config()
+const mongoose = require("mongoose");
+const chalk = require("chalk");
 
-mongoose.connect(process.env.DB_URL, {useNewUrlParser: true, useUnifiedTopology: true})
+// const dotenv = require('dotenv').config()
+
+mongoose.connect(process.env.DB_URL, {useNewUrlParser: true, useUnifiedTopology: true}).catch(e => {
+    console.error(e,chalk.whiteBright.bgRed.bold(`\nError connecting to MongoDB! This could be because DB_URL is incorrect in your .env file. SPOT will not properly function without a database.`))
+})
+
 
 const db = mongoose.connection
 
 db.on('error', (e) => console.log(`Error: ${e}`))
 
 db.once('open', function() {
-    console.log("Connected to Database")
+    console.log(chalk.green("Successfully Connected to the Database"))
 })
 
 /*
