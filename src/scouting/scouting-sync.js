@@ -13,7 +13,7 @@ const chalk = require("chalk");
 module.exports = (server) => {
     if (!ScoutingSync.initialized) {
         if (!server) {
-            console.warn("You need to pass in an http server to initialize ScoutingSync!")
+            console.warn(chalk.yellow("You need to pass in an http server to initialize ScoutingSync. This can be ignored if ScoutingSync is initialized elsewhere."))
         } else {
             ScoutingSync.initialize(server); //initialize the socketio stuff
         }

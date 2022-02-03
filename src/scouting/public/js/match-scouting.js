@@ -170,6 +170,7 @@ let devEnd
                 scouterId: ScoutingSync.state.scouterId, // from scouting-sync.js
                 robotNumber: Number(ScoutingSync.state.robotNumber), // from scouting-sync.js
                 matchNumber: Number(ScoutingSync.state.matchNumber),
+                eventNumber: config.matchNumber,
                 actionQueue: filteredActionQueue,
             }
         }
