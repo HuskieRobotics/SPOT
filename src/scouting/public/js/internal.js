@@ -5,6 +5,33 @@ DO NOT REMOVE OR MODIFY ANYTHING UNLESS YOU KNOW WHAT YOU'RE DOING
 *****************************************************************/
 let config = fetch(`/config.json`).then(res => res.json());
 
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function() {
+    navigator.serviceWorker.register('/sw.js').then(function(registration) {
+      // Registration was successful
+      console.log('ServiceWorker registration successful with scope: ', registration.scope);
+    }, function(err) {
+      // registration failed
+      console.log('ServiceWorker registration failed: ', err);
+    });
+  });
+}
+
+let attemptedPWA
+window.addEventListener("beforeinstallprompt", (e) => {
+  if (attemptedPWA) return;
+  attemptedPWA = true;
+  e.preventDefault();
+  let prompt = e;
+  let modal = new Modal("small")
+  modal.text("SPOT is better when you install the app!").action("Install", () => {
+    prompt.prompt();
+    prompt.userChoice.then(() => {
+      modal.modalExit();
+    })
+  }).dismiss("Maybe Later")
+})
+
 function switchPage(pageName) {
   const pages = document.body.querySelectorAll(".page")
   for (const page of pages) {
@@ -124,6 +151,14 @@ class Modal {
 
     return this
   }
+
+  action(buttonText,func) {
+    const buttonElement = document.createElement("button")
+    buttonElement.innerText = buttonText
+    buttonElement.addEventListener("click", func);
+    this.element.appendChild(buttonElement);
+    return this
+  }
 }
 
 function showFade(element) {
@@ -151,20 +186,29 @@ class Popup {
       "color": "var(--green)"
     },
   }
+  popupElement;
 
   constructor(type, text, duration=5000) {
-    const popupElement = document.createElement("p")
-    popupElement.classList = "popup"
-    popupElement.style.backgroundColor = Popup.types[type].color
-    popupElement.innerText = Popup.types[type].prefix + text
-    document.body.appendChild(popupElement)
-    popupElement.offsetHeight
-    popupElement.style.top = "55px"
+    this.popupElement = document.createElement("p")
+    this.popupElement.classList = "popup"
+    this.popupElement.style.backgroundColor = Popup.types[type].color
+    this.popupElement.innerText = Popup.types[type].prefix + text
+    document.body.appendChild(this.popupElement)
+    this.popupElement.offsetHeight
+    this.popupElement.style.top = "55px"
     setTimeout(() => {
-      popupElement.style.top = "0"
+      this.popupElement.style.top = "0"
       setTimeout(() => {
-        document.body.removeChild(popupElement)
+        document.body.removeChild(this.popupElement)
       }, 600)
     }, duration)
+  }
+  setText(text) {
+    this.popupElement.innerText = text;
+    return this;
+  }
+  setType(type) {
+    this.popupElement.style.backgroundColor = Popup.types[type].color;
+    return this;
   }
 }

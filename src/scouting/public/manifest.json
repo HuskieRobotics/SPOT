@@ -1,9 +1,11 @@
 {
-    "name": "SPOT",
+    "name": "SPOT Scouting",
+    "short_name": "SPOT",
     "description": "An open source modular scouting app developed by Team 3061 Huskie Robotics.",
     "display": "fullscreen",
     "orientation": "landscape",
     "background-color": "#efefef",
+    "start_url": "/",
     "icons": [
         {
             "src": "/icons/android-icon-36x36.png",
