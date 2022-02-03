@@ -1,6 +1,8 @@
 {
    "gameId": "",
    "version": "",
+   "tbaEventKey": "",
+   "eventNumber": 0,
    "timing": {
        "totalTime": 150,
        "timeTransitions": {
@@ -9,6 +11,12 @@
            "30": {"layer": 1, "displayText": "Endgame"}
        }
    },
+   "qrConfig": {
+        "ACTION_SCHEMA": [
+            {"key": "id", "bits": 8},
+            {"key": "ts", "bits": 8}
+        ]
+    },
    "layout": {
        "gridRows": 0,
        "gridColumns": 0,

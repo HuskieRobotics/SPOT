@@ -37,7 +37,7 @@ class ScoutingSync {
             throw new Error("ScoutingSync already initialized!")
         }
         if (!process.env.TBA_API_KEY) {
-            console.log(chalk.white.bgRed.bold.underline("TBA_API_KEY not found in .env file! SPOT will not properly function without this."))
+            console.error(chalk.white.bgRed.bold("TBA_API_KEY not found in .env file! SPOT will not properly function without this."))
         }
         io = require("socket.io")(server);
         
