@@ -32,13 +32,17 @@ class ScoutingSync {
         "COMPLETE": 3,
     }
 
-    static initialize(server) {
+    static async initialize(server) {
         if (ScoutingSync.initialized) {
             throw new Error("ScoutingSync already initialized!")
         }
+
+        //matches
         if (!process.env.TBA_API_KEY) {
             console.error(chalk.white.bgRed.bold("TBA_API_KEY not found in .env file! SPOT will not properly function without this."))
         }
+        ScoutingSync.match = (await ScoutingSync.getMatches())[0];
+
         io = require("socket.io")(server);
         
         //new scouter flow
@@ -46,9 +50,7 @@ class ScoutingSync {
             let newScouter = new Scouter(socket);
             newScouter.socket.on("disconnect", () => {
                 setTimeout(() => {
-                    if (!newScouter.connected) {
-                        //remove it
-                        console.log("removing inactive scouter...")
+                    if (!newScouter.connected) { //remove old disconnnected scouters
                         ScoutingSync.scouters = ScoutingSync.scouters.filter(x=>!( !x.connected && x.timestamp == newScouter.timestamp ) )
                     }
                 },60000)
@@ -56,7 +58,8 @@ class ScoutingSync {
             ScoutingSync.scouters.push(newScouter);
         })
 
-        ScoutingSync.getMatches().then(matches => ScoutingSync.match = matches[0]);
+        console.log(chalk.green("Successfully Initialized ScoutingSync"))
+        ScoutingSync.initialized = true;
     }
     
     /**
@@ -71,7 +74,7 @@ class ScoutingSync {
                 "X-TBA-Auth-Key": process.env.TBA_API_KEY
             }
         }).catch(e => console.log(e,chalk.bold.red("\Error fetching matches from blue alliance api!")))).data;
-        
+
         //determine match numbers linearly (eg. if there are 10 quals, qf1 would be match 11)
         const matchLevels = ["qm", "ef", "qf", "sf", "f"];
         let levelCounts = {};
@@ -156,6 +159,7 @@ class ScoutingSync {
             }
         }
     }
+
     static getScouters() {
         let out = ScoutingSync.scouters.map(x => {return { ...x }} );
         for (let scouter of out) { //remove sockets from all the scouters so there isn't circular dependency
@@ -163,6 +167,7 @@ class ScoutingSync {
         }
         return out;
     }
+
     static setMatch(match) {
         ScoutingSync.match = match;
     }
