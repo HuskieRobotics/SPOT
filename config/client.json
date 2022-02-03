@@ -2,6 +2,7 @@
     "gameId": "rapidReact2022",
     "version": "0.1",
     "tbaEventKey": "2020ilch",
+    "eventNumber": 0,
     "timing": {
         "totalTime": 150000,
         "timeTransitions": {

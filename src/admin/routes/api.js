@@ -1,7 +1,14 @@
 const { Router } = require("express");
 const ScoutingSync = require("../../scouting/scouting-sync")();
-
 let router = Router();
+
+router.use((req,res,next) => {
+    if (!ScoutingSync.initialized) {
+        res.status(503).send("Scouting Sync not initialized yet!");
+    } else {
+        next()
+    }
+})
 
 router.get("/scouters", (req,res) => {
     res.json(ScoutingSync.getScouters())

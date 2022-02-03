@@ -5,6 +5,8 @@
 
 - `gameId`: A unique identifier for the current year's game. This is separate from version. 
 - `version`: A string identifying the scouting frontend's version.
+- `tbaEventKey`: A TheBlueAlliance event key corresponding to the event.
+- `eventNumber`: An event number, used to differentiate teamMatchPerformances between different events.
 - `timing`
     - `totalTime`: The total amount of time in a game in seconds.
     - `timeTransitions`: An object with keys being numbers (in the JSON as a string) denoting the start of a time-based layer transition (see `layers`).
