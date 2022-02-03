@@ -5,27 +5,25 @@ let auth2
 let currentUser
 
 gapi.load('auth2', () => {
-    setTimeout(() => {
-        auth2 = gapi.auth2.init({
-            client_id: clientId
-        })
-        
+    auth2 = gapi.auth2.init({
+        client_id: clientId
+    })
+    
 
-        auth2.then(() => {
-            if (!auth2.isSignedIn.get()) {
-                auth2.attachClickHandler(document.querySelector(".auth-buttons .google"), {})
-                spinner.classList.remove("visible")
-            }
-        }).catch(() => {
-            document.querySelector(".auth-buttons .google").classList.remove("active")
+    auth2.then(() => {
+        if (!auth2.isSignedIn.get()) {
+            auth2.attachClickHandler(document.querySelector(".auth-buttons .google"), {})
             spinner.classList.remove("visible")
-        })
+        }
+    }).catch(() => {
+        document.querySelector(".auth-buttons .google").classList.remove("active")
+        spinner.classList.remove("visible")
+    })
 
-        
+    
 
-        auth2.isSignedIn.listen(signinChanged)
-        auth2.currentUser.listen(userChanged)
-    }, 200)
+    auth2.isSignedIn.listen(signinChanged)
+    auth2.currentUser.listen(userChanged)
 })
 
 function signinChanged(val) {
@@ -48,9 +46,7 @@ async function userChanged(user) {
         currentUser = verification.user
         //TODO: update ScoutingSync.scouterId
         switchPage("waiting")
-        setTimeout(() => {
-            spinner.classList.remove("visible")
-        }, 200)
+        spinner.classList.remove("visible")
     }
   }
 }
@@ -67,7 +63,8 @@ async function verify(user) {
 }
 
 document.querySelector("#landing > div.auth.landing-screen > div > div.manual").addEventListener("click", () => {
-    switchPage("form")
-})
+    updateForm();
+    switchPage("form");
+});
 
 // signOutBtn.addEventListener("click", signOut)
