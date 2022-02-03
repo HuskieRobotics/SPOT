@@ -1,7 +1,11 @@
 const mongoose = require('mongoose')
-const dotenv = require('dotenv').config()
+// const dotenv = require('dotenv').config()
 
-mongoose.connect(process.env.DB_URL, {useNewUrlParser: true, useUnifiedTopology: true})
+
+mongoose.connect(process.env.DB_URL, {useNewUrlParser: true, useUnifiedTopology: true}).catch(e => {
+    console.log(e,`\n\x1b[41mError connecting to MongoDB. This could be because your DB_URL is incorrect. SPOT will not properly function without a database.\x1b[0m`)
+})
+
 
 const db = mongoose.connection
 
