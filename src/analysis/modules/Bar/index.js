@@ -8,14 +8,9 @@ class Bar {
     }
 
     formatData(teams, dataset) {
-        let bars = this.moduleConfig.options.bars
-
-        
-
-        const values = Object.entries(bars).map((bar) => {
-            const [barName, barInfo] = bar
-            const summed = teams.map(team => getPath(dataset.teams[team], barInfo.path)).flat().reduce((acc, i) => acc + i, 0)
-            if (barInfo.aggrMethod == "sum") { //optionally summed
+        const values = this.moduleConfig.options.bars.map((bar) => {
+            const summed = teams.map(team => getPath(dataset.teams[team], bar.path)).flat().reduce((acc, i) => acc + i, 0)
+            if (bar.aggrMethod == "sum") { //optionally summed
                 return summed
             } else { //default is average
                 return summed / teams.length
@@ -24,7 +19,7 @@ class Bar {
 
         const data = [
             {
-                x: Object.keys(bars),
+                x: this.moduleConfig.options.bars.map(bar => bar.name),
                 y: values,
                 type: "bar",
                 marker: {

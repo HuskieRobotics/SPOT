@@ -6,8 +6,9 @@ class QREncoder {
     
     constructor() {
         (async () => {
-            config = await config;
-            this.ACTION_SCHEMA = config.qrConfig.ACTION_SCHEMA;
+            qrConfig = await qrConfig;
+
+            this.ACTION_SCHEMA = qrConfig.ACTION_SCHEMA;
             this.ID_ENUM = QREncoder.generateIdEnum(config.layout.layers.flat());
             this.ID_ENUM_REVERSE = Object.assign({}, ...Object.entries(this.ID_ENUM).map(([key,index]) => ({ [index]: key })));
         })()
@@ -48,7 +49,7 @@ class QREncoder {
         
         /****** Action Queue ******/
         for (let action of teamMatchPerformance.actionQueue) {
-            //action's values are defined by the qrConfig.ACTION_SCHEMA in config.json
+            //action's values are defined by the ACTION_SCHEMA in qr.json
             for (let {key,bits} of this.ACTION_SCHEMA) {
                 if (key == "id") {
                     out += QREncoder.encodeValue(this.ID_ENUM[getVal(action,key)], 2 ** bits - 2, 0, bits) //254 max unique ids, probably enough for 99.9% of scouting apps

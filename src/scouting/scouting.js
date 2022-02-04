@@ -17,10 +17,6 @@ router.get("/", (req,res) => {
     });
 })
 
-router.get("/config.json", (req,res) => {
-    res.sendFile(path.resolve(__dirname, "../../config/client.json"));
-})
-
 var executablesOutput;
 router.get("/executables.js", (req,res) => {
     if (executablesOutput) {

@@ -1,0 +1,6 @@
+{
+    "ACTION_SCHEMA": [
+        {"key": "id", "bits": 8},
+        {"key": "ts", "bits": 8}
+    ]
+}

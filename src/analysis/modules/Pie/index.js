@@ -8,12 +8,9 @@ class Pie {
     }
 
     formatData(teams, dataset) {
-        let slices = this.moduleConfig.options.slices
-
-        const values = Object.entries(slices).map((slice) => {
-            const [sliceName, sliceInfo] = slice
-            const summed = teams.map(team => getPath(dataset.teams[team], sliceInfo.path)).flat().reduce((acc, i) => acc + i, 0)
-            if (sliceInfo.aggrMethod == "sum") { //optionally summed
+        const values = this.moduleConfig.options.slices.map((slice) => {
+            const summed = teams.map(team => getPath(dataset.teams[team], slice.path)).flat().reduce((acc, i) => acc + i, 0)
+            if (slice.aggrMethod == "sum") { //optionally summed
                 return summed
             } else { //default is average
                 return summed / teams.length
@@ -22,7 +19,7 @@ class Pie {
 
         const data = [
             {
-                labels: Object.keys(slices),
+                labels: this.moduleConfig.options.slices.map(slice => slice.name),
                 values: values,
                 type: "pie",
                 hole: 0.4,

@@ -1,4 +1,4 @@
-class HeatmapScatterPlots {
+class HeatmapScatterPlot {
     container;
     moduleConfig;
 
@@ -25,18 +25,18 @@ class HeatmapScatterPlots {
                 x: filteredActionQueue.map(a => getPath(a, this.moduleConfig.options.coordinatePath).x),
                 y: filteredActionQueue.map(a => getPath(a, this.moduleConfig.options.coordinatePath).y),
                 marker: {
-                    size: 20,
+                    size: 16,
                     line: {
                         color: 'white',
                         width: 1
                     },
                 },
-                opacity: 0.8
+                opacity: 0.6
             }
         })
 
         const filteredAllActionQueue = teams.map(team => getPath(dataset.teams[team], this.moduleConfig.options.aggregatedActionsPath)).flat()
-            .filter(a => actionGroups[1].actions.includes(a.id))
+            .filter(a => actionGroups[0].actions.includes(a.id))
 
         data.push({
             type: "histogram2dcontour",
@@ -44,18 +44,29 @@ class HeatmapScatterPlots {
             y: filteredAllActionQueue.map(a => getPath(a, this.moduleConfig.options.coordinatePath).y),
             xaxis: "x",
             yaxis: "y",
-            opacity: 0.5,
-            // nbinsx: 6,
-            // nbinsy: 6,
+            opacity: 0.7,
+            nbinsx: 10,
+            nbinsy: 10,
+            // xbins: {
+            //     start: 0,
+            //     size: 5,
+            //     end: 100
+            // },
+            // ybins: {
+            //     start: 0,
+            //     size: 5,
+            //     end: 100
+            // },
+            zmin: 0,
             showscale: false,
-            colorscale: [["0", "rgba(255,255,255,0)"],["1", getComputedStyle(document.documentElement).getPropertyValue('--accent-alt')]],
+            colorscale: [[0, "rgba(255,255,255,0)"],[.1, "rgba(255, 147, 115, 50)"],[1, "rgba(255, 59, 0, 255)"]],
         })
 
         return data
     }
 
     async setData(data) {
-        const fieldImg = await getSvgDataPng(window.location.href + "img/field.svg")
+        const fieldImg = await getSvgDataPng(window.location.href + this.moduleConfig.options.imgPath)
 
         const layout = {
             dragmode: false,

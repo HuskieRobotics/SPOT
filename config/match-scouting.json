@@ -1,8 +1,4 @@
 {
-    "gameId": "rapidReact2022",
-    "version": "0.1",
-    "tbaEventKey": "2020ilch",
-    "eventNumber": 0,
     "timing": {
         "totalTime": 150000,
         "timeTransitions": {
@@ -19,12 +15,6 @@
                 "displayText": "Endgame"
             }
         }
-    },
-    "qrConfig": {
-        "ACTION_SCHEMA": [
-            {"key": "id", "bits": 8},
-            {"key": "ts", "bits": 8}
-        ]
     },
     "layout": {
         "gridRows": 5,

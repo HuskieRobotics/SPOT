@@ -25,7 +25,6 @@ module.exports = {
                 misses: []
             },options)
 
-            console.log(tmp.actionQueue[0],options)
             let pickups = tmp.actionQueue.filter(x=>options.pickups.includes(x.id));
             let endings = tmp.actionQueue.filter(x=>options.scores.includes(x.id) || options.misses.includes(x.id));
 

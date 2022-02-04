@@ -3,7 +3,10 @@
                EVERYTHING HERE IS VERY IMPORTANT
 DO NOT REMOVE OR MODIFY ANYTHING UNLESS YOU KNOW WHAT YOU'RE DOING
 *****************************************************************/
-let config = fetch(`/config.json`).then(res => res.json());
+let config = fetch("/config/config.json").then(res => res.json());
+let matchScoutingConfig = fetch("/config/match-scouting.json").then(res => res.json());
+let qrConfig = fetch("/config/qr.json").then(res => res.json());
+
 
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', function() {
