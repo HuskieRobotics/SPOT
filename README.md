@@ -11,33 +11,7 @@ SPOT is built with HTML, JS, CSS, and Node.js and operates with a MongoDB databa
 - Admin view for live scouter management at competition.
 - Easy scouter tracking and analytics through Google authentication or a form.
 
-
-## Config Info
-
-### client.json
-`client.json` includes all of the information that encompasses a scouting app's basic frontend and data collection.
-
-- `gameId`: A unique identifier for the current year's game. This is separate from version. 
-- `version`: A string identifying the scouting frontend's version.
-- `timing`
-    - `totalTime`: The total amount of time in a game in ms.
-    - `timeTransitions`: An object with keys being numbers (in the JSON as a string) denoting the start of a time-based layer transition (see `layers`). The display text is then displayed in any match-control buttons.
-- `layout`: the layout of a scouting app's main grid.
-    - `gridRows`: The number of rows in the scouting app's main grid.
-    - `gridColumns`: The number of columns in the scouting app's main grid.
-    - `layers`: A layer is an array of objects representing each button of the scouting app visible in a layer. By default, the layer at index 0 of layers is shown, but this can be changed through `timing`, or by `executables` triggered by a button press.
-        - `id`: A unique identifier string for the button that represents a scouting action
-        - `displayText`: The text to be displayed inside of the button (optional)
-        - `gridArea`: An array of four strings representing each element of a CSS grid-area attribute that will be applied to the button (ex. `0 / 1 / 1 / 2` becomes `["0","1","1","2"]`)
-        - `class`: A CSS class to be applied to the button.
-        - `type`: A string representing the type of scouting action the button represents.
-            1. `"action"`: When pressed, add a robot action to the action queue (eg. score, climb) and run any executables if applicable.
-            2. `"undo"`: When pressed, remove the last action from the action queue and run any executables if applicable.
-            3. `"none"`: When pressed, run any executables if applicable without modifying the action queue.
-            4. `"match-control"`: Is either a start button, timer, or end button depending on the time remaining in the match.
-        - `executables`: An array of objects representing custom tasks executed when the button is pressed beyond those specified by their type.
-            - `type`: Name of an executable function.
-            - `args`: A static array of arguments passed into the executable function.
+## [Quickstart Guide](https://docs.google.com/document/d/1dATXMC5U7aT0SfnYEOWFiafaeWbu8opabNglWSFCSPE/view)
 
 ## Pages
 Pages are the modular component of the scouting frontend. Every view that a scouter sees is a page. Pages are stored in `/src/scouting/views/pages/` as .ejs files. By default, the initial page is `landing.ejs`, but can be changed in `/src/scouting/scouting.js`.
