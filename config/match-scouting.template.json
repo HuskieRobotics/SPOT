@@ -4,7 +4,7 @@
        "timeTransitions": {
            "150": {"layer": 0, "displayText": "Auto"},
            "135": {"layer": 1, "displayText": "Teleop"},
-           "30": {"layer": 1, "displayText": "Endgame"}
+           "30": {"layer": 2, "displayText": "Endgame"}
        }
    },
    "layout": {
@@ -13,6 +13,7 @@
        "layers": [
            [{
                "id": "",
+               "displayText": "",
                "gridArea": ["","","",""],
                "class": "",
                "type": "",

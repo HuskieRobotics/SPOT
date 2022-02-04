@@ -107,6 +107,10 @@ async function updateMatches() {
     }
 }
 
+document.querySelector("#startScouting").addEventListener("click", () => {
+    fetch("/admin/api/enterMatch");
+})
+
 fetchScouters();
 setInterval(fetchScouters, 2500);
 

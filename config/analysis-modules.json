@@ -1,7 +1,7 @@
 [
     {
         "view": "team",
-        "module": "HeatmapScatterPlots",
+        "module": "HeatmapScatterPlot",
         "name": "Action Plot",
         "position": "main",
         "options": {
@@ -9,11 +9,11 @@
             "aggregatedActionsPath": "aggregatedActions",
             "actionGroups": [
                 {
-                    "label": "Shots",
+                    "name": "Shots",
                     "actions": ["upperHub", "lowerHub", "miss"]
                 },
                 {
-                    "label": "Pickups",
+                    "name": "Pickups",
                     "actions": ["groundPickup", "terminalPickup"]
                 }
             ],
@@ -23,7 +23,8 @@
                 "miss": "Miss",
                 "groundPickup": "GroundP",
                 "terminalPickup": "TerminalP"
-            }
+            },
+            "imgPath": "img/field.svg"
         }
     },
     {
@@ -32,32 +33,37 @@
         "position": "side",
         "name": "Team Stats",
         "options": {
-            "list": {
-                "Average Cycle Time": {
+            "list": [
+                {
+                    "name": "Average Cycle Time",
                     "path": "cycle.averageTime",
                     "multiplier": 0.001,
                     "decimals": 2,
                     "unit": "s"
                 },
-                "Average Completed Cycle Time": {
+                {
+                    "name": "Average Completed Cycle Time",
                     "path": "cycle.averageTimeComplete",
                     "multiplier": 0.001,
                     "decimals": 2,
                     "unit": "s"
                 },
-                "Average Accuracy": {
+                {
+                    "name": "Average Accuracy",
                     "path": "accuracy",
                     "multiplier": 100,
                     "decimals": 1,
                     "unit": "%"
                 },
-                "Average Scores": {
+                {
+                    "name": "Average Scores",
                     "path": "scoreCount"
                 },
-                "Average Misses": {
+                {
+                    "name": "Average Misses",
                     "path": "counts.miss"
                 }
-            }
+            ]
         }
     },
     {
@@ -66,17 +72,20 @@
         "position": "main",
         "name": "Shot Distribution",
         "options": {
-            "bars": {
-                "Upper Hub": {
+            "bars": [
+                {
+                    "name": "Upper Hub",
                     "path": "counts.upperHub"
                 },
-                "Lower Hub": {
+                {
+                    "name": "Lower Hub",
                     "path": "counts.lowerHub"
                 },
-                "Miss": {
+                {
+                    "name": "Miss",
                     "path": "counts.miss"
                 }
-            }
+            ]
         }
     },
     {
@@ -85,19 +94,21 @@
         "position": "main",
         "name": "Pickup Distribution",
         "options": {
-            "slices": {
-                "Ground": {
+            "slices": [
+                {
+                    "name": "Ground",
                     "path": "counts.groundPickup"
                 },
-                "Terminal": {
+                {
+                    "name": "Terminal",
                     "path": "counts.terminalPickup"
                 }
-            }
+            ]
         }
     },
     {
         "view": "match",
-        "module": "HeatmapScatterPlots",
+        "module": "HeatmapScatterPlot",
         "name": "Action Plot",
         "position": "main",
         "options": {
@@ -105,11 +116,11 @@
             "aggregatedActionsPath": "aggregatedActions",
             "actionGroups": [
                 {
-                    "label": "Shots",
+                    "name": "Shots",
                     "actions": ["upperHub", "lowerHub", "miss"]
                 },
                 {
-                    "label": "Pickups",
+                    "name": "Pickups",
                     "actions": ["groundPickup", "terminalPickup"]
                 }
             ],
@@ -119,7 +130,8 @@
                 "miss": "Miss",
                 "groundPickup": "GroundP",
                 "terminalPickup": "TerminalP"
-            }
+            },
+            "imgPath": "img/field.svg"
         }
     },
     {
@@ -128,32 +140,37 @@
         "position": "side",
         "name": "Alliance Stats",
         "options": {
-            "list": {
-                "Average Cycle Time": {
+            "list": [
+                {
+                    "name": "Average Cycle Time",
                     "path": "cycle.averageTime",
                     "multiplier": 0.001,
                     "decimals": 2,
                     "unit": "s"
                 },
-                "Average Completed Cycle Time": {
+                {
+                    "name": "Average Completed Cycle Time",
                     "path": "cycle.averageTimeComplete",
                     "multiplier": 0.001,
                     "decimals": 2,
                     "unit": "s"
                 },
-                "Average Accuracy": {
+                {
+                    "name": "Average Accuracy",
                     "path": "accuracy",
                     "multiplier": 100,
                     "decimals": 1,
                     "unit": "%"
                 },
-                "Average Scores": {
+                {
+                    "name": "Average Scores",
                     "path": "scoreCount"
                 },
-                "Average Misses": {
+                {
+                    "name": "Average Misses",
                     "path": "counts.miss"
                 }
-            }
+            ]
         }
     }
 ]

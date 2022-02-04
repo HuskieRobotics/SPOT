@@ -2,18 +2,19 @@ let actionQueue = [];
 let devEnd
 
 (async () => {
-    config = await config
+    config = await config;
+    matchScoutingConfig = await matchScoutingConfig;
     //initiate timing
-    let time = config.timing.totalTime;
+    let time = matchScoutingConfig.timing.totalTime;
     let timerActive = false;
     //create grid
     const grid = document.querySelector("#match-scouting .button-grid");
-    grid.style.gridTemplateColumns = `repeat(${config.layout.gridColumns}, 1fr)`;
-    grid.style.gridTemplateRows = `repeat(${config.layout.gridRows}, 1fr)`;
+    grid.style.gridTemplateColumns = `repeat(${matchScoutingConfig.layout.gridColumns}, 1fr)`;
+    grid.style.gridTemplateRows = `repeat(${matchScoutingConfig.layout.gridRows}, 1fr)`;
 
     
     //build buttons
-    const layers = deepClone(config.layout.layers);
+    const layers = deepClone(matchScoutingConfig.layout.layers);
     const buttons = layers.flat();
 
     const buttonBuilders = { //an object to give buttons type specific things, button type: function (button)
@@ -35,7 +36,7 @@ let devEnd
 
                 //special case for match-control buttons which have extra undo funcitonality without executables
                 if (undoneButton.type === "match-control") {
-                    time = config.timing.totalTime; //reset timer
+                    time = matchScoutingConfig.timing.totalTime; //reset timer
                     ScoutingSync.updateState({status: ScoutingSync.SCOUTER_STATUS.WAITING}); //tell the server that you are now waiting to start
                     clearInterval(undoneButton.timerInterval); //clear the timing interval
                     undoneButton.element.innerText = "Start Match";
@@ -85,13 +86,13 @@ let devEnd
 
                 let displayText = "";
                 let start = Date.now()
-                devEnd = () => {start = Date.now() - (config.timing.totalTime - 1)}
-                const transitions = Object.keys(config.timing.timeTransitions).map(x => Number(x)).sort((a,b) => b - a);
+                devEnd = () => {start = Date.now() - (matchScoutingConfig.timing.totalTime - 1)}
+                const transitions = Object.keys(matchScoutingConfig.timing.timeTransitions).map(x => Number(x)).sort((a,b) => b - a);
                 timerActive = true;
                 button.timerInterval = setInterval(() => {
                     if (time <= transitions[0]) { //move to the next transition if it is time
-                        displayText = config.timing.timeTransitions[transitions[0]].displayText;
-                        showLayer(config.timing.timeTransitions[transitions[0]].layer);
+                        displayText = matchScoutingConfig.timing.timeTransitions[transitions[0]].displayText;
+                        showLayer(matchScoutingConfig.timing.timeTransitions[transitions[0]].layer);
                         transitions.shift()
                     }
                     if (time <= 0) {
@@ -105,7 +106,7 @@ let devEnd
 
                         return;
                     }
-                    time = config.timing.totalTime - (Date.now() - start);
+                    time = matchScoutingConfig.timing.totalTime - (Date.now() - start);
                     buttons.filter(x => x.type === "match-control").forEach((b) => { //update all match-control buttons (even those in different layers)
                         b.element.innerText = `${(time / 1000).toFixed(2)} | ${displayText}`;
                     });
@@ -166,33 +167,13 @@ let devEnd
             this.data = {
                 matchId: `${ScoutingSync.state.matchNumber}-${ScoutingSync.state.robotNumber}-${ScoutingSync.state.scouterId}-${Math.floor((Math.random() * 2 ** 32)).toString(32)}`,
                 timestamp: Date.now(),
-                clientVersion: config.version,
+                clientVersion: config.VERSION,
                 scouterId: ScoutingSync.state.scouterId, // from scouting-sync.js
                 robotNumber: Number(ScoutingSync.state.robotNumber), // from scouting-sync.js
                 matchNumber: Number(ScoutingSync.state.matchNumber),
-                eventNumber: config.matchNumber,
+                eventNumber: config.EVENT_NUMBER,
                 actionQueue: filteredActionQueue,
             }
         }
     }
 })()
-
-class TeamMatchPerformance {
-    data;
-    constructor(actionQueue) {
-        let filteredActionQueue = actionQueue.filter(action=>!action.temp);
-        filteredActionQueue = filteredActionQueue.map(x => {
-            x.ts = Math.max(x.ts,0);
-            return x;
-        })
-        this.data = {
-            matchId: `${ScoutingSync.state.matchNumber}-${ScoutingSync.state.robotNumber}-${ScoutingSync.state.scouterId}-${Math.floor((Math.random() * 2 ** 32)).toString(32)}`,
-            timestamp: Date.now(),
-            clientVersion: config.version,
-            scouterId: ScoutingSync.state.scouterId, // from scouting-sync.js
-            robotNumber: Number(ScoutingSync.state.robotNumber), // from scouting-sync.js
-            matchNumber: Number(ScoutingSync.state.matchNumber),
-            actionQueue: filteredActionQueue,
-        }
-    }
-}

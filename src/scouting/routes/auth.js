@@ -1,5 +1,6 @@
-const {OAuth2Client} = require('google-auth-library')
-const oAuth2Client = new OAuth2Client(process.env.CLIENT_ID)
+const {OAuth2Client} = require('google-auth-library');
+const oAuth2Client = new OAuth2Client(process.env.CLIENT_ID);
+const config = require("../../../config/config.json");
 const { Router } = require("express");
 
 let router = Router();

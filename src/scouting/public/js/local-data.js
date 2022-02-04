@@ -68,4 +68,4 @@ class LocalData {
     }
 }
 
-LocalData.initialize("development")
+LocalData.initialize("development2")

@@ -1,9 +1,4 @@
 (async () => {
-    //api keys and config
-    const EVENT_ID = "2020ilch"
-    const TBA_API_KEY = "35YGkhzv98FQInv2qLCZ6C9sixyhgU4hawV0oOS3jY0JikXVgAW2fKsAIKgZP8zx";
-    //TODO: put api key into a server config and request
-
     //modules object strucutre
     const modules = {
         team: [],
@@ -16,8 +11,9 @@
     //start loading animation, fetch modules config, fetch dataset, then initialize UI elements
     let dataset
     await loadAround(async () => {
-        const modulesConfig = await fetch(`/analysis/analysis-modules.json`).then(res => res.json());
+        const modulesConfig = await fetch(`/config/analysis-modules.json`).then(res => res.json());
         dataset = await fetchDataset()
+        console.log(dataset)
         initDashboard(dataset, modulesConfig)
         await new Promise(r => setTimeout(r, 300))
     })
@@ -29,7 +25,7 @@
     }
     
     async function fetchTeams() {
-        const teams = await fetch(`https://www.thebluealliance.com/api/v3/event/${EVENT_ID}/teams?X-TBA-Auth-Key=${TBA_API_KEY}`).then(res => res.json())
+        const teams = await fetch(`/analysis/api/teams`).then(res => res.json())
         return teams.reduce((acc, t) => {
             acc[t.team_number] = t.nickname
             return acc
@@ -144,7 +140,7 @@
                 }
 
                 //set data on match modules
-                await setMatchModules([teamSelects.slice(0, 3).map(s => s.value).filter(s => s !== "none"), teamSelects.slice(0, 3).map(s => s.value).filter(s => s !== "none")])
+                await setMatchModules([teamSelects.slice(0, 3).map(s => s.value).filter(s => s !== "none"), teamSelects.slice(3).map(s => s.value).filter(s => s !== "none")])
             })
         }
 

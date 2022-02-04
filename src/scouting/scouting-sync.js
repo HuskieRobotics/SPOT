@@ -6,8 +6,8 @@ Socket-IO communication to synchronize many aspects of the client and server. Se
 
 let io;
 const {TeamMatchPerformance} = require("../lib/db.js");
-const axios = require('axios');
-const config = require("../../config/client.json");
+const axios = require("axios");
+const config = require("../../config/config.json");
 const chalk = require("chalk");
 
 module.exports = (server) => {
@@ -38,8 +38,8 @@ class ScoutingSync {
         }
 
         //matches
-        if (!process.env.TBA_API_KEY) {
-            console.error(chalk.white.bgRed.bold("TBA_API_KEY not found in .env file! SPOT will not properly function without this."))
+        if (!config.secrets.TBA_API_KEY) {
+            console.error(chalk.whiteBright.bgRed.bold("TBA_API_KEY not found in config.json file! SPOT will not properly function without this."))
         }
         ScoutingSync.match = (await ScoutingSync.getMatches())[0];
 
@@ -66,14 +66,14 @@ class ScoutingSync {
      * get a regional's matches from thebluealliance api
      */
     static async getMatches() {
-        if (!process.env.TBA_API_KEY) {
+        if (!config.secrets.TBA_API_KEY) {
             return []; //no key, no matches
         }
-        let tbaMatches = (await axios.get(`https://www.thebluealliance.com/api/v3/event/${config.tbaEventKey}/matches`, {
+        let tbaMatches = (await axios.get(`https://www.thebluealliance.com/api/v3/event/${config.TBA_EVENT_KEY}/matches`, {
             headers: {
-                "X-TBA-Auth-Key": process.env.TBA_API_KEY
+                "X-TBA-Auth-Key": config.secrets.TBA_API_KEY
             }
-        }).catch(e => console.log(e,chalk.bold.red("\Error fetching matches from blue alliance api!")))).data;
+        }).catch(e => console.log(e,chalk.bold.red("\nError fetching matches from Blue Alliance Api!")))).data;
 
         //determine match numbers linearly (eg. if there are 10 quals, qf1 would be match 11)
         const matchLevels = ["qm", "ef", "qf", "sf", "f"];

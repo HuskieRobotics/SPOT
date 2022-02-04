@@ -9,10 +9,6 @@ router.get("/", (req,res) => {
     res.render(__dirname + "/views/index.ejs");
 })
 
-router.get("/analysis-modules.json", (req,res) => {
-    res.sendFile(path.resolve(__dirname, "../../config/analysis-modules.json"));
-})
-
 let modulesOutput;
 router.get("/modules.js", (req,res) => {
     if (modulesOutput) {

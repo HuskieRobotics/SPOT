@@ -15,7 +15,7 @@ class Stats {
 
     formatData(teams, dataset) {
         const data = []
-        for (const [statName, stat] of Object.entries(this.moduleConfig.options.list)) {
+        for (const stat of this.moduleConfig.options.list) {
             let formattedStat
             let summed = teams.map(team => getPath(dataset.teams[team], stat.path)).flat().reduce((acc, i) => acc + i, 0)
             
@@ -42,7 +42,7 @@ class Stats {
             }
 
             data.push({
-                name: statName,
+                name: stat.name,
                 value: formattedStat
             })
         }
