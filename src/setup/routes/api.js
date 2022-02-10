@@ -3,7 +3,6 @@ const { Router } = require("express");
 const mongoose = require("mongoose");
 const chalk = require("chalk");
 const axios = require("axios");
-const { config } = require("process");
 let router = Router();
 
 let REQUIRE_ACCESS_CODE;
@@ -59,20 +58,14 @@ router.post("/config", async (req,res) => {
         res.json({success: true});
 
         //restart the app
-        console.log(chalk.green("Updated config.json; restarting server..."))
-        process.on("exit", () => {
-            require("child_process").spawn(process.argv.shift(), process.argv, {
-                cwd: process.cwd(),
-                detached : true,
-                stdio: "inherit"
-            })
-        })
-        process.exit();
+        console.log(chalk.green("Updated config.json; stopping server..."))
 
+        process.exit();
     } else {
         console.log(chalk.red("invalid config.json recieved: Invalid ACCESS_CODE!"))
         res.json({success: false, reason:"Invalid ACCESS_CODE!"});
     }
 })
+
 
 module.exports = router;

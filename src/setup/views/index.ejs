@@ -13,38 +13,67 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;700&family=Saira:wght@300;400;700&family=Tajawal:wght@300;400;700&display=swap"
         rel="stylesheet">
+    <link href="./css/global.css" rel="stylesheet" type="text/css" />
+    <link href="./css/internal.css" rel="stylesheet" type="text/css" />
     <link href="./css/style.css" rel="stylesheet" type="text/css" />
 </head>
 
 <body>
-    <form>
+    <div id="setup-header">SPOT Setup</div>
+
+    <form id="setup-form">
         <input hidden type="text" name="VERSION" value="1.0">
         <div>
-            <label for="ACCESS_CODE">Access Code used for logging into SPOT's admin page or editing its confiuration.</label>
-            <input type="text" id="ACCESS_CODE" name="ACCESS_CODE" placeholder="Access Code">
+            <div>Access Code used for logging into SPOT's admin page or editing its configuration.</div>
+            <label class="label">
+                <input type="text" id="ACCESS_CODE" name="ACCESS_CODE" class="input" required>
+                <span>Access Code</span>
+            </label>
         </div>
         <div>
-            <label for="DATABASE_URL">The MongoDB Connection URL for your database</label>
-            <input type="text" id="DATABASE_URL" name="DATABASE_URL" placeholder="MongoDB Database URL">
+            <div>The MongoDB Connection URL for your database</div>
+            <label class="label">
+                <input type="text" id="DATABASE_URL" name="DATABASE_URL" class="input" required>
+                <span>Database URL</span>
+            </label>
         </div>
         <div>
-            <label for="TBA_API_KEY">Your TheBlueAlliance API Key</label>
-            <input type="text" id="TBA_API_KEY" name="TBA_API_KEY" placeholder="TheBlueAlliance API Key">
-            <label for="TBA_API_KEY">Your TheBlueAlliance Event Key (eg. "2020ilch")</label>
-            <input type="text" id="TBA_EVENT_KEY" name="TBA_EVENT_KEY" placeholder="TheBlueAlliance Event Key">
+            <div>Your TheBlueAlliance API Key</div>
+            <label class="label">
+                <input type="text" id="TBA_API_KEY" name="TBA_API_KEY" class="input" required>
+                <span>TBA API Key</span>
+            </label>
+
+
+            <div>Your TheBlueAlliance Event Key (eg. "2020ilch")</div>
+            <label class="label">
+                <input type="text" id="TBA_EVENT_KEY" name="TBA_EVENT_KEY" class="input" required>
+                <span>TBA Event Key</span>
+            </label>
         </div>
         <div>
-            <label for="GOOGLE_CLIENT_ID">Your Google Client ID</label>
-            <input type="text" id="GOOGLE_CLIENT_ID" name="GOOGLE_CLIENT_ID" placeholder="Google Client ID (optional)">
-            <label for="TBA_API_KEY">Your Google Client Secret</label>
-            <input type="text" id="GOOGLE_CLIENT_SECRET" name="GOOGLE_CLIENT_SECRET" placeholder="Google Client Secret (optional)">
+            <div>Your Google Client ID (optional)</div>
+            <label class="label">
+                <input type="text" id="GOOGLE_CLIENT_ID" name="GOOGLE_CLIENT_ID" class="input" required>
+                <span>Client ID</span>
+            </label>
+
+            <div>Your Google Client Secret (optional)</div>
+            <label class="label">
+                <input type="text" id="GOOGLE_CLIENT_SECRET" name="GOOGLE_CLIENT_SECRET" class="input" required>
+                <span>Client Secret</span>
+            </label>
         </div>
         <div>
-            <label for="TBA_API_KEY">Event Number</label>
-            <input type="number" id="EVENT_NUMBER" name="EVENT_NUMBER" value=0>
+            <div>Event Number</div>
+            <label class="label">
+                <input type="number" id="EVENT_NUMBER" name="EVENT_NUMBER" value=0 class="input" required>
+                <span>Event Number</span>
+            </label>
         </div>
-        <div id="submit">Submit</div>
     </form>
+
+    <button id="submit">Submit</button>
     <script src="./js/script.js"></script>
 </body>
 
