@@ -27,6 +27,8 @@
         }
     },
 
+
+
     {
         "type": "tmp",
         "name": "cycle",
@@ -80,46 +82,17 @@
         }
     },
 
+
+
     {
         "type": "team",
         "name": "average",
-        "outputPath": "averages.upperHub",
+        "outputPath": "averages",
         "options": {
-            "path": "counts.upperHub"
+            "path": "counts"
         }
     },
-    {
-        "type": "team",
-        "name": "average",
-        "outputPath": "averages.lowerHub",
-        "options": {
-            "path": "counts.upperHub"
-        }
-    },
-    {
-        "type": "team",
-        "name": "average",
-        "outputPath": "averages.groundPickup",
-        "options": {
-            "path": "counts.groundPickup"
-        }
-    },
-    {
-        "type": "team",
-        "name": "average",
-        "outputPath": "averages.terminalPickup",
-        "options": {
-            "path": "counts.terminalPickup"
-        }
-    },
-    {
-        "type": "team",
-        "name": "average",
-        "outputPath": "averages.miss",
-        "options": {
-            "path": "counts.miss"
-        }
-    },
+
 
     {
         "type": "team",
@@ -139,6 +112,8 @@
         }
     },
 
+
+
     {
         "type": "tmp",
         "name": "actionTime",
@@ -147,7 +122,6 @@
             "actionId": "leaveTarmac"
         }
     },
-
     {
         "type": "team",
         "name": "average",
@@ -155,5 +129,100 @@
         "options": {
             "path": "tarmacCrossTime"
         }
+    },
+    {
+        "type": "tmp",
+        "name": "actionTime",
+        "outputPath": "startClimbTime",
+        "options": {
+            "actionId": "startClimb"
+        }
+    },
+    {
+        "type": "team",
+        "name": "average",
+        "outputPath": "averages.startClimbTime",
+        "options": {
+            "path": "startClimbTime"
+        }
+    },
+
+    {
+        "type": "tmp",
+        "name": "actionTimeFilter",
+        "outputPath": "autoActions",
+        "options": {
+            "timeMin": 135000
+        }
+    },
+    {
+        "type": "tmp",
+        "name": "countActions",
+        "outputPath": "countsAuto",
+        "options": {
+            "all": true,
+            "actionArrayPath": "autoActions"
+        }
+    },
+    {
+        "type": "tmp",
+        "name": "weightedSum",
+        "outputPath": "scores.auto",
+        "options": {
+            "weightedPaths": {
+                "countsAuto.leaveTarmac": 2,
+                "countsAuto.lowerHub": 2,
+                "countsAuto.upperHub": 4
+            }
+        }
+    },
+    
+    {
+        "type": "tmp",
+        "name": "actionTimeFilter",
+        "outputPath": "teleopActions",
+        "options": {
+            "timeMax": 135000
+        }
+    },
+    {
+        "type": "tmp",
+        "name": "countActions",
+        "outputPath": "countsTeleop",
+        "options": {
+            "all": true,
+            "actionArrayPath": "teleopActions"
+        }
+    },
+    {
+        "type": "tmp",
+        "name": "weightedSum",
+        "outputPath": "scores.teleop",
+        "options": {
+            "weightedPaths": {
+                "countsTeleop.lowerHub": 1,
+                "countsTeleop.upperHub": 2
+            }
+        }
+    },
+
+    {
+        "type": "tmp",
+        "name": "sum",
+        "outputPath": "scores.all",
+        "options": {
+            "addends": ["scores.teleop","scores.auto"]
+        }
+    },
+
+    {
+        "type": "team",
+        "name": "average",
+        "outputPath": "averageScores",
+        "options": {
+            "path": "scores"
+        }
     }
+
+
 ]

@@ -1,4 +1,3 @@
-const { get } = require("mongoose");
 const { setPath, getPath } = require("../../lib/util");
 const {DataTransformer} = require("../DataTransformer");
 
@@ -21,13 +20,5 @@ module.exports = {
         }
         return dataset;
 
-    }),
-
-    /**
-     * @type {DataTransformer}
-     * @param options.example {String} example parameter description
-     */
-    team: new DataTransformer("actionTime", (dataset, outputPath, options) => {
-        return dataset;
     })
 }
