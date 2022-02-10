@@ -1,12 +1,48 @@
 [
     {
         "type": "tmp",
+        "name": "countActions",
+        "outputPath": "counts",
+        "options": {
+            "all": true
+        }
+    },
+    {
+        "type": "team",
+        "name": "countActions",
+        "outputPath": "counts",
+        "options": {
+            "all": true
+        }
+    },
+    {
+        "type": "team",
+        "name": "sum",
+        "outputPath": "counts.scores",
+        "options": {
+            "addends": [
+                "counts.upperHub",
+                "counts.lowerHub"
+            ]
+        }
+    },
+
+    {
+        "type": "tmp",
         "name": "cycle",
         "outputPath": "cycle",
         "options": {
-            "pickups": ["groundPickup","terminalPickup"],
-            "scores": ["upperHub","lowerHub"],
-            "misses": ["miss"]
+            "pickups": [
+                "groundPickup",
+                "terminalPickup"
+            ],
+            "scores": [
+                "upperHub",
+                "lowerHub"
+            ],
+            "misses": [
+                "miss"
+            ]
         }
     },
     {
@@ -20,39 +56,30 @@
     {
         "type": "team",
         "name": "aggregateArray",
-        "outputPath": "aggregatedActions",
+        "outputPath": "cycle.allComplete",
         "options": {
-            "path": "actionQueue"
+            "path": "cycle.allComplete"
         }
     },
     {
         "type": "team",
-        "name": "average",
+        "name": "averageArray",
         "outputPath": "cycle.averageTime",
         "options": {
-            "path": "cycle.averageTime"
+            "arrayPath": "cycle.all",
+            "valuePath": "timeDifferential"
         }
     },
     {
         "type": "team",
-        "name": "average",
+        "name": "averageArray",
         "outputPath": "cycle.averageTimeComplete",
         "options": {
-            "path": "cycle.averageTimeComplete"
+            "arrayPath": "cycle.allComplete",
+            "valuePath": "timeDifferential"
         }
     },
-    {
-        "type": "tmp",
-        "name": "countActions",
-        "outputPath": "counts",
-        "options": {"all": true}
-    },
-    {
-        "type": "team",
-        "name": "countActions",
-        "outputPath": "counts",
-        "options": {"all": true}
-    },
+
     {
         "type": "team",
         "name": "average",
@@ -93,22 +120,40 @@
             "path": "counts.miss"
         }
     },
+
     {
         "type": "team",
         "name": "ratio",
         "outputPath": "accuracy",
         "options": {
-            "numerator": ["counts.lowerHub","counts.upperHub"],
-            "denominator": ["counts.lowerHub","counts.upperHub","counts.miss"],
+            "numerator": [
+                "counts.lowerHub",
+                "counts.upperHub"
+            ],
+            "denominator": [
+                "counts.lowerHub",
+                "counts.upperHub",
+                "counts.miss"
+            ],
             "divByZero": 0
         }
     },
+
+    {
+        "type": "tmp",
+        "name": "actionTime",
+        "outputPath": "tarmacCrossTime",
+        "options": {
+            "actionId": "leaveTarmac"
+        }
+    },
+
     {
         "type": "team",
-        "name": "sum",
-        "outputPath": "scoreCount",
+        "name": "average",
+        "outputPath": "averages.tarmacCrossTime",
         "options": {
-            "addends": ["counts.upperHub","counts.lowerHub"]
+            "path": "tarmacCrossTime"
         }
     }
 ]

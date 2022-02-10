@@ -11,6 +11,7 @@ module.exports = {
             const teamTmps = dataset.tmps.filter(x=>x.robotNumber == teamNumber); //only the tmps that are this team's
 
             let average = teamTmps.reduce((acc, tmp) => {
+                console.log(tmp);
                 return acc + getPath(tmp, options.path)
             }, 0) / teamTmps.length
 
