@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name='viewport' content='width=device-width, initial-scale=1, user-scalable=no, viewport-fit=cover'>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>SPOT - Setup</title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.0/css/all.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;700&family=Saira:wght@300;400;700&family=Tajawal:wght@300;400;700&display=swap"
+        rel="stylesheet">
+    <link href="./css/style.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+    <form>
+        <input hidden type="text" name="VERSION" value="1.0">
+        <div>
+            <label for="ACCESS_CODE">Access Code used for logging into SPOT's admin page or editing its confiuration.</label>
+            <input type="text" id="ACCESS_CODE" name="ACCESS_CODE" placeholder="Access Code">
+        </div>
+        <div>
+            <label for="DATABASE_URL">The MongoDB Connection URL for your database</label>
+            <input type="text" id="DATABASE_URL" name="DATABASE_URL" placeholder="MongoDB Database URL">
+        </div>
+        <div>
+            <label for="TBA_API_KEY">Your TheBlueAlliance API Key</label>
+            <input type="text" id="TBA_API_KEY" name="TBA_API_KEY" placeholder="TheBlueAlliance API Key">
+            <label for="TBA_API_KEY">Your TheBlueAlliance Event Key (eg. "2020ilch")</label>
+            <input type="text" id="TBA_EVENT_KEY" name="TBA_EVENT_KEY" placeholder="TheBlueAlliance Event Key">
+        </div>
+        <div>
+            <label for="GOOGLE_CLIENT_ID">Your Google Client ID</label>
+            <input type="text" id="GOOGLE_CLIENT_ID" name="GOOGLE_CLIENT_ID" placeholder="Google Client ID (optional)">
+            <label for="TBA_API_KEY">Your Google Client Secret</label>
+            <input type="text" id="GOOGLE_CLIENT_SECRET" name="GOOGLE_CLIENT_SECRET" placeholder="Google Client Secret (optional)">
+        </div>
+        <div>
+            <label for="TBA_API_KEY">Event Number</label>
+            <input type="number" id="EVENT_NUMBER" name="EVENT_NUMBER" value=0>
+        </div>
+        <div id="submit">Submit</div>
+    </form>
+    <script src="./js/script.js"></script>
+</body>
+
+</html>

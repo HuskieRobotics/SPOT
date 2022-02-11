@@ -13,6 +13,17 @@ const SCOUTER_STATUS_REVERSE = {
 
 const scouters = {};
 
+;(async () => {
+    await fetchScouters();
+    setInterval(fetchScouters, 2500);
+
+    await updateMatches()
+    // setInterval(updateMatches, 2500);
+
+    document.querySelector("#admin-panel").classList.add("visible")
+})()
+
+
 async function fetchScouters() { //scouter fetch interval (every 2.5s)
     let scouterList = await (await fetch("./api/scouters")).json();
     for (let scouter of scouterList) {
@@ -45,19 +56,19 @@ async function updateMatches() {
     let {allMatches, currentMatch} = await (await fetch(`/admin/api/matches`)).json();
 
     //clear matches view
-    document.querySelector("#matches").innerHTML = "";
+    document.querySelector("#match-list").innerHTML = "";
 
     //rebuild matches view
     for (let match of allMatches) {
         let matchElement = document.createElement("div");
         matchElement.classList.add("match");
         matchElement.innerHTML = `
-        <div class="match-header">${match.number} - ${match.match_string.toUpperCase()}</div>
+        <div class="match-header"><strong>${match.number}</strong> - ${match.match_string.toUpperCase().split("_")[0]}-<strong>${match.match_string.toUpperCase().split("_")[1]}</strong></div>
         <input type="checkbox" class="match-select">
         <div class="match-teams red"></div>
         <div class="match-teams blue"></div>
         `
-        document.querySelector("#matches").appendChild(matchElement);
+        document.querySelector("#match-list").appendChild(matchElement);
 
         if (currentMatch.match_string == match.match_string) { //check the box if it is selected
             matchElement.querySelector(".match-select").checked = true;
@@ -107,15 +118,9 @@ async function updateMatches() {
     }
 }
 
-document.querySelector("#startScouting").addEventListener("click", () => {
+document.querySelector("#start-scouting").addEventListener("click", () => {
     fetch("/admin/api/enterMatch");
 })
-
-fetchScouters();
-setInterval(fetchScouters, 2500);
-
-updateMatches()
-// setInterval(updateMatches, 2500);
 
 class ScouterDisplay {
     scouterElement;
@@ -126,14 +131,14 @@ class ScouterDisplay {
 
         this.scouterElement = document.createElement("div");
         this.scouterElement.innerHTML = `
-        <div class="matchNumber"></div>
-        <div class="scouterId"></div>
-        <div class="robotNumber"></div>
-        <div class="scouterStatus"></div>
+        <div class="match-number"></div>
+        <div class="scouter-id"></div>
+        <div class="robot-number"></div>
+        <div class="scouter-status"></div>
         `;
         this.scouterElement.classList.add("scouter");
 
-        document.querySelector("#scouters").appendChild(this.scouterElement);
+        document.querySelector("#scouter-list").appendChild(this.scouterElement);
 
         this.updateScouterElement();
         
@@ -144,25 +149,31 @@ class ScouterDisplay {
         this.scouter.state = state || this.scouter.state;
 
         //write all text
-        this.scouterElement.querySelector(".scouterId").innerText = this.scouter.state.scouterId;
-        this.scouterElement.querySelector(".matchNumber").innerText = this.scouter.state.matchNumber;
-        this.scouterElement.querySelector(".robotNumber").innerText = this.scouter.state.robotNumber;
+        this.scouterElement.querySelector(".scouter-id").innerText = this.scouter.state.scouterId;
+        this.scouterElement.querySelector(".match-number").innerText = this.scouter.state.matchNumber;
+        this.scouterElement.querySelector(".robot-number").innerText = this.scouter.state.robotNumber;
 
         //update color
         const SCOUTER_STATUS_COLOR = {
-            "0": "white", //NEW
-            "1": "yellow", //WAITING
-            "2": "green", //SCOUTING
-            "3": "lime" //COMPLETE
+            "0": "var(--text)", //NEW
+            "1": "#ffa500", //WAITING
+            "2": "var(--accent)", //SCOUTING
+            "3": "var(--green)" //COMPLETE
         }
-        const DISCONNETED_COLOR = "red";
+        const DISCONNECTED_COLOR = "var(--error)";
 
         if (!this.scouter.state.connected && !(this.scouter.state.status == SCOUTER_STATUS.COMPLETE)) { //disconneted and not complete
-            this.scouterElement.querySelector(".scouterStatus").style.color = DISCONNETED_COLOR;
-            this.scouterElement.querySelector(".scouterStatus").innerText = "DISCONNECTED";
+            this.scouterElement.querySelector(".scouter-status").style.color = DISCONNECTED_COLOR;
+            this.scouterElement.style.borderColor = DISCONNECTED_COLOR;
+            this.scouterElement.querySelector(".match-number").style.backgroundColor = SCOUTER_STATUS_COLOR[this.scouter.state.status];
+            this.scouterElement.querySelector(".match-number").style.borderColor = SCOUTER_STATUS_COLOR[this.scouter.state.status];
+            this.scouterElement.querySelector(".scouter-status").innerText = "DISCONNECTED";
         } else {
-            this.scouterElement.querySelector(".scouterStatus").style.color = SCOUTER_STATUS_COLOR[this.scouter.state.status];
-            this.scouterElement.querySelector(".scouterStatus").innerText = SCOUTER_STATUS_REVERSE[this.scouter.state.status];
+            this.scouterElement.querySelector(".scouter-status").style.color = SCOUTER_STATUS_COLOR[this.scouter.state.status];
+            this.scouterElement.style.borderColor = SCOUTER_STATUS_COLOR[this.scouter.state.status];
+            this.scouterElement.querySelector(".match-number").style.backgroundColor = SCOUTER_STATUS_COLOR[this.scouter.state.status];
+            this.scouterElement.querySelector(".match-number").style.borderColor = SCOUTER_STATUS_COLOR[this.scouter.state.status];
+            this.scouterElement.querySelector(".scouter-status").innerText = SCOUTER_STATUS_REVERSE[this.scouter.state.status];
         }
     }
     destruct() {
