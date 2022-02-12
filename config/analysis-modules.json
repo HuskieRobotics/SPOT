@@ -35,33 +35,86 @@
         "options": {
             "list": [
                 {
-                    "name": "Average Cycle Time",
+                    "name": "Initiation Cross",
+                    "path": "averages.tarmacCrossTime",
+                    "multiplier": -0.001,
+                    "addend": 150,
+                    "decimals": 2,
+                    "unit": "s in"
+                },
+                {
+                    "name": "Climb Start",
+                    "path": "averages.startClimbTime",
+                    "multiplier": 0.001,
+                    "decimals": 2,
+                    "unit": "s to end"
+                },
+                {
+                    "name": "All Cycle Time",
                     "path": "cycle.averageTime",
                     "multiplier": 0.001,
                     "decimals": 2,
                     "unit": "s"
                 },
                 {
-                    "name": "Average Completed Cycle Time",
+                    "name": "Scored Cycle Time",
                     "path": "cycle.averageTimeComplete",
                     "multiplier": 0.001,
                     "decimals": 2,
                     "unit": "s"
                 },
                 {
-                    "name": "Average Accuracy",
+                    "name": "Accuracy",
                     "path": "accuracy",
                     "multiplier": 100,
                     "decimals": 1,
                     "unit": "%"
                 },
                 {
-                    "name": "Average Scores",
-                    "path": "scoreCount"
+                    "name": "Shot Score in Auto",
+                    "path": "averageScores.auto"
                 },
                 {
-                    "name": "Average Misses",
-                    "path": "counts.miss"
+                    "name": "Shot Score",
+                    "path": "averageScores.all"
+                },
+                {
+                    "name": "Upper Hub Shots",
+                    "path": "averages.upperHub"
+                },
+                {
+                    "name": "Lower Hub Shots",
+                    "path": "averages.lowerHub"
+                },
+                {
+                    "name": "Misses",
+                    "path": "averages.miss"
+                }
+            ]
+        }
+    },
+    {
+        "view": "team",
+        "module": "Pie",
+        "position": "main",
+        "name": "Climb Distribution",
+        "options": {
+            "slices": [
+                {
+                    "name": "Climb 1",
+                    "path": "counts.climb1"
+                },
+                {
+                    "name": "Climb 2",
+                    "path": "counts.climb2"
+                },
+                {
+                    "name": "Climb 3",
+                    "path": "counts.climb3"
+                },
+                {
+                    "name": "Climb 4",
+                    "path": "counts.climb4"
                 }
             ]
         }
@@ -106,10 +159,12 @@
             ]
         }
     },
+
+
     {
         "view": "match",
         "module": "HeatmapScatterPlot",
-        "name": "Action Plot",
+        "name": "Alliance Action Plot",
         "position": "main",
         "options": {
             "coordinatePath": "other.pos",
@@ -142,33 +197,126 @@
         "options": {
             "list": [
                 {
-                    "name": "Average Cycle Time",
+                    "name": "Initiation Cross",
+                    "path": "averages.tarmacCrossTime",
+                    "multiplier": -0.001,
+                    "addend": 150,
+                    "decimals": 2,
+                    "unit": "s in"
+                },
+                {
+                    "name": "Climb Start",
+                    "path": "averages.startClimbTime",
+                    "multiplier": 0.001,
+                    "decimals": 2,
+                    "unit": "s to end"
+                },
+                {
+                    "name": "All Cycle Time",
                     "path": "cycle.averageTime",
                     "multiplier": 0.001,
                     "decimals": 2,
                     "unit": "s"
                 },
                 {
-                    "name": "Average Completed Cycle Time",
+                    "name": "Scored Cycle Time",
                     "path": "cycle.averageTimeComplete",
                     "multiplier": 0.001,
                     "decimals": 2,
                     "unit": "s"
                 },
                 {
-                    "name": "Average Accuracy",
+                    "name": "Accuracy",
                     "path": "accuracy",
                     "multiplier": 100,
                     "decimals": 1,
                     "unit": "%"
                 },
                 {
-                    "name": "Average Scores",
-                    "path": "scoreCount"
+                    "name": "Shot Score in Auto",
+                    "path": "averageScores.auto"
                 },
                 {
-                    "name": "Average Misses",
+                    "name": "Shot Score",
+                    "path": "averageScores.all"
+                },
+                {
+                    "name": "Upper Hub Shots",
+                    "path": "averages.upperHub"
+                },
+                {
+                    "name": "Lower Hub Shots",
+                    "path": "averages.lowerHub"
+                },
+                {
+                    "name": "Misses",
+                    "path": "averages.miss"
+                }
+            ]
+        }
+    },
+    {
+        "view": "match",
+        "module": "Pie",
+        "position": "main",
+        "name": "Alliance Climb Distribution",
+        "options": {
+            "slices": [
+                {
+                    "name": "Climb 1",
+                    "path": "counts.climb1"
+                },
+                {
+                    "name": "Climb 2",
+                    "path": "counts.climb2"
+                },
+                {
+                    "name": "Climb 3",
+                    "path": "counts.climb3"
+                },
+                {
+                    "name": "Climb 4",
+                    "path": "counts.climb4"
+                }
+            ]
+        }
+    },
+    {
+        "view": "match",
+        "module": "Bar",
+        "position": "main",
+        "name": "Alliance Shot Distribution",
+        "options": {
+            "bars": [
+                {
+                    "name": "Upper Hub",
+                    "path": "counts.upperHub"
+                },
+                {
+                    "name": "Lower Hub",
+                    "path": "counts.lowerHub"
+                },
+                {
+                    "name": "Miss",
                     "path": "counts.miss"
+                }
+            ]
+        }
+    },
+    {
+        "view": "team",
+        "module": "Pie",
+        "position": "main",
+        "name": "Pickup Distribution",
+        "options": {
+            "slices": [
+                {
+                    "name": "Ground",
+                    "path": "counts.groundPickup"
+                },
+                {
+                    "name": "Terminal",
+                    "path": "counts.terminalPickup"
                 }
             ]
         }

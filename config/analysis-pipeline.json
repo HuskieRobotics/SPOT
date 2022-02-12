@@ -27,7 +27,14 @@
         }
     },
 
-
+    {
+        "type": "team",
+        "name": "aggregateArray",
+        "outputPath": "aggregatedActions",
+        "options": {
+            "path": "actionQueue"
+        }
+    },
 
     {
         "type": "tmp",
