@@ -53,7 +53,7 @@ html {
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
     background: var(--accent-alt);
-    width: 6px;
-    border: 2px solid rgba(0,0,0,0);
+    width: 4px;
+    border: 3px solid rgba(0,0,0,0);
     background-clip: padding-box;
 }
