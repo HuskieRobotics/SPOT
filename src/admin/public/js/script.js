@@ -177,6 +177,7 @@ async function updateMatches(accessCode) {
 
 document.querySelector("#start-scouting").addEventListener("click", () => {
     fetch("/admin/api/enterMatch");
+    console.log("ENTER MATCH!")
 })
 
 class ScouterDisplay {

@@ -1,12 +1,57 @@
 [
     {
         "type": "tmp",
+        "name": "countActions",
+        "outputPath": "counts",
+        "options": {
+            "all": true
+        }
+    },
+    {
+        "type": "team",
+        "name": "countActions",
+        "outputPath": "counts",
+        "options": {
+            "all": true
+        }
+    },
+    {
+        "type": "team",
+        "name": "sum",
+        "outputPath": "counts.scores",
+        "options": {
+            "addends": [
+                "counts.upperHub",
+                "counts.lowerHub"
+            ]
+        }
+    },
+
+    {
+        "type": "team",
+        "name": "aggregateArray",
+        "outputPath": "aggregatedActions",
+        "options": {
+            "path": "actionQueue"
+        }
+    },
+
+    {
+        "type": "tmp",
         "name": "cycle",
         "outputPath": "cycle",
         "options": {
-            "pickups": ["groundPickup","terminalPickup"],
-            "scores": ["upperHub","lowerHub"],
-            "misses": ["miss"]
+            "pickups": [
+                "groundPickup",
+                "terminalPickup"
+            ],
+            "scores": [
+                "upperHub",
+                "lowerHub"
+            ],
+            "misses": [
+                "miss"
+            ]
         }
     },
     {
@@ -20,95 +65,201 @@
     {
         "type": "team",
         "name": "aggregateArray",
-        "outputPath": "aggregatedActions",
+        "outputPath": "cycle.allComplete",
         "options": {
-            "path": "actionQueue"
+            "path": "cycle.allComplete"
         }
     },
     {
         "type": "team",
-        "name": "average",
+        "name": "averageArray",
         "outputPath": "cycle.averageTime",
         "options": {
-            "path": "cycle.averageTime"
+            "arrayPath": "cycle.all",
+            "valuePath": "timeDifferential"
         }
     },
     {
         "type": "team",
-        "name": "average",
+        "name": "averageArray",
         "outputPath": "cycle.averageTimeComplete",
         "options": {
-            "path": "cycle.averageTimeComplete"
+            "arrayPath": "cycle.allComplete",
+            "valuePath": "timeDifferential"
         }
     },
-    {
-        "type": "tmp",
-        "name": "countActions",
-        "outputPath": "counts",
-        "options": {"all": true}
-    },
-    {
-        "type": "team",
-        "name": "countActions",
-        "outputPath": "counts",
-        "options": {"all": true}
-    },
+
+
+
     {
         "type": "team",
         "name": "average",
-        "outputPath": "averages.upperHub",
+        "outputPath": "averages",
         "options": {
-            "path": "counts.upperHub"
+            "path": "counts"
         }
     },
-    {
-        "type": "team",
-        "name": "average",
-        "outputPath": "averages.lowerHub",
-        "options": {
-            "path": "counts.upperHub"
-        }
-    },
-    {
-        "type": "team",
-        "name": "average",
-        "outputPath": "averages.groundPickup",
-        "options": {
-            "path": "counts.groundPickup"
-        }
-    },
-    {
-        "type": "team",
-        "name": "average",
-        "outputPath": "averages.terminalPickup",
-        "options": {
-            "path": "counts.terminalPickup"
-        }
-    },
-    {
-        "type": "team",
-        "name": "average",
-        "outputPath": "averages.miss",
-        "options": {
-            "path": "counts.miss"
-        }
-    },
+
+
     {
         "type": "team",
         "name": "ratio",
         "outputPath": "accuracy",
         "options": {
-            "numerator": ["counts.lowerHub","counts.upperHub"],
-            "denominator": ["counts.lowerHub","counts.upperHub","counts.miss"],
+            "numerator": [
+                "counts.lowerHub",
+                "counts.upperHub"
+            ],
+            "denominator": [
+                "counts.lowerHub",
+                "counts.upperHub",
+                "counts.miss"
+            ],
             "divByZero": 0
+        }
+    },
+
+
+
+    {
+        "type": "tmp",
+        "name": "actionTime",
+        "outputPath": "tarmacCrossTime",
+        "options": {
+            "actionId": "leaveTarmac"
         }
     },
     {
         "type": "team",
-        "name": "sum",
-        "outputPath": "scoreCount",
+        "name": "average",
+        "outputPath": "averages.tarmacCrossTime",
         "options": {
-            "addends": ["counts.upperHub","counts.lowerHub"]
+            "path": "tarmacCrossTime"
+        }
+    },
+
+
+
+    {
+        "type": "tmp",
+        "name": "actionTime",
+        "outputPath": "startClimbTime",
+        "options": {
+            "actionId": "startClimb"
+        }
+    },
+    {
+        "type": "team",
+        "name": "average",
+        "outputPath": "averages.startClimbTime",
+        "options": {
+            "path": "startClimbTime"
+        }
+    },
+
+
+    
+    {
+        "type": "tmp",
+        "name": "actionTimeFilter",
+        "outputPath": "autoActions",
+        "options": {
+            "timeMin": 135000
+        }
+    },
+    {
+        "type": "tmp",
+        "name": "countActions",
+        "outputPath": "countsAuto",
+        "options": {
+            "all": true,
+            "actionArrayPath": "autoActions"
+        }
+    },
+    {
+        "type": "tmp",
+        "name": "weightedSum",
+        "outputPath": "scores.auto",
+        "options": {
+            "weightedPaths": {
+                "countsAuto.leaveTarmac": 2,
+                "countsAuto.lowerHub": 2,
+                "countsAuto.upperHub": 4
+            }
+        }
+    },
+    
+    {
+        "type": "tmp",
+        "name": "actionTimeFilter",
+        "outputPath": "teleopActions",
+        "options": {
+            "timeMax": 135000
+        }
+    },
+    {
+        "type": "tmp",
+        "name": "countActions",
+        "outputPath": "countsTeleop",
+        "options": {
+            "all": true,
+            "actionArrayPath": "teleopActions"
+        }
+    },
+    {
+        "type": "tmp",
+        "name": "weightedSum",
+        "outputPath": "scores.teleop",
+        "options": {
+            "weightedPaths": {
+                "countsTeleop.lowerHub": 1,
+                "countsTeleop.upperHub": 2
+            }
+        }
+    },
+
+    {
+        "type": "tmp",
+        "name": "finalActionOccurance",
+        "outputPath": "finalClimbState",
+        "options": {
+            "ids": ["climb1","climb2","climb3","climb4","climbF"]
+        }
+    },
+    {
+        "type": "tmp",
+        "name": "map",
+        "outputPath": "scores.endgame",
+        "options": {
+            "path": "finalClimbState.id",
+            "map": {
+                "": 0,
+                "climbF": 0,
+                "climb1": 4,
+                "climb2": 6,
+                "climb3": 10,
+                "climb4": 15
+            }
+        }
+    },
+
+    {
+        "type": "tmp",
+        "name": "sum",
+        "outputPath": "scores.all",
+        "options": {
+            "addends": ["scores.teleop","scores.auto","scores.endgame"]
+        }
+    },
+
+    {
+        "type": "team",
+        "name": "average",
+        "outputPath": "averageScores",
+        "options": {
+            "path": "scores"
         }
     }
+
+
 ]

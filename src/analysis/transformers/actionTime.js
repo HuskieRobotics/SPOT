@@ -1,4 +1,4 @@
-const { setPath } = require("../../lib/util");
+const { setPath, getPath } = require("../../lib/util");
 const {DataTransformer} = require("../DataTransformer");
 
 module.exports = {
@@ -13,22 +13,12 @@ module.exports = {
             for (let action of tmp.actionQueue) {
                 if (action.id == options.actionId) {
                     setPath(tmp, outputPath, action.ts);
-                    return dataset;
                 }
             }
+            if (!getPath(tmp,outputPath,false)) //no action of options.actionId found
+                setPath(tmp,outputPath,options.default || null);
         }
-
-        //no action of options.actionId found
-        setPath(tmp,outputPath,options.default || null);
         return dataset;
 
-    }),
-
-    /**
-     * @type {DataTransformer}
-     * @param options.example {String} example parameter description
-     */
-    team: new DataTransformer("actionTime", (dataset, outputPath, options) => {
-        return dataset;
     })
 }

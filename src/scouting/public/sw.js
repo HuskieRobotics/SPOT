@@ -21,7 +21,21 @@ const filesToCache = [
     "/js/scouting-sync.js",
     "/js/waiting.js",
     "/manifest.json",
-    "/executables.js"
+    "/executables.js",
+    "/analysis",
+    "/analysis/css/style.css",
+    "/analysis/css/internal.css",
+    "/analysis/css/global.css",
+    "/analysis/img/field.svg",
+    "/analysis/img/logo.png",
+    "/analysis/img/logo1.png",
+    "/analysis/img/spinner.svg",
+    "/analysis/js/elements.js",
+    "/analysis/js/script.js",
+    "/analysis/js/ui.js",
+    "/analysis/js/util.js",
+    "/analysis/api/dataset",
+    "/analysis/api/teams"
 ]
 
 self.addEventListener('install', function(event) {
@@ -45,6 +59,7 @@ self.addEventListener('fetch', (event) => {
                     }
                     return networkResponse;
                 }).catch(e=>console.log(e))
+
                 return response || fetchPromise;
             })
         })

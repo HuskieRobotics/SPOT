@@ -47,6 +47,7 @@ router.get("/enterMatch", (req,res) => {
     } else {
         res.json({error: "Not Authorized"})
     }
+    res.json(true);
 })
 router.post("/setMatch", (req,res) => {
     if (req.headers.authorization === config.secrets.ACCESS_CODE) {
