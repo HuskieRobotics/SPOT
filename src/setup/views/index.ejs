@@ -13,38 +13,79 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;700&family=Saira:wght@300;400;700&family=Tajawal:wght@300;400;700&display=swap"
         rel="stylesheet">
+    <link href="./css/global.css" rel="stylesheet" type="text/css" />
+    <link href="./css/internal.css" rel="stylesheet" type="text/css" />
+    <link href="./css/ui-elements.css" rel="stylesheet" type="text/css" />
     <link href="./css/style.css" rel="stylesheet" type="text/css" />
 </head>
 
 <body>
-    <form>
+    <div id="setup-header">SPOT Setup</div>
+
+    <form id="setup-form">
         <input hidden type="text" name="VERSION" value="1.0">
         <div>
-            <label for="ACCESS_CODE">Access Code used for logging into SPOT's admin page or editing its confiuration.</label>
-            <input type="text" id="ACCESS_CODE" name="ACCESS_CODE" placeholder="Access Code">
+            <h1>Access Code</h1>
+            <div>An Access Code is used for logging into SPOT's admin page or editing its configuration. Make sure to save this somewhere, as you will need it to edit this setup configuration or view the admin page.</div>
+            <label class="label">
+                <input type="text" id="ACCESS_CODE" name="ACCESS_CODE" class="input" required>
+                <span>Access Code</span>
+            </label>
         </div>
         <div>
-            <label for="DATABASE_URL">The MongoDB Connection URL for your database</label>
-            <input type="text" id="DATABASE_URL" name="DATABASE_URL" placeholder="MongoDB Database URL">
+            <h1>MongoDB Setup</h1> 
+            <p>The MongoDB Connection URL is for your database. Your connection URL should look like <code>"mongodb+srv://&lt;username&gt;:&lt;password&gt;&amp;&lt;clusterurl&gt;/myFirstDatabase?retryWrites=true&amp;w=majority"</code>. For more detailed instructions on how to find this for your specific database deployment, read the Quickstart Guide linked in the README.</p>
+            <label class="label">
+                <input type="text" id="DATABASE_URL" name="DATABASE_URL" class="input" required>
+                <span>Database URL</span>
+            </label>
         </div>
         <div>
-            <label for="TBA_API_KEY">Your TheBlueAlliance API Key</label>
-            <input type="text" id="TBA_API_KEY" name="TBA_API_KEY" placeholder="TheBlueAlliance API Key">
-            <label for="TBA_API_KEY">Your TheBlueAlliance Event Key (eg. "2020ilch")</label>
-            <input type="text" id="TBA_EVENT_KEY" name="TBA_EVENT_KEY" placeholder="TheBlueAlliance Event Key">
+            <h1>TheBlueAlliance Setup</h1>
+            <p>SPOT uses TheBlueAlliance to help load in matches automatically. For SPOT to function correctly you need a TheBlueAlliance API Key and event-specific Event Key.</p><br>
+            <p>To obtain an api key, visit <a href="https://www.thebluealliance.com/">their site</a>, navigate to the "account" page under "more" in the navbar. Login if you have to, then under the "Read API Keys" section, add a new API Key. Copy that key and paste it into the box below.</p> 
+            <video controls muted playsinline>
+                <source src="/video/TBA_API_KEY.webm" type="video/webm">
+            </video>
+            <label class="label">
+                <input type="text" id="TBA_API_KEY" name="TBA_API_KEY" class="input" required>
+                <span>TBA API Key</span>
+            </label>
+            <br>
+            <p>Next, you need to find the Event Key for your competition. Using TheBlueAlliance's search box, find your event. Make sure the year is correct, or else the matches displayed in your admin view won't match the schedule. In your browser's address bar, copy the Event Key, the text following "/event/", and paste it into the box below.</p> 
+            <video controls muted playsinline>
+                <source src="/video/TBA_EVENT_KEY.webm" type="video/webm">
+            </video>
+            <label class="label">
+                <input type="text" id="TBA_EVENT_KEY" name="TBA_EVENT_KEY" class="input" required>
+                <span>TBA Event Key</span>
+            </label>
         </div>
         <div>
-            <label for="GOOGLE_CLIENT_ID">Your Google Client ID</label>
-            <input type="text" id="GOOGLE_CLIENT_ID" name="GOOGLE_CLIENT_ID" placeholder="Google Client ID (optional)">
-            <label for="TBA_API_KEY">Your Google Client Secret</label>
-            <input type="text" id="GOOGLE_CLIENT_SECRET" name="GOOGLE_CLIENT_SECRET" placeholder="Google Client Secret (optional)">
+            <h1>Google Sign-In Setup (Coming Soon, optional)</h1>
+            <p>Google Sign-In is not currently a functioning part of SPOT, but it will be in the near future.</p><br>
+            <label class="label">
+                <input type="text" id="GOOGLE_CLIENT_ID" name="GOOGLE_CLIENT_ID" class="input" disabled>
+                <span>Client ID</span>
+            </label>
+
+            <label class="label">
+                <input type="text" id="GOOGLE_CLIENT_SECRET" name="GOOGLE_CLIENT_SECRET" class="input" disabled>
+                <span>Client Secret</span>
+            </label>
         </div>
         <div>
-            <label for="TBA_API_KEY">Event Number</label>
-            <input type="number" id="EVENT_NUMBER" name="EVENT_NUMBER" value=0>
+            <h1>Event Number</h1>
+            <p>The Event Number to be associated with your data. An event number allows you to filter your dataset between events without overwriting your previous data. We recommend that for your first event you choose 0, for your second event 1, and so on. You will need to edit this between events or else data from the previous event will appear in your analysis.</p>
+            <label class="label">
+                <input type="number" id="EVENT_NUMBER" name="EVENT_NUMBER" value=0 class="input" required>
+                <span>Event Number</span>
+            </label>
         </div>
-        <div id="submit">Submit</div>
     </form>
+
+    <button id="submit">Submit</button>
+    <script src="./js/ui-elements.js"></script>
     <script src="./js/script.js"></script>
 </body>
 

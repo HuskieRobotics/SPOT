@@ -13,7 +13,7 @@ if ('serviceWorker' in navigator) {
 document.querySelector("#submit").addEventListener("click", async () => {
     let secrets = ["ACCESS_CODE", "DATABASE_URL", "TBA_API_KEY", "GOOGLE_CLIENT_ID", "GOOGLE_CLIENT_SECRET"]
     let config = { secrets: {} };
-    for (let [key, value] of new FormData(document.querySelector("form"))) {
+    for (let [key, value] of new FormData(document.getElementById("setup-form"))) {
         if (value === "") continue; //dont send unset config values (eg, no ACCESS_CODE)
         if (secrets.includes(key)) {
             config.secrets[key] = value;
@@ -34,10 +34,10 @@ document.querySelector("#submit").addEventListener("click", async () => {
     })).json()
     console.log(res, config);
     if (res.success) {
-        setTimeout(() => {
+        new Modal("small").header("Config Saved").text("Restart the server then reload to complete setup").action("Reload", () => {
             window.location.reload();
-        },5000);
+        })
     } else {
-        alert(res.reason);
+        new Modal("small").header("Config Not Saved").text(res.reason).dismiss()
     }
 })
