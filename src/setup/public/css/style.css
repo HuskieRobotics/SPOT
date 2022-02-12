@@ -18,12 +18,16 @@
 .label {
     position: relative;
     align-self: center;
-    margin-top: 20px;
+    margin: 20px 0;
     padding: 16px 0;
     border-top: 1px solid var(--accent-alt);
     box-shadow: 0 -6px 10px -10px var(--accent-alt), 0 6px 10px -10px var(--accent-alt);
     border-bottom: 1px solid var(--accent-alt);
     border-radius: 6px
+}
+
+.label:last-child {
+    margin-bottom: 0;
 }
 
 .label > span {
@@ -58,12 +62,29 @@ body {
     padding: 0 5vw;
 }
 
+a {
+    color: var(--accent);
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 12px;
+}
+
+code {
+    background-color: var(--bg);
+}
+
+video {
+    margin: 24px 0;
+}
+
 #setup-form {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 25px;
-    max-width: 1000px;
+    max-width: 800px;
     width: 100%;
 }
 

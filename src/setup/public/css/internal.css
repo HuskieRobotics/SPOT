@@ -30,6 +30,10 @@ a {
     cursor: pointer;
 }
 
+code {
+    font-family: monospace !important
+}
+
 button {
     cursor: pointer;
 }

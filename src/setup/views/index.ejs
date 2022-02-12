@@ -25,7 +25,7 @@
         <input hidden type="text" name="VERSION" value="1.0">
         <div>
             <h1>Access Code</h1>
-            <div>An Access Code that is used for logging into SPOT's admin page or editing its configuration. Make sure to save this somewhere, as you will need it to edit this setup configuration or view the admin page.</div>
+            <div>An Access Code is used for logging into SPOT's admin page or editing its configuration. Make sure to save this somewhere, as you will need it to edit this setup configuration or view the admin page.</div>
             <label class="label">
                 <input type="text" id="ACCESS_CODE" name="ACCESS_CODE" class="input" required>
                 <span>Access Code</span>
@@ -33,7 +33,7 @@
         </div>
         <div>
             <h1>MongoDB Setup</h1> 
-            <p>The MongoDB Connection URL for your database. Your connection url should look like <code>&quot;mongodb+srv://&lt;username&gt;:&lt;password&gt;&amp;&lt;clusterurl&gt;/myFirstDatabase?retryWrites=true&amp;w=majority&quot;</code>. For more detailed instructions on how to find this for your specific database deployment, read the Quickstart Guide linked in the README.</p>
+            <p>The MongoDB Connection URL is for your database. Your connection URL should look like <code>"mongodb+srv://&lt;username&gt;:&lt;password&gt;&amp;&lt;clusterurl&gt;/myFirstDatabase?retryWrites=true&amp;w=majority"</code>. For more detailed instructions on how to find this for your specific database deployment, read the Quickstart Guide linked in the README.</p>
             <label class="label">
                 <input type="text" id="DATABASE_URL" name="DATABASE_URL" class="input" required>
                 <span>Database URL</span>
@@ -42,7 +42,7 @@
         <div>
             <h1>TheBlueAlliance Setup</h1>
             <p>SPOT uses TheBlueAlliance to help load in matches automatically. For SPOT to function correctly you need a TheBlueAlliance API Key and event-specific Event Key.</p><br>
-            <p>To obtain an api key, navigate to the "account" page, under "more" in the navbar. Login if you have to, then, under the "Read API Keys" section, add an new API Key. Copy that key and paste it into the box below.</p> 
+            <p>To obtain an api key, visit <a href="https://www.thebluealliance.com/">their site</a>, navigate to the "account" page under "more" in the navbar. Login if you have to, then under the "Read API Keys" section, add a new API Key. Copy that key and paste it into the box below.</p> 
             <video controls muted playsinline>
                 <source src="/video/TBA_API_KEY.webm" type="video/webm">
             </video>
@@ -55,22 +55,19 @@
             <video controls muted playsinline>
                 <source src="/video/TBA_EVENT_KEY.webm" type="video/webm">
             </video>
-            <div>Your TheBlueAlliance Event Key (eg. "2020ilch")</div>
             <label class="label">
                 <input type="text" id="TBA_EVENT_KEY" name="TBA_EVENT_KEY" class="input" required>
                 <span>TBA Event Key</span>
             </label>
         </div>
         <div>
-            <h1>Google Sign-In Setup (Coming Soon)</h1>
+            <h1>Google Sign-In Setup (Coming Soon, optional)</h1>
             <p>Google Sign-In is not currently a functioning part of SPOT, but it will be in the near future.</p><br>
-            <div>Your Google Client ID (optional)</div>
             <label class="label">
                 <input type="text" id="GOOGLE_CLIENT_ID" name="GOOGLE_CLIENT_ID" class="input" disabled>
                 <span>Client ID</span>
             </label>
 
-            <div>Your Google Client Secret (optional)</div>
             <label class="label">
                 <input type="text" id="GOOGLE_CLIENT_SECRET" name="GOOGLE_CLIENT_SECRET" class="input" disabled>
                 <span>Client Secret</span>
