@@ -10,8 +10,9 @@ if ('serviceWorker' in navigator) {
     });
 }
 
+
+let oldAccessCode;
 ;(async () => {
-    let accessCode
     const authRequest = await fetch("./api/auth").then(res => res.json())
 
     if (authRequest.status !== 2) {
@@ -40,7 +41,8 @@ if ('serviceWorker' in navigator) {
         }).then(res => res.json())
 
         if (auth.status === 1) {
-            await constructApp(accessCode)
+            await constructApp(accessCode);
+            oldAccessCode = accessCode;
             authModal.modalExit()
         } else {
             new Popup("error", "Wrong Access Code")
@@ -86,7 +88,7 @@ document.querySelector("#submit").addEventListener("click", async () => {
             "Content-Type": "application/json"
         },
         body: JSON.stringify({
-            ACCESS_CODE: "",
+            ACCESS_CODE: oldAccessCode,
             config
         })
     })).json()
