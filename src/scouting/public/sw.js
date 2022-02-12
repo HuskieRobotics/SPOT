@@ -53,11 +53,9 @@ self.addEventListener('fetch', (event) => {
         caches.open(cacheVersion).then((cache) => {
             return cache.match(event.request).then((response) => {
                 event.request.importance = "low"; //low priority
-                console.log("CACHED RESPONSE", response ? response.clone(): null)
                 const fetchPromise = fetch(event.request).then((networkResponse) => {
                     if (filesToCache.includes((new URL(event.request.url)).pathname)) {//if the file is in the cache list
                         cache.put(event.request, networkResponse.clone());
-                        console.log("PUTTING CACHE!",networkResponse.clone());
                     }
                     return networkResponse;
                 }).catch(e=>console.log(e))
