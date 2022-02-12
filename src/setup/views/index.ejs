@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name='viewport' content='width=device-width, initial-scale=1, user-scalable=no, viewport-fit=cover'>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>SPOT - Setup</title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.0/css/all.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;700&family=Saira:wght@300;400;700&family=Tajawal:wght@300;400;700&display=swap"
+        rel="stylesheet">
+    <link href="./css/global.css" rel="stylesheet" type="text/css" />
+    <link href="./css/internal.css" rel="stylesheet" type="text/css" />
+    <link href="./css/style.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+    <div id="setup-header">SPOT Setup</div>
+
+    <form id="setup-form">
+        <input hidden type="text" name="VERSION" value="1.0">
+        <div>
+            <div>Access Code used for logging into SPOT's admin page or editing its configuration.</div>
+            <label class="label">
+                <input type="text" id="ACCESS_CODE" name="ACCESS_CODE" class="input" required>
+                <span>Access Code</span>
+            </label>
+        </div>
+        <div>
+            <div>The MongoDB Connection URL for your database</div>
+            <label class="label">
+                <input type="text" id="DATABASE_URL" name="DATABASE_URL" class="input" required>
+                <span>Database URL</span>
+            </label>
+        </div>
+        <div>
+            <div>Your TheBlueAlliance API Key</div>
+            <label class="label">
+                <input type="text" id="TBA_API_KEY" name="TBA_API_KEY" class="input" required>
+                <span>TBA API Key</span>
+            </label>
+
+
+            <div>Your TheBlueAlliance Event Key (eg. "2020ilch")</div>
+            <label class="label">
+                <input type="text" id="TBA_EVENT_KEY" name="TBA_EVENT_KEY" class="input" required>
+                <span>TBA Event Key</span>
+            </label>
+        </div>
+        <div>
+            <div>Your Google Client ID (optional)</div>
+            <label class="label">
+                <input type="text" id="GOOGLE_CLIENT_ID" name="GOOGLE_CLIENT_ID" class="input" required>
+                <span>Client ID</span>
+            </label>
+
+            <div>Your Google Client Secret (optional)</div>
+            <label class="label">
+                <input type="text" id="GOOGLE_CLIENT_SECRET" name="GOOGLE_CLIENT_SECRET" class="input" required>
+                <span>Client Secret</span>
+            </label>
+        </div>
+        <div>
+            <div>Event Number</div>
+            <label class="label">
+                <input type="number" id="EVENT_NUMBER" name="EVENT_NUMBER" value=0 class="input" required>
+                <span>Event Number</span>
+            </label>
+        </div>
+    </form>
+
+    <button id="submit">Submit</button>
+    <script src="./js/script.js"></script>
+</body>
+
+</html>
