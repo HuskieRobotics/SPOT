@@ -14,18 +14,6 @@ if (fs.existsSync("config/config.json")) {
     ACCESS_CODE = config["ACCESS_CODE"];
 }
 
-
-router.get("/config", async (req,res) => {
-    if (!REQUIRE_ACCESS_CODE) { //config doesnt exist
-        res.json({});
-    } else {
-        if (req.query.ACCESS_CODE == ACCESS_CODE) {
-            res.sendFile("/config/config.json");
-        } else {
-            res.json(false);
-        }
-    }
-})
 router.post("/config", async (req,res) => {
     let config = req.body.config;
     if (!REQUIRE_ACCESS_CODE || req.body.ACCESS_CODE == ACCESS_CODE) {

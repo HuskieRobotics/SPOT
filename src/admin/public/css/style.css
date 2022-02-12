@@ -1,9 +1,88 @@
 body {
-    margin: 0
+    margin: 0;
+    overflow: hidden;
+}
+
+.access-input {
+    border-radius: 8px;
+    border: 2px solid var(--text);
+    background-color: var(--bg-alt);
+    color: var(--text);
+    padding: 8px 12px;
+    font-size: 1.5em;
+}
+
+#menu {
+    height: 100%;
+    width: 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 16px 0;
+    grid-area: 1 / 1 / 2 / 2;
+    background-color: var(--bg-alt);
+    opacity: 0;
+    transition: 0.3s visibility, opacity, width;
+    visibility: hidden;
+    border-right: 1px solid var(--text);
+    transition: 0.3s all;
+    z-index: 999;
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+
+#menu.expanded {
+    width: 200px;
+}
+
+#menu > * {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 12px;
+    cursor: pointer;
+    color: var(--text);
+    text-decoration: none;
+}
+
+#menu > * > i  {
+    font-size: 1.75rem;
+}
+
+#menu > * > div {
+    font-size: 1.25rem;
+    width: 0;
+    overflow: hidden;
+    white-space: pre;
+    opacity: 0;
+    transition: 0.3s opacity, margin;
+}
+
+#menu.expanded > * > div {
+    width: unset;
+    margin-left: 10px;
+    opacity: 1;
+}
+
+#menu-icon {
+    color: var(--accent);
+    transition: 0.3s transform cubic-bezier(.17,.67,.89,1.29);
+    transform: rotate(270deg);
+    margin-bottom: 16px;
+}
+
+#menu-icon-container {
+    border-bottom: 2px solid black;
+    margin-bottom: 16px;
+}
+
+#menu.expanded #menu-icon {
+    transform: rotate(90deg);
 }
 
 #admin-panel {
-    width: 100%;
+    margin-left: 50px;
     height: 100vh;
     display: flex;
     flex-direction: column;
@@ -13,6 +92,13 @@ body {
     opacity: 0;
     transition: 0.3s visibility, opacity;
     visibility: hidden;
+    grid-area: 1 / 2 / 2 / 3;
+}
+
+#menu.visible {
+    visibility: unset;
+    opacity: 1;
+    transition: visibility 0s 0s, opacity 0.3s 0s, 0.3s width;
 }
 
 #admin-panel.visible {
@@ -22,12 +108,14 @@ body {
 }
 
 #scouters {
-    padding: 20px;
+    padding: 21px;
     padding-top: 24px;
     border: 2px solid var(--text);
     border-radius: 10px;
     position: relative;
     margin-top: 10px;
+    min-height: 200px;
+    max-height: 360px;
 }
 
 #scouter-list {
@@ -50,13 +138,14 @@ body {
     flex-direction: column;
     justify-content: space-evenly;
     align-items: center;
-    padding: 0 25px;
+    padding: 6px 25px 0;
 }
 
 .scouter > .scouter-id {
     font-size: 1.3rem;
     text-overflow: ellipsis;
     width: 100%;
+    text-align: center;
     overflow: hidden;
 }
 .scouter > .robot-number {
@@ -65,13 +154,14 @@ body {
 }
 .scouter > .match-number {
     position: absolute;
-    left: -1px;
-    bottom: -1px;
-    border-radius: 0 10px 0 10px;
+    left: 50%;
+    top: -1px;
+    transform: translateX(-50%);
+    border-radius: 0 0 10px 10px;
     font-weight: bold;
-    font-size: 1.2rem;
+    font-size: 1.15rem;
     color: var(--bg-alt);
-    padding: 5px;
+    padding: 0 12px 2px;
     line-height: 1em;
     background-color: var(--text);
     border: 2px solid var(--text);
@@ -198,12 +288,38 @@ body {
 
     .scouter {
         height: 100px;
-        padding: 0 10px;
+        padding: 6px 10px 0;
         width: 115px;
     }
 
     html {
         font-size: 70%;
+    }
+    
+    #scouters {
+        min-height: 150px;
+    }
+
+    .scouter > .match-number {
+        line-height: 0.7em;
+        padding: 0 8px 3px;
+        font-size: 1.3rem;
+    }
+
+    body {
+        grid-template-columns: auto 1fr;
+    }
+
+    #menu {
+        padding: 10px 0;
+    }
+
+    #menu > * > i {
+        font-size: 2rem;
+    }
+
+    #menu > * > div {
+        font-size: 1.75rem;
     }
 }
 
@@ -231,16 +347,11 @@ body {
         gap: 6px;
         flex-wrap: wrap;
         justify-content: space-evenly;
-        max-height: 210px;
     }
 
     #scouters {
-        padding: 20px 12px;
-    }
-
-    .scouter > .match-number {
-        padding: 3px;
-        font-size: 1.6rem;
+        padding: 21px 12px;
+        min-height: unset;
     }
 }
 
