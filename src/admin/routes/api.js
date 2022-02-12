@@ -22,6 +22,14 @@ router.get("/auth", (req, res) => {
     }
 })
 
+router.get("/config", (req, res) => {
+    if (config.secrets.ACCESS_CODE === "" || req.headers.authorization === config.secrets.ACCESS_CODE) {
+        res.json(config)
+    } else {
+        res.json({error: "Not Authorized"})
+    }
+})
+
 router.get("/scouters", (req,res) => {
     if (req.headers.authorization === config.secrets.ACCESS_CODE) {
         res.json(ScoutingSync.getScouters())

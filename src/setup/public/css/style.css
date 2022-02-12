@@ -56,10 +56,6 @@
 
 body {
     background-color: var(--bg);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 0 5vw;
 }
 
 a {
@@ -113,4 +109,32 @@ video {
     border: none;
     padding: 15px 60px;
     border-radius: var(--border-radius);
+}
+
+#setup-container {
+    height: 100vh;
+    width: 100%;
+    opacity: 0;
+    transition: 0.3s visibility, opacity;
+    visibility: hidden;
+    background-color: var(--bg);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 5vw;
+}
+
+#setup-container.visible {
+    visibility: unset;
+    opacity: 1;
+    transition: visibility 0s 0s, opacity 0.3s 0s;
+}
+
+.access-input {
+    border-radius: 8px;
+    border: 2px solid var(--text);
+    background-color: var(--bg-alt);
+    color: var(--text);
+    padding: 8px 12px;
+    font-size: 1.5em;
 }
