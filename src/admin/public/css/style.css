@@ -59,6 +59,7 @@ body {
     font-size: 1.3rem;
     text-overflow: ellipsis;
     width: 100%;
+    text-align: center;
     overflow: hidden;
 }
 .scouter > .robot-number {
