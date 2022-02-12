@@ -1,5 +1,6 @@
 #config file
 config.json
+config.bak.json
 
 #gitpod files
 .gitpod.yml

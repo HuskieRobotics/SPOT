@@ -259,7 +259,7 @@
         "view": "match",
         "module": "Pie",
         "position": "main",
-        "name": "Alliance Climb Distribution",
+        "name": "Climb Distribution",
         "options": {
             "slices": [
                 {
@@ -285,7 +285,7 @@
         "view": "match",
         "module": "Bar",
         "position": "main",
-        "name": "Alliance Shot Distribution",
+        "name": "Shot Distribution",
         "options": {
             "bars": [
                 {
@@ -304,7 +304,7 @@
         }
     },
     {
-        "view": "team",
+        "view": "match",
         "module": "Pie",
         "position": "main",
         "name": "Pickup Distribution",
