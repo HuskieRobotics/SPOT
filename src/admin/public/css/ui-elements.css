@@ -1,5 +1,5 @@
 .modal {
-    position: absolute;
+    position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
@@ -21,7 +21,7 @@
 }
   
 .modal-blind {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     height: 100%;;
@@ -106,7 +106,7 @@
 }
 
 .popup {
-    position: absolute;
+    position: fixed;
     top: 0px;
     left: 50%;
     border-radius: 8px;

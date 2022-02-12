@@ -34,10 +34,10 @@ document.querySelector("#submit").addEventListener("click", async () => {
     })).json()
     console.log(res, config);
     if (res.success) {
-        setTimeout(() => {
+        new Modal("small").header("Config Saved").text("Restart the server then reload to complete setup").action("Reload", () => {
             window.location.reload();
-        },5000);
+        })
     } else {
-        alert(res.reason);
+        new Modal("small").header("Config Not Saved").text(res.reason).dismiss()
     }
 })

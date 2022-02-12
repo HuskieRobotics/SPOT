@@ -1,45 +1,5 @@
-/*****************************************************************
-                        !!!WARNING!!!
-               EVERYTHING HERE IS VERY IMPORTANT
-DO NOT REMOVE OR MODIFY ANYTHING UNLESS YOU KNOW WHAT YOU'RE DOING
-*****************************************************************/
-* {
-    box-sizing: border-box;
-}
-
-body {
-    margin: 0;
-}
-
-html {
-    height: 100%;
-    width: 100%;
-}
-
-h1, h2, h3 {
-    margin: 0;
-}
-
-p {
-    margin: 0;
-}
-
-a {
-    color: initial;
-    text-decoration: initial;
-    cursor: pointer;
-}
-
-code {
-    font-family: monospace !important
-}
-
-button {
-    cursor: pointer;
-}
-
 .modal {
-    position: absolute;
+    position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
@@ -61,7 +21,7 @@ button {
 }
   
 .modal-blind {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     height: 100%;;
@@ -137,7 +97,7 @@ button {
 
 .modal > button {
     border: none;
-    background-color: var(--accent);
+    background-color: var(--accent-alt);
     border-radius: 10px;
     color: white;
     font-size: 1.5em;
@@ -146,7 +106,7 @@ button {
 }
 
 .popup {
-    position: absolute;
+    position: fixed;
     top: 0px;
     left: 50%;
     border-radius: 8px;
