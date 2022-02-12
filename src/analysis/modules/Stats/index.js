@@ -33,6 +33,10 @@ class Stats {
                 formattedStat *= stat.multiplier
             }
 
+            if (stat.addend !== undefined) {
+                formattedStat += stat.addend
+            }
+
             if (stat.decimals !== undefined) {
                 formattedStat = formattedStat.toFixed(stat.decimals)
             }
