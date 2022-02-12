@@ -10,9 +10,39 @@ let ACCESS_CODE;
 
 if (fs.existsSync("config/config.json")) {
     let config = JSON.parse(fs.readFileSync("config/config.json"));
-    REQUIRE_ACCESS_CODE = "ACCESS_CODE" in config;
-    ACCESS_CODE = config["ACCESS_CODE"];
+    REQUIRE_ACCESS_CODE = "ACCESS_CODE" in config.secrets;
+    ACCESS_CODE = config.secrets["ACCESS_CODE"];
 }
+
+router.get("/auth", (req, res) => {
+    if (REQUIRE_ACCESS_CODE) {
+        let config = JSON.parse(fs.readFileSync("config/config.json"));
+
+        if (config.secrets.ACCESS_CODE === "") {
+            res.json({status: 2})
+        } else if (config.secrets.ACCESS_CODE == req.headers.authorization) {
+            res.json({status: 1})
+        } else {
+            res.json({status: 0})
+        }
+    } else {
+        res.json({status: 2})
+    }
+})
+
+router.get("/config", (req, res) => {
+    if (REQUIRE_ACCESS_CODE) {
+        let config = JSON.parse(fs.readFileSync("config/config.json"));
+
+        if (config.secrets.ACCESS_CODE === "" || req.headers.authorization === config.secrets.ACCESS_CODE) {
+            res.json({config: config})
+        } else {
+            res.json({error: "Not Authorized"})
+        }
+    } else {
+        res.send({})
+    }
+})
 
 router.post("/config", async (req,res) => {
     let config = req.body.config;

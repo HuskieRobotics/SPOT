@@ -12,7 +12,7 @@ if ('serviceWorker' in navigator) {
 
 ;(async () => {
     let accessCode
-    const authRequest = await fetch("/admin/api/auth").then(res => res.json())
+    const authRequest = await fetch("./api/auth").then(res => res.json())
 
     if (authRequest.status !== 2) {
         const authModal = new Modal("small", false).header("Sign In")
@@ -33,7 +33,7 @@ if ('serviceWorker' in navigator) {
     }
 
     async function validate(accessCode, authModal) {
-        const auth = await fetch("/admin/api/auth", {
+        const auth = await fetch("./api/auth", {
             headers: {
                 Authorization: accessCode
             }
@@ -49,21 +49,21 @@ if ('serviceWorker' in navigator) {
 })()
 
 async function constructApp(accessCode) {
-    const config = await fetch("/admin/api/config", {
+    const config = (await fetch("./api/config", {
         headers: {
             Authorization: accessCode
         }
-    }).then(res => res.json())
+    }).then(res => res.json())).config
 
-    console.log(config)
-
-    document.querySelector("#ACCESS_CODE").value = config.secrets.ACCESS_CODE || ""
-    document.querySelector("#DATABASE_URL").value = config.secrets.DATABASE_URL || ""
-    document.querySelector("#TBA_API_KEY").value = config.secrets.TBA_API_KEY || ""
-    document.querySelector("#TBA_EVENT_KEY").value = config.TBA_EVENT_KEY || ""
-    document.querySelector("#GOOGLE_CLIENT_ID").value = config.GOOGLE_CLIENT_ID || ""
-    document.querySelector("#GOOGLE_CLIENT_SECRET").value = config.GOOGLE_CLIENT_SECRET || ""
-    document.querySelector("#EVENT_NUMBER").value = config.EVENT_NUMBER || ""
+    if (config) {
+        document.querySelector("#ACCESS_CODE").value = config.secrets.ACCESS_CODE || ""
+        document.querySelector("#DATABASE_URL").value = config.secrets.DATABASE_URL || ""
+        document.querySelector("#TBA_API_KEY").value = config.secrets.TBA_API_KEY || ""
+        document.querySelector("#TBA_EVENT_KEY").value = config.TBA_EVENT_KEY || ""
+        document.querySelector("#GOOGLE_CLIENT_ID").value = config.GOOGLE_CLIENT_ID || ""
+        document.querySelector("#GOOGLE_CLIENT_SECRET").value = config.GOOGLE_CLIENT_SECRET || ""
+        document.querySelector("#EVENT_NUMBER").value = config.EVENT_NUMBER || ""
+    }
 
     document.querySelector("#setup-container").classList.add("visible")
 }
