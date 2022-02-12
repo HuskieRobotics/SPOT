@@ -22,12 +22,14 @@ body {
 }
 
 #scouters {
-    padding: 20px;
+    padding: 21px;
     padding-top: 24px;
     border: 2px solid var(--text);
     border-radius: 10px;
     position: relative;
     margin-top: 10px;
+    min-height: 200px;
+    max-height: 360px;
 }
 
 #scouter-list {
@@ -50,7 +52,7 @@ body {
     flex-direction: column;
     justify-content: space-evenly;
     align-items: center;
-    padding: 0 25px;
+    padding: 6px 25px 0;
 }
 
 .scouter > .scouter-id {
@@ -65,13 +67,14 @@ body {
 }
 .scouter > .match-number {
     position: absolute;
-    left: -1px;
-    bottom: -1px;
-    border-radius: 0 10px 0 10px;
+    left: 50%;
+    top: -1px;
+    transform: translateX(-50%);
+    border-radius: 0 0 10px 10px;
     font-weight: bold;
-    font-size: 1.2rem;
+    font-size: 1.15rem;
     color: var(--bg-alt);
-    padding: 5px;
+    padding: 0 12px 2px;
     line-height: 1em;
     background-color: var(--text);
     border: 2px solid var(--text);
@@ -198,12 +201,22 @@ body {
 
     .scouter {
         height: 100px;
-        padding: 0 10px;
+        padding: 6px 10px 0;
         width: 115px;
     }
 
     html {
         font-size: 70%;
+    }
+    
+    #scouters {
+        min-height: 150px;
+    }
+
+    .scouter > .match-number {
+        line-height: 0.7em;
+        padding: 0 8px 3px;
+        font-size: 1.3rem;
     }
 }
 
@@ -231,16 +244,11 @@ body {
         gap: 6px;
         flex-wrap: wrap;
         justify-content: space-evenly;
-        max-height: 210px;
     }
 
     #scouters {
-        padding: 20px 12px;
-    }
-
-    .scouter > .match-number {
-        padding: 3px;
-        font-size: 1.6rem;
+        padding: 21px 12px;
+        min-height: unset;
     }
 }
 
