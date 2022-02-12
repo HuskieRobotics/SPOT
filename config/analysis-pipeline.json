@@ -241,7 +241,7 @@
         "name": "sum",
         "outputPath": "scores.all",
         "options": {
-            "addends": ["scores.teleop","scores.auto"]
+            "addends": ["scores.teleop","scores.auto","scores.endgame"]
         }
     },
 
