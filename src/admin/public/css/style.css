@@ -1,9 +1,88 @@
 body {
-    margin: 0
+    margin: 0;
+    overflow: hidden;
+}
+
+.access-input {
+    border-radius: 8px;
+    border: 2px solid var(--text);
+    background-color: var(--bg-alt);
+    color: var(--text);
+    padding: 8px 12px;
+    font-size: 1.5em;
+}
+
+#menu {
+    height: 100%;
+    width: 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 16px 0;
+    grid-area: 1 / 1 / 2 / 2;
+    background-color: var(--bg-alt);
+    opacity: 0;
+    transition: 0.3s visibility, opacity, width;
+    visibility: hidden;
+    border-right: 1px solid var(--text);
+    transition: 0.3s all;
+    z-index: 999;
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+
+#menu.expanded {
+    width: 200px;
+}
+
+#menu > * {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 12px;
+    cursor: pointer;
+    color: var(--text);
+    text-decoration: none;
+}
+
+#menu > * > i  {
+    font-size: 1.75rem;
+}
+
+#menu > * > div {
+    font-size: 1.25rem;
+    width: 0;
+    overflow: hidden;
+    white-space: pre;
+    opacity: 0;
+    transition: 0.3s opacity, margin;
+}
+
+#menu.expanded > * > div {
+    width: unset;
+    margin-left: 10px;
+    opacity: 1;
+}
+
+#menu-icon {
+    color: var(--accent);
+    transition: 0.3s transform cubic-bezier(.17,.67,.89,1.29);
+    transform: rotate(270deg);
+    margin-bottom: 16px;
+}
+
+#menu-icon-container {
+    border-bottom: 2px solid black;
+    margin-bottom: 16px;
+}
+
+#menu.expanded #menu-icon {
+    transform: rotate(90deg);
 }
 
 #admin-panel {
-    width: 100%;
+    margin-left: 50px;
     height: 100vh;
     display: flex;
     flex-direction: column;
@@ -13,6 +92,13 @@ body {
     opacity: 0;
     transition: 0.3s visibility, opacity;
     visibility: hidden;
+    grid-area: 1 / 2 / 2 / 3;
+}
+
+#menu.visible {
+    visibility: unset;
+    opacity: 1;
+    transition: visibility 0s 0s, opacity 0.3s 0s, 0.3s width;
 }
 
 #admin-panel.visible {
@@ -218,6 +304,22 @@ body {
         line-height: 0.7em;
         padding: 0 8px 3px;
         font-size: 1.3rem;
+    }
+
+    body {
+        grid-template-columns: auto 1fr;
+    }
+
+    #menu {
+        padding: 10px 0;
+    }
+
+    #menu > * > i {
+        font-size: 2rem;
+    }
+
+    #menu > * > div {
+        font-size: 1.75rem;
     }
 }
 

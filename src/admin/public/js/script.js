@@ -14,18 +14,71 @@ const SCOUTER_STATUS_REVERSE = {
 const scouters = {};
 
 ;(async () => {
-    await fetchScouters();
-    setInterval(fetchScouters, 2500);
+    const authRequest = await fetch("./api/auth").then(res => res.json())
 
-    await updateMatches()
-    // setInterval(updateMatches, 2500);
+    if (authRequest.status !== 2) {
+        const authModal = new Modal("small", false).header("Sign In")
+        const accessCodeInput = createDOMElement("input", "access-input")
+        accessCodeInput.placeholder = "Access Code"
+        accessCodeInput.type = "password"
+        accessCodeInput.addEventListener("keydown", (e) => {
+            if (e.keyCode == 13) {
+                validate(accessCodeInput.value, authModal)
+            }
+        })
+        authModal.element.appendChild(accessCodeInput)
+        authModal.action("Submit", async () => {
+            validate(accessCodeInput.value, authModal)
+        })
+    } else {
+        await constructApp()
+    }
 
-    document.querySelector("#admin-panel").classList.add("visible")
+    async function validate(accessCode, authModal) {
+        const auth = await fetch("./api/auth", {
+            headers: {
+                Authorization: accessCode
+            }
+        }).then(res => res.json())
+
+        if (auth.status === 1) {
+            await constructApp(accessCode)
+            authModal.modalExit()
+        } else {
+            new Popup("error", "Wrong Access Code")
+        }
+    }
 })()
 
+async function constructApp(accessCode) {
+    await updateScouters(accessCode);
+    setInterval(() => updateScouters(accessCode), 2500);
 
-async function fetchScouters() { //scouter fetch interval (every 2.5s)
-    let scouterList = await (await fetch("./api/scouters")).json();
+    await updateMatches(accessCode)
+    // setInterval(updateMatches, 2500);
+
+    let menuExpanded = false
+
+    document.querySelector("#admin-panel").classList.add("visible")
+    document.querySelector("#menu").classList.add("visible")
+
+    document.querySelector("#menu-icon").addEventListener("click", () => {
+        if (menuExpanded) {
+            document.querySelector("#menu").classList.remove("expanded")
+        } else {
+            document.querySelector("#menu").classList.add("expanded")
+        }
+        menuExpanded = !menuExpanded
+    })
+}
+
+async function updateScouters(accessCode) { //scouter fetch interval (every 2.5s)
+    let scouterList = await (await fetch("./api/scouters", {
+        headers: {
+            Authorization: accessCode
+        }
+    })).json();
+
     for (let scouter of scouterList) {
         if (scouter.timestamp in scouters) {
             scouters[scouter.timestamp].updateScouterElement(scouter.state);
@@ -39,7 +92,7 @@ async function fetchScouters() { //scouter fetch interval (every 2.5s)
                     scouters[scouter.timestamp].destruct();
                     delete scouters[scouter.timestamp]
                 }
-            },15000)
+            }, 15000)
         }
     }
     console.log(scouters)
@@ -52,8 +105,12 @@ async function fetchScouters() { //scouter fetch interval (every 2.5s)
     }
 }
 
-async function updateMatches() {
-    let {allMatches, currentMatch} = await (await fetch(`/admin/api/matches`)).json();
+async function updateMatches(accessCode) {
+    let {allMatches, currentMatch} = await (await fetch(`/admin/api/matches`, {
+        headers: {
+            Authorization: accessCode
+        }
+    })).json();
 
     //clear matches view
     document.querySelector("#match-list").innerHTML = "";
