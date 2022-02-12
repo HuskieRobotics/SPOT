@@ -1,3 +1,16 @@
+//load the service worker, allows for offline analysis
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function () {
+        navigator.serviceWorker.register('/sw.js').then(function (registration) {
+            // Registration was successful
+            console.log('ServiceWorker registration successful with scope: ', registration.scope);
+        }, function (err) {
+            // registration failed
+            console.log('ServiceWorker registration failed: ', err);
+        });
+    });
+}
+
 (async () => {
     //modules object strucutre
     const modules = {
@@ -23,7 +36,7 @@
     async function fetchDataset() {
         return await fetch("./api/dataset").then(res => res.json())
     }
-    
+
     async function fetchTeams() {
         const teams = await fetch(`/analysis/api/teams`).then(res => res.json())
         return teams.reduce((acc, t) => {
@@ -78,7 +91,7 @@
             await setTeamModules(teamNumber)
             displayTeam(teamContainer)
         })
-        
+
         return teamContainer
     }
 
@@ -107,7 +120,7 @@
 
         //get all dropdowns
         const teamSelects = Array.from(document.querySelectorAll(".alliance-selects")).map(g => Array.from(g.children)).flat()
-        
+
         //populate dropdowns with team numbers
         for (const teamSelect of teamSelects) {
             for (const team of Object.keys(dataset.teams)) {
