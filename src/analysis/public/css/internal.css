@@ -28,3 +28,32 @@ html {
 .main-svg {
     border-radius: var(--border-radius);
 }
+
+/* width */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: var(--orange-light);
+    filter: saturate(0.8);
+    transition: 0.2s background;
+    border-radius: 999px;
+    width: 4px;
+    border: 3px solid rgba(0,0,0,0);
+    background-clip: padding-box;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: var(--accent-alt);
+    width: 6px;
+    border: 2px solid rgba(0,0,0,0);
+    background-clip: padding-box;
+}

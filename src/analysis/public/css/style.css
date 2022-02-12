@@ -12,6 +12,7 @@ body {
   opacity: 0;
   visibility: hidden;
   background-color: var(--bg);
+  overflow: hidden;
 }
 
 #app.visible {
@@ -24,6 +25,9 @@ body {
   grid-area: 3 / 1 / 4 / 2;
   background-color: var(--bg-alt);
   padding: 16px;
+  display: grid;
+  min-height: 0;
+  grid-template-rows: auto auto 1fr;
 }
 
 #header {
@@ -208,6 +212,8 @@ body {
   display: flex;
   flex-direction: column;
   gap: 20px;
+  overflow: auto;
+  padding-right: 2px;
 }
 
 #welcome {
