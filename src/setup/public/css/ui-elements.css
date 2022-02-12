@@ -97,7 +97,7 @@
 
 .modal > button {
     border: none;
-    background-color: var(--accent);
+    background-color: var(--accent-alt);
     border-radius: 10px;
     color: white;
     font-size: 1.5em;

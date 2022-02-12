@@ -30,14 +30,21 @@
     <link href="./css/style.css" rel="stylesheet" type="text/css" />
     <link href="./css/ui-elements.css" rel="stylesheet" type="text/css" />
     <link href="./css/global.css" rel="stylesheet" type="text/css" />
+    <link href="./css/internal.css" rel="stylesheet" type="text/css" />
   </head>
   <body>
-    <div id="adminPanel">
-      <div class="title">Scouters</div>
-      <div id="scouters"></div>
-      <input type="button" id="startScouting" value="Start Scouting">
-      <div class="title">Matches</div>
-      <div id="matches"></div>
+    <img id="spinner" src="./img/spinner.svg">
+
+    <div id="admin-panel">
+      <div id="scouters">
+        <div id="scouter-list"></div>
+        <input type="button" id="start-scouting" value="Start Scouting">
+        <div class="title">Scouters</div>
+      </div>
+      <div id="matches">
+        <div class="title">Matches</div>
+        <div id="match-list"></div>
+      </div>
     </div>
     <script src="./js/ui-elements.js"></script>
     <script src="./js/script.js"></script>

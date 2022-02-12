@@ -15,10 +15,12 @@ router.get("/scouters", (req,res) => {
 });
 
 router.get("/enterMatch", (req,res) => {
+    console.log("ENTER MATCH!")
     for (let scouter of ScoutingSync.scouters) {
         if (scouter.state.status == ScoutingSync.SCOUTER_STATUS.WAITING)
             scouter.socket.emit("enterMatch");
     }
+    res.json(true);
 })
 router.post("/setMatch", (req,res) => {
     ScoutingSync.setMatch(req.body);
