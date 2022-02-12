@@ -13,7 +13,7 @@ class Pie {
             if (slice.aggrMethod == "sum") { //optionally summed
                 return summed
             } else { //default is average
-                return summed / teams.length
+                return (summed / teams.length).toFixed(2)
             }
         })
 
