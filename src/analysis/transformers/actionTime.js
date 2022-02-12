@@ -15,7 +15,7 @@ module.exports = {
                     setPath(tmp, outputPath, action.ts);
                 }
             }
-            if (!getPath(tmp,outputPath)) //no action of options.actionId found
+            if (!getPath(tmp,outputPath,false)) //no action of options.actionId found
                 setPath(tmp,outputPath,options.default || null);
         }
         return dataset;

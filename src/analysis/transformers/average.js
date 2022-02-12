@@ -19,7 +19,7 @@ module.exports = {
                 let out = {};
                 for (let subpath in getPath(teamTmps[0], options.path)) {
                     let average = teamTmps.reduce((acc, tmp) => {
-                        return acc + getPath(tmp, `${options.path}.${subpath}`)
+                        return acc + getPath(tmp, `${options.path}.${subpath}`) //if this is causing an error, your tmps may not have the same schema (eg. some keys (which you are trying to average) are not defined in some tmps)
                     }, 0) / teamTmps.length;
                     out[subpath] = average;
                 }

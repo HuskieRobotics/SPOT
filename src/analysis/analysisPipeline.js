@@ -34,7 +34,7 @@ for (let executableFile of fs.readdirSync(__dirname + "/transformers")) {
 if (debug) console.log("loaded all transformers!");
 
 
-async function execute(dataset,debug=false) {
+async function execute(dataset) {
     /* get tmps from database */
     dataset = new Dataset((await TeamMatchPerformance.find()).map((o) => o.toObject()));
     

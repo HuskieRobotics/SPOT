@@ -130,6 +130,9 @@
             "path": "tarmacCrossTime"
         }
     },
+
+
+
     {
         "type": "tmp",
         "name": "actionTime",
@@ -147,6 +150,8 @@
         }
     },
 
+
+    
     {
         "type": "tmp",
         "name": "actionTimeFilter",
@@ -202,6 +207,31 @@
             "weightedPaths": {
                 "countsTeleop.lowerHub": 1,
                 "countsTeleop.upperHub": 2
+            }
+        }
+    },
+
+    {
+        "type": "tmp",
+        "name": "finalActionOccurance",
+        "outputPath": "finalClimbState",
+        "options": {
+            "ids": ["climb1","climb2","climb3","climb4","climbF"]
+        }
+    },
+    {
+        "type": "tmp",
+        "name": "map",
+        "outputPath": "scores.endgame",
+        "options": {
+            "path": "finalClimbState.id",
+            "map": {
+                "": 0,
+                "climbF": 0,
+                "climb1": 4,
+                "climb2": 6,
+                "climb3": 10,
+                "climb4": 15
             }
         }
     },
