@@ -27,7 +27,7 @@ We'd love to see your analysis transformers and modules! If you think your trans
 * **General Naming** - Try to avoid naming the transformer/module or internal variables after anything related to the game or any game terminology (ex. shot, score, climb). We are working with raw data, not game data. Words to use are "action, array, count" etc.
     * Instead of `ShotMap`, try `ActionMap`
     * Instead of `PickupList`, try `ActionList` (also goes along with **Configurable**)
-* **Transformer Types**Transformers should have either a `tmp` or `team` type, or both. Make sure your `team` type isn't just a version of another existing transformer like `average`.
+* **Transformer Types**: Transformers should have either a `tmp` or `team` type, or both. Make sure your `team` type isn't just a version of another existing transformer like `average`.
 * **Follow transformer/module required configurations** - Make sure to follow the general conventions and structure of existing transformers and modules.
     * Transformer configurations need:
         * `type` - Type of transformer, either `tmp` for Team Match Performances (one team's performance and actions in one match) or `team` (an entire team's data).
@@ -57,7 +57,6 @@ When filing an issue, make sure to answer these five questions:
 3. What did you do?
 4. What did you expect to see?
 5. What did you see instead?
-General questions should go to the ( LINK THIS Discord server)
 
 # How to suggest a feature or enhancement
 ### Philosophy and guiding principles
@@ -70,5 +69,5 @@ General questions should go to the ( LINK THIS Discord server)
 The core team looks at pull requests on a regular basis in meetings and provides feedback on open pull requests and merges in valid pull requests.
 After feedback has been given we expect responses within two weeks. After two weeks we may close the pull request if it isn't showing any activity.
 
-# Community
-You can chat with the core team and the community on Discord LINK THIS.
+# Questions?
+Message the core team at [spot@team3061.org](spot@team3061.org)
