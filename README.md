@@ -1,5 +1,6 @@
 # SPOT
 SPOT (Scouting Platforms On Time) is an open source modular scouting app framework developed by Team 3061 Huskie Robotics. SPOT provides a simple platform upon which a team can build a scouting app with little to no prior experience.
+* Quick setup with a built-in first-run wizard to walk teams through configuring their scouting app, connecting to The Blue Alliance, and setting up their database.
 
 SPOT is built with HTML, JS, CSS, and Node.js and operates with a MongoDB database.
 
