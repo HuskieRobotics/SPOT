@@ -1,5 +1,5 @@
 # SPOT - Scouting Platforms On Time
-SPOT is an open source modular scouting app framework for FRC developed by Team 3061 Huskie Robotics. SPOT provides a simple platform upon which a team can build a scouting app with little to no prior experience.
+SPOT is an open-source modular scouting app framework for FRC developed by Team 3061 Huskie Robotics. SPOT provides a simple platform upon which a team can build a scouting app with little to no prior experience.
 
 ## Features
 
@@ -7,7 +7,7 @@ SPOT is an open source modular scouting app framework for FRC developed by Team 
 * Analysis page to display detailed statistics and charts about matches and teams.
 * Admin view for live scouter management at competition.
 * Preconfigured for the 2022 Rapid React game with no additional game-specific customization required.
-* Easy deployment experience when teams run server on Glitch
+* Easy deployment experience when teams run a server on Glitch
 * Optimized for teams who have internet access while scouting, completely functional for teams with no internet access.
 * Quick setup with a built-in first-run wizard to walk teams through configuring their scouting app, connecting to The Blue Alliance, and setting up their database.
 * Completely configurable analysis and scouting view without the need for a single line of code.
@@ -16,7 +16,7 @@ SPOT is built with HTML, JS, CSS, and Node.js and operates with a MongoDB databa
 
 ### SPOT is designed for a wide range of teams with a wide range of expertise and requirements:
 
-1. A team that is new to scouting and aren't sure what information to gather or how to analyze their data. SPOT comes as a preconfigured app that can be deployed with minimal setup and will provide all the basic functionality needed by most teams.
+1. A team that is new to scouting and isn't sure what information to gather or how to analyze their data. SPOT comes as a preconfigured app that can be deployed with minimal setup and will provide all the basic functionality needed by most teams.
 2. A team that has some experience with scouting and wants to collect specific data that may not be part of the default configuration but that doesn't have significant programming experience. SPOT can be configured by modifying configuration files rather than by writing code.
 3. A team that has experience with scouting and wants to perform custom analysis operations or advanced custom scouting interfaces and has some programming experience. SPOT can utilize user-provided analysis modules to extend its functionality beyond the default configuration without requiring teams to modify the base code. 
 4. A team that has significant experience with scouting and significant programming expertise. SPOT is open source, documented, and designed to extensible such that teams can start from this code base and build their own custom scouting system.
@@ -29,7 +29,7 @@ SPOT is built with HTML, JS, CSS, and Node.js and operates with a MongoDB databa
 
 # Getting Started
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. If you have any questions, feel free to contact us [spot@team3061.org](mailto:spot@team3061.org).
 
 ## [Quickstart](https://docs.google.com/document/d/1dATXMC5U7aT0SfnYEOWFiafaeWbu8opabNglWSFCSPE/edit?usp=sharing)
 
