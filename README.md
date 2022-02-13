@@ -27,11 +27,11 @@ SPOT is built with HTML, JS, CSS, and Node.js and operates with a MongoDB databa
 * SPOT does not require you to write code to configure, set up, or use SPOT.
 * SPOT does not require you to be online for its most basic features (scouting, data analysis)
 
-# Getting Started
+## Getting Started
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. If you have any questions, feel free to contact us [spot@team3061.org](mailto:spot@team3061.org).
 
-## [Quickstart](https://docs.google.com/document/d/1dATXMC5U7aT0SfnYEOWFiafaeWbu8opabNglWSFCSPE/edit?usp=sharing)
+### [Quickstart](https://docs.google.com/document/d/1dATXMC5U7aT0SfnYEOWFiafaeWbu8opabNglWSFCSPE/edit?usp=sharing)
 
 ## Usage
 
