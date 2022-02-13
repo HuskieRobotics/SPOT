@@ -55,7 +55,16 @@ async function constructApp(accessCode) {
     setInterval(() => updateScouters(accessCode), 2500);
 
     await updateMatches(accessCode)
-    // setInterval(updateMatches, 2500);
+    setInterval(() => updateMatches(accessCode), 2500);
+
+    document.querySelector("#start-scouting").addEventListener("click", () => {
+        fetch("/admin/api/enterMatch", {
+            headers: {
+                Authorization: accessCode
+            }
+        });
+        console.log("ENTER MATCH!")
+    })
 
     let menuExpanded = false
 
@@ -175,11 +184,6 @@ async function updateMatches(accessCode) {
         })
     }
 }
-
-document.querySelector("#start-scouting").addEventListener("click", () => {
-    fetch("/admin/api/enterMatch");
-    console.log("ENTER MATCH!")
-})
 
 class ScouterDisplay {
     scouterElement;

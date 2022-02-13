@@ -46,9 +46,23 @@ class ScoutingSync {
             ScoutingSync.sync();
         })
 
+        //store previous robot and match number for comparison
+        let previousMatchInfo = {
+            robotNumber: null,
+            matchNumber: null
+        }
         ScoutingSync.socket.on("enterMatch", () => {
             setTimeout(() => { //wait an extra 100ms to guarantee you are on the waiting screen
-                console.log("enter match!");
+                console.log(ScoutingSync.state, previousMatchInfo);
+                if (ScoutingSync.state.robotNumber == previousMatchInfo.robotNumber && 
+                    ScoutingSync.state.matchNumber == previousMatchInfo.matchNumber)
+                    return;
+                
+                previousMatchInfo = {
+                    robotNumber: ScoutingSync.state.robotNumber,
+                    matchNumber: ScoutingSync.state.matchNumber
+                }
+                
                 switchPage("match-scouting");
                 new Modal("small").header("Match Information").text(`
                 You have been assigned team ${ScoutingSync.state.robotNumber} in match ${ScoutingSync.state.matchNumber}.

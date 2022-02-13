@@ -36,10 +36,10 @@ router.get("/enterMatch", (req,res) => {
             if (scouter.state.status == ScoutingSync.SCOUTER_STATUS.WAITING)
                 scouter.socket.emit("enterMatch");
         }
+        res.json(true);
     } else {
         res.json({error: "Not Authorized"})
     }
-    res.json(true);
 })
 router.post("/setMatch", (req,res) => {
     if (req.headers.authorization === config.secrets.ACCESS_CODE) {
