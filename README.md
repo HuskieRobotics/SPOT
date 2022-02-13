@@ -7,6 +7,7 @@ SPOT is an open source modular scouting app framework for FRC developed by Team 
 * Analysis page to display detailed statistics and charts about matches and teams.
 * Admin view for live scouter management at competition.
 * Preconfigured for the 2022 Rapid React game with no additional game-specific customization required.
+* Easy deployment experience when teams run server on Glitch
 * Optimized for teams who have internet access while scouting, completely functional for teams with no internet access.
 * Quick setup with a built-in first-run wizard to walk teams through configuring their scouting app, connecting to The Blue Alliance, and setting up their database.
 * Completely configurable analysis and scouting view without the need for a single line of code.
@@ -57,8 +58,8 @@ Documentation of the core codebase is currently partially included in files. Che
 * **Dylan Schmit** - *Initial work* - [cyandev](https://github.com/cyandev)
 * **Nithilan Kalidoss** - *Initial work* - [nithilan4](https://github.com/nithilan4)
 
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
+See also the list of [contributors](https://github.com/HuskieRobotics/SPOT/contributors) who participated in this project.
 
 ## License
 
-This project is licensed under the Apache License 2.0 - see the [LICENSE.md](LICENSE.md) file for details
+This project is licensed under the Apache License 2.0 - see the [LICENSE.md](LICENSE) file for details
