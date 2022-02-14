@@ -28,7 +28,6 @@ const filesToCache = [
     "/analysis/css/global.css",
     "/analysis/img/field.svg",
     "/analysis/img/logo.png",
-    "/analysis/img/logo1.png",
     "/analysis/img/spinner.svg",
     "/analysis/js/elements.js",
     "/analysis/js/script.js",
