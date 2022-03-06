@@ -1,6 +1,6 @@
 const express = require("express");
 let app = express();
-const server = app.listen(process.env.PORT || 8080, () => {console.log(chalk.cyan(`Server listening on port ${process.env.PORT || 8080}`))});
+const server = app.listen(process.env.PORT || 80, () => {console.log(chalk.cyan(`Server listening on port ${process.env.PORT || 80}`))});
 const chalk = require("chalk");
 const fs = require("fs");
 
