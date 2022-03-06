@@ -33,4 +33,6 @@
 ::978f952a14a936cc963da21a135fa983
 @echo off
 title Scouting App
-powershell npm start
+cd C:\Users\meilu\Documents\GitHub\SPOT\
+powershell C:\Users\meilu\Documents\GitHub\SPOT\start.exe
+pause
