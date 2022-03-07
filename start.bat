@@ -35,4 +35,3 @@
 title Scouting App
 cd C:\Users\meilu\Documents\GitHub\SPOT\
 powershell C:\Users\meilu\Documents\GitHub\SPOT\start.exe
-pause
