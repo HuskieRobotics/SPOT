@@ -10,9 +10,9 @@
 }
 
 #match-scouting .button-grid {
-    margin-top: 5vh;
+    margin-top: 5.5vh;
     width: 99%;
-    height: 94%;
+    height: 93.5%;
     display: grid;
     grid-gap: .75vw;
     border-radius: var(--border-radius, 16px);
@@ -32,10 +32,11 @@
     cursor: pointer;
     user-select: none;
     overflow: hidden;
-    box-shadow: 0 0 5px black;
+    box-shadow: 0 0 8px 0px #838383;
+	transition: 0.2s border, 0.2s box-shadow
 }
 #match-scouting .grid-button:active {
-    box-shadow: 0 0 7px black;
+    box-shadow: 0 0 12px 0px #222222;
     font-size: 3.3vw;
 }
 
