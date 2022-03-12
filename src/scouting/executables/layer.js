@@ -5,7 +5,6 @@
  */
 executables["layer"] = {
     execute(button,layers,fromLayer,toLayer) {
-        console.log(layers.flat())
         for (let button of layers.flat()) { //hide all buttons
             button.element.style.display = "none"
         }

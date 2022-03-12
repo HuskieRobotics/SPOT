@@ -146,7 +146,8 @@ body {
     text-overflow: ellipsis;
     width: 100%;
     text-align: center;
-    overflow: hidden;
+    overflow-y: visible;
+    overflow-x: clip
 }
 .scouter > .robot-number {
     font-size: 3rem;

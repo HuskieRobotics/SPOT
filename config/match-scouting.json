@@ -10,9 +10,9 @@
                 "layer": 2,
                 "displayText": "Teleop"
             },
-            "30000": {
+            "80000": {
                 "layer": 3,
-                "displayText": "Endgame"
+                "displayText": "Teleop"
             }
         }
     },
@@ -235,7 +235,7 @@
                     "gridArea": ["3", "1", "4", "2"],
                     "class": "pink",
                     "type": "action",
-                    "executables": []
+                    "executables": [{"type":"climbHighlight","args":[]}]
                 },
                 {
                     "id": "climb2",
@@ -243,7 +243,7 @@
                     "gridArea": ["3", "2", "4", "3"],
                     "class": "pink",
                     "type": "action",
-                    "executables": []
+                    "executables": [{"type":"climbHighlight","args":[]}]
                 },
                 {
                     "id": "climb3",
@@ -251,7 +251,7 @@
                     "gridArea": ["3", "3", "4", "4"],
                     "class": "pink",
                     "type": "action",
-                    "executables": []
+                    "executables": [{"type":"climbHighlight","args":[]}]
                 },
                 {
                     "id": "climb4",
@@ -259,7 +259,7 @@
                     "gridArea": ["3", "4", "4", "5"],
                     "class": "pink",
                     "type": "action",
-                    "executables": []
+                    "executables": [{"type":"climbHighlight","args":[]}]
                 },
                 {
                     "id": "climbF",
