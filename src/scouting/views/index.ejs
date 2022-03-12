@@ -43,6 +43,11 @@
         <% } %> -->
     </div>
 
+	<div class="status">
+		<div class="connection-status">Loading...</div>
+		<div class="last-actions"></div>
+	</div>
+
     <% for (let filename of pages) { %>
         <div id=<%=filename.replace(".ejs","")%> class="page <%= filename === landingPage + ".ejs" ? "visible" : ""%>"><%- include(`pages/${filename}`) %></div>
     <% } %>

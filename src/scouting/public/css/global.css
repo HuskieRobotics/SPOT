@@ -32,6 +32,31 @@ body {
     z-index: 9999;
 }
 
+.status {
+	position: absolute;
+	top: 1.5vh;
+	left: 0;
+	line-height: 1em;
+	width: 100%;
+	z-index: 9999;
+	display: flex;
+	justify-content: space-between;
+	padding: 0 20px;
+	font-size: min(3.5vmin, 20px);
+}
+
+.connection-status {
+	font-weight: 700
+}
+
+.connection-status.connected {
+	color: var(--green);
+}
+
+.connection-status.disconnected {
+	color: var(--error);
+}
+
 * {
     font-family: var(--font, sans-serif)
 }

@@ -24,13 +24,21 @@ class ScoutingSync {
             ScoutingSync.state.offlineMode = false; //the user connected so disable offlineMode
             ScoutingSync.state.connected = true;
             ScoutingSync.socket.emit("updateState", ScoutingSync.state) //send the server your initial state
-            console.log("connected");
+            document.querySelector(".status .connection-status").innerText = "Connected"
+			document.querySelector(".status .connection-status").classList.add("connected")
+			document.querySelector(".status .connection-status").classList.remove("disconnected")
+
+			console.log("connected");
             ScoutingSync.sync();
         })
 
         ScoutingSync.socket.on("disconnect", () => {
             ScoutingSync.state.connected = false;
-            console.log("disconnected");
+			document.querySelector(".status .connection-status").innerText = "Disconnected"
+			document.querySelector(".status .connection-status").classList.remove("connected")
+			document.querySelector(".status .connection-status").classList.add("disconnected")
+
+			console.log("disconnected");
         })
 
         ScoutingSync.socket.on("err", (msg) => {
