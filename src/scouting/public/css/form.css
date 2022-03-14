@@ -82,6 +82,18 @@
     height: 2em;
 }
 
+#form .form .cancel {
+    grid-area: 4/1/5/3;
+    font-size: 1.75em;
+    width: 90%;
+    background-color: var(--accent);
+    border-radius: var(--border-radius);
+    color: var(--bg-alt);
+    border: none;
+    margin: 6px 0;
+    height: 2em;
+}
+
 @media screen and (min-height: 600px) {
     #form .form {
         width: 350px;
@@ -96,6 +108,10 @@
         font-size: 2em
     }
     #form .form .save {
+        width: calc(100% - 24px);
+        margin: 12px 0;
+    }
+    #form .form .cancel {
         width: calc(100% - 24px);
         margin: 12px 0;
     }

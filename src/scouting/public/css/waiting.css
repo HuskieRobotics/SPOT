@@ -7,7 +7,17 @@
     line-height: 1.4;
     padding: 64px 12px 0 12px;
 }
-
+#waiting .cancel {
+    grid-area: 4/1/5/3;
+    font-size: 1.75em;
+    width: 90%;
+    background-color: var(--accent);
+    border-radius: var(--border-radius);
+    color: var(--bg-alt);
+    border: none;
+    margin: 6px 0;
+    height: 2em;
+}
 
 /* scale text based on height */
 #waiting {
@@ -20,6 +30,10 @@
     }
     #waiting .hint {
         bottom: 40px !important;
+    }
+    #waiting .cancel {
+        width: calc(25% - 24px);
+        margin: 12px 0;
     }
 }
 

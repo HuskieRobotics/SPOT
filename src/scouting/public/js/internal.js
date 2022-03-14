@@ -27,7 +27,7 @@ window.addEventListener("beforeinstallprompt", (e) => {
   e.preventDefault();
   let prompt = e;
   let modal = new Modal("small")
-  modal.text("SPOT is better when you install the app!").action("Install", () => {
+  modal.text("Devil Scouting is better when you install the app!").action("Install", () => {
     prompt.prompt();
     prompt.userChoice.then(() => {
       modal.modalExit();

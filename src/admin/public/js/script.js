@@ -30,6 +30,9 @@ const scouters = {};
         authModal.action("Submit", async () => {
             validate(accessCodeInput.value, authModal)
         })
+        authModal.action("Cancel", async () => {
+            location.href = '/';
+        })
     } else {
         await constructApp()
     }

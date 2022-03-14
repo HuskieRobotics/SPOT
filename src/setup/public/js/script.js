@@ -29,6 +29,9 @@ let oldAccessCode;
         authModal.action("Submit", async () => {
             validate(accessCodeInput.value, authModal)
         })
+        authModal.action("Cancel", async () => {
+            location.href = '/';
+        })
     } else {
         await constructApp("")
     }

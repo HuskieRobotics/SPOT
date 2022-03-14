@@ -18,6 +18,9 @@ document.querySelector("#form .save").addEventListener("click", async () => {
         switchPage("waiting");
     }
 })
+document.querySelector("#form .cancel").addEventListener("click", async () => {
+    switchPage("landing");
+})
 
 function updateForm() {
     document.querySelector("#form .first-name").value = localStorage.getItem("firstName") || "";

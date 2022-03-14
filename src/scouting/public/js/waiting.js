@@ -30,6 +30,9 @@ activeHint.innerText = hints[0];
 toggleHintElement(activeHint);
 
 //resize the hint container's height on page height change
+document.querySelector("#waiting .cancel").addEventListener("click", async () => {
+    location.href = '/';
+})
 window.addEventListener("resize", () => {
     document.querySelector("#waiting .hint").style.height = activeHint.offsetHeight + "px";
     console.log()
