@@ -13,6 +13,10 @@
     <img class="logo" src="/img/logo.png">
     <span class="sign-in-text">Devil Scouting</span>
     <div class="auth-buttons">
+
+    
+
+        
         <div class="google active">
             <i class="fab fa-google"></i>
             <span>Sign in with Google</span>
@@ -21,8 +25,18 @@
             <i class="fas fa-pen-square"></i>
             <span>Sign in Manually</span>
         </div>
+        <div class="admin active">
+            <i class="fas fa-house-user"></i>
+            <span><button id="match-view-switch" onclick="window.location.href='/admin'">Admin</button></span>
+        </div>
+        <div class="analysis active">
+            <i class="fas fa-chart-bar"></i>
+            <span><button id="match-view-switch" onclick="window.location.href='/analysis'">Analysis</button></span>
+        </div>
+
     </div>
 </div>
-
+<script src="/js/admin.js"></script>
+<script src="/js/analysis.js"></script>
 <script src="https://apis.google.com/js/platform.js"></script>
 <script src="/js/landing.js"></script>
