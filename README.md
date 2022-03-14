@@ -29,7 +29,7 @@ Devil Scouting is built with HTML, JS, CSS, and Node.js and operates with a Mong
 
 ## Getting Started
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. If you have any questions, feel free to contact us [1559.software@gmail.com](mailto:1559.software@gmail.com).
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. If you have any questions, feel free to contact us at [1559.software@gmail.com](mailto:1559.software@gmail.com).
 
 ### [Quickstart](https://docs.google.com/document/d/1dATXMC5U7aT0SfnYEOWFiafaeWbu8opabNglWSFCSPE/edit?usp=sharing)
 
