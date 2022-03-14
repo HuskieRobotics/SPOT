@@ -57,6 +57,7 @@ Documentation of the core codebase is currently partially included in files. Che
 
 * **Dylan Schmit** - *Initial work* - [cyandev](https://github.com/cyandev)
 * **Nithilan Kalidoss** - *Initial work* - [nithilan4](https://github.com/nithilan4)
+* **Rylan Meilutis** - *Finishing Touches* - [rylan-meilutis](https://github.com/rylan-meilutis)
 
 See also the list of [contributors](https://github.com/Team1559/Devil-Scouting/contributors) who participated in this project.
 
