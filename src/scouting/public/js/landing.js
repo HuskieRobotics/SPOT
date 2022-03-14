@@ -20,6 +20,7 @@ gapi.load('auth2', () => {
         spinner.classList.remove("visible")
     })
 
+
     
 
     auth2.isSignedIn.listen(signinChanged)
@@ -65,6 +66,12 @@ async function verify(user) {
 document.querySelector("#landing > div.auth.landing-screen > div > div.manual").addEventListener("click", () => {
     updateForm();
     switchPage("form");
+});
+document.querySelector("#landing > div.auth.landing-screen > div > div.admin").addEventListener("click", () => {
+    location.href = '/admin';
+});
+document.querySelector("#landing > div.auth.landing-screen > div > div.analysis").addEventListener("click", () => {
+    location.href = '/analysis';
 });
 
 // signOutBtn.addEventListener("click", signOut)
