@@ -23,7 +23,7 @@ document.querySelector("#form .cancel").addEventListener("click", async () => {
 })
 
 function updateForm() {
-    document.querySelector("#form .first-name").value = localStorage.getItem("firstName").replace(" ", "") || "";
+    document.querySelector("#form .first-name").value = localStorage.getItem("firstName") || "";
     document.querySelector("#form .last-name").value = localStorage.getItem("lastName") || "";
     
     if (ScoutingSync.state.offlineMode || !ScoutingSync.state.connected) { //only show manual entry for robot and match number when permenantly offline or temporarily disconnected

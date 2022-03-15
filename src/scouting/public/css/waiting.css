@@ -32,8 +32,8 @@
         bottom: 40px !important;
     }
     #waiting .cancel {
-        width: calc(25% - 24px);
-        margin: 12px 0;
+        width: calc(60% - 24px);
+        margin: 8px 0;
     }
 }
 
