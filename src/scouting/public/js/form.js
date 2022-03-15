@@ -1,5 +1,5 @@
 document.querySelector("#form .save").addEventListener("click", async () => {
-    localStorage.setItem("firstName",document.querySelector("#form .first-name").value); //store form values in localstorage
+    localStorage.setItem("firstName",document.querySelector("#form .first-name").value + "&nbsp;"); //store form values in localstorage
     localStorage.setItem("lastName",document.querySelector("#form .last-name").value);
 
     if (ScoutingSync.state.offlineMode) {
