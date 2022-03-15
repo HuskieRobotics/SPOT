@@ -1,4 +1,4 @@
-let hints = ["If you misclick a button, you can always press UNDO to undo your mistake!","Show up to scout on time! Try to be there a few minutes in advance.","Stay focused when scouting. Data you collect helps your team greatly.","If you ever have an issue, make sure to notify the scouting team.","Before you leave, let the scouting team know so they can replace you."]
+let hints = ["If you misclick a button, you can always press UNDO to undo your mistake!","Show up to scout on time! Try to be there a few minutes in advance.","Stay focused when scouting. Data you collect helps your team greatly.","If you ever have an issue, make sure to notify the scouting team.","Before you leave, let the scouting team know so they can replace you.","Remember, accuracy is key, as it allows us to pick the best teams for our allience."]
 
 function shuffleArray(array) {
     for (var i = array.length - 1; i > 0; i--) {
