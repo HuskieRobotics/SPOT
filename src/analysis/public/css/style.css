@@ -270,6 +270,23 @@ body {
   color: var(--bg-alt)
 }
 
+#menu-buttons {
+  background-color: var(--bg);
+  border: 3px solid var(--accent);
+  border-radius: var(--border-radius);
+  font-size: 1.3rem;
+  width: 100%;
+  color: var(--text);
+  cursor: pointer;
+  transition: 0.3s color, 0.3s background-color
+}
+
+#menu-buttons.selected {
+  background-color: var(--accent);
+  color: var(--bg-alt)
+}
+
+
 #match-view {
   display: flex;
   flex-direction: column;
