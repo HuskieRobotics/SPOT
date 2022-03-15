@@ -110,6 +110,16 @@ video {
     padding: 15px 60px;
     border-radius: var(--border-radius);
 }
+#cancel {
+    color: var(--bg-alt);
+    background-color: var(--accent-alt);
+    font-size: 2em;
+    line-height: 1em;
+    margin: 0px 0;
+    border: none;
+    padding: 15px 60px;
+    border-radius: var(--border-radius);
+}
 
 #setup-container {
     width: 100%;

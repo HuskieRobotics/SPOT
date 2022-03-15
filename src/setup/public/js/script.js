@@ -72,6 +72,9 @@ async function constructApp(accessCode) {
 
     document.querySelector("#setup-container").classList.add("visible")
 }
+document.querySelector("#cancel").addEventListener("click", async () => {
+        location.href = '/';
+})
 
 document.querySelector("#submit").addEventListener("click", async () => {
     let secrets = ["ACCESS_CODE", "DATABASE_URL", "TBA_API_KEY", "GOOGLE_CLIENT_ID", "GOOGLE_CLIENT_SECRET"]

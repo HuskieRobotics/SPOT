@@ -275,6 +275,7 @@ body {
   border: 3px solid var(--accent);
   border-radius: var(--border-radius);
   font-size: 1.3rem;
+  margin: 10px 0;
   width: 100%;
   color: var(--text);
   cursor: pointer;
