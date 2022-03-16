@@ -23,3 +23,9 @@
     width: 100%;
     color: var(--text);
 }
+
+@media screen and (max-width: 1100px) {
+	.stats.container {
+		padding: 25px 20px;
+	}
+}

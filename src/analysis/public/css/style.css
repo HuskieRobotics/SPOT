@@ -344,3 +344,34 @@ body {
 .alliance-modules > div:last-child {
   margin-bottom: 20px;
 }
+
+@media screen and (max-width: 1100px) {
+	html {
+		font-size: 75%;
+	}
+
+	#app {
+		grid-template-columns: 200px auto;
+		grid-template-rows: 40px 20px auto;
+	}
+
+	#dashboard > div.visible {
+		height: calc(100vh - 40px);
+	}
+
+	#main-list > div:first-child {
+		margin-top: 25px;
+	}
+
+	#side-list > div:first-child {
+		margin-top: 25px;
+	}
+
+	#main-list > div:last-child {
+		margin-bottom: 25px;
+	}
+
+	#side-list > div:last-child {
+		margin-bottom: 25px;
+	}
+}
