@@ -90,9 +90,10 @@ let devEnd
             button.element.addEventListener("click", async () => {
                 // Handle click after timer runs out
                 if (time <= 0) {
-                    console.log("submitting")
-                    await LocalData.storeTeamMatchPerformance(new TeamMatchPerformance(actionQueue).data)
+                    new Popup("notice","Submitting Data...",1000);
+                    await LocalData.storeTeamMatchPerformance(new TeamMatchPerformance(actionQueue).data);
                     await ScoutingSync.sync();
+                    await ScoutingSync.updateState({status: ScoutingSync.SCOUTER_STATUS.COMPLETE});
                     window.location.reload();
                 }
                 

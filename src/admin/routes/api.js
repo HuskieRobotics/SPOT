@@ -1,7 +1,8 @@
 const { Router } = require("express");
 const ScoutingSync = require("../../scouting/scouting-sync")();
 let router = Router();
-const config = require("../../../config/config.json")
+const config = require("../../../config/config.json");
+const { TeamMatchPerformance } = require("../../lib/db");
 
 
 router.use((req,res,next) => {
@@ -30,10 +31,16 @@ router.get("/scouters", (req,res) => {
     }
 });
 
+router.get("/data", async (req,res) => {
+    res.json(await TeamMatchPerformance.find());
+})
+
+
 router.get("/enterMatch", (req,res) => {
     if (req.headers.authorization === config.secrets.ACCESS_CODE) {
         for (let scouter of ScoutingSync.scouters) {
             if (scouter.state.status == ScoutingSync.SCOUTER_STATUS.WAITING)
+                scouter.updateState({status: ScoutingSync.SCOUTER_STATUS.SCOUTING});
                 scouter.socket.emit("enterMatch");
         }
         res.json(true);

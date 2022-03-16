@@ -18,19 +18,29 @@ class ScoutingSync {
     }
 
     static initialize() {
-        ScoutingSync.socket = io()
+        ScoutingSync.socket = io();
 
-        ScoutingSync.socket.on("connect", () => {
+        function onConnect() {
+            if (ScoutingSync.state.connected) return; //only run connect events once
             ScoutingSync.state.offlineMode = false; //the user connected so disable offlineMode
             ScoutingSync.state.connected = true;
             ScoutingSync.socket.emit("updateState", ScoutingSync.state) //send the server your initial state
             document.querySelector(".status .connection-status").innerText = "Connected"
 			document.querySelector(".status .connection-status").classList.add("connected")
 			document.querySelector(".status .connection-status").classList.remove("disconnected")
-
-			console.log("connected");
             ScoutingSync.sync();
-        })
+        }
+        ScoutingSync.socket.on("connect", onConnect);
+
+        setTimeout(() => {
+            if (ScoutingSync.socket.connected) {
+                onConnect() //sometimes socketio doesnt fire "connect" event on page reload. why? who knows.
+            } else {
+                new Popup("error", "failed to connect!");
+            }
+        },1000)
+
+        ScoutingSync.socket.on("connect_error",(err)=>new Popup("error", err.toString()))
 
         ScoutingSync.socket.on("disconnect", () => {
             ScoutingSync.state.connected = false;
@@ -42,7 +52,7 @@ class ScoutingSync {
         })
 
         ScoutingSync.socket.on("err", (msg) => {
-            console.error(msg);
+            new Popup("error", msg);
         })
 
         ScoutingSync.socket.on("updateState", (stateUpdate) => {
@@ -102,7 +112,6 @@ class ScoutingSync {
             const teamMatchPerformances = await LocalData.getAllTeamMatchPerformances()
             const teamMatchPerformanceIds = teamMatchPerformances.map(teamMatchPerformance => teamMatchPerformance.matchId)
             new Popup("notice","Syncing Data...",1000);
-            await ScoutingSync.updateState({status: ScoutingSync.SCOUTER_STATUS.COMPLETE});
             ScoutingSync.socket.emit("syncData", teamMatchPerformanceIds, (requestedTeamMatchPerformanceIds) => {
                 ScoutingSync.socket.emit("teamMatchPerformances", teamMatchPerformances.filter(teamMatchPerformance => requestedTeamMatchPerformanceIds.includes(teamMatchPerformance.matchId)), () => {
                     new Popup("success","Data Sync Complete!",2000);

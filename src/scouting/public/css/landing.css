@@ -149,6 +149,6 @@
 #landing .versionString {
     position: absolute;
     left: 50%;
-    bottom: 0;
+    bottom: 10px;
     transform: translateX(-50%);
 }

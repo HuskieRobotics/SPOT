@@ -20,14 +20,18 @@ document.querySelector("#form .save").addEventListener("click", async () => {
 })
 
 function updateForm() {
-    document.querySelector("#form .first-name").value = localStorage.getItem("firstName") || "";
-    document.querySelector("#form .last-name").value = localStorage.getItem("lastName") || "";
-    
-    if (ScoutingSync.state.offlineMode || !ScoutingSync.state.connected) { //only show manual entry for robot and match number when permenantly offline or temporarily disconnected
-        document.querySelector("#form .match-number").parentElement.style.display = "inline";
-        document.querySelector("#form .robot-number").parentElement.style.display = "inline";
-    } else {
-        document.querySelector("#form .match-number").parentElement.style.display = "none";
-        document.querySelector("#form .robot-number").parentElement.style.display = "none";
+    try {
+        document.querySelector("#form .first-name").value = localStorage.getItem("firstName") || "";
+        document.querySelector("#form .last-name").value = localStorage.getItem("lastName") || "";
+        
+        if (ScoutingSync.state.offlineMode || !ScoutingSync.state.connected) { //only show manual entry for robot and match number when permenantly offline or temporarily disconnected
+            document.querySelector("#form .match-number").parentElement.style.display = "inline";
+            document.querySelector("#form .robot-number").parentElement.style.display = "inline";
+        } else {
+            document.querySelector("#form .match-number").parentElement.style.display = "none";
+            document.querySelector("#form .robot-number").parentElement.style.display = "none";
+        }
+    } catch (e) {
+        //keep going even if this errors, we need them to be able to input data
     }
 }
