@@ -67,3 +67,8 @@
 .highlight {
     background-color: #72409c;
 }
+
+.disabled {
+	opacity: 0.6;
+	pointer-events: none;
+}
