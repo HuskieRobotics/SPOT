@@ -25,9 +25,9 @@ class ScoutingSync {
             ScoutingSync.state.offlineMode = false; //the user connected so disable offlineMode
             ScoutingSync.state.connected = true;
             ScoutingSync.socket.emit("updateState", ScoutingSync.state) //send the server your initial state
-            document.querySelector(".status .connection-status").innerText = "Connected"
-			document.querySelector(".status .connection-status").classList.add("connected")
-			document.querySelector(".status .connection-status").classList.remove("disconnected")
+            document.querySelector(".status .socket-status").innerText = "Connected"
+			document.querySelector(".status .socket-status").classList.add("connected")
+			document.querySelector(".status .socket-status").classList.remove("disconnected")
             ScoutingSync.sync();
         }
         ScoutingSync.socket.on("connect", onConnect);
@@ -44,9 +44,9 @@ class ScoutingSync {
 
         ScoutingSync.socket.on("disconnect", () => {
             ScoutingSync.state.connected = false;
-			document.querySelector(".status .connection-status").innerText = "Disconnected"
-			document.querySelector(".status .connection-status").classList.remove("connected")
-			document.querySelector(".status .connection-status").classList.add("disconnected")
+			document.querySelector(".status .socket-status").innerText = "Disconnected"
+			document.querySelector(".status .socket-status").classList.remove("connected")
+			document.querySelector(".status .socket-status").classList.add("disconnected")
 
 			console.log("disconnected");
         })
@@ -82,6 +82,7 @@ class ScoutingSync {
                 }
                 
                 switchPage("match-scouting");
+				document.querySelector(".scouting-info").style.display = "block"
                 new Modal("small").header("Match Information").text(`
                 You have been assigned team ${ScoutingSync.state.robotNumber} in match ${ScoutingSync.state.matchNumber}.
                 `).dismiss("OK")

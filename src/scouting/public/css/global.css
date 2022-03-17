@@ -46,15 +46,32 @@ body {
 }
 
 .connection-status {
+	display:flex;
+	gap: 10px;
+}
+
+.socket-status {
 	font-weight: 700
 }
 
-.connection-status.connected {
+.socket-status.connected {
 	color: var(--green);
 }
 
-.connection-status.disconnected {
+.socket-status.disconnected {
 	color: var(--error);
+}
+
+.reload {
+	cursor: pointer;
+}
+
+.scouting-info {
+	display: none;
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
 }
 
 * {

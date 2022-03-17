@@ -10,6 +10,7 @@ document.querySelector("#form .save").addEventListener("click", async () => {
             status: ScoutingSync.SCOUTER_STATUS.WAITING
         })
         switchPage("match-scouting");
+		document.querySelector(".scouting-info").style.display = "block"
     } else {
         await ScoutingSync.updateState({
             scouterId: `${document.querySelector("#form .first-name").value}${document.querySelector("#form .last-name").value}`,
