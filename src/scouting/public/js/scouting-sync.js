@@ -52,7 +52,7 @@ class ScoutingSync {
         })
 
         ScoutingSync.socket.on("err", (msg) => {
-            new Popup("error", msg);
+            // new Popup("error", msg);
         })
 
         ScoutingSync.socket.on("updateState", (stateUpdate) => {
@@ -91,6 +91,7 @@ class ScoutingSync {
     static updateState(stateUpdate,incoming=false) {
         return new Promise((res,rej) => {
             Object.assign(ScoutingSync.state, stateUpdate);
+			document.querySelector(".scouting-info").innerText = `Match: ${ScoutingSync.state.matchNumber} | Team: ${ScoutingSync.state.robotNumber}`
             if (!incoming) {
                 ScoutingSync.socket.emit("updateState", ScoutingSync.state, () => {
                     res(true);
@@ -123,4 +124,8 @@ class ScoutingSync {
     }
 }
 
-ScoutingSync.initialize()
+try {
+	ScoutingSync.initialize()
+} catch(e) {
+	console.log("Socket failed to load", e)
+}
