@@ -47,7 +47,7 @@ body {
 
 .connection-status {
 	display:flex;
-	gap: 10px;
+	gap: 0.8vw;
 }
 
 .socket-status {
