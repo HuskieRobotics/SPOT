@@ -31,13 +31,7 @@ class Stats {
                 formattedStat = summed / teams.length
             }
             
-            if (stat.multiplier !== undefined) {
-                formattedStat *= stat.multiplier
-            }
-
-            if (stat.addend !== undefined) {
-                formattedStat += stat.addend
-            }
+			formattedStat = this.applyModifiers(stat, formattedStat)
 
 			let statRank
 			let totalRanked
@@ -47,22 +41,13 @@ class Stats {
 				if (stat.sort !== 0 && stat.sort !== undefined && teams.length == 1) {
 					const filteredTeams = Object.keys(dataset.teams).filter(team => {
 						let teamStatToFilter = getPath(dataset.teams[team], stat.path, 0)
-
-						if (stat.multiplier !== undefined) {
-							teamStatToFilter *= stat.multiplier
-						}
-			
-						if (stat.addend !== undefined) {
-							teamStatToFilter += stat.addend
-						}
-
-						console.log(teamStatToFilter)
+						teamStatToFilter = this.applyModifiers(stat, teamStatToFilter)
 
 						return (!isNaN(teamStatToFilter) && teamStatToFilter != stat.hideIfValue)
 					})
 
 					totalRanked = filteredTeams.length
-					statRank = filteredTeams.sort((a, b) => (getPath(dataset.teams[a], stat.path, 0) - getPath(dataset.teams[b], stat.path, 0)) * stat.sort).indexOf(teams[0]) + 1
+					statRank = filteredTeams.sort((a, b) => (this.applyModifiers(stat, getPath(dataset.teams[b], stat.path, 0)) - this.applyModifiers(stat, getPath(dataset.teams[a], stat.path, 0))) * stat.sort).indexOf(teams[0]) + 1
 				}
 
 				if (stat.decimals !== undefined) {
@@ -85,6 +70,18 @@ class Stats {
 
         return data
     }
+
+	applyModifiers(stat, value) {
+		if (stat.multiplier !== undefined) {
+			value *= stat.multiplier
+		}
+
+		if (stat.addend !== undefined) {
+			value += stat.addend
+		}
+
+		return value
+	}
 
     setData(data) {
         this.header.innerText = this.moduleConfig.name
