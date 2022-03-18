@@ -2,7 +2,7 @@
     {
         "view": "team",
         "module": "HeatmapScatterPlot",
-        "name": "Action Plot",
+        "name": "Shot Plot",
         "position": "main",
         "options": {
             "coordinatePath": "other.pos",
@@ -11,16 +11,31 @@
                 {
                     "name": "Shots",
                     "actions": ["upperHub", "lowerHub", "miss"]
-                },
+                }
+            ],
+            "actionLabels": {
+                "upperHub": "Upper",
+                "lowerHub": "Lower",
+                "miss": "Miss"
+            },
+            "imgPath": "img/field.svg"
+        }
+    },
+	{
+        "view": "team",
+        "module": "HeatmapScatterPlot",
+        "name": "Pickup Plot",
+        "position": "main",
+        "options": {
+            "coordinatePath": "other.pos",
+            "aggregatedActionsPath": "aggregatedActions",
+            "actionGroups": [
                 {
                     "name": "Pickups",
                     "actions": ["groundPickup", "terminalPickup"]
                 }
             ],
             "actionLabels": {
-                "upperHub": "Upper",
-                "lowerHub": "Lower",
-                "miss": "Miss",
                 "groundPickup": "Ground",
                 "terminalPickup": "Terminal"
             },
@@ -40,6 +55,8 @@
                     "multiplier": -0.001,
                     "addend": 150,
                     "decimals": 2,
+					"hideIfValue": 150,
+					"sort": -1,
                     "unit": "s in"
                 },
                 {
@@ -47,6 +64,7 @@
                     "path": "averages.startClimbTime",
                     "multiplier": 0.001,
                     "decimals": 2,
+					"hideIfValue": 0,
                     "unit": "s to end"
                 },
                 {
@@ -54,6 +72,7 @@
                     "path": "cycle.averageTime",
                     "multiplier": 0.001,
                     "decimals": 2,
+					"hideIfValue": 0,
                     "unit": "s"
                 },
                 {
@@ -61,6 +80,7 @@
                     "path": "cycle.averageTimeComplete",
                     "multiplier": 0.001,
                     "decimals": 2,
+					"hideIfValue": 0,
                     "unit": "s"
                 },
                 {
@@ -168,7 +188,7 @@
     {
         "view": "match",
         "module": "HeatmapScatterPlot",
-        "name": "Alliance Action Plot",
+        "name": "Alliance Shot Plot",
         "position": "main",
         "options": {
             "coordinatePath": "other.pos",
@@ -177,7 +197,25 @@
                 {
                     "name": "Shots",
                     "actions": ["upperHub", "lowerHub", "miss"]
-                },
+                }
+            ],
+            "actionLabels": {
+                "upperHub": "Upper",
+                "lowerHub": "Lower",
+                "miss": "Miss"
+            },
+            "imgPath": "img/field.svg"
+        }
+    },
+	{
+        "view": "match",
+        "module": "HeatmapScatterPlot",
+        "name": "Alliance Pickup Plot",
+        "position": "main",
+        "options": {
+            "coordinatePath": "other.pos",
+            "aggregatedActionsPath": "aggregatedActions",
+            "actionGroups": [
                 {
                     "name": "Pickups",
                     "actions": ["groundPickup", "terminalPickup"]

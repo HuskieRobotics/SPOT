@@ -17,17 +17,18 @@ class Stats {
         const data = []
         for (const stat of this.moduleConfig.options.list) {
             let formattedStat
-            let summed = teams.map(team => getPath(dataset.teams[team], stat.path)).flat().reduce((acc, i) => acc + i, 0)
-            
-            console.log(summed)
+			let summed
+			if (teams.length > 1) {
+				summed = teams.map(team => getPath(dataset.teams[team], stat.path, 0)).flat().reduce((acc, i) => acc + i, 0)
+			} else {
+				summed = getPath(dataset.teams[teams[0]], stat.path, 0)
+			}
 
             if (stat.aggrMethod == "sum") { //optionally summed
                 formattedStat = summed
             } else { //default is average
                 formattedStat = summed / teams.length
             }
-
-            // console.log(formattedStat)
             
             if (stat.multiplier !== undefined) {
                 formattedStat *= stat.multiplier
@@ -37,17 +38,47 @@ class Stats {
                 formattedStat += stat.addend
             }
 
-            if (stat.decimals !== undefined) {
-                formattedStat = formattedStat.toFixed(stat.decimals)
-            }
+			let statRank
+			let totalRanked
+			if (isNaN(formattedStat) || formattedStat == stat.hideIfValue) {
+				formattedStat = "—"
+			} else {
+				if (stat.sort !== 0 && stat.sort !== undefined && teams.length == 1) {
+					const filteredTeams = Object.keys(dataset.teams).filter(team => {
+						let teamStatToFilter = getPath(dataset.teams[team], stat.path, 0)
 
-            if (stat.unit) {
-                formattedStat += stat.unit
-            }
+						if (stat.multiplier !== undefined) {
+							teamStatToFilter *= stat.multiplier
+						}
+			
+						if (stat.addend !== undefined) {
+							teamStatToFilter += stat.addend
+						}
 
+						console.log(teamStatToFilter)
+
+						return (!isNaN(teamStatToFilter) && teamStatToFilter != stat.hideIfValue)
+					})
+
+					totalRanked = filteredTeams.length
+					statRank = filteredTeams.sort((a, b) => (getPath(dataset.teams[a], stat.path, 0) - getPath(dataset.teams[b], stat.path, 0)) * stat.sort).indexOf(teams[0]) + 1
+				}
+
+				if (stat.decimals !== undefined) {
+					formattedStat = formattedStat.toFixed(stat.decimals)
+				}
+	
+				if (stat.unit) {
+					formattedStat += stat.unit
+				}
+			}
+
+            
             data.push({
                 name: stat.name,
-                value: formattedStat
+                value: formattedStat,
+				rank: statRank,
+				totalRanked: totalRanked
             })
         }
 
@@ -59,7 +90,17 @@ class Stats {
         clearDiv(this.list)
         for (const stat of data) {
             const statElement = createDOMElement("div", "stat")
-            statElement.innerHTML = `<strong>${stat.name}:</strong> ${stat.value}`
+			let rankClass = "top100"
+			if (stat.rank <= Math.round(stat.totalRanked * 0.05)) {
+				rankClass = "top5"
+			} else if (stat.rank <= Math.round(stat.totalRanked * 0.25)) {
+				rankClass = "top25"
+			} else if (stat.rank <= Math.round(stat.totalRanked * 0.5)) {
+				rankClass = "top50"
+			}
+
+			const rank = stat.rank ? `<span class="rank ${rankClass}">#${stat.rank} </span>` : ""
+            statElement.innerHTML = `<strong>${rank}${stat.name}:</strong> ${stat.value}`
             this.list.appendChild(statElement)
         }
     }
