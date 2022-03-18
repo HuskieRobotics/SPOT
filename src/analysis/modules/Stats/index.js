@@ -16,6 +16,7 @@ class Stats {
     formatData(teams, dataset) {
         const data = []
         for (const stat of this.moduleConfig.options.list) {
+            console.log(stat)
             let formattedStat
 			let summed
 			if (teams.length > 1) {

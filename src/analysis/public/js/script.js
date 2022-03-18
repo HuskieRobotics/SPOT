@@ -105,6 +105,7 @@ if ('serviceWorker' in navigator) {
     //call setData on every module in teams
     async function setTeamModules(teamNumber) {
         for (const module of modules.team) {
+            console.log(module)
             await module.setData(await module.formatData([teamNumber], dataset))
         }
     }

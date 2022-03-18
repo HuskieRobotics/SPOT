@@ -26,8 +26,10 @@ module.exports = {
                 return acc + getPath(tmp, path, 0)
             }, 0)
 
+            console.log(numeratorSum, denominatorSum)
+
             if (denominatorSum === 0) {
-                setPath(tmp, outputPath, options.divByZero || Infinity)
+                setPath(tmp, outputPath, options.divByZero)
             } else {
                 setPath(tmp, outputPath, numeratorSum / denominatorSum)
             }
