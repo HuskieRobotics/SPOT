@@ -29,6 +29,21 @@
     },
     {
         "view": "team",
+        "module": "PerformanceTimePlot",
+        "name": "Performance Over Time",
+        "position": "main",
+        "options": {
+            "trackedStats": [
+                "scores.auto",
+                "scores.teleop",
+                "scores.endgame",
+                "scores.all",
+                "accuracy"
+            ]
+        }
+    },
+    {
+        "view": "team",
         "module": "Stats",
         "position": "side",
         "name": "Team Stats",
