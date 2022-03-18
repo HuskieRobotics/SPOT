@@ -47,7 +47,8 @@ body {
 
 .connection-status {
 	display:flex;
-	gap: 0.8vw;
+	align-items: center;
+	gap: max(1vw, 10px);
 }
 
 .socket-status {
@@ -64,6 +65,7 @@ body {
 
 .reload {
 	cursor: pointer;
+	font-size: min(8vmin, 25px)
 }
 
 .scouting-info {
