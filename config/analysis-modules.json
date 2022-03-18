@@ -163,15 +163,15 @@
                 },
                 {
                     "name": "Mid Rung",
-                    "path": "counts.climb2"
+                    "path": "climbLevels.climb2"
                 },
                 {
                     "name": "High Rung",
-                    "path": "counts.climb3"
+                    "path": "climbLevels.climb3"
                 },
                 {
                     "name": "Traversal Rung",
-                    "path": "counts.climb4"
+                    "path": "climbLevels.climb4"
                 }
             ]
         }
