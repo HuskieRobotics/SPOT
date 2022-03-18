@@ -50,15 +50,15 @@
                     "unit": "s to end"
                 },
                 {
-                    "name": "All Cycle Time",
-                    "path": "cycle.averageTime",
+                    "name": "Climb End Time",
+                    "path": "averages.endClimbTime",
                     "multiplier": 0.001,
                     "decimals": 2,
-                    "unit": "s"
+                    "unit": "s to end"
                 },
                 {
-                    "name": "Scored Cycle Time",
-                    "path": "cycle.averageTimeComplete",
+                    "name": "Time Per Ball",
+                    "path": "timePerBall",
                     "multiplier": 0.001,
                     "decimals": 2,
                     "unit": "s"
@@ -105,19 +105,27 @@
         "options": {
             "slices": [
                 {
-                    "name": "Climb 1",
-                    "path": "counts.climb1"
+                    "name": "No Climb",
+                    "path": "climbLevels.noClimb"
                 },
                 {
-                    "name": "Climb 2",
+                    "name": "Fall",
+                    "path": "climbLevels.climbF"
+                },
+                {
+                    "name": "Low Rung",
+                    "path": "climbLevels.climb1"
+                },
+                {
+                    "name": "Mid Rung",
                     "path": "counts.climb2"
                 },
                 {
-                    "name": "Climb 3",
+                    "name": "High Rung",
                     "path": "counts.climb3"
                 },
                 {
-                    "name": "Climb 4",
+                    "name": "Traversal Rung",
                     "path": "counts.climb4"
                 }
             ]
@@ -125,11 +133,11 @@
     },
     {
         "view": "team",
-        "module": "Bar",
+        "module": "Pie",
         "position": "main",
         "name": "Shot Distribution",
         "options": {
-            "bars": [
+            "slices": [
                 {
                     "name": "Upper Hub",
                     "path": "counts.upperHub"

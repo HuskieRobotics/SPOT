@@ -16,6 +16,7 @@ class Stats {
     formatData(teams, dataset) {
         const data = []
         for (const stat of this.moduleConfig.options.list) {
+            console.log(stat)
             let formattedStat
             let summed = teams.map(team => getPath(dataset.teams[team], stat.path)).flat().reduce((acc, i) => acc + i, 0)
             

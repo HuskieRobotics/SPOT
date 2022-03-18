@@ -1,4 +1,5 @@
 const pipelineConfig = require("../../config/analysis-pipeline.json");
+const config = require("../../config/config.json");
 const fs = require("fs");
 const { TeamMatchPerformance } = require("../lib/db");
 const { Dataset } = require("./DataTransformer");
@@ -36,7 +37,7 @@ if (debug) console.log("loaded all transformers!");
 
 async function execute(dataset) {
     /* get tmps from database */
-    dataset = new Dataset((await TeamMatchPerformance.find()).map((o) => o.toObject()));
+    dataset = new Dataset((await TeamMatchPerformance.find({eventNumber: config.EVENT_NUMBER})).map((o) => o.toObject()));
     
     for (let tfConfig of pipelineConfig) {
         if (debug) console.log(`running ${tfConfig.name} - ${JSON.stringify(tfConfig.options)}`)
