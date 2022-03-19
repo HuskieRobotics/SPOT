@@ -46,7 +46,10 @@ class Stats {
 					})
 
 					totalRanked = filteredTeams.length
-					statRank = filteredTeams.sort((a, b) => (this.applyModifiers(stat, getPath(dataset.teams[b], stat.path, 0)) - this.applyModifiers(stat, getPath(dataset.teams[a], stat.path, 0))) * stat.sort).indexOf(teams[0]) + 1
+					const rankedTeams = filteredTeams.sort((a, b) => (this.applyModifiers(stat, getPath(dataset.teams[b], stat.path, 0)) - this.applyModifiers(stat, getPath(dataset.teams[a], stat.path, 0))) * stat.sort)
+					statRank = rankedTeams.indexOf(teams[0]) + 1
+					console.log(stat.name)
+					console.log(rankedTeams.map(t => `${t}: ${this.applyModifiers(stat, getPath(dataset.teams[t], stat.path, 0))}`))
 				}
 
 				if (stat.decimals !== undefined) {
