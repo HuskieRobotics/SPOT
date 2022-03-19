@@ -28,7 +28,6 @@ if ('serviceWorker' in navigator) {
 		const modulesConfig = await fetch(`/config/analysis-modules.json`).then(res => res.json());
 		dataset = await fetchDataset()
 		matches = (await fetch("/admin/api/matches").then(res => res.json())).allMatches
-		console.log(matches)
 		console.log(dataset)
 		initDashboard(dataset, modulesConfig)
 		await new Promise(r => setTimeout(r, 300))
@@ -108,7 +107,6 @@ if ('serviceWorker' in navigator) {
 	//call setData on every module in teams
 	async function setTeamModules(teamNumber) {
 		for (const module of modules.team) {
-			console.log(module)
 			await module.setData(await module.formatData([teamNumber], dataset))
 		}
 	}
@@ -176,7 +174,6 @@ if ('serviceWorker' in navigator) {
 			if (matchSelect.value !== "none") {
 				matchSelect.classList.add("filled")
 				const selectedMatch = matches.find(m => m.match_string == matchSelect.value)
-				console.log(selectedMatch)
 				for (let i = 0; i < 3; i++) {
 					teamSelects[i].value = Object.keys(dataset.teams).includes(selectedMatch.robots.red[i]) ? selectedMatch.robots.red[i] : "none"
 					if (teamSelects[i].value === "none") {
