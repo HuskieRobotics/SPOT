@@ -269,6 +269,20 @@
 	{
 		"view": "match",
 		"module": "ColumnDisplay",
+		"name": "Climb Time",
+		"position": "main",
+		"options": {
+			"path": "averages.climbDuration",
+			"multiplier": 0.001,
+			"decimals": 2,
+			"hideIfValue": 0,
+			"sort": -1,
+			"unit": "s"
+		}
+	},
+	{
+		"view": "match",
+		"module": "ColumnDisplay",
 		"name": "Total Points",
 		"position": "main",
 		"options": {
