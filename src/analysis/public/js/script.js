@@ -241,7 +241,9 @@ if ('serviceWorker' in navigator) {
 
 		searchInput.addEventListener("input", () => {
 			if (searchInput.value !== "") {
-				const sortedTeams = fuzzysort.go(searchInput.value, Object.keys(dataset.teams), { limit: 100 })
+				const sortedTeams = fuzzysort.go(searchInput.value, Object.keys(dataset.teams), {
+					allowTypo: true
+				})
 				console.log(sortedTeams)
 				for (const team of Array.from(teamList.children)) {
 					team.style.display = "none"
