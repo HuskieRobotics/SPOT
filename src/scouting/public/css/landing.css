@@ -74,7 +74,7 @@
 #landing .logo {
     height: 90vmin;
     position: absolute;
-    opacity: 0.05;
+    opacity: 0.25;
     z-index: 1;
 }
 
