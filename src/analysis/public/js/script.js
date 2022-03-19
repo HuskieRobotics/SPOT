@@ -81,6 +81,7 @@ if ('serviceWorker' in navigator) {
 		const teamContainer = createDOMElement("div", "team-container")
 		const teamNumDisplay = createDOMElement("div", "team-number")
 		teamNumDisplay.innerText = teamNumber
+		teamContainer.setAttribute("num", teamNumber)
 		teamContainer.appendChild(teamNumDisplay)
 		if (allTeams) {
 			const teamNameDisplay = createDOMElement("div", "team-name")
@@ -237,6 +238,34 @@ if ('serviceWorker' in navigator) {
 	function initDashboard(dataset, modulesConfig) {
 		loadTeams(dataset, modulesConfig)
 		loadMatchView(dataset, modulesConfig)
+
+		searchInput.addEventListener("input", () => {
+			if (searchInput.value !== "") {
+				const sortedTeams = fuzzysort.go(searchInput.value, Object.keys(dataset.teams), { limit: 100 })
+				console.log(sortedTeams)
+				for (const team of Array.from(teamList.children)) {
+					team.style.display = "none"
+				}
+				for (const sortResult of sortedTeams) {
+					const toAppend = Array.from(teamList.children).find(teamElement => teamElement.getAttribute("num") == sortResult.target)
+					teamList.appendChild(toAppend)
+					toAppend.style.display = "flex"
+				}
+			} else {
+				for (const team of Array.from(teamList.children).sort((a, b) => {
+					const aLength = a.getAttribute("num").length
+					const bLength = b.getAttribute("num").length
+					if (aLength == bLength) {
+						return a.getAttribute("num").localeCompare(b.getAttribute("num"))
+					} else {
+						return aLength - bLength
+					}
+				})) {
+					teamList.appendChild(team)
+					team.style.display = "flex"
+				}
+			}
+		})
 	}
 
 	//reset the UI to state of nothing shown, nothing selected
