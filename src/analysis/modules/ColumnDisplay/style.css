@@ -64,4 +64,5 @@
     flex-direction: column;
     gap: 2px;
 	align-items: center;
+	width: 30%;
 }
