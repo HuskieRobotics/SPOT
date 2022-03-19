@@ -59,13 +59,9 @@ router.post("/setMatch", (req,res) => {
 });
 
 router.get("/matches", async (req,res) => {
-    if (req.headers.authorization === config.secrets.ACCESS_CODE) {
-        res.json({
-            "allMatches": await ScoutingSync.getMatches(),
-            "currentMatch": ScoutingSync.match
-        })
-    } else {
-        res.json({error: "Not Authorized"})
-    }
+	res.json({
+		"allMatches": await ScoutingSync.getMatches(),
+		"currentMatch": ScoutingSync.match
+	})
 })
 module.exports = router;

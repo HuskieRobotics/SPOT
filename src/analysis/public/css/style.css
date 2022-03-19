@@ -6,7 +6,7 @@ body {
   height: 100vh;
   width: 100%;
   display: grid;
-  grid-template-columns: 300px auto;
+  grid-template-columns: 275px auto;
   grid-template-rows: 75px 30px auto;
   transition: 0.3s visibility, opacity;
   opacity: 0;
@@ -137,7 +137,6 @@ body {
   padding: 0 40px 0 12px;
   background-color: var(--bg);
   border: 2px solid var(--accent-alt);
-  outline: none;
 }
 
 #search-icon {
@@ -274,7 +273,7 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 20px;
+  gap: 10px;
 }
 
 #select-teams-text {
@@ -282,6 +281,7 @@ body {
   line-height: 1em;
   color: var(--accent-alt);
   margin-top: 32px;
+  margin-bottom: 10px;
 }
 
 #team-selects {
@@ -302,23 +302,40 @@ body {
 }
 
 .alliance-selects > select {
-  border-radius: var(--border-radius);
-  border: 2px solid var(--text);
-  width: 90px;
-  font-size: 1.2rem;
-  text-align: center;
-  color: var(--text);
-  background-color: var(--bg-alt);
-  outline: none;
-  transition: 0.2s border-color;
+	width: 90px;
 }
 
-.alliance-selects > select > option {
-  text-align: center;
+.select {
+	border-radius: var(--border-radius);
+	border: 2px solid var(--text);
+	font-size: 1.2rem;
+	text-align: center;
+	color: var(--text);
+	background-color: var(--bg-alt);
+	transition: 0.2s border-color;
 }
 
-.alliance-selects > select.filled {
-  border-color: var(--accent-alt);
+.select > option {
+	text-align: center;
+}
+
+.select.filled {
+	border-color: var(--accent-alt);
+}
+
+#match-select-label {
+	font-size: 1.4em;
+	/* font-weight: 00; */
+}
+
+#match-select-container {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+}
+
+#match-select {
+	width: 75px;
 }
 
 #alliance-module-container {

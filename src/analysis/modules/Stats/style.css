@@ -9,8 +9,8 @@
 }
 
 .stats .header {
-    font-size: 2rem;
-    line-height: 2rem;
+    font-size: 2em;
+    line-height: 1em;
     text-align: center;
     color: var(--text);
     margin-bottom: 12px;
@@ -18,7 +18,7 @@
 
 .stats .list {
     display: flex;
-    font-size: 1.25rem;
+    font-size: 1.25em;
     flex-direction: column;
     width: 100%;
     color: var(--text);

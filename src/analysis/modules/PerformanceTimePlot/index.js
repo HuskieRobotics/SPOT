@@ -5,12 +5,11 @@ class PerformanceTimePlot {
     constructor(moduleConfig) {
         this.moduleConfig = moduleConfig
         this.container = createDOMElement("div", "container line")
-        
     }
 
     async formatData(teams, dataset) {
         let trackedStats = this.moduleConfig.options.trackedStats;
-        if (teams.length > 1) throw new Error("you cant find performace vs time for multiple teams")
+        if (teams.length > 1) throw new Error("Can't track multiple multiple teams!")
         let teamTmps = dataset.tmps.filter(x=>x.robotNumber == teams[0]);
 
         let trackedStatTraces = {};
@@ -25,7 +24,6 @@ class PerformanceTimePlot {
 
         for (let tmp of teamTmps) {
             for (let stat of trackedStats) {
-                console.log(stat)
                 trackedStatTraces[stat].y.push(getPath(tmp,stat));
             }
         }

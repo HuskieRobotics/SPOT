@@ -112,31 +112,37 @@
                 {
                     "name": "Average Auto Points",
                     "path": "averageScores.auto",
+					"decimals": 2,
 					"sort": 1
                 },
                 {
                     "name": "Average Climb Points",
                     "path": "averageScores.endgame",
+					"decimals": 2,
 					"sort": 1
                 },
                 {
                     "name": "Average Points",
                     "path": "averageScores.all",
+					"decimals": 2,
 					"sort": 1
                 },
                 {
                     "name": "Average Upper Hub Shots",
                     "path": "averages.upperHub",
+					"decimals": 2,
 					"sort": 1
                 },
                 {
                     "name": "Average Lower Hub Shots",
                     "path": "averages.lowerHub",
+					"decimals": 2,
 					"sort": 1
                 },
                 {
                     "name": "Average Misses",
                     "path": "averages.miss",
+					"decimals": 2,
 					"sort": -1
                 }
             ]
@@ -217,7 +223,17 @@
         }
     },
 
-
+	{
+		"view": "match",
+		"module": "SingleDisplay",
+		"name": "Alliance Score",
+		"position": "main",
+		"options": {
+			"path": "averageScores.all",
+			"aggrMethod": "sum",
+			"decimals": 2
+		}
+	},
     {
         "view": "match",
         "module": "HeatmapScatterPlot",
@@ -255,9 +271,6 @@
                 }
             ],
             "actionLabels": {
-                "upperHub": "Upper",
-                "lowerHub": "Lower",
-                "miss": "Miss",
                 "groundPickup": "Ground",
                 "terminalPickup": "Terminal"
             },
@@ -274,21 +287,25 @@
                 {
                     "name": "Expected Auto Points",
                     "path": "averageScores.auto",
+					"decimals": 2,
                     "aggrMethod": "sum"
                 },
                 {
                     "name": "Expected Teleop Points",
                     "path": "averageScores.teleop",
+					"decimals": 2,
                     "aggrMethod": "sum"
                 },
                 {
                     "name": "Expected Climb Points",
                     "path": "averageScores.endgame",
+					"decimals": 2,
                     "aggrMethod": "sum"
                 },
                 {
                     "name": "Expected Score",
                     "path": "averageScores.all",
+					"decimals": 2,
                     "aggrMethod": "sum"
                 }
             ]
