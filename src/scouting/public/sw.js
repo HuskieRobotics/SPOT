@@ -35,6 +35,7 @@ const filesToCache = [
     "/analysis/js/util.js",
     "/analysis/api/dataset",
     "/analysis/api/teams",
+	"/admin/api/matches",
 	"/config/config.json",
 	"/config/match-scouting.json",
 	"/config/qr.json",

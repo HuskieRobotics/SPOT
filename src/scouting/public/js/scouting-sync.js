@@ -1,5 +1,6 @@
 class ScoutingSync {
     static socket;
+	static matches;
 
     static SCOUTER_STATUS = {
         "NEW": 0, //scouters who have connected but have not sent their state data
@@ -17,9 +18,9 @@ class ScoutingSync {
         matchNumber: 0
     }
 
-    static initialize() {
+    static async initialize() {
         ScoutingSync.socket = io();
-
+		ScoutingSync.matches = (await fetch("/admin/api/matches").then(res => res.json())).allMatches
         function onConnect() {
             if (ScoutingSync.state.connected) return; //only run connect events once
             ScoutingSync.state.offlineMode = false; //the user connected so disable offlineMode
@@ -92,8 +93,13 @@ class ScoutingSync {
     static updateState(stateUpdate,incoming=false) {
         return new Promise((res,rej) => {
             Object.assign(ScoutingSync.state, stateUpdate);
-			document.querySelector(".scouting-info").innerText = `Match: ${ScoutingSync.state.matchNumber} | Team: ${ScoutingSync.state.robotNumber}`
-            if (!incoming) {
+			const updateMatch = ScoutingSync.matches.find(m => m.number == ScoutingSync.state.matchNumber)
+			if (updateMatch) {
+				document.querySelector(".scouting-info").innerText = `Match: ${ScoutingSync.state.matchNumber} | Team: ${ScoutingSync.state.robotNumber}`
+				document.querySelector(".scouting-info").style.color = updateMatch.robots.red.includes(ScoutingSync.state.robotNumber) ? "var(--error)" : "var(--accent)"
+			}
+	
+			if (!incoming) {
                 ScoutingSync.socket.emit("updateState", ScoutingSync.state, () => {
                     res(true);
                 });
