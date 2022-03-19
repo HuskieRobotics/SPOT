@@ -259,6 +259,16 @@
 	{
 		"view": "match",
 		"module": "ColumnDisplay",
+		"name": "Possible Climbs",
+		"position": "main",
+		"options": {
+			"string": true,
+			"path": "possibleClimbs"
+		}
+	},
+	{
+		"view": "match",
+		"module": "ColumnDisplay",
 		"name": "Total Points",
 		"position": "main",
 		"options": {
@@ -292,6 +302,26 @@
 			"decimals": 1,
 			"multiplier": 100,
 			"unit": "%"
+		}
+	},
+	{
+		"view": "match",
+		"module": "ColumnDisplay",
+		"name": "Possible Shots",
+		"position": "main",
+		"options": {
+			"string": true,
+			"path": "possibleShots"
+		}
+	},
+	{
+		"view": "match",
+		"module": "ColumnDisplay",
+		"name": "Drivetrain",
+		"position": "main",
+		"options": {
+			"string": true,
+			"path": "drivetrain"
 		}
 	},
     {

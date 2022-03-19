@@ -108,9 +108,6 @@
             "valuePath": "timeDifferential"
         }
     },
-
-
-
     {
         "type": "team",
         "name": "average",
@@ -405,7 +402,6 @@
             "addends": ["scores.teleop","scores.auto","scores.endgame"]
         }
     },
-
     {
         "type": "team",
         "name": "average",
@@ -413,7 +409,35 @@
         "options": {
             "path": "scores"
         }
-    }
-
-
+    },
+	{
+		"type": "team",
+		"name": "threshold",
+		"outputPath": "possibleClimbs",
+		"options": {
+			"threshold": 0,
+			"separator": ", ",
+			"none": "—",
+			"paths": {
+				"climbLevels.climb1": "1",
+				"climbLevels.climb2": "2",
+				"climbLevels.climb3": "3",
+				"climbLevels.climb4": "4"
+			}
+		}
+	},
+	{
+		"type": "team",
+		"name": "threshold",
+		"outputPath": "possibleShots",
+		"options": {
+			"threshold": 1,
+			"separator": ", ",
+			"none": "—",
+			"paths": {
+				"averages.upperHub": "U",
+				"averages.lowerHub": "L"
+			}
+		}
+	}
 ]

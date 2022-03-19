@@ -5,13 +5,13 @@
     background-color: var(--bg-alt);
     border-radius: var(--border-radius);
     border: 2px solid var(--accent-alt);
-	gap: 10px;
+	gap: 12px;
 	width: 90%;
 }
 
 .column-display .header {
 	text-align: center;
-	font-size: 1.5em;
+	font-size: 1.6em;
 	line-height: 1em;
 }
 
@@ -36,7 +36,7 @@
 	color: var(--bg-alt);
 	line-height: 1em;
 	border-radius: 0 0 var(--border-radius) var(--border-radius);
-	padding: 2px;
+	padding: 2px 8px;
     margin-top: 2px;
     font-size: 1.15em;
 	width: 100%;

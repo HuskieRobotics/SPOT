@@ -16,13 +16,13 @@ class ColumnDisplay {
     formatData(teams, dataset) {
 		const data = []
 		for (const team of teams) {
-			let formattedDisplay = getPath(dataset.teams[team], this.moduleConfig.options.path, 0)
+			let formattedDisplay = getPath(dataset.teams[team], this.moduleConfig.options.path, this.moduleConfig.options.string ? "—" : 0)
 
 			formattedDisplay = this.applyModifiers(formattedDisplay)
 
 			let statRank
 			let totalRanked
-			if (isNaN(formattedDisplay) || formattedDisplay == this.moduleConfig.options.hideIfValue) {
+			if (!this.moduleConfig.options.string && (isNaN(formattedDisplay) || formattedDisplay == this.moduleConfig.options.hideIfValue)) {
 				formattedDisplay = "—"
 			} else {
 				if (this.moduleConfig.options.sort !== 0 && this.moduleConfig.options.sort !== undefined) {
@@ -82,7 +82,7 @@ class ColumnDisplay {
 
 			teamDisplayContainer.appendChild(teamValue)
 			teamDisplayContainer.appendChild(teamNum)
-			
+
 			if (teamData.rank) {
 				let rankClass = "top100"
 				if (teamData.rank <= Math.round(teamData.totalRanked * 0.05)) {
@@ -96,8 +96,6 @@ class ColumnDisplay {
 				teamRank.innerText = `#${teamData.rank}`
 				teamDisplayContainer.appendChild(teamRank)
 			}
-
-			
 			
 			this.displaysContainer.appendChild(teamDisplayContainer)
 		}
