@@ -38,7 +38,7 @@ class SingleDisplay {
 			}
 
 			if (this.moduleConfig.options.unit) {
-				formattedStat += this.moduleConfig.options.unit
+				formattedDisplay += this.moduleConfig.options.unit
 			}
 		}
 

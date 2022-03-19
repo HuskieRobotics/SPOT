@@ -1,48 +1,61 @@
 class ColumnDisplay {
     container;
     header;
-    displayContainer;
+    displaysContainer;
     moduleConfig;
 
     constructor(moduleConfig) {
         this.moduleConfig = moduleConfig
         this.container = createDOMElement("div", "container column-display")
         this.header = createDOMElement("div", "header")
-        this.displayContainer = createDOMElement("div", "display-container")
+        this.displaysContainer = createDOMElement("div", "displays-container")
         this.container.appendChild(this.header)
-        this.container.appendChild(this.displayContainer)
+        this.container.appendChild(this.displaysContainer)
     }
 
     formatData(teams, dataset) {
-		let summed
-		if (teams.length > 1) {
-			summed = teams.map(team => getPath(dataset.teams[team], this.moduleConfig.options.path, 0)).flat().reduce((acc, i) => acc + i, 0)
-		} else {
-			summed = getPath(dataset.teams[teams[0]], this.moduleConfig.options.path, 0)
-		}
+		const data = []
+		for (const team of teams) {
+			let formattedDisplay = getPath(dataset.teams[team], this.moduleConfig.options.path, 0)
 
-		let formattedDisplay
-		if (this.moduleConfig.options.aggrMethod == "sum") { //optionally summed
-			formattedDisplay = summed
-		} else { //default is average
-			formattedDisplay = summed / teams.length
-		}
+			formattedDisplay = this.applyModifiers(formattedDisplay)
 
-		formattedDisplay = this.applyModifiers(formattedDisplay)
+			let statRank
+			let totalRanked
+			if (isNaN(formattedDisplay) || formattedDisplay == this.moduleConfig.options.hideIfValue) {
+				formattedDisplay = "—"
+			} else {
+				if (this.moduleConfig.options.sort !== 0 && this.moduleConfig.options.sort !== undefined) {
+					const filteredTeams = Object.keys(dataset.teams).filter(team => {
+						let teamStatToFilter = getPath(dataset.teams[team], this.moduleConfig.options.path, 0)
+						teamStatToFilter = this.applyModifiers(teamStatToFilter)
 
-		if (isNaN(formattedDisplay) || formattedDisplay == this.moduleConfig.options.hideIfValue) {
-			formattedDisplay = "—"
-		} else {
-			if (this.moduleConfig.options.decimals !== undefined) {
-				formattedDisplay = formattedDisplay.toFixed(this.moduleConfig.options.decimals)
+						return (!isNaN(teamStatToFilter) && teamStatToFilter != this.moduleConfig.options.hideIfValue)
+					})
+
+					totalRanked = filteredTeams.length
+					const rankedTeams = filteredTeams.sort((a, b) => (this.applyModifiers(getPath(dataset.teams[b], this.moduleConfig.options.path, 0)) - this.applyModifiers(getPath(dataset.teams[a], this.moduleConfig.options.path, 0))) * this.moduleConfig.options.sort)
+					statRank = rankedTeams.indexOf(team) + 1
+				}
+
+				if (this.moduleConfig.options.decimals !== undefined) {
+					formattedDisplay = formattedDisplay.toFixed(this.moduleConfig.options.decimals)
+				}
+
+				if (this.moduleConfig.options.unit) {
+					formattedDisplay += this.moduleConfig.options.unit
+				}
 			}
 
-			if (this.moduleConfig.options.unit) {
-				formattedStat += this.moduleConfig.options.unit
-			}
+			data.push({
+				team: team,
+				value: formattedDisplay,
+				rank: statRank,
+				totalRanked: totalRanked
+			})
 		}
 
-        return formattedDisplay
+        return data
     }
 
 	applyModifiers(value) {
@@ -59,6 +72,34 @@ class ColumnDisplay {
 
     setData(data) {
         this.header.innerText = this.moduleConfig.name
-        this.display.innerText = data
+        clearDiv(this.displaysContainer)
+		for (const teamData of data) {
+			const teamDisplayContainer = createDOMElement("div", "team-display-container")
+			const teamValue = createDOMElement("div", "team-value")
+			teamValue.innerText = teamData.value
+			const teamNum = createDOMElement("div", "team-num")
+			teamNum.innerText = teamData.team
+
+			teamDisplayContainer.appendChild(teamValue)
+			teamDisplayContainer.appendChild(teamNum)
+			
+			if (teamData.rank) {
+				let rankClass = "top100"
+				if (teamData.rank <= Math.round(teamData.totalRanked * 0.05)) {
+					rankClass = "top5"
+				} else if (teamData.rank <= Math.round(teamData.totalRanked * 0.25)) {
+					rankClass = "top25"
+				} else if (teamData.rank <= Math.round(teamData.totalRanked * 0.5)) {
+					rankClass = "top50"
+				}
+				const teamRank = createDOMElement("div", `team-rank ${rankClass}`)
+				teamRank.innerText = `#${teamData.rank}`
+				teamDisplayContainer.appendChild(teamRank)
+			}
+
+			
+			
+			this.displaysContainer.appendChild(teamDisplayContainer)
+		}
     }
 }
