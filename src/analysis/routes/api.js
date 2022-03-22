@@ -17,7 +17,7 @@ router.get("/teams", async (req, res) => {
     if (!config.secrets.TBA_API_KEY) {
         return res.json([]); //no key, no teams
     }
-    let tbaTeams = (await axios.get(`https://www.thebluealliance.com/api/v3/event/teams`, {
+    let tbaTeams = (await axios.get(`https://www.thebluealliance.com/api/v3/teams`, {
         headers: {
             "X-TBA-Auth-Key": config.secrets.TBA_API_KEY
         }
