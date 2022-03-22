@@ -24,7 +24,8 @@ router.get("/teams", async (req, res) => {
 		}
 
 
-	}).catch(e => console.log(e, chalk.bold.red("\nError fetching teams from Blue Alliance API!")))).data + ",";
+	}).catch(e => console.log(e, chalk.bold.red("\nError fetching teams from Blue Alliance API!")))).data;
+	tbaTeams += ",\n";
 	for (let i = 1; i < 20; i++) {
 		tbaTeams += (await axios.get(`https://www.thebluealliance.com/api/v3/teams/` + i, {
 			//https://www.thebluealliance.com/api/v3/event/${config.TBA_EVENT_KEY}/teams
@@ -33,7 +34,8 @@ router.get("/teams", async (req, res) => {
 			}
 
 
-		}).catch(e => console.log(e, chalk.bold.red("\nError fetching teams from Blue Alliance API!")))).data + ",";
+		}).catch(e => console.log(e, chalk.bold.red("\nError fetching teams from Blue Alliance API!")))).data;
+		tbaTeams += ",\n";
 	}
 
 
