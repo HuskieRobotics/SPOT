@@ -4,7 +4,7 @@ const axios = require("axios")
 const config = require("../../../config/config.json");
 
 let router = Router();
-
+//https://www.thebluealliance.com/api/v3/event/${config.TBA_EVENT_KEY}/teams
 router.get("/dataset", async (req, res) => {
     res.json(await executeAnalysisPipeline())
 })
@@ -17,7 +17,7 @@ router.get("/teams", async (req, res) => {
     if (!config.secrets.TBA_API_KEY) {
         return res.json([]); //no key, no teams
     }
-    let tbaTeams = (await axios.get(`https://www.thebluealliance.com/api/v3/teams`, {
+    let tbaTeams = (await axios.get(`https://www.thebluealliance.com/api/v3/teams/0`, {
         headers: {
             "X-TBA-Auth-Key": config.secrets.TBA_API_KEY
         }
