@@ -41,7 +41,7 @@ router.get("/teams", async (req, res) => {
 	}
 
 
-	res.json(tbaTeams)
+	return res.json(tbaTeams)
 })
 
 router.get("/csv", async (req, res) => {
