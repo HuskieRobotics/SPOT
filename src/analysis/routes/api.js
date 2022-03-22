@@ -4,6 +4,8 @@ const axios = require("axios")
 const config = require("../../../config/config.json");
 
 let router = Router();
+const chalk = require("chalk");
+
 
 router.get("/dataset", async (req, res) => {
 	res.json(await executeAnalysisPipeline())
@@ -25,8 +27,25 @@ router.get("/teams", async (req, res) => {
 
 
 	}).catch(e => console.log(e, chalk.bold.red("\nError fetching teams from Blue Alliance API!")))).data;
-	
-	return res.json(tbaTeams)
+	let tmp = tbaTeams;
+	for (let i = 1; i <= 20; i++) {
+		try {
+			tmp = ((await axios.get(`https://www.thebluealliance.com/api/v3/teams/` + i, {
+				//https://www.thebluealliance.com/api/v3/event/${config.TBA_EVENT_KEY}/teams
+				headers: {
+					"X-TBA-Auth-Key": config.secrets.TBA_API_KEY
+				}
+
+
+			}).catch(e => console.log(e, chalk.bold.red("\nError fetching teams from Blue Alliance API!")))).data);
+		} catch (e) {
+		}
+		tbaTeams = tbaTeams.concat(tmp)
+		// console.log(tmp);
+	}
+	res.json(tbaTeams)
+	// console.log(res);
+
 })
 
 router.get("/csv", async (req, res) => {
