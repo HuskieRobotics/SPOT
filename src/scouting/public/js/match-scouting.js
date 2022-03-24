@@ -4,6 +4,8 @@ let devEnd
 (async () => {
     config = await config;
     matchScoutingConfig = await matchScoutingConfig;
+	await ScoutingSync.sync();
+	let robotNum = ScoutingSync.state.robotNumber;
 
     //initiate timing
     let time = matchScoutingConfig.timing.totalTime;
@@ -38,9 +40,9 @@ let devEnd
                 //special case for match-control buttons which have extra undo funcitonality without executables
                 if (undoneButton.type === "match-control") {
                     time = matchScoutingConfig.timing.totalTime; //reset timer
-                    ScoutingSync.updateState({status: ScoutingSync.SCOUTER_STATUS.WAITING}); //tell the server that you are now waiting to start
+                    ScoutingSync.updateState({status: ScoutingSync.SCOUTER_STATUS.SCOUTING}); //tell the server that you are now waiting to start
                     clearInterval(undoneButton.timerInterval); //clear the timing interval
-                    undoneButton.element.innerText = "Start Match" + " | Your Team: " + ScoutingSync.state.robotNumber;
+                    undoneButton.element.innerText = "Start Match" + " | Your Team: " + robotNum;
                     timerActive = false;
                     showLayer(0);
                 }
@@ -65,9 +67,8 @@ let devEnd
         },
 
         "match-control": (button) => {
-			ScoutingSync.updateState({status: ScoutingSync.SCOUTER_STATUS.SCOUTING})
-			ScoutingSync.sync();
-            button.element.innerText = "Start Match" + " | Your Team: " + ScoutingSync.state.robotNumber;
+            ScoutingSync.updateState({status: ScoutingSync.SCOUTER_STATUS.SCOUTING}); //tell the server that you started scouting
+            button.element.innerText = "Start Match" + " | Your Team: " + robotNum;
             button.element.addEventListener("click", async () => {
                 // Handle click after timer runs out
                 if (time <= 0) {
@@ -85,7 +86,6 @@ let devEnd
                     "temp": true
                 })
 
-                ScoutingSync.updateState({status: ScoutingSync.SCOUTER_STATUS.SCOUTING}); //tell the server that you started scouting
 
                 let displayText = "";
                 let start = Date.now()
