@@ -6,7 +6,7 @@ let devEnd
     matchScoutingConfig = await matchScoutingConfig;
 
     //initiate timing
-    let time = matchScoutingConfig.timing.totalTime + " Your Team: " + ScoutingSync.state.robotNumber;
+    let time = matchScoutingConfig.timing.totalTime;
     let timerActive = false;
     //create grid
     const grid = document.querySelector("#match-scouting .button-grid");
@@ -37,7 +37,7 @@ let devEnd
 
                 //special case for match-control buttons which have extra undo funcitonality without executables
                 if (undoneButton.type === "match-control") {
-                    time = matchScoutingConfig.timing.totalTime + " Your Team: " + ScoutingSync.state.robotNumber; //reset timer
+                    time = matchScoutingConfig.timing.totalTime; //reset timer
                     ScoutingSync.updateState({status: ScoutingSync.SCOUTER_STATUS.WAITING}); //tell the server that you are now waiting to start
                     clearInterval(undoneButton.timerInterval); //clear the timing interval
                     undoneButton.element.innerText = "Start Match";
