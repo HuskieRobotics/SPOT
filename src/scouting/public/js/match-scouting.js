@@ -4,8 +4,8 @@ let devEnd
 (async () => {
     config = await config;
     matchScoutingConfig = await matchScoutingConfig;
-	await ScoutingSync.sync();
     ScoutingSync.updateState({status: ScoutingSync.SCOUTER_STATUS.SCOUTING}); //tell the server that you started scouting
+	await ScoutingSync.initialize();
 
 	let robotNum = ScoutingSync.state.robotNumber;
 
