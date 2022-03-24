@@ -92,7 +92,7 @@ let devEnd
                 timerActive = true;
                 button.timerInterval = setInterval(() => {
                     if (time <= transitions[0]) { //move to the next transition if it is time
-                        displayText = matchScoutingConfig.timing.timeTransitions[transitions[0]].displayText;
+                        displayText = matchScoutingConfig.timing.timeTransitions[transitions[0]].displayText + " Your Team: " + ScoutingSync.state.robotNumber;
                         showLayer(matchScoutingConfig.timing.timeTransitions[transitions[0]].layer);
                         transitions.shift()
                     }
