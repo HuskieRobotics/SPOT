@@ -1,7 +1,7 @@
 {
-    "name": "SPOT Scouting",
-    "short_name": "SPOT",
-    "description": "An open source modular scouting app developed by Team 3061 Huskie Robotics.",
+    "name": "Devil Scouting",
+    "short_name": "DevilScout",
+    "description": "An open source modular scouting app developed by Team 1559 Devil Tech.",
     "display": "fullscreen",
     "orientation": "landscape",
     "background-color": "#efefef",
