@@ -17,6 +17,7 @@ class ScoutingSync {
         matchNumber: 0
     }
 
+
     static initialize() {
         ScoutingSync.socket = io()
 
@@ -64,6 +65,8 @@ class ScoutingSync {
                 }
                 
                 switchPage("match-scouting");
+                ScoutingSync.updateState({status: ScoutingSync.SCOUTER_STATUS.SCOUTING}); //tell the server that you started scouting
+                // console.log(ScoutingSync.state.robotNumber);
                 new Modal("small").header("Match Information").text(`
                 You have been assigned team ${ScoutingSync.state.robotNumber} in match ${ScoutingSync.state.matchNumber}.
                 `).dismiss("OK")

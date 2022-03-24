@@ -2,13 +2,10 @@ let actionQueue = [];
 let devEnd
 
 (async () => {
+
     config = await config;
     matchScoutingConfig = await matchScoutingConfig;
-    ScoutingSync.updateState({status: ScoutingSync.SCOUTER_STATUS.SCOUTING}); //tell the server that you started scouting
-	await ScoutingSync.initialize();
-
-	let robotNum = ScoutingSync.state.robotNumber;
-
+ 
     //initiate timing
     let time = matchScoutingConfig.timing.totalTime;
     let timerActive = false;
@@ -44,7 +41,7 @@ let devEnd
                     time = matchScoutingConfig.timing.totalTime; //reset timer
                     ScoutingSync.updateState({status: ScoutingSync.SCOUTER_STATUS.SCOUTING}); //tell the server that you are now waiting to start
                     clearInterval(undoneButton.timerInterval); //clear the timing interval
-                    undoneButton.element.innerText = "Start Match" + " | Your Team: " + robotNum;
+                    undoneButton.element.innerText = "Start Match" + " | Your Team: " + ScoutingSync.state.robotNumber;
                     timerActive = false;
                     showLayer(0);
                 }
@@ -69,7 +66,7 @@ let devEnd
         },
 
         "match-control": (button) => {
-            button.element.innerText = "Start Match" + " | Your Team: " + robotNum;
+            button.element.innerText = "Start Match";
             button.element.addEventListener("click", async () => {
                 // Handle click after timer runs out
                 if (time <= 0) {
@@ -137,6 +134,8 @@ let devEnd
             grid.appendChild(button.element);
         }
     }
+    ScoutingSync.updateState({status: ScoutingSync.SCOUTER_STATUS.SCOUTING}); //tell the server that you started scouting
+
 
     showLayer(0); //initially show layer 0
 
