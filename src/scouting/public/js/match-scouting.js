@@ -65,7 +65,8 @@ let devEnd
         },
 
         "match-control": (button) => {
-			await ScoutingSync.sync();
+			ScoutingSync.sync();
+
             button.element.innerText = "Start Match" + " | Your Team: " + ScoutingSync.state.robotNumber;
             button.element.addEventListener("click", async () => {
                 // Handle click after timer runs out
