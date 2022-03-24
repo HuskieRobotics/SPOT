@@ -64,8 +64,8 @@ let devEnd
             })
         },
 
-        "match-control": (button) => {
-			ScoutingSync.sync();
+        "match-control": async (button) => {
+			await ScoutingSync.sync();
 
             button.element.innerText = "Start Match" + " | Your Team: " + ScoutingSync.state.robotNumber;
             button.element.addEventListener("click", async () => {
