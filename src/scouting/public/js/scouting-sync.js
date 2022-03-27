@@ -63,7 +63,7 @@ class ScoutingSync {
                     robotNumber: ScoutingSync.state.robotNumber,
                     matchNumber: ScoutingSync.state.matchNumber
                 }
-                if (ScoutingScoutingSync.state.robotNumber == null || ScoutingSync.state.matchNumber == null) {
+                if (ScoutingSync.state.robotNumber == null || ScoutingSync.state.matchNumber == null) {
                     switchPage("match-scouting");
                     ScoutingSync.updateState({ status: ScoutingSync.SCOUTER_STATUS.NEW }); //tell the server that you started scouting
                     new Modal("small").header("Max Scouters reached").text(`
