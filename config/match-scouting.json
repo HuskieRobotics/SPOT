@@ -12,7 +12,7 @@
             },
             "80000": {
                 "layer": 3,
-                "displayText": "Teleop"
+                "displayText": "Endgame"
             }
         }
     },
@@ -28,6 +28,14 @@
                     "class": "gray timer",
                     "type": "match-control",
                     "executables": []
+                },
+				{
+                    "id": "cancel",
+                    "displayText": "Cancel",
+                    "gridArea": ["6", "2", "2", "8"],
+                    "class": "gray timer",
+                    "type": "cancel",
+                    "executables": []
                 }
             ],
             [
@@ -39,6 +47,7 @@
                     "type": "match-control",
                     "executables": []
                 },
+
                 {
                     "id": "leaveTarmac",
                     "displayText": "Leave Tarmac Zone",
