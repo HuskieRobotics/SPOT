@@ -192,11 +192,11 @@ body {
     color: var(--bg-alt);
     border-radius: 10px;
     position: absolute;
-    bottom: -3px;
-    left: 50%;
+    top: -36px;
+    left: 80%;
     transform: translate(-50%, 50%);
     font: 1.4em/1em Cairo;
-    padding: 5px 20px;
+    padding: 5px 5px;
     cursor: pointer;
 }
 
