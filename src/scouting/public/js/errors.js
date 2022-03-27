@@ -1,6 +1,6 @@
-let e = document.querySelector("#form .ok")
-if (e != null){
-	e.addEventListener("click", async () => {
+let errorForm = document.querySelector("#form .ok")
+if (errorForm != null){
+	errorForm.addEventListener("click", async () => {
     location.href = "/";
 })
 }
