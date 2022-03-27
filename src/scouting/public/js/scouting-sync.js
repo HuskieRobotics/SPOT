@@ -72,12 +72,17 @@ class ScoutingSync {
                     mod.action("OK", async () => {
                         location.href = "/";
                     })
-                    window.onclick = function(event) {
-                        if (event.target == mod) {
-                            location.href = "/";
-                        }
+                    $('body').on('dblclick', 'div.element.small', function() {
+                      window.setTimeout(function(event) {
+                    // get our modal (there may be several, only one is displayed)
+                    var $modalContainer = $('div.hud[style*="display: block;"]');
+                    if (! $somethingInTheModal.closest('div.hud[style*="display: block;"]').length) {
+                    // our modal is closed
+                    location.href = "/";
                     }
-                                }
+                    }, 1000);
+                    });
+                    }
                 else {
                     switchPage("match-scouting");
                     ScoutingSync.updateState({ status: ScoutingSync.SCOUTER_STATUS.SCOUTING }); //tell the server that you started scouting
