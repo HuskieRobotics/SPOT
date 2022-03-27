@@ -6,6 +6,8 @@ class ScoutingSync {
         "WAITING": 1, //scouters not actively in the process of scouting (up to when they click the start button)
         "SCOUTING": 2, //scouters actively scouting a match
         "COMPLETE": 3,
+        "TOOMANY": 4,
+        "MATCHERROR": 5,
     }
 
     static state = {
@@ -65,10 +67,11 @@ class ScoutingSync {
                 }
                 if (ScoutingSync.state.matchNumber == "0") {
                     switchPage("error");
+                    ScoutingSync.updateState({ status: ScoutingSync.SCOUTER_STATUS.MATCHERROR }); //tell the server that you started scouting
                     }
                 else if (ScoutingSync.state.robotNumber == "") {
                     switchPage("max-scouters");
-                    ScoutingSync.updateState({ status: ScoutingSync.SCOUTER_STATUS.NEW }); //tell the server that you started scouting
+                    ScoutingSync.updateState({ status: ScoutingSync.SCOUTER_STATUS.TOOMANY }); //tell the server that you started scouting
                     }
                 else {
                     switchPage("match-scouting");

@@ -30,6 +30,8 @@ class ScoutingSync {
         "WAITING": 1, //scouters not actively in the process of scouting (dont have the scouting ui open)
         "SCOUTING": 2, //scouters actively scouting a match
         "COMPLETE": 3,
+        "TOOMANY": 4,
+        "MATCHERROR": 5,
     }
 
     static async initialize(server) {

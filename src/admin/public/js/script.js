@@ -5,10 +5,12 @@ const SCOUTER_STATUS = {
     "COMPLETE": 3,
 }
 const SCOUTER_STATUS_REVERSE = {
-    "0": "NOT SCOUTING",
+    "0": "New",
     "1": "WAITING",
     "2": "SCOUTING",
-    "3": "COMPLETE"
+    "3": "COMPLETE",
+	"4": "TOO MANY SCOUTERS",
+	"5": "NO MATCH ASSIGNED",
 }
 
 const scouters = {};
