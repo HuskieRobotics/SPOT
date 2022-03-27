@@ -15,6 +15,8 @@ const SCOUTER_STATUS_REVERSE = {
 	"5": "NO MATCH ASSIGNED",
 }
 
+let scroll = false;
+
 const scouters = {};
 
 ;(async () => {
@@ -73,9 +75,7 @@ async function constructApp(accessCode) {
         console.log("ENTER MATCH!")
     })
 	document.querySelector("#center-list").addEventListener("click", () => {
-       matchElement.scrollIntoView({
-            block: "center"
-       });
+       scroll = true;
     })
 
     let menuExpanded = false
@@ -150,6 +150,12 @@ async function updateMatches(accessCode) {
 
         if (currentMatch.match_string == match.match_string) { //check the box if it is selected
             matchElement.querySelector(".match-select").checked = true;
+			if (scroll){
+				matchElement.scrollIntoView({
+            block: "center"
+            });
+			scroll = false;
+			}
         }
 
         //add the robot numbers to match
