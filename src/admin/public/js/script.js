@@ -7,11 +7,11 @@ const SCOUTER_STATUS = {
     "MATCHERROR": 5,
 }
 const SCOUTER_STATUS_REVERSE = {
-    "0": "New",
+    "0": "NEW",
     "1": "WAITING",
     "2": "SCOUTING",
     "3": "COMPLETE",
-	"4": "TOO MANY SCOUTERS",
+	"4": "UNASSIGNED SCOUTER",
 	"5": "NO MATCH ASSIGNED",
 }
 
