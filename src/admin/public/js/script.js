@@ -228,8 +228,17 @@ class ScouterDisplay {
 
         //write all text
         this.scouterElement.querySelector(".scouter-id").innerText = this.scouter.state.scouterId;
-        this.scouterElement.querySelector(".match-number").innerText = this.scouter.state.matchNumber;
-        this.scouterElement.querySelector(".robot-number").innerText = this.scouter.state.robotNumber;
+		if (this.scouter.state.matchNumber != ""){
+        	this.scouterElement.querySelector(".match-number").innerText = this.scouter.state.matchNumber;
+        } else {        	
+			this.scouterElement.querySelector(".match-number").innerText = "0";
+		}
+		
+		if (this.scouter.state.robotNumber != ""){
+        	this.scouterElement.querySelector(".robot-number").innerText = "No Robot in Match"
+		} else {        	
+        	this.scouterElement.querySelector(".robot-number").innerText = this.scouter.state.robotNumber;
+		}
 
         //update color
         const SCOUTER_STATUS_COLOR = {
