@@ -41,7 +41,7 @@
 
 @media screen and (min-height: 600px) {
     #errors .errors {	
-        width: 800px;
+        width: 750px;
         height: auto;
         display: flex;
         flex-direction: column;
