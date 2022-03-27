@@ -16,6 +16,7 @@ const filesToCache = [
     "/js/global.js",
     "/js/internal.js",
     "/js/landing.js",
+    "/js/errors.js",
     "/js/local-data.js",
     "/js/match-scouting.js",
     "/js/scouting-sync.js",
