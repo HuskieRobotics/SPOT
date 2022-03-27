@@ -3,6 +3,8 @@ const SCOUTER_STATUS = {
     "WAITING": 1, //scouters not actively in the process of scouting (dont have the scouting ui open)
     "SCOUTING": 2, //scouters actively scouting a match
     "COMPLETE": 3,
+    "TOOMANY": 4,
+    "MATCHERROR": 5,
 }
 const SCOUTER_STATUS_REVERSE = {
     "0": "New",
@@ -230,7 +232,7 @@ class ScouterDisplay {
             "2": "var(--accent)", //SCOUTING
             "3": "var(--green)", //COMPLETE
             "4": "var(--text)", 
-            "5": "var(--text)" 
+            "5": "var(--error)" 
         }
         const DISCONNECTED_COLOR = "var(--error)";
 
