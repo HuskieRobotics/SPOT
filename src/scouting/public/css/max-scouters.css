@@ -1,8 +1,8 @@
-error {
+#max-scouters {
     background-color: var(--bg);
 }
 
-error .input {
+#max-scouters .input {
   background-color: var(--bg-alt);
   border: black 2px solid;
   color: black;
@@ -15,15 +15,15 @@ error .input {
   outline: none;
 }
 
-error .input:focus {
+#max-scouters .input:focus {
   border: var(--accent) 2px solid;
 }
 
-error .label {
+#max-scouters .label {
   position: relative
 }
 
-error .label > span {
+#max-scouters .label > span {
   position: absolute;
   padding: 0 5px;
   left: 12px;
@@ -45,12 +45,12 @@ error .label > span {
     width: 100%;
 }
 
-error {
+#max-scouters {
     display: flex;
     align-items: center;
     justify-content: center;
 }
-error .form {
+#max-scouters .form {
     background-color: var(--bg-alt);
     border-radius: var(--border-radius);
     display: grid;
@@ -64,13 +64,13 @@ error .form {
     padding: 20px;
 }
 
-error .form .title {
+#max-scouters .form .title {
     grid-area: 1/1/2/3;
     margin: 0px 0;
     font-size: 2em;
 }
 
-error .form .save {
+#max-scouters .form .save {
     grid-area: 4/1/5/3;
     font-size: 1.75em;
     width: 90%;
@@ -82,7 +82,7 @@ error .form .save {
     height: 2em;
 }
 
-error .form .cancel {
+#max-scouters .form .cancel {
     grid-area: 4/1/5/3;
     font-size: 1.75em;
     width: 90%;
@@ -95,7 +95,7 @@ error .form .cancel {
 }
 
 @media screen and (min-height: 600px) {
-    error .form {
+    #max-scouters .form {
         width: 350px;
         height: auto;
         display: flex;
@@ -104,18 +104,18 @@ error .form .cancel {
         align-items: center;
         padding: 20px;
     }
-    error .form .title {
+    #max-scouters .form .title {
         font-size: 2em
     }
-    error .form .save {
+    #max-scouters .form .save {
         width: calc(100% - 24px);
         margin: 12px 0;
     }
-    error .form .cancel {
+    #max-scouters .form .cancel {
         width: calc(100% - 24px);
         margin: 12px 0;
     }
-    error .input {
+    #max-scouters .input {
         width: 100%;
         margin: 12px 0;
     }

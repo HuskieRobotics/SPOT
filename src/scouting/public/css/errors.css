@@ -1,8 +1,8 @@
-#form {
+#errors {
     background-color: var(--bg);
 }
 
-#form .input {
+#errors .input {
   background-color: var(--bg-alt);
   border: black 2px solid;
   color: black;
@@ -15,15 +15,15 @@
   outline: none;
 }
 
-#form .input:focus {
+#errors .input:focus {
   border: var(--accent) 2px solid;
 }
 
-#form .label {
+#errors .label {
   position: relative
 }
 
-#form .label > span {
+#errors .label > span {
   position: absolute;
   padding: 0 5px;
   left: 12px;
@@ -45,12 +45,12 @@
     width: 100%;
 }
 
-#form {
+#errors {
     display: flex;
     align-items: center;
     justify-content: center;
 }
-#form .form {
+#errors .form {
     background-color: var(--bg-alt);
     border-radius: var(--border-radius);
     display: grid;
@@ -64,13 +64,13 @@
     padding: 20px;
 }
 
-#form .form .title {
+#errors .form .title {
     grid-area: 1/1/2/3;
     margin: 0px 0;
     font-size: 2em;
 }
 
-#form .form .save {
+#errors .form .save {
     grid-area: 4/1/5/3;
     font-size: 1.75em;
     width: 90%;
@@ -82,7 +82,7 @@
     height: 2em;
 }
 
-#form .form .cancel {
+#errors .form .cancel {
     grid-area: 4/1/5/3;
     font-size: 1.75em;
     width: 90%;
@@ -95,7 +95,7 @@
 }
 
 @media screen and (min-height: 600px) {
-    #form .form {
+    #errors .form {
         width: 350px;
         height: auto;
         display: flex;
@@ -104,18 +104,18 @@
         align-items: center;
         padding: 20px;
     }
-    #form .form .title {
+    #errors .form .title {
         font-size: 2em
     }
-    #form .form .save {
+    #errors .form .save {
         width: calc(100% - 24px);
         margin: 12px 0;
     }
-    #form .form .cancel {
+    #errors .form .cancel {
         width: calc(100% - 24px);
         margin: 12px 0;
     }
-    #form .input {
+    #errors .input {
         width: 100%;
         margin: 12px 0;
     }

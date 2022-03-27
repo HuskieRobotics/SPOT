@@ -1,3 +1,3 @@
-document.querySelector("#error .ok").addEventListener("click", async () => {
+document.querySelector("#max-scouters .ok").addEventListener("click", async () => {
     location.href = "/";
 })
