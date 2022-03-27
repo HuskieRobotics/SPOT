@@ -79,7 +79,7 @@ class ScoutingSync {
                     }
                                 }
                 else {
-                    sw i tchPage("match-scouting");
+                    switchPage("match-scouting");
                     dateState({ status: ScoutingSync.SCOUTER_STATUS.SCOUTING }); //tell the server that you started scouting
                     // console.log(ScoutingSync.state.robotNumber);
                     new Modal("small").header("Match Information").text(`
@@ -90,8 +90,8 @@ class ScoutingSync {
         })
     }
     static updateState(stateUpdate, incoming = false) {
-        turn new Promise((res, rej) => {
-            sign(ScoutingSync.state, stateUpdate);
+        return new Promise((res, rej) => {
+            Object.assign(ScoutingSync.state, stateUpdate);
             if (!incoming) {
                 ScoutingSync.socket.emit("updateState", ScoutingSync.state, () => {
                     res(true);
