@@ -40,7 +40,7 @@ class ScoutingSync {
 
         ScoutingSync.socket.on("updateState", (stateUpdate) => {
             console.log("State Update:", stateUpdate);
-            ScoutingSync.updateState(stateUpdate, rue);
+            ScoutingSync.updateState(stateUpdate, true);
         })
 
         ScoutingSync.socket.on("syncRequest", () => {
