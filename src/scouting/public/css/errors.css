@@ -1,33 +1,31 @@
-#errors {
+#error {
     background-color: var(--bg);
 }
 
-#errors {
+#error {
     display: flex;
     align-items: center;
     justify-content: center;
 }
-#errors .errors {
+#error .errors {
     background-color: var(--bg-alt);
     border-radius: var(--border-radius);
     display: grid;
-    grid-template-columns: 50% 50%;
-    grid-template-rows: 20% 30% 30% 20%;
     width: 750px;
     justify-items: center;
     align-items: center;
-    height: 90vh;
+    height: auto;
     gap: 2.5px;
     padding: 20px;
 }
 
-#errors .errors .title {
+#error .errors .title {
     grid-area: 1/1/2/3;
     margin: 0px 0;
     font-size: 2em;
 }
 
-#errors .errors .ok {
+#error .errors .ok {
     grid-area: 4/1/5/3;
     font-size: 1.75em;
     width: 90%;
@@ -35,7 +33,7 @@
     border-radius: var(--border-radius);
     color: var(--bg-alt);
     border: none;
-    margin: 6px 0;
+    margin: 10px 0;
     height: 2em;
 }
 
