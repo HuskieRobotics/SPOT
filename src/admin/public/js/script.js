@@ -5,7 +5,7 @@ const SCOUTER_STATUS = {
     "COMPLETE": 3,
 }
 const SCOUTER_STATUS_REVERSE = {
-    "0": "NEW",
+    "0": "NOT SCOUTING",
     "1": "WAITING",
     "2": "SCOUTING",
     "3": "COMPLETE"
