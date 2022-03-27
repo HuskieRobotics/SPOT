@@ -235,7 +235,7 @@ class ScouterDisplay {
 		}
 		
 		if (this.scouter.state.robotNumber != ""){
-        	this.scouterElement.querySelector(".robot-number").innerText = "No Robot in Match"
+        	this.scouterElement.querySelector(".robot-number").innerText = "Error"
 		} else {        	
         	this.scouterElement.querySelector(".robot-number").innerText = this.scouter.state.robotNumber;
 		}
