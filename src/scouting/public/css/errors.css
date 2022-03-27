@@ -8,14 +8,7 @@
     justify-content: center;
 }
 #errors .errors {
-    background-color: var(--bg);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    line-height: 1.4;
-    padding: 64px 12px 0 12px;
-/*    background-color: var(--bg-alt);
+    background-color: var(--bg-alt);
     border-radius: var(--border-radius);
     display: grid;
     grid-template-columns: 50% 50%;
@@ -25,7 +18,7 @@
     align-items: center;
     height: 90vh;
     gap: 2.5px;
-    padding: 20px;*/
+    padding: 20px;
 }
 
 #errors .errors .title {
@@ -47,18 +40,15 @@
 }
 
 @media screen and (min-height: 600px) {
-    #errors .errors {
-	
-	font-size: 1.5em;
-	/*
-        width: 350px;
+    #errors .errors {	
+        width: 800px;
         height: auto;
         display: flex;
         flex-direction: column;
         justify-content: space-evenly;
         align-items: center;
         padding: 20px;
-*/
+
     }
     #errors .errors .title {
         font-size: 2em
