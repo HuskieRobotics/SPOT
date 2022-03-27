@@ -63,25 +63,12 @@ class ScoutingSync {
                     robotNumber: ScoutingSync.state.robotNumber,
                     matchNumber: ScoutingSync.state.matchNumber
                 }
-                if (ScoutingSync.state.robotNumber == "" || ScoutingSync.state.matchNumber == "") {
-                    switchPage("match-scouting");
-                    ScoutingSync.updateState({ status: ScoutingSync.SCOUTER_STATUS.NEW }); //tell the server that you started scouting
-                    let mod = new Modal("small").header("Max Scouters reached").text(`
-                    The max number of scouters has been reached. If this continues to be a problem please contact scouting admin
-                    `)
-                    mod.action("OK", async () => {
-                        location.href = "/";
-                    })
-                    $('body').on('dblclick', 'div.element.small', function() {
-                      window.setTimeout(function(event) {
-                    // get our modal (there may be several, only one is displayed)
-                    var $modalContainer = $('div.hud[style*="display: block;"]');
-                    if (! $somethingInTheModal.closest('div.hud[style*="display: block;"]').length) {
-                    // our modal is closed
-                    location.href = "/";
+                if (ScoutingSync.state.matchNumber == "0") {
+                    switchPage("error");
                     }
-                    }, 1000);
-                    });
+                else if (ScoutingSync.state.robotNumber == "") {
+                    switchPage("max-scouters");
+                    ScoutingSync.updateState({ status: ScoutingSync.SCOUTER_STATUS.NEW }); //tell the server that you started scouting
                     }
                 else {
                     switchPage("match-scouting");
