@@ -234,10 +234,11 @@ class ScouterDisplay {
 			this.scouterElement.querySelector(".match-number").innerText = "0";
 		}
 		
-		if (this.scouter.state.robotNumber != ""){
-        	this.scouterElement.querySelector(".robot-number").innerText = "Error"
-		} else {        	
-        	this.scouterElement.querySelector(".robot-number").innerText = this.scouter.state.robotNumber;
+		if (this.scouter.state.robotNumber != "" || this.scouter.state.robotNumber == "undefined"){
+		    this.scouterElement.querySelector(".robot-number").innerText = this.scouter.state.robotNumber;
+		} else {
+	        this.scouterElement.querySelector(".robot-number").innerText = "Error"
+        	
 		}
 
         //update color
