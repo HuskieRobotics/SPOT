@@ -186,6 +186,20 @@ body {
     cursor: pointer;
 }
 
+#center-list {
+    border: 2px solid var(--text);
+    background-color: var(--accent);
+    color: var(--bg-alt);
+    border-radius: 10px;
+    position: absolute;
+    bottom: -3px;
+    left: 50%;
+    transform: translate(-50%, 50%);
+    font: 1.4em/1em Cairo;
+    padding: 5px 20px;
+    cursor: pointer;
+}
+
 #matches {
     padding: 20px;
     padding-top: 24px;
