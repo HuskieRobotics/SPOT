@@ -32,7 +32,7 @@
 				{
                     "id": "cancel",
                     "displayText": "Cancel",
-                    "gridArea": ["6", "2", "2", "8"],
+                    "gridArea": ["2", "2", "2", "5"],
                     "class": "gray timer",
                     "type": "cancel",
                     "executables": []
