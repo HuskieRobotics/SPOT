@@ -237,7 +237,7 @@ class ScouterDisplay {
 		if (this.scouter.state.robotNumber != "" || this.scouter.state.robotNumber == "undefined"){
 		    this.scouterElement.querySelector(".robot-number").innerText = this.scouter.state.robotNumber;
 		} else {
-	        this.scouterElement.querySelector(".robot-number").innerText = "Error"
+	        this.scouterElement.querySelector(".robot-number").innerText = ""
         	
 		}
 
