@@ -70,6 +70,11 @@ async function constructApp(accessCode) {
         });
         console.log("ENTER MATCH!")
     })
+	document.querySelector("#center-list").addEventListener("click", () => {
+       matchElement.scrollIntoView({
+            block: "center"
+       });
+    })
 
     let menuExpanded = false
 
@@ -223,7 +228,9 @@ class ScouterDisplay {
             "0": "var(--text)", //NEW
             "1": "#ffa500", //WAITING
             "2": "var(--accent)", //SCOUTING
-            "3": "var(--green)" //COMPLETE
+            "3": "var(--green)", //COMPLETE
+            "4": "var(--text)", 
+            "5": "var(--text)" 
         }
         const DISCONNECTED_COLOR = "var(--error)";
 
