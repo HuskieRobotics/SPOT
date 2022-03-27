@@ -64,13 +64,14 @@ class ScoutingSync {
                     matchNumber: ScoutingSync.state.matchNumber
                 }
                 if (ScoutingScoutingSync.state.robotNumber == null || ScoutingSync.state.matchNumber == null) {
-                    switchPage("waiting");
-                    ScoutingSync.updateState({ status: ScoutingSync.SCOUTER_STATUS.WAITING }); //tell the server that you started scouting
+                    switchPage("match-scouting");
+                    ScoutingSync.updateState({ status: ScoutingSync.SCOUTER_STATUS.NEW }); //tell the server that you started scouting
                     new Modal("small").header("Max Scouters reached").text(`
-                The max number of scouters has been reached. If this continues to be a problem please contact scouting admin
-                `).action("OK", async () => {
+                    The max number of scouters has been reached. If this continues to be a problem please contact scouting admin
+                    `).action("OK", async () => {
                         location.href = "/";
                     })
+                    location.href = "/";
                 }
                 else {
                     switchPage("match-scouting");
