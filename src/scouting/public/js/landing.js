@@ -1,4 +1,3 @@
-
 const spinner = document.querySelector("#landing .spinner-container")
 
 const clientId = "800684505201-pfg5ddut06emg4l4ch4b8u0jco05vluh.apps.googleusercontent.com"
@@ -13,13 +12,14 @@ gapi.load('auth2', () => {
 
     auth2.then(() => {
         if (!auth2.isSignedIn.get()) {
-            auth2.attachClickHandler(document.querySelector(".auth-buttons .google"), {})
+            //auth2.attachClickHandler(document.querySelector(".auth-buttons .google"), {})
             spinner.classList.remove("visible")
         }
     }).catch(() => {
-        document.querySelector(".auth-buttons .google").classList.remove("active")
+        //document.querySelector(".auth-buttons .google").classList.remove("active")
         spinner.classList.remove("visible")
     })
+
 
     
 
@@ -72,9 +72,6 @@ document.querySelector("#landing > div.auth.landing-screen > div > div.admin").a
 });
 document.querySelector("#landing > div.auth.landing-screen > div > div.analysis").addEventListener("click", () => {
     location.href = '/analysis';
-});
-document.querySelector("#landing > div.auth.landing-screen > div > div.info").addEventListener("click", () => {
-    switchPage("instructions")
 });
 
 // signOutBtn.addEventListener("click", signOut)
