@@ -18,7 +18,7 @@ class Stats {
         for (const stat of this.moduleConfig.options.list) {
             let formattedStat
             let summed = teams.map(team => getPath(dataset.teams[team], stat.path)).flat().reduce((acc, i) => acc + i, 0)
-            
+
             console.log(summed)
 
             if (stat.aggrMethod == "sum") { //optionally summed
@@ -28,7 +28,7 @@ class Stats {
             }
 
             // console.log(formattedStat)
-            
+
             if (stat.multiplier !== undefined) {
                 formattedStat *= stat.multiplier
             }

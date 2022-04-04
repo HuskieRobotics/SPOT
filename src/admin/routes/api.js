@@ -1,10 +1,10 @@
-const { Router } = require("express");
+const {Router} = require("express");
 const ScoutingSync = require("../../scouting/scouting-sync")();
 let router = Router();
 const config = require("../../../config/config.json")
 
 
-router.use((req,res,next) => {
+router.use((req, res, next) => {
     if (!ScoutingSync.initialized) {
         res.status(503).send("Scouting Sync not initialized yet!");
     } else {
@@ -22,7 +22,7 @@ router.get("/auth", (req, res) => {
     }
 })
 
-router.get("/scouters", (req,res) => {
+router.get("/scouters", (req, res) => {
     if (req.headers.authorization === config.secrets.ACCESS_CODE) {
         res.json(ScoutingSync.getScouters())
     } else {
@@ -30,7 +30,7 @@ router.get("/scouters", (req,res) => {
     }
 });
 
-router.get("/enterMatch", (req,res) => {
+router.get("/enterMatch", (req, res) => {
     if (req.headers.authorization === config.secrets.ACCESS_CODE) {
         for (let scouter of ScoutingSync.scouters) {
             if (scouter.state.status == ScoutingSync.SCOUTER_STATUS.WAITING)
@@ -41,7 +41,7 @@ router.get("/enterMatch", (req,res) => {
         res.json({error: "Not Authorized"})
     }
 })
-router.post("/setMatch", (req,res) => {
+router.post("/setMatch", (req, res) => {
     if (req.headers.authorization === config.secrets.ACCESS_CODE) {
         ScoutingSync.setMatch(req.body);
         ScoutingSync.assignScouters();
@@ -51,7 +51,7 @@ router.post("/setMatch", (req,res) => {
     }
 });
 
-router.get("/matches", async (req,res) => {
+router.get("/matches", async (req, res) => {
     if (req.headers.authorization === config.secrets.ACCESS_CODE) {
         res.json({
             "allMatches": await ScoutingSync.getMatches(),

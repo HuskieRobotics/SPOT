@@ -64,7 +64,7 @@ let devEnd
                 doExecutables(button)
             })
         },
-        
+
         "cancel": (button) => {
             //add a temporary event to the action queue with no id which will be removed before the action queue is sent
             button.element.addEventListener("click", () => {
@@ -98,7 +98,7 @@ let devEnd
                     "temp": true
                 })
 
-                ScoutingSync.updateState({ status: ScoutingSync.SCOUTER_STATUS.SCOUTING }); //tell the server that you started scouting
+                ScoutingSync.updateState({status: ScoutingSync.SCOUTER_STATUS.SCOUTING}); //tell the server that you started scouting
 
                 let displayText = "";
                 let start = Date.now()

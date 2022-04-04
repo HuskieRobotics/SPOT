@@ -1,4 +1,4 @@
-const { getPath, setPath } = require("../../lib/util");
+const {getPath, setPath} = require("../../lib/util");
 const {DataTransformer} = require("../DataTransformer");
 
 module.exports = {
@@ -9,10 +9,10 @@ module.exports = {
      */
     tmps: new DataTransformer("averageArray", (dataset, outputPath, options) => {
         for (let tmp of dataset.tmps) {
-            let array = getPath(tmp,options.arrayPath);
+            let array = getPath(tmp, options.arrayPath);
             if (!Array.isArray(array)) throw new Error(`no array found at ${options.arrayPath}!`);
-            
-            let avg = array.reduce((acc,x) => acc + getPath(x, options.valuePath), 0) / array.length;
+
+            let avg = array.reduce((acc, x) => acc + getPath(x, options.valuePath), 0) / array.length;
             setPath(tmp, outputPath, avg);
         }
     }),
@@ -22,12 +22,12 @@ module.exports = {
      * @param options.valuePath {String} the path to the field to be averaged
      */
     team: new DataTransformer("averageArray", (dataset, outputPath, options) => {
-        for (let [teamNumber,team] of Object.entries(dataset.teams)) {
-            let array = getPath(team,options.arrayPath);
+        for (let [teamNumber, team] of Object.entries(dataset.teams)) {
+            let array = getPath(team, options.arrayPath);
             if (!Array.isArray(array)) throw new Error(`no array found at ${options.arrayPath}!`);
 
             let avg = array.reduce((acc, x) => acc + getPath(x, options.valuePath), 0) / array.length;
-            setPath(team,outputPath,avg)
+            setPath(team, outputPath, avg)
         }
         return dataset;
     })

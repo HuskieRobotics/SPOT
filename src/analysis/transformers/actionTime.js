@@ -1,4 +1,4 @@
-const { setPath, getPath } = require("../../lib/util");
+const {setPath, getPath} = require("../../lib/util");
 const {DataTransformer} = require("../DataTransformer");
 
 module.exports = {
@@ -15,8 +15,8 @@ module.exports = {
                     setPath(tmp, outputPath, action.ts);
                 }
             }
-            if (!getPath(tmp,outputPath,false)) //no action of options.actionId found
-                setPath(tmp,outputPath,options.default || null);
+            if (!getPath(tmp, outputPath, false)) //no action of options.actionId found
+                setPath(tmp, outputPath, options.default || null);
         }
         return dataset;
 

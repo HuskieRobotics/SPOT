@@ -46,7 +46,7 @@ body {
     text-decoration: none;
 }
 
-#menu > * > i  {
+#menu > * > i {
     font-size: 1.75rem;
 }
 
@@ -67,7 +67,7 @@ body {
 
 #menu-icon {
     color: var(--accent);
-    transition: 0.3s transform cubic-bezier(.17,.67,.89,1.29);
+    transition: 0.3s transform cubic-bezier(.17, .67, .89, 1.29);
     transform: rotate(270deg);
     margin-bottom: 16px;
 }
@@ -149,10 +149,12 @@ body {
     overflow-y: visible;
     overflow-x: clip
 }
+
 .scouter > .robot-number {
     font-size: 3rem;
     font-weight: bold;
 }
+
 .scouter > .match-number {
     position: absolute;
     left: 50%;
@@ -167,6 +169,7 @@ body {
     background-color: var(--text);
     border: 2px solid var(--text);
 }
+
 .scouter > .scouter-status {
     font-size: 1.3rem;
     font-weight: bold;
@@ -234,7 +237,7 @@ body {
 #matches .match {
     display: grid;
     width: 100%;
-    grid-template-columns: calc(.75 * 80px + 14px) repeat(2,1fr);
+    grid-template-columns: calc(.75 * 80px + 14px) repeat(2, 1fr);
     grid-template-rows: 30% 70%;
     border: 2px solid var(--text);
     border-radius: 10px;
@@ -262,10 +265,10 @@ body {
     height: calc(.4 * 80px);
     transform: scale(0);
     border-radius: 16px;
-    transition: 120ms transform cubic-bezier(.37,-0.02,.47,1.77);
+    transition: 120ms transform cubic-bezier(.37, -0.02, .47, 1.77);
     box-shadow: inset calc(.75 * 80px) calc(.75 * 80px) var(--accent);
 }
-  
+
 .match .match-select:checked::before {
     transform: scale(1);
 }
@@ -283,7 +286,7 @@ body {
     align-items: center;
     text-align: center;
     font: 1.8em/calc(80px * .75) "Cairo";
-    color: var(--bg-alt);   
+    color: var(--bg-alt);
 }
 
 .match .match-teams.red {
@@ -310,7 +313,7 @@ body {
     html {
         font-size: 70%;
     }
-    
+
     #scouters {
         min-height: 150px;
     }
@@ -344,14 +347,14 @@ body {
     }
 
     #matches .match {
-        grid-template-columns: calc(.75 * 80px) repeat(2,1fr);
+        grid-template-columns: calc(.75 * 80px) repeat(2, 1fr);
     }
 
     .match .match-select {
         width: calc(.75 * 65px);
         height: calc(.75 * 65px);
         margin-right: 0;
-    } 
+    }
 
     .match .match-select::before {
         width: calc(.4 * 65px);

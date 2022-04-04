@@ -82,6 +82,7 @@ class ScoutingSync {
             }, 100)
         })
     }
+
     static updateState(stateUpdate, incoming = false) {
         return new Promise((res, rej) => {
             Object.assign(ScoutingSync.state, stateUpdate);

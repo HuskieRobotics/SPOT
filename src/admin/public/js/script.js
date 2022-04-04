@@ -11,8 +11,8 @@ const SCOUTER_STATUS_REVERSE = {
     "1": "WAITING",
     "2": "SCOUTING",
     "3": "COMPLETE",
-	"4": "UNASSIGNED SCOUTER",
-	"5": "NO MATCH ASSIGNED",
+    "4": "UNASSIGNED SCOUTER",
+    "5": "NO MATCH ASSIGNED",
 }
 
 let scroll = false;
@@ -74,31 +74,33 @@ async function constructApp(accessCode) {
         });
         console.log("ENTER MATCH!")
     })
-	document.querySelector("#center-list").addEventListener("click", () => {
-       scroll = true;
+    document.querySelector("#center-list").addEventListener("click", () => {
+        scroll = true;
     })
 
     let infoModal = false
     document.querySelector("#info").addEventListener("click", () => {
         document.querySelector("#menu").classList.remove("expanded")
-        if(!infoModal){
+        if (!infoModal) {
             infoModal = true
-        let info = new Modal("small", false).header("Instructions").text(`
+            let info = new Modal("small", false).header("Instructions").text(`
                     Press start scouting to start scouting, scouting will automatically start when six scouters join. 
                     (Note: Pressing start will only progress the scouter past the wait screen, they still manually have to start the match.)\n
                     Use the menu buttons to navigate around Devil Scouting.
                     `)
 
-        info.action("OK", async()=>{
-            closeInfoModal(info)
-        })
+            info.action("OK", async () => {
+                closeInfoModal(info)
+            })
 
         }
     })
-    function closeInfoModal(modal){
+
+    function closeInfoModal(modal) {
         modal.modalExit()
         infoModal = false
     }
+
     let menuExpanded = false
 
     document.querySelector("#admin-panel").classList.add("visible")
@@ -140,7 +142,7 @@ async function updateScouters(accessCode) { //scouter fetch interval (every 2.5s
     console.log(scouters)
     //prune scouters that no longer exist
     for (let timestamp in scouters) {
-        if (!scouterList.find(x=>x.timestamp = timestamp)) { //they no longer exist
+        if (!scouterList.find(x => x.timestamp = timestamp)) { //they no longer exist
             scouters[timestamp].destruct();
             delete scouters[timestamp];
         }
@@ -171,16 +173,16 @@ async function updateMatches(accessCode) {
 
         if (currentMatch.match_string == match.match_string) { //check the box if it is selected
             matchElement.querySelector(".match-select").checked = true;
-			if (scroll){
-				matchElement.scrollIntoView({
-            block: "center"
-            });
-			scroll = false;
-			}
+            if (scroll) {
+                matchElement.scrollIntoView({
+                    block: "center"
+                });
+                scroll = false;
+            }
         }
 
         //add the robot numbers to match
-        for (let color of ["red","blue"]) {
+        for (let color of ["red", "blue"]) {
             for (let robotNumber of match.robots[color]) {
                 let text = document.createElement("div");
                 text.innerText = robotNumber;
@@ -195,7 +197,7 @@ async function updateMatches(accessCode) {
                 checkbox.checked = true;
                 return;
             }
-            
+
             checkbox.checked = false; //set it to unchecked while processing the request
 
             //send a post request with the new match
@@ -208,7 +210,7 @@ async function updateMatches(accessCode) {
                 body: JSON.stringify(match),
             }).then((res) => res.json()).then((success) => {
                 if (success === true) { //if the match is successfully updated on the server-side
-                    new Popup("success", `Match ${match.number} - ${match.match_string.toUpperCase()} Selected!`,2000);
+                    new Popup("success", `Match ${match.number} - ${match.match_string.toUpperCase()} Selected!`, 2000);
                     for (let box of document.querySelectorAll(".match .match-select")) { //deselect all boxes
                         box.checked = false;
                     }
@@ -225,7 +227,7 @@ class ScouterDisplay {
     scouterElement;
     scouter;
 
-    constructor (scouter) {
+    constructor(scouter) {
         this.scouter = scouter;
 
         this.scouterElement = document.createElement("div");
@@ -240,8 +242,9 @@ class ScouterDisplay {
         document.querySelector("#scouter-list").appendChild(this.scouterElement);
 
         this.updateScouterElement();
-        
+
     }
+
     updateScouterElement(state) {
 
         //update state
@@ -249,18 +252,18 @@ class ScouterDisplay {
 
         //write all text
         this.scouterElement.querySelector(".scouter-id").innerText = this.scouter.state.scouterId;
-		if (this.scouter.state.matchNumber != ""){
-        	this.scouterElement.querySelector(".match-number").innerText = this.scouter.state.matchNumber;
-        } else {        	
-			this.scouterElement.querySelector(".match-number").innerText = "0";
-		}
-		
-		if (this.scouter.state.robotNumber != "" || this.scouter.state.robotNumber == "undefined"){
-		    this.scouterElement.querySelector(".robot-number").innerText = this.scouter.state.robotNumber;
-		} else {
-	        this.scouterElement.querySelector(".robot-number").innerText = ""
-        	
-		}
+        if (this.scouter.state.matchNumber != "") {
+            this.scouterElement.querySelector(".match-number").innerText = this.scouter.state.matchNumber;
+        } else {
+            this.scouterElement.querySelector(".match-number").innerText = "0";
+        }
+
+        if (this.scouter.state.robotNumber != "" || this.scouter.state.robotNumber == "undefined") {
+            this.scouterElement.querySelector(".robot-number").innerText = this.scouter.state.robotNumber;
+        } else {
+            this.scouterElement.querySelector(".robot-number").innerText = ""
+
+        }
 
         //update color
         const SCOUTER_STATUS_COLOR = {
@@ -268,8 +271,8 @@ class ScouterDisplay {
             "1": "#ffa500", //WAITING
             "2": "var(--accent)", //SCOUTING
             "3": "var(--green)", //COMPLETE
-            "4": "var(--text)", 
-            "5": "var(--error)" 
+            "4": "var(--text)",
+            "5": "var(--error)"
         }
         const DISCONNECTED_COLOR = "var(--error)";
 
@@ -287,6 +290,7 @@ class ScouterDisplay {
             this.scouterElement.querySelector(".scouter-status").innerText = SCOUTER_STATUS_REVERSE[this.scouter.state.status];
         }
     }
+
     destruct() {
         this.scouterElement.parentElement.removeChild(this.scouterElement);
     }

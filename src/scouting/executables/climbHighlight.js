@@ -14,12 +14,12 @@ executables["climbHighlight"] = {
             if (layerButton.executables.find(e => e.type == "climbHighlight")) //if its highlightable
                 highlightableButtons[layerButton.id] = layerButton //add its id
         }
-        let oldHighlightId = [...actionQueue].reverse().find(x=>x && x.id in highlightableButtons).id;
-        
+        let oldHighlightId = [...actionQueue].reverse().find(x => x && x.id in highlightableButtons).id;
+
         //re add highlights
         button.element.classList.remove("highlight");
         highlightableButtons[oldHighlightId].element.classList.add("highlight");
-        
+
 
     }
 }

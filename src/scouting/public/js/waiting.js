@@ -1,4 +1,4 @@
-let hints = ["If you misclick a button, you can always press UNDO to undo your mistake!","Show up to scout on time! Try to be there a few minutes in advance.","Stay focused when scouting. Data you collect helps us greatly.","If you ever have an issue, make sure to notify the scouting admins.","Before you leave, let the scouting team know so they can replace you.","Remember, accuracy is key, as it allows us to pick the best teams for our alliance."]
+let hints = ["If you misclick a button, you can always press UNDO to undo your mistake!", "Show up to scout on time! Try to be there a few minutes in advance.", "Stay focused when scouting. Data you collect helps us greatly.", "If you ever have an issue, make sure to notify the scouting admins.", "Before you leave, let the scouting team know so they can replace you.", "Remember, accuracy is key, as it allows us to pick the best teams for our alliance."]
 
 function shuffleArray(array) {
     for (var i = array.length - 1; i > 0; i--) {
@@ -15,7 +15,7 @@ function toggleHintElement(hintElement) {
         document.querySelector("#waiting .hint").style.height = Math.max(activeHint.offsetHeight, document.querySelector("#waiting .hint").offsetHeight) + "px";
         document.querySelector("#waiting").style.paddingBottom = Math.max(activeHint.offsetHeight, document.querySelector("#waiting .hint").offsetHeight) + 45 + "px";
     }, 250)
-    
+
     //toggle the hint element's visibility
     if (hintElement.classList.contains("visible")) {
         hintElement.classList.remove("visible")
@@ -23,6 +23,7 @@ function toggleHintElement(hintElement) {
         hintElement.classList.add("visible")
     }
 }
+
 //shuffle hints + create interval
 shuffleArray(hints);
 let [activeHint, inactiveHint] = document.querySelectorAll("#waiting .hint-text");
@@ -39,7 +40,7 @@ window.addEventListener("resize", () => {
     document.querySelector("#waiting").style.paddingBottom = activeHint.offsetHeight + 45 + "px";
 })
 
-window.addEventListener("orientationchange", function() {
+window.addEventListener("orientationchange", function () {
     document.querySelector("#waiting .hint").style.height = activeHint.offsetHeight + "px";
     console.log()
     document.querySelector("#waiting").style.paddingBottom = activeHint.offsetHeight + 45 + "px";

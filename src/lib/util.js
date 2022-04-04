@@ -1,17 +1,17 @@
-
-class ThrowError {} //this is probably not best practice, I tried to find a better way but no luck
+class ThrowError {
+} //this is probably not best practice, I tried to find a better way but no luck
 /**
  * return the value at a keypath in a object
  * @param {Object} obj - the object
  * @param {String} path - the path within the object "data.matches.q24.teams"
  * @param {*} ifnone - returned if the path does not exist in the object. If this isn't defined getPath will throw an error if the path doesnt exist.
- * @returns 
+ * @returns
  */
-function getPath(obj,path,ifnone=ThrowError) {
-    if (typeof obj === "undefined") {  
-        if (ifnone == ThrowError)  {
+function getPath(obj, path, ifnone = ThrowError) {
+    if (typeof obj === "undefined") {
+        if (ifnone == ThrowError) {
             throw new Error("path not traversable!");
-        } else {  
+        } else {
             return ifnone;
         }
     }
@@ -24,15 +24,15 @@ function getPath(obj,path,ifnone=ThrowError) {
  * set a value at a keypath within an object
  * @param {Object} obj the object that will be modified
  * @param {String} path the keypath where you wish to set the value (eg. "team.counts.lowerHub"). If this is not fully defined, it will be created
- * @param {Object} value the value to set at the path 
+ * @param {Object} value the value to set at the path
  * @returns the value
  */
 
-function setPath(obj,path,value) {
+function setPath(obj, path, value) {
     if (!path.includes(".")) return obj[path] = value;
     path = path.split(".");
     if (!obj[path[0]]) obj[path[0]] = {}; // if the path doesn't exist, make an empty object there
-    return setPath(obj[path.shift()], path.join("."),value); 
+    return setPath(obj[path.shift()], path.join("."), value);
 }
 
 
@@ -65,4 +65,4 @@ function setPath(obj,path,value) {
 //     }
 // }
 
-module.exports = {getPath,setPath};
+module.exports = {getPath, setPath};

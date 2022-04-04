@@ -1,10 +1,10 @@
-const { getPath, setPath } = require("../../lib/util");
+const {getPath, setPath} = require("../../lib/util");
 const {DataTransformer} = require("../DataTransformer");
 
 module.exports = {
     /**
      * @type {DataTransformer}
-     * @param options.addends {String[]} array of MatchTeamPerformance outputPaths 
+     * @param options.addends {String[]} array of MatchTeamPerformance outputPaths
      */
     tmp: new DataTransformer("sum", (dataset, outputPath, options) => {
         for (const tmp of dataset.tmps) {

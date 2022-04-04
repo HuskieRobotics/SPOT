@@ -4,7 +4,7 @@ executables["constantPosition"] = {
         if (!actionQueue[actionQueue.length - 1].other) actionQueue[actionQueue.length - 1].other = {}
         actionQueue[actionQueue.length - 1].other.pos = position;
 
-},
+    },
     reverse(button, layers, args) {
         //nothing to undo
     }
