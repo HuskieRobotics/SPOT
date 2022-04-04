@@ -96,7 +96,7 @@ async function constructApp(accessCode) {
         }
     })
     function closeInfoModal(modal){
-        modal.hide()
+        modal.modalExit()
         infoModal = false
     }
     let menuExpanded = false
