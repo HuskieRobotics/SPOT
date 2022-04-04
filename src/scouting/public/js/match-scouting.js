@@ -37,7 +37,7 @@ let devEnd
                 //special case for match-control buttons which have extra undo funcitonality without executables
                 if (undoneButton.type === "match-control") {
                     time = matchScoutingConfig.timing.totalTime; //reset timer
-                    ScoutingSync.updateState({status: ScoutingSync.SCOUTER_STATUS.WAITING}); //tell the server that you are now waiting to start
+                    ScoutingSync.updateState({status: ScoutingSync.SCOUTER_STATUS.SCOUTING}); //tell the server that you are now waiting to start
                     clearInterval(undoneButton.timerInterval); //clear the timing interval
                     undoneButton.element.innerText = "Start Match";
                     timerActive = false;
@@ -60,6 +60,13 @@ let devEnd
                     "temp": true
                 })
                 doExecutables(button)
+            })
+        },
+
+        "cancel": (button) => {
+            //add a temporary event to the action queue with no id which will be removed before the action queue is sent
+            button.element.addEventListener("click", () => {
+                location.href = '/';
             })
         },
 
@@ -86,8 +93,10 @@ let devEnd
 
                 let displayText = "";
                 let start = Date.now()
-                devEnd = () => {start = Date.now() - (matchScoutingConfig.timing.totalTime - 1)}
-                const transitions = Object.keys(matchScoutingConfig.timing.timeTransitions).map(x => Number(x)).sort((a,b) => b - a);
+                devEnd = () => {
+                    start = Date.now() - (matchScoutingConfig.timing.totalTime - 1)
+                }
+                const transitions = Object.keys(matchScoutingConfig.timing.timeTransitions).map(x => Number(x)).sort((a, b) => b - a);
                 timerActive = true;
                 button.timerInterval = setInterval(() => {
                     if (time <= transitions[0]) { //move to the next transition if it is time
@@ -132,6 +141,8 @@ let devEnd
             grid.appendChild(button.element);
         }
     }
+    ScoutingSync.updateState({status: ScoutingSync.SCOUTER_STATUS.SCOUTING}); //tell the server that you started scouting
+
 
     showLayer(0); //initially show layer 0
 
@@ -158,6 +169,7 @@ let devEnd
     // DATA
     class TeamMatchPerformance {
         data;
+
         constructor(actionQueue) {
             let filteredActionQueue = actionQueue.filter(action=>!action.temp);
             filteredActionQueue = filteredActionQueue.map(x => {

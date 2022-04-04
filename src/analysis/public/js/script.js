@@ -40,6 +40,7 @@ if ('serviceWorker' in navigator) {
     async function fetchTeams() {
         const teams = await fetch(`/analysis/api/teams`).then(res => res.json())
         return teams.reduce((acc, t) => {
+
             acc[t.team_number] = t.nickname
             return acc
         }, {})
@@ -63,9 +64,9 @@ if ('serviceWorker' in navigator) {
         }
 
         //get all team modules, create and store module classes, then append their placeholder containers to lists
-        for (const module of modulesConfig.filter(m => m.view == "team")) {
+        for (const module of modulesConfig.filter(m => m.view === "team")) {
             const moduleObject = new moduleClasses[module.module](module)
-            if (module.position == "main") {
+            if (module.position === "main") {
                 mainList.appendChild(moduleObject.container)
             } else {
                 sideList.appendChild(moduleObject.container)

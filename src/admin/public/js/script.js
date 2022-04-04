@@ -22,7 +22,7 @@ const scouters = {};
         accessCodeInput.placeholder = "Access Code"
         accessCodeInput.type = "password"
         accessCodeInput.addEventListener("keydown", (e) => {
-            if (e.keyCode == 13) {
+            if (e.keyCode === 13) {
                 validate(accessCodeInput.value, authModal)
             }
         })
@@ -65,6 +65,16 @@ async function constructApp(accessCode) {
         });
         console.log("ENTER MATCH!")
     })
+	document.querySelector("#center-list").addEventListener("click", () => {
+       scroll = true;
+    })
+    document.querySelector("#info").addEventListener("click", () => {
+        new Modal("large").header("Instructions").text(`
+                    Press start scouting to start scouting, scouting will automatically start when six scouters join.
+                    (Note: Pressing start will only progress the scouter past the wait screen, they still manually have to start the match.)\n
+                    Use the menu buttons to navigate around Devil Scouting.
+                    `).dismiss("OK")
+    })
 
     let menuExpanded = false
 
@@ -92,12 +102,12 @@ async function updateScouters(accessCode) { //scouter fetch interval (every 2.5s
         if (scouter.timestamp in scouters) {
             scouters[scouter.timestamp].updateScouterElement(scouter.state);
         } else {
-            if (scouter.state.status == SCOUTER_STATUS.COMPLETE || !scouter.state.connected) continue; //it's already submitted/disconnected, dont show it.
+            if (scouter.state.status === SCOUTER_STATUS.COMPLETE || !scouter.state.connected) continue; //it's already submitted/disconnected, dont show it.
             scouters[scouter.timestamp] = new ScouterDisplay(scouter);
         }
-        if (scouter.state.status == SCOUTER_STATUS.COMPLETE || !scouter.state.connected) { //prune offline/complete scouters from the list
+        if (scouter.state.status === SCOUTER_STATUS.COMPLETE || !scouter.state.connected) { //prune offline/complete scouters from the list
             setTimeout(() => {
-                if (scouters[scouter.timestamp] && (scouters[scouter.timestamp].scouter.state.status == SCOUTER_STATUS.COMPLETE || !scouters[scouter.timestamp].scouter.state.connected)) {
+                if (scouters[scouter.timestamp] && (scouters[scouter.timestamp].scouter.state.status === SCOUTER_STATUS.COMPLETE || !scouters[scouter.timestamp].scouter.state.connected)) {
                     scouters[scouter.timestamp].destruct();
                     delete scouters[scouter.timestamp]
                 }

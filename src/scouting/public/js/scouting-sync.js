@@ -54,24 +54,34 @@ class ScoutingSync {
         ScoutingSync.socket.on("enterMatch", () => {
             setTimeout(() => { //wait an extra 100ms to guarantee you are on the waiting screen
                 console.log(ScoutingSync.state, previousMatchInfo);
-                if (ScoutingSync.state.robotNumber == previousMatchInfo.robotNumber && 
-                    ScoutingSync.state.matchNumber == previousMatchInfo.matchNumber)
+                if (ScoutingSync.state.robotNumber === previousMatchInfo.robotNumber &&
+                    ScoutingSync.state.matchNumber === previousMatchInfo.matchNumber)
                     return;
                 
                 previousMatchInfo = {
                     robotNumber: ScoutingSync.state.robotNumber,
                     matchNumber: ScoutingSync.state.matchNumber
                 }
-                
-                switchPage("match-scouting");
-                new Modal("small").header("Match Information").text(`
-                You have been assigned team ${ScoutingSync.state.robotNumber} in match ${ScoutingSync.state.matchNumber}.
-                `).dismiss("OK")
-            },100)
+                if (ScoutingSync.state.matchNumber === "0") {
+                    switchPage("error");
+                    ScoutingSync.updateState({status: ScoutingSync.SCOUTER_STATUS.MATCHERROR}); //tell the server that you started scouting
+                } else if (ScoutingSync.state.robotNumber === "") {
+                    switchPage("max-scouters");
+                    ScoutingSync.updateState({status: ScoutingSync.SCOUTER_STATUS.TOOMANY}); //tell the server that you started scouting
+                } else {
+                    switchPage("match-scouting");
+                    ScoutingSync.updateState({status: ScoutingSync.SCOUTER_STATUS.SCOUTING}); //tell the server that you started scouting
+                    // console.log(ScoutingSync.state.robotNumber);
+                    new Modal("small").header("Match Information").text(`
+                    You have been assigned team ${ScoutingSync.state.robotNumber} in match ${ScoutingSync.state.matchNumber}.
+                    `).dismiss("OK")
+                }
+            }, 100)
         })
     }
-    static updateState(stateUpdate,incoming=false) {
-        return new Promise((res,rej) => {
+
+    static updateState(stateUpdate, incoming = false) {
+        return new Promise((res, rej) => {
             Object.assign(ScoutingSync.state, stateUpdate);
             if (!incoming) {
                 ScoutingSync.socket.emit("updateState", ScoutingSync.state, () => {
@@ -88,16 +98,16 @@ class ScoutingSync {
 
         return new Promise(async (res,rej) => {
             let timeout = setTimeout(() => {
-                new Popup("error", "failed to sync data!")
+                new Popup("error", "Failed To Sync Data :(")
                 res(false) //resolve, just so that the program can continue
             },10000);
             const teamMatchPerformances = await LocalData.getAllTeamMatchPerformances()
             const teamMatchPerformanceIds = teamMatchPerformances.map(teamMatchPerformance => teamMatchPerformance.matchId)
-            new Popup("notice","Syncing Data...",1000);
+            // new Popup("notice", "Syncing Data...", 1000);
             await ScoutingSync.updateState({status: ScoutingSync.SCOUTER_STATUS.COMPLETE});
             ScoutingSync.socket.emit("syncData", teamMatchPerformanceIds, (requestedTeamMatchPerformanceIds) => {
                 ScoutingSync.socket.emit("teamMatchPerformances", teamMatchPerformances.filter(teamMatchPerformance => requestedTeamMatchPerformanceIds.includes(teamMatchPerformance.matchId)), () => {
-                    new Popup("success","Data Sync Complete!",2000);
+                    new Popup("success", "Data Sync Succeeded", 1500);
                     clearTimeout(timeout);
                     res(true)
                 });
