@@ -7,10 +7,6 @@
                 "displayText": "Auto"
             },
             "131000": {
-                "layer": 2,
-                "displayText": "Teleop"
-            },
-            "80000": {
                 "layer": 3,
                 "displayText": "Teleop"
             }
