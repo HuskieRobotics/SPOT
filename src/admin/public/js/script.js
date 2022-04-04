@@ -3,19 +3,13 @@ const SCOUTER_STATUS = {
     "WAITING": 1, //scouters not actively in the process of scouting (dont have the scouting ui open)
     "SCOUTING": 2, //scouters actively scouting a match
     "COMPLETE": 3,
-    "TOOMANY": 4,
-    "MATCHERROR": 5,
 }
 const SCOUTER_STATUS_REVERSE = {
     "0": "NEW",
     "1": "WAITING",
     "2": "SCOUTING",
-    "3": "COMPLETE",
-	"4": "UNASSIGNED SCOUTER",
-	"5": "NO MATCH ASSIGNED",
+    "3": "COMPLETE"
 }
-
-let scroll = false;
 
 const scouters = {};
 
@@ -28,16 +22,13 @@ const scouters = {};
         accessCodeInput.placeholder = "Access Code"
         accessCodeInput.type = "password"
         accessCodeInput.addEventListener("keydown", (e) => {
-            if (e.keyCode == 13) {
+            if (e.keyCode === 13) {
                 validate(accessCodeInput.value, authModal)
             }
         })
         authModal.element.appendChild(accessCodeInput)
         authModal.action("Submit", async () => {
             validate(accessCodeInput.value, authModal)
-        })
-        authModal.action("Cancel", async () => {
-            location.href = '/';
         })
     } else {
         await constructApp()
@@ -77,6 +68,13 @@ async function constructApp(accessCode) {
 	document.querySelector("#center-list").addEventListener("click", () => {
        scroll = true;
     })
+    document.querySelector("#info").addEventListener("click", () => {
+        new Modal("large").header("Instructions").text(`
+                    Press start scouting to start scouting, scouting will automatically start when six scouters join.
+                    (Note: Pressing start will only progress the scouter past the wait screen, they still manually have to start the match.)\n
+                    Use the menu buttons to navigate around Devil Scouting.
+                    `).dismiss("OK")
+    })
 
     let menuExpanded = false
 
@@ -104,12 +102,12 @@ async function updateScouters(accessCode) { //scouter fetch interval (every 2.5s
         if (scouter.timestamp in scouters) {
             scouters[scouter.timestamp].updateScouterElement(scouter.state);
         } else {
-            if (scouter.state.status == SCOUTER_STATUS.COMPLETE || !scouter.state.connected) continue; //it's already submitted/disconnected, dont show it.
+            if (scouter.state.status === SCOUTER_STATUS.COMPLETE || !scouter.state.connected) continue; //it's already submitted/disconnected, dont show it.
             scouters[scouter.timestamp] = new ScouterDisplay(scouter);
         }
-        if (scouter.state.status == SCOUTER_STATUS.COMPLETE || !scouter.state.connected) { //prune offline/complete scouters from the list
+        if (scouter.state.status === SCOUTER_STATUS.COMPLETE || !scouter.state.connected) { //prune offline/complete scouters from the list
             setTimeout(() => {
-                if (scouters[scouter.timestamp] && (scouters[scouter.timestamp].scouter.state.status == SCOUTER_STATUS.COMPLETE || !scouters[scouter.timestamp].scouter.state.connected)) {
+                if (scouters[scouter.timestamp] && (scouters[scouter.timestamp].scouter.state.status === SCOUTER_STATUS.COMPLETE || !scouters[scouter.timestamp].scouter.state.connected)) {
                     scouters[scouter.timestamp].destruct();
                     delete scouters[scouter.timestamp]
                 }
@@ -150,12 +148,9 @@ async function updateMatches(accessCode) {
 
         if (currentMatch.match_string == match.match_string) { //check the box if it is selected
             matchElement.querySelector(".match-select").checked = true;
-			if (scroll){
-				matchElement.scrollIntoView({
-            block: "center"
+            matchElement.scrollIntoView({
+                block: "center"
             });
-			scroll = false;
-			}
         }
 
         //add the robot numbers to match
@@ -228,27 +223,15 @@ class ScouterDisplay {
 
         //write all text
         this.scouterElement.querySelector(".scouter-id").innerText = this.scouter.state.scouterId;
-		if (this.scouter.state.matchNumber != ""){
-        	this.scouterElement.querySelector(".match-number").innerText = this.scouter.state.matchNumber;
-        } else {        	
-			this.scouterElement.querySelector(".match-number").innerText = "0";
-		}
-		
-		if (this.scouter.state.robotNumber != "" || this.scouter.state.robotNumber == "undefined"){
-		    this.scouterElement.querySelector(".robot-number").innerText = this.scouter.state.robotNumber;
-		} else {
-	        this.scouterElement.querySelector(".robot-number").innerText = ""
-        	
-		}
+        this.scouterElement.querySelector(".match-number").innerText = this.scouter.state.matchNumber;
+        this.scouterElement.querySelector(".robot-number").innerText = this.scouter.state.robotNumber;
 
         //update color
         const SCOUTER_STATUS_COLOR = {
             "0": "var(--text)", //NEW
             "1": "#ffa500", //WAITING
             "2": "var(--accent)", //SCOUTING
-            "3": "var(--green)", //COMPLETE
-            "4": "var(--text)", 
-            "5": "var(--error)" 
+            "3": "var(--green)" //COMPLETE
         }
         const DISCONNECTED_COLOR = "var(--error)";
 
