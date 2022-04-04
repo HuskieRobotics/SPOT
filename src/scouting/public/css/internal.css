@@ -65,13 +65,13 @@ button {
     display: flex;
     flex-direction: column;
 }
-  
+
 .modal.visible {
     visibility: unset;
     opacity: 1;
     transition: visibility 0s 0s, opacity 0.3s 0s;
 }
-  
+
 .modal-blind {
     position: absolute;
     top: 0;
@@ -85,13 +85,13 @@ button {
     opacity: 0;
     visibility: hidden;
 }
-  
+
 .modal-blind.visible {
     visibility: unset;
     opacity: 0.7;
     transition: visibility 0s 0s, opacity 0.3s 0s;
 }
-  
+
 .modal-close {
     font-size: 1.5em;
     color: var(--text);
@@ -106,12 +106,12 @@ button {
     min-width: 800px;
     min-height: 500px;
 }
-  
+
 .modal.medium {
     min-width: 600px;
     min-height: 375px;
 }
-  
+
 .modal.small {
     min-width: 400px;
     min-height: 250px;
@@ -168,7 +168,7 @@ button {
     line-height: 1.75rem;
     padding: 6px 18px;
     text-align: center;
-    transition: 0.6s cubic-bezier(.76,-0.47,.24,1.47);
+    transition: 0.6s cubic-bezier(.76, -0.47, .24, 1.47);
     z-index: 100;
     transform: translate(-50%, -100%);
     box-shadow: 0 0 2px var(--text);
@@ -198,5 +198,5 @@ button {
     position: absolute;
     bottom: 0;
     left: 50%;
-    transform: translate(-50%,0)
+    transform: translate(-50%, 0)
 }

@@ -1,4 +1,4 @@
-const { setPath, getPath } = require("../../lib/util");
+const {setPath, getPath} = require("../../lib/util");
 const {DataTransformer} = require("../DataTransformer");
 const matchScoutingConfig = require("../../../config/match-scouting.json");
 
@@ -19,10 +19,10 @@ module.exports = {
                     filteredActionArray.push(action);
                 }
             }
-            setPath(tmp,outputPath,filteredActionArray);
+            setPath(tmp, outputPath, filteredActionArray);
 
-            if (!getPath(tmp,outputPath)) //no action of options.actionId found
-                setPath(tmp,outputPath,options.default || null);
+            if (!getPath(tmp, outputPath)) //no action of options.actionId found
+                setPath(tmp, outputPath, options.default || null);
         }
         return dataset;
     })

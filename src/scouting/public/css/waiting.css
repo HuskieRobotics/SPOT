@@ -7,6 +7,7 @@
     line-height: 1.4;
     padding: 64px 12px 0 12px;
 }
+
 #waiting .cancel {
     grid-area: 4/1/5/3;
     font-size: 1.75em;
@@ -28,9 +29,11 @@
     #waiting {
         font-size: 1.5em;
     }
+
     #waiting .hint {
         bottom: 40px !important;
     }
+
     #waiting .cancel {
         width: calc(60% - 24px);
         margin: 8px 0;
@@ -68,7 +71,7 @@
     }
     50% {
         transform: rotate(180deg) scale(0.9)
-        
+
     }
     100% {
         transform: rotate(360deg) scale(1)
@@ -90,7 +93,7 @@
     color: black;
     bottom: 0px;
     left: 50%;
-    transform: translate(-50%,0);
+    transform: translate(-50%, 0);
     background-color: var(--bg-alt);
     max-width: 75%;
     padding: 0.5em var(--border-radius);
@@ -99,7 +102,7 @@
     visibility: hidden;
     transition: visibility 0.2s, opacity 0.2s;
     opacity: 0;
-    
+
 }
 
 #waiting .hint .hint-text.visible {

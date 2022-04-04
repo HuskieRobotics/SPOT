@@ -6,7 +6,7 @@ class HeatmapScatterPlot {
         this.moduleConfig = moduleConfig
         this.container = createDOMElement("div", "container plot")
         this.switcher = createDOMElement("div", "switcher")
-        
+
     }
 
     async formatData(teams, dataset) {
@@ -59,7 +59,7 @@ class HeatmapScatterPlot {
             // },
             zmin: 0,
             showscale: false,
-            colorscale: [[0, "rgba(255,255,255,0)"],[.1, "rgba(255, 147, 115, 50)"],[1, "rgba(255, 59, 0, 255)"]],
+            colorscale: [[0, "rgba(255,255,255,0)"], [.1, "rgba(255, 147, 115, 50)"], [1, "rgba(255, 59, 0, 255)"]],
         })
 
         return data
@@ -85,21 +85,21 @@ class HeatmapScatterPlot {
             },
             legend: {
                 font: {
-                    size: 20    
+                    size: 20
                 },
                 orientation: "h",
                 itemsizing: "trace",
                 y: -3
             },
             xaxis: {
-                range: [ 0, 100 ],
+                range: [0, 100],
                 showgrid: false,
                 showticklabels: false,
                 zeroline: false,
                 showline: false
             },
             yaxis: {
-                range: [ 100, 0 ],
+                range: [100, 0],
                 showticklabels: false,
                 showgrid: false,
                 scaleanchor: "x",
@@ -148,8 +148,8 @@ async function getSvgDataPng(url) {
             canvas.width = img.width * 4;
             canvas.height = img.height * 4;
             const ctx = canvas.getContext("2d");
-            ctx.drawImage(img,0,0,img.width * 4, img.height * 4);
+            ctx.drawImage(img, 0, 0, img.width * 4, img.height * 4);
             r({src: canvas.toDataURL(), w: img.width, h: img.height});
         }
     })
-  }
+}

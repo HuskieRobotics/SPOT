@@ -20,10 +20,10 @@ executables["position"] = {
             actionQueue[actionQueue.length - 1].other.pos = lockedPosition;
 
             //set the border color and position lock time
-            setAllButtonBorders(layers,positionConfig.LOCK_BORDER_COLOR);
+            setAllButtonBorders(layers, positionConfig.LOCK_BORDER_COLOR);
             setTimeout(() => {
-                if (lockedTime + positionConfig.POSITION_LOCK_DELAY_MS <= Date.now() + 10) setAllButtonBorders(layers,"transparent");
-            },positionConfig.POSITION_LOCK_DELAY_MS)
+                if (lockedTime + positionConfig.POSITION_LOCK_DELAY_MS <= Date.now() + 10) setAllButtonBorders(layers, "transparent");
+            }, positionConfig.POSITION_LOCK_DELAY_MS)
             lockedTime = Date.now();
             return;
         }
@@ -55,7 +55,7 @@ executables["position"] = {
             /* position gathering */
 
             //find image width/height and margin offsets
-            let aspectRatio = positionImage.naturalWidth/positionImage.naturalHeight;
+            let aspectRatio = positionImage.naturalWidth / positionImage.naturalHeight;
             let width = positionImage.height * aspectRatio;
             let height = positionImage.height;
             if (width > positionImage.width) {
@@ -71,21 +71,21 @@ executables["position"] = {
             let y = (e.offsetY - marginY) / height * 100;
 
             //make x and y an integer between 0 and 100
-            x = Math.round(Math.max(Math.min(x,100),0));
-            y = Math.round(Math.max(Math.min(y,100),0));
-            
+            x = Math.round(Math.max(Math.min(x, 100), 0));
+            y = Math.round(Math.max(Math.min(y, 100), 0));
+
             //add the pos to the last action of the action queue (SHOULD be the action from the button that triggered this)
             if (!actionQueue[actionQueue.length - 1].other) actionQueue[actionQueue.length - 1].other = {}
-            let pos = actionQueue[actionQueue.length - 1].other.pos = {x,y};
+            let pos = actionQueue[actionQueue.length - 1].other.pos = {x, y};
 
             /* position lock */
             if (positionConfig.POSITION_LOCK_DELAY_MS != 0) { //position lock is enabled,
                 lockedTime = Date.now();
                 lockedPosition = pos;
-                setAllButtonBorders(layers,positionConfig.LOCK_BORDER_COLOR);
+                setAllButtonBorders(layers, positionConfig.LOCK_BORDER_COLOR);
                 setTimeout(() => {
-                    if (lockedTime + positionConfig.POSITION_LOCK_DELAY_MS <= Date.now() + 10) setAllButtonBorders(layers,"transparent");
-                },positionConfig.POSITION_LOCK_DELAY_MS)
+                    if (lockedTime + positionConfig.POSITION_LOCK_DELAY_MS <= Date.now() + 10) setAllButtonBorders(layers, "transparent");
+                }, positionConfig.POSITION_LOCK_DELAY_MS)
             }
 
             //remove the position image + container from DOM.
@@ -97,9 +97,9 @@ executables["position"] = {
     }
 }
 
-function setAllButtonBorders(layers,color) {
+function setAllButtonBorders(layers, color) {
     for (let button of layers.flat()) {
-        if (button.executables.filter(x=>x.type=="position").length > 0) { //it has a position executable
+        if (button.executables.filter(x => x.type == "position").length > 0) { //it has a position executable
             button.element.style.border = `0.5vw solid ${color}`;
         }
     }

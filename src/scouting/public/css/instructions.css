@@ -7,6 +7,7 @@
     align-items: center;
     justify-content: center;
 }
+
 #instructions .instructions {
     background-color: var(--bg-alt);
     border-radius: var(--border-radius);
@@ -49,9 +50,11 @@
         align-items: center;
         padding: 20px;
     }
+
     #instructions .instructions .title {
         font-size: 2em
     }
+
     #instructions .instructions .ok {
         width: calc(100% - 24px);
         margin: 12px 0;

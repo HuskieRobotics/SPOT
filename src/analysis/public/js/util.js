@@ -1,4 +1,5 @@
-class ThrowError {} //this is probably not best practice, I tried to find a better way but no luck
+class ThrowError {
+} //this is probably not best practice, I tried to find a better way but no luck
 
 
 function createDOMElement(tag, classes, id) {
@@ -19,11 +20,11 @@ function clearDiv(div) {
 }
 
 
-function getPath(obj, path, ifNone=ThrowError) {
-    if (typeof obj === "undefined") {  
-        if (ifNone === ThrowError)  {
+function getPath(obj, path, ifNone = ThrowError) {
+    if (typeof obj === "undefined") {
+        if (ifNone === ThrowError) {
             throw new Error("path not traversable!");
-        } else {  
+        } else {
             return ifNone;
         }
     }

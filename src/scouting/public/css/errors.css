@@ -7,6 +7,7 @@
     align-items: center;
     justify-content: center;
 }
+
 #error .errors {
     background-color: var(--bg-alt);
     border-radius: var(--border-radius);
@@ -38,7 +39,7 @@
 }
 
 @media screen and (min-height: 600px) {
-    #errors .errors {	
+    #errors .errors {
         width: 750px;
         height: auto;
         display: flex;
@@ -48,9 +49,11 @@
         padding: 20px;
 
     }
+
     #errors .errors .title {
         font-size: 2em
     }
+
     #errors .errors .ok {
         width: calc(100% - 24px);
         margin: 12px 0;

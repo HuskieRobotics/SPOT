@@ -3,42 +3,42 @@
 }
 
 #form .input {
-  background-color: var(--bg-alt);
-  border: black 2px solid;
-  color: black;
-  cursor: pointer;
-  text-align: left;
-  border-radius: 8px;
-  font-size: 1.5em;
-  padding: 8px 12px;
-  transition: 0.3s color, 0.3s border;
-  outline: none;
+    background-color: var(--bg-alt);
+    border: black 2px solid;
+    color: black;
+    cursor: pointer;
+    text-align: left;
+    border-radius: 8px;
+    font-size: 1.5em;
+    padding: 8px 12px;
+    transition: 0.3s color, 0.3s border;
+    outline: none;
 }
 
 #form .input:focus {
-  border: var(--accent) 2px solid;
+    border: var(--accent) 2px solid;
 }
 
 #form .label {
-  position: relative
+    position: relative
 }
 
 #form .label > span {
-  position: absolute;
-  padding: 0 5px;
-  left: 12px;
-  background-color: var(--bg-alt);
-  top: -8px;
-  border-radius: 20px;
-  font-size: 1.5em;
-  transition: 0.2s transform;
-  pointer-events: none;
-  color: var(--placeholder);
+    position: absolute;
+    padding: 0 5px;
+    left: 12px;
+    background-color: var(--bg-alt);
+    top: -8px;
+    border-radius: 20px;
+    font-size: 1.5em;
+    transition: 0.2s transform;
+    pointer-events: none;
+    color: var(--placeholder);
 }
 
 .input:focus + span, .input:valid + span {
-  transform: scale(0.75) translate(-20px, -46px);
-  color: black !important;
+    transform: scale(0.75) translate(-20px, -46px);
+    color: black !important;
 }
 
 .input {
@@ -50,6 +50,7 @@
     align-items: center;
     justify-content: center;
 }
+
 #form .form {
     background-color: var(--bg-alt);
     border-radius: var(--border-radius);
@@ -104,17 +105,21 @@
         align-items: center;
         padding: 20px;
     }
+
     #form .form .title {
         font-size: 2em
     }
+
     #form .form .save {
         width: calc(100% - 24px);
         margin: 12px 0;
     }
+
     #form .form .cancel {
         width: calc(100% - 24px);
         margin: 12px 0;
     }
+
     #form .input {
         width: 100%;
         margin: 12px 0;

@@ -1,7 +1,7 @@
 const pipelineConfig = require("../../config/analysis-pipeline.json");
 const fs = require("fs");
-const { TeamMatchPerformance } = require("../lib/db");
-const { Dataset } = require("./DataTransformer");
+const {TeamMatchPerformance} = require("../lib/db");
+const {Dataset} = require("./DataTransformer");
 const chalk = require("chalk");
 
 //enable debug logs
@@ -18,7 +18,7 @@ for (let executableFile of fs.readdirSync(__dirname + "/transformers")) {
     let transformer = require("./transformers/" + executableFile);
 
     if ("tmp" in transformer) { //the transformer supports teamMatchPerformances
-        if (debug)console.log(`${transformer.tmp.name}.tmp - detected`)
+        if (debug) console.log(`${transformer.tmp.name}.tmp - detected`)
         if (transformer.tmp.name in transformers.tmp)
             throw new Error(chalk.whiteBright.bgRed.bold(`${transformers.tmp.name}.tmp - transformer name duplicated! Transformer names must be unique.\nOther transformers loaded: [${Object.keys(transformers.tmp)}]`));
         transformers.tmp[transformer.tmp.name] = transformer.tmp;
@@ -26,7 +26,7 @@ for (let executableFile of fs.readdirSync(__dirname + "/transformers")) {
 
     if ("team" in transformer) { //the transformer supports teams
         if (debug) console.log(`${transformer.team.name}.team - detected`)
-        if (transformer.team.name in transformers.team) 
+        if (transformer.team.name in transformers.team)
             throw new Error(`${transformers.team.name} - transformer name duplicated! Transformer names must be unique.\nOther transformers loaded: [${Object.keys(transformers.tmp)}]`);
         transformers.team[transformer.team.name] = transformer.team;
     }
@@ -37,7 +37,7 @@ if (debug) console.log("loaded all transformers!");
 async function execute(dataset) {
     /* get tmps from database */
     dataset = new Dataset((await TeamMatchPerformance.find()).map((o) => o.toObject()));
-    
+
     for (let tfConfig of pipelineConfig) {
         if (debug) console.log(`running ${tfConfig.name} - ${JSON.stringify(tfConfig.options)}`)
         dataset = transformers[tfConfig.type][tfConfig.name].execute(dataset, tfConfig.outputPath, tfConfig.options);

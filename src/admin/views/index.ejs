@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
     <meta charset="utf-8">
     <meta name='viewport' content='width=device-width, initial-scale=1, user-scalable=no, viewport-fit=cover'>
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -9,7 +9,8 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.0/css/all.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;700&family=Saira:wght@300;400;700&family=Tajawal:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;700&family=Saira:wght@300;400;700&family=Tajawal:wght@300;400;700&display=swap"
+          rel="stylesheet">
     <link rel="apple-touch-icon" sizes="180x180" href="./icons/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="./icons/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="./icons/favicon-16x16.png">
@@ -23,52 +24,52 @@
     <meta name="msapplication-TileColor" content="#ffffff">
     <meta name="msapplication-TileImage" content="./icons/ms-icon-144x144.png">
     <meta name="theme-color" content="#ffffff">
-    <link href="./css/style.css" rel="stylesheet" type="text/css" />
-    <link href="./css/ui-elements.css" rel="stylesheet" type="text/css" />
-    <link href="./css/global.css" rel="stylesheet" type="text/css" />
-    <link href="./css/internal.css" rel="stylesheet" type="text/css" />
-  </head>
-  <body>
-    <img id="spinner" src="./img/spinner.svg">
+    <link href="./css/style.css" rel="stylesheet" type="text/css"/>
+    <link href="./css/ui-elements.css" rel="stylesheet" type="text/css"/>
+    <link href="./css/global.css" rel="stylesheet" type="text/css"/>
+    <link href="./css/internal.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<img id="spinner" src="./img/spinner.svg">
 
-    <div id="menu">
-      <div id="menu-icon-container">
+<div id="menu">
+    <div id="menu-icon-container">
         <i id="menu-icon" class="fas fa-angle-double-down"></i>
-      </div>
-      <a id="config" href="/setup">
+    </div>
+    <a id="config" href="/setup">
         <i class="fas fa-cog"></i>
         <div>Edit Config</div>
-      </a>
-      <div id="info">
+    </a>
+    <div id="info">
         <i class="fas fa-info-circle"></i>
-          <div>Instructions</div>
-      </div>
-      <a id="home" href="/">
+        <div>Instructions</div>
+    </div>
+    <a id="home" href="/">
         <i class="fas fa-house-user"></i>
         <div>Home</div>
-      </a>
-      <a id="analysis" href="/analysis">
+    </a>
+    <a id="analysis" href="/analysis">
         <i class="fas fa-chart-bar"></i>
         <div>Analysis</div>
-      </a>
-      <a id="export-csv" href="/analysis/api/csv">
+    </a>
+    <a id="export-csv" href="/analysis/api/csv">
         <i class="fas fa-file-download"></i>
         <div>Export Data</div>
-      </a>
-    </div>
+    </a>
+</div>
 
-    <div id="admin-panel">
-      <div id="scouters">
+<div id="admin-panel">
+    <div id="scouters">
         <div id="scouter-list"></div>
         <input type="button" id="start-scouting" value="Start Scouting">
         <div class="title">Scouters</div>
-      </div>
-      <div id="matches">
+    </div>
+    <div id="matches">
         <input type="button" id="center-list" value="Scroll To Current Match">
         <div class="title">Matches</div>
         <div id="match-list"></div>
-      </div>
     </div>
-    <script src="./js/ui-elements.js"></script>
-    <script src="./js/script.js"></script>
-  </body>
+</div>
+<script src="./js/ui-elements.js"></script>
+<script src="./js/script.js"></script>
+</body>

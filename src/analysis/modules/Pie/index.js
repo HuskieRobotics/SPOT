@@ -51,7 +51,7 @@ class Pie {
             },
             legend: {
                 font: {
-                    size: 20    
+                    size: 20
                 },
                 x: 0.85
             },

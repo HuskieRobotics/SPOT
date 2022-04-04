@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
     <meta charset="utf-8">
     <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
     <meta content="utf-8" http-equiv="encoding">
@@ -11,9 +11,10 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.0/css/all.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;700&family=Saira:wght@300;400;700&family=Tajawal:wght@300;400;700&display=swap" rel="stylesheet">
-    <link href="./css/global.css" rel="stylesheet" type="text/css" />
-    <link href="./css/internal.css" rel="stylesheet" type="text/css" />
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;700&family=Saira:wght@300;400;700&family=Tajawal:wght@300;400;700&display=swap"
+          rel="stylesheet">
+    <link href="./css/global.css" rel="stylesheet" type="text/css"/>
+    <link href="./css/internal.css" rel="stylesheet" type="text/css"/>
     <link rel="apple-touch-icon" sizes="180x180" href="./icons/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="./icons/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="./icons/favicon-16x16.png">
@@ -33,19 +34,20 @@
     <script src="./js/scouting-sync.js"></script>
     <script src="./js/qrcode.js"></script>
     <script src="./build/qrcode.js"></script>
-  </head>
-  <body>
-    <div class="debug-switcher">
-        <!-- <% for (let filename of pages) { %>
-            <button class=<%=filename.replace(".ejs","")%>>
-                <%=filename.replace(".ejs","")%>
+</head>
+<body>
+<div class="debug-switcher">
+    <!-- <% for (let filename of pages) { %>
+            <button class=<%= filename.replace(".ejs", "") %>>
+                <%= filename.replace(".ejs", "") %>
             </button>
         <% } %> -->
-    </div>
+</div>
 
-    <% for (let filename of pages) { %>
-        <div id=<%=filename.replace(".ejs","")%> class="page <%= filename === landingPage + ".ejs" ? "visible" : ""%>"><%- include(`pages/${filename}`) %></div>
-    <% } %>
-    <script src="./js/global.js"></script>
-  </body>
+<% for (let filename of pages) { %>
+<div id=<%= filename.replace(".ejs", "") %> class="page <%= filename === landingPage + ".ejs" ? "visible" : "" %>
+"><%- include(`pages/${filename}`) %></div>
+<% } %>
+<script src="./js/global.js"></script>
+</body>
 </html>

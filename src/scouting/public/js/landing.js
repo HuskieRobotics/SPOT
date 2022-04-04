@@ -1,4 +1,3 @@
-
 const spinner = document.querySelector("#landing .spinner-container")
 
 const clientId = "800684505201-pfg5ddut06emg4l4ch4b8u0jco05vluh.apps.googleusercontent.com"
@@ -9,7 +8,7 @@ gapi.load('auth2', () => {
     auth2 = gapi.auth2.init({
         client_id: clientId
     })
-    
+
 
     auth2.then(() => {
         if (!auth2.isSignedIn.get()) {
@@ -21,8 +20,6 @@ gapi.load('auth2', () => {
         spinner.classList.remove("visible")
     })
 
-
-    
 
     auth2.isSignedIn.listen(signinChanged)
     auth2.currentUser.listen(userChanged)
@@ -41,27 +38,27 @@ async function signOut() {
 }
 
 async function userChanged(user) {
-  if (auth2.isSignedIn.get()) {
-    const verification = await verify(user)
-    console.log(verification)
-    if (verification.status) {
-        currentUser = verification.user
-        //TODO: update ScoutingSync.scouterId
-        switchPage("waiting")
-        spinner.classList.remove("visible")
+    if (auth2.isSignedIn.get()) {
+        const verification = await verify(user)
+        console.log(verification)
+        if (verification.status) {
+            currentUser = verification.user
+            //TODO: update ScoutingSync.scouterId
+            switchPage("waiting")
+            spinner.classList.remove("visible")
+        }
     }
-  }
 }
 
 async function verify(user) {
-  const res = await fetch("/auth/verify", {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      token: user.getAuthResponse().id_token
-    }
-  }).then(res => res.json())
-  return res
+    const res = await fetch("/auth/verify", {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            token: user.getAuthResponse().id_token
+        }
+    }).then(res => res.json())
+    return res
 }
 
 document.querySelector("#landing > div.auth.landing-screen > div > div.manual").addEventListener("click", () => {

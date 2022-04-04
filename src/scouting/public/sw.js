@@ -7,9 +7,9 @@ const filesToCache = [
     "/css/landing.css",
     "/css/match-scouting.css",
     "/css/waiting.css",
-	"/css/errors.css",
+    "/css/errors.css",
     "/css/instructions.css",
-	"/css/max-scouters.css",	
+    "/css/max-scouters.css",
     "/icons/favicon.ico",
     "/img/field.svg",
     "/img/gear.svg",
@@ -43,13 +43,13 @@ const filesToCache = [
     "/analysis/api/teams"
 ]
 
-self.addEventListener('install', function(event) {
+self.addEventListener('install', function (event) {
     // Perform install steps
     event.waitUntil(
         caches.open(cacheVersion)
-        .then(function(cache) {
-            return cache.addAll(filesToCache);
-        })
+            .then(function (cache) {
+                return cache.addAll(filesToCache);
+            })
     );
 });
 
@@ -63,10 +63,10 @@ self.addEventListener('fetch', (event) => {
                         cache.put(event.request, networkResponse.clone());
                     }
                     return networkResponse;
-                }).catch(e=>console.log(e))
+                }).catch(e => console.log(e))
 
                 return response || fetchPromise;
             })
         })
     );
-  });
+});

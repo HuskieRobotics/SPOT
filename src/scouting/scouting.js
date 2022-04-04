@@ -6,11 +6,11 @@ let router = express.Router();
 
 router.use(express.static(__dirname + "/public"));
 
-router.get("/build/qrcode.js", (req,res) => {
+router.get("/build/qrcode.js", (req, res) => {
     res.sendFile(path.resolve(__dirname, "../../node_modules/qrcode/build/qrcode.js"));
 })
 
-router.get("/", (req,res) => {
+router.get("/", (req, res) => {
     res.render(__dirname + "/views/index.ejs", {
         pages: fs.readdirSync(__dirname + "/views/pages"), //include all of the pages in the pages folder
         landingPage: "landing" //the landing page of your app, the first thing a user sees when they open it
@@ -18,7 +18,7 @@ router.get("/", (req,res) => {
 })
 
 var executablesOutput;
-router.get("/executables.js", (req,res) => {
+router.get("/executables.js", (req, res) => {
     if (executablesOutput) {
         res.send(executablesOutput) //there might be a better way to do this
     } else {

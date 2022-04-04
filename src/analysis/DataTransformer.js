@@ -1,38 +1,42 @@
-const { TeamMatchPerformance } = require("../lib/db");
+const {TeamMatchPerformance} = require("../lib/db");
 
 
 class DataTransformer {
     #name;
     #execFunc;
+
     /**
      * @param {String} name
      * @param {execFunc} execFunc
      */
-    constructor (name,execFunc) {
+    constructor(name, execFunc) {
         if (!name) throw new Error("DataTransformers must have a name!");
         this.#name = name;
         this.#execFunc = execFunc;
     }
+
     get name() {
         return this.#name;
     }
+
     /**
      * executes the transformer on a Dataset after making all properties currently in the Dataset read only. This ensures that DataTransformers do not overwrite each other's outputs.
-     * @param {Dataset} dataset 
-     * @param {String} outputPath 
+     * @param {Dataset} dataset
+     * @param {String} outputPath
      * @param {Object} options
      * @returns {Dataset} the augmented dataset
      */
-    execute(dataset,outputPath,options) {
-        return this.#execFunc(dataset,outputPath,options)
+    execute(dataset, outputPath, options) {
+        return this.#execFunc(dataset, outputPath, options)
     }
 }
 
 class Dataset {
     tmps;
     teams;
+
     /**
-     * @param {TeamMatchPerformance[]} teamMatchPerformances 
+     * @param {TeamMatchPerformance[]} teamMatchPerformances
      */
     constructor(teamMatchPerformances) {
         this.tmps = [];
@@ -46,4 +50,4 @@ class Dataset {
     }
 }
 
-module.exports = {DataTransformer,Dataset};
+module.exports = {DataTransformer, Dataset};

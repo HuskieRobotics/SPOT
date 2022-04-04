@@ -3,7 +3,6 @@ Socket-IO communication to synchronize many aspects of the client and server. Se
 */
 
 
-
 let io;
 const {TeamMatchPerformance} = require("../lib/db.js");
 const axios = require("axios");
@@ -43,19 +42,23 @@ class ScoutingSync {
         if (!config.secrets.TBA_API_KEY) {
             console.error(chalk.whiteBright.bgRed.bold("TBA_API_KEY not found in config.json file! SPOT will not properly function without this."))
         }
-        ScoutingSync.match = (await ScoutingSync.getMatches())[0] || {number: 0, match_string: "", robots: {red: [], blue: []}};
+        ScoutingSync.match = (await ScoutingSync.getMatches())[0] || {
+            number: 0,
+            match_string: "",
+            robots: {red: [], blue: []}
+        };
 
         io = require("socket.io")(server);
-        
+
         //new scouter flow
         io.on("connection", (socket) => {
             let newScouter = new Scouter(socket);
             newScouter.socket.on("disconnect", () => {
                 setTimeout(() => {
                     if (!newScouter.connected) { //remove old disconnnected scouters
-                        ScoutingSync.scouters = ScoutingSync.scouters.filter(x=>!( !x.connected && x.timestamp == newScouter.timestamp ) )
+                        ScoutingSync.scouters = ScoutingSync.scouters.filter(x => !(!x.connected && x.timestamp == newScouter.timestamp))
                     }
-                },60000)
+                }, 60000)
             })
             ScoutingSync.scouters.push(newScouter);
         })
@@ -63,7 +66,7 @@ class ScoutingSync {
         console.log(chalk.green("Successfully Initialized ScoutingSync"))
         ScoutingSync.initialized = true;
     }
-    
+
     /**
      * get a regional's matches from thebluealliance api
      */
@@ -75,21 +78,21 @@ class ScoutingSync {
             headers: {
                 "X-TBA-Auth-Key": config.secrets.TBA_API_KEY
             }
-        }).catch(e => console.log(e,chalk.bold.red("\nError fetching matches from Blue Alliance Api!")))).data;
+        }).catch(e => console.log(e, chalk.bold.red("\nError fetching matches from Blue Alliance Api!")))).data;
 
         //determine match numbers linearly (eg. if there are 10 quals, qf1 would be match 11)
         const matchLevels = ["qm", "ef", "qf", "sf", "f"];
         let levelCounts = {};
         for (let level of matchLevels) {
-            levelCounts[level] = tbaMatches.filter(x=>x.comp_level == level).length
+            levelCounts[level] = tbaMatches.filter(x => x.comp_level == level).length
         }
 
         //find the offset to apply to each level of match
         let levelOffsets = {};
-        for (let [index,level] of matchLevels.entries()) {
-            levelOffsets[level] = matchLevels.slice(0,index).reduce((acc,level) => acc+levelCounts[level],0);
+        for (let [index, level] of matchLevels.entries()) {
+            levelOffsets[level] = matchLevels.slice(0, index).reduce((acc, level) => acc + levelCounts[level], 0);
         }
-        
+
         let processedMatches = [];
 
         //add the level offset to each match and simplify structure
@@ -98,14 +101,14 @@ class ScoutingSync {
                 number: match.match_number + levelOffsets[match.comp_level], //adjust match number with the offset
                 match_string: match.key,
                 robots: {
-                    red: match.alliances.red.team_keys.map(x=>x.replace("frc","")),
-                    blue: match.alliances.blue.team_keys.map(x=>x.replace("frc",""))
+                    red: match.alliances.red.team_keys.map(x => x.replace("frc", "")),
+                    blue: match.alliances.blue.team_keys.map(x => x.replace("frc", ""))
                 }
             });
         }
 
         //sort the processed matches by number
-        processedMatches = processedMatches.sort((a,b) => a.number - b.number);
+        processedMatches = processedMatches.sort((a, b) => a.number - b.number);
 
         return processedMatches;
     }
@@ -115,12 +118,12 @@ class ScoutingSync {
      */
     static assignScouters() {
         let nextRobots = new Set(ScoutingSync.match.robots.red.concat(ScoutingSync.match.robots.blue)); //the robots that are next in line to be assigned to scouters
-        
+
 
         //if someone is ACTIVELY scouting the robot, remove it from the set of robots to be scouted
         for (let scouter of ScoutingSync.scouters) {
-            if (scouter.state.connected && scouter.state.status === ScoutingSync.SCOUTER_STATUS.SCOUTING) { 
-                nextRobots.delete(scouter.state.robotNumber); 
+            if (scouter.state.connected && scouter.state.status === ScoutingSync.SCOUTER_STATUS.SCOUTING) {
+                nextRobots.delete(scouter.state.robotNumber);
             }
         }
 
@@ -133,7 +136,7 @@ class ScoutingSync {
                 //get the next robot number from the set (the set doesnt return robots in any particular order)
                 let robotNumber = [...nextRobots][0]
                 nextRobots.delete(robotNumber);
-                
+
                 //notify the scouter of their match assignment
                 scouter.updateState({
                     matchNumber: ScoutingSync.match.number,
@@ -142,16 +145,16 @@ class ScoutingSync {
             }
         }
 
-        let currentMatchWaitingScouters = ScoutingSync.scouters.filter(x=>
-            x.state.matchNumber == ScoutingSync.match.number && 
+        let currentMatchWaitingScouters = ScoutingSync.scouters.filter(x =>
+            x.state.matchNumber == ScoutingSync.match.number &&
             x.state.status == ScoutingSync.SCOUTER_STATUS.WAITING &&
             x.state.connected);
-        
+
         //if anyone is scouting the match, tell all waiting scouters to start
-        if (ScoutingSync.scouters.filter(x=>
-            x.state.matchNumber == ScoutingSync.match.number && 
+        if (ScoutingSync.scouters.filter(x =>
+            x.state.matchNumber == ScoutingSync.match.number &&
             x.state.status == ScoutingSync.SCOUTER_STATUS.SCOUTING
-            ).length > 0) {
+        ).length > 0) {
             for (let scouter of currentMatchWaitingScouters) {
                 scouter.socket.emit("enterMatch");
             }
@@ -163,7 +166,9 @@ class ScoutingSync {
     }
 
     static getScouters() {
-        let out = ScoutingSync.scouters.map(x => {return { ...x }} );
+        let out = ScoutingSync.scouters.map(x => {
+            return {...x}
+        });
         for (let scouter of out) { //remove sockets from all the scouters so there isn't circular dependency
             delete scouter.socket;
         }
@@ -187,7 +192,7 @@ class Scouter {
     constructor(socket) {
         this.socket = socket;
         this.timestamp = Date.now();
-        
+
         //socket listeners below
 
         this.socket.on("disconnect", () => {
@@ -195,13 +200,13 @@ class Scouter {
             ScoutingSync.assignScouters(); //reassign scouters, this matters if there are two scouters on one robot and a scouter scouting 1 robot leaves
         })
 
-        this.socket.on("updateState", (stateUpdate,ack) => {
+        this.socket.on("updateState", (stateUpdate, ack) => {
             this.state = Object.assign(this.state, stateUpdate);
             ScoutingSync.assignScouters(); //reassign scouters, just to be sure it's all correct
-            if(ack) ack(); //acknowledge the status update
+            if (ack) ack(); //acknowledge the status update
         })
 
-        this.socket.on("teamMatchPerformances", (teamMatchPerformances,ack) => {
+        this.socket.on("teamMatchPerformances", (teamMatchPerformances, ack) => {
             TeamMatchPerformance.create(teamMatchPerformances);
             if (ack) ack(true);
         })

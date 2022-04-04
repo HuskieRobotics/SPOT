@@ -34,6 +34,7 @@
     overflow: hidden;
     box-shadow: 0 0 5px black;
 }
+
 #match-scouting .grid-button:active {
     box-shadow: 0 0 7px black;
     font-size: 3.3vw;
@@ -48,7 +49,7 @@
 }
 
 .orange {
-    background-color: #ef6c00   
+    background-color: #ef6c00
 }
 
 .red {

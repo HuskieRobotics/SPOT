@@ -110,6 +110,7 @@ video {
     padding: 15px 60px;
     border-radius: var(--border-radius);
 }
+
 #cancel {
     color: var(--bg-alt);
     background-color: var(--accent-alt);

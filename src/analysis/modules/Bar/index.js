@@ -46,12 +46,12 @@ class Bar {
             },
             xaxis: {
                 tickfont: {
-                    size: 20    
+                    size: 20
                 }
             },
             yaxis: {
                 tickfont: {
-                    size: 16   
+                    size: 16
                 }
             },
             font: {

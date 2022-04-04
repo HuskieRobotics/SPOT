@@ -1,4 +1,4 @@
-const { getPath, setPath } = require("../../lib/util");
+const {getPath, setPath} = require("../../lib/util");
 const {DataTransformer} = require("../DataTransformer");
 
 module.exports = {
@@ -8,7 +8,7 @@ module.exports = {
      * @param options.denominator {String[]} array of TeamMatchPerformance output paths OR numbers summed to become denominator of the ratio
      * @param options.divByZero {Object} value to return if denominator sum is zero
      */
-    tmp: new DataTransformer("ratio", (dataset,outputPath,options) => {
+    tmp: new DataTransformer("ratio", (dataset, outputPath, options) => {
 
         /* iterate through TeamMatchPerformances */
         for (let tmp of dataset.tmps) {
@@ -42,7 +42,7 @@ module.exports = {
      * @param options.denominator {String[]} array of Team output paths OR numbers summed to become denominator of the ratio
      * @param options.divByZero {Object} value to return if denominator sum is zero
      */
-    team: new DataTransformer("ratio", (dataset,outputPath,options) => {
+    team: new DataTransformer("ratio", (dataset, outputPath, options) => {
         /* iterate through TeamMatchPerformances */
         for (let [teamNumber, team] of Object.entries(dataset.teams)) {
             const denominatorSum = options.denominator.reduce((acc, path) => {

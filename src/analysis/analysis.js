@@ -5,12 +5,12 @@ let router = express.Router();
 
 router.use(express.static(__dirname + "/public"));
 
-router.get("/", (req,res) => {
+router.get("/", (req, res) => {
     res.render(__dirname + "/views/index.ejs");
 })
 
 let modulesOutput;
-router.get("/modules.js", (req,res) => {
+router.get("/modules.js", (req, res) => {
     if (modulesOutput) {
         res.send(modulesOutput) //there might be a better way to do this
     } else {
@@ -32,7 +32,7 @@ router.get("/modules.js", (req,res) => {
 })
 
 let modulesStyleOutput;
-router.get("/modules.css", (req,res) => {
+router.get("/modules.css", (req, res) => {
     if (modulesStyleOutput) {
         res.send(modulesStyleOutput) //there might be a better way to do this
     } else {

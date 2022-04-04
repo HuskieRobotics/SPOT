@@ -12,10 +12,11 @@
     --border-radius: 16px;
     --font: Cairo, sans-serif
 }
+
 html {
-      overflow: hidden;
-      height: 100%;
-      position: fixed;
+    overflow: hidden;
+    height: 100%;
+    position: fixed;
 }
 
 body {

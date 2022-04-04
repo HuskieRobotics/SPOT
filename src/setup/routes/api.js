@@ -1,5 +1,5 @@
 const fs = require("fs");
-const { Router } = require("express");
+const {Router} = require("express");
 const mongoose = require("mongoose");
 const chalk = require("chalk");
 const axios = require("axios");
@@ -44,7 +44,7 @@ router.get("/config", (req, res) => {
     }
 })
 
-router.post("/config", async (req,res) => {
+router.post("/config", async (req, res) => {
     let config = req.body.config;
     if (!REQUIRE_ACCESS_CODE || req.body.ACCESS_CODE == ACCESS_CODE) {
 
@@ -52,8 +52,8 @@ router.post("/config", async (req,res) => {
         try {
             await mongoose.connect(config.secrets.DATABASE_URL, {useNewUrlParser: true, useUnifiedTopology: true}) //try connecting to mongodb server
         } catch (e) {
-            console.log(chalk.red("invalid config.json recieved: DATABASE_URL failed to connect!"),e)
-            res.json({success: false, reason:"DATABASE_URL failed to connect!"});
+            console.log(chalk.red("invalid config.json recieved: DATABASE_URL failed to connect!"), e)
+            res.json({success: false, reason: "DATABASE_URL failed to connect!"});
             return;
         }
 
@@ -67,11 +67,11 @@ router.post("/config", async (req,res) => {
         } catch (e) {
             console.log(e)
             console.log(chalk.red("invalid config.json recieved: Invalid TBA_API_KEY!"))
-            res.json({success: false, reason:"Invalid TBA_API_KEY!"});
+            res.json({success: false, reason: "Invalid TBA_API_KEY!"});
             return;
         }
 
-        fs.writeFileSync("config/config.json",JSON.stringify(config));
+        fs.writeFileSync("config/config.json", JSON.stringify(config));
 
         res.json({success: true});
 
@@ -81,7 +81,7 @@ router.post("/config", async (req,res) => {
         process.exit();
     } else {
         console.log(chalk.red("invalid config.json recieved: Invalid ACCESS_CODE!"))
-        res.json({success: false, reason:"Invalid ACCESS_CODE!"});
+        res.json({success: false, reason: "Invalid ACCESS_CODE!"});
     }
 })
 
