@@ -78,7 +78,7 @@ async function constructApp(accessCode) {
        scroll = true;
     })
 
-    let infoModal = true
+    let infoModal = false
     document.querySelector("#info").addEventListener("click", () => {
         if(!infoModal){
             infoModal = true
