@@ -191,7 +191,7 @@
         "name": "actionTimeFilter",
         "outputPath": "autoActions",
         "options": {
-            "timeMin": 135000
+            "timeMin": 131000
         }
     },
     {
@@ -221,7 +221,7 @@
         "name": "actionTimeFilter",
         "outputPath": "teleopActions",
         "options": {
-            "timeMax": 135000
+            "timeMax": 131000
         }
     },
     {
