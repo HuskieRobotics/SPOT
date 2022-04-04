@@ -78,6 +78,7 @@ async function constructApp(accessCode) {
        scroll = true;
     })
     document.querySelector("#info").addEventListener("click", () => {
+        document.querySelector("#menu").classList.remove("expanded")
         new Modal("large").header("Instructions").text(`
                     Press start scouting to start scouting, scouting will automatically start when six scouters join.
                     (Note: Pressing start will only progress the scouter past the wait screen, they still manually have to start the match.)\n
