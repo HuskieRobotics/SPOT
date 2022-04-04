@@ -2,10 +2,8 @@ let actionQueue = [];
 let devEnd
 
 (async () => {
-
     config = await config;
     matchScoutingConfig = await matchScoutingConfig;
-
     //initiate timing
     let time = matchScoutingConfig.timing.totalTime;
     let timerActive = false;
@@ -14,7 +12,7 @@ let devEnd
     grid.style.gridTemplateColumns = `repeat(${matchScoutingConfig.layout.gridColumns}, 1fr)`;
     grid.style.gridTemplateRows = `repeat(${matchScoutingConfig.layout.gridRows}, 1fr)`;
 
-
+    
     //build buttons
     const layers = deepClone(matchScoutingConfig.layout.layers);
     const buttons = layers.flat();
@@ -22,7 +20,7 @@ let devEnd
     const buttonBuilders = { //an object to give buttons type specific things, button type: function (button)
         "action": (button) => {
             //add an action to the actionQueue
-            button.element.addEventListener("click", () => {
+            button.element.addEventListener("click", () => { 
                 actionQueue.push({
                     "id": button.id,
                     "ts": time,
@@ -39,15 +37,15 @@ let devEnd
                 //special case for match-control buttons which have extra undo funcitonality without executables
                 if (undoneButton.type === "match-control") {
                     time = matchScoutingConfig.timing.totalTime; //reset timer
-                    ScoutingSync.updateState({ status: ScoutingSync.SCOUTER_STATUS.SCOUTING }); //tell the server that you are now waiting to start
+                    ScoutingSync.updateState({status: ScoutingSync.SCOUTER_STATUS.SCOUTING}); //tell the server that you are now waiting to start
                     clearInterval(undoneButton.timerInterval); //clear the timing interval
-                    undoneButton.element.innerText = "Start Match" + " | Your Team: " + ScoutingSync.state.robotNumber;
+                    undoneButton.element.innerText = "Start Match";
                     timerActive = false;
                     showLayer(0);
                 }
 
                 for (const executable of undoneButton.executables) {
-                    executables[executable.type].reverse(undoneButton, layers, ...executable.args) //reverse any executables associated with the undone button
+                    executables[executable.type].reverse(undoneButton,layers,...executable.args) //reverse any executables associated with the undone button
                 }
                 doExecutables(button)
             })
@@ -55,7 +53,7 @@ let devEnd
 
         "none": (button) => {
             //add a temporary event to the action queue with no id which will be removed before the action queue is sent
-            button.element.addEventListener("click", () => {
+            button.element.addEventListener("click", () => { 
                 actionQueue.push({
                     "id": button.id,
                     "ts": time,
@@ -64,7 +62,7 @@ let devEnd
                 doExecutables(button)
             })
         },
-        
+
         "cancel": (button) => {
             //add a temporary event to the action queue with no id which will be removed before the action queue is sent
             button.element.addEventListener("click", () => {
@@ -82,25 +80,27 @@ let devEnd
                     await ScoutingSync.sync();
                     window.location.reload();
                 }
-
+                
                 if (timerActive) return;
-
+                
                 actionQueue.push({ //create a temporary action queue so you can undo it
                     "id": button.id,
                     "ts": time,
                     "temp": true
                 })
 
-                ScoutingSync.updateState({ status: ScoutingSync.SCOUTER_STATUS.SCOUTING }); //tell the server that you started scouting
+                ScoutingSync.updateState({status: ScoutingSync.SCOUTER_STATUS.SCOUTING}); //tell the server that you started scouting
 
                 let displayText = "";
                 let start = Date.now()
-                devEnd = () => { start = Date.now() - (matchScoutingConfig.timing.totalTime - 1) }
+                devEnd = () => {
+                    start = Date.now() - (matchScoutingConfig.timing.totalTime - 1)
+                }
                 const transitions = Object.keys(matchScoutingConfig.timing.timeTransitions).map(x => Number(x)).sort((a, b) => b - a);
                 timerActive = true;
                 button.timerInterval = setInterval(() => {
                     if (time <= transitions[0]) { //move to the next transition if it is time
-                        displayText = matchScoutingConfig.timing.timeTransitions[transitions[0]].displayText + " | Your Team: " + ScoutingSync.state.robotNumber;
+                        displayText = matchScoutingConfig.timing.timeTransitions[transitions[0]].displayText;
                         showLayer(matchScoutingConfig.timing.timeTransitions[transitions[0]].layer);
                         transitions.shift()
                     }
@@ -129,19 +129,19 @@ let devEnd
     for (const layer of layers) {
         for (const button of layer) {
             button.element = document.createElement("div");
-
+            
             //give the button element its properties
             button.element.innerText = button.displayText || button.id;
             button.element.classList.add("grid-button", ...button.class.split(" "));
             button.element.style.gridArea = button.gridArea.join(" / ");
-
+            
             //apply type to button
             buttonBuilders[button.type](button);
             //add the button to the grid
             grid.appendChild(button.element);
         }
     }
-    ScoutingSync.updateState({ status: ScoutingSync.SCOUTER_STATUS.SCOUTING }); //tell the server that you started scouting
+    ScoutingSync.updateState({status: ScoutingSync.SCOUTER_STATUS.SCOUTING}); //tell the server that you started scouting
 
 
     showLayer(0); //initially show layer 0
@@ -169,10 +169,11 @@ let devEnd
     // DATA
     class TeamMatchPerformance {
         data;
+
         constructor(actionQueue) {
-            let filteredActionQueue = actionQueue.filter(action => !action.temp);
+            let filteredActionQueue = actionQueue.filter(action=>!action.temp);
             filteredActionQueue = filteredActionQueue.map(x => {
-                x.ts = Math.max(x.ts, 0);
+                x.ts = Math.max(x.ts,0);
                 return x;
             })
             this.data = {
