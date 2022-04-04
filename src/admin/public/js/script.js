@@ -83,7 +83,7 @@ async function constructApp(accessCode) {
         document.querySelector("#menu").classList.remove("expanded")
         if(!infoModal){
             infoModal = true
-        let info = new Modal("large", false).header("Instructions").text(`
+        let info = new Modal("small", false).header("Instructions").text(`
                     Press start scouting to start scouting, scouting will automatically start when six scouters join. 
                     (Note: Pressing start will only progress the scouter past the wait screen, they still manually have to start the match.)\n
                     Use the menu buttons to navigate around Devil Scouting.
