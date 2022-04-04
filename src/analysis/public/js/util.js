@@ -19,15 +19,15 @@ function clearDiv(div) {
 }
 
 
-function getPath(obj, path, ifNone=ThrowError) {
+function getPath(obj,path,ifnone=ThrowError) {
     if (typeof obj === "undefined") {  
-        if (ifNone === ThrowError)  {
+        if (ifnone == ThrowError)  {
             throw new Error("path not traversable!");
         } else {  
-            return ifNone;
+            return ifnone;
         }
     }
     if (path === "") return obj;
     path = path.split(".");
-    return getPath(obj[path.shift()], path.join("."), ifNone);
+    return getPath(obj[path.shift()], path.join("."), ifnone);
 }
