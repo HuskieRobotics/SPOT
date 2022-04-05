@@ -32,17 +32,9 @@
 				{
                     "id": "cancel",
                     "displayText": "Cancel",
-                    "gridArea": ["4", "2", "3", "5"],
+                    "gridArea": ["2", "2", "2", "5"],
                     "class": "red",
                     "type": "cancel",
-                    "executables": []
-                },
-                                {
-                    "id": "info",
-                    "displayText": "Instructions",
-                    "gridArea": ["2", "2", "2", "5"],
-                    "class": "navy",
-                    "type": "info",
                     "executables": []
                 }
             ],

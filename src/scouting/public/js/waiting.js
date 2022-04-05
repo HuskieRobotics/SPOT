@@ -34,10 +34,6 @@ toggleHintElement(activeHint);
 document.querySelector("#waiting .cancel").addEventListener("click", async () => {
     location.href = '/';
 })
-document.querySelector("#waiting .info").addEventListener("click", async () => {
-    setPage("waiting")
-    switchPage("instructions")
-})
 window.addEventListener("resize", () => {
     document.querySelector("#waiting .hint").style.height = activeHint.offsetHeight + "px";
     console.log()
