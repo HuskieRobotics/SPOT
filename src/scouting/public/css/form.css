@@ -95,7 +95,7 @@
     height: 2em;
 }
 
-@media screen and (min-height: 600px) {
+@media screen and (min-height: 0px) {
     #form .form {
         width: 350px;
         height: auto;
