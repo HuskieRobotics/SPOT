@@ -29,6 +29,14 @@
                     "type": "match-control",
                     "executables": []
                 },
+                {
+                    "id": "info",
+                    "displayText": "Instructions",
+                    "gridArea": ["3", "2", "2", "5"],
+                    "class": "navy",
+                    "type": "info",
+                    "executables": []
+                },
 				{
                     "id": "cancel",
                     "displayText": "Cancel",

@@ -11,7 +11,19 @@
 #waiting .cancel {
     grid-area: 4/1/5/3;
     font-size: 1.75em;
-    width: 90%;
+    width: 60%;
+    background-color: var(--accent);
+    border-radius: var(--border-radius);
+    color: var(--bg-alt);
+    border: none;
+    margin: 6px 0;
+    height: 2em;
+}
+
+#waiting .info {
+    grid-area: 4/1/5/3;
+    font-size: 1.75em;
+    width: 60%;
     background-color: var(--accent);
     border-radius: var(--border-radius);
     color: var(--bg-alt);
@@ -25,7 +37,7 @@
     font-size: 1.2em;
 }
 
-@media screen and (min-height: 500px) {
+@media screen and (min-width: 500px) {
     #waiting {
         font-size: 1.5em;
     }
@@ -35,7 +47,30 @@
     }
 
     #waiting .cancel {
-        width: calc(60% - 24px);
+        width: calc(40% - 24px);
+        margin: 8px 0;
+    }
+    #waiting .info {
+        width: calc(40% - 24px);
+        margin: 8px 0;
+    }
+}
+
+@media screen and (max-width: 400px) {
+    #waiting {
+        font-size: 1.5em;
+    }
+
+    #waiting .hint {
+        bottom: 30px !important;
+    }
+
+    #waiting .cancel {
+        width: calc(80% - 24px);
+        margin: 8px 0;
+    }
+    #waiting .info {
+        width: calc(80% - 24px);
         margin: 8px 0;
     }
 }

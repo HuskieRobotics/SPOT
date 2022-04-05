@@ -72,10 +72,11 @@ let devEnd
             })
         },
 
-        "cancel": (button) => {
+        "info": (button) => {
             //add a temporary event to the action queue with no id which will be removed before the action queue is sent
             button.element.addEventListener("click", () => {
-                location.href = '/';
+                setPage("match-scouting")
+                switchPage("instructions")
             })
         },
 
