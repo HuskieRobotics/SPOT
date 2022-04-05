@@ -33,7 +33,7 @@
                     "id": "info",
                     "displayText": "Instructions",
                     "gridArea": ["2", "2", "2", "5"],
-                    "class": "navy",
+                    "class": "gray timer",
                     "type": "info",
                     "executables": []
                 },
