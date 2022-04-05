@@ -8,6 +8,7 @@ class ScoutingSync {
         "COMPLETE": 3,
         "TOOMANY": 4,
         "MATCHERROR": 5,
+        "READY": 6,
     }
 
     static state = {
@@ -73,7 +74,7 @@ class ScoutingSync {
                     ScoutingSync.updateState({status: ScoutingSync.SCOUTER_STATUS.TOOMANY}); //tell the server that you started scouting
                 } else {
                     switchPage("match-scouting");
-                    ScoutingSync.updateState({status: ScoutingSync.SCOUTER_STATUS.SCOUTING}); //tell the server that you started scouting
+                    ScoutingSync.updateState({status: ScoutingSync.SCOUTER_STATUS.READY}); //tell the server that you started scouting
                     // console.log(ScoutingSync.state.robotNumber);
                     new Modal("small").header("Match Information").text(`
                     You have been assigned team ${ScoutingSync.state.robotNumber} in match ${ScoutingSync.state.matchNumber}.
