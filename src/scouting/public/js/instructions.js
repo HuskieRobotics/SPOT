@@ -1,3 +1,10 @@
+let page = "landing"
 document.querySelector("#instructions .ok").addEventListener("click", async () => {
-    switchPage("landing")
+    console.log("switched to page "+ page)
+    switchPage(page)
 })
+
+function setPage(newPage){
+    page = newPage
+    console.log("set to page "+ page)
+}

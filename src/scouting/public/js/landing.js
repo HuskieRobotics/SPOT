@@ -72,6 +72,7 @@ document.querySelector("#landing > div.auth.landing-screen > div > div.analysis"
     location.href = '/analysis';
 });
 document.querySelector("#landing > div.auth.landing-screen > div > div.info").addEventListener("click", () => {
+    setPage("landing")
     switchPage("instructions")
 });
 
