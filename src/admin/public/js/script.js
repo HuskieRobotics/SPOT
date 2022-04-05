@@ -136,7 +136,7 @@ async function updateScouters(accessCode) { //scouter fetch interval (every 2.5s
                     scouters[scouter.timestamp].destruct();
                     delete scouters[scouter.timestamp]
                 }
-            }, 15000)
+            }, 4000)
         }
     }
     console.log(scouters)
