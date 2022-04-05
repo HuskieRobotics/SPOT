@@ -5,6 +5,7 @@ const SCOUTER_STATUS = {
     "COMPLETE": 3,
     "TOOMANY": 4,
     "MATCHERROR": 5,
+    "READY": 6,
 }
 const SCOUTER_STATUS_REVERSE = {
     "0": "NEW",
@@ -13,6 +14,7 @@ const SCOUTER_STATUS_REVERSE = {
     "3": "COMPLETE",
     "4": "UNASSIGNED SCOUTER",
     "5": "NO MATCH ASSIGNED",
+    "6": "READY TO SCOUT",
 }
 
 let scroll = false;
@@ -272,7 +274,8 @@ class ScouterDisplay {
             "2": "var(--accent)", //SCOUTING
             "3": "var(--green)", //COMPLETE
             "4": "var(--text)",
-            "5": "var(--error)"
+            "5": "var(--error)",
+            "6": "var(--ready)"
         }
         const DISCONNECTED_COLOR = "var(--error)";
 

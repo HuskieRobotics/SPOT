@@ -39,7 +39,7 @@ let devEnd
                 //special case for match-control buttons which have extra undo funcitonality without executables
                 if (undoneButton.type === "match-control") {
                     time = matchScoutingConfig.timing.totalTime; //reset timer
-                    ScoutingSync.updateState({status: ScoutingSync.SCOUTER_STATUS.SCOUTING}); //tell the server that you are now waiting to start
+                    ScoutingSync.updateState({status: ScoutingSync.SCOUTER_STATUS.READY}); //tell the server that you are now waiting to start
                     clearInterval(undoneButton.timerInterval); //clear the timing interval
                     undoneButton.element.innerText = "Start Match" + " | Your Team: " + ScoutingSync.state.robotNumber;
                     timerActive = false;

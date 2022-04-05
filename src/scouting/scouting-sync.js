@@ -31,6 +31,7 @@ class ScoutingSync {
         "COMPLETE": 3,
         "TOOMANY": 4,
         "MATCHERROR": 5,
+        "READY": 6,
     }
 
     static async initialize(server) {
