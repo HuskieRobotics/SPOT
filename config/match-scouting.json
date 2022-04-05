@@ -29,20 +29,20 @@
                     "type": "match-control",
                     "executables": []
                 },
-                {
-                    "id": "info",
-                    "displayText": "Instructions",
-                    "gridArea": ["2", "2", "2", "5"],
-                    "class": "gray timer",
-                    "type": "info",
-                    "executables": []
-                },
 				{
                     "id": "cancel",
                     "displayText": "Cancel",
-                    "gridArea": ["3", "2", "2", "5"],
+                    "gridArea": ["4", "2", "3", "5"],
                     "class": "red",
                     "type": "cancel",
+                    "executables": []
+                },
+                                {
+                    "id": "info",
+                    "displayText": "Instructions",
+                    "gridArea": ["2", "2", "2", "5"],
+                    "class": "navy",
+                    "type": "info",
                     "executables": []
                 }
             ],
