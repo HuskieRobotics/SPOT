@@ -110,7 +110,7 @@ class ScoutingSync {
             await ScoutingSync.updateState({status: ScoutingSync.SCOUTER_STATUS.COMPLETE});
             ScoutingSync.socket.emit("syncData", teamMatchPerformanceIds, (requestedTeamMatchPerformanceIds) => {
                 ScoutingSync.socket.emit("teamMatchPerformances", teamMatchPerformances.filter(teamMatchPerformance => requestedTeamMatchPerformanceIds.includes(teamMatchPerformance.matchId)), () => {
-                    new Popup("success", "Data Sync Succeeded", 1500);
+                    // new Popup("success", "Data Sync Succeeded", 1500);
                     clearTimeout(timeout);
                     res(true)
                 });
