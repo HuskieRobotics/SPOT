@@ -74,7 +74,7 @@ async function constructApp(accessCode) {
                 Authorization: accessCode
             }
         });
-        console.log("ENTER MATCH!")
+        // console.log("ENTER MATCH!")
     })
     document.querySelector("#center-list").addEventListener("click", () => {
         scroll = true;
@@ -141,7 +141,7 @@ async function updateScouters(accessCode) { //scouter fetch interval (every 2.5s
             }, 4000)
         }
     }
-    console.log(scouters)
+    // console.log(scouters)
     //prune scouters that no longer exist
     for (let timestamp in scouters) {
         if (!scouterList.find(x => x.timestamp = timestamp)) { //they no longer exist

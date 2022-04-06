@@ -55,7 +55,7 @@ router.get("/csv", async (req, res) => {
     let rows = [];
     let headerRow = false;
     for (let [teamNumber, team] of Object.entries(dataset.teams)) {
-        console.log(team.counts)
+        // console.log(team.counts)
         if (!headerRow) {
             headerRow = true;
             rows.push(["Team Number",
