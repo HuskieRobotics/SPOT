@@ -381,10 +381,11 @@
 	},
 	{
 		"type": "team",
-		"name": "average",
+		"name": "subtract",
 		"outputPath": "averages.climbDuration",
 		"options": {
-			"path": "climbDuration"
+			"minuend": "averages.startClimbTime",
+			"subtrahend": "averages.endClimbTime"
 		}
 	},
     {
