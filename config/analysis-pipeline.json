@@ -370,6 +370,24 @@
             "path": "finalClimbState.ts"
         }
     },
+	{
+		"type": "tmp",
+		"name": "subtract",
+		"outputPath": "climbDuration",
+		"options": {
+			"minuend": "startClimbTime",
+			"subtrahend": "finalClimbState.ts"
+		}
+	},
+	{
+		"type": "team",
+		"name": "subtract",
+		"outputPath": "averages.climbDuration",
+		"options": {
+			"minuend": "averages.startClimbTime",
+			"subtrahend": "averages.endClimbTime"
+		}
+	},
     {
         "type": "tmp",
         "name": "map",
