@@ -191,7 +191,7 @@
         "name": "actionTimeFilter",
         "outputPath": "autoActions",
         "options": {
-            "timeMin": 135000
+            "timeMin": 131000
         }
     },
     {
@@ -221,7 +221,7 @@
         "name": "actionTimeFilter",
         "outputPath": "teleopActions",
         "options": {
-            "timeMax": 135000
+            "timeMax": 131000
         }
     },
     {
@@ -370,23 +370,6 @@
             "path": "finalClimbState.ts"
         }
     },
-	{
-		"type": "tmp",
-		"name": "subtract",
-		"outputPath": "climbDuration",
-		"options": {
-			"minuend": "finalClimbState.ts",
-			"subtrahend": "startClimb"
-		}
-	},
-	{
-		"type": "team",
-		"name": "average",
-		"outputPath": "averages.climbDuration",
-		"options": {
-			"path": "climbDuration"
-		}
-	},
     {
         "type": "tmp",
         "name": "map",
