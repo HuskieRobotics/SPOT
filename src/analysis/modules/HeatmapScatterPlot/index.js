@@ -18,7 +18,7 @@ class HeatmapScatterPlot {
 
         const data = actions.reduce((acc, actionId) => {
             const filteredActionQueue = teams.map(team => getPath(dataset.teams[team], this.moduleConfig.options.aggregatedActionsPath)).flat().filter(a => a.id == actionId)
-            console.log(this.moduleConfig.options.actionLabels[actionId])
+            // console.log(this.moduleConfig.options.actionLabels[actionId])
 			if (filteredActionQueue.length) {
 				acc.push({
 					mode: "markers",
@@ -41,7 +41,7 @@ class HeatmapScatterPlot {
 			return acc
         }, [])
 
-		console.log(data)
+		// console.log(data)
 
         const filteredAllActionQueue = teams.map(team => getPath(dataset.teams[team], this.moduleConfig.options.aggregatedActionsPath)).flat()
             .filter(a => actionGroups[0].actions.includes(a.id))
