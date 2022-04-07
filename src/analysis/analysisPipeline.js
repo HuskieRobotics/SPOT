@@ -1,8 +1,10 @@
 const pipelineConfig = require("../../config/analysis-pipeline.json");
+const config = require("../../config/config.json");
 const fs = require("fs");
 const { TeamMatchPerformance } = require("../lib/db");
 const { Dataset } = require("./DataTransformer");
 const chalk = require("chalk");
+const { setPath } = require("../lib/util");
 
 //enable debug logs
 const debug = false
@@ -33,15 +35,32 @@ for (let executableFile of fs.readdirSync(__dirname + "/transformers")) {
 }
 if (debug) console.log("loaded all transformers!");
 
+/* load manual data */
+const manual = {
+	teams: require("./manual/teams.json"),
+	tmps: require("./manual/tmps.json")
+}
+if (debug) console.log("loaded all manual data!");
+
 
 async function execute(dataset) {
     /* get tmps from database */
-    dataset = new Dataset((await TeamMatchPerformance.find()).map((o) => o.toObject()));
+    dataset = new Dataset((await TeamMatchPerformance.find({eventNumber: config.EVENT_NUMBER})).map((o) => o.toObject()));
     
     for (let tfConfig of pipelineConfig) {
         if (debug) console.log(`running ${tfConfig.name} - ${JSON.stringify(tfConfig.options)}`)
         dataset = transformers[tfConfig.type][tfConfig.name].execute(dataset, tfConfig.outputPath, tfConfig.options);
     }
+
+	dataset.tmps = dataset.tmps.concat(manual.tmps)
+	for (const [path, teamData] of Object.entries(manual.teams)) {
+		for (const [team, value] of Object.entries(teamData)) {
+			if (team in dataset.teams) {
+				setPath(dataset.teams[team], path, value)
+			}
+		}
+	}
+
     if (debug) console.log("complete!")
 
     return dataset

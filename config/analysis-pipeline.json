@@ -18,11 +18,12 @@
     {
         "type": "team",
         "name": "sum",
-        "outputPath": "counts.scores",
+        "outputPath": "counts.balls",
         "options": {
             "addends": [
                 "counts.upperHub",
-                "counts.lowerHub"
+                "counts.lowerHub",
+                "counts.miss"
             ]
         }
     },
@@ -34,6 +35,25 @@
         "options": {
             "path": "actionQueue"
         }
+    },
+
+    {
+        "type": "team",
+        "name": "countMatches",
+        "outputPath": "temp.totalTimeMs",
+        "options": {
+            "weight": 150000
+        }
+    },
+    {
+        "type": "team",
+        "name": "ratio",
+        "outputPath": "timePerBall",
+        "options": {
+            "numerator": ["temp.totalTimeMs"],
+            "denominator": ["counts.balls"]
+        },
+        "divByZero": 150000
     },
 
     {
@@ -88,9 +108,6 @@
             "valuePath": "timeDifferential"
         }
     },
-
-
-
     {
         "type": "team",
         "name": "average",
@@ -100,7 +117,23 @@
         }
     },
 
-
+    {
+        "type": "tmp",
+        "name": "ratio",
+        "outputPath": "accuracy",
+        "options": {
+            "numerator": [
+                "counts.lowerHub",
+                "counts.upperHub"
+            ],
+            "denominator": [
+                "counts.lowerHub",
+                "counts.upperHub",
+                "counts.miss"
+            ],
+            "divByZero": 0
+        }
+    },
     {
         "type": "team",
         "name": "ratio",
@@ -137,9 +170,6 @@
             "path": "tarmacCrossTime"
         }
     },
-
-
-
     {
         "type": "tmp",
         "name": "actionTime",
@@ -156,15 +186,12 @@
             "path": "startClimbTime"
         }
     },
-
-
-    
     {
         "type": "tmp",
         "name": "actionTimeFilter",
         "outputPath": "autoActions",
         "options": {
-            "timeMin": 135000
+            "timeMin": 131000
         }
     },
     {
@@ -194,7 +221,7 @@
         "name": "actionTimeFilter",
         "outputPath": "teleopActions",
         "options": {
-            "timeMax": 135000
+            "timeMax": 131000
         }
     },
     {
@@ -220,10 +247,127 @@
 
     {
         "type": "tmp",
-        "name": "finalActionOccurance",
+        "name": "finalActionOccurence",
         "outputPath": "finalClimbState",
         "options": {
-            "ids": ["climb1","climb2","climb3","climb4","climbF"]
+            "ids": ["climb1","climb2","climb3","climb4","climbF"],
+            "default": {
+                "id": "noClimb",
+                "ts": 0
+            }
+        }
+    },
+
+    {
+        "type": "tmp",
+        "name": "map",
+        "outputPath": "climbCounts.noClimb",
+        "options": {
+            "path": "finalClimbState.id",
+            "map": {
+                "noClimb": 1,
+                "climbF": 0,
+                "climb1": 0,
+                "climb2": 0,
+                "climb3": 0,
+                "climb4": 0
+            }
+        }
+    },
+    {
+        "type": "tmp",
+        "name": "map",
+        "outputPath": "climbCounts.climbF",
+        "options": {
+            "path": "finalClimbState.id",
+            "map": {
+                "noClimb": 0,
+                "climbF": 1,
+                "climb1": 0,
+                "climb2": 0,
+                "climb3": 0,
+                "climb4": 0
+            }
+        }
+    },
+    {
+        "type": "tmp",
+        "name": "map",
+        "outputPath": "climbCounts.climb1",
+        "options": {
+            "path": "finalClimbState.id",
+            "map": {
+                "noClimb": 0,
+                "climbF": 0,
+                "climb1": 1,
+                "climb2": 0,
+                "climb3": 0,
+                "climb4": 0
+            }
+        }
+    },
+    {
+        "type": "tmp",
+        "name": "map",
+        "outputPath": "climbCounts.climb2",
+        "options": {
+            "path": "finalClimbState.id",
+            "map": {
+                "noClimb": 0,
+                "climbF": 0,
+                "climb1": 0,
+                "climb2": 1,
+                "climb3": 0,
+                "climb4": 0
+            }
+        }
+    },
+    {
+        "type": "tmp",
+        "name": "map",
+        "outputPath": "climbCounts.climb3",
+        "options": {
+            "path": "finalClimbState.id",
+            "map": {
+                "noClimb": 0,
+                "climbF": 0,
+                "climb1": 0,
+                "climb2": 0,
+                "climb3": 1,
+                "climb4": 0
+            }
+        }
+    },
+    {
+        "type": "tmp",
+        "name": "map",
+        "outputPath": "climbCounts.climb4",
+        "options": {
+            "path": "finalClimbState.id",
+            "map": {
+                "noClimb": 0,
+                "climbF": 0,
+                "climb1": 0,
+                "climb2": 0,
+                "climb3": 0,
+                "climb4": 1
+            }
+        }
+    },
+    {
+        "type": "team",
+        "name": "average",
+        "outputPath": "climbLevels",
+        "options": {
+            "path": "climbCounts"
+        }
+    },
+    {
+        "type": "team",
+        "name": "average",
+        "outputPath": "averages.endClimbTime",
+        "options": {
+            "path": "finalClimbState.ts"
         }
     },
     {
@@ -233,7 +377,7 @@
         "options": {
             "path": "finalClimbState.id",
             "map": {
-                "": 0,
+                "noClimb": 0,
                 "climbF": 0,
                 "climb1": 4,
                 "climb2": 6,
@@ -251,7 +395,6 @@
             "addends": ["scores.teleop","scores.auto","scores.endgame"]
         }
     },
-
     {
         "type": "team",
         "name": "average",
@@ -259,7 +402,35 @@
         "options": {
             "path": "scores"
         }
-    }
-
-
+    },
+	{
+		"type": "team",
+		"name": "threshold",
+		"outputPath": "possibleClimbs",
+		"options": {
+			"threshold": 0,
+			"separator": ", ",
+			"none": "—",
+			"paths": {
+				"climbLevels.climb1": "1",
+				"climbLevels.climb2": "2",
+				"climbLevels.climb3": "3",
+				"climbLevels.climb4": "4"
+			}
+		}
+	},
+	{
+		"type": "team",
+		"name": "threshold",
+		"outputPath": "possibleShots",
+		"options": {
+			"threshold": 1,
+			"separator": ", ",
+			"none": "—",
+			"paths": {
+				"averages.upperHub": "U",
+				"averages.lowerHub": "L"
+			}
+		}
+	}
 ]

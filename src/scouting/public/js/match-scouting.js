@@ -12,7 +12,26 @@ let devEnd
     grid.style.gridTemplateColumns = `repeat(${matchScoutingConfig.layout.gridColumns}, 1fr)`;
     grid.style.gridTemplateRows = `repeat(${matchScoutingConfig.layout.gridRows}, 1fr)`;
 
-    
+    function updateLastAction() {
+		const actionQueueIds = actionQueue.map(a => a.id)
+		const lastActions = []
+		for (let i = actionQueueIds.length - 1; i >= 0; i--) {
+			if (lastActions[lastActions.length - 1]?.id !== actionQueueIds[i]) {
+				if (lastActions.length < 3) {
+					lastActions.push({
+						id: actionQueueIds[i],
+						num: 1
+					})
+				} else {
+					break
+				}
+			} else {
+				lastActions[lastActions.length - 1].num++
+			}
+		}
+		document.querySelector(".status .last-actions").innerText = lastActions.reverse().map(a => a.id + (a.num > 1 ? ` (${a.num})` : "")).join(" ➔ ")
+	}
+
     //build buttons
     const layers = deepClone(matchScoutingConfig.layout.layers);
     const buttons = layers.flat();
@@ -26,6 +45,7 @@ let devEnd
                     "ts": time,
                 })
                 doExecutables(button)
+				updateLastAction()
             })
         },
 
@@ -48,6 +68,7 @@ let devEnd
                     executables[executable.type].reverse(undoneButton,layers,...executable.args) //reverse any executables associated with the undone button
                 }
                 doExecutables(button)
+				updateLastAction()
             })
         },
 
@@ -60,6 +81,7 @@ let devEnd
                     "temp": true
                 })
                 doExecutables(button)
+				updateLastAction()
             })
         },
 
@@ -68,9 +90,19 @@ let devEnd
             button.element.addEventListener("click", async () => {
                 // Handle click after timer runs out
                 if (time <= 0) {
-                    console.log("submitting")
-                    await LocalData.storeTeamMatchPerformance(new TeamMatchPerformance(actionQueue).data)
-                    await ScoutingSync.sync();
+					for (const button of buttons) {
+						button.element.classList.add("disabled")
+					}
+                    new Popup("notice","Submitting Data...",1000);
+                    await LocalData.storeTeamMatchPerformance(new TeamMatchPerformance(actionQueue).data);
+                    setTimeout(() => {
+						new Popup("error","Couldn't submit, syncing later",1000);
+						setTimeout(() => {
+							window.location.reload()
+						}, 1000)
+					}, 5000)
+					await ScoutingSync.sync();
+                    await ScoutingSync.updateState({status: ScoutingSync.SCOUTER_STATUS.COMPLETE});
                     window.location.reload();
                 }
                 
@@ -112,6 +144,7 @@ let devEnd
                     });
                 }, 10);
                 doExecutables(button);
+				updateLastAction()
             })
         }
     }

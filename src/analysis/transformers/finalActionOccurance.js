@@ -9,9 +9,10 @@ module.exports = {
      * output the last occurance of an action with an id in the ids list
      * @type {DataTransformer}
      * @param options.ids {String[]} the array of actionIds to be 
-     * @param actionArrayPath {String} optional, the path to the array of actions in the tmp
+     * @param options.default {Object} a default object if a final action occurance isnt found
+     * @param options.actionArrayPath {String} optional, the path to the array of actions in the tmp
      */
-    tmp: new DataTransformer("finalActionOccurance",(dataset,outputPath,options) => {
+    tmp: new DataTransformer("finalActionOccurence",(dataset,outputPath,options) => {
         /* find which action ids should be examined */
         if (!options) throw new Error("no options provided! Please provide an array of ids or set all to true")
         let countedIds = options.ids;
@@ -23,6 +24,9 @@ module.exports = {
                     setPath(tmp,outputPath,action);
                     break;
                 }
+            }
+            if (!getPath(tmp,outputPath,false) && options.default) { //default object
+                setPath(tmp,outputPath,options.default);
             }
         }
         return dataset;

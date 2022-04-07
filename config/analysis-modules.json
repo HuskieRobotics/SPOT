@@ -2,7 +2,7 @@
     {
         "view": "team",
         "module": "HeatmapScatterPlot",
-        "name": "Action Plot",
+        "name": "Shot Plot",
         "position": "main",
         "options": {
             "coordinatePath": "other.pos",
@@ -11,20 +11,50 @@
                 {
                     "name": "Shots",
                     "actions": ["upperHub", "lowerHub", "miss"]
-                },
+                }
+            ],
+            "actionLabels": {
+                "upperHub": "Upper",
+                "lowerHub": "Lower",
+                "miss": "Miss"
+            },
+            "imgPath": "img/field.svg"
+        }
+    },
+	{
+        "view": "team",
+        "module": "HeatmapScatterPlot",
+        "name": "Pickup Plot",
+        "position": "main",
+        "options": {
+            "coordinatePath": "other.pos",
+            "aggregatedActionsPath": "aggregatedActions",
+            "actionGroups": [
                 {
                     "name": "Pickups",
                     "actions": ["groundPickup", "terminalPickup"]
                 }
             ],
             "actionLabels": {
-                "upperHub": "Upper",
-                "lowerHub": "Lower",
-                "miss": "Miss",
                 "groundPickup": "Ground",
                 "terminalPickup": "Terminal"
             },
             "imgPath": "img/field.svg"
+        }
+    },
+    {
+        "view": "team",
+        "module": "PerformanceTimePlot",
+        "name": "Performance Over Time",
+        "position": "main",
+        "options": {
+            "trackedStats": [
+                "scores.auto",
+                "scores.teleop",
+                "scores.endgame",
+                "scores.all",
+                "accuracy"
+            ]
         }
     },
     {
@@ -40,6 +70,8 @@
                     "multiplier": -0.001,
                     "addend": 150,
                     "decimals": 2,
+					"hideIfValue": 150,
+					"sort": -1,
                     "unit": "s in"
                 },
                 {
@@ -47,20 +79,26 @@
                     "path": "averages.startClimbTime",
                     "multiplier": 0.001,
                     "decimals": 2,
+					"hideIfValue": 0,
+					"sort": -1,
                     "unit": "s to end"
                 },
                 {
-                    "name": "All Cycle Time",
-                    "path": "cycle.averageTime",
+                    "name": "Climb End Time",
+                    "path": "averages.endClimbTime",
                     "multiplier": 0.001,
                     "decimals": 2,
-                    "unit": "s"
+					"hideIfValue": 0,
+					"sort": -1,
+                    "unit": "s to end"
                 },
                 {
-                    "name": "Scored Cycle Time",
-                    "path": "cycle.averageTimeComplete",
+                    "name": "Time Per Ball",
+                    "path": "timePerBall",
                     "multiplier": 0.001,
                     "decimals": 2,
+					"hideIfValue": 0,
+					"sort": -1,
                     "unit": "s"
                 },
                 {
@@ -68,31 +106,44 @@
                     "path": "accuracy",
                     "multiplier": 100,
                     "decimals": 1,
+					"sort": 1,
                     "unit": "%"
                 },
                 {
                     "name": "Average Auto Points",
-                    "path": "averageScores.auto"
+                    "path": "averageScores.auto",
+					"decimals": 2,
+					"sort": 1
                 },
                 {
                     "name": "Average Climb Points",
-                    "path": "averageScores.endgame"
+                    "path": "averageScores.endgame",
+					"decimals": 2,
+					"sort": 1
                 },
                 {
                     "name": "Average Points",
-                    "path": "averageScores.all"
+                    "path": "averageScores.all",
+					"decimals": 2,
+					"sort": 1
                 },
                 {
                     "name": "Average Upper Hub Shots",
-                    "path": "averages.upperHub"
+                    "path": "averages.upperHub",
+					"decimals": 2,
+					"sort": 1
                 },
                 {
                     "name": "Average Lower Hub Shots",
-                    "path": "averages.lowerHub"
+                    "path": "averages.lowerHub",
+					"decimals": 2,
+					"sort": 1
                 },
                 {
                     "name": "Average Misses",
-                    "path": "averages.miss"
+                    "path": "averages.miss",
+					"decimals": 2,
+					"sort": -1
                 }
             ]
         }
@@ -105,31 +156,39 @@
         "options": {
             "slices": [
                 {
-                    "name": "Climb 1",
-                    "path": "counts.climb1"
+                    "name": "No Climb",
+                    "path": "climbLevels.noClimb"
                 },
                 {
-                    "name": "Climb 2",
-                    "path": "counts.climb2"
+                    "name": "Fall",
+                    "path": "climbLevels.climbF"
                 },
                 {
-                    "name": "Climb 3",
-                    "path": "counts.climb3"
+                    "name": "Low Rung",
+                    "path": "climbLevels.climb1"
                 },
                 {
-                    "name": "Climb 4",
-                    "path": "counts.climb4"
+                    "name": "Mid Rung",
+                    "path": "climbLevels.climb2"
+                },
+                {
+                    "name": "High Rung",
+                    "path": "climbLevels.climb3"
+                },
+                {
+                    "name": "Traversal Rung",
+                    "path": "climbLevels.climb4"
                 }
             ]
         }
     },
     {
         "view": "team",
-        "module": "Bar",
+        "module": "Pie",
         "position": "main",
         "name": "Shot Distribution",
         "options": {
-            "bars": [
+            "slices": [
                 {
                     "name": "Upper Hub",
                     "path": "counts.upperHub"
@@ -164,11 +223,101 @@
         }
     },
 
-
+	{
+		"view": "match",
+		"module": "SingleDisplay",
+		"name": "Alliance Score",
+		"position": "main",
+		"options": {
+			"path": "averageScores.all",
+			"aggrMethod": "sum",
+			"decimals": 2
+		}
+	},
+	{
+		"view": "match",
+		"module": "ColumnDisplay",
+		"name": "Auto Points",
+		"position": "main",
+		"options": {
+			"path": "averageScores.auto",
+			"sort": 1,
+			"decimals": 1
+		}
+	},
+	{
+		"view": "match",
+		"module": "ColumnDisplay",
+		"name": "Climb Points",
+		"position": "main",
+		"options": {
+			"path": "averageScores.endgame",
+			"sort": 1,
+			"decimals": 1
+		}
+	},
+	{
+		"view": "match",
+		"module": "ColumnDisplay",
+		"name": "Possible Climbs",
+		"position": "main",
+		"options": {
+			"string": true,
+			"path": "possibleClimbs"
+		}
+	},
+	{
+		"view": "match",
+		"module": "ColumnDisplay",
+		"name": "Total Points",
+		"position": "main",
+		"options": {
+			"path": "averageScores.all",
+			"sort": 1,
+			"decimals": 1
+		}
+	},
+	{
+		"view": "match",
+		"module": "ColumnDisplay",
+		"name": "Time Per Ball",
+		"position": "main",
+		"options": {
+			"path": "timePerBall",
+			"multiplier": 0.001,
+			"decimals": 2,
+			"hideIfValue": 0,
+			"sort": -1,
+			"unit": "s"
+		}
+	},
+	{
+		"view": "match",
+		"module": "ColumnDisplay",
+		"name": "Accuracy",
+		"position": "main",
+		"options": {
+			"path": "accuracy",
+			"sort": 1,
+			"decimals": 1,
+			"multiplier": 100,
+			"unit": "%"
+		}
+	},
+	{
+		"view": "match",
+		"module": "ColumnDisplay",
+		"name": "Possible Shots",
+		"position": "main",
+		"options": {
+			"string": true,
+			"path": "possibleShots"
+		}
+	},
     {
         "view": "match",
         "module": "HeatmapScatterPlot",
-        "name": "Alliance Action Plot",
+        "name": "Alliance Shot Plot",
         "position": "main",
         "options": {
             "coordinatePath": "other.pos",
@@ -177,16 +326,31 @@
                 {
                     "name": "Shots",
                     "actions": ["upperHub", "lowerHub", "miss"]
-                },
+                }
+            ],
+            "actionLabels": {
+                "upperHub": "Upper",
+                "lowerHub": "Lower",
+                "miss": "Miss"
+            },
+            "imgPath": "img/field.svg"
+        }
+    },
+	{
+        "view": "match",
+        "module": "HeatmapScatterPlot",
+        "name": "Alliance Pickup Plot",
+        "position": "main",
+        "options": {
+            "coordinatePath": "other.pos",
+            "aggregatedActionsPath": "aggregatedActions",
+            "actionGroups": [
                 {
                     "name": "Pickups",
                     "actions": ["groundPickup", "terminalPickup"]
                 }
             ],
             "actionLabels": {
-                "upperHub": "Upper",
-                "lowerHub": "Lower",
-                "miss": "Miss",
                 "groundPickup": "Ground",
                 "terminalPickup": "Terminal"
             },
@@ -203,21 +367,25 @@
                 {
                     "name": "Expected Auto Points",
                     "path": "averageScores.auto",
+					"decimals": 2,
                     "aggrMethod": "sum"
                 },
                 {
                     "name": "Expected Teleop Points",
                     "path": "averageScores.teleop",
+					"decimals": 2,
                     "aggrMethod": "sum"
                 },
                 {
                     "name": "Expected Climb Points",
                     "path": "averageScores.endgame",
+					"decimals": 2,
                     "aggrMethod": "sum"
                 },
                 {
                     "name": "Expected Score",
                     "path": "averageScores.all",
+					"decimals": 2,
                     "aggrMethod": "sum"
                 }
             ]

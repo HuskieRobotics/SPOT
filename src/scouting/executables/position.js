@@ -4,8 +4,8 @@
  */
 
 let positionConfig = {
-    POSITION_LOCK_DELAY_MS: 1000,
-    LOCK_BORDER_COLOR: "#1b471b"
+    POSITION_LOCK_DELAY_MS: 2000,
+    LOCK_BORDER_COLOR: "#00ffa5"
 }
 
 

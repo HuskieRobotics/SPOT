@@ -145,3 +145,10 @@
 #landing .auth-buttons > div.active:hover {
     background-color: var(--accent);
 }
+
+#landing .versionString {
+    position: absolute;
+    left: 50%;
+    bottom: 10px;
+    transform: translateX(-50%);
+}

@@ -9,21 +9,24 @@ module.exports = {
     team: new DataTransformer("average", (dataset, outputPath, options) => {
         for (const [teamNumber, team] of Object.entries(dataset.teams)) {
             const teamTmps = dataset.tmps.filter(x=>x.robotNumber == teamNumber); //only the tmps that are this team's
-            if (typeof getPath(teamTmps[0], options.path) == "number") { //normal numeric average
-                let average = teamTmps.reduce((acc, tmp) => {
-                    return acc + getPath(tmp, options.path)
-                }, 0) / teamTmps.length
-    
-                setPath(team, outputPath, average)
-            } else { //average all properties in object
-                let out = {};
+            const pathResult = getPath(teamTmps[0], options.path)
+			if (typeof pathResult == "object" && pathResult !== null) { //average all properties in object
+				let out = {};
                 for (let subpath in getPath(teamTmps[0], options.path)) {
-                    let average = teamTmps.reduce((acc, tmp) => {
+					const filteredTeamTmps = teamTmps.filter((tmp) => getPath(tmp, `${options.path}.${subpath}`) !== null)
+                    let average = filteredTeamTmps.reduce((acc, tmp) => {
                         return acc + getPath(tmp, `${options.path}.${subpath}`) //if this is causing an error, your tmps may not have the same schema (eg. some keys (which you are trying to average) are not defined in some tmps)
-                    }, 0) / teamTmps.length;
+                    }, 0) / filteredTeamTmps.length;
                     out[subpath] = average;
                 }
                 setPath(team, outputPath, out)
+			} else { //normal numeric / null average
+				const filteredTeamTmps = teamTmps.filter((tmp) => getPath(tmp, options.path) !== null)
+                let average = filteredTeamTmps.reduce((acc, tmp) => {
+                    return acc + getPath(tmp, options.path)
+                }, 0) / filteredTeamTmps.length
+
+				setPath(team, outputPath, average)
             }
         }
 
