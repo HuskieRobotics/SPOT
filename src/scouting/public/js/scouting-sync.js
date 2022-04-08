@@ -92,8 +92,9 @@ class ScoutingSync {
                     switchPage("max-scouters");
                     ScoutingSync.updateState({status: ScoutingSync.SCOUTER_STATUS.TOOMANY}); //tell the server that you started scouting
                 } else {
-                    switchPage("match-scouting");
-                    ScoutingSync.updateState({status: ScoutingSync.SCOUTER_STATUS.READY}); //tell the server that you started scouting
+                    switchPage("match-scouting")
+                        ScoutingSync.updateState({status: ScoutingSync.SCOUTER_STATUS.READY}); //tell the server that you started scouting
+                    }
 				document.querySelector(".scouting-info").style.display = "block"
                 new Modal("small").header("Match Information").text(`
                 You have been assigned team ${ScoutingSync.state.robotNumber} in match ${ScoutingSync.state.matchNumber}.
