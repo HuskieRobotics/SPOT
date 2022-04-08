@@ -16,30 +16,40 @@ class HeatmapScatterPlot {
             return acc
         }, [])
 
-        const data = actions.map(actionId => {
+        const data = actions.reduce((acc, actionId) => {
             const filteredActionQueue = teams.map(team => getPath(dataset.teams[team], this.moduleConfig.options.aggregatedActionsPath)).flat().filter(a => a.id == actionId)
-            return {
-                mode: "markers",
-                type: "scatter",
-                name: this.moduleConfig.options.actionLabels[actionId],
-                x: filteredActionQueue.map(a => getPath(a, this.moduleConfig.options.coordinatePath).x),
-                y: filteredActionQueue.map(a => getPath(a, this.moduleConfig.options.coordinatePath).y),
-                marker: {
-                    size: 16,
-                    line: {
-                        color: 'white',
-                        width: 1
-                    },
-                },
-                opacity: 0.6
-            }
-        })
+            // console.log(this.moduleConfig.options.actionLabels[actionId])
+			if (filteredActionQueue.length) {
+				acc.push({
+					mode: "markers",
+					type: "scatter",
+					showlegend: true,
+					name: this.moduleConfig.options.actionLabels[actionId],
+					x: filteredActionQueue.map(a => getPath(a, this.moduleConfig.options.coordinatePath).x),
+					y: filteredActionQueue.map(a => getPath(a, this.moduleConfig.options.coordinatePath).y),
+					marker: {
+						size: 16,
+						line: {
+							color: 'white',
+							width: 1
+						},
+					},
+					opacity: 0.6
+				})
+			}
+
+			return acc
+        }, [])
+
+		// console.log(data)
 
         const filteredAllActionQueue = teams.map(team => getPath(dataset.teams[team], this.moduleConfig.options.aggregatedActionsPath)).flat()
             .filter(a => actionGroups[0].actions.includes(a.id))
 
         data.push({
             type: "histogram2dcontour",
+			name: "Heatmap",
+			showlegend: true,
             x: filteredAllActionQueue.map(a => getPath(a, this.moduleConfig.options.coordinatePath).x),
             y: filteredAllActionQueue.map(a => getPath(a, this.moduleConfig.options.coordinatePath).y),
             xaxis: "x",

@@ -58,18 +58,24 @@ router.get("/csv", async (req, res) => {
         // console.log(team.counts)
         if (!headerRow) {
             headerRow = true;
-            rows.push(["Team Number",
-                ...Object.entries(team.counts).map(([i, x]) => i + "Count"), //all counts
-                ...Object.entries(team.averages).map(([i, x]) => i + "Average"), //all averages
-                "Average Cycle Time", "Average Complete Cycle Time", //cycle
-                "Accuracy", //accuracy
+            rows.push(["Team Number", 
+                ...Object.entries(team.counts).map(([i,x]) => i+" Count"), //all counts
+                ...Object.entries(team.averages).map(([i,x]) => i+" Average"), //all averages
+                ...Object.entries(team.averageScores).map(([i,x]) => i+" Average Score"), //average scores
+                "Time Per Ball",
+                "Possible Climbs",
+                "Accuracy", //accuracy,
+				...Object.entries(team.averageScores).map(([i,x]) => i+"Average"), //all averages
             ])
         }
-        rows.push([teamNumber,
-            ...Object.entries(team.counts).map(([i, x]) => x), //all counts
-            ...Object.entries(team.averages).map(([i, x]) => x), //all averages
-            team.cycle.averageTime, team.cycle.averageTimeComplete, //cycle
+        rows.push([teamNumber, 
+            ...Object.entries(team.counts).map(([i,x]) => x), //all counts
+            ...Object.entries(team.averages).map(([i,x]) => x), //all averages
+            ...Object.entries(team.averageScores).map(([i,x]) => x), //all averages
+            team.timePerBall,
+            team.possibleClimbs,
             team.accuracy, //accuracy
+			...Object.entries(team.averageScores).map(([i,x]) => x), //all averages
         ])
     }
 

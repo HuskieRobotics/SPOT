@@ -279,6 +279,12 @@ class ScouterDisplay {
         }
         const DISCONNECTED_COLOR = "var(--error)";
 
+        if (this.scouter.state.status == SCOUTER_STATUS.NEW) {
+            this.scouterElement.style.display = "none";
+        } else {
+            this.scouterElement.style.display = "flex";
+        }
+
         if (!this.scouter.state.connected && !(this.scouter.state.status == SCOUTER_STATUS.COMPLETE)) { //disconneted and not complete
             this.scouterElement.querySelector(".scouter-status").style.color = DISCONNECTED_COLOR;
             this.scouterElement.style.borderColor = DISCONNECTED_COLOR;

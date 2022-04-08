@@ -32,6 +32,50 @@ body {
     z-index: 9999;
 }
 
+.status {
+	position: absolute;
+	top: 1.5vh;
+	left: 0;
+	line-height: 1em;
+	width: 100%;
+	z-index: 9999;
+	display: flex;
+	justify-content: space-between;
+	padding: 0 20px;
+	font-size: min(3.5vmin, 20px);
+}
+
+.connection-status {
+	display:flex;
+	align-items: center;
+	gap: max(1vw, 10px);
+}
+
+.socket-status {
+	font-weight: 700
+}
+
+.socket-status.connected {
+	color: var(--green);
+}
+
+.socket-status.disconnected {
+	color: var(--error);
+}
+
+.reload {
+	cursor: pointer;
+	font-size: min(8vmin, 25px)
+}
+
+.scouting-info {
+	display: none;
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
+}
+
 * {
     font-family: var(--font, sans-serif)
 }

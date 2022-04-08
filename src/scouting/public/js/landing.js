@@ -20,6 +20,12 @@ gapi.load('auth2', () => {
         spinner.classList.remove("visible")
     })
 
+	setTimeout(() => {
+		document.querySelector(".auth-buttons .google").classList.remove("active")
+        spinner.classList.remove("visible")
+	}, 5000)
+
+    
 
     auth2.isSignedIn.listen(signinChanged)
     auth2.currentUser.listen(userChanged)

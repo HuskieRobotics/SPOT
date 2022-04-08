@@ -216,11 +216,15 @@ class Scouter {
             const serverTeamMatchPerformanceIds = (await TeamMatchPerformance.find()).map(teamMatchPerformance => teamMatchPerformance.matchId)
             requestTeamMatchPerformances(clientTeamMatchPerformanceIds.filter(clientTeamMatchPerformanceId => !serverTeamMatchPerformanceIds.includes(clientTeamMatchPerformanceId)))
         })
+        // comment out the clearData command
+        // this.socket.on("clearData", async () => {
+        //     await TeamMatchPerformance.deleteMany()
+        //     console.log("all data cleared")
+        // })
 
-        this.socket.on("clearData", async () => {
-            await TeamMatchPerformance.deleteMany()
-            console.log("all data cleared")
-        })
+        // this.socket.onAny((event, ...args) => {
+        //     console.log(`Recieved Event ${event} with args ${JSON.stringify(args)}\n${JSON.stringify(ScoutingSync.scouters.map(x=>x.state))}`);
+        // })
     }
 
     updateState(stateUpdate) {

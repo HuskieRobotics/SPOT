@@ -40,7 +40,14 @@ const filesToCache = [
     "/analysis/js/ui.js",
     "/analysis/js/util.js",
     "/analysis/api/dataset",
-    "/analysis/api/teams"
+    "/analysis/api/teams",
+	"/admin/api/matches",
+	"/config/config.json",
+	"/config/match-scouting.json",
+	"/config/qr.json",
+	"/icons/site.webmanifest",
+	"/icons/favicon-16x16.png",
+	"/icons/favicon-32x32.png"
 ]
 
 self.addEventListener('install', function (event) {

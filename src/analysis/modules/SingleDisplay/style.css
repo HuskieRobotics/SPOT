@@ -1,0 +1,22 @@
+.single-display.container {
+    padding: 20px 25px;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--bg-alt);
+    border-radius: var(--border-radius);
+    border: 2px solid var(--accent-alt);
+	gap: 2px;
+}
+
+.single-display .header {
+	text-align: center;
+	font-size: 1.3em;
+	line-height: 1em;
+}
+
+.single-display .display {
+	text-align: center;
+	font-size: 3em;
+	font-weight: 700;
+	line-height: 1em;
+}
