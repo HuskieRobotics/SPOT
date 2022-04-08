@@ -212,7 +212,7 @@ if ('serviceWorker' in navigator) {
 		})
 
 		//create match module objects and append placeholders to module list elements
-		for (const module of modulesConfig.filter(m => m.view == "match")) {
+		for (const module of modulesConfig.filter(m => m.view === "match")) {
 			const leftModuleObject = new moduleClasses[module.module](module)
 			leftAllianceModules.appendChild(leftModuleObject.container)
 			modules.match.left.push(leftModuleObject)
@@ -249,7 +249,7 @@ if ('serviceWorker' in navigator) {
 					team.style.display = "none"
 				}
 				for (const sortResult of sortedTeams) {
-					const toAppend = Array.from(teamList.children).find(teamElement => teamElement.getAttribute("num") == sortResult.target)
+					const toAppend = Array.from(teamList.children).find(teamElement => teamElement.getAttribute("num") === sortResult.target)
 					teamList.appendChild(toAppend)
 					toAppend.style.display = "flex"
 				}
@@ -257,7 +257,7 @@ if ('serviceWorker' in navigator) {
 				for (const team of Array.from(teamList.children).sort((a, b) => {
 					const aLength = a.getAttribute("num").length
 					const bLength = b.getAttribute("num").length
-					if (aLength == bLength) {
+					if (aLength === bLength) {
 						return a.getAttribute("num").localeCompare(b.getAttribute("num"))
 					} else {
 						return aLength - bLength

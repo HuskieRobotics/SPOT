@@ -134,7 +134,7 @@ class ScoutingSync {
             const teamMatchPerformanceIds = teamMatchPerformances.map(teamMatchPerformance => teamMatchPerformance.matchId)
             // new Popup("notice", "Syncing Data...", 1000);
             await ScoutingSync.updateState({status: ScoutingSync.SCOUTER_STATUS.COMPLETE});
-            new Popup("notice","Syncing Data...",1000);
+            // new Popup("notice","Syncing Data...",1000);
             ScoutingSync.socket.emit("syncData", teamMatchPerformanceIds, (requestedTeamMatchPerformanceIds) => {
                 ScoutingSync.socket.emit("teamMatchPerformances", teamMatchPerformances.filter(teamMatchPerformance => requestedTeamMatchPerformanceIds.includes(teamMatchPerformance.matchId)), () => {
                     // new Popup("success", "Data Sync Succeeded", 1500);

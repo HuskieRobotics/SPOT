@@ -21,7 +21,7 @@ gapi.load('auth2', () => {
     })
 
 	setTimeout(() => {
-		document.querySelector(".auth-buttons .google").classList.remove("active")
+		// document.querySelector(".auth-buttons .google").classList.remove("active")
         spinner.classList.remove("visible")
 	}, 5000)
 
