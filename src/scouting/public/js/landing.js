@@ -1,4 +1,10 @@
-let spinner = document.querySelector("#landing .spinner-container")
+let spinner
+
+try{
+    spinner = document.querySelector("#landing .spinner-container")}
+catch (Error){
+
+}
 
 const clientId = "800684505201-pfg5ddut06emg4l4ch4b8u0jco05vluh.apps.googleusercontent.com"
 let auth2

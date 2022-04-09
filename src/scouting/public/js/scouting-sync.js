@@ -114,7 +114,7 @@ class ScoutingSync {
             }
 			if (updateMatch) {
 				document.querySelector(".scouting-info").innerText = `Match: ${ScoutingSync.state.matchNumber} | Team: ${ScoutingSync.state.robotNumber}`
-				document.querySelector(".scouting-info").style.color = updateMatch.robots.red.includes(ScoutingSync.state.robotNumber) ? "var(--error)" : "var(--accent)"
+				document.querySelector(".scouting-info").style.color = updateMatch.robots.red.includes(ScoutingSync.state.robotNumber) ? "var(--text)" : "var(--text)"
 			}
 	
 			if (!incoming) {
