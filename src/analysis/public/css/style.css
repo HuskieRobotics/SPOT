@@ -43,7 +43,7 @@ body {
 }
 
 #dashboard {
-    grid-area: 2 / 2 / 5 / 4;
+    grid-area: 3 / 2 / 5 / 4;
     overflow: hidden;
     position: relative;
 }
