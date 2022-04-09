@@ -40,11 +40,11 @@ class ScoutingSync {
             if (ScoutingSync.socket.connected) {
                 onConnect() //sometimes socketio doesnt fire "connect" event on page reload. why? who knows.
             } else {
-                new Popup("error", "failed to connect!");
+                new Popup("error", "Failed to connect!");
             }
         },1000)
 
-        ScoutingSync.socket.on("connect_error",(err)=>new Popup("error", err.toString()))
+        ScoutingSync.socket.on("connect_error",()=>new Popup("error", "An error occurred"))
 
         ScoutingSync.socket.on("disconnect", () => {
             ScoutingSync.state.connected = false;
