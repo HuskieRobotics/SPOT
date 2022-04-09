@@ -39,11 +39,11 @@ body {
     align-items: center;
     padding: 0 20px;
     box-shadow: 0 0 12px -2px #ff6030;
-    grid-area: 1 / 2 / 2 / 4;
+    grid-area: 1 / 2 / 3 / 4;
 }
 
 #dashboard {
-    grid-area: 2 / 2 / 4 / 4;
+    grid-area: 2 / 2 / 5 / 4;
     overflow: hidden;
     position: relative;
 }
@@ -113,7 +113,7 @@ body {
 
 #logo-text {
     color: white;
-    font-size: 2.5rem;
+    font-size: 2.2rem;
 }
 
 #search {
@@ -121,22 +121,23 @@ body {
 }
 
 #search-container {
-  padding: 20px 0;
-  border-top: 1px solid var(--accent-alt);
-  border-bottom: 1px solid var(--accent-alt);
-  box-shadow: 0 -7px 10px -10px var(--accent-alt);
-  border-radius: 8px 8px 0 0;
-  margin: 20px 0;
+    padding: 20px 0;
+    border-top: 1px solid var(--accent-alt);
+    border-bottom: 1px solid var(--accent-alt);
+    box-shadow: 0 -7px 10px -10px var(--accent-alt);
+    border-radius: 8px 8px 0 0;
+    margin: 20px 0;
+    position: center;
 }
 
 #search-input {
-  border-radius: var(--border-radius);
-  border: none;
-  width: 100%;
-  font-size: 1.2rem;
-  padding: 0 40px 0 12px;
-  background-color: var(--bg);
-  border: 2px solid var(--accent-alt);
+    border-radius: var(--border-radius);
+    border: none;
+    width: 100%;
+    font-size: 1.2rem;
+    padding: 0 40px 0 12px;
+    background-color: var(--bg);
+    border: 2px solid var(--accent-alt);
 }
 
 #search-icon {
@@ -271,10 +272,10 @@ body {
 
 #menu-buttons {
     background-color: var(--bg);
-    border: 3px solid var(--accent);
+    border: 3px solid var(--orange-light);
     border-radius: var(--border-radius);
     font-size: 1.3rem;
-    margin: 10px 0;
+    margin: 10px 10px;
     width: 100%;
     height: 50px;
     color: var(--text);
@@ -289,18 +290,18 @@ body {
 
 
 #match-view {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
 }
 
 #select-teams-text {
-  font-size: 3rem;
-  line-height: 1em;
-  color: var(--accent-alt);
-  margin-top: 32px;
-  margin-bottom: 10px;
+    font-size: 3rem;
+    line-height: 1em;
+    color: var(--accent-alt);
+    margin-top: 32px;
+    margin-bottom: 10px;
 }
 
 #team-selects {
@@ -321,40 +322,40 @@ body {
 }
 
 .alliance-selects > select {
-	width: 90px;
+    width: 90px;
 }
 
 .select {
-	border-radius: var(--border-radius);
-	border: 2px solid var(--text);
-	font-size: 1.2rem;
-	text-align: center;
-	color: var(--text);
-	background-color: var(--bg-alt);
-	transition: 0.2s border-color;
+    border-radius: var(--border-radius);
+    border: 2px solid var(--text);
+    font-size: 1.2rem;
+    text-align: center;
+    color: var(--text);
+    background-color: var(--bg-alt);
+    transition: 0.2s border-color;
 }
 
 .select > option {
-	text-align: center;
+    text-align: center;
 }
 
 .select.filled {
-	border-color: var(--accent-alt);
+    border-color: var(--accent-alt);
 }
 
 #match-select-label {
-	font-size: 1.4em;
-	/* font-weight: 00; */
+    font-size: 1.4em;
+    /* font-weight: 00; */
 }
 
 #match-select-container {
-	display: flex;
-	align-items: center;
-	gap: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
 #match-select {
-	width: 100px;
+    width: 100px;
 }
 
 #alliance-module-container {
@@ -365,12 +366,12 @@ body {
 }
 
 .alliance-modules {
-  width: 50%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 16px;
-  overflow-y: scroll;
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    overflow-y: scroll;
 }
 
 .alliance-modules.hidden {
@@ -378,36 +379,36 @@ body {
 }
 
 .alliance-modules > div:last-child {
-  margin-bottom: 20px;
+    margin-bottom: 20px;
 }
 
 @media screen and (max-width: 1100px) {
-	html {
-		font-size: 75%;
-	}
+    html {
+        font-size: 75%;
+    }
 
-	#app {
-		grid-template-columns: 200px auto;
-		grid-template-rows: 40px 20px auto;
-	}
+    #app {
+        grid-template-columns: 200px auto;
+        grid-template-rows: 40px 20px auto;
+    }
 
-	#dashboard > div.visible {
-		height: calc(100vh - 40px);
-	}
+    #dashboard > div.visible {
+        height: calc(100vh - 40px);
+    }
 
-	#main-list > div:first-child {
-		margin-top: 25px;
-	}
+    #main-list > div:first-child {
+        margin-top: 25px;
+    }
 
-	#side-list > div:first-child {
-		margin-top: 25px;
-	}
+    #side-list > div:first-child {
+        margin-top: 25px;
+    }
 
-	#main-list > div:last-child {
-		margin-bottom: 25px;
-	}
+    #main-list > div:last-child {
+        margin-bottom: 25px;
+    }
 
-	#side-list > div:last-child {
-		margin-bottom: 25px;
-	}
+    #side-list > div:last-child {
+        margin-bottom: 25px;
+    }
 }
