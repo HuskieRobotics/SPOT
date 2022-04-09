@@ -106,13 +106,11 @@ class ScoutingSync {
     static updateState(stateUpdate, incoming = false) {
         return new Promise((res, rej) => {
             Object.assign(ScoutingSync.state, stateUpdate);
-            let data = ScoutingSync.matches.find(m => m.number === ScoutingSync.state.matchNumber)
-            let updateMatch = "";
-            if (data !== "undefined"){
-			    updateMatch = data;
-            }
-            else{
-                updateMatch = false;
+            let updateMatch
+            try{
+			    updateMatch = ScoutingSync.matches.find(m => m.number === ScoutingSync.state.matchNumber)}
+            catch (TypeError){
+                updateMatch = false
             }
 			if (updateMatch) {
 				document.querySelector(".scouting-info").innerText = `Match: ${ScoutingSync.state.matchNumber} | Team: ${ScoutingSync.state.robotNumber}`
