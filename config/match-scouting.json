@@ -2,15 +2,15 @@
   "timing": {
     "totalTime": 135000,
     "timeTransitions": {
-        "149990": {
+        "134990": {
             "layer": 1,
             "displayText": "Auto"
         },
-        "131000": {
+        "120000": {
             "layer": 2,
             "displayText": "Teleop"
       },
-      "80000": {
+      "30000": {
         "layer": 3,
         "displayText": "Endgame"
       }
