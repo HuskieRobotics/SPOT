@@ -29,8 +29,14 @@ function updateForm() {
         document.querySelector("#form .last-name").value = localStorage.getItem("lastName") || "";
         
         if (ScoutingSync.state.offlineMode || !ScoutingSync.state.connected) { //only show manual entry for robot and match number when permenantly offline or temporarily disconnected
-            document.querySelector("#form .match-number").parentElement.style.display = "inline";
-            document.querySelector("#form .robot-number").parentElement.style.display = "inline";
+            new Modal("small", false)
+		.header("Disconnected")
+		.text("Please reconnect to continue")
+		.action("Ok",
+			() => window.location.reload()
+		)
+            document.querySelector("#form .match-number").parentElement.style.display = "none";
+            document.querySelector("#form .robot-number").parentElement.style.display = "none";
         } else {
             document.querySelector("#form .match-number").parentElement.style.display = "none";
             document.querySelector("#form .robot-number").parentElement.style.display = "none";

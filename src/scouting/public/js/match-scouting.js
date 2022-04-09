@@ -61,7 +61,7 @@ let devEnd
                     time = matchScoutingConfig.timing.totalTime; //reset timer
                     ScoutingSync.updateState({status: ScoutingSync.SCOUTER_STATUS.READY}); //tell the server that you are now waiting to start
                     clearInterval(undoneButton.timerInterval); //clear the timing interval
-                    undoneButton.element.innerText = "Start Match" + " | Your Team: " + ScoutingSync.state.robotNumber;
+                    undoneButton.element.innerText = "Start Match";
                     timerActive = false;
                     showLayer(0);
                 }
@@ -142,7 +142,7 @@ let devEnd
                 timerActive = true;
                 button.timerInterval = setInterval(() => {
                     if (time <= transitions[0]) { //move to the next transition if it is time
-                        displayText = matchScoutingConfig.timing.timeTransitions[transitions[0]].displayText + " | Your Team: " + ScoutingSync.state.robotNumber;
+                        displayText = matchScoutingConfig.timing.timeTransitions[transitions[0]].displayText;
                         showLayer(matchScoutingConfig.timing.timeTransitions[transitions[0]].layer);
                         transitions.shift()
                     }

@@ -12,11 +12,11 @@
 
 // document.querySelector(".debug-switcher").appendChild(syncButton)
 
-document.querySelector(".reload").addEventListener("click", () => {
-	new Modal("small")
-		.header("Warning")
-		.text("Are you sure you want to reload?")
-		.action("Reload", 
-			() => window.location.reload()
-		)
-})
+// document.querySelector(".reload").addEventListener("click", () => {
+// 	new Modal("small")
+// 		.header("Warning")
+// 		.text("Are you sure you want to reload?")
+// 		.action("Reload",
+// 			() => window.location.reload()
+// 		)
+// })
