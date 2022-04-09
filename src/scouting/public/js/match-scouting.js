@@ -31,7 +31,7 @@ let devEnd
 				lastActions[lastActions.length - 1].num++
 			}
 		}
-		document.querySelector(".status .last-actions").innerText = lastActions.reverse().map(a => a.id + (a.num > 1 ? ` (${a.num})` : "")).join(" ➔ ")
+		// document.querySelector(".status .last-actions").innerText = lastActions.reverse().map(a => a.id + (a.num > 1 ? ` (${a.num})` : "")).join(" ➔ ")
 	}
 
     //build buttons
