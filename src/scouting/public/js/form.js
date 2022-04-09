@@ -10,7 +10,7 @@ document.querySelector("#form .save").addEventListener("click", async () => {
             status: ScoutingSync.SCOUTER_STATUS.WAITING
         })
         switchPage("match-scouting");
-		document.querySelector(".scouting-info").style.display = "block"
+        document.querySelector(".scouting-info").style.display = "block"
     } else {
         await ScoutingSync.updateState({
             scouterId: `${(document.querySelector("#form .first-name").value.replace(" ", "") + " ").replace("  ", " ")}${document.querySelector("#form .last-name").value}`,
@@ -27,14 +27,15 @@ function updateForm() {
     try {
         document.querySelector("#form .first-name").value = localStorage.getItem("firstName") || "";
         document.querySelector("#form .last-name").value = localStorage.getItem("lastName") || "";
-        
+
         if (ScoutingSync.state.offlineMode || !ScoutingSync.state.connected) { //only show manual entry for robot and match number when permenantly offline or temporarily disconnected
             new Modal("small", false)
-		.header("Disconnected")
-		.text("Please reconnect to continue")
-		.action("Ok",
-			() => window.location.reload()
-		)
+                .header("Disconnected")
+                .text("Please reconnect to continue")
+                .action("Reload",
+                    () => window.location.reload()
+                )
+                .dismiss("OK")
             document.querySelector("#form .match-number").parentElement.style.display = "none";
             document.querySelector("#form .robot-number").parentElement.style.display = "none";
         } else {
