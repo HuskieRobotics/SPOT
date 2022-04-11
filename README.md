@@ -25,7 +25,6 @@ Devil Scouting is built with HTML, JS, CSS, and Node.js and operates with a Mong
 ## Guiding Principles
 * Devil Scouting's goal is to provide a universal scouting app platform that can function with any past or future FIRST Robotics game by just changing the configuration.
 * Devil Scouting does not require you to write code to configure, set up, or use Devil Scouting.
-* Devil Scouting does not require you to be online for its most basic features (scouting, data analysis)
 
 ## Getting Started
 
