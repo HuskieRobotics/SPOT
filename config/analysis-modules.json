@@ -156,6 +156,55 @@
             ]
         }
     },
+	{
+        "view": "team",
+        "module": "Divider",
+        "position": "side",
+        "name": "Placeholder",
+		"separate": true,
+		"options": {}
+	},
+	{
+        "view": "team",
+        "module": "Stats",
+        "position": "side",
+        "name": "Placeholder Stats",
+		"separate": true,
+        "options": {
+            "list": [
+                {
+                    "name": "Average Auto Points",
+                    "path": "manual.placeholder.averageScores.auto",
+					"decimals": 2,
+					"sort": 1
+                },
+                {
+                    "name": "Average Climb Points",
+                    "path": "manual.placeholder.averageScores.endgame",
+					"decimals": 2,
+					"sort": 1
+                },
+                {
+                    "name": "Average Points",
+                    "path": "manual.placeholder.averageScores.all",
+					"decimals": 2,
+					"sort": 1
+                },
+                {
+                    "name": "Average Upper Hub Shots",
+                    "path": "manual.placeholder.averages.upperHub",
+					"decimals": 2,
+					"sort": 1
+                },
+                {
+                    "name": "Average Lower Hub Shots",
+                    "path": "manual.placeholder.averages.lowerHub",
+					"decimals": 2,
+					"sort": 1
+                }
+            ]
+        }
+    },
     {
         "view": "team",
         "module": "Pie",
@@ -208,6 +257,61 @@
                 {
                     "name": "Miss",
                     "path": "counts.miss"
+                }
+            ]
+        }
+    },
+
+	{
+        "view": "team",
+        "module": "Divider",
+        "position": "main",
+        "name": "Placeholder",
+		"separate": true,
+		"options": {}
+	},
+	{
+        "view": "team",
+        "module": "Pie",
+        "position": "main",
+        "name": "Climb Distribution",
+		"separate": true,
+        "options": {
+            "slices": [
+                {
+                    "name": "Low Rung",
+                    "path": "manual.placeholder.climbLevels.climb1"
+                },
+                {
+                    "name": "Mid Rung",
+                    "path": "manual.placeholder.climbLevels.climb2"
+                },
+                {
+                    "name": "High Rung",
+                    "path": "manual.placeholder.climbLevels.climb3"
+                },
+                {
+                    "name": "Traversal Rung",
+                    "path": "manual.placeholder.climbLevels.climb4"
+                }
+            ]
+        }
+    },
+    {
+        "view": "team",
+        "module": "Pie",
+        "position": "main",
+        "name": "Shot Distribution",
+		"separate": true,
+        "options": {
+            "slices": [
+                {
+                    "name": "Upper Hub",
+                    "path": "manual.placeholder.averages.upperHub"
+                },
+                {
+                    "name": "Lower Hub",
+                    "path": "manual.placeholder.averages.lowerHub"
                 }
             ]
         }
@@ -325,7 +429,7 @@
 		"position": "main",
 		"options": {
 			"string": true,
-			"path": "drivetrain"
+			"path": "manual.drivetrain"
 		}
 	},
     {
@@ -422,6 +526,131 @@
                 {
                     "name": "Miss",
                     "path": "averages.miss"
+                }
+            ]
+        }
+    },
+
+	{
+        "view": "match",
+        "module": "Divider",
+        "position": "main",
+        "name": "Placeholder",
+		"separate": true,
+		"options": {}
+	},
+	{
+		"view": "match",
+		"module": "SingleDisplay",
+		"name": "Alliance Score",
+		"position": "main",
+		"separate": true,
+		"options": {
+			"path": "manual.placeholder.averageScores.all",
+			"aggrMethod": "sum",
+			"decimals": 2
+		}
+	},
+	{
+		"view": "match",
+		"module": "ColumnDisplay",
+		"name": "Auto Points",
+		"position": "main",
+		"separate": true,
+		"options": {
+			"path": "manual.placeholder.averageScores.auto",
+			"sort": 1,
+			"decimals": 1
+		}
+	},
+	{
+		"view": "match",
+		"module": "ColumnDisplay",
+		"name": "Climb Points",
+		"position": "main",
+		"separate": true,
+		"options": {
+			"path": "manual.placeholder.averageScores.endgame",
+			"sort": 1,
+			"decimals": 1
+		}
+	},
+	{
+		"view": "match",
+		"module": "ColumnDisplay",
+		"name": "Possible Climbs",
+		"position": "main",
+		"separate": true,
+		"options": {
+			"string": true,
+			"path": "manual.placeholder.possibleClimbs"
+		}
+	},
+	{
+		"view": "match",
+		"module": "ColumnDisplay",
+		"name": "Total Points",
+		"position": "main",
+		"separate": true,
+		"options": {
+			"path": "manual.placeholder.averageScores.all",
+			"sort": 1,
+			"decimals": 1
+		}
+	},
+	{
+		"view": "match",
+		"module": "ColumnDisplay",
+		"name": "Possible Shots",
+		"position": "main",
+		"separate": true,
+		"options": {
+			"string": true,
+			"path": "manual.placeholder.possibleShots"
+		}
+	},
+	{
+		"view": "match",
+		"module": "ColumnDisplay",
+		"name": "Drivetrain",
+		"position": "main",
+		"separate": true,
+		"options": {
+			"string": true,
+			"path": "manual.drivetrain"
+		}
+	},
+	{
+        "view": "match",
+        "module": "Stats",
+        "position": "side",
+        "name": "Placeholder Alliance Stats",
+		"separate": true,
+        "options": {
+            "list": [
+                {
+                    "name": "Expected Auto Points",
+                    "path": "manual.placeholder.averageScores.auto",
+					"decimals": 2,
+                    "aggrMethod": "sum"
+                },
+                {
+                    "name": "Expected Teleop Points",
+                    "path": "manual.placeholder.averageScores.teleop",
+					"decimals": 2,
+                    "aggrMethod": "sum"
+                },
+                {
+                    "name": "Expected Climb Points",
+                    "path": "manual.placeholder.averageScores.endgame",
+					"decimals": 2,
+                    "aggrMethod": "sum"
+                },
+                {
+                    "name": "Expected Score",
+                    "path": "manual.placeholder.averageScores.all",
+					"decimals": 2,
+                    "aggrMethod": "sum"
                 }
             ]
         }

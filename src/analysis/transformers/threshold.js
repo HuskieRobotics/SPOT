@@ -14,7 +14,7 @@ module.exports = {
 			const passingNames = []
 
 			for (const [path, name] of Object.entries(options.paths)) {
-				if (options.threshold === undefined || getPath(team, path) > options.threshold) {
+				if (options.threshold === undefined || getPath(team, path, 0) > options.threshold) {
 					passingNames.push(name)
 				}
 			}

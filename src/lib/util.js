@@ -10,7 +10,7 @@ class ThrowError {} //this is probably not best practice, I tried to find a bett
 function getPath(obj,path,ifnone=ThrowError) {
     if (typeof obj === "undefined") {  
         if (ifnone == ThrowError)  {
-            throw new Error("path not traversable!");
+            throw new Error(`path ${path} not traversable!`);
         } else {  
             return ifnone;
         }

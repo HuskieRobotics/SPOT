@@ -1,24 +1,1508 @@
 {
 	"drivetrain": {
-		"2481": "5-S",
-		"2040": "M",
-		"4531": "M",
-		"648": "M",
-		"1736": "S",
-		"1756": "S",
-		"2358": "S",
-		"2783": "S",
-		"4096": "S",
-		"4143": "S",
-		"4655": "S",
-		"5442": "S",
-		"7103": "S",
-		"1625": "T",
-		"2039": "T",
-		"4241": "T",
-		"4645": "T",
-		"7848": "T",
-		"8096": "T",
-		"8122": "T"
+		
+	},
+
+	"placeholder": {
+		"33": {
+			"averages": {
+				"lowerHub": -0.8,
+				"upperHub": 14.1
+			},
+			"averageScores": {
+				"auto": 12.4,
+				"teleop": 27.4,
+				"endgame": 8.8,
+				"all": 48.7
+			},
+			"climbLevels": {
+				"climb1": 0,
+				"climb2": 0,
+				"climb3": 5,
+				"climb4": 78
+			},
+			"possibleShots": "U",
+			"possibleClimbs": "3, 4"
+		},
+		"70": {
+			"averages": {
+				"lowerHub": -0.7,
+				"upperHub": 8.8
+			},
+			"averageScores": {
+				"auto": 16.2,
+				"teleop": 18.5,
+				"endgame": 11.3,
+				"all": 45
+			},
+			"climbLevels": {
+				"climb1": 0,
+				"climb2": 5,
+				"climb3": 5,
+				"climb4": 79
+			},
+			"possibleShots": "U",
+			"possibleClimbs": "2, 3, 4"
+		},
+		"85": {
+			"averages": {
+				"lowerHub": 3.3,
+				"upperHub": 5.3
+			},
+			"averageScores": {
+				"auto": 11.1,
+				"teleop": 13.9,
+				"endgame": 7.4,
+				"all": 34
+			},
+			"climbLevels": {
+				"climb1": 0,
+				"climb2": 22,
+				"climb3": 61,
+				"climb4": 6
+			},
+			"possibleShots": "U, L",
+			"possibleClimbs": "2, 3, 4"
+		},
+		"125": {
+			"averages": {
+				"lowerHub": -0.8,
+				"upperHub": 15.2
+			},
+			"averageScores": {
+				"auto": 14,
+				"teleop": 29.6,
+				"endgame": 10.3,
+				"all": 53.9
+			},
+			"climbLevels": {
+				"climb1": 0,
+				"climb2": 6,
+				"climb3": 0,
+				"climb4": 72
+			},
+			"possibleShots": "U",
+			"possibleClimbs": "2, 4"
+		},
+		"341": {
+			"averages": {
+				"lowerHub": 2.2,
+				"upperHub": 6.2
+			},
+			"averageScores": {
+				"auto": 9.8,
+				"teleop": 14.5,
+				"endgame": 12.3,
+				"all": 37.5
+			},
+			"climbLevels": {
+				"climb1": 0,
+				"climb2": 0,
+				"climb3": 6,
+				"climb4": 72
+			},
+			"possibleShots": "U, L",
+			"possibleClimbs": "3, 4"
+		},
+		"386": {
+			"averages": {
+				"lowerHub": 0.3,
+				"upperHub": 5.1
+			},
+			"averageScores": {
+				"auto": 9.3,
+				"teleop": 10.5,
+				"endgame": 4.7,
+				"all": 27.9
+			},
+			"climbLevels": {
+				"climb1": 33,
+				"climb2": 25,
+				"climb3": 0,
+				"climb4": 0
+			},
+			"possibleShots": "U",
+			"possibleClimbs": "1, 2"
+		},
+		"503": {
+			"averages": {
+				"lowerHub": -0.2,
+				"upperHub": 13.6
+			},
+			"averageScores": {
+				"auto": 13,
+				"teleop": 27,
+				"endgame": 10.5,
+				"all": 50.1
+			},
+			"climbLevels": {
+				"climb1": 0,
+				"climb2": 10,
+				"climb3": 5,
+				"climb4": 70
+			},
+			"possibleShots": "U",
+			"possibleClimbs": "2, 3, 4"
+		},
+		"649": {
+			"averages": {
+				"lowerHub": -0.1,
+				"upperHub": 7.1
+			},
+			"averageScores": {
+				"auto": 9.7,
+				"teleop": 14,
+				"endgame": 10.6,
+				"all": 35.3
+			},
+			"climbLevels": {
+				"climb1": 0,
+				"climb2": 31,
+				"climb3": 15,
+				"climb4": 31
+			},
+			"possibleShots": "U",
+			"possibleClimbs": "2, 3, 4"
+		},
+		"876": {
+			"averages": {
+				"lowerHub": 0.2,
+				"upperHub": 8
+			},
+			"averageScores": {
+				"auto": 10.5,
+				"teleop": 16.3,
+				"endgame": 11.7,
+				"all": 39
+			},
+			"climbLevels": {
+				"climb1": 0,
+				"climb2": 0,
+				"climb3": 13,
+				"climb4": 81
+			},
+			"possibleShots": "U",
+			"possibleClimbs": "3, 4"
+		},
+		"971": {
+			"averages": {
+				"lowerHub": -1.4,
+				"upperHub": 15.2
+			},
+			"averageScores": {
+				"auto": 16.2,
+				"teleop": 29.1,
+				"endgame": 4,
+				"all": 51.5
+			},
+			"climbLevels": {
+				"climb1": 0,
+				"climb2": 50,
+				"climb3": 13,
+				"climb4": 0
+			},
+			"possibleShots": "U",
+			"possibleClimbs": "2, 3"
+		},
+		"1261": {
+			"averages": {
+				"lowerHub": 0.9,
+				"upperHub": 8.9
+			},
+			"averageScores": {
+				"auto": 7.8,
+				"teleop": 18.7,
+				"endgame": 5.3,
+				"all": 31.2
+			},
+			"climbLevels": {
+				"climb1": 0,
+				"climb2": 36,
+				"climb3": 53,
+				"climb4": 0
+			},
+			"possibleShots": "U",
+			"possibleClimbs": "2, 3"
+		},
+		"1391": {
+			"averages": {
+				"lowerHub": 0.7,
+				"upperHub": 5.6
+			},
+			"averageScores": {
+				"auto": 17.2,
+				"teleop": 11.8,
+				"endgame": 8.5,
+				"all": 38.8
+			},
+			"climbLevels": {
+				"climb1": 0,
+				"climb2": 5,
+				"climb3": 24,
+				"climb4": 47
+			},
+			"possibleShots": "U",
+			"possibleClimbs": "2, 3, 4"
+		},
+		"1403": {
+			"averages": {
+				"lowerHub": -0.2,
+				"upperHub": 5.4
+			},
+			"averageScores": {
+				"auto": 11.5,
+				"teleop": 10.6,
+				"endgame": 8.6,
+				"all": 31.4
+			},
+			"climbLevels": {
+				"climb1": 0,
+				"climb2": 22,
+				"climb3": 57,
+				"climb4": 7
+			},
+			"possibleShots": "U",
+			"possibleClimbs": "2, 3, 4"
+		},
+		"1555": {
+			"averages": {
+				"lowerHub": 1.6,
+				"upperHub": 1.1
+			},
+			"averageScores": {
+				"auto": 1.9,
+				"teleop": 3.7,
+				"endgame": 2.2,
+				"all": 7.8
+			},
+			"climbLevels": {
+				"climb1": 0,
+				"climb2": 8,
+				"climb3": 0,
+				"climb4": 0
+			},
+			"possibleShots": "U, L",
+			"possibleClimbs": "2"
+		},
+		"1577": {
+			"averages": {
+				"lowerHub": -0.5,
+				"upperHub": 20.9
+			},
+			"averageScores": {
+				"auto": 16.8,
+				"teleop": 41.4,
+				"endgame": 13.1,
+				"all": 71.5
+			},
+			"climbLevels": {
+				"climb1": 6,
+				"climb2": 16,
+				"climb3": 0,
+				"climb4": 78
+			},
+			"possibleShots": "U",
+			"possibleClimbs": "1, 2, 4"
+		},
+		"1671": {
+			"averages": {
+				"lowerHub": -0.9,
+				"upperHub": 7
+			},
+			"averageScores": {
+				"auto": 6.2,
+				"teleop": 12.9,
+				"endgame": 2.7,
+				"all": 22.1
+			},
+			"climbLevels": {
+				"climb1": 0,
+				"climb2": 22,
+				"climb3": 6,
+				"climb4": 11
+			},
+			"possibleShots": "U",
+			"possibleClimbs": "2, 3, 4"
+		},
+		"1741": {
+			"averages": {
+				"lowerHub": 0.1,
+				"upperHub": 0.2
+			},
+			"averageScores": {
+				"auto": 4,
+				"teleop": 0.4,
+				"endgame": 6.2,
+				"all": 13.3
+			},
+			"climbLevels": {
+				"climb1": 0,
+				"climb2": 47,
+				"climb3": 0,
+				"climb4": 12
+			},
+			"possibleShots": "-",
+			"possibleClimbs": "2, 4"
+		},
+		"1792": {
+			"averages": {
+				"lowerHub": 0.3,
+				"upperHub": 2.4
+			},
+			"averageScores": {
+				"auto": 6.7,
+				"teleop": 4.7,
+				"endgame": 5.3,
+				"all": 16.8
+			},
+			"climbLevels": {
+				"climb1": 11,
+				"climb2": 56,
+				"climb3": 0,
+				"climb4": 0
+			},
+			"possibleShots": "U",
+			"possibleClimbs": "1, 2"
+		},
+		"2056": {
+			"averages": {
+				"lowerHub": -0.4,
+				"upperHub": 15.9
+			},
+			"averageScores": {
+				"auto": 18.4,
+				"teleop": 31.5,
+				"endgame": 11.5,
+				"all": 63.9
+			},
+			"climbLevels": {
+				"climb1": 0,
+				"climb2": 10,
+				"climb3": 16,
+				"climb4": 63
+			},
+			"possibleShots": "U",
+			"possibleClimbs": "2, 3, 4"
+		},
+		"2080": {
+			"averages": {
+				"lowerHub": 1.4,
+				"upperHub": 1.2
+			},
+			"averageScores": {
+				"auto": 2.2,
+				"teleop": 3.9,
+				"endgame": -0.5,
+				"all": 4.6
+			},
+			"climbLevels": {
+				"climb1": 0,
+				"climb2": 18,
+				"climb3": 0,
+				"climb4": 0
+			},
+			"possibleShots": "U, L",
+			"possibleClimbs": "2"
+		},
+		"2220": {
+			"averages": {
+				"lowerHub": 0.9,
+				"upperHub": 3
+			},
+			"averageScores": {
+				"auto": 6.4,
+				"teleop": 6.8,
+				"endgame": 13.2,
+				"all": 26.8
+			},
+			"climbLevels": {
+				"climb1": 0,
+				"climb2": 14,
+				"climb3": 29,
+				"climb4": 57
+			},
+			"possibleShots": "U",
+			"possibleClimbs": "2, 3, 4"
+		},
+		"2337": {
+			"averages": {
+				"lowerHub": 1.8,
+				"upperHub": 10.9
+			},
+			"averageScores": {
+				"auto": 14,
+				"teleop": 23.7,
+				"endgame": 10.5,
+				"all": 49.3
+			},
+			"climbLevels": {
+				"climb1": 0,
+				"climb2": 16,
+				"climb3": 0,
+				"climb4": 63
+			},
+			"possibleShots": "U, L",
+			"possibleClimbs": "2, 4"
+		},
+		"2383": {
+			"averages": {
+				"lowerHub": 0.7,
+				"upperHub": 9.3
+			},
+			"averageScores": {
+				"auto": 10.2,
+				"teleop": 19.2,
+				"endgame": 9.1,
+				"all": 38.9
+			},
+			"climbLevels": {
+				"climb1": 0,
+				"climb2": 22,
+				"climb3": 67,
+				"climb4": 0
+			},
+			"possibleShots": "U",
+			"possibleClimbs": "2, 3"
+		},
+		"2468": {
+			"averages": {
+				"lowerHub": 0,
+				"upperHub": 11.8
+			},
+			"averageScores": {
+				"auto": 8.4,
+				"teleop": 23.6,
+				"endgame": 9.4,
+				"all": 42.7
+			},
+			"climbLevels": {
+				"climb1": 5,
+				"climb2": 10,
+				"climb3": 5,
+				"climb4": 75
+			},
+			"possibleShots": "U",
+			"possibleClimbs": "1, 2, 3, 4"
+		},
+		"2539": {
+			"averages": {
+				"lowerHub": 0.7,
+				"upperHub": 8.2
+			},
+			"averageScores": {
+				"auto": 8.4,
+				"teleop": 17.1,
+				"endgame": 11.3,
+				"all": 38.6
+			},
+			"climbLevels": {
+				"climb1": 0,
+				"climb2": 0,
+				"climb3": 32,
+				"climb4": 68
+			},
+			"possibleShots": "U",
+			"possibleClimbs": "3, 4"
+		},
+		"3061": {
+			"averages": {
+				"lowerHub": -0.5,
+				"upperHub": 11.3
+			},
+			"averageScores": {
+				"auto": 10.4,
+				"teleop": 22.2,
+				"endgame": 12.5,
+				"all": 47.3
+			},
+			"climbLevels": {
+				"climb1": 0,
+				"climb2": 13,
+				"climb3": 20,
+				"climb4": 67
+			},
+			"possibleShots": "U",
+			"possibleClimbs": "2, 3, 4"
+		},
+		"3142": {
+			"averages": {
+				"lowerHub": -0.1,
+				"upperHub": 8.2
+			},
+			"averageScores": {
+				"auto": 10.9,
+				"teleop": 16.2,
+				"endgame": 10.7,
+				"all": 36.6
+			},
+			"climbLevels": {
+				"climb1": 0,
+				"climb2": 6,
+				"climb3": 13,
+				"climb4": 50
+			},
+			"possibleShots": "U",
+			"possibleClimbs": "2, 3, 4"
+		},
+		"3171": {
+			"averages": {
+				"lowerHub": 2,
+				"upperHub": 5.3
+			},
+			"averageScores": {
+				"auto": 8.2,
+				"teleop": 12.7,
+				"endgame": 8.5,
+				"all": 30.8
+			},
+			"climbLevels": {
+				"climb1": 6,
+				"climb2": 11,
+				"climb3": 61,
+				"climb4": 0
+			},
+			"possibleShots": "U, L",
+			"possibleClimbs": "1, 2, 3"
+		},
+		"3357": {
+			"averages": {
+				"lowerHub": -0.3,
+				"upperHub": 11.2
+			},
+			"averageScores": {
+				"auto": 13.7,
+				"teleop": 22,
+				"endgame": 12.7,
+				"all": 50.1
+			},
+			"climbLevels": {
+				"climb1": 0,
+				"climb2": 6,
+				"climb3": 0,
+				"climb4": 94
+			},
+			"possibleShots": "U",
+			"possibleClimbs": "2, 4"
+		},
+		"3360": {
+			"averages": {
+				"lowerHub": -0.1,
+				"upperHub": 1.3
+			},
+			"averageScores": {
+				"auto": 4.3,
+				"teleop": 2.5,
+				"endgame": 8.1,
+				"all": 17.1
+			},
+			"climbLevels": {
+				"climb1": 0,
+				"climb2": 18,
+				"climb3": 27,
+				"climb4": 55
+			},
+			"possibleShots": "U",
+			"possibleClimbs": "2, 3, 4"
+		},
+		"3655": {
+			"averages": {
+				"lowerHub": 0.7,
+				"upperHub": 5.7
+			},
+			"averageScores": {
+				"auto": 5.2,
+				"teleop": 12,
+				"endgame": 15.5,
+				"all": 33.3
+			},
+			"climbLevels": {
+				"climb1": 0,
+				"climb2": 0,
+				"climb3": 19,
+				"climb4": 69
+			},
+			"possibleShots": "U",
+			"possibleClimbs": "3, 4"
+		},
+		"3668": {
+			"averages": {
+				"lowerHub": 0.6,
+				"upperHub": 8
+			},
+			"averageScores": {
+				"auto": 8.6,
+				"teleop": 16.6,
+				"endgame": 8.3,
+				"all": 33.4
+			},
+			"climbLevels": {
+				"climb1": 0,
+				"climb2": 28,
+				"climb3": 14,
+				"climb4": 29
+			},
+			"possibleShots": "U",
+			"possibleClimbs": "2, 3, 4"
+		},
+		"3749": {
+			"averages": {
+				"lowerHub": 3.2,
+				"upperHub": 3.4
+			},
+			"averageScores": {
+				"auto": 4.5,
+				"teleop": 10,
+				"endgame": 5.9,
+				"all": 24.3
+			},
+			"climbLevels": {
+				"climb1": 0,
+				"climb2": 46,
+				"climb3": 0,
+				"climb4": 9
+			},
+			"possibleShots": "U, L",
+			"possibleClimbs": "2, 4"
+		},
+		"3792": {
+			"averages": {
+				"lowerHub": -1.3,
+				"upperHub": 5.3
+			},
+			"averageScores": {
+				"auto": 7.1,
+				"teleop": 9.4,
+				"endgame": 11.3,
+				"all": 28.8
+			},
+			"climbLevels": {
+				"climb1": 0,
+				"climb2": 14,
+				"climb3": 15,
+				"climb4": 64
+			},
+			"possibleShots": "U",
+			"possibleClimbs": "2, 3, 4"
+		},
+		"3824": {
+			"averages": {
+				"lowerHub": 4.8,
+				"upperHub": 0.9
+			},
+			"averageScores": {
+				"auto": 3.3,
+				"teleop": 6.6,
+				"endgame": 3.2,
+				"all": 14.8
+			},
+			"climbLevels": {
+				"climb1": 0,
+				"climb2": 59,
+				"climb3": 0,
+				"climb4": 0
+			},
+			"possibleShots": "L",
+			"possibleClimbs": "2"
+		},
+		"3932": {
+			"averages": {
+				"lowerHub": -0.1,
+				"upperHub": 2.3
+			},
+			"averageScores": {
+				"auto": 5.9,
+				"teleop": 4.5,
+				"endgame": 11.9,
+				"all": 26.8
+			},
+			"climbLevels": {
+				"climb1": 0,
+				"climb2": 0,
+				"climb3": 7,
+				"climb4": 79
+			},
+			"possibleShots": "U",
+			"possibleClimbs": "3, 4"
+		},
+		"3952": {
+			"averages": {
+				"lowerHub": 1.6,
+				"upperHub": -0.5
+			},
+			"averageScores": {
+				"auto": 2.6,
+				"teleop": 0.4,
+				"endgame": 4.3,
+				"all": 8.7
+			},
+			"climbLevels": {
+				"climb1": 6,
+				"climb2": 0,
+				"climb3": 12,
+				"climb4": 47
+			},
+			"possibleShots": "L",
+			"possibleClimbs": "1, 3, 4"
+		},
+		"3959": {
+			"averages": {
+				"lowerHub": 0.1,
+				"upperHub": 7.5
+			},
+			"averageScores": {
+				"auto": 5.8,
+				"teleop": 15.1,
+				"endgame": 3.6,
+				"all": 25.2
+			},
+			"climbLevels": {
+				"climb1": 25,
+				"climb2": 38,
+				"climb3": 0,
+				"climb4": 0
+			},
+			"possibleShots": "U",
+			"possibleClimbs": "1, 2"
+		},
+		"3986": {
+			"averages": {
+				"lowerHub": 1,
+				"upperHub": 6.2
+			},
+			"averageScores": {
+				"auto": 6.8,
+				"teleop": 13.5,
+				"endgame": 7.7,
+				"all": 26.6
+			},
+			"climbLevels": {
+				"climb1": 0,
+				"climb2": 8,
+				"climb3": 31,
+				"climb4": 46
+			},
+			"possibleShots": "U",
+			"possibleClimbs": "2, 3, 4"
+		},
+		"4003": {
+			"averages": {
+				"lowerHub": -0.7,
+				"upperHub": 12.3
+			},
+			"averageScores": {
+				"auto": 12,
+				"teleop": 23.9,
+				"endgame": 1.7,
+				"all": 37.6
+			},
+			"climbLevels": {
+				"climb1": 0,
+				"climb2": 56,
+				"climb3": 0,
+				"climb4": 0
+			},
+			"possibleShots": "U",
+			"possibleClimbs": "2"
+		},
+		"4089": {
+			"averages": {
+				"lowerHub": -0.3,
+				"upperHub": 11.7
+			},
+			"averageScores": {
+				"auto": 12.1,
+				"teleop": 23,
+				"endgame": 2.4,
+				"all": 38.4
+			},
+			"climbLevels": {
+				"climb1": 0,
+				"climb2": 6,
+				"climb3": 22,
+				"climb4": 11
+			},
+			"possibleShots": "U",
+			"possibleClimbs": "2, 3, 4"
+		},
+		"4099": {
+			"averages": {
+				"lowerHub": -0.1,
+				"upperHub": 10
+			},
+			"averageScores": {
+				"auto": 8.4,
+				"teleop": 19.9,
+				"endgame": 6.2,
+				"all": 35.4
+			},
+			"climbLevels": {
+				"climb1": 0,
+				"climb2": 22,
+				"climb3": 44,
+				"climb4": 17
+			},
+			"possibleShots": "U",
+			"possibleClimbs": "2, 3, 4"
+		},
+		"4188": {
+			"averages": {
+				"lowerHub": 2.2,
+				"upperHub": 9.7
+			},
+			"averageScores": {
+				"auto": 9.6,
+				"teleop": 21.6,
+				"endgame": 9.5,
+				"all": 40.9
+			},
+			"climbLevels": {
+				"climb1": 0,
+				"climb2": 26,
+				"climb3": 42,
+				"climb4": 11
+			},
+			"possibleShots": "U, L",
+			"possibleClimbs": "2, 3, 4"
+		},
+		"4400": {
+			"averages": {
+				"lowerHub": 0.2,
+				"upperHub": 6.4
+			},
+			"averageScores": {
+				"auto": 5.7,
+				"teleop": 12.9,
+				"endgame": 1.4,
+				"all": 21.4
+			},
+			"climbLevels": {
+				"climb1": 0,
+				"climb2": 43,
+				"climb3": 0,
+				"climb4": 13
+			},
+			"possibleShots": "U",
+			"possibleClimbs": "2, 4"
+		},
+		"4414": {
+			"averages": {
+				"lowerHub": -1.3,
+				"upperHub": 17.3
+			},
+			"averageScores": {
+				"auto": 14.9,
+				"teleop": 33.2,
+				"endgame": 6.4,
+				"all": 55.8
+			},
+			"climbLevels": {
+				"climb1": 0,
+				"climb2": 5,
+				"climb3": 11,
+				"climb4": 28
+			},
+			"possibleShots": "U",
+			"possibleClimbs": "2, 3, 4"
+		},
+		"4611": {
+			"averages": {
+				"lowerHub": -1.1,
+				"upperHub": 2.3
+			},
+			"averageScores": {
+				"auto": 5.3,
+				"teleop": 3.4,
+				"endgame": 8.5,
+				"all": 19.2
+			},
+			"climbLevels": {
+				"climb1": 0,
+				"climb2": 14,
+				"climb3": 40,
+				"climb4": 13
+			},
+			"possibleShots": "U",
+			"possibleClimbs": "2, 3, 4"
+		},
+		"4613": {
+			"averages": {
+				"lowerHub": -0.9,
+				"upperHub": 10
+			},
+			"averageScores": {
+				"auto": 5.4,
+				"teleop": 18.6,
+				"endgame": 11.1,
+				"all": 37
+			},
+			"climbLevels": {
+				"climb1": 0,
+				"climb2": 10,
+				"climb3": 21,
+				"climb4": 53
+			},
+			"possibleShots": "U",
+			"possibleClimbs": "2, 3, 4"
+		},
+		"4735": {
+			"averages": {
+				"lowerHub": 4.4,
+				"upperHub": 0.6
+			},
+			"averageScores": {
+				"auto": 4.7,
+				"teleop": 5.7,
+				"endgame": 7.7,
+				"all": 18.8
+			},
+			"climbLevels": {
+				"climb1": 0,
+				"climb2": 73,
+				"climb3": 7,
+				"climb4": 0
+			},
+			"possibleShots": "L",
+			"possibleClimbs": "2, 3"
+		},
+		"4905": {
+			"averages": {
+				"lowerHub": -0.2,
+				"upperHub": 8.6
+			},
+			"averageScores": {
+				"auto": 8.9,
+				"teleop": 17,
+				"endgame": 10.3,
+				"all": 38.9
+			},
+			"climbLevels": {
+				"climb1": 0,
+				"climb2": 52,
+				"climb3": 16,
+				"climb4": 21
+			},
+			"possibleShots": "U",
+			"possibleClimbs": "2, 3, 4"
+		},
+		"4944": {
+			"averages": {
+				"lowerHub": 7.5,
+				"upperHub": 1.6
+			},
+			"averageScores": {
+				"auto": 4.8,
+				"teleop": 10.5,
+				"endgame": 5.3,
+				"all": 20.4
+			},
+			"climbLevels": {
+				"climb1": 0,
+				"climb2": 27,
+				"climb3": 9,
+				"climb4": 0
+			},
+			"possibleShots": "U, L",
+			"possibleClimbs": "2, 3"
+		},
+		"5152": {
+			"averages": {
+				"lowerHub": -1.3,
+				"upperHub": 5.7
+			},
+			"averageScores": {
+				"auto": 10.5,
+				"teleop": 10.1,
+				"endgame": 11.2,
+				"all": 31.8
+			},
+			"climbLevels": {
+				"climb1": 6,
+				"climb2": 7,
+				"climb3": 20,
+				"climb4": 60
+			},
+			"possibleShots": "U",
+			"possibleClimbs": "1, 2, 3, 4"
+		},
+		"5172": {
+			"averages": {
+				"lowerHub": -0.9,
+				"upperHub": 20.4
+			},
+			"averageScores": {
+				"auto": 15.9,
+				"teleop": 39.8,
+				"endgame": 5.2,
+				"all": 64.3
+			},
+			"climbLevels": {
+				"climb1": 0,
+				"climb2": 0,
+				"climb3": 0,
+				"climb4": 0
+			},
+			"possibleShots": "U",
+			"possibleClimbs": "-"
+		},
+		"5298": {
+			"averages": {
+				"lowerHub": 0,
+				"upperHub": 4.6
+			},
+			"averageScores": {
+				"auto": 2.9,
+				"teleop": 9.1,
+				"endgame": 2.3,
+				"all": 17.3
+			},
+			"climbLevels": {
+				"climb1": 0,
+				"climb2": 50,
+				"climb3": 0,
+				"climb4": 0
+			},
+			"possibleShots": "U",
+			"possibleClimbs": "2"
+		},
+		"5406": {
+			"averages": {
+				"lowerHub": 1.2,
+				"upperHub": 10.4
+			},
+			"averageScores": {
+				"auto": 12.9,
+				"teleop": 22,
+				"endgame": 12.2,
+				"all": 49.3
+			},
+			"climbLevels": {
+				"climb1": 0,
+				"climb2": 6,
+				"climb3": 7,
+				"climb4": 56
+			},
+			"possibleShots": "U, L",
+			"possibleClimbs": "2, 3, 4"
+		},
+		"5460": {
+			"averages": {
+				"lowerHub": -0.3,
+				"upperHub": 12.3
+			},
+			"averageScores": {
+				"auto": 9,
+				"teleop": 24.4,
+				"endgame": 7.6,
+				"all": 45.6
+			},
+			"climbLevels": {
+				"climb1": 0,
+				"climb2": 21,
+				"climb3": 10,
+				"climb4": 37
+			},
+			"possibleShots": "U",
+			"possibleClimbs": "2, 3, 4"
+		},
+		"5484": {
+			"averages": {
+				"lowerHub": -0.3,
+				"upperHub": 8.8
+			},
+			"averageScores": {
+				"auto": 6.6,
+				"teleop": 17.4,
+				"endgame": 14,
+				"all": 37.3
+			},
+			"climbLevels": {
+				"climb1": 0,
+				"climb2": 7,
+				"climb3": 6,
+				"climb4": 87
+			},
+			"possibleShots": "U",
+			"possibleClimbs": "2, 3, 4"
+		},
+		"5985": {
+			"averages": {
+				"lowerHub": -0.2,
+				"upperHub": 7.5
+			},
+			"averageScores": {
+				"auto": 7.8,
+				"teleop": 14.2,
+				"endgame": 6.7,
+				"all": 30.3
+			},
+			"climbLevels": {
+				"climb1": 0,
+				"climb2": 26,
+				"climb3": 32,
+				"climb4": 0
+			},
+			"possibleShots": "U",
+			"possibleClimbs": "2, 3"
+		},
+		"6300": {
+			"averages": {
+				"lowerHub": 2.8,
+				"upperHub": 1.4
+			},
+			"averageScores": {
+				"auto": 3.3,
+				"teleop": 5.5,
+				"endgame": 2.6,
+				"all": 11.7
+			},
+			"climbLevels": {
+				"climb1": 0,
+				"climb2": 50,
+				"climb3": 0,
+				"climb4": 0
+			},
+			"possibleShots": "U, L",
+			"possibleClimbs": "2"
+		},
+		"6340": {
+			"averages": {
+				"lowerHub": 1.1,
+				"upperHub": 5.8
+			},
+			"averageScores": {
+				"auto": 5.5,
+				"teleop": 12.7,
+				"endgame": 12.3,
+				"all": 32
+			},
+			"climbLevels": {
+				"climb1": 0,
+				"climb2": 0,
+				"climb3": 20,
+				"climb4": 80
+			},
+			"possibleShots": "U, L",
+			"possibleClimbs": "3, 4"
+		},
+		"6358": {
+			"averages": {
+				"lowerHub": 4.3,
+				"upperHub": -0.1
+			},
+			"averageScores": {
+				"auto": 4.1,
+				"teleop": 4.2,
+				"endgame": 4.5,
+				"all": 13.3
+			},
+			"climbLevels": {
+				"climb1": 0,
+				"climb2": 14,
+				"climb3": 0,
+				"climb4": 7
+			},
+			"possibleShots": "L",
+			"possibleClimbs": "2, 4"
+		},
+		"6401": {
+			"averages": {
+				"lowerHub": 0.5,
+				"upperHub": 4.4
+			},
+			"averageScores": {
+				"auto": 7.2,
+				"teleop": 9.2,
+				"endgame": 2.5,
+				"all": 19.2
+			},
+			"climbLevels": {
+				"climb1": 0,
+				"climb2": 42,
+				"climb3": 0,
+				"climb4": 0
+			},
+			"possibleShots": "U",
+			"possibleClimbs": "2"
+		},
+		"6453": {
+			"averages": {
+				"lowerHub": 1,
+				"upperHub": 0.3
+			},
+			"averageScores": {
+				"auto": 4.3,
+				"teleop": 1.6,
+				"endgame": 10.3,
+				"all": 16.4
+			},
+			"climbLevels": {
+				"climb1": 0,
+				"climb2": 0,
+				"climb3": 0,
+				"climb4": 94
+			},
+			"possibleShots": "-",
+			"possibleClimbs": "4"
+		},
+		"6586": {
+			"averages": {
+				"lowerHub": 0.3,
+				"upperHub": 2.1
+			},
+			"averageScores": {
+				"auto": -1.9,
+				"teleop": 4.4,
+				"endgame": 2.2,
+				"all": 4.7
+			},
+			"climbLevels": {
+				"climb1": 0,
+				"climb2": 0,
+				"climb3": 0,
+				"climb4": 6
+			},
+			"possibleShots": "U",
+			"possibleClimbs": "4"
+		},
+		"6652": {
+			"averages": {
+				"lowerHub": -1.1,
+				"upperHub": 9.4
+			},
+			"averageScores": {
+				"auto": 7.8,
+				"teleop": 17.7,
+				"endgame": -0.8,
+				"all": 24.9
+			},
+			"climbLevels": {
+				"climb1": 0,
+				"climb2": 47,
+				"climb3": 0,
+				"climb4": 6
+			},
+			"possibleShots": "U",
+			"possibleClimbs": "2, 4"
+		},
+		"6749": {
+			"averages": {
+				"lowerHub": -1,
+				"upperHub": 1.5
+			},
+			"averageScores": {
+				"auto": 4.1,
+				"teleop": 1.9,
+				"endgame": 13.5,
+				"all": 20
+			},
+			"climbLevels": {
+				"climb1": 0,
+				"climb2": 17,
+				"climb3": 0,
+				"climb4": 61
+			},
+			"possibleShots": "U",
+			"possibleClimbs": "2, 4"
+		},
+		"7072": {
+			"averages": {
+				"lowerHub": 4.2,
+				"upperHub": 0.5
+			},
+			"averageScores": {
+				"auto": 1.9,
+				"teleop": 5.1,
+				"endgame": 3,
+				"all": 9.2
+			},
+			"climbLevels": {
+				"climb1": 6,
+				"climb2": 47,
+				"climb3": 0,
+				"climb4": 0
+			},
+			"possibleShots": "L",
+			"possibleClimbs": "1, 2"
+		},
+		"8006": {
+			"averages": {
+				"lowerHub": 0.7,
+				"upperHub": 1.3
+			},
+			"averageScores": {
+				"auto": 4.3,
+				"teleop": 3.3,
+				"endgame": 3,
+				"all": 10.6
+			},
+			"climbLevels": {
+				"climb1": 0,
+				"climb2": 54,
+				"climb3": 8,
+				"climb4": 0
+			},
+			"possibleShots": "U",
+			"possibleClimbs": "2, 3"
+		},
+		"8022": {
+			"averages": {
+				"lowerHub": 0.5,
+				"upperHub": 0.2
+			},
+			"averageScores": {
+				"auto": 6.8,
+				"teleop": 0.8,
+				"endgame": 3.3,
+				"all": 11.7
+			},
+			"climbLevels": {
+				"climb1": 0,
+				"climb2": 46,
+				"climb3": 0,
+				"climb4": 8
+			},
+			"possibleShots": "-",
+			"possibleClimbs": "2, 4"
+		},
+		"8033": {
+			"averages": {
+				"lowerHub": 0.2,
+				"upperHub": 11.8
+			},
+			"averageScores": {
+				"auto": 7.8,
+				"teleop": 23.7,
+				"endgame": -0.4,
+				"all": 32.6
+			},
+			"climbLevels": {
+				"climb1": 0,
+				"climb2": 33,
+				"climb3": 0,
+				"climb4": 0
+			},
+			"possibleShots": "U",
+			"possibleClimbs": "2"
+		},
+		"8516": {
+			"averages": {
+				"lowerHub": 1.2,
+				"upperHub": 2.6
+			},
+			"averageScores": {
+				"auto": 4.4,
+				"teleop": 6.3,
+				"endgame": 9.3,
+				"all": 19.6
+			},
+			"climbLevels": {
+				"climb1": 0,
+				"climb2": 24,
+				"climb3": 0,
+				"climb4": 47
+			},
+			"possibleShots": "U, L",
+			"possibleClimbs": "2, 4"
+		},
+		"8537": {
+			"averages": {
+				"lowerHub": 2.3,
+				"upperHub": 4
+			},
+			"averageScores": {
+				"auto": 2.1,
+				"teleop": 10.2,
+				"endgame": 2.3,
+				"all": 17.9
+			},
+			"climbLevels": {
+				"climb1": 0,
+				"climb2": 77,
+				"climb3": 8,
+				"climb4": 0
+			},
+			"possibleShots": "U, L",
+			"possibleClimbs": "2, 3"
+		},
+		"8574": {
+			"averages": {
+				"lowerHub": 2.8,
+				"upperHub": 1.1
+			},
+			"averageScores": {
+				"auto": 4.7,
+				"teleop": 5,
+				"endgame": 1.1,
+				"all": 14.3
+			},
+			"climbLevels": {
+				"climb1": 0,
+				"climb2": 0,
+				"climb3": 0,
+				"climb4": 9
+			},
+			"possibleShots": "U, L",
+			"possibleClimbs": "4"
+		},
+		"8708": {
+			"averages": {
+				"lowerHub": 0.9,
+				"upperHub": 2.7
+			},
+			"averageScores": {
+				"auto": 6.8,
+				"teleop": 6.3,
+				"endgame": 9,
+				"all": 23.6
+			},
+			"climbLevels": {
+				"climb1": 0,
+				"climb2": 58,
+				"climb3": 0,
+				"climb4": 0
+			},
+			"possibleShots": "U",
+			"possibleClimbs": "2"
+		},
+		"8793": {
+			"averages": {
+				"lowerHub": -0.1,
+				"upperHub": 0.6
+			},
+			"averageScores": {
+				"auto": 6.5,
+				"teleop": 1.1,
+				"endgame": 3.7,
+				"all": 13.7
+			},
+			"climbLevels": {
+				"climb1": 0,
+				"climb2": 0,
+				"climb3": 0,
+				"climb4": 0
+			},
+			"possibleShots": "-",
+			"possibleClimbs": "-"
+		},
+		"8818": {
+			"averages": {
+				"lowerHub": -1.5,
+				"upperHub": 2.3
+			},
+			"averageScores": {
+				"auto": 2.8,
+				"teleop": 3.1,
+				"endgame": -0.3,
+				"all": 5.8
+			},
+			"climbLevels": {
+				"climb1": 0,
+				"climb2": 9,
+				"climb3": 0,
+				"climb4": 8
+			},
+			"possibleShots": "U",
+			"possibleClimbs": "2, 4"
+		}
 	}
 }
