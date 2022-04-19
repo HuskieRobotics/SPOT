@@ -32,12 +32,11 @@
             "actionGroups": [
                 {
                     "name": "Pickups",
-                    "actions": ["groundPickup", "terminalPickup"]
+                    "actions": ["groundPickup"]
                 }
             ],
             "actionLabels": {
-                "groundPickup": "Ground",
-                "terminalPickup": "Terminal"
+                "groundPickup": "Ground"
             },
             "imgPath": "img/field.svg"
         }
@@ -213,24 +212,6 @@
             ]
         }
     },
-    {
-        "view": "team",
-        "module": "Pie",
-        "position": "main",
-        "name": "Pickup Distribution",
-        "options": {
-            "slices": [
-                {
-                    "name": "Ground",
-                    "path": "counts.groundPickup"
-                },
-                {
-                    "name": "Terminal",
-                    "path": "counts.terminalPickup"
-                }
-            ]
-        }
-    },
 
 	{
 		"view": "match",
@@ -380,12 +361,11 @@
             "actionGroups": [
                 {
                     "name": "Pickups",
-                    "actions": ["groundPickup", "terminalPickup"]
+                    "actions": ["groundPickup"]
                 }
             ],
             "actionLabels": {
-                "groundPickup": "Ground",
-                "terminalPickup": "Terminal"
+                "groundPickup": "Ground"
             },
             "imgPath": "img/field.svg"
         }
