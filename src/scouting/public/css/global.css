@@ -70,6 +70,10 @@ body {
 
 .scouting-info {
 	display: none;
+	position: absolute;
+	top: 0;
+	left: 50%;
+	transform: translateX(-50%);
 }
 
 * {
