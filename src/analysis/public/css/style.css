@@ -166,11 +166,11 @@ body {
   border-radius: 16px;
   border: 2px solid var(--accent-alt);
   background-color: var(--bg);
-  padding: 18px;
+  padding: 16px;
   border-top-width: 6px;
   display: flex;
   flex-direction: column;
-  gap: 7px;
+  gap: 8px;
   cursor: pointer;
   transition: 0.3s border, 0.3s background-color;
 }
@@ -179,15 +179,15 @@ body {
   text-align: center;
   color: var(--accent-alt);
   font-weight: 600;
-  font-size: 1.6em;
-  line-height: 1em;
+  font-size: 1.5rem;
+  line-height: 1.5rem;
   transition: 0.3s color;
 }
 
 .team-container > .team-name {
   text-align: center;
-  font-size: 1.1em;
-  line-height: 1em;
+  font-size: 1.2rem;
+  line-height: 1.2rem;
   color: var(--text);
   transition: 0.3s color;
 }
@@ -204,7 +204,7 @@ body {
 #team-list {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 20px;
   overflow: auto;
   padding-right: 2px;
 }
