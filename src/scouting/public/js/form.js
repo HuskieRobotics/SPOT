@@ -2,7 +2,7 @@ document.querySelector("#form .save").addEventListener("click", async () => {
         localStorage.setItem("firstName", document.querySelector("#form .first-name").value); //store form values in localstorage
         localStorage.setItem("lastName", document.querySelector("#form .last-name").value);
         if (ScoutingSync.state.offlineMode || !ScoutingSync.state.connected) { //only show manual entry for robot and match number when permenantly offline or temporarily disconnected
-            switchPage("form")
+            switchPage("landing")
             new Modal("small", false)
                 .header("Disconnected")
                 .text("Please reconnect to continue")
