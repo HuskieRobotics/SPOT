@@ -147,7 +147,7 @@
     animation: spin 3200ms ease-in-out infinite;
     filter: invert(1) brightness(.35) sepia(1) hue-rotate(180deg) saturate(2);
     height: 0;
-    max-height: 500px;
+    max-height: 240px;
     flex-grow: 1;
     user-select: none;
     pointer-events: none;
