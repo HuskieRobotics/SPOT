@@ -169,6 +169,8 @@ body {
     transition: 0.3s all;
 }
 
+
+
 .team-container {
     border-radius: 16px;
     border: 2px solid var(--accent-alt);
@@ -209,11 +211,21 @@ body {
 }
 
 #team-list {
+    z-index: 99;
     display: flex;
     flex-direction: column;
     gap: 20px;
     overflow: auto;
     padding-right: 2px;
+    background: white;
+}
+
+
+#team-loading-box {
+    z-index: 9;
+    height: 1px;
+    width: 100%;
+    padding-left: 2px;
 }
 
 #welcome {
