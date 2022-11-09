@@ -99,9 +99,11 @@ class ScoutingSync {
                         ScoutingSync.updateState({status: ScoutingSync.SCOUTER_STATUS.READY}); //tell the server that you started scouting
                     }
 				document.querySelector(".scouting-info").style.display = "block"
-                new Modal("small").header("Match Information").text(`
-                You have been assigned team ${ScoutingSync.state.robotNumber} in match ${ScoutingSync.state.matchNumber}.
-                `).dismiss("OK")
+                if (ScoutingSync.state.robotNumber !== "" && ScoutingSync.state.matchNumber !== "" || ScoutingSync.state.matchNumber !== 0) {
+                    new Modal("small").header("Match Information").text(`
+                    You have been assigned team ${ScoutingSync.state.robotNumber} in match ${ScoutingSync.state.matchNumber}.
+                    `).dismiss("OK")
+                }
             },100)
         })
     }
