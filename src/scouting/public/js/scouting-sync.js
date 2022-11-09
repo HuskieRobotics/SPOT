@@ -84,8 +84,10 @@ class ScoutingSync {
                     robotNumber: ScoutingSync.state.robotNumber,
                     matchNumber: ScoutingSync.state.matchNumber
                 }
-                
-                if (ScoutingSync.state.matchNumber === "0") {
+                if(ScoutingSync.state.status === ScoutingSync.SCOUTER_STATUS.NEW){
+
+                }
+                else if (ScoutingSync.state.matchNumber === "0") {
                     switchPage("error");
                     ScoutingSync.updateState({status: ScoutingSync.SCOUTER_STATUS.MATCHERROR}); //tell the server that you started scouting
                 } else if (ScoutingSync.state.robotNumber === "") {

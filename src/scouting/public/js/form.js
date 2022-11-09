@@ -18,7 +18,14 @@ document.querySelector("#form .save").addEventListener("click", async () => {
                 scouterId: `${(document.querySelector("#form .first-name").value.replace(" ", "") + " ").replace("  ", " ")}${document.querySelector("#form .last-name").value}`,
                 status: ScoutingSync.SCOUTER_STATUS.WAITING
             })
-            switchPage("match-scouting");
+            switchPage("landing");
+            new Modal("small", false)
+                .header("Disconnected")
+                .text("Please reconnect to continue")
+                .dismiss("OK")
+                .action("Reload",
+                    () => window.location.reload()
+                )
             document.querySelector(".scouting-info").style.display = "block"
         } else {
             await ScoutingSync.updateState({
