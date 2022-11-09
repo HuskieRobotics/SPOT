@@ -91,7 +91,6 @@ class ScoutingSync {
                     switchPage("error");
                     ScoutingSync.updateState({status: ScoutingSync.SCOUTER_STATUS.MATCHERROR}); //tell the server that you started scouting
                 } else if (ScoutingSync.state.robotNumber === "") {
-                    console.log(ScoutingSync.state.status)
                     switchPage("max-scouters");
                     ScoutingSync.updateState({status: ScoutingSync.SCOUTER_STATUS.TOOMANY}); //tell the server that you started scouting
                 } else {
