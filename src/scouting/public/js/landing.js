@@ -71,10 +71,10 @@ document.querySelector("#landing > div.auth.landing-screen > div > div.manual").
     switchPage("form");
 });
 document.querySelector("#landing > div.auth.landing-screen > div > div.admin").addEventListener("click", () => {
-    location.href = '/admin';
+    location.href = '/admin/';
 });
 document.querySelector("#landing > div.auth.landing-screen > div > div.analysis").addEventListener("click", () => {
-    location.href = '/analysis';
+    location.href = '/analysis/';
 });
 document.querySelector("#landing > div.auth.landing-screen > div > div.info").addEventListener("click", () => {
     setPage("landing")
