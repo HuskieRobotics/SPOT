@@ -59,6 +59,9 @@ Documentation of the core codebase is currently partially included in files. Che
 * **Nithilan Kalidoss** - *Initial work* - [nithilan4](https://github.com/nithilan4)
 
 See also the list of [contributors](https://github.com/HuskieRobotics/SPOT/contributors) who participated in this project.
+* **Maaz Zubair** - *Maintanence* - [maaz-zubair-99](https://github.com/maaz-zubair-99)
+* **Faiz Muhammad** - *Maintanence* - [faizmuhammad12](https://github.com/faizmuhammad12)
+* **Emma Shipley** - *Maintanence* - [emmashipley](https://github.com/emmashipley)
 
 ## License
 
