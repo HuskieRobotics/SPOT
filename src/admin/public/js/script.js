@@ -138,9 +138,6 @@ async function updateMatches(accessCode) {
 
         if (currentMatch.match_string == match.match_string) { //check the box if it is selected
             matchElement.querySelector(".match-select").checked = true;
-            matchElement.scrollIntoView({
-                block: "center"
-            });
         }
 
         //add the robot numbers to match
