@@ -1,0 +1,106 @@
+#form {
+    background-color: var(--bg);
+}
+
+#form .input {
+  background-color: var(--bg-alt);
+  border: black 2px solid;
+  color: black;
+  cursor: pointer;
+  text-align: left;
+  border-radius: 8px;
+  font-size: 1.5em;
+  padding: 8px 12px;
+  transition: 0.3s color, 0.3s border;
+  outline: none;
+}
+
+#form .input:focus {
+  border: var(--accent) 2px solid;
+}
+
+#form .label {
+  position: relative
+}
+
+#form .label > span {
+  position: absolute;
+  padding: 0 5px;
+  left: 12px;
+  background-color: var(--bg-alt);
+  top: -8px;
+  border-radius: 20px;
+  font-size: 1.5em;
+  transition: 0.2s transform;
+  pointer-events: none;
+  color: var(--placeholder);
+}
+
+.input:focus + span, .input:valid + span {
+  transform: scale(0.75) translate(-20px, -46px);
+  color: black !important;
+}
+
+.input {
+    width: 100%;
+}
+
+#form {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+#form .form {
+    background-color: var(--bg-alt);
+    border-radius: var(--border-radius);
+    display: grid;
+    grid-template-columns: 50% 50%;
+    grid-template-rows: 20% 30% 30% 20%;
+    width: 750px;
+    justify-items: center;
+    align-items: center;
+    height: 90vh;
+    gap: 2.5px;
+    padding: 20px;
+}
+
+#form .form .title {
+    grid-area: 1/1/2/3;
+    margin: 0px 0;
+    font-size: 2em;
+}
+
+#form .form .save {
+    grid-area: 4/1/5/3;
+    font-size: 1.75em;
+    width: 90%;
+    background-color: var(--accent);
+    border-radius: var(--border-radius);
+    color: var(--bg-alt);
+    border: none;
+    margin: 6px 0;
+    height: 2em;
+}
+
+@media screen and (min-height: 600px) {
+    #form .form {
+        width: 350px;
+        height: auto;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-evenly;
+        align-items: center;
+        padding: 20px;
+    }
+    #form .form .title {
+        font-size: 2em
+    }
+    #form .form .save {
+        width: calc(100% - 24px);
+        margin: 12px 0;
+    }
+    #form .input {
+        width: 100%;
+        margin: 12px 0;
+    }
+}

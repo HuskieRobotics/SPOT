@@ -1,0 +1,370 @@
+body {
+    margin: 0;
+    overflow: hidden;
+}
+
+.access-input {
+    border-radius: 8px;
+    border: 2px solid var(--text);
+    background-color: var(--bg-alt);
+    color: var(--text);
+    padding: 8px 12px;
+    font-size: 1.5em;
+}
+
+#menu {
+    height: 100%;
+    width: 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 16px 0;
+    grid-area: 1 / 1 / 2 / 2;
+    background-color: var(--bg-alt);
+    opacity: 0;
+    transition: 0.3s visibility, opacity, width;
+    visibility: hidden;
+    border-right: 1px solid var(--text);
+    transition: 0.3s all;
+    z-index: 999;
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+
+#menu.expanded {
+    width: 200px;
+}
+
+#menu > * {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 12px;
+    cursor: pointer;
+    color: var(--text);
+    text-decoration: none;
+}
+
+#menu > * > i  {
+    font-size: 1.75rem;
+}
+
+#menu > * > div {
+    font-size: 1.25rem;
+    width: 0;
+    overflow: hidden;
+    white-space: pre;
+    opacity: 0;
+    transition: 0.3s opacity, margin;
+}
+
+#menu.expanded > * > div {
+    width: unset;
+    margin-left: 10px;
+    opacity: 1;
+}
+
+#menu-icon {
+    color: var(--accent);
+    transition: 0.3s transform cubic-bezier(.17,.67,.89,1.29);
+    transform: rotate(270deg);
+    margin-bottom: 16px;
+}
+
+#menu-icon-container {
+    border-bottom: 2px solid black;
+    margin-bottom: 16px;
+}
+
+#menu.expanded #menu-icon {
+    transform: rotate(90deg);
+}
+
+#admin-panel {
+    margin-left: 50px;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    padding: 25px 5%;
+    color: var(--text);
+    background: var(--bg);
+    opacity: 0;
+    transition: 0.3s visibility, opacity;
+    visibility: hidden;
+    grid-area: 1 / 2 / 2 / 3;
+}
+
+#menu.visible {
+    visibility: unset;
+    opacity: 1;
+    transition: visibility 0s 0s, opacity 0.3s 0s, 0.3s width;
+}
+
+#admin-panel.visible {
+    visibility: unset;
+    opacity: 1;
+    transition: visibility 0s 0s, opacity 0.3s 0s;
+}
+
+#scouters {
+    padding: 21px;
+    padding-top: 24px;
+    border: 2px solid var(--text);
+    border-radius: 10px;
+    position: relative;
+    margin-top: 10px;
+    min-height: 200px;
+    max-height: 360px;
+}
+
+#scouter-list {
+    display: flex;
+    overflow-x: auto;
+    gap: 10px;
+    height: 100%;
+}
+
+.scouter {
+    height: 150px;
+    width: 200px;
+    border-radius: 10px;
+    border: 2px solid var(--text);
+    position: relative;
+    color: var(--text);
+    background-color: var(--bg-alt);
+    font: 1em/1em "Cairo";
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    padding: 6px 25px 0;
+}
+
+.scouter > .scouter-id {
+    font-size: 1.3rem;
+    text-overflow: ellipsis;
+    width: 100%;
+    text-align: center;
+    overflow-y: visible;
+    overflow-x: clip
+}
+.scouter > .robot-number {
+    font-size: 3rem;
+    font-weight: bold;
+}
+.scouter > .match-number {
+    position: absolute;
+    left: 50%;
+    top: -1px;
+    transform: translateX(-50%);
+    border-radius: 0 0 10px 10px;
+    font-weight: bold;
+    font-size: 1.15rem;
+    color: var(--bg-alt);
+    padding: 0 12px 2px;
+    line-height: 1em;
+    background-color: var(--text);
+    border: 2px solid var(--text);
+}
+.scouter > .scouter-status {
+    font-size: 1.3rem;
+    font-weight: bold;
+}
+
+#start-scouting {
+    border: 2px solid var(--text);
+    background-color: var(--accent);
+    color: var(--bg-alt);
+    border-radius: 10px;
+    position: absolute;
+    bottom: -3px;
+    left: 50%;
+    transform: translate(-50%, 50%);
+    font: 1.4em/1em Cairo;
+    padding: 5px 20px;
+    cursor: pointer;
+}
+
+#matches {
+    padding: 20px;
+    padding-top: 24px;
+    border: 2px solid var(--text);
+    border-radius: 10px;
+    position: relative;
+    margin-top: 32px;
+    min-height: 0;
+}
+
+.title {
+    position: absolute;
+    background-color: var(--bg);
+    border-radius: 10px;
+    top: 0px;
+    left: 40px;
+    font: 2em/1em "Cairo";
+    padding: 0 6px;
+    transform: translateY(-50%);
+}
+
+#match-list {
+    height: 100%;
+    width: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    gap: 12px;
+    display: flex;
+    flex-direction: column;
+}
+
+#matches .match {
+    display: grid;
+    width: 100%;
+    grid-template-columns: calc(.75 * 80px + 14px) repeat(2,1fr);
+    grid-template-rows: 30% 70%;
+    border: 2px solid var(--text);
+    border-radius: 10px;
+    padding: 10px 15px;
+    background: var(--bg-alt);
+}
+
+.match .match-select {
+    width: calc(.75 * 80px);
+    height: calc(.75 * 80px);
+    margin-right: 14px;
+    appearance: none;
+    background-color: var(--text);
+    display: grid;
+    place-content: center;
+    border-radius: 10px;
+    align-self: center;
+}
+
+
+.match .match-select::before {
+    content: "";
+    width: calc(.4 * 80px);
+    height: calc(.4 * 80px);
+    transform: scale(0);
+    border-radius: 16px;
+    transition: 120ms transform cubic-bezier(.37,-0.02,.47,1.77);
+    box-shadow: inset calc(.75 * 80px) calc(.75 * 80px) var(--accent);
+}
+  
+.match .match-select:checked::before {
+    transform: scale(1);
+}
+
+.match .match-header {
+    grid-area: 1 / 1 / 2 / 4;
+    font-size: 1.2em;
+    line-height: 1em;
+}
+
+.match .match-teams {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+    text-align: center;
+    font: 1.8em/calc(80px * .75) "Cairo";
+    color: var(--bg-alt);   
+}
+
+.match .match-teams.red {
+    background: #ff6666;
+    border-radius: 10px 0 0 10px;
+}
+
+.match .match-teams.blue {
+    background: #6666ff;
+    border-radius: 0 10px 10px 0;
+}
+
+@media only screen and (max-height: 500px), screen and (max-width: 700px) {
+    #admin-panel {
+        padding: 15px 2.5%;
+    }
+
+    .scouter {
+        height: 100px;
+        padding: 6px 10px 0;
+        width: 115px;
+    }
+
+    html {
+        font-size: 70%;
+    }
+    
+    #scouters {
+        min-height: 150px;
+    }
+
+    .scouter > .match-number {
+        line-height: 0.7em;
+        padding: 0 8px 3px;
+        font-size: 1.3rem;
+    }
+
+    body {
+        grid-template-columns: auto 1fr;
+    }
+
+    #menu {
+        padding: 10px 0;
+    }
+
+    #menu > * > i {
+        font-size: 2rem;
+    }
+
+    #menu > * > div {
+        font-size: 1.75rem;
+    }
+}
+
+@media only screen and (max-width: 550px) {
+    .match .match-teams {
+        font: 1.3rem/1em Cairo;
+    }
+
+    #matches .match {
+        grid-template-columns: calc(.75 * 65px) repeat(2,1fr);
+    }
+
+    .match .match-select {
+        width: calc(.75 * 50px);
+        height: calc(.75 * 50px);
+        margin-right: 0;
+    } 
+
+    .match .match-select::before {
+        width: calc(.4 * 50px);
+        height: calc(.4 * 50px);
+    }
+
+    #scouter-list {
+        gap: 6px;
+        flex-wrap: wrap;
+        justify-content: space-evenly;
+    }
+
+    #scouters {
+        padding: 21px 12px;
+        min-height: unset;
+    }
+
+	#match-list {
+		gap: 8px;
+	}
+}
+
+@media only screen and (max-width: 450px) {
+    #matches {
+        padding: 16px 0px 12px 4px;
+    }
+
+    #matches .match {
+        padding: 8px 6px;
+    }
+}

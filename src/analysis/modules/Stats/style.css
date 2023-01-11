@@ -1,0 +1,43 @@
+.stats.container {
+    width: 90%;
+    padding: 30px 40px;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--bg-alt);
+    border-radius: var(--border-radius);
+    border: 2px solid var(--accent-alt);
+}
+
+.stats .header {
+    font-size: 2em;
+    line-height: 1em;
+    text-align: center;
+    color: var(--text);
+    margin-bottom: 12px;
+}
+
+.stats .list {
+    display: flex;
+    font-size: 1.25em;
+    flex-direction: column;
+    width: 100%;
+    color: var(--text);
+}
+
+.stats .rank.top5 {
+	color: var(--accent);
+}
+
+.stats .rank.top25 {
+	color: var(--green);
+}
+
+.stats .rank.top50 {
+	color: var(--orange-light);
+}
+
+@media screen and (max-width: 1100px) {
+	.stats.container {
+		padding: 25px 20px;
+	}
+}

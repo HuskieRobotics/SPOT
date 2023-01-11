@@ -1,0 +1,20 @@
+.divider.container {
+    width: 90%;
+    background-color: var(--accent-alt);
+	min-height: 5px;
+	border-radius: var(--border-radius);
+	position: relative;
+}
+
+.divider .title {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	padding: 0 10px;
+	transform: translate(-50%, -50%);
+	text-align: center;
+	background-color: var(--bg);
+	color: var(--accent-alt);
+	font-size: 1.4em;
+	line-height: 1em;
+}
