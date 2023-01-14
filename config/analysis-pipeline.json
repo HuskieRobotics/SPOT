@@ -62,8 +62,7 @@
         "outputPath": "cycle",
         "options": {
             "pickups": [
-                "groundPickup",
-                "terminalPickup"
+                "groundPickup"
             ],
             "scores": [
                 "upperHub",

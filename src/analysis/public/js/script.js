@@ -108,7 +108,12 @@ if ('serviceWorker' in navigator) {
 	//call setData on every module in teams
 	async function setTeamModules(teamNumber) {
 		for (const module of modules.team) {
-			await module.setData(await module.formatData([teamNumber], dataset))
+			if (!module.moduleConfig.separate && Object.keys(dataset.teams[teamNumber]).filter(prop => prop !== "manual").length == 0) {
+				module.container.classList.add("hidden")
+			} else {
+				module.container.classList.remove("hidden")
+				await module.setData(await module.formatData([teamNumber], dataset))
+			}
 		}
 	}
 
@@ -226,11 +231,37 @@ if ('serviceWorker' in navigator) {
 	//call setData on every module in matches
 	async function setMatchModules(alliances) {
 		for (const module of modules.match.left) {
-			await module.setData(await module.formatData(alliances[0], dataset))
+			const displayedAlliances = alliances[0].filter(teamNumber => {
+				if (!module.moduleConfig.separate && Object.keys(dataset.teams[teamNumber]).filter(prop => prop !== "manual").length == 0) {
+					return false
+				}
+
+				return true
+			})
+
+			if (displayedAlliances.length !== 0) {
+				module.container.classList.remove("hidden")
+				await module.setData(await module.formatData(displayedAlliances, dataset))
+			} else {
+				module.container.classList.add("hidden")
+			}
 		}
 
 		for (const module of modules.match.right) {
-			await module.setData(await module.formatData(alliances[1], dataset))
+			const displayedAlliances = alliances[1].filter(teamNumber => {
+				if (!module.moduleConfig.separate && Object.keys(dataset.teams[teamNumber]).filter(prop => prop !== "manual").length == 0) {
+					return false
+				}
+
+				return true
+			})
+
+			if (displayedAlliances.length !== 0) {
+				module.container.classList.remove("hidden")
+				await module.setData(await module.formatData(displayedAlliances, dataset))
+			} else {
+				module.container.classList.add("hidden")
+			}
 		}
 	}
 

@@ -32,12 +32,11 @@
             "actionGroups": [
                 {
                     "name": "Pickups",
-                    "actions": ["groundPickup", "terminalPickup"]
+                    "actions": ["groundPickup"]
                 }
             ],
             "actionLabels": {
-                "groundPickup": "Ground",
-                "terminalPickup": "Terminal"
+                "groundPickup": "Ground"
             },
             "imgPath": "img/field.svg"
         }
@@ -93,14 +92,14 @@
                     "unit": "s to end"
                 },
 				{
-                    "name": "Climb Duration",
-                    "path": "averages.climbDuration",
-                    "multiplier": 0.001,
-                    "decimals": 2,
+					"name": "Climb Duration",
+					"path": "averages.climbDuration",
+					"multiplier": 0.001,
+					"decimals": 2,
 					"hideIfValue": 0,
 					"sort": -1,
-                    "unit": "s"
-                },
+					"unit": "s"
+				},
                 {
                     "name": "Time Per Ball",
                     "path": "timePerBall",
@@ -213,25 +212,6 @@
             ]
         }
     },
-    {
-        "view": "team",
-        "module": "Pie",
-        "position": "main",
-        "name": "Pickup Distribution",
-        "options": {
-            "slices": [
-                {
-                    "name": "Ground",
-                    "path": "counts.groundPickup"
-                },
-                {
-                    "name": "Terminal",
-                    "path": "counts.terminalPickup"
-                }
-            ]
-        }
-    },
-
 	{
 		"view": "match",
 		"module": "SingleDisplay",
@@ -278,7 +258,7 @@
 	{
 		"view": "match",
 		"module": "ColumnDisplay",
-		"name": "Climb Duration",
+		"name": "Climb Time",
 		"position": "main",
 		"options": {
 			"path": "averages.climbDuration",
@@ -337,6 +317,16 @@
 			"path": "possibleShots"
 		}
 	},
+	{
+		"view": "match",
+		"module": "ColumnDisplay",
+		"name": "Drivetrain",
+		"position": "main",
+		"options": {
+			"string": true,
+			"path": "manual.drivetrain"
+		}
+	},
     {
         "view": "match",
         "module": "HeatmapScatterPlot",
@@ -370,12 +360,11 @@
             "actionGroups": [
                 {
                     "name": "Pickups",
-                    "actions": ["groundPickup", "terminalPickup"]
+                    "actions": ["groundPickup"]
                 }
             ],
             "actionLabels": {
-                "groundPickup": "Ground",
-                "terminalPickup": "Terminal"
+                "groundPickup": "Ground"
             },
             "imgPath": "img/field.svg"
         }
