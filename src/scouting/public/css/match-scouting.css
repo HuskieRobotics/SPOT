@@ -14,7 +14,7 @@
     width: 99%;
     height: 93.5%;
     display: grid;
-    grid-gap: .75vw;
+    grid-gap: 3vw;
     border-radius: var(--border-radius, 16px);
     padding: .5vmin
 }
@@ -42,6 +42,10 @@
 
 #match-scouting .grid-button.gray {
     background-color: #2D2D2D
+}
+
+.button-padding {
+  padding: 5vw;
 }
 
 .silver {

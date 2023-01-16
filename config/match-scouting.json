@@ -107,7 +107,7 @@
                     "gridArea": ["3", "3", "4", "5"],
                     "class": "gray",
                     "type": "action",
-                    "executables": [{"type": "layer", "args":[2,1]}]
+                    "executables": []
                 },
                 {
                     "id": "platformEngaged",
@@ -115,7 +115,7 @@
                     "gridArea": ["3", "6", "4", "8"],
                     "class": "gray border",
                     "type": "action",
-                    "executables": [{"type": "layer", "args":[2,1]}]
+                    "executables": []
                 },
                 {
                     "id": "platformLeave",
@@ -155,7 +155,7 @@
                     "id": "conePickupGrid",
                     "displayText": "Grid",
                     "gridArea": ["4", "3", "5", "4"],
-                    "class": "yellow",
+                    "class": "yellow button-padding",
                     "type": "action",
                     "executables": [{"type":"layer","args":[3,5]}]
                 },
@@ -163,7 +163,7 @@
                     "id": "conePickupCommunity",
                     "displayText": "Comm",
                     "gridArea": ["4", "4", "5", "5"],
-                    "class": "yellow",
+                    "class": "yellow button-padding",
                     "type": "action",
                     "executables": [{"type":"layer","args":[3,5]}]
                 },
@@ -171,7 +171,7 @@
                     "id": "conePickupFloor",
                     "displayText": "Floor",
                     "gridArea": ["4", "5", "5", "6"],
-                    "class": "yellow",
+                    "class": "yellow button-padding",
                     "type": "action",
                     "executables": [{"type":"layer","args":[3,5]}]
                 },
@@ -179,7 +179,7 @@
                     "id": "conePickupChute",
                     "displayText": "Chute",
                     "gridArea": ["4", "6", "5", "7"],
-                    "class": "yellow",
+                    "class": "yellow button-padding",
                     "type": "action",
                     "executables": [{"type":"layer","args":[3,5]}]
                 },
@@ -187,7 +187,7 @@
                     "id": "conePickupShelf",
                     "displayText": "Shelf",
                     "gridArea": ["4", "7", "5", "8"],
-                    "class": "yellow",
+                    "class": "yellow button-padding",
                     "type": "action",
                     "executables": [{"type":"layer","args":[3,5]}]
                 }
@@ -228,7 +228,7 @@
                 },
               {
                     "id": "cubePickupFloor",
-                    "displayText": "Ground",
+                    "displayText": "Floor",
                     "gridArea": ["4", "5", "5", "6"],
                     "class": "highlight",
                     "type": "action",

@@ -3,16 +3,100 @@
       "view":"team",
       "module":"Stats",
       "position":"side",
-      "name":"Stats that we hope work",
+      "name":"Charging Dock Averages",
       "options": {
         "list":[
           {
-            "name":"Charging Dock",
-            "path":"counts.chargingDock",
+            "name":"Attempts",
+            "path":"averages.chargingDock",
+            "decimals":2,
+            "sort":1
+          },
+          {
+            "name":"Docked",
+            "path":"averages.platformDocked",
+            "decimals":2,
+            "sort":1
+          },
+          {
+            "name":"Engaged",
+            "path":"averages.platformEngaged",
+            "decimals":2,
+            "sort":1
+          },
+          {
+            "name":"Left",
+            "path":"averages.platformLeave",
+            "decimals":2,
+            "sort":1
+          },
+          {
+            "name":"Fell",
+            "path":"averages.platformFall",
             "decimals":2,
             "sort":1
           }
         ]
       }
+    },
+  {
+    "view":"team",
+    "module": "Pie",
+    "position":"main",
+    "name":"Cone Pickups",
+    "options":{
+      "slices":[
+        {
+          "name":"Grid",
+          "path":"averages.conePickupGrid"
+        },
+        {
+          "name":"Community",
+          "path":"averages.conePickupCommunity"
+        },
+        {
+          "name":"Floor",
+          "path":"averages.conePickupFloor"
+        },
+        {
+          "name":"Chute",
+          "path":"averages.conePickupChute"
+        },
+        {
+          "name":"Shelf",
+          "path":"averages.conePickupShelf"
+        }
+      ]
     }
+  },
+  {
+    "view":"team",
+    "module": "Pie",
+    "position":"main",
+    "name":"Cube Pickups",
+    "options":{
+      "slices":[
+        {
+          "name":"Grid",
+          "path":"averages.cubePickupGrid"
+        },
+        {
+          "name":"Community",
+          "path":"averages.cubePickupCommunity"
+        },
+        {
+          "name":"Floor",
+          "path":"averages.cubePickupFloor"
+        },
+        {
+          "name":"Chute",
+          "path":"averages.cubePickupChute"
+        },
+        {
+          "name":"Shelf",
+          "path":"averages.cubePickupShelf"
+        }
+      ]
+    }
+  }
 ]

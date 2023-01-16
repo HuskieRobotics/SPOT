@@ -1,3 +1,4 @@
+
 class Bar {
     container;
     moduleConfig;

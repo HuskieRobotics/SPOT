@@ -8,7 +8,7 @@ module.exports = {
      */
     tmp: new DataTransformer("test", (dataset, outputPath, options) => {
         for (const tmp of dataset.tmps) {
-            console.log(tmp)
+            // console.log(tmp)
         }
 
         return dataset;
@@ -20,7 +20,7 @@ module.exports = {
      */
     team: new DataTransformer("test", (dataset, outputPath, options) => {
         for (const [teamNumber, team] of Object.entries(dataset.teams)) {
-            console.log(team)
+            // console.log(team)
         }
 
         return dataset;
