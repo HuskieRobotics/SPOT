@@ -230,11 +230,12 @@ if ('serviceWorker' in navigator) {
 
 	// Auto pick list UI functions
 	async function loadAutoPickList(dataset, modulesConfig){
-		//add event listener to "Simulate Match" button to set reset UI and switch to match view
+		//add event listener to "AutoPickList" button to set reset UI and switch to autopicklist tab
 		autoPickSwitch.addEventListener("click", () => {
 			clearInterface()
 			autoPickSwitch.classList.add("selected")
 		})
+
 	}
 
 
@@ -319,5 +320,6 @@ if ('serviceWorker' in navigator) {
 		hideFade(matchView)
 		hideFade(teamView)
 		matchViewSwitch.classList.remove("selected")
+		autoPickSwitch.classList.remove("selected")
 	}
 })()
