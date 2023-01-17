@@ -247,7 +247,7 @@ body {
   transition: visibility 0s 0s, opacity 0.3s 0s;
 }
 
-#match-view-switch {
+#match-view-switch,#auto-pick-switch {
   background-color: var(--bg);
   border: 3px solid var(--accent);
   border-radius: var(--border-radius);
@@ -255,10 +255,11 @@ body {
   width: 100%;
   color: var(--text);
   cursor: pointer;
-  transition: 0.3s color, 0.3s background-color
+  transition: 0.3s color, 0.3s background-color;
+  margin-bottom: 10px;
 }
 
-#match-view-switch.selected {
+#match-view-switch.selected,#auto-pick-switch.selected {
   background-color: var(--accent);
   color: var(--bg-alt)
 }

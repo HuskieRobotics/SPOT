@@ -228,6 +228,16 @@ if ('serviceWorker' in navigator) {
 		}
 	}
 
+	// Auto pick list UI functions
+	async function loadAutoPickList(dataset, modulesConfig){
+		//add event listener to "Simulate Match" button to set reset UI and switch to match view
+		autoPickSwitch.addEventListener("click", () => {
+			clearInterface()
+			autoPickSwitch.classList.add("selected")
+		})
+	}
+
+
 	//call setData on every module in matches
 	async function setMatchModules(alliances) {
 		for (const module of modules.match.left) {
@@ -269,6 +279,7 @@ if ('serviceWorker' in navigator) {
 	function initDashboard(dataset, modulesConfig) {
 		loadTeams(dataset, modulesConfig)
 		loadMatchView(dataset, modulesConfig)
+		loadAutoPickList(dataset,modulesConfig)
 
 		searchInput.addEventListener("input", () => {
 			if (searchInput.value !== "") {
