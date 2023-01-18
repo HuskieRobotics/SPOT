@@ -1,3 +1,6 @@
+const { zScore } = require("simple-statistics");
+const { Dataset } = require("../../DataTransformer");
+
 function swap(arr, i, j) {
 	let temp = arr[i];
 	arr[i] = arr[j];
@@ -57,11 +60,16 @@ function sortTeams(teams) {
 }
 //-------------------------------------------------------------------------------------------------------------------------------------//
 
-// an alliance is made up of three teams
-let alliance = {
-	a : Team a,
-	b : Team b,
-	c : Team c
+async function fetchDataset() {
+	return await fetch("./api/dataset").then(res => res.json())
+}
+
+async function fetchTeams() {
+	const teams = await fetch(`/analysis/api/teams`).then(res => res.json())
+	return teams.reduce((acc, t) => {
+		acc[t.team_number] = t.nickname
+		return acc
+	}, {})
 }
 
 function possibleAliiances(teams) {
@@ -75,6 +83,32 @@ function possibleAliiances(teams) {
 	}
 }
 
-function compareAlliances(alliance1, alliance2) {
-	return 1 // % chance alliance 1 wins
+function allianceAverage(alliance) {
+	return alliance[0].averageScore + alliance[1].averageScore + alliance[2].averageScore;
 }
+
+function allianceStandardDeviation(alliance) {
+	let i = Math.pow(alliance[0].standardDeviation, 2) + Math.pow(alliance[1].standardDeviation, 2) + Math.pow(alliance[2].standardDeviation, 2)
+	return staMath.sqrt(i);
+}
+
+function matchAverage(alliance1, alliance2) {
+	return allianceAverage(alliance1) - allianceAverage(alliance2);
+}
+
+function matchStandardDeviation(alliance1, alliance2) {
+	let i = Math.pow(allianceStandardDeviation(alliance), 2) + Math.pow(allianceStandardDeviation(alliance), 2);
+	return Math.sqrt(i);
+}
+
+function compareAlliances {
+	zscore = zScore()
+}
+
+//----------------------------------------------------------------------------------------------------------------------------------//
+const dataset = fetchDataset();
+const teams = fetchTeams();
+const possibleAliiances = possibleAliiances(teams);
+console.log(teams);
+console.log(possibleAliiances);
+
