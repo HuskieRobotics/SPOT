@@ -234,6 +234,7 @@ if ('serviceWorker' in navigator) {
 		autoPickSwitch.addEventListener("click", () => {
 			clearInterface()
 			autoPickSwitch.classList.add("selected")
+			showFade(autoPickView)
 		})
 
 	}
