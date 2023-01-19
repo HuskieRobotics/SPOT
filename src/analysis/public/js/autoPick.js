@@ -136,6 +136,23 @@ function compareAlliances(alliance1, alliance2) {
 	probAlliance2Wins = cumulativeStdNormalProbability(zscore)
 	return 1 - probAlliance2Wins;
 }
+/**
+ * 
+ * @param {a list of alliances} alliances 
+ * @returns a list of alliances prioritized, by winning probability 
+ * 
+ * If we compare to every alliances to every other alliances we can make a (key, value) map with a key of the alliance number and a value of their winning prob
+ * Then it can be passed into another (key, value) map with the key being a team number and a value of their average chance of winning
+ */
+function compareAllTeams(alliances) {
+	let allianceProb = new Map();
+	for (a in alliances) {
+		for (b in alliances){
+			allianceProb.set(alliances.indexOf(a), allianceProb.get(alliances.indexOf(a)) + compareAlliances(a, b))
+		}
+	}
+
+}
 
 //----------------------------------------------------------------------------------------------------------------------------------//
 
