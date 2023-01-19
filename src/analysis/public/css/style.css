@@ -114,6 +114,11 @@ body {
   position: relative;
 }
 
+#pick-list-search-container{
+  border:none;
+  margin-bottom:5px;
+}
+
 #search-container {
   padding: 20px 0;
   border-top: 1px solid var(--accent-alt);
@@ -307,6 +312,11 @@ body {
   align-items:center;
   margin-left:40px;
   gap: 10px;
+  
+}
+
+#auto-pick-team-list{
+  overflow:auto;
 }
 
 #alliance-vs {
@@ -391,7 +401,7 @@ body {
 		grid-template-rows: 40px 20px auto;
 	}
 
-	#dashboard > div.visible {
+	#x > div.visible {
 		height: calc(100vh - 40px);
 	}
 

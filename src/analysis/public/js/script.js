@@ -98,6 +98,54 @@ if ('serviceWorker' in navigator) {
 		return teamContainer
 	}
 
+	//creates list of teams for auto pick list tab
+	async function loadTeamsAutoPick(dataset, modulesConfig) {
+		//get blue alliance teams
+		const allTeams = await fetchTeams()
+		//add to sidebar team list
+		for (const [teamNumber, team] of Object.entries(dataset.teams)) {
+			const autoPickTeamContainer = constructTeam(teamNumber, team, allTeams)
+			autoPickTeamList.appendChild(autoPickTeamContainer)
+		}
+
+		
+		//get all team modules, create and store module classes, then append their placeholder containers to lists
+		for (const module of modulesConfig.filter(m => m.view == "team")) {
+			const moduleObject = new moduleClasses[module.module](module)
+			if (module.position == "main") {
+				mainList.appendChild(moduleObject.container)
+			} else {
+				sideList.appendChild(moduleObject.container)
+			}
+			
+			modules.team.push(moduleObject)
+			
+		}
+		
+	}
+
+	function constructTeam(teamNumber, team, allTeams) {
+		//create and populate sidebar element
+		const teamContainer = createDOMElement("div", "team-container")
+		const teamNumDisplay = createDOMElement("div", "team-number")
+		teamNumDisplay.innerText = teamNumber
+		teamContainer.setAttribute("num", teamNumber)
+		teamContainer.appendChild(teamNumDisplay)
+		if (allTeams) {
+			const teamNameDisplay = createDOMElement("div", "team-name")
+			teamNameDisplay.innerText = allTeams[teamNumber]
+			teamContainer.appendChild(teamNameDisplay)
+		}
+
+		//switch to team on click of sidebar team, set module data
+		teamContainer.addEventListener("click", async () => {
+			await setTeamModules(teamNumber)
+			displayTeam(teamContainer)
+		})
+
+		return teamContainer
+	}
+
 	//reset UI and switch to team view
 	function displayTeam(teamContainer) {
 		clearInterface()
@@ -234,7 +282,10 @@ if ('serviceWorker' in navigator) {
 		autoPickSwitch.addEventListener("click", () => {
 			clearInterface()
 			autoPickSwitch.classList.add("selected")
+			loadTeamsAutoPick(dataset,modulesConfig)
 			showFade(autoPickView)
+			
+			
 		})
 
 	}
@@ -320,6 +371,7 @@ if ('serviceWorker' in navigator) {
 		hideFade(welcomeView)
 		hideFade(matchView)
 		hideFade(teamView)
+		hideFade(autoPickView)
 		matchViewSwitch.classList.remove("selected")
 		autoPickSwitch.classList.remove("selected")
 	}
