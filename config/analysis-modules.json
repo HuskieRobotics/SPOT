@@ -223,6 +223,16 @@
 			"decimals": 2
 		}
 	},
+    {
+		"view": "match",
+		"module": "SingleDisplay",
+		"name": "Percent Chance of Winning",
+		"position": "main",
+		"options": {
+			"path": "",
+			"decimals": 2
+		}
+	},
 	{
 		"view": "match",
 		"module": "ColumnDisplay",

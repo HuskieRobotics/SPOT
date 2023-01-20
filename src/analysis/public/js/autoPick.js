@@ -151,14 +151,23 @@ function compareAllTeams(alliances) {
 			allianceProb.set(alliances.indexOf(a), allianceProb.get(alliances.indexOf(a)) + compareAlliances(a, b))
 		}
 	}
+	//The map now contains a map of all possible alliances and a sum of their change of winning
+	for(a in allianceProb){ 
+		allianceProb.set(a, allianceProb.get(a) / Math.pow(alliances.length(), 2))
+	}
+	//Now each alliances value should be their average chance of winning
+	let teamProb = new Map();
+	for(a in allianceProb){
+		
+	}
 
 }
 
 //----------------------------------------------------------------------------------------------------------------------------------//
 
-const dataset = fetchDataset();
-const teams = fetchTeams();
-const possibleAliiances = possibleAliiances(teams);
+let dataset = fetchDataset();
+let teams = fetchTeams();
 console.log(teams);
+let possibleAliiances = possibleAliiances(teams);
 console.log(possibleAliiances);
 
