@@ -108,7 +108,13 @@ if ('serviceWorker' in navigator) {
 			autoPickTeamList.appendChild(autoPickTeamContainer)
 		}
 
-		
+		//enable sidebar if sidebar modules exist
+		if (modulesConfig.map(m => m.position).includes("side")) {
+			teamView.classList.add("side-enabled")
+		} else {
+			teamView.classList.remove("side-enabled")
+		}
+
 		//get all team modules, create and store module classes, then append their placeholder containers to lists
 		for (const module of modulesConfig.filter(m => m.view == "team")) {
 			const moduleObject = new moduleClasses[module.module](module)
@@ -285,6 +291,38 @@ if ('serviceWorker' in navigator) {
 			loadTeamsAutoPick(dataset,modulesConfig)
 			showFade(autoPickView)
 			
+			/*
+			searchInput.addEventListener("input", () => {
+			if (searchInput.value !== "") {
+				const sortedTeams = fuzzysort.go(searchInput.value, Object.keys(dataset.teams), {
+					allowTypo: true
+				})
+				console.log(sortedTeams)
+				for (const team of Array.from(autoPickTeamList.children)) {
+					team.style.display = "none"
+				}
+				for (const sortResult of sortedTeams) {
+					const toAppend = Array.from(autoPickTeamList.children).find(teamElement => teamElement.getAttribute("num") == sortResult.target)
+					autoPickTeamList.appendChild(toAppend)
+					toAppend.style.display = "flex"
+				}
+			} else {
+				for (const team of Array.from(autoPickTeamList.children).sort((a, b) => {
+					const aLength = a.getAttribute("num").length
+					const bLength = b.getAttribute("num").length
+					if (aLength == bLength) {
+						return a.getAttribute("num").localeCompare(b.getAttribute("num"))
+					} else {
+						return aLength - bLength
+					}
+				})) {
+					autoPickTeamList.appendChild(team)
+					team.style.display = "flex"
+				}
+			
+			}
+			
+		})*/
 			
 		})
 
