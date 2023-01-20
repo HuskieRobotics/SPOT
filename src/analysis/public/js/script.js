@@ -100,6 +100,7 @@ if ('serviceWorker' in navigator) {
 
 	//creates list of teams for auto pick list tab
 	async function loadTeamsAutoPick(dataset, modulesConfig) {
+		autoPickTeamList.innerHTML = ""
 		//get blue alliance teams
 		const allTeams = await fetchTeams()
 		//add to sidebar team list
@@ -128,28 +129,6 @@ if ('serviceWorker' in navigator) {
 			
 		}
 		
-	}
-
-	function constructTeam(teamNumber, team, allTeams) {
-		//create and populate sidebar element
-		const teamContainer = createDOMElement("div", "team-container")
-		const teamNumDisplay = createDOMElement("div", "team-number")
-		teamNumDisplay.innerText = teamNumber
-		teamContainer.setAttribute("num", teamNumber)
-		teamContainer.appendChild(teamNumDisplay)
-		if (allTeams) {
-			const teamNameDisplay = createDOMElement("div", "team-name")
-			teamNameDisplay.innerText = allTeams[teamNumber]
-			teamContainer.appendChild(teamNameDisplay)
-		}
-
-		//switch to team on click of sidebar team, set module data
-		teamContainer.addEventListener("click", async () => {
-			await setTeamModules(teamNumber)
-			displayTeam(teamContainer)
-		})
-
-		return teamContainer
 	}
 
 	//reset UI and switch to team view
