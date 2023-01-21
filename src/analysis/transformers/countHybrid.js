@@ -1,4 +1,5 @@
 const {DataTransformer} = require("../DataTransformer");
+const { getPath, setPath } = require("../../lib/util");
 
 module.exports = {
     /**
@@ -15,11 +16,10 @@ module.exports = {
           placements[id] = 0;
         }
         for(let action of getPath(tmp,"actionQueue")){
-          if(options.pickup.contains(action.id)){
+          if(options.pickup.includes(action.id)){
             heldPiece = action.id
           }
-          if(options.hybrid.contains(action.id)){
-            console.log(`placed ${heldPiece} in ${action.id}`)
+          if(options.hybrid.includes(action.id)){
             placements[heldPiece] = placements[heldPiece] +1;
           }
         }

@@ -1,0 +1,31 @@
+.grid.container {
+  width: 90%;
+  background-color: var(--bg-alt);
+  border-radius: var(--border-radius);
+  border: 2px solid var(--accent-alt);
+  box-sizing: border-box;
+  padding:2%
+}
+.table > div {
+  margin:.2vw;
+  font-size:1.5em;
+  text-align:center;
+  box-sizing: border-box;
+  border-radius: calc(var(--border-radius) / 2);
+}
+.grid.container > .header{
+  text-align:center;
+  font-size: 2em;
+}
+
+.gray {
+  background-color: #c7c7c7;
+}
+
+.yellow {
+  background-color: #f4e180
+}
+
+.purple{
+  background-color: #ddb3ff;
+}

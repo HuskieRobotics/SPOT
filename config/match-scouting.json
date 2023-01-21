@@ -214,7 +214,7 @@
                     "id": "cubePickupGrid",
                     "displayText": "Grid",
                     "gridArea": ["4", "3", "5", "4"],
-                    "class": "highlight",
+                    "class": "highlight button-padding",
                     "type": "action",
                     "executables": [{"type":"layer","args":[4,6]}]
                 },
@@ -222,7 +222,7 @@
                     "id": "cubePickupCommunity",
                     "displayText": "Comm",
                     "gridArea": ["4", "4", "5", "5"],
-                    "class": "highlight",
+                    "class": "highlight button-padding",
                     "type": "action",
                     "executables": [{"type":"layer","args":[4,6]}]
                 },
@@ -230,7 +230,7 @@
                     "id": "cubePickupFloor",
                     "displayText": "Floor",
                     "gridArea": ["4", "5", "5", "6"],
-                    "class": "highlight",
+                    "class": "highlight button-padding",
                     "type": "action",
                     "executables": [{"type":"layer","args":[4,6]}]
                 },
@@ -238,7 +238,7 @@
                     "id": "cubePickupChute",
                     "displayText": "Chute",
                     "gridArea": ["4", "6", "5", "7"],
-                    "class": "highlight",
+                    "class": "highlight button-padding",
                     "type": "action",
                     "executables": [{"type":"layer","args":[4,6]}]
                 },
@@ -246,7 +246,7 @@
                     "id": "cubePickupShelf",
                     "displayText": "Shelf",
                     "gridArea": ["4", "7", "5", "8"],
-                    "class": "highlight",
+                    "class": "highlight button-padding",
                     "type": "action",
                     "executables": [{"type":"layer","args":[4,6]}]
                 }
