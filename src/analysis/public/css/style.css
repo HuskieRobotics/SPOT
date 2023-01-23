@@ -388,7 +388,15 @@ body {
 .alliance-modules > div.hidden {
 	display: none;
 }
-
+#auto-pick-stats{
+    display:flex;
+    flex-direction:column;
+    color:red;
+    height:100px;
+    width:100px;
+    border-radius:5px;
+    border-color:red;
+  }
 @media screen and (max-width: 1100px) {
 	html {
 		font-size: 75%;
@@ -410,4 +418,6 @@ body {
 	#side-list {
 		padding: 25px 0;
 	}
+
+  
 }

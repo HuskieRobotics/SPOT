@@ -3,14 +3,17 @@ class Stats {
     header;
     list;
     moduleConfig;
+	autoStats;
 
     constructor(moduleConfig) {
         this.moduleConfig = moduleConfig
         this.container = createDOMElement("div", "container stats")
+		this.autoStats = createDOMElement("div","auto-pick-stats")
         this.header = createDOMElement("div", "header")
         this.list = createDOMElement("div", "list")
         this.container.appendChild(this.header)
         this.container.appendChild(this.list)
+		//this.autoStats.appendChild(this.list)
     }
 
     formatData(teams, dataset) {

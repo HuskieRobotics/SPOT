@@ -105,7 +105,7 @@ if ('serviceWorker' in navigator) {
 		const allTeams = await fetchTeams()
 		//add to sidebar team list
 		for (const [teamNumber, team] of Object.entries(dataset.teams)) {
-			const autoPickTeamContainer = constructTeam(teamNumber, team, allTeams)
+			const autoPickTeamContainer = constructTeamAutoPick(teamNumber, team, allTeams)
 			autoPickTeamList.appendChild(autoPickTeamContainer)
 		}
 
@@ -131,6 +131,30 @@ if ('serviceWorker' in navigator) {
 		
 	}
 
+	function constructTeamAutoPick(teamNumber, team, allTeams) {
+		//create and populate sidebar element
+		const teamContainer = createDOMElement("div", "team-container")
+		const teamNumDisplay = createDOMElement("div", "team-number")
+		teamNumDisplay.innerText = teamNumber
+		teamContainer.setAttribute("num", teamNumber)
+		teamContainer.appendChild(teamNumDisplay)
+		if (allTeams) {
+			const teamNameDisplay = createDOMElement("div", "team-name")
+			teamNameDisplay.innerText = allTeams[teamNumber]
+			teamContainer.appendChild(teamNameDisplay)
+		}
+
+		//switch to team on click of sidebar team, set module data
+		teamContainer.addEventListener("click", async () => {
+			/*
+			await setTeamModules(teamNumber)
+			displayTeam(teamContainer)
+			*/
+		})
+
+		return teamContainer
+	}
+
 	//reset UI and switch to team view
 	function displayTeam(teamContainer) {
 		clearInterface()
@@ -145,6 +169,18 @@ if ('serviceWorker' in navigator) {
 				module.container.classList.add("hidden")
 			} else {
 				module.container.classList.remove("hidden")
+				await module.setData(await module.formatData([teamNumber], dataset))
+			}
+		}
+	}
+
+	async function setTeamModulesAutoPick(teamNumber) {
+		for (const module of modules.team) {
+			if (!module.moduleConfig.separate && Object.keys(dataset.teams[teamNumber]).filter(prop => prop !== "manual").length == 0) {
+				module.container.classList.add("hidden")
+			} else {
+				module.container.classList.remove("hidden")
+				document.getElementById("auto-pick-stats").appendChild(module.container)
 				await module.setData(await module.formatData([teamNumber], dataset))
 			}
 		}
