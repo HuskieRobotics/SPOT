@@ -7,7 +7,7 @@ async function fetchTeams() {
 		return acc
 	}, {})
 }
-async function loadTeamsPickList(dataset, modulesConfig) {
+async function loadTeamsPickList(dataset) {
 	//get blue alliance teams
 	const allTeams = await fetchTeams();
 	//add to sidebar team list
@@ -18,9 +18,17 @@ async function loadTeamsPickList(dataset, modulesConfig) {
 
 }
 
+//reset UI and switch to team view
+function displayTeam(teamContainer) {
+	//clearInterface()
+	teamContainer.classList.add("selected")
+	showFade(teamView)
+}
+
+
 function constructTeam(teamNumber, team, allTeams) {
-	//create and populate sidebar element
-	const teamContainer = createDOMElement("div", "team-container")
+
+	const teamContainer = createDOMElement("button", "team-container") // need to activate the button
 	const teamNumDisplay = createDOMElement("div", "team-number")
 	teamNumDisplay.innerText = teamNumber
 	teamContainer.setAttribute("num", teamNumber)
@@ -31,11 +39,22 @@ function constructTeam(teamNumber, team, allTeams) {
 		teamContainer.appendChild(teamNameDisplay)
 	}
 
-	//switch to team on click of sidebar team, set module data
+	//
 	teamContainer.addEventListener("click", async () => {
-		await setTeamModules(teamNumber)
+		// await teamContainer.enableButton(); // only enables them currently
+		//document.getElementById(teamContainer).disabled = false;
+		teamContainer.classList.add("selected")
 		displayTeam(teamContainer)
 	})
 
 	return teamContainer
 }
+
+async function fetchDataset() {
+	return await fetch("/analysis/api/dataset").then(res => res.json())
+}
+
+(async ()=>{
+	var data = await fetchDataset();
+	loadTeamsPickList(data);
+})();
