@@ -193,14 +193,25 @@ body {
   }
   
   .team-container.selected {
-    background-color: var(--accent-alt);
+    background-color: var(--bg);
     border-top-width: 2px;
   }
   
   .team-container.selected > .team-number, .team-container.selected > .team-name {
-    color: var(--bg-alt);
+    color: var(--accent-alt);
   }
   
+  /* when team-container is hidden*/
+
+  .team-container.selected.hidden {
+    background-color: var(--accent-alt);
+    border-top-width: 2px;
+  }
+
+  .team-container.selected.hidden > .team-number, .team-container.selected.hidden > .team-name {
+    color: var(--bg);
+  }
+
   #team-list {
     display: flex;
     flex-direction: column;
@@ -247,28 +258,6 @@ body {
     transition: visibility 0s 0s, opacity 0.3s 0s;
   }
   
-  #match-view-switch {
-    background-color: var(--bg);
-    border: 3px solid var(--accent);
-    border-radius: var(--border-radius);
-    font-size: 1.3rem;
-    width: 100%;
-    color: var(--text);
-    cursor: pointer;
-    transition: 0.3s color, 0.3s background-color
-  }
-  
-  #match-view-switch.selected {
-    background-color: var(--accent);
-    color: var(--bg-alt)
-  }
-  
-  #match-view {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-  }
   
   #select-teams-text {
     font-size: 3rem;
@@ -283,20 +272,6 @@ body {
     flex-direction: row;
     gap: 16px;
     align-items: center;
-  }
-  
-  #alliance-vs {
-    font-size: 1.5rem;
-  }
-  
-  .alliance-selects {
-    display: flex;
-    flex-direction: row;
-    gap: 8px;
-  }
-  
-  .alliance-selects > select {
-      width: 90px;
   }
   
   .select {
@@ -322,40 +297,6 @@ body {
       /* font-weight: 00; */
   }
   
-  #match-select-container {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-  }
-  
-  #match-select {
-      width: 100px;
-  }
-  
-  #alliance-module-container {
-    display: flex;
-    flex-direction: row;
-    width: 100%;
-    overflow-y: scroll;
-  }
-  
-  .alliance-modules {
-    width: 50%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 16px;
-    overflow-y: scroll;
-    padding: 10px 0 20px 0;
-  }
-  
-  .alliance-modules.hidden {
-    visibility: hidden;
-  }
-  
-  .alliance-modules > div.hidden {
-      display: none;
-  }
   
   @media screen and (max-width: 1100px) {
       html {

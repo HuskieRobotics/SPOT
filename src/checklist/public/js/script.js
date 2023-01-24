@@ -41,9 +41,9 @@ function constructTeam(teamNumber, team, allTeams) {
 
 	//
 	teamContainer.addEventListener("click", async () => {
-		// await teamContainer.enableButton(); // only enables them currently
-		//document.getElementById(teamContainer).disabled = false;
-		teamContainer.classList.add("selected")
+		teamContainer.classList.toggle("hidden");
+		
+		//teamContainer.classList.add("selected")
 		displayTeam(teamContainer)
 	})
 
