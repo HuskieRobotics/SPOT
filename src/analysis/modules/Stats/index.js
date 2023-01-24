@@ -8,7 +8,7 @@ class Stats {
     constructor(moduleConfig) {
         this.moduleConfig = moduleConfig
         this.container = createDOMElement("div", "container stats")
-		this.autoStats = createDOMElement("div","auto-pick-stats")
+		//this.autoStats = createDOMElement("div","auto-pick-stats")
         this.header = createDOMElement("div", "header")
         this.list = createDOMElement("div", "list")
         this.container.appendChild(this.header)

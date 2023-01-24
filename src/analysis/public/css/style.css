@@ -391,10 +391,9 @@ body {
 #auto-pick-stats{
     display:flex;
     flex-direction:column;
+    flex:1;
     color:red;
-    height:100px;
-    width:100px;
-    border-radius:5px;
+    border-width:5px;
     border-color:red;
   }
 @media screen and (max-width: 1100px) {

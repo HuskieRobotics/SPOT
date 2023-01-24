@@ -109,13 +109,6 @@ if ('serviceWorker' in navigator) {
 			autoPickTeamList.appendChild(autoPickTeamContainer)
 		}
 
-		//enable sidebar if sidebar modules exist
-		if (modulesConfig.map(m => m.position).includes("side")) {
-			teamView.classList.add("side-enabled")
-		} else {
-			teamView.classList.remove("side-enabled")
-		}
-
 		//get all team modules, create and store module classes, then append their placeholder containers to lists
 		for (const module of modulesConfig.filter(m => m.view == "team")) {
 			const moduleObject = new moduleClasses[module.module](module)
@@ -146,10 +139,10 @@ if ('serviceWorker' in navigator) {
 
 		//switch to team on click of sidebar team, set module data
 		teamContainer.addEventListener("click", async () => {
-			/*
+			
 			await setTeamModules(teamNumber)
-			displayTeam(teamContainer)
-			*/
+			displayStats(teamContainer)
+			
 		})
 
 		return teamContainer
@@ -160,6 +153,15 @@ if ('serviceWorker' in navigator) {
 		clearInterface()
 		teamContainer.classList.add("selected")
 		showFade(teamView)
+	}
+
+	// pull up auto pick list tab stats
+	function displayStats(teamContainer){
+		//clearInterface()
+		loadTeamsAutoPick(dataset,modulesConfig)
+		showFade(autoPickView)
+		teamContainer.classList.add("selected")
+		showFade(autoPickStats)
 	}
 
 	//call setData on every module in teams
