@@ -32,6 +32,8 @@ body {
   
   #header {
     background: var(--text);
+    height: 100px;
+    width: 100px;
     border-bottom: 0.25vh solid white;
     display: flex;
     flex-direction: row;
