@@ -112,11 +112,9 @@ if ('serviceWorker' in navigator) {
 		//get all team modules, create and store module classes, then append their placeholder containers to lists
 		for (const module of modulesConfig.filter(m => m.view == "team")) {
 			const moduleObject = new moduleClasses[module.module](module)
-			if (module.position == "main") {
-				mainList.appendChild(moduleObject.container)
-			} else {
-				sideList.appendChild(moduleObject.container)
-			}
+			if (module.position == "side") {
+				autoPickStats.appendChild(moduleObject.container)
+			} 
 			
 			modules.team.push(moduleObject)
 			
@@ -136,7 +134,7 @@ if ('serviceWorker' in navigator) {
 			teamNameDisplay.innerText = allTeams[teamNumber]
 			teamContainer.appendChild(teamNameDisplay)
 		}
-
+		
 		//switch to team on click of sidebar team, set module data
 		teamContainer.addEventListener("click", async () => {
 			
@@ -157,9 +155,11 @@ if ('serviceWorker' in navigator) {
 
 	// pull up auto pick list tab stats
 	function displayStats(teamContainer){
-		//clearInterface()
-		loadTeamsAutoPick(dataset,modulesConfig)
-		showFade(autoPickView)
+		/*
+		for(let container of autoPickStats.childNodes){
+			container.classList.remove("selected")
+		}
+		*/
 		teamContainer.classList.add("selected")
 		showFade(autoPickStats)
 	}
@@ -176,17 +176,6 @@ if ('serviceWorker' in navigator) {
 		}
 	}
 
-	async function setTeamModulesAutoPick(teamNumber) {
-		for (const module of modules.team) {
-			if (!module.moduleConfig.separate && Object.keys(dataset.teams[teamNumber]).filter(prop => prop !== "manual").length == 0) {
-				module.container.classList.add("hidden")
-			} else {
-				module.container.classList.remove("hidden")
-				document.getElementById("auto-pick-stats").appendChild(module.container)
-				await module.setData(await module.formatData([teamNumber], dataset))
-			}
-		}
-	}
 
 	//match UI functions
 	async function loadMatchView(dataset, modulesConfig) {
@@ -423,10 +412,13 @@ if ('serviceWorker' in navigator) {
 	//reset the UI to state of nothing shown, nothing selected
 	function clearInterface() {
 		Array.from(document.querySelector("#team-list").children).map(t => t.classList.remove("selected"))
+		Array.from(document.querySelector("#auto-pick-team-list").children).map(t => t.classList.remove("selected"))
+		autoPickStats.innerHTML = ""
 		hideFade(welcomeView)
 		hideFade(matchView)
 		hideFade(teamView)
 		hideFade(autoPickView)
+		hideFade(autoPickStats)
 		matchViewSwitch.classList.remove("selected")
 		autoPickSwitch.classList.remove("selected")
 	}

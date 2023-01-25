@@ -389,13 +389,12 @@ body {
 	display: none;
 }
 #auto-pick-stats{
-    display:flex;
-    flex-direction:column;
-    flex:1;
-    color:red;
-    border-width:5px;
-    border-color:red;
-  }
+  margin-left:75px;
+  margin-top:50px;
+  color:red;
+  border-width:5px;
+  border-color:red;
+}
 @media screen and (max-width: 1100px) {
 	html {
 		font-size: 75%;
