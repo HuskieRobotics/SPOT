@@ -1,5 +1,5 @@
-const { zScore, cumulativeStdNormalProbability } = require("simple-statistics");
-const { Dataset } = require("../../DataTransformer");
+// const { Dataset } = require("../../DataTransformer");
+// const { zScore, cumulativeStdNormalProbability } = require("simple-statistics");
 
 function swap(arr, i, j) {
 	let temp = arr[i];
@@ -93,7 +93,7 @@ function possibleAliiances(teams) {
  * @returns the average score for an alliance 
  */
 function allianceAverage(alliance) {
-	return alliance[0].averageScore + alliance[1].averageScore + alliance[2].averageScore;
+	return alliance[0].avg + alliance[1].avg + alliance[2].avg;
 }
 
 /**
@@ -102,7 +102,7 @@ function allianceAverage(alliance) {
  * @returns the standard deveiation of an alliances score 
  */
 function allianceStandardDeviation(alliance) {
-	let i = Math.pow(alliance[0].standardDeviation, 2) + Math.pow(alliance[1].standardDeviation, 2) + Math.pow(alliance[2].standardDeviation, 2)
+	let i = Math.pow(alliance[0].sd, 2) + Math.pow(alliance[1].sd, 2) + Math.pow(alliance[2].sd, 2)
 	return Math.sqrt(i);
 }
 /**
@@ -121,7 +121,7 @@ function matchAverage(alliance1, alliance2) {
  * @returns the the standard deveation in the difference of the score between two alliances
  */
 function matchStandardDeviation(alliance1, alliance2) {
-	let i = Math.pow(allianceStandardDeviation(alliance), 2) + Math.pow(allianceStandardDeviation(alliance), 2);
+	let i = Math.pow(allianceStandardDeviation(alliance1), 2) + Math.pow(allianceStandardDeviation(alliance2), 2);
 	return Math.sqrt(i);
 }
 /**
@@ -132,8 +132,8 @@ function matchStandardDeviation(alliance1, alliance2) {
  */
 
 function compareAlliances(alliance1, alliance2) {
-	zscore = zScore(0, matchAverage(alliance1, alliance2), matchStandardDeviation(alliance1, alliance2))
-	probAlliance2Wins = cumulativeStdNormalProbability(zscore)
+	zscore = ss.zScore(0, matchAverage(alliance1, alliance2), matchStandardDeviation(alliance1, alliance2))
+	probAlliance2Wins = ss.cumulativeStdNormalProbability(zscore)
 	return 1 - probAlliance2Wins;
 }
 /**
@@ -165,9 +165,62 @@ function compareAllTeams(alliances) {
 
 //----------------------------------------------------------------------------------------------------------------------------------//
 
-let dataset = fetchDataset();
-let teams = fetchTeams();
-console.log(teams);
-let possibleAliiances = possibleAliiances(teams);
-console.log(possibleAliiances);
+// let dataset = fetchDataset();
+// let teams = fetchTeams();
+// console.log(teams);
+// let pAliiances = possibleAliiances(teams);
+// console.log(pAliiances);
 
+let teamB1 = {
+	sd : 20,
+	avg: 80
+}
+
+let teamB2 = {
+	sd : 20,
+	avg: 70
+}
+
+let teamB3 = {
+	sd : 20,
+	avg: 20
+}
+
+let teamR1 = {
+	sd : 20,
+	avg: 60
+}
+
+let teamR2 = {
+	sd : 20,
+	avg: 70
+}
+
+let teamR3 = {
+	sd : 20,
+	avg: 30
+}
+
+console.log("Blue 1" + teamB1)
+console.log("Blue 2" + teamB2)
+console.log("Blue 3" + teamB3)
+
+console.log("Red 1" + teamR1)
+console.log("Red 2" + teamR2)
+console.log("Red 3" + teamR3)
+
+
+let allianceBlue = [teamB1, teamB2, teamB3]
+let allianceRed =[teamR1, teamR2, teamR3]
+
+console.log(allianceBlue)
+console.log(allianceRed)
+
+
+
+console.log(allianceAverage(allianceBlue))
+console.log(allianceAverage(allianceRed))
+console.log(allianceStandardDeviation(allianceBlue))
+console.log(allianceStandardDeviation(allianceRed))
+
+console.log(compareAlliances(allianceBlue, allianceRed));
