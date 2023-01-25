@@ -21,7 +21,7 @@ async function loadTeamsPickList(dataset) {
 //reset UI and switch to team view
 function displayTeam(teamContainer) {
 	//clearInterface()
-	teamContainer.classList.add("selected")
+	teamContainer.classList.toggle("selected")
 	showFade(teamView)
 }
 
@@ -39,11 +39,7 @@ function constructTeam(teamNumber, team, allTeams) {
 		teamContainer.appendChild(teamNameDisplay)
 	}
 
-	//
 	teamContainer.addEventListener("click", async () => {
-		teamContainer.classList.toggle("hidden");
-		
-		//teamContainer.classList.add("selected")
 		displayTeam(teamContainer)
 	})
 

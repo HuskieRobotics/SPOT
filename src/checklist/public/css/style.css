@@ -193,31 +193,30 @@ body {
   }
   
   .team-container.selected {
-    background-color: var(--bg);
+    background-color: var(--accent-alt);
     border-top-width: 2px;
   }
   
   .team-container.selected > .team-number, .team-container.selected > .team-name {
-    color: var(--accent-alt);
-  }
-  
-  /* when team-container is hidden*/
-
-  .team-container.selected.hidden {
-    background-color: var(--accent-alt);
-    border-top-width: 2px;
-  }
-
-  .team-container.selected.hidden > .team-number, .team-container.selected.hidden > .team-name {
     color: var(--bg);
   }
-
+  
   #team-list {
     display: flex;
     flex-direction: column;
     gap: 20px;
     overflow: auto;
     padding-right: 2px;
+  }
+
+  #pick-list {
+    height: 100%;
+    width: 50%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    gap: 20px;
+    display: flex;
+    flex-direction: column;
   }
   
   #welcome {
