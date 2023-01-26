@@ -92,14 +92,15 @@ body {
   }
   
   #logo {
-    height: 100%;
+    height: 95px;
     width: 100%;
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: center;
     grid-area: 1 / 1 / 3 / 2;
-    gap: 14px;
+    gap: 25px;
+    
     background-color: var(--accent-alt);
   }
   
@@ -169,27 +170,34 @@ body {
     border: 2px solid var(--accent-alt);
     background-color: var(--bg);
     padding: 16px;
-    border-top-width: 6px;
+    border-top-width: 2px;
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 10px;
     cursor: pointer;
     transition: 0.3s border, 0.3s background-color;
+    width: 75%;
+    justify-items: center;
+
   }
   
   .team-container > .team-number {
     text-align: center;
+    text-justify: center;
+    width: 100%;
     color: var(--accent-alt);
     font-weight: 600;
-    font-size: 1.5rem;
-    line-height: 1.5rem;
+    font-size: 2.0rem;
+    line-height: 2.0rem;
     transition: 0.3s color;
   }
   
   .team-container > .team-name {
     text-align: center;
-    font-size: 1.2rem;
-    line-height: 1.2rem;
+    text-justify: center;
+    width: 100%;
+    font-size: 1.8rem;
+    line-height: 1.6rem;
     color: var(--text);
     transition: 0.3s color;
   }
@@ -208,17 +216,20 @@ body {
     flex-direction: column;
     gap: 20px;
     overflow: auto;
-    padding-right: 2px;
+    padding-right: 20px;
+    padding-left:20px;
   }
 
   #pick-list {
     height: 100%;
-    width: 50%;
+    width: 100%;
     overflow-y: auto;
     overflow-x: hidden;
     gap: 20px;
     display: flex;
     flex-direction: column;
+    padding-top: 20px;
+    align-items: center;
   }
   
   #welcome {
