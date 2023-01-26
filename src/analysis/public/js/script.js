@@ -160,6 +160,7 @@ if ('serviceWorker' in navigator) {
 			container.classList.remove("selected")
 		}
 		*/
+		Array.from(document.querySelector("#auto-pick-team-list").children).map(t => t.classList.remove("selected"))
 		teamContainer.classList.add("selected")
 		showFade(autoPickStats)
 	}
@@ -412,7 +413,7 @@ if ('serviceWorker' in navigator) {
 	//reset the UI to state of nothing shown, nothing selected
 	function clearInterface() {
 		Array.from(document.querySelector("#team-list").children).map(t => t.classList.remove("selected"))
-		Array.from(document.querySelector("#auto-pick-team-list").children).map(t => t.classList.remove("selected"))
+		
 		autoPickStats.innerHTML = ""
 		hideFade(welcomeView)
 		hideFade(matchView)
