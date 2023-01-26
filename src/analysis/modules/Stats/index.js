@@ -8,12 +8,10 @@ class Stats {
     constructor(moduleConfig) {
         this.moduleConfig = moduleConfig
         this.container = createDOMElement("div", "container stats")
-		//this.autoStats = createDOMElement("div","auto-pick-stats")
         this.header = createDOMElement("div", "header")
         this.list = createDOMElement("div", "list")
         this.container.appendChild(this.header)
         this.container.appendChild(this.list)
-		//this.autoStats.appendChild(this.list)
     }
 
     formatData(teams, dataset) {
@@ -38,7 +36,7 @@ class Stats {
 			let statRank
 			let totalRanked
 			if (isNaN(formattedStat) || formattedStat == stat.hideIfValue) {
-				formattedStat = "—"
+				formattedStat = "—" // set hasValue = false
 			} else {
 				if (stat.sort !== 0 && stat.sort !== undefined && teams.length == 1) {
 					const filteredTeams = Object.keys(dataset.teams).filter(team => {
@@ -65,7 +63,7 @@ class Stats {
 			}
 
             
-            data.push({
+            data.push({ // add boolean hasValue to see if there are stats
                 name: stat.name,
                 value: formattedStat,
 				rank: statRank,
@@ -91,6 +89,12 @@ class Stats {
     setData(data) {
         this.header.innerText = this.moduleConfig.name
         clearDiv(this.list)
+
+		if(data.length==0){ // if(hasValue == false)
+			const NAElement = createDOMElement("div","stat")
+			NAElement.innerHTML = '<strong class = "noData">No Data</strong>'
+			this.list.appendChild(NAElement)
+		}
         for (const stat of data) {
             const statElement = createDOMElement("div", "stat")
 			let rankClass = "top100"

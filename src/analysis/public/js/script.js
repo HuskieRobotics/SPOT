@@ -169,7 +169,7 @@ if ('serviceWorker' in navigator) {
 	async function setTeamModules(teamNumber) {
 		for (const module of modules.team) {
 			if (!module.moduleConfig.separate && Object.keys(dataset.teams[teamNumber]).filter(prop => prop !== "manual").length == 0) {
-				module.container.classList.add("hidden")
+				// module.container.classList.add("hidden")
 			} else {
 				module.container.classList.remove("hidden")
 				await module.setData(await module.formatData([teamNumber], dataset))
