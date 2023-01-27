@@ -58,7 +58,7 @@ body {
 }
 
 #team-view.side-enabled {
-  grid-template-columns: 80% 20%;
+  grid-template-columns: 75% 25%;
 }
 
 #main-list {

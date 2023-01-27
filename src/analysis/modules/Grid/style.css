@@ -17,15 +17,9 @@
   text-align:center;
   font-size: 2em;
 }
+.cell{
+  text-align:center;
+  box-sizing: border-box;
+  border-radius: calc(var(--border-radius) / 2);
 
-.gray {
-  background-color: #c7c7c7;
-}
-
-.yellow {
-  background-color: #f4e180
-}
-
-.purple{
-  background-color: #ddb3ff;
 }

@@ -10,6 +10,7 @@ module.exports = {
      */
     tmp: new DataTransformer("map", (dataset, outputPath, options) => {
         for (let tmp of dataset.tmps) {
+          console.log(getPath(tmp, options.path,""))
             setPath(tmp, outputPath, options.map[getPath(tmp, options.path,"")]) //default to an empty string if there is no value
         }
         return dataset;

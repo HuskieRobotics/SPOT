@@ -2,14 +2,6 @@
     "timing": {
         "totalTime": 150000,
         "timeTransitions": {
-            "149990": {
-                "layer": 1,
-                "displayText": "Auto"
-            },
-            "135000": {
-                "layer": 1,
-                "displayText": "Teleop"
-            }
         }
     },
     "layout": {
@@ -20,9 +12,33 @@
                 {
                     "id": "startGame",
                     "displayText": "Start",
-                    "gridArea": ["3", "2", "5", "9"],
+                    "gridArea": ["4", "1", "6", "10"],
                     "class": "silver timer",
                     "type": "match-control",
+                    "executables": [{"type": "layer", "args":[0,1]}]
+                },
+              {
+                    "id": "prePickupCone",
+                    "displayText": "Cone",
+                    "gridArea": ["2", "1", "4", "4"],
+                    "class": "yellow",
+                    "type": "action",
+                    "executables": [{"type": "layer", "args":[0,7]}]
+                },
+              {
+                    "id": "prePickupCube",
+                    "displayText": "Cube",
+                    "gridArea": ["2", "7", "4", "10"],
+                    "class": "highlight",
+                    "type": "action",
+                    "executables": [{"type": "layer", "args":[0,8]}]
+                },
+              {
+                    "id": "prePickupNone",
+                    "displayText": "None",
+                    "gridArea": ["2", "4", "4", "7"],
+                    "class": "gray",
+                    "type": "action",
                     "executables": []
                 }
             ], 
@@ -36,8 +52,8 @@
                     "executables": []
                 },
                 {
-                    "id": "leftCommunity",
-                    "displayText": "Leave  Community",
+                    "id": "crossCommunity",
+                    "displayText": "Cross Community",
                     "gridArea": ["2", "4", "3", "7"],
                     "class": "gray",
                     "type": "action",
@@ -262,8 +278,8 @@
                     "executables": []
                 },
                 {
-                    "id": "leftCommunity",
-                    "displayText": "Leave  Community",
+                    "id": "crossCommunity",
+                    "displayText": "Cross Community",
                     "gridArea": ["2", "4", "3", "7"],
                     "class": "gray",
                     "type": "action",
@@ -489,8 +505,8 @@
                     "executables": []
                 },
                 {
-                    "id": "leftCommunity",
-                    "displayText": "Leave  Community",
+                    "id": "crossCommunity",
+                    "displayText": "Cross Community",
                     "gridArea": ["2", "4", "3", "7"],
                     "class": "gray",
                     "type": "action",
@@ -656,7 +672,62 @@
                       "type": "action",
                       "executables": [{"type": "layer", "args":[6,1]}]
                 }
+            ],
+          [
+                {
+                    "id": "startGame",
+                    "displayText": "Start",
+                    "gridArea": ["4", "1", "6", "10"],
+                    "class": "silver timer",
+                    "type": "match-control",
+                    "executables": [{"type": "layer", "args":[7,5]}]
+                },
+              
+              {
+                    "id": "prePickupCube",
+                    "displayText": "Cube",
+                    "gridArea": ["2", "7", "4", "10"],
+                    "class": "highlight",
+                    "type": "action",
+                    "executables": [{"type": "layer", "args":[7,8]}]
+                },
+              {
+                    "id": "prePickupNone",
+                    "displayText": "None",
+                    "gridArea": ["2", "4", "4", "7"],
+                    "class": "gray",
+                    "type": "action",
+                    "executables": [{"type": "layer", "args":[7,0]}]
+                }
+            ],
+          [
+                {
+                    "id": "startGame",
+                    "displayText": "Start",
+                    "gridArea": ["4", "1", "6", "10"],
+                    "class": "silver timer",
+                    "type": "match-control",
+                    "executables": [{"type": "layer", "args":[8,6]}]
+                },
+              
+              {
+                    "id": "prePickupCone",
+                    "displayText": "Cone",
+                    "gridArea": ["2", "1", "4", "4"],
+                    "class": "yellow",
+                    "type": "action",
+                    "executables": [{"type": "layer", "args":[8,7]}]
+                },
+              {
+                    "id": "prePickupNone",
+                    "displayText": "None",
+                    "gridArea": ["2", "4", "4", "7"],
+                    "class": "gray",
+                    "type": "action",
+                    "executables": [{"type": "layer", "args":[8,0]}]
+                }
             ]
+          
         ]
     }
 }

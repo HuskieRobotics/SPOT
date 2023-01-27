@@ -124,7 +124,7 @@ let devEnd
                 button.timerInterval = setInterval(() => {
                     if (time <= transitions[0]) { //move to the next transition if it is time
                         displayText = matchScoutingConfig.timing.timeTransitions[transitions[0]].displayText;
-                        showLayer(matchScoutingConfig.timing.timeTransitions[transitions[0]].layer);
+                        // showLayer(matchScoutingConfig.timing.timeTransitions[transitions[0]].layer);
                         transitions.shift()
                     }
                     if (time <= 0) {
