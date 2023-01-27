@@ -38,7 +38,6 @@
 
 .noData{
     width: 90%;
-    padding: 30px 40px;
     background-color: var(--bg-alt);
     border:none;
 }

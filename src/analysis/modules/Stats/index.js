@@ -4,8 +4,11 @@ class Stats {
     list;
     moduleConfig;
 	autoStats;
+	hasValue;
 
-    constructor(moduleConfig) {
+	// There is probably a function that doesn't change anything if if can't find the object
+	// Find that function and set the stats box to only say "NA"
+    constructor(moduleConfig) { 
         this.moduleConfig = moduleConfig
         this.container = createDOMElement("div", "container stats")
         this.header = createDOMElement("div", "header")
@@ -17,6 +20,7 @@ class Stats {
     formatData(teams, dataset) {
         const data = []
         for (const stat of this.moduleConfig.options.list) {
+			let hasValue=true;
             let formattedStat
 			let summed
 			if (teams.length > 1) {
@@ -36,7 +40,8 @@ class Stats {
 			let statRank
 			let totalRanked
 			if (isNaN(formattedStat) || formattedStat == stat.hideIfValue) {
-				formattedStat = "—" // set hasValue = false
+				formattedStat = "—" 
+				hasValue = false
 			} else {
 				if (stat.sort !== 0 && stat.sort !== undefined && teams.length == 1) {
 					const filteredTeams = Object.keys(dataset.teams).filter(team => {
@@ -67,7 +72,8 @@ class Stats {
                 name: stat.name,
                 value: formattedStat,
 				rank: statRank,
-				totalRanked: totalRanked
+				totalRanked: totalRanked,
+				hasValue:hasValue
             })
         }
 
@@ -90,25 +96,29 @@ class Stats {
         this.header.innerText = this.moduleConfig.name
         clearDiv(this.list)
 
-		if(data.length==0){ // if(hasValue == false)
-			const NAElement = createDOMElement("div","stat")
-			NAElement.innerHTML = '<strong class = "noData">No Data</strong>'
-			this.list.appendChild(NAElement)
-		}
+		
         for (const stat of data) {
-            const statElement = createDOMElement("div", "stat")
-			let rankClass = "top100"
-			if (stat.rank <= Math.round(stat.totalRanked * 0.05)) {
-				rankClass = "top5"
-			} else if (stat.rank <= Math.round(stat.totalRanked * 0.25)) {
-				rankClass = "top25"
-			} else if (stat.rank <= Math.round(stat.totalRanked * 0.5)) {
-				rankClass = "top50"
+			if(stat.hasValue == false){ // if(hasValue == false)
+				const NAElement = createDOMElement("div","stat")
+				NAElement.innerHTML = `<strong>${stat.name}:</strong> <strong class = "noData">No Data</strong>`
+				this.list.appendChild(NAElement)
 			}
+			else{
+				const statElement = createDOMElement("div", "stat")
+				let rankClass = "top100"
+				if (stat.rank <= Math.round(stat.totalRanked * 0.05)) {
+					rankClass = "top5"
+				} else if (stat.rank <= Math.round(stat.totalRanked * 0.25)) {
+					rankClass = "top25"
+				} else if (stat.rank <= Math.round(stat.totalRanked * 0.5)) {
+					rankClass = "top50"
+				}
 
-			const rank = stat.rank ? `<span class="rank ${rankClass}">#${stat.rank} </span>` : ""
-            statElement.innerHTML = `<strong>${rank}${stat.name}:</strong> ${stat.value}`
-            this.list.appendChild(statElement)
+				const rank = stat.rank ? `<span class="rank ${rankClass}">#${stat.rank} </span>` : ""
+				statElement.innerHTML = `<strong>${rank}${stat.name}:</strong> ${stat.value}`
+				this.list.appendChild(statElement)
+			}
+			
         }
     }
 }
