@@ -21,15 +21,7 @@ body {
     transition: visibility 0s 0s, opacity 0.3s 0s;
   }
   
-  #sidebar {
-    grid-area: 3 / 1 / 4 / 2;
-    background-color: var(--bg-alt);
-    padding: 16px;
-    display: grid;
-    min-height: 0;
-    grid-template-rows: auto auto 1fr;
-  }
-  
+  /* styling for page header */
   #header {
     background: var(--text);
     height: 100px;
@@ -43,54 +35,7 @@ body {
     box-shadow: 0 0 12px -2px #ff6030;
     grid-area: 1 / 2 / 2 / 4;
   }
-  
-  #dashboard {
-    grid-area: 2 / 2 / 4 / 4;
-    overflow: hidden;
-    position: relative;
-  }
-  
-  #team-view {
-    height: 100%;
-    width: 100%;
-    display: grid;
-    grid-template-rows: 1fr;
-    overflow: hidden;
-    grid-template-columns: 1fr;
-  }
-  
-  #team-view.side-enabled {
-    grid-template-columns: 65% 35%;
-  }
-  
-  #main-list {
-    grid-area: 1 / 1 / 2 / 2;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
-    overflow-y: scroll;
-    padding: 40px 0;
-  }
-  
-  #main-list > div.hidden {
-      display: none;
-  }
-  
-  #side-list {
-    grid-area: 1 / 2 / 2 / 3;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
-    overflow-y: scroll;
-    padding: 40px 0;
-  }
-  
-  #side-list > div.hidden {
-      display: none;
-  }
-  
+  /* styling for logo */
   #logo {
     height: 95px;
     width: 100%;
@@ -112,59 +57,7 @@ body {
     color: white;
     font-size: 2.5rem;
   }
-  
-  #search {
-    position: relative;
-  }
-  
-  #search-container {
-    padding: 20px 0;
-    border-top: 1px solid var(--accent-alt);
-    border-bottom: 1px solid var(--accent-alt);
-    box-shadow: 0 -7px 10px -10px var(--accent-alt);
-    border-radius: 8px 8px 0 0;
-    margin: 20px 0;
-  }
-  
-  #search-input {
-    border-radius: var(--border-radius);
-    border: none;
-    width: 100%;
-    font-size: 1.2rem;
-    padding: 0 40px 0 12px;
-    background-color: var(--bg);
-    border: 2px solid var(--accent-alt);
-  }
-  
-  #search-icon {
-    position: absolute;
-    top: 50%;
-    right: 12px;
-    font-size: 1.2rem;
-    transform: translateY(-50%);
-    transition: 0.3s color;
-  }
-  
-  #search-input:focus + #search-icon, #search-input:valid + #search-icon {
-    color: var(--accent)
-  }
-  
-  #loading-bar-container {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 4px;
-    width: 100%;
-    z-index: 99;
-  }
-  
-  #loading-bar {
-    background-color: var(--accent-alt);
-    height: 100%;
-    width: 0%;
-    transition: 0.3s all;
-  }
-  
+  /* styling for buttons  */
   .team-container { 
     border-radius: 16px;
     border: 2px solid var(--accent-alt);
@@ -180,7 +73,7 @@ body {
     justify-items: center;
 
   }
-  
+  /* team number */
   .team-container > .team-number {
     text-align: center;
     text-justify: center;
@@ -191,7 +84,7 @@ body {
     line-height: 2.0rem;
     transition: 0.3s color;
   }
-  
+  /* team name */
   .team-container > .team-name {
     text-align: center;
     text-justify: center;
@@ -201,7 +94,7 @@ body {
     color: var(--text);
     transition: 0.3s color;
   }
-  
+  /* styling for buttons when selected */
   .team-container.selected {
     background-color: var(--accent-alt);
     border-top-width: 2px;
@@ -210,16 +103,7 @@ body {
   .team-container.selected > .team-number, .team-container.selected > .team-name {
     color: var(--bg);
   }
-  
-  #team-list {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    overflow: auto;
-    padding-right: 20px;
-    padding-left:20px;
-  }
-
+ /* styling for pick list  */
   #pick-list {
     height: 100%;
     width: 100%;
@@ -230,83 +114,6 @@ body {
     flex-direction: column;
     padding-top: 20px;
     align-items: center;
-  }
-  
-  #welcome {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 32px;
-  }
-  
-  #welcome-text {
-    font-size: 4rem;
-    line-height: 1em;
-    color: var(--accent-alt);
-    text-align: center;
-  }
-  
-  #welcome-subtext {
-    font-size: 2.5rem;
-    line-height: 1em;
-    margin-bottom: 40px;
-  }
-  
-  #dashboard > div {
-    width: 100%;
-    transition: 0.3s visibility, opacity;
-    opacity: 0;
-    position: absolute;
-    top: 0;
-    left: 0;
-    visibility: hidden;
-  }
-  
-  #dashboard > div.visible {
-    visibility: unset;
-    height: calc(100vh - 75px);
-    opacity: 1;
-    transition: visibility 0s 0s, opacity 0.3s 0s;
-  }
-  
-  
-  #select-teams-text {
-    font-size: 3rem;
-    line-height: 1em;
-    color: var(--accent-alt);
-    margin-top: 32px;
-    margin-bottom: 10px;
-  }
-  
-  #team-selects {
-    display: flex;
-    flex-direction: row;
-    gap: 16px;
-    align-items: center;
-  }
-  
-  .select {
-      border-radius: var(--border-radius);
-      border: 2px solid var(--text);
-      font-size: 1.2rem;
-      text-align: center;
-      color: var(--text);
-      background-color: var(--bg-alt);
-      transition: 0.2s border-color;
-  }
-  
-  .select > option {
-      text-align: center;
-  }
-  
-  .select.filled {
-      border-color: var(--accent-alt);
-  }
-  
-  #match-select-label {
-      font-size: 1.4em;
-      /* font-weight: 00; */
   }
   
   
