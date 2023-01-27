@@ -68,7 +68,7 @@ class Stats {
 			}
 
             
-            data.push({ // add boolean hasValue to see if there are stats
+            data.push({ 
                 name: stat.name,
                 value: formattedStat,
 				rank: statRank,
@@ -96,9 +96,9 @@ class Stats {
         this.header.innerText = this.moduleConfig.name
         clearDiv(this.list)
 
-		
+
         for (const stat of data) {
-			if(stat.hasValue == false){ // if(hasValue == false)
+			if(stat.hasValue == false){
 				const NAElement = createDOMElement("div","stat")
 				NAElement.innerHTML = `<strong>${stat.name}:</strong> <strong class = "noData">No Data</strong>`
 				this.list.appendChild(NAElement)
@@ -120,5 +120,9 @@ class Stats {
 			}
 			
         }
+		if(this.list.innerHTML === ""){ //FIX THIS
+			NoStatsElement.innerHTML = '<strong class = "zeroData">NA</strong>'
+			this.list.appendChild(statElement)
+		}
     }
 }
