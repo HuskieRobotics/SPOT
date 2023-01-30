@@ -15,6 +15,7 @@ class Stats {
         this.list = createDOMElement("div", "list")
         this.container.appendChild(this.header)
         this.container.appendChild(this.list)
+		this.header.innerHTML = '<div>No Team Selected</div>'
     }
 
     formatData(teams, dataset) {
