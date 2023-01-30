@@ -170,6 +170,7 @@ function compareAllTeams(alliances) {
 // console.log(teams);
 // let pAliiances = possibleAliiances(teams);
 // console.log(pAliiances);
+console.log("test")
 
 let teamB1 = {
 	sd : 20,
