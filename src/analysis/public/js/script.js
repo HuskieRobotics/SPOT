@@ -169,11 +169,19 @@ if ('serviceWorker' in navigator) {
 	async function setTeamModules(teamNumber) {
 		for (const module of modules.team) {
 			if (!module.moduleConfig.separate && Object.keys(dataset.teams[teamNumber]).filter(prop => prop !== "manual").length == 0) {
-				// module.container.classList.add("hidden")
+				// console.log(`would add hidden: ${teamNumber}`)
+				// console.log(Object.keys(module.moduleConfig))
+				if(module.moduleConfig.position == "side"){
+					await module.setData(await module.formatData([teamNumber], dataset))
+				}
+				module.container.classList.add("hidden")
 			} else {
+				// console.log(`not adding hidden: ${teamNumber}`)
 				module.container.classList.remove("hidden")
 				await module.setData(await module.formatData([teamNumber], dataset))
+				
 			}
+			
 		}
 	}
 

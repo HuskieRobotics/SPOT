@@ -93,9 +93,9 @@ class Stats {
 	}
 
     setData(data) {
-        this.header.innerText = this.moduleConfig.name
+        this.header.innerHTML = this.moduleConfig.name
+	
         clearDiv(this.list)
-
 
         for (const stat of data) {
 			if(stat.hasValue == false){
@@ -120,9 +120,5 @@ class Stats {
 			}
 			
         }
-		if(this.list.innerHTML === ""){ //FIX THIS
-			NoStatsElement.innerHTML = '<strong class = "zeroData">NA</strong>'
-			this.list.appendChild(statElement)
-		}
     }
 }
