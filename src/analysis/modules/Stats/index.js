@@ -21,7 +21,7 @@ class Stats {
     formatData(teams, dataset) {
         const data = []
         for (const stat of this.moduleConfig.options.list) {
-			let hasValue=true;
+			let hasValue=true; // if each individual stat has a value
             let formattedStat
 			let summed
 			if (teams.length > 1) {
@@ -98,14 +98,14 @@ class Stats {
 	
         clearDiv(this.list)
 
-        for (const stat of data) {
-			if(stat.hasValue == false){
+        for (const stat of data) { // add all data to stats div
+			if(stat.hasValue == false){ // if no stats exist, display "No Data"
 				const NAElement = createDOMElement("div","stat")
 				NAElement.innerHTML = `<strong>${stat.name}:</strong> <strong class = "noData">No Data</strong>`
 				this.list.appendChild(NAElement)
 			}
 			else{
-				const statElement = createDOMElement("div", "stat")
+				const statElement = createDOMElement("div", "stat") // different rank classes display different colors
 				let rankClass = "top100"
 				if (stat.rank <= Math.round(stat.totalRanked * 0.05)) {
 					rankClass = "top5"
@@ -115,7 +115,7 @@ class Stats {
 					rankClass = "top50"
 				}
 
-				const rank = stat.rank ? `<span class="rank ${rankClass}">#${stat.rank} </span>` : ""
+				const rank = stat.rank ? `<span class="rank ${rankClass}">#${stat.rank} </span>` : "" // create individual stat display
 				statElement.innerHTML = `<strong>${rank}${stat.name}:</strong> ${stat.value}`
 				this.list.appendChild(statElement)
 			}

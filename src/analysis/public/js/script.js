@@ -123,7 +123,7 @@ if ('serviceWorker' in navigator) {
 	}
 
 	function constructTeamAutoPick(teamNumber, team, allTeams) {
-		//create and populate sidebar element
+		//create and populate autoPickTeamList element
 		const teamContainer = createDOMElement("div", "team-container")
 		const teamNumDisplay = createDOMElement("div", "team-number")
 		teamNumDisplay.innerText = teamNumber
@@ -135,9 +135,8 @@ if ('serviceWorker' in navigator) {
 			teamContainer.appendChild(teamNameDisplay)
 		}
 		
-		//switch to team on click of sidebar team, set module data
+		//switch to team on click, set module data
 		teamContainer.addEventListener("click", async () => {
-			
 			await setTeamModules(teamNumber)
 			displayStats(teamContainer)
 			
@@ -153,13 +152,8 @@ if ('serviceWorker' in navigator) {
 		showFade(teamView)
 	}
 
-	// pull up auto pick list tab stats
+	// pull up and display auto pick list tab stats
 	function displayStats(teamContainer){
-		/*
-		for(let container of autoPickStats.childNodes){
-			container.classList.remove("selected")
-		}
-		*/
 		Array.from(document.querySelector("#auto-pick-team-list").children).map(t => t.classList.remove("selected"))
 		teamContainer.classList.add("selected")
 		showFade(autoPickStats)
@@ -306,22 +300,7 @@ if ('serviceWorker' in navigator) {
 			loadTeamsAutoPick(dataset,modulesConfig)
 			showFade(autoPickView)
 			
-			/*
-			searchInput.addEventListener("input", () => {
-			if (searchInput.value !== "") {
-				const sortedTeams = fuzzysort.go(searchInput.value, Object.keys(dataset.teams), {
-					allowTypo: true
-				})
-				console.log(sortedTeams)
-				for (const team of Array.from(autoPickTeamList.children)) {
-					team.style.display = "none"
-				}
-				for (const sortResult of sortedTeams) {
-					const toAppend = Array.from(autoPickTeamList.children).find(teamElement => teamElement.getAttribute("num") == sortResult.target)
-					autoPickTeamList.appendChild(toAppend)
-					toAppend.style.display = "flex"
-				}
-			} else {
+			/* TODO - sort teams based on scoring potential
 				for (const team of Array.from(autoPickTeamList.children).sort((a, b) => {
 					const aLength = a.getAttribute("num").length
 					const bLength = b.getAttribute("num").length
@@ -334,10 +313,7 @@ if ('serviceWorker' in navigator) {
 					autoPickTeamList.appendChild(team)
 					team.style.display = "flex"
 				}
-			
-			}
-			
-		})*/
+			*/
 			
 		})
 
@@ -381,7 +357,7 @@ if ('serviceWorker' in navigator) {
 		}
 	}
 
-	//dashboard initializer, loads teams and match view
+	//dashboard initializer, loads teams, match view, and autopicklist
 	function initDashboard(dataset, modulesConfig) {
 		loadTeams(dataset, modulesConfig)
 		loadMatchView(dataset, modulesConfig)
