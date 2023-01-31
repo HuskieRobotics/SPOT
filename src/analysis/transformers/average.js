@@ -10,11 +10,13 @@ module.exports = {
         for (const [teamNumber, team] of Object.entries(dataset.teams)) {
             const teamTmps = dataset.tmps.filter(x=>x.robotNumber == teamNumber); //only the tmps that are this team's
             const pathResult = getPath(teamTmps[0], options.path)
-			if (typeof pathResult == "object" && pathResult !== null) { //average all properties in object
+
+          if (typeof pathResult == "object" && pathResult !== null) { //average all properties in object
 				let out = {};
                 for (let subpath in getPath(teamTmps[0], options.path)) {
-					const filteredTeamTmps = teamTmps.filter((tmp) => getPath(tmp, `${options.path}.${subpath}`) !== null)
-                    let average = filteredTeamTmps.reduce((acc, tmp) => {
+                  
+					const filteredTeamTmps = teamTmps.filter((tmp) => getPath(tmp, `${options.path}.${subpath}`,null) !== null)
+                  let average = filteredTeamTmps.reduce((acc, tmp) => {
                         return acc + getPath(tmp, `${options.path}.${subpath}`) //if this is causing an error, your tmps may not have the same schema (eg. some keys (which you are trying to average) are not defined in some tmps)
                     }, 0) / filteredTeamTmps.length;
                     out[subpath] = average;

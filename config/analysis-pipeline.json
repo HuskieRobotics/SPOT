@@ -298,6 +298,24 @@
         }
 	},
   {
+				"type": "tmp",
+				"name": "finalActionOccurence",
+        "outputPath": "finalTeleopDock",
+        "options": {
+          "actionArrayPath": "teleopFilter",
+          "ids":[
+            "platformFall",
+            "platformEngaged",
+            "platformLeave",
+            "platformDocked"
+          ],
+          "default": {
+            "id": "noDock",
+            "ts": 0
+          }
+        }
+	},
+  {
       "type": "tmp",
       "name": "map",
       "outputPath": "scores.autoDock",
@@ -312,8 +330,37 @@
         }
       }
   },
-  
-  
+  {
+      "type": "tmp",
+      "name": "map",
+      "outputPath": "scores.teleopDock",
+      "options": {
+        "path":"finalTeleopDock.id",
+        "map":{
+          "noDock":0,
+          "platformDock":6,
+          "platformEngaged":10,
+          "platformFall":0,
+          "platformLeave":0
+        }
+      }
+  },
+  {
+    "type":"tmp",
+    "name":"sum",
+    "outputPath":"scores.dock",
+    "options":{
+      "addends":["scores.autoDock","scores.teleopDock"]
+    }
+  },
+  {
+    "type":"tmp",
+    "name":"sum",
+    "outputPath":"scores.total",
+    "options":{
+      "addends":["scores.auto","scores.teleop","scores.dock"]
+    }
+  },
   {
     "type":"tmp",
     "name":"cycle",
@@ -346,15 +393,6 @@
         "outputPath": "coneCycle.averageTime",
         "options": {
             "arrayPath": "coneCycle.all",
-            "valuePath": "timeDifferential"
-        }
-    },
-  {
-        "type": "team",
-        "name": "averageArray",
-        "outputPath": "coneCycle.averageTimeComplete",
-        "options": {
-            "arrayPath": "coneCycle.allComplete",
             "valuePath": "timeDifferential"
         }
     },
@@ -444,6 +482,14 @@
         "options": {
             "arrayPath": "cycle.allComplete",
             "valuePath": "timeDifferential"
+        }
+    },
+    {
+        "type": "team",
+        "name": "average",
+        "outputPath": "averageScores",
+        "options": {
+            "path": "scores"
         }
     }
 ]

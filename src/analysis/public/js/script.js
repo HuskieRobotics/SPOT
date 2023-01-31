@@ -53,8 +53,11 @@ if ('serviceWorker' in navigator) {
 		const allTeams = await fetchTeams()
 		//add to sidebar team list
 		for (const [teamNumber, team] of Object.entries(dataset.teams)) {
-			const teamContainer = constructTeam(teamNumber, team, allTeams)
-			teamList.appendChild(teamContainer)
+			// console.log(`team: ${Object.keys(team)}\n num: ${teamNumber}\n allTeams: ${allTeams[teamNumber]}`)
+      if(allTeams[teamNumber]){
+        const teamContainer = constructTeam(teamNumber, team, allTeams)
+			  teamList.appendChild(teamContainer)
+      }
 		}
 
 		//enable sidebar if sidebar modules exist
@@ -136,14 +139,17 @@ if ('serviceWorker' in navigator) {
 
 		//get all dropdowns
 		const teamSelects = Array.from(document.querySelectorAll(".alliance-selects")).map(g => Array.from(g.children)).flat()
-
+    const allTeams = await fetchTeams()
 		//populate dropdowns with team numbers
 		for (const teamSelect of teamSelects) {
 			for (const team of Object.keys(dataset.teams)) {
-				const option = createDOMElement("option")
-				option.innerText = team
-				option.value = team
-				teamSelect.appendChild(option)
+				// console.log(team)
+        if(allTeams[team]){
+          const option = createDOMElement("option")
+				  option.innerText = team
+				  option.value = team
+				  teamSelect.appendChild(option)
+        }
 			}
 
 			//on dropdown change
