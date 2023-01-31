@@ -51,14 +51,7 @@
                     "type": "match-control",
                     "executables": []
                 },
-                {
-                    "id": "crossCommunity",
-                    "displayText": "Cross Community",
-                    "gridArea": ["2", "4", "3", "7"],
-                    "class": "gray",
-                    "type": "action",
-                    "executables": []
-                },
+                
                 {
                     "id": "broken",
                     "displayText": "Disabled",
@@ -277,14 +270,7 @@
                     "type": "match-control",
                     "executables": []
                 },
-                {
-                    "id": "crossCommunity",
-                    "displayText": "Cross Community",
-                    "gridArea": ["2", "4", "3", "7"],
-                    "class": "gray",
-                    "type": "action",
-                    "executables": []
-                },
+                
                 {
                     "id": "broken",
                     "displayText": "Disabled",
@@ -504,14 +490,7 @@
                     "type": "match-control",
                     "executables": []
                 },
-                {
-                    "id": "crossCommunity",
-                    "displayText": "Cross Community",
-                    "gridArea": ["2", "4", "3", "7"],
-                    "class": "gray",
-                    "type": "action",
-                    "executables": []
-                },
+                
                 {
                     "id": "broken",
                     "displayText": "Disabled",
