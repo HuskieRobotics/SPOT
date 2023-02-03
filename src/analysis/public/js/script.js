@@ -251,7 +251,7 @@ if ('serviceWorker' in navigator) {
 			if(module.wholeMatch) {
 				let allTeams = alliances[0]
 				allTeams.push('|')
-				allTeams = allTEams.concat(alliance)
+				allTeams = allTEams.concat(alliances[1])
 				displayedAlliances = allTeams.filter(teamNumber => {
 					if (!module.moduleConfig.separate && Object.keys(dataset.teams[teamNumber]).filter(prop => prop !== "manual").length == 0) {
 						return false
@@ -282,7 +282,24 @@ if ('serviceWorker' in navigator) {
 
 				return true
 			})
-
+			if(module.wholeMatch) {
+				let allTeams = alliances[1]
+				allTeams.push('|')
+				allTeams = allTEams.concat(alliances[0])
+				displayedAlliances = allTeams.filter(teamNumber => {
+					if (!module.moduleConfig.separate && Object.keys(dataset.teams[teamNumber]).filter(prop => prop !== "manual").length == 0) {
+						return false
+					}
+	
+					return true
+				})
+				if (displayedAlliances.length !== 0) {
+					module.container.classList.remove("hidden")
+					await module.setData(await module.formatData(displayedAlliances, dataset))
+				} else {
+					module.container.classList.add("hidden")
+				}
+			}
 			if (displayedAlliances.length !== 0) {
 				module.container.classList.remove("hidden")
 				await module.setData(await module.formatData(displayedAlliances, dataset))

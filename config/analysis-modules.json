@@ -228,6 +228,7 @@
 		"module": "SingleDisplay",
 		"name": "Percent Chance of Winning",
 		"position": "main",
+        "wholeMatch": true,
 		"options": {
 			"path": "",
 			"decimals": 2

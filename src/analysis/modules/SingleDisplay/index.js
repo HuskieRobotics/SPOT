@@ -15,19 +15,39 @@ class SingleDisplay {
 
     formatData(teams, dataset) {
 		let summed
-		if (teams.length > 1) {
-			summed = teams.map(team => getPath(dataset.teams[team], this.moduleConfig.options.path, 0)).flat().reduce((acc, i) => acc + i, 0)
-		} else {
-			summed = getPath(dataset.teams[teams[0]], this.moduleConfig.options.path, 0)
+		if(this.moduleConfig.wholeMatch) {
+			// teams = [b1,b2,b3,|,r1,r3]
+			// 1 split list of teams
+			let indexOfPipe = teams.idexOF("|")
+			let alliance1 = teams.slice(0, indexOfPipe)
+			let alliance2 = teams.slice(indexOfPipe-1, teams.length)
+			// 3 identify which calculation to perform
+			// 4 send output to formattedDiplay
+			if(alliance1.length > 0){ // 2 validate alliances have at least 1 robot
+				if (this.moduleConfig.options.aggrMethod == "percentChanceOfWin") { //optionally summed
+				} else { //default is undefined
+					formattedDisplay = 0
+				}
+			
+			} 
+			else {
+				
+			}
 		}
+		else {
+			if (teams.length > 1) {
+				summed = teams.map(team => getPath(dataset.teams[team], this.moduleConfig.options.path, 0)).flat().reduce((acc, i) => acc + i, 0)
+			} else {
+				summed = getPath(dataset.teams[teams[0]], this.moduleConfig.options.path, 0)
+			}
 
-		let formattedDisplay
-		if (this.moduleConfig.options.aggrMethod == "sum") { //optionally summed
-			formattedDisplay = summed
-		} else { //default is average
-			formattedDisplay = summed / teams.length
+			let formattedDisplay
+			if (this.moduleConfig.options.aggrMethod == "sum") { //optionally summed
+				formattedDisplay = summed
+			} else { //default is average
+				formattedDisplay = summed / teams.length
+			}
 		}
-
 		formattedDisplay = this.applyModifiers(formattedDisplay)
 
 		if (isNaN(formattedDisplay) || formattedDisplay == this.moduleConfig.options.hideIfValue) {
