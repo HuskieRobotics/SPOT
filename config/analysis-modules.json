@@ -526,7 +526,7 @@
 		"module": "SingleDisplay",
 		"name": "Percent Chance of Winning",
 		"position": "main",
-        "wholeMatch": true,
+    "wholeMatch": true,
 		"options": {
             "aggrMethod" : "percentChanceOfWinning",
 			"decimals": 2

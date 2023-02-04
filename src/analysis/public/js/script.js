@@ -233,7 +233,7 @@ if ('serviceWorker' in navigator) {
 			rightAllianceModules.appendChild(rightModuleObject.container)
 			modules.match.right.push(rightModuleObject)
 			
-			if(m.wholeMatch) {
+			if(module.wholeMatch) {
 				const bothModuleObjectLeft = new moduleClasses[module.module](module)
 				leftAllianceModules.appendChild(bothModuleObjectLeft.container)
 				const bothModuleObjectRight = new moduleClasses[module.module](module)
@@ -247,19 +247,21 @@ if ('serviceWorker' in navigator) {
 	//call setData on every module in matches
 	async function setMatchModules(alliances) {
 		for (const module of modules.match.left) {
+			console.log(module.moduleConfig.name)
 			var displayedAlliances = alliances[0].filter(teamNumber => {
-				if (!module.moduleConfig.separate && Object.keys(dataset.teams[teamNumber]).filter(prop => prop !== "manual").length == 0) {
+				if (!module.moduleConfig.separate && teamNumber != "|"  && Object.keys(dataset.teams[teamNumber]).filter(prop => prop !== "manual").length == 0) {
 					return false
 				}
 
 				return true
 			})
-			if(module.wholeMatch) {
+			if(module.moduleConfig.wholeMatch) {
+				console.log(module.moduleConfig.wholeMatch)
 				let allTeams = alliances[0]
 				allTeams.push('|')
-				allTeams = allTEams.concat(alliances[1])
+				allTeams = allTeams.concat(alliances[1])
 				displayedAlliances = allTeams.filter(teamNumber => {
-					if (!module.moduleConfig.separate && Object.keys(dataset.teams[teamNumber]).filter(prop => prop !== "manual").length == 0) {
+					if (!module.moduleConfig.separate && teamNumber != "|" && Object.keys(dataset.teams[teamNumber]).filter(prop => prop !== "manual").length == 0) {
 						return false
 					}
 	
@@ -281,19 +283,21 @@ if ('serviceWorker' in navigator) {
 		}
 
 		for (const module of modules.match.right) {
+			console.log(module.moduleConfig.name)
 			const displayedAlliances = alliances[1].filter(teamNumber => {
-				if (!module.moduleConfig.separate && Object.keys(dataset.teams[teamNumber]).filter(prop => prop !== "manual").length == 0) {
+				if (!module.moduleConfig.separate && teamNumber != "|"  && Object.keys(dataset.teams[teamNumber]).filter(prop => prop !== "manual").length == 0) {
 					return false
 				}
 
 				return true
 			})
-			if(module.wholeMatch) {
+			if(module.moduleConfig.wholeMatch) {
 				let allTeams = alliances[1]
 				allTeams.push('|')
-				allTeams = allTEams.concat(alliances[0])
+				allTeams = allTeams.concat(alliances[0])
+				console.log(`whole match right side ${allTeams}`)
 				displayedAlliances = allTeams.filter(teamNumber => {
-					if (!module.moduleConfig.separate && Object.keys(dataset.teams[teamNumber]).filter(prop => prop !== "manual").length == 0) {
+					if (!module.moduleConfig.separate && teamNumber != "|"  && Object.keys(dataset.teams[teamNumber]).filter(prop => prop !== "manual").length == 0) {
 						return false
 					}
 	

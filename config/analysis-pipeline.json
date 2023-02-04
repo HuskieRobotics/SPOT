@@ -498,7 +498,7 @@
 		"name": "standardDeviation",
 		"outputPath": "standardDeviation",
 		"options": {
-			"path" : "scores.all"
+			"path" : "scores.total"
 		}
 	}
 
