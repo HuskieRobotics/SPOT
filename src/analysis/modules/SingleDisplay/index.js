@@ -21,11 +21,12 @@ class SingleDisplay {
 			let indexOfPipe = teams.idexOF("|")
 			let alliance1 = teams.slice(0, indexOfPipe)
 			let alliance2 = teams.slice(indexOfPipe-1, teams.length)
-			// 3 identify which calculation to perform
-			// 4 send output to formattedDiplay
 			if(alliance1.length > 0){ // 2 validate alliances have at least 1 robot
-				if (this.moduleConfig.options.aggrMethod == "percentChanceOfWin") { //optionally summed
-				} else { //default is undefined
+				if (this.moduleConfig.options.aggrMethod == "percentChanceOfWin") {	// 3 identify which calculation to perform
+					// 4 send output to formattedDisplay
+					formattedDisplay = this.percentChanceOfWinning(alliance1, alliance2)
+				} 
+				else { //default is undefined
 					formattedDisplay = 0
 				}
 			
