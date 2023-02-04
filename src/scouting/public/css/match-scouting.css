@@ -14,7 +14,7 @@
     width: 99%;
     height: 93.5%;
     display: grid;
-    grid-gap: .75vw;
+    grid-gap: 3vw;
     border-radius: var(--border-radius, 16px);
     padding: .5vmin
 }
@@ -44,6 +44,15 @@
     background-color: #2D2D2D
 }
 
+.button-padding {
+  padding: 5vw;
+}
+
+.silver {
+  border: 3px solid #2d2d2d;
+  background-color: #919191
+}
+
 .green {
     background-color: #4caf50
 }
@@ -53,15 +62,23 @@
 }
 
 .red {
-    background-color: #ff4436
+    background-color: #ff4436;
 }
 
 .navy {
-    background-color: #3f51b5
+    background-color: #3f51b5;
 }
 
 .pink {
-    background-color: #f06292
+    background-color: #f06292;
+}
+
+.yellow{
+  background-color:#d8c24f;
+}
+
+.border{
+  border: 4px solid #37cde1;
 }
 
 .highlight {

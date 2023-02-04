@@ -52,7 +52,7 @@ module.exports = {
             //counts
             out.cycleCount = out.all.length;
             out.cycleCountComplete = out.allComplete.length;
-
+          
             setPath(tmp,outputPath,out);
         }
 

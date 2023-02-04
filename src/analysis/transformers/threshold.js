@@ -3,7 +3,7 @@ const {DataTransformer} = require("../DataTransformer");
 
 module.exports = {
     /** given a list of paths with numeric values, returns a list or delimited string of those paths that pass a minimum threshold
-     * @type {DataTransformer}
+     * @type {DataTransf {ormer}
 	 * @param options.threshold {Number} a number that all path values must be greater than to pass the threshold. if not specified, all values pass
 	 * @param options.separator {String} a string to join each passing name with. if not specified, return an array of names
 	 * @param options.none {String} a string to return if no values pass. a separator is required for this parameter to be used (optional)
