@@ -24,7 +24,7 @@ class SingleDisplay {
 			if(alliance1.length > 0){ // 2 validate alliances have at least 1 robot
 				if (this.moduleConfig.options.aggrMethod == "percentChanceOfWin") {	// 3 identify which calculation to perform
 					// 4 send output to formattedDisplay
-					formattedDisplay = this.percentChanceOfWinning(alliance1, alliance2)
+					formattedDisplay = this.compareAlliances(alliance1, alliance2)
 				} 
 				else { //default is undefined
 					formattedDisplay = 0
@@ -32,7 +32,7 @@ class SingleDisplay {
 			
 			} 
 			else {
-				
+				formattedDisplay = 0
 			}
 		}
 		else {
@@ -82,4 +82,42 @@ class SingleDisplay {
         this.header.innerText = this.moduleConfig.name
         this.display.innerText = data
     }
+
+	matchAverage(alliance1, alliance2) {
+		alliance1Avg = 0
+		for (a in alliance1) {
+			data = getPath(dataset.teams[a],"averageScores",0)
+			alliance1Avg += data
+		}
+		alliance2Avg = 0
+		for (a in alliance2) {
+			data = getPath(dataset.teams[a],"averageScores",0)
+			alliance1Avg += data
+		}
+		return alliance1Avg - alliance2Avg
+	}
+	
+	matchStandardDeviation(alliance1, alliance2) {
+		alliance1SD = 0
+		for (a in alliance1) {
+			data = getPath(dataset.teams[a],"standardDeviation",0)
+			alliance1SD += Math.pow(data, 2)
+		}
+		alliance1SD = Math.sqrt(alliance1SD)
+		alliance2SD = 0
+		for (a in alliance2) {
+			data = getPath(dataset.teams[a],"standardDeviation",0)
+			alliance1SD += Math.pow(data, 2)
+		}
+		alliance2SD = Math.sqrt(alliance2SD)
+		return Math.sqrt(Math.pow(alliance1SD, 2) + Math.pow(alliance2SD, 2))
+	}
+	
+	compareAlliances(alliance1, alliance2) {
+		zscore = ss.zScore(0, matchAverage(alliance1, alliance2), matchStandardDeviation(alliance1, alliance2))
+		probAlliance2Wins = ss.cumulativeStdNormalProbability(zscore)
+		return 1 - probAlliance2Wins;
+	}
+
+	
 }

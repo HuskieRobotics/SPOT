@@ -230,7 +230,7 @@
 		"position": "main",
         "wholeMatch": true,
 		"options": {
-			"path": "",
+            "aggrMethod" : "percentChanceOfWinning",
 			"decimals": 2
 		}
 	},

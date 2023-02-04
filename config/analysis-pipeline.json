@@ -449,5 +449,14 @@
 				"averages.lowerHub": "L"
 			}
 		}
+	},
+    {
+		"type": "team",
+		"name": "standardDeviation",
+		"outputPath": "standardDeviation",
+		"options": {
+			"path" : "scores.all"
+		}
 	}
+
 ]

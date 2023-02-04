@@ -1,7 +1,7 @@
 {
   "name": "spot",
   "version": "1.0.0",
-  "description": "",
+  "description": "SPOT is an open-source modular scouting app framework for FRC developed by Team 3061 Huskie Robotics. SPOT provides a simple platform upon which a team can build a scouting app with little to no prior experience.",
   "main": "./src/app.js",
   "scripts": {
     "start": "node src/app.js",
