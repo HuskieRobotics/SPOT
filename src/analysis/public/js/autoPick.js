@@ -77,11 +77,15 @@ async function fetchTeams() {
  * @returns A list of all possible alliances, including impossible allaicnes(duplicate teams on an alliance)
  */
 function possibleAliiances(teams) {
-	let possibleAlliiances = [] // an array of all possible alliances 
+	
+	let possibleAlliiances = Set() // a set of all possible alliances 
 	for(x in teams) {
 		for(y in teams) {
 			for(z in teams) {
-				possibleAliiances.push(new alliance[x, y, z])
+				if(x!=y && y !=z && z!=x){
+					possibleAliiances.push(new Set(x, y, z))
+				}
+				
 			}
 		}
 	}
@@ -138,13 +142,20 @@ function compareAlliances(alliance1, alliance2) {
 }
 /**
  * 
- * @param {a list of alliances} alliances 
- * @returns a list of alliances prioritized, by winning probability 
- * 
+ * @param {a list of teams} all of the teams  
+ * @returns a list of pairs (team, value) that is sorted by the value of winning probability
  * If we compare to every alliances to every other alliances we can make a (key, value) map with a key of the alliance number and a value of their winning prob
  * Then it can be passed into another (key, value) map with the key being a team number and a value of their average chance of winning
  */
-function compareAllTeams(alliances) {
+function compareAllTeams(teams) { 
+	// create list of all alliances using possibleAlliances(teams) function
+	// compare each alliance to every other alliance and keep a running probability, 
+	// average this probability at the end for each alliance
+	// loop through each alliance, add average probability to each team, 
+	// take average of this total for each team - average probability of this team winning
+	// sort teams by probability
+
+
 	let allianceProb = new Map();
 	for (a in alliances) {
 		for (b in alliances){
