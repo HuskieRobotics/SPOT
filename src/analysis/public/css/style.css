@@ -43,7 +43,7 @@ body {
 }
 
 #dashboard {
-  grid-area: 2 / 2 / 4 / 4;
+  grid-area: 1 / 2 / 4 / 4;
   overflow: hidden;
   position: relative;
 }
@@ -58,7 +58,7 @@ body {
 }
 
 #team-view.side-enabled {
-  grid-template-columns: 65% 35%;
+  grid-template-columns: 75% 25%;
 }
 
 #main-list {
@@ -242,7 +242,7 @@ body {
 
 #dashboard > div.visible {
   visibility: unset;
-  height: calc(100vh - 75px);
+  height: calc(100vh);
   opacity: 1;
   transition: visibility 0s 0s, opacity 0.3s 0s;
 }

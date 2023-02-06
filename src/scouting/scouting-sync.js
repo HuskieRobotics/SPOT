@@ -9,7 +9,7 @@ const {TeamMatchPerformance} = require("../lib/db.js");
 const axios = require("axios");
 const config = require("../../config/config.json");
 const chalk = require("chalk");
-
+const DEMO = true;
 module.exports = (server) => {
     if (!ScoutingSync.initialized) {
         if (!server) {
@@ -145,18 +145,24 @@ class ScoutingSync {
             x.state.status == ScoutingSync.SCOUTER_STATUS.WAITING &&
             x.state.connected);
         
-        //if anyone is scouting the match, tell all waiting scouters to start
-        if (ScoutingSync.scouters.filter(x=>
-            x.state.matchNumber == ScoutingSync.match.number && 
-            x.state.status == ScoutingSync.SCOUTER_STATUS.SCOUTING
-            ).length > 0) {
-            for (let scouter of currentMatchWaitingScouters) {
-                scouter.socket.emit("enterMatch");
-            }
-        } else if (currentMatchWaitingScouters.length >= 6) { //if there are 6 scouters waiting, enter match.
-            for (let scouter of currentMatchWaitingScouters) {
-                scouter.socket.emit("enterMatch");
-            }
+        if(!DEMO){
+          //if anyone is scouting the match, tell all waiting scouters to start
+          if (ScoutingSync.scouters.filter(x=>
+              x.state.matchNumber == ScoutingSync.match.number && 
+              x.state.status == ScoutingSync.SCOUTER_STATUS.SCOUTING
+              ).length > 0) {
+              for (let scouter of currentMatchWaitingScouters) {
+                  scouter.socket.emit("enterMatch");
+              }
+          } else if (currentMatchWaitingScouters.length >= 6) { //if there are 6 scouters waiting, enter match.
+              for (let scouter of currentMatchWaitingScouters) {
+                  scouter.socket.emit("enterMatch");
+              }
+          }
+        } else {
+          for (let scouter of currentMatchWaitingScouters) { //for demo, everyone should enter immediately
+            scouter.socket.emit("enterMatch");
+          }
         }
     }
 
@@ -205,8 +211,12 @@ class Scouter {
         })
 
         this.socket.on("syncData", async (clientTeamMatchPerformanceIds, requestTeamMatchPerformances) => {
+          if(!DEMO){  
             const serverTeamMatchPerformanceIds = (await TeamMatchPerformance.find()).map(teamMatchPerformance => teamMatchPerformance.matchId)
             requestTeamMatchPerformances(clientTeamMatchPerformanceIds.filter(clientTeamMatchPerformanceId => !serverTeamMatchPerformanceIds.includes(clientTeamMatchPerformanceId)))
+          } else {
+            requestTeamMatchPerformances([]) //dont request any tmps for the demo
+          }        
         })
         // comment out the clearData command
         // this.socket.on("clearData", async () => {

@@ -17,7 +17,8 @@ if ('serviceWorker' in navigator) {
 		team: [],
 		match: {
 			left: [],
-			right: []
+			right: [],
+			both: []
 		}
 	}
 
@@ -53,8 +54,11 @@ if ('serviceWorker' in navigator) {
 		const allTeams = await fetchTeams()
 		//add to sidebar team list
 		for (const [teamNumber, team] of Object.entries(dataset.teams)) {
-			const teamContainer = constructTeam(teamNumber, team, allTeams)
-			teamList.appendChild(teamContainer)
+			// console.log(`team: ${Object.keys(team)}\n num: ${teamNumber}\n allTeams: ${allTeams[teamNumber]}`)
+      if(allTeams[teamNumber]){
+        const teamContainer = constructTeam(teamNumber, team, allTeams)
+			  teamList.appendChild(teamContainer)
+      }
 		}
 
 		//enable sidebar if sidebar modules exist
@@ -199,14 +203,17 @@ if ('serviceWorker' in navigator) {
 
 		//get all dropdowns
 		const teamSelects = Array.from(document.querySelectorAll(".alliance-selects")).map(g => Array.from(g.children)).flat()
-
+    const allTeams = await fetchTeams()
 		//populate dropdowns with team numbers
 		for (const teamSelect of teamSelects) {
 			for (const team of Object.keys(dataset.teams)) {
-				const option = createDOMElement("option")
-				option.innerText = team
-				option.value = team
-				teamSelect.appendChild(option)
+				// console.log(team)
+        if(allTeams[team]){
+          const option = createDOMElement("option")
+				  option.innerText = team
+				  option.value = team
+				  teamSelect.appendChild(option)
+        }
 			}
 
 			//on dropdown change
@@ -288,6 +295,15 @@ if ('serviceWorker' in navigator) {
 			const rightModuleObject = new moduleClasses[module.module](module)
 			rightAllianceModules.appendChild(rightModuleObject.container)
 			modules.match.right.push(rightModuleObject)
+			
+			if(module.wholeMatch) {
+				const bothModuleObjectLeft = new moduleClasses[module.module](module)
+				leftAllianceModules.appendChild(bothModuleObjectLeft.container)
+				const bothModuleObjectRight = new moduleClasses[module.module](module)
+				leftAllianceModules.appendChild(bothModuleObjectRight.container)
+				// modules.match.both.push(bothModuleObject)
+			}
+
 		}
 	}
 
@@ -323,14 +339,33 @@ if ('serviceWorker' in navigator) {
 	//call setData on every module in matches
 	async function setMatchModules(alliances) {
 		for (const module of modules.match.left) {
-			const displayedAlliances = alliances[0].filter(teamNumber => {
-				if (!module.moduleConfig.separate && Object.keys(dataset.teams[teamNumber]).filter(prop => prop !== "manual").length == 0) {
+			console.log(module.moduleConfig.name)
+			var displayedAlliances = alliances[0].filter(teamNumber => {
+				if (!module.moduleConfig.separate && teamNumber != "|"  && Object.keys(dataset.teams[teamNumber]).filter(prop => prop !== "manual").length == 0) {
 					return false
 				}
 
 				return true
 			})
-
+			if(module.moduleConfig.wholeMatch) {
+				console.log(module.moduleConfig.wholeMatch)
+				let allTeams = alliances[0]
+				allTeams.push('|')
+				allTeams = allTeams.concat(alliances[1])
+				displayedAlliances = allTeams.filter(teamNumber => {
+					if (!module.moduleConfig.separate && teamNumber != "|" && Object.keys(dataset.teams[teamNumber]).filter(prop => prop !== "manual").length == 0) {
+						return false
+					}
+	
+					return true
+				})
+				if (displayedAlliances.length !== 0) {
+					module.container.classList.remove("hidden")
+					await module.setData(await module.formatData(displayedAlliances, dataset))
+				} else {
+					module.container.classList.add("hidden")
+				}
+			}
 			if (displayedAlliances.length !== 0) {
 				module.container.classList.remove("hidden")
 				await module.setData(await module.formatData(displayedAlliances, dataset))
@@ -340,14 +375,33 @@ if ('serviceWorker' in navigator) {
 		}
 
 		for (const module of modules.match.right) {
+			console.log(module.moduleConfig.name)
 			const displayedAlliances = alliances[1].filter(teamNumber => {
-				if (!module.moduleConfig.separate && Object.keys(dataset.teams[teamNumber]).filter(prop => prop !== "manual").length == 0) {
+				if (!module.moduleConfig.separate && teamNumber != "|"  && Object.keys(dataset.teams[teamNumber]).filter(prop => prop !== "manual").length == 0) {
 					return false
 				}
 
 				return true
 			})
-
+			if(module.moduleConfig.wholeMatch) {
+				let allTeams = alliances[1]
+				allTeams.push('|')
+				allTeams = allTeams.concat(alliances[0])
+				console.log(`whole match right side ${allTeams}`)
+				displayedAlliances = allTeams.filter(teamNumber => {
+					if (!module.moduleConfig.separate && teamNumber != "|"  && Object.keys(dataset.teams[teamNumber]).filter(prop => prop !== "manual").length == 0) {
+						return false
+					}
+	
+					return true
+				})
+				if (displayedAlliances.length !== 0) {
+					module.container.classList.remove("hidden")
+					await module.setData(await module.formatData(displayedAlliances, dataset))
+				} else {
+					module.container.classList.add("hidden")
+				}
+			}
 			if (displayedAlliances.length !== 0) {
 				module.container.classList.remove("hidden")
 				await module.setData(await module.formatData(displayedAlliances, dataset))
