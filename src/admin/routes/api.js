@@ -4,6 +4,7 @@ let router = Router();
 const config = require("../../../config/config.json");
 const { TeamMatchPerformance } = require("../../lib/db");
 
+const DEMO = true;
 
 router.use((req,res,next) => {
     if (!ScoutingSync.initialized) {
@@ -14,6 +15,7 @@ router.use((req,res,next) => {
 })
 
 router.get("/auth", (req, res) => {
+  if(!DEMO){
     if (config.secrets.ACCESS_CODE === "") {
         res.json({status: 2})
     } else if (config.secrets.ACCESS_CODE == req.headers.authorization) {
@@ -21,14 +23,21 @@ router.get("/auth", (req, res) => {
     } else {
         res.json({status: 0})
     }
+  } else {
+    res.json({status: 2})
+  }
 })
 
 router.get("/scouters", (req,res) => {
+  if(!DEMO){
     if (req.headers.authorization === config.secrets.ACCESS_CODE) {
         res.json(ScoutingSync.getScouters())
     } else {
         res.json({error: "Not Authorized"})
     }
+  } else {
+    res.json(ScoutingSync.getScouters())
+  }
 });
 
 router.get("/data", async (req,res) => {
@@ -36,7 +45,8 @@ router.get("/data", async (req,res) => {
 })
 
 
-router.get("/enterMatch", (req,res) => {
+router.get("/enterMatch", async (req,res) => {
+  if(!DEMO){
     if (req.headers.authorization === config.secrets.ACCESS_CODE) {
         for (let scouter of ScoutingSync.scouters) {
             if (scouter.state.status == ScoutingSync.SCOUTER_STATUS.WAITING)
@@ -47,8 +57,21 @@ router.get("/enterMatch", (req,res) => {
     } else {
         res.json({error: "Not Authorized"})
     }
+  } else {
+    let test = await ScoutingSync.getMatches()
+     res.json({
+        "allMatches": test,
+        "currentMatch": ScoutingSync.match
+    })
+    for (let scouter of ScoutingSync.scouters) {
+        if (scouter.state.status == ScoutingSync.SCOUTER_STATUS.WAITING)
+            scouter.socket.emit("enterMatch");
+    }
+    res.json(true);
+  }
 })
 router.post("/setMatch", (req,res) => {
+  if(!DEMO){
     if (req.headers.authorization === config.secrets.ACCESS_CODE) {
         ScoutingSync.setMatch(req.body);
         ScoutingSync.assignScouters();
@@ -56,6 +79,11 @@ router.post("/setMatch", (req,res) => {
     } else {
         res.json({error: "Not Authorized"})
     }
+  } else {
+    ScoutingSync.setMatch(req.body);
+    ScoutingSync.assignScouters();
+    res.json(true);
+  }
 });
 
 router.get("/matches", async (req,res) => {
