@@ -223,7 +223,7 @@ if ('serviceWorker' in navigator) {
 			}
 		})
 
-		//create match module objects and append placeholders to module list elements
+		//create match module objects and append placeholders to module list  elements
 		for (const module of modulesConfig.filter(m => m.view == "match")) {
 			const leftModuleObject = new moduleClasses[module.module](module)
 			leftAllianceModules.appendChild(leftModuleObject.container)
