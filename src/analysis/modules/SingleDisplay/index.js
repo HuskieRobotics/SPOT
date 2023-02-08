@@ -17,23 +17,27 @@ class SingleDisplay {
 		let summed
 		let formattedDisplay
 		if(this.moduleConfig.wholeMatch) {
+			console.log("this happened")
 			// teams = [b1,b2,b3,|,r1,r3]
 			// 1 split list of teams
+			console.log(`teams: ${teams}`)
 			let indexOfPipe = teams.indexOf("|")
-			let alliance1 = teams.slice(0, indexOfPipe)
-			let alliance2 = teams.slice(indexOfPipe+1, teams.length)
+			let alliance1 = [3061] //teams.slice(0, indexOfPipe)
+			let alliance2 = [3061] //teams.slice(indexOfPipe+1, teams.length)
 			console.log(`alliances: ${alliance1} and ${alliance2}`)
 			if(alliance1.length > 0){ // 2 validate alliances have at least 1 robot
 				if (this.moduleConfig.options.aggrMethod == "percentChanceOfWin") {	// 3 identify which calculation to perform
 					// 4 send output to formattedDisplay
-					
-					console.log("Compared Alliances" + this.compareAlliances(alliance1,alliance2))
+					console.log("this is good")
+					ocnsole.log("Compared Alliances" + this.compareAlliances(alliance1,alliance2))
 					formattedDisplay = this.compareAlliances(alliance1, alliance2)
 				} else { //default is undefined
+					console.log("bad")
 					formattedDisplay = 0
 				}
 			
 			} else {
+				console.log("also bad")
 				formattedDisplay = 0
 			}
 		} else {
