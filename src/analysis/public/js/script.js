@@ -107,6 +107,10 @@ if ('serviceWorker' in navigator) {
 		autoPickTeamList.innerHTML = ""
 		//get blue alliance teams
 		const allTeams = await fetchTeams()
+
+		// sort teams by rank
+		
+
 		//add to sidebar team list
 		for (const [teamNumber, team] of Object.entries(dataset.teams)) {
 			const autoPickTeamContainer = constructTeamAutoPick(teamNumber, team, allTeams)
@@ -315,22 +319,6 @@ if ('serviceWorker' in navigator) {
 			autoPickSwitch.classList.add("selected")
 			loadTeamsAutoPick(dataset,modulesConfig)
 			showFade(autoPickView)
-			
-			/* TODO - sort teams based on scoring potential
-				for (const team of Array.from(autoPickTeamList.children).sort((a, b) => {
-					const aLength = a.getAttribute("num").length
-					const bLength = b.getAttribute("num").length
-					if (aLength == bLength) {
-						return a.getAttribute("num").localeCompare(b.getAttribute("num"))
-					} else {
-						return aLength - bLength
-					}
-				})) {
-					autoPickTeamList.appendChild(team)
-					team.style.display = "flex"
-				}
-			*/
-			
 		})
 
 	}

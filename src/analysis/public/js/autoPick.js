@@ -76,13 +76,13 @@ async function fetchTeams() {
 /**
  * 
  * @param {A list of all teams} teams 
- * @returns A list of all possible alliances, including impossible allaicnes(duplicate teams on an alliance)
+ * @returns A list of all possible alliances, not including including impossible allaicnes(duplicate teams on an alliance)
  */
-function possibleAliances(teams) {
-	var alliances = new Set() // a set of all possible alliances 
+function possibleAlliances(teams) {
+	var alliances = new Set() // a set of sets of all possible alliances  -  set of sets so there aren't any duplicates
 	for(let x = 0; x < teams.length; x++) {
 		for(let y = 0; y < teams.length; y++) {
-			for(let z = 0; z < teams.length; z++) {
+			for(let z = 0; z < teams.length; z++) { // makes sure there aren't alliances with duplicate teams
 				if(teams[x].team_number!=teams[y].team_number && teams[y].team_number!=teams[z].team_number && teams[z].team_number!=teams[x].team_number){
 					alliances.add(new Set([teams[x], teams[y], teams[z]]))
 				}
@@ -144,62 +144,54 @@ function compareAlliances(alliance1, alliance2) {
 /**
  * 
  * @param {a list of teams} all of the teams  
- * @returns a list of pairs (team, value) that is sorted by the value of winning probability
  * If we compare to every alliances to every other alliances we can make a (key, value) map with a key of the alliance number and a value of their winning prob
  * Then it can be passed into another (key, value) map with the key being a team number and a value of their average chance of winning
  */
 function compareAllTeams(teams) { 
-	// create list of all alliances using possibleAlliances(teams) function
-	// compare each alliance to every other alliance and keep a running probability, 
-	// average this probability at the end for each alliance
-	// loop through each alliance, add average probability to each team, 
+	// Algorithm:
+	// create list of all alliances using possibleAlliances(teams) function, this is a set of sets that needs
+	// 		to be converted to an array of arrays
+	// compare each alliance to every other alliance and keep a running probability (sum of every probability), 
+	// 		average this probability at the end for each alliance.
+	// loop through each alliance, add average probability to each team, average this at the end
+	//    so each team has a value of their average chance of winning in any given alliance
 	
-	console.log("teams in cat: " + teams[1].team_number)
-	console.log('type: ' + typeof possibleAliances(teams));
-	let interator = possibleAliances(teams).values();
-	console.log("length" + interator[0]);
-	for(let x in interator){
-		console.log("value " + x);
+	let alliancesWithScore = []; // an array of arrays; Within each list contains an alliance, sum of probabilities, number of alliances compared with, and avg probability
+	let iterator = possibleAlliances(teams).values();  // an iterator that goes through all possible alliances
+	for(let i = 0; i < possibleAlliances(teams).size; i++){ // sumProbability is the total, probability = sumProbability / teamsComparedWith
+		let iterator2 = iterator.next().value.values(); // converts the set to an array so we can use it
+		let allianceValue = [iterator2.next().value, iterator2.next().value, iterator2.next().value];
+		alliancesWithScore[i] = {alliance:allianceValue,probability:0,sumProbability:0,teamsComparedWith:0};
 	}
-	let alliances = new Set([possibleAliances(teams).entries()]);
-	console.log("alliances type: " +typeof(alliances))
-	for(let alliance =0; alliance<alliances.size; alliance++){
-		console.log("alliance: " + alliances.values[alliance]);
-	}
-	for(let alliance in alliances.values){
-		console.log(alliance)
-	}
-	let alliancesWithScore = [];    // a list of all alliances, that keeps track of their average winning probability
-	for(let alliance in alliances.values){ // sumProbability is the total, probability = sumProbability / teamsComparedWith
-		alliancesWithScore[i] = {alliance:alliance,probability:0,sumProbability:0,teamsComparedWith:0};
-		console.log("RAN")
-	}
-	for(let i =0; i <alliancesWithScore.length;i++){
+	for(let i =0; i <alliancesWithScore.length;i++){ // use compareAlliances function to compare all the alliances with each other
 		for(let j = i+1; j < alliancesWithScore.length;j++){
-			alliancesWithScore[i].sumProbability += compareAlliances(alliancesWithScore[i].alliance, alliancesWithScore[j].alliance);
-			alliancesWithScore[i].teamsComparedWith++;
-			alliancesWithScore[j].sumProbability += compareAlliances(alliancesWithScore[j].alliance, alliancesWithScore[i].alliance);
-			alliancesWithScore[j].teamsComparedWith++;
+			// make sure we don't compare alliances that use the same team
+			let validAlliances = true;
+			alliancesWithScore[i].alliance.forEach(team=>{
+				if(alliancesWithScore[j].alliance.includes(team)){
+					validAlliances = false;
+				}
+			})
+			if(validAlliances){
+				alliancesWithScore[i].sumProbability += compareAlliances(alliancesWithScore[i].alliance, alliancesWithScore[j].alliance);
+				alliancesWithScore[i].teamsComparedWith++;
+				alliancesWithScore[j].sumProbability += compareAlliances(alliancesWithScore[j].alliance, alliancesWithScore[i].alliance);
+				alliancesWithScore[j].teamsComparedWith++;
+			}
 		}
 		alliancesWithScore[i].probability = alliancesWithScore[i].sumProbability / alliancesWithScore[i].teamsComparedWith;
 	}
 
 	// take average of this total for each team - average probability of this team winning
-	// sort teams by probability
-	//alliancesWithScore[0].alliance[0].avgProbability = 0; 
-	//alliancesWithScore[0].alliance[0].alliancesComparedWith = 0;
+	// sort teams by probability of winning
 	for(let i = 0; i < teams.length; i++){
 		setPath(teams[i], "avgProbability", 0);
 		setPath(teams[i], "alliancesComparedWith", 0);
 	}
 	console.log("alliance with score length" + alliancesWithScore.length)
 	for(let allianceNum = 0; allianceNum < alliancesWithScore.length;allianceNum++){
-		console.log("184") // access each alliance
 		for(let team = 0; team <3; team++){ // access each team on the alliance
-			console.log(alliancesWithScore[allianceNum])
-			console.log('team object keys: '+Object.keys(alliancesWithScore[allianceNum].alliance[team]))
-			console.log("probability" + alliancesWithScore[allianceNum].probability)
-			alliancesWithScore[allianceNum].alliance[team].avgProbability += alliancesWithScore[alliance].probability;
+			alliancesWithScore[allianceNum].alliance[team].avgProbability += alliancesWithScore[allianceNum].probability;
 			alliancesWithScore[allianceNum].alliance[team].alliancesComparedWith++;
 		}
 	}
@@ -255,6 +247,9 @@ let teamR3 = {
 	
 }
 
+
+// TESTS - 
+/*
 console.log("Blue 1" + teamB1)
 console.log("Blue 2" + teamB2)
 console.log("Blue 3" + teamB3)
@@ -281,9 +276,11 @@ console.log(compareAlliances(allianceBlue, allianceRed));
 
 let teams = [teamB1, teamB2, teamB3, teamR1, teamR2, teamR3]
 compareAllTeams(teams)
-console.log(teamB1.avgProbability)
-console.log(teamB2.avgProbability)
-console.log(teamB3.avgProbability)
-console.log(teamR1.avgProbability)
-console.log(teamR2.avgProbability)
-console.log(teamR3.avgProbability)
+console.log(teamB1.avgProbability) // 0.66152  (avg: 80, sd: 20)
+console.log(teamB2.avgProbability) // 0.59114  (avg: 70, sd: 20)
+console.log(teamB3.avgProbability) // 0.2696   (avg: 20, sd: 20)
+console.log(teamR1.avgProbability) // 0.52532  (avg: 60, sd: 20)
+console.log(teamR2.avgProbability) // 0.59114  (avg: 70, sd: 20)
+console.log(teamR3.avgProbability) // 0.36126  (avg: 30, sd: 20)
+
+*/
