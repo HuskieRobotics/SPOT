@@ -57,65 +57,102 @@ body {
     color: white;
     font-size: 2.5rem;
   }
-  /* styling for buttons  */
-  .team-container { 
-    border-radius: 16px;
-    border: 2px solid var(--accent-alt);
-    background-color: var(--bg);
-    padding: 16px;
-    border-top-width: 2px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    cursor: pointer;
-    transition: 0.3s border, 0.3s background-color;
-    width: 75%;
-    justify-items: center;
-
-  }
-  /* team number */
-  .team-container > .team-number {
-    text-align: center;
-    text-justify: center;
-    width: 100%;
-    color: var(--accent-alt);
-    font-weight: 600;
-    font-size: 2.0rem;
-    line-height: 2.0rem;
-    transition: 0.3s color;
-  }
-  /* team name */
-  .team-container > .team-name {
-    text-align: center;
-    text-justify: center;
-    width: 100%;
-    font-size: 1.8rem;
-    line-height: 1.6rem;
-    color: var(--text);
-    transition: 0.3s color;
-  }
-  /* styling for buttons when selected */
-  .team-container.selected {
-    background-color: var(--accent-alt);
-    border-top-width: 2px;
-  }
   
-  .team-container.selected > .team-number, .team-container.selected > .team-name {
-    color: var(--bg);
-  }
- /* styling for pick list  */
-  #pick-list {
+  #matches {
+    padding: 20px;
+    padding-top: 24px;
+    border: 2px solid var(--text);
+    border-radius: 10px;
+    position: relative;
+    margin-top: 32px;
+    min-height: 0;
+}
+
+.title {
+    position: absolute;
+    background-color: var(--bg);
+    border-radius: 10px;
+    top: 0px;
+    left: 40px;
+    font: 2em/1em "Cairo";
+    padding: 0 6px;
+    transform: translateY(-50%);
+}
+
+#match-list {
     height: 100%;
     width: 100%;
     overflow-y: auto;
     overflow-x: hidden;
-    gap: 20px;
+    gap: 12px;
     display: flex;
     flex-direction: column;
-    padding-top: 20px;
-    align-items: center;
-  }
+}
+
+#matches .match {
+    display: grid;
+    width: 100%;
+    grid-template-columns: calc(.75 * 80px + 14px) repeat(2,1fr);
+    grid-template-rows: 30% 70%;
+    border: 2px solid var(--text);
+    border-radius: 10px;
+    padding: 10px 15px;
+    background: var(--bg-alt);
+}
+
+.match .match-select {
+    width: calc(.75 * 80px);
+    height: calc(.75 * 80px);
+    margin-right: 14px;
+    appearance: none;
+    background-color: var(--text);
+    display: grid;
+    place-content: center;
+    border-radius: 10px;
+    align-self: center;
+}
+
+
+.match .match-select::before {
+    content: "";
+    width: calc(.4 * 80px);
+    height: calc(.4 * 80px);
+    transform: scale(0);
+    border-radius: 16px;
+    transition: 120ms transform cubic-bezier(.37,-0.02,.47,1.77);
+    box-shadow: inset calc(.75 * 80px) calc(.75 * 80px) var(--accent);
+}
   
+.match .match-select:checked::before {
+    transform: scale(1);
+}
+
+.match .match-header {
+    grid-area: 1 / 1 / 2 / 4;
+    font-size: 1.2em;
+    line-height: 1em;
+}
+
+.match .match-teams {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+    text-align: center;
+    font: 1.8em/calc(80px * .75) "Cairo";
+    color: var(--bg-alt);   
+}
+
+.match .match-teams.red {
+    background: #ff6666;
+    border-radius: 10px 0 0 10px;
+}
+
+.match .match-teams.blue {
+    background: #6666ff;
+    border-radius: 0 10px 10px 0;
+}
+
   
   @media screen and (max-width: 1100px) {
       html {

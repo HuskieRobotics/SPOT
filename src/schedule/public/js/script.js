@@ -68,40 +68,40 @@
 // }
 
 
-// async function updateMatches(accessCode) {
-//     let {allMatches, currentMatch} = await (await fetch(`/admin/api/matches`, {
-//         headers: {
-//             Authorization: accessCode
-//         }
-//     })).json();
+async function updateMatches(accessCode) {
+    let {allMatches, currentMatch} = await (await fetch(`/admin/api/matches`, {
+        headers: {
+            Authorization: accessCode
+        }
+    })).json();
 
-//     //clear matches view
-//     document.querySelector("#match-list").innerHTML = "";
+    //clear matches view
+    document.querySelector("#match-list").innerHTML = "";
 
-//     //rebuild matches view
-//     for (let match of allMatches) {
-//         let matchElement = document.createElement("div");
-//         matchElement.classList.add("match");
-//         matchElement.innerHTML = `
-//         <div class="match-header"><strong>${match.number}</strong> - ${match.match_string.toUpperCase().split("_")[0]}-<strong>${match.match_string.toUpperCase().split("_")[1]}</strong></div>
-//         <input type="checkbox" class="match-select">
-//         <div class="match-teams red"></div>
-//         <div class="match-teams blue"></div>
-//         `
-//         document.querySelector("#match-list").appendChild(matchElement);
+    //rebuild matches view
+    for (let match of allMatches) {
+        let matchElement = document.createElement("div");
+        matchElement.classList.add("match");
+        matchElement.innerHTML = `
+        <div class="match-header"><strong>${match.number}</strong> - ${match.match_string.toUpperCase().split("_")[0]}-<strong>${match.match_string.toUpperCase().split("_")[1]}</strong></div>
+        <input type="checkbox" class="match-select">
+        <div class="match-teams red"></div>
+        <div class="match-teams blue"></div>
+        `
+        document.querySelector("#match-list").appendChild(matchElement);
 
 
-//         //add the robot numbers to match
-//         for (let color of ["red","blue"]) {
-//             for (let robotNumber of match.robots[color]) {
-//                 let text = document.createElement("div");
-//                 text.innerText = robotNumber;
-//                 matchElement.querySelector(`.match-teams.${color}`).appendChild(text)
-//             }
-//         }
+        //add the robot numbers to match
+        for (let color of ["red","blue"]) {
+            for (let robotNumber of match.robots[color]) {
+                let text = document.createElement("div");
+                text.innerText = robotNumber;
+                matchElement.querySelector(`.match-teams.${color}`).appendChild(text)
+            }
+        }
 
-//     }
-// }
+    }
+}
 
 // class ScouterDisplay {
 //     scouterElement;

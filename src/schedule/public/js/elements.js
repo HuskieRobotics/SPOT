@@ -1,2 +1,1 @@
-const header = document.getElementById("header")
-const pickList = document.getElementById("pick-list")
+const matchElement = document.getElementById("match-list")
