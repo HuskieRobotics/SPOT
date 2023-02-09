@@ -116,8 +116,9 @@ if ('serviceWorker' in navigator) {
 				teams.push(team);
 				teamsWithNum.push([teamNumber,team]);
 			}
-		}
-		console.log("teams type and size: " + typeof(teams)+teams.length)
+		} 
+		console.log("teams type and size: " + typeof(teams)+teams.length+teams[0].teamNameDisplay)  
+				// does not display teamname or team number, team object is empty
 		// compare the teams to get avg win probabilities
 		compareAllTeams(teams)
 		for(let team in teams){
