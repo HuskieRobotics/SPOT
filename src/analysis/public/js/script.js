@@ -122,7 +122,7 @@ if ('serviceWorker' in navigator) {
 		while(!sorted){
 			sorted = true;
 			for(let i = 0; i < teams.length-1; i++){
-				if(teams[i].avgWinProb < teams[i+1].avgWinProb){
+				if(teams[i].avgProbability < teams[i+1].avgProbability){
 					let temp = teams[i];
 					teams[i] = teams[i+1];
 					teams[i+1] = temp;
@@ -133,10 +133,10 @@ if ('serviceWorker' in navigator) {
 				}
 			}
 		}
-
+		console.log(teamsWithNum)
 		//add to team list on autopicktab
 		for (let i = 0; i < teamsWithNum.length; i++) {
-			const autoPickTeamContainer = constructTeamAutoPick(teamsWithNum[0], teamsWithNum[1], allTeams)
+			const autoPickTeamContainer = constructTeamAutoPick(teamsWithNum[i][0], teamsWithNum[i][1], allTeams)
 			autoPickTeamList.appendChild(autoPickTeamContainer)
 		}
 

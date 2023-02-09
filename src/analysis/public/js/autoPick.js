@@ -98,7 +98,7 @@ function possibleAlliances(teams) {
  * @returns the average score for an alliance 
  */
 function allianceAverage(alliance) {
-	return alliance[0].avg + alliance[1].avg + alliance[2].avg;
+	return alliance[0].averageScores.total + alliance[1].averageScores.total + alliance[2].averageScores.total;
 }
 
 /**
@@ -107,7 +107,7 @@ function allianceAverage(alliance) {
  * @returns the standard deveiation of an alliances score 
  */
 function allianceStandardDeviation(alliance) {
-	let i = Math.pow(alliance[0].sd, 2) + Math.pow(alliance[1].sd, 2) + Math.pow(alliance[2].sd, 2)
+	let i = Math.pow(alliance[0].standardDeviation, 2) + Math.pow(alliance[1].standardDeviation, 2) + Math.pow(alliance[2].standardDeviation, 2)
 	return Math.sqrt(i);
 }
 /**
