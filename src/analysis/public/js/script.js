@@ -108,12 +108,35 @@ if ('serviceWorker' in navigator) {
 		//get blue alliance teams
 		const allTeams = await fetchTeams()
 
-		// sort teams by rank
-		
+		// get an array of all teams to sort them
+		let teams = []
+		let teamsWithNum = []
+		for(const [teamNumber, team] of Object.entries(dataset.teams)){
+			teams.push(team);
+			teamsWithNum.push([teamNumber,team]);
+		}
+		// compare the teams to get avg win probabilities
+		compareAllTeams(teams)
+		// sort teams by avg win probability using bubble sort
+		let sorted = false;
+		while(!sorted){
+			sorted = true;
+			for(let i = 0; i < teams.length-1; i++){
+				if(teams[i].avgWinProb < teams[i+1].avgWinProb){
+					let temp = teams[i];
+					teams[i] = teams[i+1];
+					teams[i+1] = temp;
+					temp = teamsWithNum[i];
+					teamsWithNum[i] = teamsWithNum[i+1];
+					teamsWithNum[i+1] = temp;
+					sorted = false;
+				}
+			}
+		}
 
-		//add to sidebar team list
-		for (const [teamNumber, team] of Object.entries(dataset.teams)) {
-			const autoPickTeamContainer = constructTeamAutoPick(teamNumber, team, allTeams)
+		//add to team list on autopicktab
+		for (let i = 0; i < teamsWithNum.length; i++) {
+			const autoPickTeamContainer = constructTeamAutoPick(teamsWithNum[0], teamsWithNum[1], allTeams)
 			autoPickTeamList.appendChild(autoPickTeamContainer)
 		}
 
