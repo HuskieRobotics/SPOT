@@ -83,13 +83,13 @@ class SingleDisplay {
     }
 
 	matchAverage(alliance1, alliance2) {
-		alliance1Avg = 0
+		let alliance1Avg = 0
 		for (a in alliance1) {
 			console.log("a AVG" + getPath(dataset.teams[a],"averageScores",0))
 			data = getPath(dataset.teams[a],"averageScores",0)
 			alliance1Avg += data
 		}
-		alliance2Avg = 0
+		let alliance2Avg = 0
 		for (a in alliance2) {
 			console.log("a AVG" + getPath(dataset.teams[a],"averageScores",0))
 			data = getPath(dataset.teams[a],"averageScores",0)

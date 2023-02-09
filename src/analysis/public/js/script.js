@@ -108,15 +108,21 @@ if ('serviceWorker' in navigator) {
 		//get blue alliance teams
 		const allTeams = await fetchTeams()
 
-		// get an array of all teams to sort them
+		// get an array of all teams that contain data to sort them
 		let teams = []
 		let teamsWithNum = []
 		for(const [teamNumber, team] of Object.entries(dataset.teams)){
-			teams.push(team);
-			teamsWithNum.push([teamNumber,team]);
+			if(dataset.tmps.filter(tmp => tmp.robotNumber == teamNumber).length > 0 && allTeams[teamNumber]){
+				teams.push(team);
+				teamsWithNum.push([teamNumber,team]);
+			}
 		}
+		console.log("teams type and size: " + typeof(teams)+teams.length)
 		// compare the teams to get avg win probabilities
 		compareAllTeams(teams)
+		for(let team in teams){
+			console.log("avg: " + team.avgProbability)
+		}
 		// sort teams by avg win probability using bubble sort
 		let sorted = false;
 		while(!sorted){

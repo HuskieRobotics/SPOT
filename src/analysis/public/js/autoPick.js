@@ -65,6 +65,7 @@ function sortTeams(teams) {
 async function fetchDataset() {
 	return await fetch("./api/dataset").then(res => res.json())
 }
+let dataset = fetchDataset();
 
 async function fetchTeams() {
 	const teams = await fetch(`/analysis/api/teams`).then(res => res.json())
@@ -117,7 +118,19 @@ function allianceStandardDeviation(alliance) {
  * @returns the average difference in score between two alliances, a postive number means on average alliance 1 wins
  */
 function matchAverage(alliance1, alliance2) {
-	return allianceAverage(alliance1) - allianceAverage(alliance2);
+	let alliance1Avg = 0
+	for (a in alliance1) {
+		console.log("a AVG" + getPath(a,"averageScores",0))
+		data = getPath(a,"averageScores",0)
+		alliance1Avg += data
+	}
+	let alliance2Avg = 0
+	for (a in alliance2) {
+		console.log("a AVG" + getPath(a,"averageScores",0))
+		data = getPath(a,"averageScores",0)
+		alliance1Avg += data
+	}
+	return alliance1Avg - alliance2Avg
 }
 
 /**
@@ -126,8 +139,21 @@ function matchAverage(alliance1, alliance2) {
  * @returns the the standard deveation in the difference of the score between two alliances
  */
 function matchStandardDeviation(alliance1, alliance2) {
-	let i = Math.pow(allianceStandardDeviation(alliance1), 2) + Math.pow(allianceStandardDeviation(alliance2), 2);
-	return Math.sqrt(i);
+	alliance1SD = 0
+	for (a in alliance1) {
+		console.log("a SD" + getPath(a,"standardDeviation",0))
+		data = getPath(a,"standardDeviation",0)
+		alliance1SD += Math.pow(data, 2)
+	}
+	alliance1SD = Math.sqrt(alliance1SD)
+	alliance2SD = 0
+	for (a in alliance2) {
+		console.log("a SD" + getPath(a,"standardDeviation",0))
+		data = getPath(a,"standardDeviation",0)
+		alliance1SD += Math.pow(data, 2)
+	}
+	alliance2SD = Math.sqrt(alliance2SD)
+	return Math.sqrt(Math.pow(alliance1SD, 2) + Math.pow(alliance2SD, 2))
 }
 /**
  * 
@@ -135,9 +161,8 @@ function matchStandardDeviation(alliance1, alliance2) {
  * @param {*} alliance2 
  * @returns the probiblity that alliance 1 wins a random match between the two alliances 
  */
-
 function compareAlliances(alliance1, alliance2) {
-	zscore = ss.zScore(0, matchAverage(alliance1, alliance2), matchStandardDeviation(alliance1, alliance2))
+	zscore = ss.zScore(0, this.matchAverage(alliance1, alliance2), this.matchStandardDeviation(alliance1, alliance2))
 	probAlliance2Wins = ss.cumulativeStdNormalProbability(zscore)
 	return 1 - probAlliance2Wins;
 }
@@ -155,7 +180,7 @@ function compareAllTeams(teams) {
 	// 		average this probability at the end for each alliance.
 	// loop through each alliance, add average probability to each team, average this at the end
 	//    so each team has a value of their average chance of winning in any given alliance
-	
+	console.log("ran compare all teams");
 	let alliancesWithScore = []; // an array of arrays; Within each list contains an alliance, sum of probabilities, number of alliances compared with, and avg probability
 	let iterator = possibleAlliances(teams).values();  // an iterator that goes through all possible alliances
 	for(let i = 0; i < possibleAlliances(teams).size; i++){ // sumProbability is the total, probability = sumProbability / teamsComparedWith
