@@ -15,18 +15,6 @@
   outline: none;
 }
 
-/* #form .input.blue {
-    background-color: var( --accent:);
-    border: black 2px solid;
-    color: black;
-    cursor: pointer;
-    text-align: left;
-    border-radius: 8px;
-    font-size: 1.5em;
-    padding: 8px 12px;
-    transition: 0.3s color, 0.3s border;
-    outline: none;
-  } */
 
 #form .input:focus {
   border: var(--accent) 2px solid;
@@ -63,6 +51,13 @@
     align-items: center;
     justify-content: center;
 }
+
+/* #form_blue {
+  display: flex;
+  align-items: center;
+  justify-content: left;
+} */
+
 #form .form {
     background-color: var(--bg-alt);
     border-radius: var(--border-radius);
