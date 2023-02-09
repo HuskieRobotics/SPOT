@@ -257,6 +257,7 @@ if ('serviceWorker' in navigator) {
 			})
 			if(module.wholeMatch) {
 				let allTeams = alliances[0]
+				console.log(`alliances script.js ${alliances}`)
 				allTeams.push('|')
 				allTeams = allTeams.concat(alliances[1])
 				displayedAlliances = allTeams.filter(teamNumber => {

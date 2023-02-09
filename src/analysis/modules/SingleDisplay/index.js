@@ -18,6 +18,7 @@ class SingleDisplay {
 		let formattedDisplay
 		if(this.moduleConfig.wholeMatch) {
 			console.log("this happened")
+			console.log(`dataset ${dataset}`)
 			// teams = [b1,b2,b3,|,r1,r3]
 			// 1 split list of teams
 			console.log(`teams: ${teams}`)
@@ -29,11 +30,13 @@ class SingleDisplay {
 				if (this.moduleConfig.options.aggrMethod == "percentChanceOfWin") {	// 3 identify which calculation to perform
 					// 4 send output to formattedDisplay
 					console.log("this is good")
-					ocnsole.log("Compared Alliances" + this.compareAlliances(alliance1,alliance2))
+					console.log("Compared Alliances" + this.compareAlliances(alliance1,alliance2, dataset))
 					formattedDisplay = this.compareAlliances(alliance1, alliance2)
 				} else { //default is undefined
 					console.log("bad")
 					formattedDisplay = 0
+					console.log("Compared Alliances" + this.compareAlliances(alliance1,alliance2, dataset))
+					formattedDisplay = this.compareAlliances(alliance1, alliance2)
 				}
 			
 			} else {
@@ -86,42 +89,40 @@ class SingleDisplay {
         this.display.innerText = data
     }
 
-	matchAverage(alliance1, alliance2) {
-		alliance1Avg = 0
-		for (a in alliance1) {
-			console.log("a AVG" + getPath(dataset.teams[a],"averageScores",0))
-			data = getPath(dataset.teams[a],"averageScores",0)
-			alliance1Avg += data
+	matchAverage(alliance1, alliance2, dataset){
+		let alliance1Avg = 0
+		for (const a of alliance1) {
+			console.log("a AVG" + getPath(Object.entries(dataset.teams)[a],"averageScores",0))
+			alliance1Avg += getPath(Object.entries(dataset.teams)[a],"averageScores",0)
 		}
-		alliance2Avg = 0
-		for (a in alliance2) {
-			console.log("a AVG" + getPath(dataset.teams[a],"averageScores",0))
-			data = getPath(dataset.teams[a],"averageScores",0)
-			alliance1Avg += data
+		let alliance2Avg = 0
+		for (const a of alliance2) {
+			console.log("a AVG" + getPath(Object.entries(dataset.teams)[a],"averageScores",0))
+			alliance1Avg += getPath(Object.entries(dataset.teams)[a],"averageScores",0)
 		}
 		return alliance1Avg - alliance2Avg
 	}
 	
-	matchStandardDeviation(alliance1, alliance2) {
-		alliance1SD = 0
-		for (a in alliance1) {
-			console.log("a SD" + getPath(dataset.teams[a],"standardDeviation",0))
-			data = getPath(dataset.teams[a],"standardDeviation",0)
+	matchStandardDeviation(alliance1, alliance2, dataset) {
+		let alliance1SD = 0
+		for (const a of alliance1) {
+			console.log("a SD" + getPath(Object.entries(dataset.teams)[a],"standardDeviation",0))
+			let data = getPath(Object.entries(dataset.teams)[a],"standardDeviation",0)
 			alliance1SD += Math.pow(data, 2)
 		}
 		alliance1SD = Math.sqrt(alliance1SD)
-		alliance2SD = 0
-		for (a in alliance2) {
-			console.log("a SD" + getPath(dataset.teams[a],"standardDeviation",0))
-			data = getPath(dataset.teams[a],"standardDeviation",0)
+		let alliance2SD = 0
+		for (const a of alliance2) {
+			console.log("a SD" + getPath(Object.entries(dataset.teams)[a],"standardDeviation",0))
+			let data = getPath(Object.entries(dataset.teams)[a],"standardDeviation",0)
 			alliance1SD += Math.pow(data, 2)
 		}
 		alliance2SD = Math.sqrt(alliance2SD)
 		return Math.sqrt(Math.pow(alliance1SD, 2) + Math.pow(alliance2SD, 2))
 	}
 	
-	compareAlliances(alliance1, alliance2) {
-		zscore = ss.zScore(0, this.matchAverage(alliance1, alliance2), this.matchStandardDeviation(alliance1, alliance2))
+	compareAlliances(alliance1, alliance2, dataset) {
+		zscore = ss.zScore(0, this.matchAverage(alliance1, alliance2, dataset), this.matchStandardDeviation(alliance1, alliance2, dataset))
 		probAlliance2Wins = ss.cumulativeStdNormalProbability(zscore)
 		return 1 - probAlliance2Wins;
 	}
