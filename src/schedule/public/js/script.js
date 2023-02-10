@@ -1,87 +1,96 @@
 
 
 
-// ;(async () => {
-//     const authRequest = await fetch("./api/auth").then(res => res.json())
+;(async () => {
+    // const authRequest = await fetch("./api/auth").then(res => res.json())
 
-//     if (authRequest.status !== 2) {
-//         const authModal = new Modal("small", false).header("Sign In")
-//         const accessCodeInput = createDOMElement("input", "access-input")
-//         accessCodeInput.placeholder = "Access Code"
-//         accessCodeInput.type = "password"
-//         accessCodeInput.addEventListener("keydown", (e) => {
-//             if (e.keyCode == 13) {
-//                 validate(accessCodeInput.value, authModal)
-//             }
-//         })
-//         authModal.element.appendChild(accessCodeInput)
-//         authModal.action("Submit", async () => {
-//             validate(accessCodeInput.value, authModal)
-//         })
-//     } else {
-//         await constructApp()
-//     }
+    constructApp();
 
-//     async function validate(accessCode, authModal) {
-//         const auth = await fetch("./api/auth", {
-//             headers: {
-//                 Authorization: accessCode
-//             }
-//         }).then(res => res.json())
+    // if (authRequest.status !== 2) {
+    //     const authModal = new Modal("small", false).header("Sign In")
+    //     const accessCodeInput = createDOMElement("input", "access-input")
+    //     accessCodeInput.placeholder = "Access Code"
+    //     accessCodeInput.type = "password"
+    //     accessCodeInput.addEventListener("keydown", (e) => {
+    //         if (e.keyCode == 13) {
+    //             validate(accessCodeInput.value, authModal)
+    //         }
+    //     })
+    //     authModal.element.appendChild(accessCodeInput)
+    //     authModal.action("Submit", async () => {
+    //         validate(accessCodeInput.value, authModal)
+    //     })
+    // } else {
+    //     await constructApp()
+    // }
 
-//         if (auth.status === 1) {
-//             await constructApp(accessCode)
-//             authModal.modalExit()
-//         } else {
-//             new Popup("error", "Wrong Access Code")
-//         }
-//     }
-// })()
+    // async function validate(accessCode, authModal) {
+    //     const auth = await fetch("./api/auth", {
+    //         headers: {
+    //             Authorization: accessCode
+    //         }
+    //     }).then(res => res.json())
 
-// async function constructApp(accessCode) {
+    //     if (auth.status === 1) {
+    //         await constructApp(accessCode)
+    //         authModal.modalExit()
+    //     } else {
+    //         new Popup("error", "Wrong Access Code")
+    //     }
+    // }
+})()
 
-//     await updateMatches(accessCode)
-//     setInterval(() => updateMatches(accessCode), 2500);
+async function constructApp() {
 
-//     document.querySelector("#start-scouting").addEventListener("click", () => {
-//         fetch("/admin/api/enterMatch", {
-//             headers: {
-//                 Authorization: accessCode
-//             }
-//         });
-//         console.log("ENTER MATCH!")
-//     })
+    updateMatches()
 
-//     let menuExpanded = false
+    //document.querySelector("#match-list").classList.add("visible")
 
-//     document.querySelector("#admin-panel").classList.add("visible")
-//     document.querySelector("#menu").classList.add("visible")
+    // setInterval(() => updateMatches(accessCode), 2500);
 
-//     document.querySelector("#menu-icon").addEventListener("click", () => {
-//         if (menuExpanded) {
-//             document.querySelector("#menu").classList.remove("expanded")
-//         } else {
-//             document.querySelector("#menu").classList.add("expanded")
-//         }
-//         menuExpanded = !menuExpanded
-//     })
-// }
+    // document.querySelector("#start-scouting").addEventListener("click", () => {
+    //     fetch("/admin/api/enterMatch", {
+    //         headers: {
+    //             Authorization: accessCode
+    //         }
+    //     });
+    //     console.log("ENTER MATCH!")
+    // })
+
+    // let menuExpanded = false
+
+    // document.querySelector("#admin-panel").classList.add("visible")
+    // document.querySelector("#menu").classList.add("visible")
+
+    // document.querySelector("#menu-icon").addEventListener("click", () => {
+    //     if (menuExpanded) {
+    //         document.querySelector("#menu").classList.remove("expanded")
+    //     } else {
+    //         document.querySelector("#menu").classList.add("expanded")
+    //     }
+    //     menuExpanded = !menuExpanded
+    // })
+}
 
 
-async function updateMatches(accessCode) {
+async function updateMatches() {
     let {allMatches, currentMatch} = await (await fetch(`/admin/api/matches`, {
         headers: {
-            Authorization: accessCode
+            Authorization: "1234"
         }
     })).json();
 
+    //let {allMatches, currentMatch} = fetch("/admin/api/matches");
+    console.log(allMatches)
     //clear matches view
     document.querySelector("#match-list").innerHTML = "";
+    
 
     //rebuild matches view
     for (let match of allMatches) {
         let matchElement = document.createElement("div");
         matchElement.classList.add("match");
+
         matchElement.innerHTML = `
         <div class="match-header"><strong>${match.number}</strong> - ${match.match_string.toUpperCase().split("_")[0]}-<strong>${match.match_string.toUpperCase().split("_")[1]}</strong></div>
         <input type="checkbox" class="match-select">
@@ -102,6 +111,8 @@ async function updateMatches(accessCode) {
 
     }
 }
+
+
 
 // class ScouterDisplay {
 //     scouterElement;
