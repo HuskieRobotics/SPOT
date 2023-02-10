@@ -113,12 +113,13 @@ if ('serviceWorker' in navigator) {
 		let teamsWithNum = []
 		for(const [teamNumber, team] of Object.entries(dataset.teams)){
 			if(dataset.tmps.filter(tmp => tmp.robotNumber == teamNumber).length > 0 && allTeams[teamNumber]){
+				console.log("true")
+				console.log(team);
 				teams.push(team);
 				teamsWithNum.push([teamNumber,team]);
 			}
 		} 
-		console.log("teams type and size: " + typeof(teams)+teams.length+teams[0].teamNameDisplay)  
-				// does not display teamname or team number, team object is empty
+		console.log("teams type and size: " + typeof(teams)+teams.length+teams[0])  
 		// compare the teams to get avg win probabilities
 		compareAllTeams(teams)
 		for(let team in teams){
@@ -140,10 +141,9 @@ if ('serviceWorker' in navigator) {
 				}
 			}
 		}
-		console.log(teamsWithNum)
 		//add to team list on autopicktab
-		for (let i = 0; i < teamsWithNum.length; i++) {
-			const autoPickTeamContainer = constructTeamAutoPick(teamsWithNum[i][0], teamsWithNum[i][1], allTeams)
+		for (let i = 0; i < teams.length; i++) {
+			const autoPickTeamContainer = constructTeamAutoPick(teams[i].team_number, teams[i], allTeams)
 			autoPickTeamList.appendChild(autoPickTeamContainer)
 		}
 

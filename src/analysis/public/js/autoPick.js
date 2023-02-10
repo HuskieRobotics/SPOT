@@ -84,7 +84,7 @@ function possibleAlliances(teams) {
 	for(let x = 0; x < teams.length; x++) {
 		for(let y = 0; y < teams.length; y++) {
 			for(let z = 0; z < teams.length; z++) { // makes sure there aren't alliances with duplicate teams
-				if(teams[x].team_number!=teams[y].team_number && teams[y].team_number!=teams[z].team_number && teams[z].team_number!=teams[x].team_number){
+				if(teams[x]!=teams[y] && teams[y]!=teams[z] && teams[z]!=teams[x]){
 					alliances.add(new Set([teams[x], teams[y], teams[z]]))
 				}
 				
@@ -119,15 +119,20 @@ function allianceStandardDeviation(alliance) {
  */
 function matchAverage(alliance1, alliance2) {
 	let alliance1Avg = 0
-	for (a in alliance1) {
-		console.log("a AVG" + getPath(a,"averageScores",0))
-		data = getPath(a,"averageScores",0)
+	console.log("alliance1")
+	console.log(alliance1);
+	for (const a in alliance1) { // get rid of enhanced for loop, use normal one
+		console.log("a ")
+		console.log(a)
+		console.log("a averagescores"+a.averageScores)
+		console.log("a AVG" + a.averageScores.total)
+		data = getPath(a,"averageScores.total",0)
 		alliance1Avg += data
 	}
 	let alliance2Avg = 0
-	for (a in alliance2) {
-		console.log("a AVG" + getPath(a,"averageScores",0))
-		data = getPath(a,"averageScores",0)
+	for (let a in alliance2) {
+		console.log("a AVG" + getPath(a,"averageScores.total",0))
+		data = getPath(a,"averageScores.total",0)
 		alliance1Avg += data
 	}
 	return alliance1Avg - alliance2Avg
@@ -139,15 +144,15 @@ function matchAverage(alliance1, alliance2) {
  * @returns the the standard deveation in the difference of the score between two alliances
  */
 function matchStandardDeviation(alliance1, alliance2) {
-	alliance1SD = 0
-	for (a in alliance1) {
+	let alliance1SD = 0
+	for (let a in alliance1) {
 		console.log("a SD" + getPath(a,"standardDeviation",0))
 		data = getPath(a,"standardDeviation",0)
 		alliance1SD += Math.pow(data, 2)
 	}
 	alliance1SD = Math.sqrt(alliance1SD)
 	alliance2SD = 0
-	for (a in alliance2) {
+	for (let a in alliance2) {
 		console.log("a SD" + getPath(a,"standardDeviation",0))
 		data = getPath(a,"standardDeviation",0)
 		alliance1SD += Math.pow(data, 2)
@@ -181,11 +186,16 @@ function compareAllTeams(teams) {
 	// loop through each alliance, add average probability to each team, average this at the end
 	//    so each team has a value of their average chance of winning in any given alliance
 	console.log("ran compare all teams");
+	console.log("teams: ")
+	console.log(teams[0])
 	let alliancesWithScore = []; // an array of arrays; Within each list contains an alliance, sum of probabilities, number of alliances compared with, and avg probability
 	let iterator = possibleAlliances(teams).values();  // an iterator that goes through all possible alliances
+	console.log("possibleAlliances")
+	console.log(possibleAlliances(teams))
 	for(let i = 0; i < possibleAlliances(teams).size; i++){ // sumProbability is the total, probability = sumProbability / teamsComparedWith
 		let iterator2 = iterator.next().value.values(); // converts the set to an array so we can use it
 		let allianceValue = [iterator2.next().value, iterator2.next().value, iterator2.next().value];
+		console.log(allianceValue);
 		alliancesWithScore[i] = {alliance:allianceValue,probability:0,sumProbability:0,teamsComparedWith:0};
 	}
 	for(let i =0; i <alliancesWithScore.length;i++){ // use compareAlliances function to compare all the alliances with each other
