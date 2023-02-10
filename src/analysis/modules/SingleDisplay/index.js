@@ -14,35 +14,36 @@ class SingleDisplay {
     }
 
     formatData(teams, dataset) {
-		let summed
+		let teamsArray = [3061, "|", 3061]
+		let summed 
 		let formattedDisplay
 		if(this.moduleConfig.wholeMatch) {
 			console.log("this happened")
 			console.log(`dataset ${dataset}`)
 			// teams = [b1,b2,b3,|,r1,r3]
 			// 1 split list of teams
-			console.log(`teams: ${teams}`)
-			let indexOfPipe = teams.indexOf("|")
-			let alliance1 = [3061] //teams.slice(0, indexOfPipe)
-			let alliance2 = [3061] //teams.slice(indexOfPipe+1, teams.length)
+			console.log(`teams: ${teamsArray}`)
+			let indexOfPipe = teamsArray.indexOf("|")
+			let alliance1 = teamsArray.slice(0, indexOfPipe)
+			let alliance2 = teamsArray.slice(indexOfPipe+1, teamsArray.length)
 			console.log(`alliances: ${alliance1} and ${alliance2}`)
-			if(alliance1.length > 0){ // 2 validate alliances have at least 1 robot
-				if (this.moduleConfig.options.aggrMethod == "percentChanceOfWin") {	// 3 identify which calculation to perform
-					// 4 send output to formattedDisplay
-					console.log("this is good")
-					console.log("Compared Alliances" + this.compareAlliances(alliance1,alliance2, dataset))
-					formattedDisplay = this.compareAlliances(alliance1, alliance2)
-				} else { //default is undefined
-					console.log("bad")
-					formattedDisplay = 0
-					console.log("Compared Alliances" + this.compareAlliances(alliance1,alliance2, dataset))
-					formattedDisplay = this.compareAlliances(alliance1, alliance2)
-				}
+			// if(alliance1.length > 0){ // 2 validate alliances have at least 1 robot
+			// 	if (this.moduleConfig.options.aggrMethod == "percentChanceOfWin") {	// 3 identify which calculation to perform
+			// 		// 4 send output to formattedDisplay
+			// 		console.log("this is good")
+			console.log("Compared Alliances" + this.compareAlliances(alliance1,alliance2, dataset))
+			formattedDisplay = this.compareAlliances(alliance1, alliance2, dataset)
+			// 	} else { //default is undefined
+			// 		console.log("bad")
+			// 		formattedDisplay = 0
+			// 		console.log("Compared Alliances" + this.compareAlliances(alliance1,alliance2, dataset))
+			// 		formattedDisplay = this.compareAlliances(alliance1, alliance2)
+			// 	}
 			
-			} else {
-				console.log("also bad")
-				formattedDisplay = 0
-			}
+			// } else {
+			// 	console.log("also bad")
+			// 	formattedDisplay = 0
+			// }
 		} else {
 			if (teams.length > 1) {
 				summed = teams.map(team => getPath(dataset.teams[team], this.moduleConfig.options.path, 0)).flat().reduce((acc, i) => acc + i, 0)
@@ -91,32 +92,32 @@ class SingleDisplay {
 
 	matchAverage(alliance1, alliance2, dataset){
 		let alliance1Avg = 0
-		for (const a of alliance1) {
-			console.log("a AVG" + getPath(Object.entries(dataset.teams)[a],"averageScores",0))
-			alliance1Avg += getPath(Object.entries(dataset.teams)[a],"averageScores",0)
-		}
+		// for (const a of alliance1) {
+		// 	console.log("a AVG" + getPath(Object.entries(dataset.teams)[a],"averageScores",0))
+		// 	alliance1Avg += getPath(Object.entries(dataset.teams)[a],"averageScores",0)
+		// }
 		let alliance2Avg = 0
-		for (const a of alliance2) {
-			console.log("a AVG" + getPath(Object.entries(dataset.teams)[a],"averageScores",0))
-			alliance1Avg += getPath(Object.entries(dataset.teams)[a],"averageScores",0)
-		}
+		// for (const a of alliance2) {
+		// 	console.log("a AVG" + getPath(Object.entries(dataset.teams)[a],"averageScores",0))
+		// 	alliance1Avg += getPath(Object.entries(dataset.teams)[a],"averageScores",0)
+		// }
 		return alliance1Avg - alliance2Avg
 	}
 	
 	matchStandardDeviation(alliance1, alliance2, dataset) {
 		let alliance1SD = 0
-		for (const a of alliance1) {
-			console.log("a SD" + getPath(Object.entries(dataset.teams)[a],"standardDeviation",0))
-			let data = getPath(Object.entries(dataset.teams)[a],"standardDeviation",0)
-			alliance1SD += Math.pow(data, 2)
-		}
+		// for (const a of alliance1) {
+		// 	console.log("a SD" + getPath(Object.entries(dataset.teams)[a],"standardDeviation",0))
+		// 	let data = getPath(Object.entries(dataset.teams)[a],"standardDeviation",0)
+		// 	alliance1SD += Math.pow(data, 2)
+		// }
 		alliance1SD = Math.sqrt(alliance1SD)
 		let alliance2SD = 0
-		for (const a of alliance2) {
-			console.log("a SD" + getPath(Object.entries(dataset.teams)[a],"standardDeviation",0))
-			let data = getPath(Object.entries(dataset.teams)[a],"standardDeviation",0)
-			alliance1SD += Math.pow(data, 2)
-		}
+		// for (const a of alliance2) {
+		// 	console.log("a SD" + getPath(Object.entries(dataset.teams)[a],"standardDeviation",0))
+		// 	let data = getPath(Object.entries(dataset.teams)[a],"standardDeviation",0)
+		// alliance1SD += Math.pow(data, 2)
+		// }
 		alliance2SD = Math.sqrt(alliance2SD)
 		return Math.sqrt(Math.pow(alliance1SD, 2) + Math.pow(alliance2SD, 2))
 	}
