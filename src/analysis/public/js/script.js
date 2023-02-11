@@ -112,9 +112,12 @@ if ('serviceWorker' in navigator) {
 		let teams = []
 		let teamsWithNum = []
 		for(const [teamNumber, team] of Object.entries(dataset.teams)){
-			if(dataset.tmps.filter(tmp => tmp.robotNumber == teamNumber).length > 0 && allTeams[teamNumber]){
-				console.log("true")
+			console.log("team: ")
+			console.log(team)
+			if(dataset.tmps.filter(tmp => tmp.robotNumber == teamNumber).length > 0 && allTeams[teamNumber]){ //
+				console.log("added team: ")
 				console.log(team);
+				setPath(team, "robotNumber", teamNumber)
 				teams.push(team);
 				teamsWithNum.push([teamNumber,team]);
 			}

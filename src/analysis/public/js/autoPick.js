@@ -80,12 +80,34 @@ async function fetchTeams() {
  * @returns A list of all possible alliances, not including including impossible allaicnes(duplicate teams on an alliance)
  */
 function possibleAlliances(teams) {
-	var alliances = new Set() // a set of sets of all possible alliances  -  set of sets so there aren't any duplicates
+	let alliances = [] // an array of all possible alliances
+	/*
+	console.log("Possible alliances teams: ")
+	console.log(teams)
+	*/
 	for(let x = 0; x < teams.length; x++) {
 		for(let y = 0; y < teams.length; y++) {
 			for(let z = 0; z < teams.length; z++) { // makes sure there aren't alliances with duplicate teams
-				if(teams[x]!=teams[y] && teams[y]!=teams[z] && teams[z]!=teams[x]){
-					alliances.add(new Set([teams[x], teams[y], teams[z]]))
+				if(teams[x].robotNumber!=teams[y].robotNumber && teams[y].robotNumber!=teams[z].robotNumber && teams[z].robotNumber!=teams[x].robotNumber){
+					/*
+					console.log("adding alliance: ")
+					console.log(teams[x].robotNumber)
+					console.log(teams[y].robotNumber)
+					console.log(teams[z].robotNumber)
+					*/
+					duplicateAlliance = false;
+					let validAlliance = true;
+					alliances.forEach(alliance=> // make sure we don't add the same alliance twice
+						{
+							alliance.forEach(team => {if (team.robotNumber == teams[x].robotNumber || 
+								team.robotNumber == teams[y].robotNumber || 
+								team.robotNumber == teams[z].robotNumber) 
+									{validAlliance = false;}
+							})
+						})
+					
+					if(validAlliance){alliances.push([teams[x], teams[y], teams[z]])
+					}
 				}
 				
 			}
@@ -121,9 +143,9 @@ function matchAverage(alliance1, alliance2) {
 	let alliance1Avg = 0
 	console.log("alliance1")
 	console.log(alliance1);
-	for (const a in alliance1) { // get rid of enhanced for loop, use normal one
+	for (let a = 0; a < alliance1.length; a++) { // get rid of enhanced for loop, use normal one
 		console.log("a ")
-		console.log(a)
+		console.log(alliance1[a])
 		console.log("a averagescores"+a.averageScores)
 		console.log("a AVG" + a.averageScores.total)
 		data = getPath(a,"averageScores.total",0)
@@ -187,27 +209,44 @@ function compareAllTeams(teams) {
 	//    so each team has a value of their average chance of winning in any given alliance
 	console.log("ran compare all teams");
 	console.log("teams: ")
-	console.log(teams[0])
+	console.log(teams)
 	let alliancesWithScore = []; // an array of arrays; Within each list contains an alliance, sum of probabilities, number of alliances compared with, and avg probability
-	let iterator = possibleAlliances(teams).values();  // an iterator that goes through all possible alliances
+	let alliances = possibleAlliances(teams); // an array of arrays (all possible alliances)
+	//let iterator = possibleAlliances(teams).values();  // an iterator that goes through all possible alliances
 	console.log("possibleAlliances")
 	console.log(possibleAlliances(teams))
 	for(let i = 0; i < possibleAlliances(teams).size; i++){ // sumProbability is the total, probability = sumProbability / teamsComparedWith
 		let iterator2 = iterator.next().value.values(); // converts the set to an array so we can use it
 		let allianceValue = [iterator2.next().value, iterator2.next().value, iterator2.next().value];
-		console.log(allianceValue);
+		//console.log(allianceValue);
 		alliancesWithScore[i] = {alliance:allianceValue,probability:0,sumProbability:0,teamsComparedWith:0};
+		console.log("Alliances: ")
+		for(let j = 0; j < allianceValue.length; j++){
+			console.log(allianceValue)
+		}
+		
 	}
+	console.log("alliancesWithScore")
+	console.log(alliancesWithScore)
 	for(let i =0; i <alliancesWithScore.length;i++){ // use compareAlliances function to compare all the alliances with each other
 		for(let j = i+1; j < alliancesWithScore.length;j++){
 			// make sure we don't compare alliances that use the same team
 			let validAlliances = true;
 			alliancesWithScore[i].alliance.forEach(team=>{
 				if(alliancesWithScore[j].alliance.includes(team)){
+					/*
+					console.log("team: ")
+					console.log(team)
+					console.log(" is in both alliances")
+					console.log(alliancesWithScore[i])
+					console.log(alliancesWithScore[j])
+					*/
 					validAlliances = false;
 				}
 			})
+			console.log("validAlliances: " + validAlliances)
 			if(validAlliances){
+				console.log("ran compareAlliances")
 				alliancesWithScore[i].sumProbability += compareAlliances(alliancesWithScore[i].alliance, alliancesWithScore[j].alliance);
 				alliancesWithScore[i].teamsComparedWith++;
 				alliancesWithScore[j].sumProbability += compareAlliances(alliancesWithScore[j].alliance, alliancesWithScore[i].alliance);
