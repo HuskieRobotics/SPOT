@@ -126,6 +126,11 @@ if ('serviceWorker' in navigator) {
 		// compare the teams to get avg win probabilities
 		compareAllTeams(teams)
 		for(let team in teams){
+			if(team.avgProbability == undefined){
+				console.log("avg is undefined")
+				setPath(team, "avgProbability", 0) // doesn't set it to 0
+				team.avgProbability = 0;
+			}
 			console.log("avg: " + team.avgProbability)
 		}
 		// sort teams by avg win probability using bubble sort
@@ -133,7 +138,8 @@ if ('serviceWorker' in navigator) {
 		while(!sorted){
 			sorted = true;
 			for(let i = 0; i < teams.length-1; i++){
-				if(teams[i].avgProbability < teams[i+1].avgProbability){
+				
+				if(teams[i].avgProbability < teams[i+1].avgProbability && teams[i].avgProbability != undefined && teams[i+1].avgProbability != undefined){
 					let temp = teams[i];
 					teams[i] = teams[i+1];
 					teams[i+1] = temp;
@@ -146,7 +152,7 @@ if ('serviceWorker' in navigator) {
 		}
 		//add to team list on autopicktab
 		for (let i = 0; i < teams.length; i++) {
-			const autoPickTeamContainer = constructTeamAutoPick(teams[i].team_number, teams[i], allTeams)
+			const autoPickTeamContainer = constructTeamAutoPick(teams[i].robotNumber, teams[i], allTeams)
 			autoPickTeamList.appendChild(autoPickTeamContainer)
 		}
 
