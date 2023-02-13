@@ -6,6 +6,27 @@
 
     constructApp();
 
+    document.querySelector("#form").addEventListener("submit", function (e){
+        if(e.key === 'Enter') {
+            console.log(e); 
+            let matches = document.querySelector("#form").value;
+
+            
+        }
+    })
+
+//     const matchNumberInput = createDOMElement("input", "access-input")
+//     //matchNumberInput.placeholder = "Access Code"
+//    // matchNumberInput.type = "password"
+//     matchNumberInput.addEventListener("keydown", (e) => {
+//         if (e.keyCode == 13) {
+//             validate(accessCodeInput.value, authModal)
+//         }
+//     })
+    
+    
+    
+    
     // if (authRequest.status !== 2) {
     //     const authModal = new Modal("small", false).header("Sign In")
     //     const accessCodeInput = createDOMElement("input", "access-input")

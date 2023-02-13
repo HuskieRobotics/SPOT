@@ -23,6 +23,14 @@ body {
     transition: visibility 0s 0s, opacity 0.3s 0s;
   }
   
+  .access-input {
+    border-radius: 8px;
+    border: 2px solid var(--text);
+    background-color: var(--bg-alt);
+    color: var(--text);
+    padding: 8px 12px;
+    font-size: 1.5em;
+}
   /* styling for page header */
   #header {
     background: var(--text);
