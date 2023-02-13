@@ -245,6 +245,7 @@ function compareAllTeams(teams) {
 			}
 		}
 		alliancesWithScore[i].probability = alliancesWithScore[i].sumProbability / alliancesWithScore[i].teamsComparedWith;
+		console.log("alliance Probability: "+i+" "+alliancesWithScore[i].probability)
 	}
 
 	// take average of this total for each team - average probability of this team winning
@@ -256,6 +257,8 @@ function compareAllTeams(teams) {
 	console.log("alliance with score length" + alliancesWithScore.length)
 	for(let allianceNum = 0; allianceNum < alliancesWithScore.length;allianceNum++){
 		for(let team = 0; team <3; team++){ // access each team on the alliance
+			console.log("team that probability is added to: ")
+			console.log(alliancesWithScore[allianceNum].alliance[team])
 			alliancesWithScore[allianceNum].alliance[team].avgProbability += alliancesWithScore[allianceNum].probability;
 			alliancesWithScore[allianceNum].alliance[team].alliancesComparedWith++;
 		}
