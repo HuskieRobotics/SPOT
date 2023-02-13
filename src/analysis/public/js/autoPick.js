@@ -148,17 +148,12 @@ function matchAverage(alliance1, alliance2) {
 	console.log("alliance1")
 	console.log(alliance1);
 	for (let a = 0; a < alliance1.length; a++) { // get rid of enhanced for loop, use normal one
-		console.log("a ")
-		console.log(alliance1[a])
-		console.log("a averagescores"+a.averageScores)
-		console.log("a AVG" + a.averageScores.total)
-		data = getPath(a,"averageScores.total",0)
+		data = getPath(alliance1[a],"averageScores.total",0)
 		alliance1Avg += data
 	}
 	let alliance2Avg = 0
-	for (let a in alliance2) {
-		console.log("a AVG" + getPath(a,"averageScores.total",0))
-		data = getPath(a,"averageScores.total",0)
+	for (let a = 0; a < alliance2.length; a++) {
+		data = getPath(alliance2[a],"averageScores.total",0)
 		alliance1Avg += data
 	}
 	return alliance1Avg - alliance2Avg
@@ -171,16 +166,14 @@ function matchAverage(alliance1, alliance2) {
  */
 function matchStandardDeviation(alliance1, alliance2) {
 	let alliance1SD = 0
-	for (let a in alliance1) {
-		console.log("a SD" + getPath(a,"standardDeviation",0))
-		data = getPath(a,"standardDeviation",0)
+	for (let a = 0; a < alliance1.length; a++) {
+		data = getPath(alliance1[a],"standardDeviation",0)
 		alliance1SD += Math.pow(data, 2)
 	}
 	alliance1SD = Math.sqrt(alliance1SD)
 	alliance2SD = 0
-	for (let a in alliance2) {
-		console.log("a SD" + getPath(a,"standardDeviation",0))
-		data = getPath(a,"standardDeviation",0)
+	for (let a = 0; a < alliance2.length; a++) {
+		data = getPath(alliance2[a],"standardDeviation",0)
 		alliance1SD += Math.pow(data, 2)
 	}
 	alliance2SD = Math.sqrt(alliance2SD)
@@ -219,14 +212,10 @@ function compareAllTeams(teams) {
 	//let iterator = possibleAlliances(teams).values();  // an iterator that goes through all possible alliances
 	console.log("possibleAlliances")
 	console.log(possibleAlliances(teams))
-	for(let i = 0; i < alliances.size; i++){ // sumProbability is the total, probability = sumProbability / teamsComparedWith
+	for(let i = 0; i < alliances.length; i++){ // sumProbability is the total, probability = sumProbability / teamsComparedWith
 		//console.log(allianceValue);
+		console.log(alliances[i])
 		alliancesWithScore[i] = {alliance:alliances[i],probability:0,sumProbability:0,teamsComparedWith:0};
-		console.log("Alliances: ")
-		for(let j = 0; j < allianceValue.length; j++){
-			console.log(allianceValue)
-		}
-		
 	}
 	console.log("alliancesWithScore")
 	console.log(alliancesWithScore)
