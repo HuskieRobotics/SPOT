@@ -112,33 +112,24 @@ if ('serviceWorker' in navigator) {
 		let teams = []
 		let teamsWithNum = []
 		for(const [teamNumber, team] of Object.entries(dataset.teams)){
-			console.log("team: ")
-			console.log(team)
+			//console.log("team: ")
+			//console.log(team)
 			if(dataset.tmps.filter(tmp => tmp.robotNumber == teamNumber).length > 0 && allTeams[teamNumber]){ //
-				console.log("added team: ")
-				console.log(team);
+				//console.log("added team: ")
+				//console.log(team);
 				setPath(team, "robotNumber", teamNumber)
 				teams.push(team);
 				teamsWithNum.push([teamNumber,team]);
 			}
 		} 
-		console.log("teams type and size: " + typeof(teams)+teams.length+teams[0])  
+		//console.log("teams type and size: " + typeof(teams)+teams.length+teams[0])  
 		// compare the teams to get avg win probabilities
 		compareAllTeams(teams)
-		for(let team in teams){
-			if(team.avgProbability == undefined){
-				console.log("avg is undefined")
-				setPath(team, "avgProbability", 0) // doesn't set it to 0
-				team.avgProbability = 0;
-			}
-			console.log("avg: " + team.avgProbability)
-		}
 		// sort teams by avg win probability using bubble sort
 		let sorted = false;
 		while(!sorted){
 			sorted = true;
 			for(let i = 0; i < teams.length-1; i++){
-				
 				if(teams[i].avgProbability < teams[i+1].avgProbability && teams[i].avgProbability != undefined && teams[i+1].avgProbability != undefined){
 					let temp = teams[i];
 					teams[i] = teams[i+1];
@@ -162,11 +153,8 @@ if ('serviceWorker' in navigator) {
 			if (module.position == "side") {
 				autoPickStats.appendChild(moduleObject.container)
 			} 
-			
 			modules.team.push(moduleObject)
-			
 		}
-		
 	}
 
 	function constructTeamAutoPick(teamNumber, team, allTeams) {
