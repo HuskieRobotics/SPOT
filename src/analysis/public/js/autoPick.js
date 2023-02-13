@@ -78,6 +78,7 @@ async function fetchTeams() {
  * 
  * @param {A list of all teams} teams 
  * @returns A list of all possible alliances, not including including impossible allaicnes(duplicate teams on an alliance)
+ * returns an array of length (teams choose 3)
  */
 function possibleAlliances(teams) {
 	let alliances = [] // an array of all possible alliances
@@ -95,15 +96,18 @@ function possibleAlliances(teams) {
 					console.log(teams[y].robotNumber)
 					console.log(teams[z].robotNumber)
 					*/
-					duplicateAlliance = false;
 					let validAlliance = true;
 					alliances.forEach(alliance=> // make sure we don't add the same alliance twice
 						{
+							let teams_matching = 0;
 							alliance.forEach(team => {if (team.robotNumber == teams[x].robotNumber || 
 								team.robotNumber == teams[y].robotNumber || 
 								team.robotNumber == teams[z].robotNumber) 
-									{validAlliance = false;}
+									{teams_matching++}
 							})
+							if(teams_matching == 3){
+								validAlliance = false;
+							}
 						})
 					
 					if(validAlliance){alliances.push([teams[x], teams[y], teams[z]])
@@ -215,11 +219,9 @@ function compareAllTeams(teams) {
 	//let iterator = possibleAlliances(teams).values();  // an iterator that goes through all possible alliances
 	console.log("possibleAlliances")
 	console.log(possibleAlliances(teams))
-	for(let i = 0; i < possibleAlliances(teams).size; i++){ // sumProbability is the total, probability = sumProbability / teamsComparedWith
-		let iterator2 = iterator.next().value.values(); // converts the set to an array so we can use it
-		let allianceValue = [iterator2.next().value, iterator2.next().value, iterator2.next().value];
+	for(let i = 0; i < alliances.size; i++){ // sumProbability is the total, probability = sumProbability / teamsComparedWith
 		//console.log(allianceValue);
-		alliancesWithScore[i] = {alliance:allianceValue,probability:0,sumProbability:0,teamsComparedWith:0};
+		alliancesWithScore[i] = {alliance:alliances[i],probability:0,sumProbability:0,teamsComparedWith:0};
 		console.log("Alliances: ")
 		for(let j = 0; j < allianceValue.length; j++){
 			console.log(allianceValue)
