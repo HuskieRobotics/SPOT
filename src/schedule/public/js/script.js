@@ -6,25 +6,13 @@
 
     constructApp();
 
-    document.querySelector("#form").addEventListener("submit", function (e){
-        if(e.key === 'Enter') {
-            console.log(e); 
-            let matches = document.querySelector("#form").value;
-
-            
+    let matches = 0;
+    document.querySelector("#numMatches").addEventListener("keydown", function (e){
+        if(e.keyCode == 13) {
+            matches = document.querySelector("#numMatches").value
+            console.log(matches);
         }
     })
-
-//     const matchNumberInput = createDOMElement("input", "access-input")
-//     //matchNumberInput.placeholder = "Access Code"
-//    // matchNumberInput.type = "password"
-//     matchNumberInput.addEventListener("keydown", (e) => {
-//         if (e.keyCode == 13) {
-//             validate(accessCodeInput.value, authModal)
-//         }
-//     })
-    
-    
     
     
     // if (authRequest.status !== 2) {
