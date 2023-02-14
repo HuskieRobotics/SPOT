@@ -317,6 +317,23 @@ body {
   gap: 10px;
 }
 
+#auto-pick-main{
+  display: flex;
+  flex-direction:column;
+  overflow:auto;
+  margin-bottom:15px;
+  gap: 10px;
+}
+
+#auto-pick-side{
+  display: flex;
+  flex-direction:column;
+  margin-bottom:15px;
+  gap: 10px;
+  width: 300px;
+}
+
+
 #alliance-vs {
   font-size: 1.5rem;
 }
@@ -388,13 +405,13 @@ body {
 .alliance-modules > div.hidden {
 	display: none;
 }
-#auto-pick-stats{
+/* #auto-pick-stats{
   margin-left:75px;
   margin-top:50px;
   color:red;
   border-width:5px;
   border-color:red;
-}
+} */
 @media screen and (max-width: 1100px) {
 	html {
 		font-size: 75%;

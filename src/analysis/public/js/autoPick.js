@@ -154,7 +154,7 @@ function matchAverage(alliance1, alliance2) {
 	let alliance2Avg = 0
 	for (let a = 0; a < alliance2.length; a++) {
 		data = getPath(alliance2[a],"averageScores.total",0)
-		alliance1Avg += data
+		alliance2Avg += data
 	}
 	return alliance1Avg - alliance2Avg
 }
@@ -174,7 +174,7 @@ function matchStandardDeviation(alliance1, alliance2) {
 	alliance2SD = 0
 	for (let a = 0; a < alliance2.length; a++) {
 		data = getPath(alliance2[a],"standardDeviation",0)
-		alliance1SD += Math.pow(data, 2)
+		alliance2SD += Math.pow(data, 2)
 	}
 	alliance2SD = Math.sqrt(alliance2SD)
 	return Math.sqrt(Math.pow(alliance1SD, 2) + Math.pow(alliance2SD, 2))

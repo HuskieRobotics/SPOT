@@ -153,6 +153,9 @@ if ('serviceWorker' in navigator) {
 			if (module.position == "side") {
 				autoPickStats.appendChild(moduleObject.container)
 			} 
+			else if(module.position == "main"){
+				autoPickMain.appendChild(moduleObject.container)
+			}
 			modules.team.push(moduleObject)
 		}
 	}
