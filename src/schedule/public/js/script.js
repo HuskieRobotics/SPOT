@@ -7,14 +7,17 @@
     constructApp();
 
     let matches = 0;
-    document.querySelector("#numMatches").addEventListener("keydown", function (e){
+    let numMatchesInput = document.querySelector("#numMatches");
+    numMatchesInput.addEventListener("keydown", function (e){
         if(e.keyCode == 13) {
-            matches = document.querySelector("#numMatches").value
+            matches = numMatchesInput.value
             console.log(matches);
+            updateMatches();
+            //FormData.clear;
         }
     })
     
-    
+
     // if (authRequest.status !== 2) {
     //     const authModal = new Modal("small", false).header("Sign In")
     //     const accessCodeInput = createDOMElement("input", "access-input")
@@ -83,20 +86,25 @@ async function constructApp() {
 
 
 async function updateMatches() {
-    let {allMatches, currentMatch} = await (await fetch(`/admin/api/matches`, {
-        headers: {
-            Authorization: "1234"
-        }
-    })).json();
+    // let {allMatches, currentMatch} = await (await fetch(`/admin/api/matches`, {
+    //     headers: {
+    //         Authorization: "1234"
+    //     }
+    // })).json();
 
     //let {allMatches, currentMatch} = fetch("/admin/api/matches");
-    console.log(allMatches)
+    let {allMatches, currentMatch} = matches; // broken
+    for(let i=0; i<matches; i++){
+        allMatches.push = i;
+    }
+
+    console.log(allMatches) // is all matches an object???
     //clear matches view
     document.querySelector("#match-list").innerHTML = "";
     
 
     //rebuild matches view
-    for (let match of allMatches) {
+    for (let matches in allMatches) {
         let matchElement = document.createElement("div");
         matchElement.classList.add("match");
 
