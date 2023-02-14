@@ -14,7 +14,7 @@ class SingleDisplay {
     }
 
     formatData(teams, dataset) {
-		let teamsArray = [3061, "|", 3061]
+		let teamsArray = [3734, "|", 3734]
 		let summed 
 		let formattedDisplay
 		if(this.moduleConfig.wholeMatch) {
@@ -92,27 +92,26 @@ class SingleDisplay {
 
 	matchAverage(alliance1, alliance2, dataset){
 		let alliance1Avg = 0
-		// for (const a of alliance1) {
-		// 	console.log("a AVG" + getPath(Object.entries(dataset.teams)[a],"averageScores",0))
-		// 	alliance1Avg += getPath(Object.entries(dataset.teams)[a],"averageScores",0)
-		// }
+		for (const a of alliance1) {
+			console.log()
+			alliance1Avg += getPath(dataset.teams[a],"averageScores.total",0)
+		}
 		let alliance2Avg = 0
-		// for (const a of alliance2) {
-		// 	console.log("a AVG" + getPath(Object.entries(dataset.teams)[a],"averageScores",0))
-		// 	alliance1Avg += getPath(Object.entries(dataset.teams)[a],"averageScores",0)
-		// }
+		for (const a of alliance2) {
+			alliance2Avg += getPath(dataset.teams[a],"averageScores.total",0)
+		}
 		return alliance1Avg - alliance2Avg
 	}
 	
 	matchStandardDeviation(alliance1, alliance2, dataset) {
-		let alliance1SD = 0
+		let alliance1SD = 10
 		// for (const a of alliance1) {
 		// 	console.log("a SD" + getPath(Object.entries(dataset.teams)[a],"standardDeviation",0))
 		// 	let data = getPath(Object.entries(dataset.teams)[a],"standardDeviation",0)
 		// 	alliance1SD += Math.pow(data, 2)
 		// }
 		alliance1SD = Math.sqrt(alliance1SD)
-		let alliance2SD = 0
+		let alliance2SD = 10
 		// for (const a of alliance2) {
 		// 	console.log("a SD" + getPath(Object.entries(dataset.teams)[a],"standardDeviation",0))
 		// 	let data = getPath(Object.entries(dataset.teams)[a],"standardDeviation",0)
@@ -123,7 +122,10 @@ class SingleDisplay {
 	}
 	
 	compareAlliances(alliance1, alliance2, dataset) {
+		console.log("matchAverage: " + this.matchAverage(alliance1, alliance2, dataset))
+		console.log("matchStandardDeviation: " + this.matchStandardDeviation(alliance1, alliance2, dataset))
 		zscore = ss.zScore(0, this.matchAverage(alliance1, alliance2, dataset), this.matchStandardDeviation(alliance1, alliance2, dataset))
+		console.log("zscore: " + zscore)
 		probAlliance2Wins = ss.cumulativeStdNormalProbability(zscore)
 		return 1 - probAlliance2Wins;
 	}
