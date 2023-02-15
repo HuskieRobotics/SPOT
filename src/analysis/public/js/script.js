@@ -255,11 +255,12 @@ if ('serviceWorker' in navigator) {
 
 				return true
 			})
-			if(module.wholeMatch) {
+			if(module.moduleConfig.wholeMatch) {
 				let allTeams = alliances[0]
 				console.log(`alliances script.js ${alliances}`)
 				allTeams.push('|')
 				allTeams = allTeams.concat(alliances[1])
+				console.log(`all teams: ${allTeams}`)
 				displayedAlliances = allTeams.filter(teamNumber => {
 					if (!module.moduleConfig.separate && teamNumber != "|" && Object.keys(dataset.teams[teamNumber]).filter(prop => prop !== "manual").length == 0) {
 						return false
@@ -267,9 +268,14 @@ if ('serviceWorker' in navigator) {
 	
 					return true
 				})
+				console.log(`displayed alliances: ${displayedAlliances}`)
 				if (displayedAlliances.length !== 0) {
 					module.container.classList.remove("hidden")
-					await module.setData(await module.formatData(displayedAlliances, dataset))
+					await module.setData(await module.formatData(allTeams, dataset)) 
+					/**
+					 * TODO: fix the filtering 
+					 * allTeams on line 274 should be displayedAlliances
+					 */
 				} else {
 					module.container.classList.add("hidden")
 				}
@@ -291,11 +297,11 @@ if ('serviceWorker' in navigator) {
 
 				return true
 			})
-			if(module.wholeMatch) {
+			if(module.moduleConfig.wholeMatch) {
 				let allTeams = alliances[1]
 				allTeams.push('|')
 				allTeams = allTeams.concat(alliances[0])
-				console.log(`whole match right side ${allTeams}`)
+				console.log(`all teams: ${allTeams}`)
 				var displayedAlliances = allTeams.filter(teamNumber => {
 					if (!module.moduleConfig.separate && teamNumber != "|"  && Object.keys(dataset.teams[teamNumber]).filter(prop => prop !== "manual").length == 0) {
 						return false
@@ -303,6 +309,7 @@ if ('serviceWorker' in navigator) {
 	
 					return true
 				})
+				console.log(`displayed alliances: ${displayedAlliances}`)
 				if (displayedAlliances.length !== 0) {
 					module.container.classList.remove("hidden")
 					await module.setData(await module.formatData(displayedAlliances, dataset))
