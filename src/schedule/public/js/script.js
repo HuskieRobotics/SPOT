@@ -12,7 +12,7 @@
         if(e.keyCode == 13) {
             matches = numMatchesInput.value
             console.log(matches);
-            updateMatches();
+            updateMatches(matches);
             //FormData.clear;
         }
     })
@@ -54,7 +54,7 @@
 
 async function constructApp() {
 
-    updateMatches()
+    updateMatches(matches)
 
     //document.querySelector("#match-list").classList.add("visible")
 
@@ -85,7 +85,7 @@ async function constructApp() {
 }
 
 
-async function updateMatches() {
+async function updateMatches(matchNumber) {
     // let {allMatches, currentMatch} = await (await fetch(`/admin/api/matches`, {
     //     headers: {
     //         Authorization: "1234"
@@ -93,40 +93,21 @@ async function updateMatches() {
     // })).json();
 
     //let {allMatches, currentMatch} = fetch("/admin/api/matches");
-    let {allMatches, currentMatch} = matches; // broken
-    for(let i=0; i<matches; i++){
-        allMatches.push = i;
+    //let {allMatches, currentMatch} = matches; / broken
+    
+    //let allMatches;
+    for(let i=0; i<matchNumber; i++){
+        let matchElement1 = document.createElement("div") // test 
+        document.querySelector("#match-list").appendChild(matchElement1);
+
     }
 
-    console.log(allMatches) // is all matches an object???
+    //console.log(allMatches) // is all matches an object???
     //clear matches view
-    document.querySelector("#match-list").innerHTML = "";
+   // document.querySelector("#match-list").innerHTML = "";
     
 
-    //rebuild matches view
-    for (let matches in allMatches) {
-        let matchElement = document.createElement("div");
-        matchElement.classList.add("match");
-
-        matchElement.innerHTML = `
-        <div class="match-header"><strong>${match.number}</strong> - ${match.match_string.toUpperCase().split("_")[0]}-<strong>${match.match_string.toUpperCase().split("_")[1]}</strong></div>
-        <input type="checkbox" class="match-select">
-        <div class="match-teams red"></div>
-        <div class="match-teams blue"></div>
-        `
-        document.querySelector("#match-list").appendChild(matchElement);
-
-
-        //add the robot numbers to match
-        for (let color of ["red","blue"]) {
-            for (let robotNumber of match.robots[color]) {
-                let text = document.createElement("div");
-                text.innerText = robotNumber;
-                matchElement.querySelector(`.match-teams.${color}`).appendChild(text)
-            }
-        }
-
-    }
+    
 }
 
 
