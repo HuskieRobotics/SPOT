@@ -5,6 +5,7 @@ class Pie {
     constructor(moduleConfig) {
         this.moduleConfig = moduleConfig
         this.container = createDOMElement("div", "container pie")
+        //this.container.innerHTML = '<div style = "font-size: 2em; text-align:center;">No Team Selected</div>'
     }
 
     formatData(teams, dataset) {
