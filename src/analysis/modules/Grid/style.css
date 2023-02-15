@@ -4,7 +4,8 @@
   border-radius: var(--border-radius);
   border: 2px solid var(--accent-alt);
   box-sizing: border-box;
-  padding:2%
+  padding:2%;
+  margin: auto;
 }
 .table > div {
   margin:.2vw;
@@ -15,7 +16,7 @@
 }
 .grid.container > .header{
   text-align:center;
-  font-size: 2em;
+  font-size: 1em;
 }
 .cell{
   text-align:center;

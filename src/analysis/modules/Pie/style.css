@@ -4,4 +4,5 @@
     border-radius: var(--border-radius);
     border: 2px solid var(--accent-alt);
     box-sizing: content-box;
+    margin:auto;
 }

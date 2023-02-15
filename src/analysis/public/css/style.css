@@ -287,9 +287,13 @@ body {
 }
 
 #auto-pick-view {
+  display:grid;
+  grid-template-columns: 1fr 3fr 1fr;
+  /*
   display: flex;
   flex-direction:row;
   gap: 10px;
+  */
 }
 
 #pick-list-text{
@@ -322,7 +326,9 @@ body {
   flex-direction:column;
   overflow:auto;
   margin-bottom:15px;
+  width: 1fr;
   gap: 10px;
+  margin-top: 32px;
 }
 
 #auto-pick-side{
@@ -330,7 +336,8 @@ body {
   flex-direction:column;
   margin-bottom:15px;
   gap: 10px;
-  width: 300px;
+  width: 0.5fr;
+  margin-top: 32px;
 }
 
 
