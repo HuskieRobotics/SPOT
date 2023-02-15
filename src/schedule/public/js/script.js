@@ -96,86 +96,28 @@ async function updateMatches(matchNumber) {
     //let {allMatches, currentMatch} = matches; / broken
     
     //let allMatches;
-    for(let i=0; i<matchNumber; i++){
-        let matchElement1 = document.createElement("div") // test 
-        document.querySelector("#match-list").appendChild(matchElement1);
+    document.querySelector("#match-list").innerHTML = "";
+    for(let i=1; i<=matchNumber; i++)
+    {
+        
+        let matchElement = document.createElement("div") // test 
+        document.querySelector("#match-list").appendChild(matchElement);
+        matchElement.classList.add("match"); // Add a button to add name intead of "manual" on table 
+        matchElement.innerHTML = `
+        <div class="match-header"><strong>${i}</strong> - ${"MANUAL"}-<strong>${"QM" + i}</strong></div> 
+        <input type="checkbox" class="match-select">
+        <div class="match-teams red"></div>
+        <div class="match-teams blue"></div>
+        `
 
     }
 
-    //console.log(allMatches) // is all matches an object???
-    //clear matches view
-   // document.querySelector("#match-list").innerHTML = "";
-    
-
+ 
     
 }
 
 
 
-// class ScouterDisplay {
-//     scouterElement;
-//     scouter;
-
-//     constructor (scouter) {
-//         this.scouter = scouter;
-
-//         this.scouterElement = document.createElement("div");
-//         this.scouterElement.innerHTML = `
-//         <div class="match-number"></div>
-//         <div class="scouter-id"></div>
-//         <div class="robot-number"></div>
-//         <div class="scouter-status"></div>
-//         `;
-//         this.scouterElement.classList.add("scouter");
-
-//         document.querySelector("#scouter-list").appendChild(this.scouterElement);
-
-//         this.updateScouterElement();
-        
-//     }
-//     updateScouterElement(state) {
-
-//         //update state
-//         this.scouter.state = state || this.scouter.state;
-
-//         //write all text
-//         this.scouterElement.querySelector(".scouter-id").innerText = this.scouter.state.scouterId;
-//         this.scouterElement.querySelector(".match-number").innerText = this.scouter.state.matchNumber;
-//         this.scouterElement.querySelector(".robot-number").innerText = this.scouter.state.robotNumber;
-
-//         //update color
-//         const SCOUTER_STATUS_COLOR = {
-//             "0": "var(--text)", //NEW
-//             "1": "#ffa500", //WAITING
-//             "2": "var(--accent)", //SCOUTING
-//             "3": "var(--green)" //COMPLETE
-//         }
-//         const DISCONNECTED_COLOR = "var(--error)";
-
-//         if (this.scouter.state.status == SCOUTER_STATUS.NEW) {
-//             this.scouterElement.style.display = "none";
-//         } else {
-//             this.scouterElement.style.display = "flex";
-//         }
-
-//         if (!this.scouter.state.connected && !(this.scouter.state.status == SCOUTER_STATUS.COMPLETE)) { //disconneted and not complete
-//             this.scouterElement.querySelector(".scouter-status").style.color = DISCONNECTED_COLOR;
-//             this.scouterElement.style.borderColor = DISCONNECTED_COLOR;
-//             this.scouterElement.querySelector(".match-number").style.backgroundColor = DISCONNECTED_COLOR;
-//             this.scouterElement.querySelector(".match-number").style.borderColor = DISCONNECTED_COLOR;
-//             this.scouterElement.querySelector(".scouter-status").innerText = "DISCONNECTED";
-//         } else {
-//             this.scouterElement.querySelector(".scouter-status").style.color = SCOUTER_STATUS_COLOR[this.scouter.state.status];
-//             this.scouterElement.style.borderColor = SCOUTER_STATUS_COLOR[this.scouter.state.status];
-//             this.scouterElement.querySelector(".match-number").style.backgroundColor = SCOUTER_STATUS_COLOR[this.scouter.state.status];
-//             this.scouterElement.querySelector(".match-number").style.borderColor = SCOUTER_STATUS_COLOR[this.scouter.state.status];
-//             this.scouterElement.querySelector(".scouter-status").innerText = SCOUTER_STATUS_REVERSE[this.scouter.state.status];
-//         }
-//     }
-//     destruct() {
-//         this.scouterElement.parentElement.removeChild(this.scouterElement);
-//     }
-// }
 
 // // not sure if this will work but building a [] of matches in the proper format
 // let processedMatches = [];

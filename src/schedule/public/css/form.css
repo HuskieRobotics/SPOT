@@ -27,9 +27,9 @@
 #form .label > span {
   position: absolute;
   padding: 0 5px;
-  left: 12px;
+  left: 11px;
   background-color: var(--bg-alt);
-  top: -8px;
+  top: 21px;
   border-radius: 20px;
   font-size: 1.5em;
   transition: 0.2s transform;
