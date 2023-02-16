@@ -106,9 +106,18 @@ async function updateMatches(matchNumber) {
         matchElement.innerHTML = `
         <div class="match-header"><strong>${i}</strong> - ${"MANUAL"}-<strong>${"QM" + i}</strong></div> 
         <input type="checkbox" class="match-select">
-        <div class="match-teams red"></div>
-        <div class="match-teams blue"></div>
+        <div class="match-teams red">
+        <div class="match-team red1" contentEditable="true"></div>
+        <div class="match-team red2" contentEditable="true"></div>
+        <div class="match-team red3" contentEditable="true"></div>
+        </div>
+        <div class="match-teams blue">
+        <div class="match-team blue1" contentEditable="true"></div>
+        <div class="match-team blue2" contentEditable="true"></div>
+        <div class="match-team blue3" contentEditable="true"></div>
+        </div>
         `
+        //matchElement.add('contentEditable="true"');
 
     }
 
