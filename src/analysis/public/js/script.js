@@ -151,6 +151,7 @@ if ('serviceWorker' in navigator) {
 		for (const module of modulesConfig.filter(m => m.view == "team")) {
 			const moduleObject = new moduleClasses[module.module](module)
 			if (module.position == "side") {
+				//FIXME reName
 				autoPickStats.appendChild(moduleObject.container)
 			} 
 			else if(module.position == "main"){
@@ -194,7 +195,8 @@ if ('serviceWorker' in navigator) {
 	function displayStats(teamContainer){
 		Array.from(document.querySelector("#auto-pick-team-list").children).map(t => t.classList.remove("selected"))
 		teamContainer.classList.add("selected")
-		showFade(autoPickStats)
+		autoPickStats.style.display = "block"
+		autoPickMain.style.display = "flex"
 	}
 
 	//call setData on every module in teams
@@ -215,6 +217,9 @@ if ('serviceWorker' in navigator) {
 			}
 			
 		}
+		autoPickStats.style.display = "none"
+		autoPickMain.style.display = "none"
+		
 	}
 
 
@@ -471,11 +476,15 @@ if ('serviceWorker' in navigator) {
 		Array.from(document.querySelector("#team-list").children).map(t => t.classList.remove("selected"))
 		
 		autoPickStats.innerHTML = ""
+		autoPickMain.innerHTML = ""
 		hideFade(welcomeView)
 		hideFade(matchView)
 		hideFade(teamView)
 		hideFade(autoPickView)
-		hideFade(autoPickStats)
+		// hideFade(autoPickStats)
+		// hideFade(autoPickMain)
+		autoPickStats.style.display = "none"
+		autoPickMain.style.display = "none"
 		matchViewSwitch.classList.remove("selected")
 		autoPickSwitch.classList.remove("selected")
 	}
