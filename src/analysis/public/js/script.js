@@ -233,13 +233,13 @@ if ('serviceWorker' in navigator) {
 			rightAllianceModules.appendChild(rightModuleObject.container)
 			modules.match.right.push(rightModuleObject)
 			
-			if(module.wholeMatch) {
-				const bothModuleObjectLeft = new moduleClasses[module.module](module)
-				leftAllianceModules.appendChild(bothModuleObjectLeft.container)
-				const bothModuleObjectRight = new moduleClasses[module.module](module)
-				leftAllianceModules.appendChild(bothModuleObjectRight.container)
-				// modules.match.both.push(bothModuleObject)
-			}
+			// if(module.wholeMatch) {
+			// 	const bothModuleObjectLeft = new moduleClasses[module.module](module)
+			// 	leftAllianceModules.appendChild(bothModuleObjectLeft.container)
+			// 	const bothModuleObjectRight = new moduleClasses[module.module](module)
+			// 	rightAllianceModules.appendChild(bothModuleObjectRight.container)
+			// 	// modules.match.both.push(bothModuleObject)
+			// }
 
 		}
 	}

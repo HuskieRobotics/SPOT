@@ -11,6 +11,7 @@ class SingleDisplay {
         this.display = createDOMElement("div", "display")
         this.container.appendChild(this.header)
         this.container.appendChild(this.display)
+		this.header.innerHTML = "No Data"
     }
 
     formatData(teams, dataset) {
