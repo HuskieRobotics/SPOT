@@ -249,10 +249,11 @@ if ('serviceWorker' in navigator) {
 		for (const module of modules.match.left) {
 			console.log(module.moduleConfig.name)
 			var displayedAlliances = alliances[0].filter(teamNumber => {
-				if (!module.moduleConfig.separate && teamNumber != "|"  && Object.keys(dataset.teams[teamNumber]).filter(prop => prop !== "manual").length == 0) {
+				if(teamNumber == "|"){return false}
+				if (!module.moduleConfig.separate  && Object.keys(dataset.teams[teamNumber]).filter(prop => prop !== "manual").length == 0) {
 					return false
 				}
-
+				
 				return true
 			})
 			if(module.moduleConfig.wholeMatch) {
@@ -265,7 +266,6 @@ if ('serviceWorker' in navigator) {
 					if (!module.moduleConfig.separate && teamNumber != "|" && Object.keys(dataset.teams[teamNumber]).filter(prop => prop !== "manual").length == 0) {
 						return false
 					}
-	
 					return true
 				})
 				console.log(`displayed alliances: ${displayedAlliances}`)
@@ -274,7 +274,7 @@ if ('serviceWorker' in navigator) {
 					await module.setData(await module.formatData(allTeams, dataset)) 
 					/**
 					 * TODO: fix the filtering 
-					 * allTeams on line 274 should be displayedAlliances
+					 * allTeams on line 274 should be maybe displayedAlliances
 					 */
 				} else {
 					module.container.classList.add("hidden")
@@ -291,10 +291,11 @@ if ('serviceWorker' in navigator) {
 		for (const module of modules.match.right) {
 			console.log(module.moduleConfig.name)
 			var displayedAlliances = alliances[1].filter(teamNumber => {
-				if (!module.moduleConfig.separate && teamNumber != "|"  && Object.keys(dataset.teams[teamNumber]).filter(prop => prop !== "manual").length == 0) {
+				if(teamNumber == "|"){return false}
+				if (!module.moduleConfig.separate && Object.keys(dataset.teams[teamNumber]).filter(prop => prop !== "manual").length == 0) {
 					return false
 				}
-
+				
 				return true
 			})
 			if(module.moduleConfig.wholeMatch) {

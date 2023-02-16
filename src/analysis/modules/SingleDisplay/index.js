@@ -21,12 +21,14 @@ class SingleDisplay {
 		if(this.moduleConfig.wholeMatch) {
 			// teams = [b1,b2,b3,|,r1,r3]
 			// 1 split list of teams
-			console.log(`teams filtered: ${teamsArray}`)
 			let indexOfPipe = teamsArray.indexOf("|")
 			let alliance1 = teamsArray.slice(0, indexOfPipe)
 			let alliance2 = teamsArray.slice(indexOfPipe+1, teamsArray.length)
-			alliance2.filter(team => team != "|")
-			console.log(`alliances: ${alliance1} and ${alliance2}`)
+			alliance2 = alliance2.filter(team => team != "|")
+			console.log(`alliance 1: ${alliance1}`)
+			console.log(`alliance 2: ${alliance2}`)
+
+			// alliance2.splice(alliance2.indexOf("|"), alliance2.indexOf("|"+1))
 			//if(alliance1.length > 0){ // 2 validate alliances have at least 1 robot
 			 	//if (this.moduleConfig.options.aggrMethod == "percentChanceOfWin") {	// 3 identify which calculation to perform
 			 		// 4 send output to formattedDisplay
