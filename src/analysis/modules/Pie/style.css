@@ -1,5 +1,6 @@
 .pie.container {
     width: 90%;
+    min-width: 75%;
     background-color: var(--bg-alt);
     border-radius: var(--border-radius);
     border: 2px solid var(--accent-alt);

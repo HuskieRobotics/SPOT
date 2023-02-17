@@ -324,9 +324,11 @@ body {
 
 #auto-pick-main{
   display: flex;
+  width: 100%;
+  min-width: 475px;
   flex-direction:column;
-  overflow:auto;
-  margin-bottom:15px;
+  overflow:auto;  
+  margin-bottom:30px;
   gap: 10px;
   margin-top:32px;
 }
