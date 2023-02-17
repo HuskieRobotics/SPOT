@@ -26,27 +26,14 @@ class SingleDisplay {
 			let alliance1 = teamsArray.slice(0, indexOfPipe)
 			let alliance2 = teamsArray.slice(indexOfPipe+1, teamsArray.length)
 			alliance2 = alliance2.filter(team => team != "|")
-			console.log(`alliance 1: ${alliance1}`)
-			console.log(`alliance 2: ${alliance2}`)
-
-			// alliance2.splice(alliance2.indexOf("|"), alliance2.indexOf("|"+1))
-			//if(alliance1.length > 0){ // 2 validate alliances have at least 1 robot
-			 	//if (this.moduleConfig.options.aggrMethod == "percentChanceOfWin") {	// 3 identify which calculation to perform
-			 		// 4 send output to formattedDisplay
-			 		console.log("this is good")
-			console.log("Compared Alliances" + this.compareAlliances(alliance1,alliance2, dataset))
-			formattedDisplay = this.compareAlliances(alliance1, alliance2, dataset)
-			// 	} else { //default is undefined
-			// 		console.log("bad")
-			// 		formattedDisplay = 0
-			// 		console.log("Compared Alliances" + this.compareAlliances(alliance1,alliance2, dataset))
-			// 		formattedDisplay = this.compareAlliances(alliance1, alliance2)
-			// 	}
 			
-			// } else {
-			// 	console.log("also bad")
-			// 	formattedDisplay = 0
-			// }
+			if (this.moduleConfig.options.aggrMethod == "percentChanceOfWinning") {	// 3 identify which calculation to perform
+				console.log("Compared Alliances" + this.compareAlliances(alliance1,alliance2, dataset))
+				formattedDisplay = this.compareAlliances(alliance1, alliance2, dataset)
+		 	} else { //default is undefined
+					formattedDisplay = 0
+			}
+			
 		} else {
 			if (teams.length > 1) {
 				summed = teams.map(team => getPath(dataset.teams[team], this.moduleConfig.options.path, 0)).flat().reduce((acc, i) => acc + i, 0)
