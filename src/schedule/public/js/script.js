@@ -99,13 +99,14 @@ async function updateMatches(matchNumber) {
     document.querySelector("#match-list").innerHTML = "";
     for(let i=1; i<=matchNumber; i++)
     {
-        
+        //   <input type="image" src="./img/lock_closed.png" class="lock-img">
         let matchElement = document.createElement("div") // test 
         document.querySelector("#match-list").appendChild(matchElement);
         matchElement.classList.add("match"); // Add a button to add name intead of "manual" on table 
         matchElement.innerHTML = `
         <div class="match-header"><strong>${i}</strong> - ${"MANUAL"}-<strong>${"QM" + i}</strong></div> 
         <input type="checkbox" class="match-select">
+ 
         <div class="match-teams red">
         <div class="match-team red1" contentEditable="true"></div>
         <div class="match-team red2" contentEditable="true"></div>
@@ -124,6 +125,8 @@ async function updateMatches(matchNumber) {
  
     
 }
+
+
 
 
 

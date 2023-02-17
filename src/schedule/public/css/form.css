@@ -38,7 +38,7 @@
 }
 
 .input:focus + span, .input:valid + span {
-  transform: scale(0.75) translate(0px, -46px);
+  transform: scale(0.75) translate(0px, -54px);
   color: black !important;
 }
 
