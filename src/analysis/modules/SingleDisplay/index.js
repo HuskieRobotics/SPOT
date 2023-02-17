@@ -128,9 +128,8 @@ class SingleDisplay {
 	 * @returns {*the percent chance that alliance1 will win this match*}
 	 */
 	compareAlliances(alliance1, alliance2, dataset) {
-		zscore = ss.zScore(0, this.matchAverage(alliance1, alliance2, dataset), this.matchStandardDeviation(alliance1, alliance2, dataset))
-		console.log("zscore: " + zscore)
-		probAlliance2Wins = ss.cumulativeStdNormalProbability(zscore)
+		let zscore = ss.zScore(0, this.matchAverage(alliance1, alliance2, dataset), this.matchStandardDeviation(alliance1, alliance2, dataset))
+		let probAlliance2Wins = ss.cumulativeStdNormalProbability(zscore)
 		return 1 - probAlliance2Wins;
 	}
 
