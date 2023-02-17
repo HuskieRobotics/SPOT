@@ -310,15 +310,16 @@ body {
   align-items:center;
   margin-left:40px;
   gap: 10px;
-  
+  overflow: auto;
 }
 
 #auto-pick-team-list{
   display: flex;
   flex-direction:column;
-  overflow:auto;
+  flex-basis:auto;
   margin-bottom:15px;
   gap: 10px;
+  overflow:auto;
 }
 
 #auto-pick-main{
