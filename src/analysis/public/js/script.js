@@ -271,11 +271,7 @@ if ('serviceWorker' in navigator) {
 				console.log(`displayed alliances: ${displayedAlliances}`)
 				if (displayedAlliances.length !== 0) {
 					module.container.classList.remove("hidden")
-					await module.setData(await module.formatData(allTeams, dataset)) 
-					/**
-					 * TODO: fix the filtering 
-					 * allTeams on line 274 should be maybe displayedAlliances
-					 */
+					await module.setData(await module.formatData(allTeams, dataset))
 				} else {
 					module.container.classList.add("hidden")
 				}
