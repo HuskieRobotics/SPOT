@@ -232,15 +232,6 @@ if ('serviceWorker' in navigator) {
 			const rightModuleObject = new moduleClasses[module.module](module)
 			rightAllianceModules.appendChild(rightModuleObject.container)
 			modules.match.right.push(rightModuleObject)
-			
-			// if(module.wholeMatch) {
-			// 	const bothModuleObjectLeft = new moduleClasses[module.module](module)
-			// 	leftAllianceModules.appendChild(bothModuleObjectLeft.container)
-			// 	const bothModuleObjectRight = new moduleClasses[module.module](module)
-			// 	rightAllianceModules.appendChild(bothModuleObjectRight.container)
-			// 	// modules.match.both.push(bothModuleObject)
-			// }
-
 		}
 	}
 

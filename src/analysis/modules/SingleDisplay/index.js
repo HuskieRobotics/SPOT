@@ -11,7 +11,6 @@ class SingleDisplay {
         this.display = createDOMElement("div", "display")
         this.container.appendChild(this.header)
         this.container.appendChild(this.display)
-		this.header.innerHTML = "No Data"
     }
 
     formatData(teams, dataset) {
@@ -28,8 +27,9 @@ class SingleDisplay {
 			// alliance 2 = [r1,r2,r3]
 			if (this.moduleConfig.options.aggrMethod == "percentChanceOfWinning") { //optionally percent chance of winning
 				formattedDisplay = this.compareAlliances(alliance1, alliance2, dataset)
+				formattedDisplay = (formattedDisplay * 100).toFixed(2).toString()+"%";
 		 	} else { //default is undefined
-					formattedDisplay = 0
+					formattedDisplay = "0%"
 			}
 			
 		} else {
@@ -48,7 +48,10 @@ class SingleDisplay {
 		formattedDisplay = this.applyModifiers(formattedDisplay)
 
 		if (isNaN(formattedDisplay) || formattedDisplay == this.moduleConfig.options.hideIfValue) {
-			formattedDisplay = "—"
+			if(!this.moduleConfig.wholeMatch){
+				formattedDisplay = "—"
+			}
+			
 		} else {
 			if (this.moduleConfig.options.decimals !== undefined) {
 				formattedDisplay = formattedDisplay.toFixed(this.moduleConfig.options.decimals)
