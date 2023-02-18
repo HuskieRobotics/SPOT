@@ -42,7 +42,7 @@ class Pie {
         const layout = {
             margin: {
                 pad: 12,
-                b: 30,
+                b: 30
             },
             title: {
                 text: this.moduleConfig.name,
@@ -63,6 +63,7 @@ class Pie {
             },
             paper_bgcolor: "#FEFEFE",
             plot_bgfcolor: "#FEFEFE",
+            
         }
 
         const config = {

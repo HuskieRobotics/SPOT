@@ -327,7 +327,7 @@ body {
 }
 
 #auto-pick-main{
-  display: flex;
+  width:95%;
   min-width: 475px;
   min-height: 600px;
   flex-direction:column;
