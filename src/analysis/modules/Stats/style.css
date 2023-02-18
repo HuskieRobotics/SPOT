@@ -1,5 +1,5 @@
 .stats.container {
-    width: 90%;
+    width: 95% !important;
     padding: 15px 15px;
     display: flex;
     flex-direction: column;
@@ -37,7 +37,7 @@
 }
 
 .noData{
-    width: 90%;
+    width: 95%;
     background-color: var(--bg-alt);
     border:none;
 }

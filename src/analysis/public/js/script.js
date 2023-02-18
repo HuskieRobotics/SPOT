@@ -142,12 +142,20 @@ if ('serviceWorker' in navigator) {
 			}
 		}
 		//add to team list on autopicktab
-		for (let i = 0; i < teams.length; i++) {
+		const firstContainer = constructTeamAutoPick(teams[0].robotNumber, teams[0], allTeams)
+		autoPickTeamList.appendChild(firstContainer)
+		for (let i = 1; i < teams.length; i++) {
 			const autoPickTeamContainer = constructTeamAutoPick(teams[i].robotNumber, teams[i], allTeams)
 			autoPickTeamList.appendChild(autoPickTeamContainer)
+			if(i == 1){
+				autoPickTeamContainer.click()
+			}
 		}
+		firstContainer.click();
 
 		//get all team modules, create and store module classes, then append their placeholder containers to lists
+		autoPickStats.innerHTML = ""
+		autoPickMain.innerHTML = ""
 		for (const module of modulesConfig.filter(m => m.view == "team")) {
 			const moduleObject = new moduleClasses[module.module](module)
 			if (module.position == "side") {
@@ -475,8 +483,7 @@ if ('serviceWorker' in navigator) {
 	function clearInterface() {
 		Array.from(document.querySelector("#team-list").children).map(t => t.classList.remove("selected"))
 		
-		autoPickStats.innerHTML = ""
-		autoPickMain.innerHTML = ""
+		
 		hideFade(welcomeView)
 		hideFade(matchView)
 		hideFade(teamView)
