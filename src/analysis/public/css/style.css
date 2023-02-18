@@ -289,6 +289,7 @@ body {
 #auto-pick-view {
   display:grid;
   grid-template-columns: 1fr 3fr 1fr;
+  overflow:auto;
   /*
   display: flex;
   flex-direction:row;
@@ -297,7 +298,7 @@ body {
 }
 
 #pick-list-text{
-  font-size: 4vmin;
+  font-size: 25px;
   line-height: 1em;
   color: var(--accent-alt);
   margin-top:32px;
@@ -307,10 +308,13 @@ body {
 #team-list-container{
   display: flex;
   flex-direction:column;
+  
   align-items:center;
   margin-left:40px;
   gap: 10px;
   overflow: auto;
+  min-width: 150px;
+  min-height: 600px;
 }
 
 #auto-pick-team-list{
@@ -324,13 +328,15 @@ body {
 
 #auto-pick-main{
   display: flex;
-  width: 100%;
   min-width: 475px;
+  min-height: 600px;
   flex-direction:column;
   overflow:auto;  
-  margin-bottom:30px;
+  margin:auto;
+  margin-bottom:10px;
   gap: 10px;
   margin-top:32px;
+  
 }
 
 #auto-pick-side{
@@ -338,9 +344,9 @@ body {
   flex-direction:column;
   overflow:auto;
   gap: 10px;
-  
+  min-width: 200px;
+  min-height: 600px;
   margin-bottom:15px;
- 
   margin-top: 32px;
 }
 
