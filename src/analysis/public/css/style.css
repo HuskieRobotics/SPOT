@@ -21,10 +21,16 @@ body {
   transition: visibility 0s 0s, opacity 0.3s 0s;
 }
 
+#menu {
+  height: 100%;
+  width: 100%;
+}
+
 #sidebar {
   grid-area: 3 / 1 / 4 / 2;
   background-color: var(--bg-alt);
   padding: 16px;
+  /* height:100vw;  this messes with the search bar*/
   display: grid;
   min-height: 0;
   grid-template-rows: auto auto 1fr;
@@ -456,6 +462,32 @@ body {
 	#side-list {
 		padding: 25px 0;
 	}
+
+  /* #menu {
+    width: 100px;
+    height:100%;
+  }
+  #logo{
+    width: 100px;
+    font-size:0px;
+  }
+  #logo-img {
+    height: 50px;
+  }
+  #logo-text{
+    font-size:0px;
+  }
+  #search-icon{
+    display:none;
+    width:0px;
+  }
+  #search-input{
+    width:100%;
+    padding: 0 10px;
+  }
+  #app{
+    grid-template-columns: 100px auto;
+  } */
 
   
 }
