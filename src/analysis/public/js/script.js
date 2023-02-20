@@ -144,12 +144,12 @@ if ('serviceWorker' in navigator) {
 		//add to team list on autopicktab
 		const firstContainer = constructTeamAutoPick(teams[0].robotNumber, teams[0], allTeams)
 		autoPickTeamList.appendChild(firstContainer)
-		firstContainer.click();
+		firstContainer.click()
 		for (let i = 1; i < teams.length; i++) {
 			const autoPickTeamContainer = constructTeamAutoPick(teams[i].robotNumber, teams[i], allTeams)
 			autoPickTeamList.appendChild(autoPickTeamContainer)
 		}
-		
+
 
 		//get all team modules, create and store module classes, then append their placeholder containers to lists
 		autoPickStats.innerHTML = ""
@@ -165,8 +165,7 @@ if ('serviceWorker' in navigator) {
 			}
 			modules.team.push(moduleObject)
 		}
-		firstContainer.click();
-		firstContainer.click();
+		setTimeout(()=>{firstContainer.click();console.log('clicked')}, 4);
 	}
 
 	function constructTeamAutoPick(teamNumber, team, allTeams) {
