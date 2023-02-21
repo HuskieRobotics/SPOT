@@ -8,8 +8,10 @@ class Pie {
     }
 
     formatData(teams, dataset) {
+        console.log(`pie teams recieved: ${teams}`);
+        let filteredTeams = teams.filter(team=>team!="|");
         const values = this.moduleConfig.options.slices.map((slice) => {
-            const summed = teams.map(team => {console.log(team);return getPath(dataset.teams[team], slice.path)}).flat().reduce((acc, i) => acc + i, 0)
+            const summed = filteredTeams.map(team => {let data = getPath(dataset.teams[team], slice.path); console.log(`${slice.path}: ${data}`);return data}).flat().reduce((acc, i) => acc + i, 0)
             if (slice.aggrMethod == "sum") { //optionally summed
                 return summed
             } else { //default is average
@@ -32,7 +34,6 @@ class Pie {
             }
         ]
 
-		console.log(data)
 
         return data
     }

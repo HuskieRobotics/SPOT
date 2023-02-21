@@ -85,6 +85,7 @@
     "module": "Pie",
     "position":"main",
     "name":"Avg Cone Pickups",
+    "wholeMatch": false,
     "options":{
       "slices":[
         {
@@ -115,6 +116,7 @@
     "module": "Pie",
     "position":"main",
     "name":"Avg Cube Pickups",
+    "wholeMatch": false,
     "options":{
       "slices":[
         {
@@ -521,6 +523,17 @@
 			"decimals": 2
 		}
 	},
+    {
+		"view": "match",
+		"module": "SingleDisplay",
+		"name": "Percent Chance of Winning",
+		"position": "main",
+    "wholeMatch": true,
+		"options": {
+            "aggrMethod" : "percentChanceOfWinning",
+			"decimals": 2
+		}
+	},
 	{
 		"view": "match",
 		"module": "ColumnDisplay",
@@ -549,6 +562,7 @@
     "module": "Pie",
     "position":"main",
     "name":"Avg Cone Pickups",
+    "wholeMatch": false,
     "options":{
       "slices":[
         {

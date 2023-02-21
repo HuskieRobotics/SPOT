@@ -491,5 +491,15 @@
         "options": {
             "path": "scores"
         }
-    }
+    },
+	
+    {
+		"type": "team",
+		"name": "standardDeviation",
+		"outputPath": "standardDeviation",
+		"options": {
+			"path" : "scores.total"
+		}
+	}
+
 ]
