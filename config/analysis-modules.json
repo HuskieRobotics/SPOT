@@ -85,6 +85,7 @@
     "module": "Pie",
     "position":"main",
     "name":"Avg Cone Pickups",
+    "wholeMatch": false,
     "options":{
       "slices":[
         {
@@ -115,6 +116,7 @@
     "module": "Pie",
     "position":"main",
     "name":"Avg Cube Pickups",
+    "wholeMatch": false,
     "options":{
       "slices":[
         {
@@ -560,6 +562,7 @@
     "module": "Pie",
     "position":"main",
     "name":"Avg Cone Pickups",
+    "wholeMatch": false,
     "options":{
       "slices":[
         {

@@ -14,28 +14,24 @@ class SingleDisplay {
     }
 
     formatData(teams, dataset) {
-		let summed
+		// teams = [b1,b2,b3,|,r1,r3,r3,|]
+		let teamsArray = teams
+		let summed 
 		let formattedDisplay
 		if(this.moduleConfig.wholeMatch) {
-			// teams = [b1,b2,b3,|,r1,r3]
-			// 1 split list of teams
-			let indexOfPipe = teams.indexOf("|")
-			let alliance1 = teams.slice(0, indexOfPipe)
-			let alliance2 = teams.slice(indexOfPipe+1, teams.length)
-			console.log(`alliances: ${alliance1} and ${alliance2}`)
-			if(alliance1.length > 0){ // 2 validate alliances have at least 1 robot
-				if (this.moduleConfig.options.aggrMethod == "percentChanceOfWin") {	// 3 identify which calculation to perform
-					// 4 send output to formattedDisplay
-					
-					console.log("Compared Alliances" + this.compareAlliances(alliance1,alliance2))
-					formattedDisplay = this.compareAlliances(alliance1, alliance2)
-				} else { //default is undefined
-					formattedDisplay = 0
-				}
-			
-			} else {
-				formattedDisplay = 0
+			let indexOfPipe = teamsArray.indexOf("|")
+			let alliance1 = teamsArray.slice(0, indexOfPipe)
+			// alliance 1 = [b1,b2,b3]
+			let alliance2 = teamsArray.slice(indexOfPipe+1, teamsArray.length)
+			alliance2 = alliance2.filter(team => team != "|")
+			// alliance 2 = [r1,r2,r3]
+			if (this.moduleConfig.options.aggrMethod == "percentChanceOfWinning") { //optionally percent chance of winning
+				formattedDisplay = this.compareAlliances(alliance1, alliance2, dataset)
+				formattedDisplay = (formattedDisplay * 100).toFixed(2).toString()+"%";
+		 	} else { //default is undefined
+					formattedDisplay = "0%"
 			}
+			
 		} else {
 			if (teams.length > 1) {
 				summed = teams.map(team => getPath(dataset.teams[team], this.moduleConfig.options.path, 0)).flat().reduce((acc, i) => acc + i, 0)
@@ -52,7 +48,10 @@ class SingleDisplay {
 		formattedDisplay = this.applyModifiers(formattedDisplay)
 
 		if (isNaN(formattedDisplay) || formattedDisplay == this.moduleConfig.options.hideIfValue) {
-			formattedDisplay = "—"
+			if(!this.moduleConfig.wholeMatch){
+				formattedDisplay = "—"
+			}
+			
 		} else {
 			if (this.moduleConfig.options.decimals !== undefined) {
 				formattedDisplay = formattedDisplay.toFixed(this.moduleConfig.options.decimals)
@@ -82,43 +81,58 @@ class SingleDisplay {
         this.display.innerText = data
     }
 
-	matchAverage(alliance1, alliance2) {
+	/**
+	 * 
+	 * @param {*an allaicne of any length*} alliance1 
+	 * @param {*an alliance to compare to of any length*} alliance2 
+	 * @param {*the data set that holds the infomation of the teams*} dataset 
+	 * @returns {*the avg difference in score between allaicne 1 and allaicne 2*}
+	 */
+	matchAverage(alliance1, alliance2, dataset){
 		let alliance1Avg = 0
-		for (a in alliance1) {
-			console.log("a AVG" + getPath(dataset.teams[a],"averageScores",0))
-			data = getPath(dataset.teams[a],"averageScores",0)
-			alliance1Avg += data
+		for (const a of alliance1) {
+			alliance1Avg += getPath(dataset.teams[a],"averageScores.total",0)
 		}
 		let alliance2Avg = 0
-		for (a in alliance2) {
-			console.log("a AVG" + getPath(dataset.teams[a],"averageScores",0))
-			data = getPath(dataset.teams[a],"averageScores",0)
-			alliance1Avg += data
+		for (const a of alliance2) {
+			alliance2Avg += getPath(dataset.teams[a],"averageScores.total",0)
 		}
 		return alliance1Avg - alliance2Avg
 	}
 	
-	matchStandardDeviation(alliance1, alliance2) {
-		alliance1SD = 0
-		for (a in alliance1) {
-			console.log("a SD" + getPath(dataset.teams[a],"standardDeviation",0))
-			data = getPath(dataset.teams[a],"standardDeviation",0)
+	/**
+	 * 
+	 * @param {*an allaicne of any length*} alliance1 
+	 * @param {*an alliance to compare to of any length*} alliance2 
+	 * @param {*the data set that holds the infomation of the teams*} dataset 
+	 * @returns {*the standard deveation of the given match*}
+	 */
+	matchStandardDeviation(alliance1, alliance2, dataset) {
+		let alliance1SD = 0
+		for (const a of alliance1) {
+			let data = getPath(dataset.teams[a],"standardDeviation",0)
 			alliance1SD += Math.pow(data, 2)
 		}
 		alliance1SD = Math.sqrt(alliance1SD)
-		alliance2SD = 0
-		for (a in alliance2) {
-			console.log("a SD" + getPath(dataset.teams[a],"standardDeviation",0))
-			data = getPath(dataset.teams[a],"standardDeviation",0)
-			alliance1SD += Math.pow(data, 2)
+		let alliance2SD = 0
+		for (const a of alliance2) {
+			let data = getPath(dataset.teams[a],"standardDeviation",0)
+			alliance2SD += Math.pow(data, 2)
 		}
 		alliance2SD = Math.sqrt(alliance2SD)
 		return Math.sqrt(Math.pow(alliance1SD, 2) + Math.pow(alliance2SD, 2))
 	}
 	
-	compareAlliances(alliance1, alliance2) {
-		zscore = ss.zScore(0, this.matchAverage(alliance1, alliance2), this.matchStandardDeviation(alliance1, alliance2))
-		probAlliance2Wins = ss.cumulativeStdNormalProbability(zscore)
+	/**
+	 * 
+	 * @param {*an allaicne of any length*} alliance1 
+	 * @param {*an alliance to compare to of any length*} alliance2 
+	 * @param {*the data set that holds the infomation of the teams*} dataset 
+	 * @returns {*the percent chance that alliance1 will win this match*}
+	 */
+	compareAlliances(alliance1, alliance2, dataset) {
+		let zscore = ss.zScore(0, this.matchAverage(alliance1, alliance2, dataset), this.matchStandardDeviation(alliance1, alliance2, dataset))
+		let probAlliance2Wins = ss.cumulativeStdNormalProbability(zscore)
 		return 1 - probAlliance2Wins;
 	}
 
