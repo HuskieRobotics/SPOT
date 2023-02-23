@@ -60,7 +60,7 @@ body {
   }
   
   #logo-img {
-    height: 10px;;
+    height: 60px;
   }
   
   #logo-text {
@@ -132,17 +132,20 @@ body {
 
 .match .match-select::before {
     content: "";
-    width: calc(.4 * 80px);
-    height: calc(.4 * 80px);
+    width: calc(.4 * 100px);
+    height: calc(.4 * 100px);
     transform: scale(0);
-    border-radius: 16px;
+    /* border-radius: 16px; */
     transition: 120ms transform cubic-bezier(.37,-0.02,.47,1.77);
-    box-shadow: inset calc(.75 * 80px) calc(.75 * 80px) var(--accent);
+    background: center url("../img/lock_closed.png");
+    /* box-shadow: inset calc(.75 * 80px) calc(.75 * 80px) var(--accent); */
+
 }
   
 .match .match-select:checked::before {
     transform: scale(1);
 }
+
 
 .match .match-header {
     grid-area: 1 / 1 / 2 / 4;
