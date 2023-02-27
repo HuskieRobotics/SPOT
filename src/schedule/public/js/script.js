@@ -16,6 +16,21 @@
             //FormData.clear;
         }
     })
+
+    // function getCSS(element)
+    // {
+    //     var css_data = '';
+    //     var css_obj = getComputedStyle(element);
+
+    //     for(var i = 0; i < css_obj.length;i++)
+    //     {
+    //         css_data +=
+    //             css_obj[i] + ':' + 
+    //             css_obj.getPropertyValue(css_obj[i])
+
+    //     }
+    // }
+    
     
 
     // if (authRequest.status !== 2) {
@@ -118,11 +133,25 @@ async function updateMatches(matchNumber) {
         <div class="match-team blue3" contentEditable="true"></div>
         </div>
         `
-        //matchElement.add('contentEditable="false"');
+        let checkbox = matchElement.querySelector(".match-select")
+        checkbox.addEventListener("input", () => {
+            if (!checkbox.checked) { //if its already selected, do nothing
+                checkbox.checked = true;
+                return;
+            }
+        
+            checkbox.checked = false; //set it to unchecked while processing the request
+        
+        })
+       
 
     }
 
- 
+//         function lockTable()
+//         {
+//             if(!checkbox.checked)
+//         }
+//   //matchElement.add('contentEditable="false"');
     
 }
 
