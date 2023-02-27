@@ -118,7 +118,7 @@ async function updateMatches(matchNumber) {
         <div class="match-team blue3" contentEditable="true"></div>
         </div>
         `
-        //matchElement.add('contentEditable="true"');
+        //matchElement.add('contentEditable="false"');
 
     }
 
