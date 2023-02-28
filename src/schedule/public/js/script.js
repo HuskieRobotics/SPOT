@@ -133,14 +133,25 @@ async function updateMatches(matchNumber) {
         <div class="match-team blue3" contentEditable="true"></div>
         </div>
         `
+        // make a way to distruguishing between divs (with ids like qm1 etc)
         let checkbox = matchElement.querySelector(".match-select")
         checkbox.addEventListener("input", () => {
-            if (!checkbox.checked) { //if its already selected, do nothing
-                checkbox.checked = true;
-                return;
+            console.log(checkbox.checked)
+            if (checkbox.checked) { //if its already selected, do nothing
+                //disable editable inputs
+                console.log(matchElement);
+                let allianceElement = document.getElementsByClassName("match-teams");
+                console.log(allianceElement);
+                // how to iterate through html collection before setting attribute
+                allianceElement.attribute('contentEditable="false"');
+            //    matchElement.getElementById("match-team red1").innerHTML = `
+            //    <div class="match-team red1" contentEditable="false"></div>
+            //    `
+                
+            } else {
+                //enable editable inputs
             }
         
-            checkbox.checked = false; //set it to unchecked while processing the request
         
         })
        
