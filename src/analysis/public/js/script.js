@@ -17,7 +17,8 @@ if ('serviceWorker' in navigator) {
 		team: [],
 		match: {
 			left: [],
-			right: []
+			right: [],
+			both: []
 		}
 	}
 
@@ -222,7 +223,7 @@ if ('serviceWorker' in navigator) {
 			}
 		})
 
-		//create match module objects and append placeholders to module list elements
+		//create match module objects and append placeholders to module list  elements
 		for (const module of modulesConfig.filter(m => m.view == "match")) {
 			const leftModuleObject = new moduleClasses[module.module](module)
 			leftAllianceModules.appendChild(leftModuleObject.container)
@@ -237,14 +238,35 @@ if ('serviceWorker' in navigator) {
 	//call setData on every module in matches
 	async function setMatchModules(alliances) {
 		for (const module of modules.match.left) {
-			const displayedAlliances = alliances[0].filter(teamNumber => {
-				if (!module.moduleConfig.separate && Object.keys(dataset.teams[teamNumber]).filter(prop => prop !== "manual").length == 0) {
+			console.log(module.moduleConfig.name)
+			var displayedAlliances = alliances[0].filter(teamNumber => {
+				if(teamNumber == "|"){return false}
+				if (!module.moduleConfig.separate  && Object.keys(dataset.teams[teamNumber]).filter(prop => prop !== "manual").length == 0) {
 					return false
 				}
-
+				
 				return true
 			})
-
+			if(module.moduleConfig.wholeMatch) {
+				let allTeams = alliances[0]
+				console.log(`alliances script.js ${alliances}`)
+				allTeams.push('|')
+				allTeams = allTeams.concat(alliances[1])
+				console.log(`all teams: ${allTeams}`)
+				displayedAlliances = allTeams.filter(teamNumber => {
+					if (!module.moduleConfig.separate && teamNumber != "|" && Object.keys(dataset.teams[teamNumber]).filter(prop => prop !== "manual").length == 0) {
+						return false
+					}
+					return true
+				})
+				console.log(`displayed alliances: ${displayedAlliances}`)
+				if (displayedAlliances.length !== 0) {
+					module.container.classList.remove("hidden")
+					await module.setData(await module.formatData(allTeams, dataset))
+				} else {
+					module.container.classList.add("hidden")
+				}
+			}
 			if (displayedAlliances.length !== 0) {
 				module.container.classList.remove("hidden")
 				await module.setData(await module.formatData(displayedAlliances, dataset))
@@ -254,14 +276,35 @@ if ('serviceWorker' in navigator) {
 		}
 
 		for (const module of modules.match.right) {
-			const displayedAlliances = alliances[1].filter(teamNumber => {
+			console.log(module.moduleConfig.name)
+			var displayedAlliances = alliances[1].filter(teamNumber => {
+				if(teamNumber == "|"){return false}
 				if (!module.moduleConfig.separate && Object.keys(dataset.teams[teamNumber]).filter(prop => prop !== "manual").length == 0) {
 					return false
 				}
-
+				
 				return true
 			})
-
+			if(module.moduleConfig.wholeMatch) {
+				let allTeams = alliances[1]
+				allTeams.push('|')
+				allTeams = allTeams.concat(alliances[0])
+				console.log(`all teams: ${allTeams}`)
+				var displayedAlliances = allTeams.filter(teamNumber => {
+					if (!module.moduleConfig.separate && teamNumber != "|"  && Object.keys(dataset.teams[teamNumber]).filter(prop => prop !== "manual").length == 0) {
+						return false
+					}
+	
+					return true
+				})
+				console.log(`displayed alliances: ${displayedAlliances}`)
+				if (displayedAlliances.length !== 0) {
+					module.container.classList.remove("hidden")
+					await module.setData(await module.formatData(displayedAlliances, dataset))
+				} else {
+					module.container.classList.add("hidden")
+				}
+			}
 			if (displayedAlliances.length !== 0) {
 				module.container.classList.remove("hidden")
 				await module.setData(await module.formatData(displayedAlliances, dataset))

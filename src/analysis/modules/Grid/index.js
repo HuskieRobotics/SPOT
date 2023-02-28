@@ -16,7 +16,7 @@ class Grid {
         let newObj = {
           x:cell.x,
           y:cell.y,
-          data:teams.map((team)=>{let data = getPath(dataset.teams[team],cell.path,0).toFixed(this.moduleConfig.options.decimals);console.log(data);return data }).reduce((acc, i) => acc + parseFloat(i), 0).toFixed(this.moduleConfig.options.decimals),
+          data:teams.map((team)=>{let data = getPath(dataset.teams[team],cell.path,0).toFixed(this.moduleConfig.options.decimals);return data }).reduce((acc, i) => acc + parseFloat(i), 0).toFixed(this.moduleConfig.options.decimals),
           hex:cell.hex,
         }
         return newObj
