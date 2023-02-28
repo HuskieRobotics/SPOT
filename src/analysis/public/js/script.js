@@ -37,8 +37,33 @@ if ('serviceWorker' in navigator) {
 
 	//data fetchers
 	async function fetchDataset() {
-		return await fetch("./api/dataset").then(res => res.json())
+		let data = null;
+		// Check if the data is already stored in local storage
+		if (localStorage.getItem("dataset")) {
+		  data = JSON.parse(localStorage.getItem("dataset"));
+		} else {
+		  data = await fetch("./api/dataset").then(res => res.json());
+		  localStorage.setItem("dataset", JSON.stringify(data));
+		}
+	  }
+
+	//   async function fetchDataset() {
+	// 	let data = null;
+	  
+	// 	// Check if the data is already stored in local storage
+	// 	if (localStorage.getItem("dataset")) {
+	// 	  data = JSON.parse(localStorage.getItem("dataset"));
+	// 	} else {
+	// 	  data = await fetch("./api/dataset").then(res => res.json());
+	// 	  localStorage.setItem("dataset", JSON.stringify(data));
+	// 	}
+	//   }
+
+	/*
+	async function fetchDataset() {
+		let data = await fetch("./api/dataset").then(res => res.json())
 	}
+	*/
 
 	async function fetchTeams() {
 		const teams = await fetch(`/analysis/api/teams`).then(res => res.json())
