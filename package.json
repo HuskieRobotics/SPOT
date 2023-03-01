@@ -1,0 +1,39 @@
+{
+  "name": "spot",
+  "version": "1.0.0",
+  "description": "SPOT is an open-source modular scouting app framework for FRC developed by Team 3061 Huskie Robotics. SPOT provides a simple platform upon which a team can build a scouting app with little to no prior experience.",
+  "main": "./src/app.js",
+  "scripts": {
+    "start": "node src/app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HuskieRobotics/spot.git"
+  },
+  "engines": {
+    "node": "12.x"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/HuskieRobotics/spot/issues"
+  },
+  "homepage": "https://github.com/HuskieRobotics/spot#readme",
+  "dependencies": {
+    "axios": "^0.25.0",
+    "body-parser": "^1.19.0",
+    "chalk": "^4.1.2",
+    "dotenv": "^10.0.0",
+    "ejs": "^3.1.6",
+    "express": "^4.17.1",
+    "express-session": "^1.17.2",
+    "fs": "0.0.1-security",
+    "google-auth-library": "^7.10.2",
+    "mongoose": "^6.4.6",
+    "nodemon": "^2.0.15",
+    "qrcode": "^1.4.4",
+    "simple-statistics": "^7.8.2",
+    "socket.io": "^4.4.1"
+  }
+}

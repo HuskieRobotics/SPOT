@@ -1,0 +1,7 @@
+.plot.container {
+    width: 90%;
+    background-color: var(--bg-alt);
+    border-radius: var(--border-radius);
+    border: 2px solid var(--accent-alt);
+    box-sizing: content-box;
+}

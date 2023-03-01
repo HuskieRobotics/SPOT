@@ -1,0 +1,381 @@
+body {
+  background-color: var(--bg);
+}
+
+#app {
+  height: 100vh;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 275px auto;
+  grid-template-rows: 75px 30px auto;
+  transition: 0.3s visibility, opacity;
+  opacity: 0;
+  visibility: hidden;
+  background-color: var(--bg);
+  overflow: hidden;
+}
+
+#app.visible {
+  visibility: unset;
+  opacity: 1;
+  transition: visibility 0s 0s, opacity 0.3s 0s;
+}
+
+#sidebar {
+  grid-area: 3 / 1 / 4 / 2;
+  background-color: var(--bg-alt);
+  padding: 16px;
+  display: grid;
+  min-height: 0;
+  grid-template-rows: auto auto 1fr;
+}
+
+#header {
+  background: var(--text);
+  border-bottom: 0.25vh solid white;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+  box-shadow: 0 0 12px -2px #ff6030;
+  grid-area: 1 / 2 / 2 / 4;
+}
+
+#dashboard {
+  grid-area: 1 / 2 / 4 / 4;
+  overflow: hidden;
+  position: relative;
+}
+
+#team-view {
+  height: 100%;
+  width: 100%;
+  display: grid;
+  grid-template-rows: 1fr;
+  overflow: hidden;
+  grid-template-columns: 1fr;
+}
+
+#team-view.side-enabled {
+  grid-template-columns: 75% 25%;
+}
+
+#main-list {
+  grid-area: 1 / 1 / 2 / 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  overflow-y: scroll;
+  padding: 40px 0;
+}
+
+#main-list > div.hidden {
+	display: none;
+}
+
+#side-list {
+  grid-area: 1 / 2 / 2 / 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  overflow-y: scroll;
+  padding: 40px 0;
+}
+
+#side-list > div.hidden {
+	display: none;
+}
+
+#logo {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  grid-area: 1 / 1 / 3 / 2;
+  gap: 14px;
+  background-color: var(--accent-alt);
+}
+
+#logo-img {
+  height: 50px;;
+}
+
+#logo-text {
+  color: white;
+  font-size: 2.5rem;
+}
+
+#search {
+  position: relative;
+}
+
+#search-container {
+  padding: 20px 0;
+  border-top: 1px solid var(--accent-alt);
+  border-bottom: 1px solid var(--accent-alt);
+  box-shadow: 0 -7px 10px -10px var(--accent-alt);
+  border-radius: 8px 8px 0 0;
+  margin: 20px 0;
+}
+
+#search-input {
+  border-radius: var(--border-radius);
+  border: none;
+  width: 100%;
+  font-size: 1.2rem;
+  padding: 0 40px 0 12px;
+  background-color: var(--bg);
+  border: 2px solid var(--accent-alt);
+}
+
+#search-icon {
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  font-size: 1.2rem;
+  transform: translateY(-50%);
+  transition: 0.3s color;
+}
+
+#search-input:focus + #search-icon, #search-input:valid + #search-icon {
+  color: var(--accent)
+}
+
+#loading-bar-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 4px;
+  width: 100%;
+  z-index: 99;
+}
+
+#loading-bar {
+  background-color: var(--accent-alt);
+  height: 100%;
+  width: 0%;
+  transition: 0.3s all;
+}
+
+.team-container { 
+  border-radius: 16px;
+  border: 2px solid var(--accent-alt);
+  background-color: var(--bg);
+  padding: 16px;
+  border-top-width: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  cursor: pointer;
+  transition: 0.3s border, 0.3s background-color;
+}
+
+.team-container > .team-number {
+  text-align: center;
+  color: var(--accent-alt);
+  font-weight: 600;
+  font-size: 1.5rem;
+  line-height: 1.5rem;
+  transition: 0.3s color;
+}
+
+.team-container > .team-name {
+  text-align: center;
+  font-size: 1.2rem;
+  line-height: 1.2rem;
+  color: var(--text);
+  transition: 0.3s color;
+}
+
+.team-container.selected {
+  background-color: var(--accent-alt);
+  border-top-width: 2px;
+}
+
+.team-container.selected > .team-number, .team-container.selected > .team-name {
+  color: var(--bg-alt);
+}
+
+#team-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  overflow: auto;
+  padding-right: 2px;
+}
+
+#welcome {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 32px;
+}
+
+#welcome-text {
+  font-size: 4rem;
+  line-height: 1em;
+  color: var(--accent-alt);
+  text-align: center;
+}
+
+#welcome-subtext {
+  font-size: 2.5rem;
+  line-height: 1em;
+  margin-bottom: 40px;
+}
+
+#dashboard > div {
+  width: 100%;
+  transition: 0.3s visibility, opacity;
+  opacity: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  visibility: hidden;
+}
+
+#dashboard > div.visible {
+  visibility: unset;
+  height: calc(100vh);
+  opacity: 1;
+  transition: visibility 0s 0s, opacity 0.3s 0s;
+}
+
+#match-view-switch {
+  background-color: var(--bg);
+  border: 3px solid var(--accent);
+  border-radius: var(--border-radius);
+  font-size: 1.3rem;
+  width: 100%;
+  color: var(--text);
+  cursor: pointer;
+  transition: 0.3s color, 0.3s background-color
+}
+
+#match-view-switch.selected {
+  background-color: var(--accent);
+  color: var(--bg-alt)
+}
+
+#match-view {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+#select-teams-text {
+  font-size: 3rem;
+  line-height: 1em;
+  color: var(--accent-alt);
+  margin-top: 32px;
+  margin-bottom: 10px;
+}
+
+#team-selects {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+  align-items: center;
+}
+
+#alliance-vs {
+  font-size: 1.5rem;
+}
+
+.alliance-selects {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+}
+
+.alliance-selects > select {
+	width: 90px;
+}
+
+.select {
+	border-radius: var(--border-radius);
+	border: 2px solid var(--text);
+	font-size: 1.2rem;
+	text-align: center;
+	color: var(--text);
+	background-color: var(--bg-alt);
+	transition: 0.2s border-color;
+}
+
+.select > option {
+	text-align: center;
+}
+
+.select.filled {
+	border-color: var(--accent-alt);
+}
+
+#match-select-label {
+	font-size: 1.4em;
+	/* font-weight: 00; */
+}
+
+#match-select-container {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+}
+
+#match-select {
+	width: 100px;
+}
+
+#alliance-module-container {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  overflow-y: scroll;
+}
+
+.alliance-modules {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  overflow-y: scroll;
+  padding: 10px 0 20px 0;
+}
+
+.alliance-modules.hidden {
+  visibility: hidden;
+}
+
+.alliance-modules > div.hidden {
+	display: none;
+}
+
+@media screen and (max-width: 1100px) {
+	html {
+		font-size: 75%;
+	}
+
+	#app {
+		grid-template-columns: 200px auto;
+		grid-template-rows: 40px 20px auto;
+	}
+
+	#dashboard > div.visible {
+		height: calc(100vh);
+	}
+
+	#main-list {
+		padding: 25px 0;
+	}
+
+	#side-list {
+		padding: 25px 0;
+	}
+}

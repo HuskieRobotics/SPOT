@@ -1,0 +1,712 @@
+	{
+    "timing": {
+        "totalTime": 150000,
+        "timeTransitions": {
+        }
+    },
+    "layout": {
+        "gridRows": 6,
+        "gridColumns": 9,
+        "layers": [
+            [
+                {
+                    "id": "startGame",
+                    "displayText": "Start",
+                    "gridArea": ["4", "1", "6", "10"],
+                    "class": "silver timer",
+                    "type": "match-control",
+                    "executables": [{"type": "layer", "args":[0,1]}]
+                },
+              {
+                    "id": "prePickupCone",
+                    "displayText": "Cone",
+                    "gridArea": ["2", "1", "4", "4"],
+                    "class": "yellow",
+                    "type": "action",
+                    "executables": [{"type": "layer", "args":[0,7]}]
+                },
+              {
+                    "id": "prePickupCube",
+                    "displayText": "Cube",
+                    "gridArea": ["2", "7", "4", "10"],
+                    "class": "highlight",
+                    "type": "action",
+                    "executables": [{"type": "layer", "args":[0,8]}]
+                },
+              {
+                    "id": "prePickupNone",
+                    "displayText": "None",
+                    "gridArea": ["2", "4", "4", "7"],
+                    "class": "gray",
+                    "type": "action",
+                    "executables": []
+                }
+            ], 
+            [
+                {
+                    "id": "startGame",
+                    "displayText": "Start",
+                    "gridArea": ["1", "4", "2", "7"],
+                    "class": "silver timer",
+                    "type": "match-control",
+                    "executables": []
+                },
+                
+                {
+                    "id": "broken",
+                    "displayText": "Disabled",
+                    "gridArea": ["1", "1", "2", "3"],
+                    "class": "red",
+                    "type": "action",
+                    "executables": []
+                },
+                {
+                    "id": "undo",
+                    "displayText": "Undo",
+                    "gridArea": ["1", "8", "2", "10"],
+                    "class": "green",
+                    "type": "undo",
+                    "executables": []
+                },
+                {
+                    "id": "conePickup",
+                    "displayText": "Cone",
+                    "gridArea": ["3", "1", "4", "3"],
+                    "class": "yellow",
+                    "type": "action",
+                    "executables": [{"type": "layer", "args":[1,3]}]
+                },
+                {
+                      "id": "cubePickup",
+                      "displayText": "Cube",
+                      "gridArea": ["3", "8", "4", "10"],
+                      "class": "highlight",
+                      "type": "action",
+                      "executables": [{"type": "layer", "args":[1,4]}]
+                  },
+                {
+                    "id": "chargingDock",
+                    "displayText": "Charging Dock",
+                    "gridArea": ["3", "4", "4", "7"],
+                    "class": "gray",
+                    "type": "action",
+                    "executables": [{"type": "layer", "args":[1,2]}]
+                }
+            ],
+            [
+                {
+                    "id": "startGame",
+                    "displayText": "Start",
+                    "gridArea": ["1", "4", "2", "7"],
+                    "class": "silver timer",
+                    "type": "match-control",
+                    "executables": []
+                },
+                {
+                    "id": "undo",
+                    "displayText": "Undo",
+                    "gridArea": ["1", "8", "2", "10"],
+                    "class": "green",
+                    "type": "undo",
+                    "executables": []
+                },
+                {
+                    "id": "platformDocked",
+                    "displayText": "Docked",
+                    "gridArea": ["3", "3", "4", "5"],
+                    "class": "gray",
+                    "type": "action",
+                    "executables": []
+                },
+                {
+                    "id": "platformEngaged",
+                    "displayText": "Engaged",
+                    "gridArea": ["3", "6", "4", "8"],
+                    "class": "gray border",
+                    "type": "action",
+                    "executables": []
+                },
+                {
+                    "id": "platformLeave",
+                    "displayText": "Leave",
+                    "gridArea": ["5", "3", "6", "5"],
+                    "class": "orange",
+                    "type": "action",
+                    "executables": [{"type": "layer", "args":[2,1]}]
+                },
+                {
+                    "id": "platformFall",
+                    "displayText": "Fall",
+                    "gridArea": ["5", "6", "6", "8"],
+                    "class": "red",
+                    "type": "action",
+                    "executables": [{"type": "layer", "args":[2,1]}]
+                }
+            ],
+            [
+                {
+                    "id": "startGame",
+                    "displayText": "Start",
+                    "gridArea": ["1", "4", "2", "7"],
+                    "class": "silver timer",
+                    "type": "match-control",
+                    "executables": []
+                },
+                {
+                    "id": "undo",
+                    "displayText": "Undo",
+                    "gridArea": ["1", "8", "2", "10"],
+                    "class": "green",
+                    "type": "undo",
+                    "executables": []
+                },
+                {
+                    "id": "conePickupGrid",
+                    "displayText": "Grid",
+                    "gridArea": ["4", "3", "5", "4"],
+                    "class": "yellow button-padding",
+                    "type": "action",
+                    "executables": [{"type":"layer","args":[3,5]}]
+                },
+              {
+                    "id": "conePickupCommunity",
+                    "displayText": "Comm",
+                    "gridArea": ["4", "4", "5", "5"],
+                    "class": "yellow button-padding",
+                    "type": "action",
+                    "executables": [{"type":"layer","args":[3,5]}]
+                },
+              {
+                    "id": "conePickupFloor",
+                    "displayText": "Floor",
+                    "gridArea": ["4", "5", "5", "6"],
+                    "class": "yellow button-padding",
+                    "type": "action",
+                    "executables": [{"type":"layer","args":[3,5]}]
+                },
+              {
+                    "id": "conePickupChute",
+                    "displayText": "Chute",
+                    "gridArea": ["4", "6", "5", "7"],
+                    "class": "yellow button-padding",
+                    "type": "action",
+                    "executables": [{"type":"layer","args":[3,5]}]
+                },
+              {
+                    "id": "conePickupShelf",
+                    "displayText": "Shelf",
+                    "gridArea": ["4", "7", "5", "8"],
+                    "class": "yellow button-padding",
+                    "type": "action",
+                    "executables": [{"type":"layer","args":[3,5]}]
+                }
+              
+            ],
+          [
+                {
+                    "id": "startGame",
+                    "displayText": "Start",
+                    "gridArea": ["1", "4", "2", "7"],
+                    "class": "silver timer",
+                    "type": "match-control",
+                    "executables": []
+                },
+                {
+                    "id": "undo",
+                    "displayText": "Undo",
+                    "gridArea": ["1", "8", "2", "10"],
+                    "class": "green",
+                    "type": "undo",
+                    "executables": []
+                },
+                {
+                    "id": "cubePickupGrid",
+                    "displayText": "Grid",
+                    "gridArea": ["4", "3", "5", "4"],
+                    "class": "highlight button-padding",
+                    "type": "action",
+                    "executables": [{"type":"layer","args":[4,6]}]
+                },
+              {
+                    "id": "cubePickupCommunity",
+                    "displayText": "Comm",
+                    "gridArea": ["4", "4", "5", "5"],
+                    "class": "highlight button-padding",
+                    "type": "action",
+                    "executables": [{"type":"layer","args":[4,6]}]
+                },
+              {
+                    "id": "cubePickupFloor",
+                    "displayText": "Floor",
+                    "gridArea": ["4", "5", "5", "6"],
+                    "class": "highlight button-padding",
+                    "type": "action",
+                    "executables": [{"type":"layer","args":[4,6]}]
+                },
+              {
+                    "id": "cubePickupChute",
+                    "displayText": "Chute",
+                    "gridArea": ["4", "6", "5", "7"],
+                    "class": "highlight button-padding",
+                    "type": "action",
+                    "executables": [{"type":"layer","args":[4,6]}]
+                },
+              {
+                    "id": "cubePickupShelf",
+                    "displayText": "Shelf",
+                    "gridArea": ["4", "7", "5", "8"],
+                    "class": "highlight button-padding",
+                    "type": "action",
+                    "executables": [{"type":"layer","args":[4,6]}]
+                }
+              
+            ],
+            [
+                {
+                    "id": "startGame",
+                    "displayText": "Start",
+                    "gridArea": ["1", "4", "2", "7"],
+                    "class": "silver timer",
+                    "type": "match-control",
+                    "executables": []
+                },
+                
+                {
+                    "id": "broken",
+                    "displayText": "Disabled",
+                    "gridArea": ["1", "1", "2", "3"],
+                    "class": "red",
+                    "type": "action",
+                    "executables": []
+                },
+                {
+                    "id": "undo",
+                    "displayText": "Undo",
+                    "gridArea": ["1", "8", "2", "10"],
+                    "class": "green",
+                    "type": "undo",
+                    "executables": []
+                },
+                {
+                    "id": "conePickup",
+                    "displayText": "Cone",
+                    "gridArea": ["3", "1", "4", "3"],
+                    "class": "yellow",
+                    "type": "action",
+                    "executables": [{"type": "layer", "args":[5,3]}]
+                },
+                {
+                      "id": "dropCone",
+                      "displayText": "Drop",
+                      "gridArea": ["3", "8", "4", "10"],
+                      "class": "red",
+                      "type": "action",
+                      "executables": [{"type": "layer", "args":[5,1]}]
+                  },
+                {
+                    "id": "chargingDock",
+                    "displayText": "Charging Dock",
+                    "gridArea": ["3", "4", "4", "7"],
+                    "class": "gray",
+                    "type": "action",
+                    "executables": [{"type": "layer", "args":[5,2]}]
+                },
+                {
+                      "id": "placement31",
+                      "displayText": " ",
+                      "gridArea": ["4", "1", "5", "2"],
+                      "class": "yellow",
+                      "type": "action",
+                      "executables": [{"type": "layer", "args":[5,1]}]
+                },
+              {
+                      "id": "placement33",
+                      "displayText": " ",
+                      "gridArea": ["4", "3", "5", "4"],
+                      "class": "yellow",
+                      "type": "action",
+                      "executables": [{"type": "layer", "args":[5,1]}]
+                },
+              {
+                      "id": "placement34",
+                      "displayText": " ",
+                      "gridArea": ["4", "4", "5", "5"],
+                      "class": "yellow",
+                      "type": "action",
+                      "executables": [{"type": "layer", "args":[5,1]}]
+                },
+              {
+                      "id": "placement36",
+                      "displayText": " ",
+                      "gridArea": ["4", "6", "5", "7"],
+                      "class": "yellow",
+                      "type": "action",
+                      "executables": [{"type": "layer", "args":[5,1]}]
+                },
+              {
+                      "id": "placement37",
+                      "displayText": " ",
+                      "gridArea": ["4", "7", "5", "8"],
+                      "class": "yellow",
+                      "type": "action",
+                      "executables": [{"type": "layer", "args":[5,1]}]
+                },
+              
+              {
+                      "id": "placement39",
+                      "displayText": " ",
+                      "gridArea": ["4", "9", "5", "10"],
+                      "class": "yellow",
+                      "type": "action",
+                      "executables": [{"type": "layer", "args":[5,1]}]
+                },
+              {
+                      "id": "placement21",
+                      "displayText": " ",
+                      "gridArea": ["5", "1", "6", "2"],
+                      "class": "yellow",
+                      "type": "action",
+                      "executables": [{"type": "layer", "args":[5,1]}]
+                },
+              {
+                      "id": "placement23",
+                      "displayText": " ",
+                      "gridArea": ["5", "3", "6", "4"],
+                      "class": "yellow",
+                      "type": "action",
+                      "executables": [{"type": "layer", "args":[5,1]}]
+                },
+              {
+                      "id": "placement24",
+                      "displayText": " ",
+                      "gridArea": ["5", "4", "6", "5"],
+                      "class": "yellow",
+                      "type": "action",
+                      "executables": [{"type": "layer", "args":[5,1]}]
+                },
+              {
+                      "id": "placement26",
+                      "displayText": " ",
+                      "gridArea": ["5", "6", "6", "7"],
+                      "class": "yellow",
+                      "type": "action",
+                      "executables": [{"type": "layer", "args":[5,1]}]
+                },
+              {
+                      "id": "placement27",
+                      "displayText": " ",
+                      "gridArea": ["5", "7", "6", "8"],
+                      "class": "yellow",
+                      "type": "action",
+                      "executables": [{"type": "layer", "args":[5,1]}]
+                },
+              {
+                      "id": "placement29",
+                      "displayText": " ",
+                      "gridArea": ["5", "9", "6", "10"],
+                      "class": "yellow",
+                      "type": "action",
+                      "executables": [{"type": "layer", "args":[5,1]}]
+                },
+              {
+                      "id": "placement11",
+                      "displayText": " ",
+                      "gridArea": ["6", "1", "7", "2"],
+                      "class": "gray",
+                      "type": "action",
+                      "executables": [{"type": "layer", "args":[5,1]}]
+                },
+              {
+                      "id": "placement12",
+                      "displayText": " ",
+                      "gridArea": ["6", "2", "7", "3"],
+                      "class": "gray",
+                      "type": "action",
+                      "executables": [{"type": "layer", "args":[5,1]}]
+                },
+              {
+                      "id": "placement13",
+                      "displayText": " ",
+                      "gridArea": ["6", "3", "7", "4"],
+                      "class": "gray",
+                      "type": "action",
+                      "executables": [{"type": "layer", "args":[5,1]}]
+                },
+              {
+                      "id": "placement14",
+                      "displayText": " ",
+                      "gridArea": ["6", "4", "7", "5"],
+                      "class": "gray",
+                      "type": "action",
+                      "executables": [{"type": "layer", "args":[5,1]}]
+                },
+              {
+                      "id": "placement15",
+                      "displayText": " ",
+                      "gridArea": ["6", "5", "7", "6"],
+                      "class": "gray",
+                      "type": "action",
+                      "executables": [{"type": "layer", "args":[5,1]}]
+                },
+              {
+                      "id": "placement16",
+                      "displayText": " ",
+                      "gridArea": ["6", "6", "7", "7"],
+                      "class": "gray",
+                      "type": "action",
+                      "executables": [{"type": "layer", "args":[5,1]}]
+                },
+              {
+                      "id": "placement17",
+                      "displayText": " ",
+                      "gridArea": ["6", "7", "7", "8"],
+                      "class": "gray",
+                      "type": "action",
+                      "executables": [{"type": "layer", "args":[5,1]}]
+                },
+              {
+                      "id": "placement18",
+                      "displayText": " ",
+                      "gridArea": ["6", "8", "7", "9"],
+                      "class": "gray",
+                      "type": "action",
+                      "executables": [{"type": "layer", "args":[5,1]}]
+                },
+              {
+                      "id": "placement19",
+                      "displayText": " ",
+                      "gridArea": ["6", "9", "7", "10"],
+                      "class": "gray",
+                      "type": "action",
+                      "executables": [{"type": "layer", "args":[5,1]}]
+                }
+            ],
+          [
+                {
+                    "id": "startGame",
+                    "displayText": "Start",
+                    "gridArea": ["1", "4", "2", "7"],
+                    "class": "silver timer",
+                    "type": "match-control",
+                    "executables": []
+                },
+                
+                {
+                    "id": "broken",
+                    "displayText": "Disabled",
+                    "gridArea": ["1", "1", "2", "3"],
+                    "class": "red",
+                    "type": "action",
+                    "executables": []
+                },
+                {
+                    "id": "undo",
+                    "displayText": "Undo",
+                    "gridArea": ["1", "8", "2", "10"],
+                    "class": "green",
+                    "type": "undo",
+                    "executables": []
+                },
+                {
+                    "id": "dropCube",
+                    "displayText": "Drop",
+                    "gridArea": ["3", "1", "4", "3"],
+                    "class": "red",
+                    "type": "action",
+                    "executables": [{"type": "layer", "args":[6,1]}]
+                },
+                {
+                      "id": "cubePickup",
+                      "displayText": "Cube",
+                      "gridArea": ["3", "8", "4", "10"],
+                      "class": "highlight",
+                      "type": "action",
+                      "executables": [{"type": "layer", "args":[6,4]}]
+                  },
+                {
+                    "id": "chargingDock",
+                    "displayText": "Charging Dock",
+                    "gridArea": ["3", "4", "4", "7"],
+                    "class": "gray",
+                    "type": "action",
+                    "executables": [{"type": "layer", "args":[6,2]}]
+                },
+              {
+                      "id": "placement32",
+                      "displayText": " ",
+                      "gridArea": ["4", "2", "5", "3"],
+                      "class": "highlight",
+                      "type": "action",
+                      "executables": [{"type": "layer", "args":[6,1]}]
+                },
+              {
+                      "id": "placement35",
+                      "displayText": " ",
+                      "gridArea": ["4", "5", "5", "6"],
+                      "class": "highlight",
+                      "type": "action",
+                      "executables": [{"type": "layer", "args":[6,1]}]
+                },
+              {
+                      "id": "placement38",
+                      "displayText": " ",
+                      "gridArea": ["4", "8", "5", "9"],
+                      "class": "highlight",
+                      "type": "action",
+                      "executables": [{"type": "layer", "args":[6,1]}]
+                },
+              {
+                      "id": "placement22",
+                      "displayText": " ",
+                      "gridArea": ["5", "2", "6", "3"],
+                      "class": "highlight",
+                      "type": "action",
+                      "executables": [{"type": "layer", "args":[6,1]}]
+                },
+              {
+                      "id": "placement25",
+                      "displayText": " ",
+                      "gridArea": ["5", "5", "6", "6"],
+                      "class": "highlight",
+                      "type": "action",
+                      "executables": [{"type": "layer", "args":[6,1]}]
+                },
+              {
+                      "id": "placement28",
+                      "displayText": " ",
+                      "gridArea": ["5", "8", "6", "9"],
+                      "class": "highlight",
+                      "type": "action",
+                      "executables": [{"type": "layer", "args":[6,1]}]
+                },
+              {
+                      "id": "placement11",
+                      "displayText": " ",
+                      "gridArea": ["6", "1", "7", "2"],
+                      "class": "gray",
+                      "type": "action",
+                      "executables": [{"type": "layer", "args":[6,1]}]
+                },
+              {
+                      "id": "placement12",
+                      "displayText": " ",
+                      "gridArea": ["6", "2", "7", "3"],
+                      "class": "gray",
+                      "type": "action",
+                      "executables": [{"type": "layer", "args":[6,1]}]
+                },
+              {
+                      "id": "placement13",
+                      "displayText": " ",
+                      "gridArea": ["6", "3", "7", "4"],
+                      "class": "gray",
+                      "type": "action",
+                      "executables": [{"type": "layer", "args":[6,1]}]
+                },
+              {
+                      "id": "placement14",
+                      "displayText": " ",
+                      "gridArea": ["6", "4", "7", "5"],
+                      "class": "gray",
+                      "type": "action",
+                      "executables": [{"type": "layer", "args":[6,1]}]
+                },
+              {
+                      "id": "placement15",
+                      "displayText": " ",
+                      "gridArea": ["6", "5", "7", "6"],
+                      "class": "gray",
+                      "type": "action",
+                      "executables": [{"type": "layer", "args":[6,1]}]
+                },
+              {
+                      "id": "placement16",
+                      "displayText": " ",
+                      "gridArea": ["6", "6", "7", "7"],
+                      "class": "gray",
+                      "type": "action",
+                      "executables": [{"type": "layer", "args":[6,1]}]
+                },
+              {
+                      "id": "placement17",
+                      "displayText": " ",
+                      "gridArea": ["6", "7", "7", "8"],
+                      "class": "gray",
+                      "type": "action",
+                      "executables": [{"type": "layer", "args":[6,1]}]
+                },
+              {
+                      "id": "placement18",
+                      "displayText": " ",
+                      "gridArea": ["6", "8", "7", "9"],
+                      "class": "gray",
+                      "type": "action",
+                      "executables": [{"type": "layer", "args":[6,1]}]
+                },
+              {
+                      "id": "placement19",
+                      "displayText": " ",
+                      "gridArea": ["6", "9", "7", "10"],
+                      "class": "gray",
+                      "type": "action",
+                      "executables": [{"type": "layer", "args":[6,1]}]
+                }
+            ],
+          [
+                {
+                    "id": "startGame",
+                    "displayText": "Start",
+                    "gridArea": ["4", "1", "6", "10"],
+                    "class": "silver timer",
+                    "type": "match-control",
+                    "executables": [{"type": "layer", "args":[7,5]}]
+                },
+              
+              {
+                    "id": "prePickupCube",
+                    "displayText": "Cube",
+                    "gridArea": ["2", "7", "4", "10"],
+                    "class": "highlight",
+                    "type": "action",
+                    "executables": [{"type": "layer", "args":[7,8]}]
+                },
+              {
+                    "id": "prePickupNone",
+                    "displayText": "None",
+                    "gridArea": ["2", "4", "4", "7"],
+                    "class": "gray",
+                    "type": "action",
+                    "executables": [{"type": "layer", "args":[7,0]}]
+                }
+            ],
+          [
+                {
+                    "id": "startGame",
+                    "displayText": "Start",
+                    "gridArea": ["4", "1", "6", "10"],
+                    "class": "silver timer",
+                    "type": "match-control",
+                    "executables": [{"type": "layer", "args":[8,6]}]
+                },
+              
+              {
+                    "id": "prePickupCone",
+                    "displayText": "Cone",
+                    "gridArea": ["2", "1", "4", "4"],
+                    "class": "yellow",
+                    "type": "action",
+                    "executables": [{"type": "layer", "args":[8,7]}]
+                },
+              {
+                    "id": "prePickupNone",
+                    "displayText": "None",
+                    "gridArea": ["2", "4", "4", "7"],
+                    "class": "gray",
+                    "type": "action",
+                    "executables": [{"type": "layer", "args":[8,0]}]
+                }
+            ]
+          
+        ]
+    }
+}

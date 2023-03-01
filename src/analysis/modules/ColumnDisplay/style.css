@@ -1,0 +1,68 @@
+.column-display.container {
+    padding: 20px 25px;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--bg-alt);
+    border-radius: var(--border-radius);
+    border: 2px solid var(--accent-alt);
+	gap: 12px;
+	width: 90%;
+}
+
+.column-display .header {
+	text-align: center;
+	font-size: 1.6em;
+	line-height: 1em;
+}
+
+.column-display .displays-container {
+	display: flex;
+	gap: 24px;
+	justify-content: space-evenly;
+}
+
+.column-display .team-num {
+	font-size: 1.3em;
+	line-height: 1em;
+}
+
+.column-display .team-value {
+	font-size: 2em;
+	line-height: 1em;
+	font-weight: bold;
+}
+
+.column-display .team-rank {
+	color: var(--bg-alt);
+	line-height: 1em;
+	border-radius: 0 0 var(--border-radius) var(--border-radius);
+	padding: 2px 8px;
+    margin-top: 2px;
+    font-size: 1.15em;
+	width: 100%;
+}
+
+.column-display .team-rank.top5 {
+	background-color: var(--accent);
+}
+
+.column-display .team-rank.top25 {
+	background-color: var(--green);
+}
+
+.column-display .team-rank.top50 {
+	background-color: var(--orange-light);
+}
+
+.column-display .team-rank.top100 {
+	background-color: var(--text);
+}
+
+.column-display .team-display-container {
+	text-align: center;
+	display: flex;
+    flex-direction: column;
+    gap: 2px;
+	align-items: center;
+	width: 30%;
+}

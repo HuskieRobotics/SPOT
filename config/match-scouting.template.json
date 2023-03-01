@@ -1,0 +1,24 @@
+{
+   "timing": {
+       "totalTime": 150,
+       "timeTransitions": {
+           "150": {"layer": 0, "displayText": "Auto"},
+           "135": {"layer": 1, "displayText": "Teleop"},
+           "30": {"layer": 2, "displayText": "Endgame"}
+       }
+   },
+   "layout": {
+       "gridRows": 0,
+       "gridColumns": 0,
+       "layers": [
+           [{
+               "id": "",
+               "displayText": "",
+               "gridArea": ["","","",""],
+               "class": "",
+               "type": "",
+               "executables": [{"type": "executableType", "args": [1]}]
+           }]
+       ]
+   }
+}

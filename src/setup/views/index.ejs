@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name='viewport' content='width=device-width, initial-scale=1, user-scalable=no, viewport-fit=cover'>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>SPOT - Setup</title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.0/css/all.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;700&family=Saira:wght@300;400;700&family=Tajawal:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="apple-touch-icon" sizes="180x180" href="./icons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="./icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="./icons/favicon-16x16.png">
+    <link rel="manifest" href="./icons/site.webmanifest">
+    <link rel="mask-icon" href="./icons/safari-pinned-tab.svg" color="#30a2ff">
+    <link rel="shortcut icon" href="./icons/favicon.ico">
+    <meta name="msapplication-TileColor" content="#fefefe">
+    <meta name="msapplication-config" content="./icons/browserconfig.xml">
+    <meta name="theme-color" content="#fefefe">
+    <link href="./css/global.css" rel="stylesheet" type="text/css" />
+    <link href="./css/internal.css" rel="stylesheet" type="text/css" />
+    <link href="./css/ui-elements.css" rel="stylesheet" type="text/css" />
+    <link href="./css/style.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+    <img id="spinner" src="./img/spinner.svg">
+    
+    <div id="setup-container">
+        <div id="setup-header">SPOT Setup</div>
+
+        <form id="setup-form">
+            <input hidden type="text" name="VERSION" value="1.0">
+            <div>
+                <h1>Access Code</h1>
+                <div>An Access Code is used for logging into SPOT's admin page or editing its configuration. Make sure to save this somewhere, as you will need it to edit this setup configuration or view the admin page.</div>
+                <label class="label">
+                    <input type="text" id="ACCESS_CODE" name="ACCESS_CODE" class="input" required>
+                    <span>Access Code</span>
+                </label>
+            </div>
+            <div>
+                <h1>MongoDB Setup</h1> 
+                <p>The MongoDB Connection URL is for your database. Your connection URL should look like <code>"mongodb+srv://&lt;username&gt;:&lt;password&gt;&amp;&lt;clusterurl&gt;/myFirstDatabase?retryWrites=true&amp;w=majority"</code>. For more detailed instructions on how to find this for your specific database deployment, read the Quickstart Guide linked in the README.</p>
+                <label class="label">
+                    <input type="text" id="DATABASE_URL" name="DATABASE_URL" class="input" required>
+                    <span>Database URL</span>
+                </label>
+            </div>
+            <div>
+                <h1>TheBlueAlliance Setup</h1>
+                <p>SPOT uses TheBlueAlliance to help load in matches automatically. For SPOT to function correctly you need a TheBlueAlliance API Key and event-specific Event Key.</p><br>
+                <p>To obtain an api key, visit <a href="https://www.thebluealliance.com/">their site</a>, navigate to the "account" page under "more" in the navbar. Login if you have to, then under the "Read API Keys" section, add a new API Key. Copy that key and paste it into the box below.</p> 
+                <video controls muted playsinline>
+                    <source src="./img/TBA_API_KEY.webm" type="video/webm">
+                </video>
+                <label class="label">
+                    <input type="text" id="TBA_API_KEY" name="TBA_API_KEY" class="input" required>
+                    <span>TBA API Key</span>
+                </label>
+                <br>
+                <p>Next, you need to find the Event Key for your competition. Using TheBlueAlliance's search box, find your event. Make sure the year is correct, or else the matches displayed in your admin view won't match the schedule. In your browser's address bar, copy the Event Key, the text following "/event/", and paste it into the box below.</p> 
+                <video controls muted playsinline>
+                    <source src="./img/TBA_EVENT_KEY.webm" type="video/webm">
+                </video>
+                <label class="label">
+                    <input type="text" id="TBA_EVENT_KEY" name="TBA_EVENT_KEY" class="input" required>
+                    <span>TBA Event Key</span>
+                </label>
+            </div>
+            <div>
+                <h1>Google Sign-In Setup (Coming Soon, optional)</h1>
+                <p>Google Sign-In is not currently a functioning part of SPOT, but it will be in the near future.</p><br>
+                <label class="label">
+                    <input type="text" id="GOOGLE_CLIENT_ID" name="GOOGLE_CLIENT_ID" class="input" disabled>
+                    <span>Client ID</span>
+                </label>
+
+                <label class="label">
+                    <input type="text" id="GOOGLE_CLIENT_SECRET" name="GOOGLE_CLIENT_SECRET" class="input" disabled>
+                    <span>Client Secret</span>
+                </label>
+            </div>
+            <div>
+                <h1>Event Number</h1>
+                <p>The Event Number to be associated with your data. An event number allows you to filter your dataset between events without overwriting your previous data. We recommend that for your first event you choose 0, for your second event 1, and so on. You will need to edit this between events or else data from the previous event will appear in your analysis.</p>
+                <label class="label">
+                    <input type="number" id="EVENT_NUMBER" name="EVENT_NUMBER" value=0 class="input" required>
+                    <span>Event Number</span>
+                </label>
+            </div>
+        </form>
+
+        <button id="submit">Submit</button>
+    </div>
+    <script src="./js/ui-elements.js"></script>
+    <script src="./js/script.js"></script>
+</body>
+
+</html>
