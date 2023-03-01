@@ -122,15 +122,15 @@ async function updateMatches(matchNumber) {
         <div class="match-header"><strong>${i}</strong> - ${"MANUAL"}-<strong>${"QM" + i}</strong></div> 
         <input type="checkbox" class="match-select">
  
-        <div class="match-teams red">
-        <div class="match-team red1" contentEditable="true"></div>
-        <div class="match-team red2" contentEditable="true"></div>
-        <div class="match-team red3" contentEditable="true"></div>
+        <div class="match-teams red qm${i}">
+        <div class="match-team r1-${i}" contentEditable="true"></div>
+        <div class="match-team r2-${i}" contentEditable="true"></div>
+        <div class="match-team r3-${i}" contentEditable="true"></div>
         </div>
-        <div class="match-teams blue">
-        <div class="match-team blue1" contentEditable="true"></div>
-        <div class="match-team blue2" contentEditable="true"></div>
-        <div class="match-team blue3" contentEditable="true"></div>
+        <div class="match-teams blue qm${i}">
+        <div class="match-team b1-${i}" contentEditable="true"></div>
+        <div class="match-team b2-${i}" contentEditable="true"></div>
+        <div class="match-team b3-${i}" contentEditable="true"></div>
         </div>
         `
         // make a way to distruguishing between divs (with ids like qm1 etc)
@@ -139,17 +139,29 @@ async function updateMatches(matchNumber) {
             console.log(checkbox.checked)
             if (checkbox.checked) { //if its already selected, do nothing
                 //disable editable inputs
-                console.log(matchElement);
-                let allianceElement = document.getElementsByClassName("match-teams");
-                console.log(allianceElement);
-                // how to iterate through html collection before setting attribute
-                allianceElement.attribute('contentEditable="false"');
-            //    matchElement.getElementById("match-team red1").innerHTML = `
-            //    <div class="match-team red1" contentEditable="false"></div>
-            //    `
+
+                let allianceElement = document.getElementsByClassName(`match-teams qm${i}`);
+                for(element of allianceElement)
+                {
+                    let element = document.getElementsByClassName('match-team')
+                    for(team of element)
+                    {
+                        team.setAttribute("contentEditable", false);
+                    }
+                }
+            
                 
             } else {
                 //enable editable inputs
+                let allianceElement = document.getElementsByClassName(`match-teams qm${i}`);
+                for(element of allianceElement)
+                {
+                    let element = document.getElementsByClassName('match-team')
+                    for(team of element)
+                    {
+                        team.setAttribute("contentEditable", true);
+                    }
+                }
             }
         
         
