@@ -83,7 +83,7 @@ class SingleDisplay {
 
 	/**
 	 * 
-	 * @param {*an allaicne of any length*} alliance1 
+	 * @param {*an alliance of any length*} alliance1 
 	 * @param {*an alliance to compare to of any length*} alliance2 
 	 * @param {*the data set that holds the infomation of the teams*} dataset 
 	 * @returns {*the avg difference in score between allaicne 1 and allaicne 2*}
