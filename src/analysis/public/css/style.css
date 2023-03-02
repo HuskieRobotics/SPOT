@@ -21,10 +21,16 @@ body {
   transition: visibility 0s 0s, opacity 0.3s 0s;
 }
 
+#menu {
+  height: 100%;
+  width: 100%;
+}
+
 #sidebar {
   grid-area: 3 / 1 / 4 / 2;
   background-color: var(--bg-alt);
   padding: 16px;
+  /* height:100vw;  this messes with the search bar*/
   display: grid;
   min-height: 0;
   grid-template-rows: auto auto 1fr;
@@ -247,7 +253,7 @@ body {
   transition: visibility 0s 0s, opacity 0.3s 0s;
 }
 
-#match-view-switch {
+#match-view-switch,#auto-pick-switch {
   background-color: var(--bg);
   border: 3px solid var(--accent);
   border-radius: var(--border-radius);
@@ -255,10 +261,11 @@ body {
   width: 100%;
   color: var(--text);
   cursor: pointer;
-  transition: 0.3s color, 0.3s background-color
+  transition: 0.3s color, 0.3s background-color;
+  margin-bottom: 10px;
 }
 
-#match-view-switch.selected {
+#match-view-switch.selected,#auto-pick-switch.selected {
   background-color: var(--accent);
   color: var(--bg-alt)
 }
@@ -284,6 +291,71 @@ body {
   gap: 16px;
   align-items: center;
 }
+
+#auto-pick-view {
+  display:grid;
+  grid-template-columns: 1fr 3fr 1fr;
+  overflow:auto;
+  /*
+  display: flex;
+  flex-direction:row;
+  gap: 10px;
+  */
+}
+
+#pick-list-text{
+  font-size: 25px;
+  line-height: 1em;
+  color: var(--accent-alt);
+  margin-top:32px;
+  margin-bottom:10px;
+}
+
+#team-list-container{
+  display: flex;
+  flex-direction:column;
+  
+  align-items:center;
+  margin-left:40px;
+  gap: 10px;
+  overflow: auto;
+  min-width: 150px;
+  min-height: 600px;
+}
+
+#auto-pick-team-list{
+  display: flex;
+  flex-direction:column;
+  flex-basis:auto;
+  margin-bottom:15px;
+  gap: 10px;
+  overflow:auto;
+}
+
+#auto-pick-main{
+  width:95%;
+  min-width: 475px;
+  min-height: 600px;
+  flex-direction:column;
+  overflow:auto;  
+  margin:auto;
+  margin-bottom:10px;
+  gap: 10px;
+  margin-top:32px;
+  
+}
+
+#auto-pick-side{
+  display: flex;
+  flex-direction:column;
+  overflow:auto;
+  gap: 10px;
+  min-width: 200px;
+  min-height: 600px;
+  margin-bottom:15px;
+  margin-top: 32px;
+}
+
 
 #alliance-vs {
   font-size: 1.5rem;
@@ -357,6 +429,18 @@ body {
 	display: none;
 }
 
+#auto-pick-stats{
+  overflow:auto;
+  /*
+  margin-left:75px;
+  margin-top:50px;
+  color:red;
+  border-width:5px;
+  border-color:red;
+  */
+} 
+
+
 @media screen and (max-width: 1100px) {
 	html {
 		font-size: 75%;
@@ -367,8 +451,8 @@ body {
 		grid-template-rows: 40px 20px auto;
 	}
 
-	#dashboard > div.visible {
-		height: calc(100vh);
+	#x > div.visible {
+		height: calc(100vh - 40px);
 	}
 
 	#main-list {
@@ -378,4 +462,32 @@ body {
 	#side-list {
 		padding: 25px 0;
 	}
+
+  /* #menu {
+    width: 100px;
+    height:100%;
+  }
+  #logo{
+    width: 100px;
+    font-size:0px;
+  }
+  #logo-img {
+    height: 50px;
+  }
+  #logo-text{
+    font-size:0px;
+  }
+  #search-icon{
+    display:none;
+    width:0px;
+  }
+  #search-input{
+    width:100%;
+    padding: 0 10px;
+  }
+  #app{
+    grid-template-columns: 100px auto;
+  } */
+
+  
 }

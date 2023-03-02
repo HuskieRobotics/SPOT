@@ -6,6 +6,7 @@
     border-radius: var(--border-radius);
     border: 2px solid var(--accent-alt);
 	gap: 2px;
+	margin: auto;
 }
 
 .single-display .header {

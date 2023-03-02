@@ -5,6 +5,7 @@ class Pie {
     constructor(moduleConfig) {
         this.moduleConfig = moduleConfig
         this.container = createDOMElement("div", "container pie")
+        //this.container.innerHTML = '<div style = "font-size: 2em; text-align:center;">No Team Selected</div>'
     }
 
     formatData(teams, dataset) {
@@ -42,7 +43,7 @@ class Pie {
         const layout = {
             margin: {
                 pad: 12,
-                b: 30,
+                b: 30
             },
             title: {
                 text: this.moduleConfig.name,
@@ -63,6 +64,7 @@ class Pie {
             },
             paper_bgcolor: "#FEFEFE",
             plot_bgfcolor: "#FEFEFE",
+            
         }
 
         const config = {

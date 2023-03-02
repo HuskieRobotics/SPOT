@@ -83,7 +83,7 @@ class SingleDisplay {
 
 	/**
 	 * 
-	 * @param {*an allaicne of any length*} alliance1 
+	 * @param {*an alliance of any length*} alliance1 
 	 * @param {*an alliance to compare to of any length*} alliance2 
 	 * @param {*the data set that holds the infomation of the teams*} dataset 
 	 * @returns {*the avg difference in score between allaicne 1 and allaicne 2*}
@@ -120,7 +120,11 @@ class SingleDisplay {
 			alliance2SD += Math.pow(data, 2)
 		}
 		alliance2SD = Math.sqrt(alliance2SD)
-		return Math.sqrt(Math.pow(alliance1SD, 2) + Math.pow(alliance2SD, 2))
+		let zscore = Math.sqrt(Math.pow(alliance1SD, 2) + Math.pow(alliance2SD, 2))
+		if (zscore < 0.01) {
+			zscore = 0.01
+		}
+		return zscore
 	}
 	
 	/**

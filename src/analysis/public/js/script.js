@@ -102,6 +102,95 @@ if ('serviceWorker' in navigator) {
 		return teamContainer
 	}
 
+	//creates list of teams for auto pick list tab
+	async function loadTeamsAutoPick(dataset, modulesConfig) {
+		autoPickTeamList.innerHTML = ""
+		//get blue alliance teams
+		const allTeams = await fetchTeams()
+
+		// get an array of all teams that contain data to sort them
+		let teams = []
+		let teamsWithNum = []
+		for(const [teamNumber, team] of Object.entries(dataset.teams)){
+			//console.log("team: ")
+			//console.log(team)
+			if(dataset.tmps.filter(tmp => tmp.robotNumber == teamNumber).length > 0 && allTeams[teamNumber]){ //
+				//console.log("added team: ")
+				//console.log(team);
+				setPath(team, "robotNumber", teamNumber)
+				teams.push(team);
+				teamsWithNum.push([teamNumber,team]);
+			}
+		} 
+		//console.log("teams type and size: " + typeof(teams)+teams.length+teams[0])  
+		// compare the teams to get avg win probabilities
+		compareAllTeams(teams)
+		// sort teams by avg win probability using bubble sort
+		let sorted = false;
+		while(!sorted){
+			sorted = true;
+			for(let i = 0; i < teams.length-1; i++){
+				if(teams[i].avgProbability < teams[i+1].avgProbability && teams[i].avgProbability != undefined && teams[i+1].avgProbability != undefined){
+					let temp = teams[i];
+					teams[i] = teams[i+1];
+					teams[i+1] = temp;
+					temp = teamsWithNum[i];
+					teamsWithNum[i] = teamsWithNum[i+1];
+					teamsWithNum[i+1] = temp;
+					sorted = false;
+				}
+			}
+		}
+		//add to team list on autopicktab
+		const firstContainer = constructTeamAutoPick(teams[0].robotNumber, teams[0], allTeams)
+		autoPickTeamList.appendChild(firstContainer)
+		firstContainer.click()
+		for (let i = 1; i < teams.length; i++) {
+			const autoPickTeamContainer = constructTeamAutoPick(teams[i].robotNumber, teams[i], allTeams)
+			autoPickTeamList.appendChild(autoPickTeamContainer)
+		}
+
+
+		//get all team modules, create and store module classes, then append their placeholder containers to lists
+		autoPickStats.innerHTML = ""
+		autoPickMain.innerHTML = ""
+		for (const module of modulesConfig.filter(m => m.view == "team")) {
+			const moduleObject = new moduleClasses[module.module](module)
+			if (module.position == "side") {
+				//FIXME reName
+				autoPickStats.appendChild(moduleObject.container)
+			} 
+			else if(module.position == "main"){
+				autoPickMain.appendChild(moduleObject.container)
+			}
+			modules.team.push(moduleObject)
+		}
+		setTimeout(()=>{firstContainer.click();console.log('clicked')}, 4);
+	}
+
+	function constructTeamAutoPick(teamNumber, team, allTeams) {
+		//create and populate autoPickTeamList element
+		const teamContainer = createDOMElement("div", "team-container")
+		const teamNumDisplay = createDOMElement("div", "team-number")
+		teamNumDisplay.innerText = teamNumber
+		teamContainer.setAttribute("num", teamNumber)
+		teamContainer.appendChild(teamNumDisplay)
+		if (allTeams) {
+			const teamNameDisplay = createDOMElement("div", "team-name")
+			teamNameDisplay.innerText = allTeams[teamNumber]
+			teamContainer.appendChild(teamNameDisplay)
+		}
+		
+		//switch to team on click, set module data
+		teamContainer.addEventListener("click", async () => {
+			await setTeamModules(teamNumber)
+			displayStats(teamContainer)
+			
+		})
+
+		return teamContainer
+	}
+
 	//reset UI and switch to team view
 	function displayTeam(teamContainer) {
 		clearInterface()
@@ -109,17 +198,37 @@ if ('serviceWorker' in navigator) {
 		showFade(teamView)
 	}
 
+	// pull up and display auto pick list tab stats
+	function displayStats(teamContainer){
+		Array.from(document.querySelector("#auto-pick-team-list").children).map(t => t.classList.remove("selected"))
+		teamContainer.classList.add("selected")
+		autoPickStats.style.display = "block"
+		autoPickMain.style.display = "flex"
+	}
+
 	//call setData on every module in teams
 	async function setTeamModules(teamNumber) {
 		for (const module of modules.team) {
 			if (!module.moduleConfig.separate && Object.keys(dataset.teams[teamNumber]).filter(prop => prop !== "manual").length == 0) {
+				// console.log(`would add hidden: ${teamNumber}`)
+				// console.log(Object.keys(module.moduleConfig))
+				if(module.moduleConfig.position == "side"){
+					await module.setData(await module.formatData([teamNumber], dataset))
+				}
 				module.container.classList.add("hidden")
 			} else {
+				// console.log(`not adding hidden: ${teamNumber}`)
 				module.container.classList.remove("hidden")
 				await module.setData(await module.formatData([teamNumber], dataset))
+				
 			}
+			
 		}
+		autoPickStats.style.display = "none"
+		autoPickMain.style.display = "none"
+		
 	}
+
 
 	//match UI functions
 	async function loadMatchView(dataset, modulesConfig) {
@@ -235,6 +344,19 @@ if ('serviceWorker' in navigator) {
 		}
 	}
 
+	// Auto pick list UI functions
+	async function loadAutoPickList(dataset, modulesConfig){
+		//add event listener to "AutoPickList" button to set reset UI and switch to autopicklist tab
+		autoPickSwitch.addEventListener("click", () => {
+			clearInterface()
+			autoPickSwitch.classList.add("selected")
+			loadTeamsAutoPick(dataset,modulesConfig)
+			showFade(autoPickView)
+		})
+
+	}
+
+
 	//call setData on every module in matches
 	async function setMatchModules(alliances) {
 		for (const module of modules.match.left) {
@@ -314,10 +436,11 @@ if ('serviceWorker' in navigator) {
 		}
 	}
 
-	//dashboard initializer, loads teams and match view
+	//dashboard initializer, loads teams, match view, and autopicklist
 	function initDashboard(dataset, modulesConfig) {
 		loadTeams(dataset, modulesConfig)
 		loadMatchView(dataset, modulesConfig)
+		loadAutoPickList(dataset,modulesConfig)
 
 		searchInput.addEventListener("input", () => {
 			if (searchInput.value !== "") {
@@ -353,9 +476,17 @@ if ('serviceWorker' in navigator) {
 	//reset the UI to state of nothing shown, nothing selected
 	function clearInterface() {
 		Array.from(document.querySelector("#team-list").children).map(t => t.classList.remove("selected"))
+		
+		
 		hideFade(welcomeView)
 		hideFade(matchView)
 		hideFade(teamView)
+		hideFade(autoPickView)
+		// hideFade(autoPickStats)
+		// hideFade(autoPickMain)
+		autoPickStats.style.display = "none"
+		autoPickMain.style.display = "none"
 		matchViewSwitch.classList.remove("selected")
+		autoPickSwitch.classList.remove("selected")
 	}
 })()
