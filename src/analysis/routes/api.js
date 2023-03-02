@@ -7,7 +7,6 @@ let router = Router();
 
 router.get("/dataset", async (req, res) => {
     res.json(await executeAnalysisPipeline())
-
 })
 
 if (!config.secrets.TBA_API_KEY) {
