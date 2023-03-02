@@ -67,8 +67,7 @@ router.get("/enterMatch", async (req,res) => {
         if (scouter.state.status == ScoutingSync.SCOUTER_STATUS.WAITING)
             scouter.socket.emit("enterMatch");
     }
-
-    //res.json();
+    res.json();
   }
 })
 router.post("/setMatch", (req,res) => {
