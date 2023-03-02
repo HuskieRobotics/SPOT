@@ -1,5 +1,7 @@
 
 
+
+
 // const { Dataset } = require("../../DataTransformer");
 // const { zScore, cumulativeStdNormalProbability } = require("simple-statistics");
 
@@ -342,14 +344,3 @@ console.log(allianceStandardDeviation(allianceBlue))
 console.log(allianceStandardDeviation(allianceRed))
 
 console.log(compareAlliances(allianceBlue, allianceRed));
-
-let teams = [teamB1, teamB2, teamB3, teamR1, teamR2, teamR3]
-compareAllTeams(teams)
-console.log(teamB1.avgProbability) // 0.66152  (avg: 80, sd: 20)
-console.log(teamB2.avgProbability) // 0.59114  (avg: 70, sd: 20)
-console.log(teamB3.avgProbability) // 0.2696   (avg: 20, sd: 20)
-console.log(teamR1.avgProbability) // 0.52532  (avg: 60, sd: 20)
-console.log(teamR2.avgProbability) // 0.59114  (avg: 70, sd: 20)
-console.log(teamR3.avgProbability) // 0.36126  (avg: 30, sd: 20)
-
-*/
