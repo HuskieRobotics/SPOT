@@ -4,7 +4,7 @@ let router = Router();
 const config = require("../../../config/config.json");
 const { TeamMatchPerformance } = require("../../lib/db");
 
-const DEMO = true;
+const DEMO = false;
 
 router.use((req,res,next) => {
     if (!ScoutingSync.initialized) {
