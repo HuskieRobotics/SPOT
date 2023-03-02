@@ -30,7 +30,8 @@ body {
   grid-area: 3 / 1 / 4 / 2;
   background-color: var(--bg-alt);
   padding: 16px;
-  /* height:100vw;  this messes with the search bar*/
+  height: calc(100vh - 75px);
+  overflow: auto;
   display: grid;
   min-height: 0;
   grid-template-rows: auto auto 1fr;
