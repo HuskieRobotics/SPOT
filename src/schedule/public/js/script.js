@@ -1,5 +1,5 @@
 
-
+let processedMatches = [];
 
 ;(async () => {
     // const authRequest = await fetch("./api/auth").then(res => res.json())
@@ -17,100 +17,24 @@
         }
     })
 
-    // function getCSS(element)
-    // {
-    //     var css_data = '';
-    //     var css_obj = getComputedStyle(element);
-
-    //     for(var i = 0; i < css_obj.length;i++)
-    //     {
-    //         css_data +=
-    //             css_obj[i] + ':' + 
-    //             css_obj.getPropertyValue(css_obj[i])
-
-    //     }
-    // }
-    
-    
-
-    // if (authRequest.status !== 2) {
-    //     const authModal = new Modal("small", false).header("Sign In")
-    //     const accessCodeInput = createDOMElement("input", "access-input")
-    //     accessCodeInput.placeholder = "Access Code"
-    //     accessCodeInput.type = "password"
-    //     accessCodeInput.addEventListener("keydown", (e) => {
-    //         if (e.keyCode == 13) {
-    //             validate(accessCodeInput.value, authModal)
-    //         }
-    //     })
-    //     authModal.element.appendChild(accessCodeInput)
-    //     authModal.action("Submit", async () => {
-    //         validate(accessCodeInput.value, authModal)
-    //     })
-    // } else {
-    //     await constructApp()
-    // }
-
-    // async function validate(accessCode, authModal) {
-    //     const auth = await fetch("./api/auth", {
-    //         headers: {
-    //             Authorization: accessCode
-    //         }
-    //     }).then(res => res.json())
-
-    //     if (auth.status === 1) {
-    //         await constructApp(accessCode)
-    //         authModal.modalExit()
-    //     } else {
-    //         new Popup("error", "Wrong Access Code")
-    //     }
-    // }
 })()
 
 async function constructApp() {
 
     updateMatches(matches)
+    
 
-    //document.querySelector("#match-list").classList.add("visible")
-
-    // setInterval(() => updateMatches(accessCode), 2500);
-
-    // document.querySelector("#start-scouting").addEventListener("click", () => {
-    //     fetch("/admin/api/enterMatch", {
-    //         headers: {
-    //             Authorization: accessCode
-    //         }
-    //     });
-    //     console.log("ENTER MATCH!")
-    // })
-
-    // let menuExpanded = false
-
-    // document.querySelector("#admin-panel").classList.add("visible")
-    // document.querySelector("#menu").classList.add("visible")
-
-    // document.querySelector("#menu-icon").addEventListener("click", () => {
-    //     if (menuExpanded) {
-    //         document.querySelector("#menu").classList.remove("expanded")
-    //     } else {
-    //         document.querySelector("#menu").classList.add("expanded")
-    //     }
-    //     menuExpanded = !menuExpanded
-    // })
 }
 
 
-async function updateMatches(matchNumber) {
-    // let {allMatches, currentMatch} = await (await fetch(`/admin/api/matches`, {
-    //     headers: {
-    //         Authorization: "1234"
-    //     }
-    // })).json();
 
-    //let {allMatches, currentMatch} = fetch("/admin/api/matches");
-    //let {allMatches, currentMatch} = matches; / broken
-    
-    //let allMatches;
+async function updateMatches(matchNumber) {
+
+    //makes a place to store data
+    for(let i=0; i<matchNumber; i++){
+        processedMatches.push(null);
+    }
+
     document.querySelector("#match-list").innerHTML = "";
     for(let i=1; i<=matchNumber; i++)
     {
@@ -133,12 +57,17 @@ async function updateMatches(matchNumber) {
         <div class="match-team b3-${i}" contentEditable="true"></div>
         </div>
         `
+
         // make a way to distruguishing between divs (with ids like qm1 etc)
         let checkbox = matchElement.querySelector(".match-select")
         checkbox.addEventListener("input", () => {
             console.log(checkbox.checked)
             if (checkbox.checked) { //if its already selected, do nothing
                 //disable editable inputs
+
+
+                // array
+                // let redteams = [];
 
                 let allianceElement = document.getElementsByClassName(`match-teams qm${i}`);
                 for(element of allianceElement)
@@ -147,8 +76,16 @@ async function updateMatches(matchNumber) {
                     for(team of element)
                     {
                         team.setAttribute("contentEditable", false);
+                        
+                        // let red1 = document.getElementsByClassName(`match-teams r1-${i}`).value;
+
+                        // redteams.push(red1);
                     }
                 }
+
+                // scrape data and add to array (unformatted)
+                // console.log(redteams);
+
             
                 
             } else {
@@ -170,11 +107,7 @@ async function updateMatches(matchNumber) {
 
     }
 
-//         function lockTable()
-//         {
-//             if(!checkbox.checked)
-//         }
-//   //matchElement.add('contentEditable="false"');
+
     
 }
 
