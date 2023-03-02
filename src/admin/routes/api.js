@@ -4,7 +4,7 @@ let router = Router();
 const config = require("../../../config/config.json");
 const { TeamMatchPerformance } = require("../../lib/db");
 
-const DEMO = false;
+const DEMO = true;
 
 router.use((req,res,next) => {
     if (!ScoutingSync.initialized) {
@@ -67,8 +67,7 @@ router.get("/enterMatch", async (req,res) => {
         if (scouter.state.status == ScoutingSync.SCOUTER_STATUS.WAITING)
             scouter.socket.emit("enterMatch");
     }
-
-    //res.json();
+    res.json();
   }
 })
 router.post("/setMatch", (req,res) => {
