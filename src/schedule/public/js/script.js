@@ -44,17 +44,17 @@ async function updateMatches(matchNumber) {
         matchElement.classList.add("match"); // Add a button to add name intead of "manual" on table 
         matchElement.innerHTML = `
         <div class="match-header"><strong>${i}</strong> - ${"MANUAL"}-<strong>${"QM" + i}</strong></div> 
-        <input type="checkbox" class="match-select" id="m${i}">
+        <input type="checkbox" class="match-select" id="${i}">
  
         <div class="match-teams red qm${i}">
-        <div class="match-team r1-${i}" contentEditable="true" id="m${i}"></div>
-        <div class="match-team r2-${i}" contentEditable="true" id="m${i}"></div>
-        <div class="match-team r3-${i}" contentEditable="true" id="m${i}"></div>
+        <div class="match-team" contentEditable="true" match="m${i}" tm="r1"></div>
+        <div class="match-team" contentEditable="true" match="m${i}" tm="r2"></div>
+        <div class="match-team" contentEditable="true" match="m${i}" tm="r3"></div>
         </div>
         <div class="match-teams blue qm${i}">
-        <div class="match-team b1-${i}" contentEditable="true" id="m${i}"></div>
-        <div class="match-team b2-${i}" contentEditable="true" id="m${i}"></div>
-        <div class="match-team b3-${i}" contentEditable="true" id="m${i}"></div>
+        <div class="match-team" contentEditable="true" match="m${i}" tm="b1"></div>
+        <div class="match-team" contentEditable="true" match="m${i}" tm="b2"></div>
+        <div class="match-team" contentEditable="true" match="m${i}" tm="b3"></div>
         </div>
         `
 
@@ -68,7 +68,7 @@ async function updateMatches(matchNumber) {
                 let element = document.getElementsByClassName('match-team')
                 for(team of element)
                 {
-                    if(team.id == `${checkbox.id}`){
+                    if(team.match == `m${checkbox.id}`){
                         team.setAttribute("contentEditable", false);
                         
                         getTeams();
