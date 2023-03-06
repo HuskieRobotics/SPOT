@@ -124,7 +124,15 @@ if ('serviceWorker' in navigator) {
 		} 
 		//console.log("teams type and size: " + typeof(teams)+teams.length+teams[0])  
 		// compare the teams to get avg win probabilities
-		compareAllTeams(teams)
+		//compareAllTeams(teams)
+		let teamsProbability = fetch('/analysis/autopick')
+		for(let i = 0; i < teams.length; i++){
+			for(let j = 0; j < teamsProbability.length; j++){
+				if (teams[i].robotNumber = teamsProbability[j].robotNumber){
+					setPath(teams[i],"avgProbability",getPath(teamsProbability[j],"avgProbability",0))
+				}
+			}
+		}
 		// sort teams by avg win probability using bubble sort
 		let sorted = false;
 		while(!sorted){
