@@ -44,17 +44,17 @@ async function updateMatches(matchNumber) {
         matchElement.classList.add("match"); // Add a button to add name intead of "manual" on table 
         matchElement.innerHTML = `
         <div class="match-header"><strong>${i}</strong> - ${"MANUAL"}-<strong>${"QM" + i}</strong></div> 
-        <input type="checkbox" class="match-select" id="${i}">
+        <input type="checkbox" class="match-select" id="m${i}">
  
         <div class="match-teams red qm${i}">
-        <div class="match-team" contentEditable="true" match="m${i}" tm="r1"></div>
-        <div class="match-team" contentEditable="true" match="m${i}" tm="r2"></div>
-        <div class="match-team" contentEditable="true" match="m${i}" tm="r3"></div>
+        <div class="match-team m${i}" contentEditable="true" tm="r1"></div>
+        <div class="match-team m${i}" contentEditable="true" tm="r2"></div>
+        <div class="match-team m${i}" contentEditable="true" tm="r3"></div>
         </div>
         <div class="match-teams blue qm${i}">
-        <div class="match-team" contentEditable="true" match="m${i}" tm="b1"></div>
-        <div class="match-team" contentEditable="true" match="m${i}" tm="b2"></div>
-        <div class="match-team" contentEditable="true" match="m${i}" tm="b3"></div>
+        <div class="match-team m${i}" contentEditable="true" tm="b1"></div>
+        <div class="match-team m${i}" contentEditable="true" tm="b2"></div>
+        <div class="match-team m${i}" contentEditable="true" tm="b3"></div>
         </div>
         `
 
@@ -65,14 +65,17 @@ async function updateMatches(matchNumber) {
             if (checkbox.checked) { //if its already selected, do nothing
                 //disable editable inputs
 
-                let element = document.getElementsByClassName('match-team')
+                //let element = document.getElementsByClassName('match-team')
+                let element = document.getElementsByClassName(`m${i}`);
                 for(team of element)
                 {
-                    if(team.match == `m${checkbox.id}`){
-                        team.setAttribute("contentEditable", false);
+                    team.setAttribute("contentEditable", false);
+                    // console.log(team.getElementByClassName(`m${i}`));
+                    // if(team == `m${checkbox.id}`){
                         
-                        getTeams();
-                    }
+                        
+                    //     getTeams();
+                    // }
                     
                 }
              
