@@ -70,14 +70,9 @@ async function updateMatches(matchNumber) {
                 for(team of element)
                 {
                     team.setAttribute("contentEditable", false);
-                    // console.log(team.getElementByClassName(`m${i}`));
-                    // if(team == `m${checkbox.id}`){
-                        
-                        
-                    //     getTeams();
-                    // }
-                    
                 }
+                
+                getTeams(checkbox.id);
              
                 
             } else {
@@ -99,11 +94,17 @@ async function updateMatches(matchNumber) {
     
 }
 
-async function getTeams() {
+async function getTeams(num) {
 
-    let red1 = document.getElementById(`m1`).innerHTML;
-    //console.log(red1)     
+    let teamArray = document.getElementsByClassName(num);
+    let processedArray = []; 
+    for(value of teamArray)
+    {
+        processedArray.push(value.innerHTML);
+       
+    }
 
+    return processedArray;
 }
 
 
