@@ -101,9 +101,9 @@ async function getTeams(num) {
     for(value of teamArray)
     {
         processedArray.push(value.innerHTML);
-       
     }
 
+    // returns team data for match selected in an array of 6 strings 
     return processedArray;
 }
 
