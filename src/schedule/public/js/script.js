@@ -13,6 +13,7 @@ let processedMatches = [];
             matches = numMatchesInput.value
             console.log(matches);
             updateMatches(matches);
+            makeMatchSchedule(matches); // make a match schedule form
             //FormData.clear;
         }
     })
@@ -72,7 +73,9 @@ async function updateMatches(matchNumber) {
                     team.setAttribute("contentEditable", false);
                 }
                 
-                getTeams(checkbox.id);
+                console.log(getTeams(checkbox.id))
+                processTeams(checkbox.id, getTeams(checkbox.id));
+                console.log(processedManualMatches);  // check
              
                 
             } else {
@@ -105,6 +108,35 @@ async function getTeams(num) {
 
     // returns team data for match selected in an array of 6 strings 
     return processedArray;
+}
+
+let processedManualMatches = [];
+// make an array which will get filled in a format
+
+function makeMatchSchedule(matchTotalNum){
+    // creates a blank form with the correct number of matches
+
+    for (let i=1; i<=matchTotalNum; i++) {
+        processedManualMatches.push({
+            number: i, 
+            match_string: `2023temp_q${i}`, // i use temp bc we don't need event keys and don't have one
+            robots: {
+                red: null, // these should be arrays
+                blue: null,
+            }
+        });
+    }
+}
+
+function processTeams(matchNum, teams) {
+    // inserts data into the correct spot
+    let redTeams = teams.slice(2);
+    let blueTeams = teams.slice(-3); // says slice is not a function?
+
+    // acccess the correct match object and then adding to properties
+    processedManualMatches[matchNum-1].robots.red = redTeams; //attempting to change the object properties
+    processedManualMatches[matchNum-1].robots.blue = blueTeams;
+
 }
 
 
