@@ -73,9 +73,7 @@ async function updateMatches(matchNumber) {
                     team.setAttribute("contentEditable", false);
                 }
                 let totalTeams = getTeams("m"+checkbox.id)
-                console.log(totalTeams);
                 processTeams(checkbox.id, totalTeams);
-                console.log(processedManualMatches);  // check
              
                 
             } else {
@@ -115,6 +113,7 @@ var processedManualMatches = [];
 
 function makeMatchSchedule(matchTotalNum){
     // creates a blank form with the correct number of matches
+    processedManualMatches = [];
 
     for (let i=1; i<=matchTotalNum; i++) {
         processedManualMatches.push({
@@ -128,7 +127,7 @@ function makeMatchSchedule(matchTotalNum){
     }
 }
 
-co
+
 
 async function processTeams(matchNum, teams) {
     // inserts data into the correct spot
@@ -142,8 +141,6 @@ async function processTeams(matchNum, teams) {
         blueTeams.push(data[i+3]);
     }
 
-    console.log(redTeams);
-    console.log(blueTeams);
     
     
 
@@ -155,18 +152,3 @@ async function processTeams(matchNum, teams) {
 
 
 
-
-// // not sure if this will work but building a [] of matches in the proper format
-// let processedMatches = [];
-
-// //add the level offset to each match and simplify structure
-// for (let match of tbaMatches) {
-//     processedMatches.push({
-//         number: match.match_number + levelOffsets[match.comp_level], //adjust match number with the offset
-//         match_string: match.key,
-//         robots: {
-//             red: match.alliances.red.team_keys.map(x=>x.replace("frc","")),
-//             blue: match.alliances.blue.team_keys.map(x=>x.replace("frc",""))
-//         }
-//     });
-// }
