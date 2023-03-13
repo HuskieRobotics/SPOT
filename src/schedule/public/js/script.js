@@ -45,7 +45,7 @@ async function updateMatches(matchNumber) {
         matchElement.classList.add("match"); // Add a button to add name intead of "manual" on table 
         matchElement.innerHTML = `
         <div class="match-header"><strong>${i}</strong> - ${"MANUAL"}-<strong>${"QM" + i}</strong></div> 
-        <input type="checkbox" class="match-select" id="m${i}">
+        <input type="checkbox" class="match-select" id="${i}">
  
         <div class="match-teams red qm${i}">
         <div class="match-team m${i}" contentEditable="true" tm="r1"></div>
@@ -72,9 +72,9 @@ async function updateMatches(matchNumber) {
                 {
                     team.setAttribute("contentEditable", false);
                 }
-                
-                console.log(getTeams(checkbox.id))
-                processTeams(checkbox.id, getTeams(checkbox.id));
+                let totalTeams = getTeams("m"+checkbox.id)
+                console.log(totalTeams);
+                processTeams(checkbox.id, totalTeams);
                 console.log(processedManualMatches);  // check
              
                 
@@ -97,7 +97,7 @@ async function updateMatches(matchNumber) {
     
 }
 
-async function getTeams(num) {
+function getTeams(num) {
 
     let teamArray = document.getElementsByClassName(num);
     let processedArray = []; 
@@ -110,7 +110,7 @@ async function getTeams(num) {
     return processedArray;
 }
 
-let processedManualMatches = [];
+var processedManualMatches = [];
 // make an array which will get filled in a format
 
 function makeMatchSchedule(matchTotalNum){
@@ -128,10 +128,24 @@ function makeMatchSchedule(matchTotalNum){
     }
 }
 
-function processTeams(matchNum, teams) {
+co
+
+async function processTeams(matchNum, teams) {
     // inserts data into the correct spot
-    let redTeams = teams.slice(2);
-    let blueTeams = teams.slice(-3); // says slice is not a function?
+    let data = await teams;
+    console.log(data);
+    let redTeams = [];
+    let blueTeams = [];
+    for(let i = 0; i < 3; i++)
+    {
+        redTeams.push(data[i]);
+        blueTeams.push(data[i+3]);
+    }
+
+    console.log(redTeams);
+    console.log(blueTeams);
+    
+    
 
     // acccess the correct match object and then adding to properties
     processedManualMatches[matchNum-1].robots.red = redTeams; //attempting to change the object properties
