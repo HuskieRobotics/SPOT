@@ -57,7 +57,7 @@ if ('serviceWorker' in navigator) {
 			// console.log(`team: ${Object.keys(team)}\n num: ${teamNumber}\n allTeams: ${allTeams[teamNumber]}`)
       if(allTeams[teamNumber]){
         const teamContainer = constructTeam(teamNumber, team, allTeams)
-			  teamList.appendChild(teamContainer)
+			teamList.appendChild(teamContainer)
       }
 		}
 
@@ -80,6 +80,8 @@ if ('serviceWorker' in navigator) {
 		}
 	}
 
+	// Creates individual team div for the sidebar - called in loadTeams
+	// 		creates event listener for the div that listens for click
 	function constructTeam(teamNumber, team, allTeams) {
 		//create and populate sidebar element
 		const teamContainer = createDOMElement("div", "team-container")
@@ -93,7 +95,7 @@ if ('serviceWorker' in navigator) {
 			teamContainer.appendChild(teamNameDisplay)
 		}
 
-		//switch to team on click of sidebar team, set module data
+		// Create event listener that switches to team view on click
 		teamContainer.addEventListener("click", async () => {
 			await setTeamModules(teamNumber)
 			displayTeam(teamContainer)
@@ -187,6 +189,7 @@ if ('serviceWorker' in navigator) {
 	}
 
 	// Creates the div/display box for each team on the autoPickTeamList - called in loadTeamsAutoPick function
+	//    Creates an event listener for the div that listens for a click
 	function constructTeamAutoPick(teamNumber, team, allTeams) {
 		//create and populate autoPickTeamList element
 		const teamContainer = createDOMElement("div", "team-container")
@@ -200,7 +203,7 @@ if ('serviceWorker' in navigator) {
 			teamContainer.appendChild(teamNameDisplay)
 		}
 		
-		// Create event listener that switches to team on click, set module data
+		// Create event listener for the div that switches the stats displayed to its team on click
 		teamContainer.addEventListener("click", async () => {
 			await setTeamModules(teamNumber)
 			displayStats(teamContainer)
@@ -209,14 +212,16 @@ if ('serviceWorker' in navigator) {
 		return teamContainer
 	}
 
-	//reset UI and switch to team view
+	// Displays team view - resets the UI and switch to team view
+	// 		Called from event listener in each sidebar team div created in constructTeam function 
 	function displayTeam(teamContainer) {
 		clearInterface()
 		teamContainer.classList.add("selected")
 		showFade(teamView)
 	}
 
-	// pull up and display auto pick list tab stats
+	// Display autoPickList stats for the team that is clicked on - 
+	// 		called from the event listener in constructTeamsAutoPick
 	function displayStats(teamContainer){
 		Array.from(document.querySelector("#auto-pick-team-list").children).map(t => t.classList.remove("selected"))
 		teamContainer.classList.add("selected")
