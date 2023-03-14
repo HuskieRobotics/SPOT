@@ -74,6 +74,7 @@ async function updateMatches(matchNumber) {
                 }
                 let totalTeams = getTeams("m"+checkbox.id)
                 processTeams(checkbox.id, totalTeams);
+    
              
                 
             } else {
@@ -141,12 +142,14 @@ async function processTeams(matchNum, teams) {
         blueTeams.push(data[i+3]);
     }
 
-    
-    
-
     // acccess the correct match object and then adding to properties
     processedManualMatches[matchNum-1].robots.red = redTeams; //attempting to change the object properties
     processedManualMatches[matchNum-1].robots.blue = blueTeams;
+
+}
+
+async function getManualMatches() {
+    return processedManualMatches;
 
 }
 

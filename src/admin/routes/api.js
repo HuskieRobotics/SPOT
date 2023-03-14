@@ -3,6 +3,7 @@ const ScoutingSync = require("../../scouting/scouting-sync")();
 let router = Router();
 const config = require("../../../config/config.json");
 const { TeamMatchPerformance } = require("../../lib/db");
+const {getManualMatches} = require("../../schedule/public/js/script.js")
 
 const DEMO = true;
 
@@ -87,9 +88,12 @@ router.post("/setMatch", (req,res) => {
 });
 
 router.get("/matches", async (req,res) => {
-	res.json({
-		"allMatches": await ScoutingSync.getMatches(),
-		"currentMatch": ScoutingSync.match
-	})
+
+  res.json({
+    "allMatches": await ScoutingSync.getMatches(),
+    "currentMatch": ScoutingSync.match
+  })
+
+	
 })
 module.exports = router;
