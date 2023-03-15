@@ -57,7 +57,7 @@ if ('serviceWorker' in navigator) {
 			// console.log(`team: ${Object.keys(team)}\n num: ${teamNumber}\n allTeams: ${allTeams[teamNumber]}`)
       if(allTeams[teamNumber]){
         const teamContainer = constructTeam(teamNumber, team, allTeams)
-			  teamList.appendChild(teamContainer)
+			teamList.appendChild(teamContainer)
       }
 		}
 
@@ -80,6 +80,8 @@ if ('serviceWorker' in navigator) {
 		}
 	}
 
+	// Creates individual team div for the sidebar - called in loadTeams
+	// 		creates event listener for the div that listens for click
 	function constructTeam(teamNumber, team, allTeams) {
 		//create and populate sidebar element
 		const teamContainer = createDOMElement("div", "team-container")
@@ -93,7 +95,7 @@ if ('serviceWorker' in navigator) {
 			teamContainer.appendChild(teamNameDisplay)
 		}
 
-		//switch to team on click of sidebar team, set module data
+		// Create event listener that switches to team view on click
 		teamContainer.addEventListener("click", async () => {
 			await setTeamModules(teamNumber)
 			displayTeam(teamContainer)
@@ -104,35 +106,49 @@ if ('serviceWorker' in navigator) {
 
 	//creates list of teams for auto pick list tab
 	async function loadTeamsAutoPick(dataset, modulesConfig) {
+		// reset autoPickTeamList html
 		autoPickTeamList.innerHTML = ""
+
 		//get blue alliance teams
 		const allTeams = await fetchTeams()
 
-		// get an array of all teams that contain data to sort them
-		let teams = []
-		let teamsWithNum = []
-		for(const [teamNumber, team] of Object.entries(dataset.teams)){
-			//console.log("team: ")
-			//console.log(team)
+		// get an array (teams) of all teams that contain data
+		var teams = []
+		for(var [teamNumber, team] of Object.entries(dataset.teams)){
+			console.log("team: ")
+			console.log(team)
+			console.log("team number: ")
+			console.log(teamNumber)
 			if(dataset.tmps.filter(tmp => tmp.robotNumber == teamNumber).length > 0 && allTeams[teamNumber]){ //
 				//console.log("added team: ")
 				//console.log(team);
 				setPath(team, "robotNumber", teamNumber)
+				console.log("data from path: " + getPath(team, "robotNumber"))
 				teams.push(team);
-				teamsWithNum.push([teamNumber,team]);
+				
+				console.log("TEAM ADDED " + teamNumber)
+				
+				console.log("team number of first team: ")
+				console.log(teams[0].robotNumber)
+				console.log(teams)
 			}
+			console.log("-----------------")
 		} 
+		console.log("teams before avgprob")
+		console.log(teams);
 		//console.log("teams type and size: " + typeof(teams)+teams.length+teams[0])  
-		// compare the teams to get avg win probabilities
-		//compareAllTeams(teams)
-		let teamsProbability = fetch('/analysis/autopick')
+
+		let teamsProbability = await fetch('/analysis/autopick').then(res => res.json())
+		console.log("teams w/ avg probability")
+		console.log(teamsProbability)
 		for(let i = 0; i < teams.length; i++){
 			for(let j = 0; j < teamsProbability.length; j++){
-				if (teams[i].robotNumber = teamsProbability[j].robotNumber){
+				if (teams[i].robotNumber == teamsProbability[j].robotNumber){
 					setPath(teams[i],"avgProbability",getPath(teamsProbability[j],"avgProbability",0))
 				}
 			}
 		}
+		
 		// sort teams by avg win probability using bubble sort
 		let sorted = false;
 		while(!sorted){
@@ -142,13 +158,11 @@ if ('serviceWorker' in navigator) {
 					let temp = teams[i];
 					teams[i] = teams[i+1];
 					teams[i+1] = temp;
-					temp = teamsWithNum[i];
-					teamsWithNum[i] = teamsWithNum[i+1];
-					teamsWithNum[i+1] = temp;
 					sorted = false;
 				}
 			}
 		}
+		
 		//add to team list on autopicktab
 		const firstContainer = constructTeamAutoPick(teams[0].robotNumber, teams[0], allTeams)
 		autoPickTeamList.appendChild(firstContainer)
@@ -158,14 +172,12 @@ if ('serviceWorker' in navigator) {
 			autoPickTeamList.appendChild(autoPickTeamContainer)
 		}
 
-
 		//get all team modules, create and store module classes, then append their placeholder containers to lists
 		autoPickStats.innerHTML = ""
 		autoPickMain.innerHTML = ""
 		for (const module of modulesConfig.filter(m => m.view == "team")) {
 			const moduleObject = new moduleClasses[module.module](module)
 			if (module.position == "side") {
-				//FIXME reName
 				autoPickStats.appendChild(moduleObject.container)
 			} 
 			else if(module.position == "main"){
@@ -176,6 +188,8 @@ if ('serviceWorker' in navigator) {
 		setTimeout(()=>{firstContainer.click();console.log('clicked')}, 4);
 	}
 
+	// Creates the div/display box for each team on the autoPickTeamList - called in loadTeamsAutoPick function
+	//    Creates an event listener for the div that listens for a click
 	function constructTeamAutoPick(teamNumber, team, allTeams) {
 		//create and populate autoPickTeamList element
 		const teamContainer = createDOMElement("div", "team-container")
@@ -189,24 +203,25 @@ if ('serviceWorker' in navigator) {
 			teamContainer.appendChild(teamNameDisplay)
 		}
 		
-		//switch to team on click, set module data
+		// Create event listener for the div that switches the stats displayed to its team on click
 		teamContainer.addEventListener("click", async () => {
 			await setTeamModules(teamNumber)
 			displayStats(teamContainer)
-			
 		})
 
 		return teamContainer
 	}
 
-	//reset UI and switch to team view
+	// Displays team view - resets the UI and switch to team view
+	// 		Called from event listener in each sidebar team div created in constructTeam function 
 	function displayTeam(teamContainer) {
 		clearInterface()
 		teamContainer.classList.add("selected")
 		showFade(teamView)
 	}
 
-	// pull up and display auto pick list tab stats
+	// Display autoPickList stats for the team that is clicked on - 
+	// 		called from the event listener in constructTeamsAutoPick
 	function displayStats(teamContainer){
 		Array.from(document.querySelector("#auto-pick-team-list").children).map(t => t.classList.remove("selected"))
 		teamContainer.classList.add("selected")
