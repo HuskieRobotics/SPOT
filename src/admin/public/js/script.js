@@ -182,6 +182,7 @@ async function updateMatches(accessCode) {
     }
 }
 
+0
 class ScouterDisplay {
     scouterElement;
     scouter;
@@ -189,12 +190,13 @@ class ScouterDisplay {
     constructor (scouter) {
         this.scouter = scouter;
 
-        this.scouterElement = document.createElement("div");
+        this.scouterElement = document.createElement("button");
         this.scouterElement.innerHTML = `
         <div class="match-number"></div>
         <div class="scouter-id"></div>
         <div class="robot-number"></div>
         <div class="scouter-status"></div>
+        <input type="disconnect" class="disconnect">
         `;
         this.scouterElement.classList.add("scouter");
 
@@ -203,6 +205,8 @@ class ScouterDisplay {
         this.updateScouterElement();
         
     }
+
+    
     updateScouterElement(state) {
 
         //update state
