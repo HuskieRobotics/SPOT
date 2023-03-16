@@ -1,225 +1,536 @@
 [
     {
-        "view": "team",
-        "module": "HeatmapScatterPlot",
-        "name": "Shot Plot",
-        "position": "main",
-        "options": {
-            "coordinatePath": "other.pos",
-            "aggregatedActionsPath": "aggregatedActions",
-            "actionGroups": [
-                {
-                    "name": "Shots",
-                    "actions": ["upperHub", "lowerHub", "miss"]
-                }
-            ],
-            "actionLabels": {
-                "upperHub": "Upper",
-                "lowerHub": "Lower",
-                "miss": "Miss"
-            },
-            "imgPath": "img/field.svg"
-        }
+      "view":"team",
+      "module":"Stats",
+      "position":"side",
+      "name":"Charging Dock Averages",
+      "options": {
+        "list":[
+          {
+            "name":"Attempts",
+            "path":"averages.chargingDock",
+            "decimals":2,
+            "sort":1
+          },
+          {
+            "name":"Docked",
+            "path":"averages.platformDocked",
+            "decimals":2,
+            "sort":1
+          },
+          {
+            "name":"Engaged",
+            "path":"averages.platformEngaged",
+            "decimals":2,
+            "sort":1
+          },
+          {
+            "name":"Left",
+            "path":"averages.platformLeave",
+            "decimals":2,
+            "sort":1
+          },
+          {
+            "name":"Fell",
+            "path":"averages.platformFall",
+            "decimals":2,
+            "sort":1
+          },
+          {
+        "name":"Engage Time",
+        "path":"dockCycle.averageTime",
+        "decimals":2,
+        "sort":-1,
+        "multiplier":0.001,
+        "unit":" sec"
+      }
+        ]
+      }
     },
-	{
-        "view": "team",
-        "module": "HeatmapScatterPlot",
-        "name": "Pickup Plot",
-        "position": "main",
-        "options": {
-            "coordinatePath": "other.pos",
-            "aggregatedActionsPath": "aggregatedActions",
-            "actionGroups": [
-                {
-                    "name": "Pickups",
-                    "actions": ["groundPickup"]
-                }
-            ],
-            "actionLabels": {
-                "groundPickup": "Ground"
-            },
-            "imgPath": "img/field.svg"
+  {
+    "view":"team",
+    "module":"Stats",
+    "position":"side",
+    "name":"Cycle Times",
+    "options":{
+      "list":[
+        {
+        "name":"Overall",
+        "path":"cycle.averageTime",
+        "decimals":2,
+        "sort":-1,
+        "multiplier":0.001,
+        "unit":" sec"
+      },{
+        "name":"Cone",
+        "path":"coneCycle.averageTime",
+        "decimals":2,
+        "sort":-1,
+        "multiplier":0.001,
+        "unit":" sec"
+      },
+        {
+        "name":"Cube",
+        "path":"cubeCycle.averageTime",
+        "decimals":2,
+        "sort":-1,
+        "multiplier":0.001,
+        "unit":" sec"
+      }
+      ]
+    }
+  },
+  {
+    "view":"team",
+    "module": "Pie",
+    "position":"main",
+    "name":"Avg Cone Pickups",
+    "wholeMatch": false,
+    "options":{
+      "slices":[
+        {
+          "name":"Grid",
+          "path":"averages.conePickupGrid"
+        },
+        {
+          "name":"Community",
+          "path":"averages.conePickupCommunity"
+        },
+        {
+          "name":"Floor",
+          "path":"averages.conePickupFloor"
+        },
+        {
+          "name":"Chute",
+          "path":"averages.conePickupChute"
+        },
+        {
+          "name":"Shelf",
+          "path":"averages.conePickupShelf"
         }
-    },
+      ]
+    }
+  },
+  {
+    "view":"team",
+    "module": "Pie",
+    "position":"main",
+    "name":"Avg Cube Pickups",
+    "wholeMatch": false,
+    "options":{
+      "slices":[
+        {
+          "name":"Grid",
+          "path":"averages.cubePickupGrid"
+        },
+        {
+          "name":"Community",
+          "path":"averages.cubePickupCommunity"
+        },
+        {
+          "name":"Floor",
+          "path":"averages.cubePickupFloor"
+        },
+        {
+          "name":"Chute",
+          "path":"averages.cubePickupChute"
+        },
+        {
+          "name":"Shelf",
+          "path":"averages.cubePickupShelf"
+        }
+      ]
+    }
+  },
+  {
+    "view":"team",
+    "module":"Grid",
+    "position":"main",
+    "name":"Avg Auto Placements",
+    "options":{
+      "rows":3,
+      "cols":9,
+      "decimals":2,
+      "min":0,
+      "max":1,
+      "cells":[
+        {
+          "x":1,
+          "y":1,
+          "path":"avgAuto.placement31",
+          "hex":"#f2d53e"
+
+        },
+        {
+          "x":2,
+          "y":1,
+          "path":"avgAuto.placement32",
+          "hex":"#a65de4"
+        },
+        {
+          "x":3,
+          "y":1,
+          "path":"avgAuto.placement33",
+          "hex":"#f2d53e"
+        },
+        {
+          "x":4,
+          "y":1,
+          "path":"avgAuto.placement34",
+          "hex":"#f2d53e"
+        },
+        {
+          "x":5,
+          "y":1,
+          "path":"avgAuto.placement35",
+          "hex":"#a65de4"
+        },
+        {
+          "x":6,
+          "y":1,
+          "path":"avgAuto.placement36",
+          "hex":"#f2d53e"
+        },
+        {
+          "x":7,
+          "y":1,
+          "path":"avgAuto.placement37",
+          "hex":"#f2d53e"
+        },
+        {
+          "x":8,
+          "y":1,
+          "path":"avgAuto.placement38",
+          "hex":"#a65de4"
+        },
+        {
+          "x":9,
+          "y":1,
+          "path":"avgAuto.placement39",
+          "hex":"#f2d53e"
+        },
+        {
+          "x":1,
+          "y":2,
+          "path":"avgAuto.placement21",
+          "hex":"#f2d53e"
+        },
+        {
+          "x":2,
+          "y":2,
+          "path":"avgAuto.placement22",
+          "hex":"#a65de4"
+        },
+        {
+          "x":3,
+          "y":2,
+          "path":"avgAuto.placement23",
+          "hex":"#f2d53e"
+        },
+        {
+          "x":4,
+          "y":2,
+          "path":"avgAuto.placement24",
+          "hex":"#f2d53e"
+        },
+        {
+          "x":5,
+          "y":2,
+          "path":"avgAuto.placement25",
+          "hex":"#a65de4"
+        },
+        {
+          "x":6,
+          "y":2,
+          "path":"avgAuto.placement26",
+          "hex":"#f2d53e"
+        },
+        {
+          "x":7,
+          "y":2,
+          "path":"avgAuto.placement27",
+          "hex":"#f2d53e"
+        },
+        {
+          "x":8,
+          "y":2,
+          "path":"avgAuto.placement28",
+          "hex":"#a65de4"
+        },
+        {
+          "x":9,
+          "y":2,
+          "path":"avgAuto.placement29",
+          "hex":"#f2d53e"
+        },
+        {
+          "x":1,
+          "y":3,
+          "path":"avgAuto.placement11",
+          "hex":"#888888"
+        },
+        {
+          "x":2,
+          "y":3,
+          "path":"avgAuto.placement12",
+          "hex":"#888888"
+        },
+        {
+          "x":3,
+          "y":3,
+          "path":"avgAuto.placement13",
+          "hex":"#888888"
+        },
+        {
+          "x":4,
+          "y":3,
+          "path":"avgAuto.placement14",
+          "hex":"#888888"
+        },
+        {
+          "x":5,
+          "y":3,
+          "path":"avgAuto.placement15",
+          "hex":"#888888"
+        },
+        {
+          "x":6,
+          "y":3,
+          "path":"avgAuto.placement16",
+          "hex":"#888888"
+        },
+        {
+          "x":7,
+          "y":3,
+          "path":"avgAuto.placement17",
+          "hex":"#888888"
+        },
+        {
+          "x":8,
+          "y":3,
+          "path":"avgAuto.placement18",
+          "hex":"#888888"
+        },
+        {
+          "x":9,
+          "y":3,
+          "path":"avgAuto.placement19",
+          "hex":"#888888"
+        }
+      ]
+    }
+  },
     {
-        "view": "team",
-        "module": "PerformanceTimePlot",
-        "name": "Performance Over Time",
-        "position": "main",
-        "options": {
-            "trackedStats": [
-                "scores.auto",
-                "scores.teleop",
-                "scores.endgame",
-                "scores.all",
-                "accuracy"
-            ]
+    "view":"team",
+    "module":"Grid",
+    "position":"main",
+    "name":"Avg Teleop Placements",
+    "options":{
+      "rows":3,
+      "cols":9,
+      "min":0,
+      "max":1,
+      "decimals":2,
+      "cells":[
+        {
+          "x":1,
+          "y":1,
+          "path":"avgTeleop.placement31",
+          "hex":"#f2d53e"
+
+        },
+        {
+          "x":2,
+          "y":1,
+          "path":"avgTeleop.placement32",
+          "hex":"#a65de4"
+        },
+        {
+          "x":3,
+          "y":1,
+          "path":"avgTeleop.placement33",
+          "hex":"#f2d53e"
+        },
+        {
+          "x":4,
+          "y":1,
+          "path":"avgTeleop.placement34",
+          "hex":"#f2d53e"
+        },
+        {
+          "x":5,
+          "y":1,
+          "path":"avgTeleop.placement35",
+          "hex":"#a65de4"
+        },
+        {
+          "x":6,
+          "y":1,
+          "path":"avgTeleop.placement36",
+          "hex":"#f2d53e"
+        },
+        {
+          "x":7,
+          "y":1,
+          "path":"avgTeleop.placement37",
+          "hex":"#f2d53e"
+        },
+        {
+          "x":8,
+          "y":1,
+          "path":"avgTeleop.placement38",
+          "hex":"#a65de4"
+        },
+        {
+          "x":9,
+          "y":1,
+          "path":"avgTeleop.placement39",
+          "hex":"#f2d53e"
+        },
+        {
+          "x":1,
+          "y":2,
+          "path":"avgTeleop.placement21",
+          "hex":"#f2d53e"
+        },
+        {
+          "x":2,
+          "y":2,
+          "path":"avgTeleop.placement22",
+          "hex":"#a65de4"
+        },
+        {
+          "x":3,
+          "y":2,
+          "path":"avgTeleop.placement23",
+          "hex":"#f2d53e"
+        },
+        {
+          "x":4,
+          "y":2,
+          "path":"avgTeleop.placement24",
+          "hex":"#f2d53e"
+        },
+        {
+          "x":5,
+          "y":2,
+          "path":"avgTeleop.placement25",
+          "hex":"#a65de4"
+        },
+        {
+          "x":6,
+          "y":2,
+          "path":"avgTeleop.placement26",
+          "hex":"#f2d53e"
+        },
+        {
+          "x":7,
+          "y":2,
+          "path":"avgTeleop.placement27",
+          "hex":"#f2d53e"
+        },
+        {
+          "x":8,
+          "y":2,
+          "path":"avgTeleop.placement28",
+          "hex":"#a65de4"
+        },
+        {
+          "x":9,
+          "y":2,
+          "path":"avgTeleop.placement29",
+          "hex":"#f2d53e"
+        },
+        {
+          "x":1,
+          "y":3,
+          "path":"avgTeleop.placement11",
+          "hex":"#888888"
+        },
+        {
+          "x":2,
+          "y":3,
+          "path":"avgTeleop.placement12",
+          "hex":"#888888"
+        },
+        {
+          "x":3,
+          "y":3,
+          "path":"avgTeleop.placement13",
+          "hex":"#888888"
+        },
+        {
+          "x":4,
+          "y":3,
+          "path":"avgTeleop.placement14",
+          "hex":"#888888"
+        },
+        {
+          "x":5,
+          "y":3,
+          "path":"avgTeleop.placement15",
+          "hex":"#888888"
+        },
+        {
+          "x":6,
+          "y":3,
+          "path":"avgTeleop.placement16",
+          "hex":"#888888"
+        },
+        {
+          "x":7,
+          "y":3,
+          "path":"avgTeleop.placement17",
+          "hex":"#888888"
+        },
+        {
+          "x":8,
+          "y":3,
+          "path":"avgTeleop.placement18",
+          "hex":"#888888"
+        },
+        {
+          "x":9,
+          "y":3,
+          "path":"avgTeleop.placement19",
+          "hex":"#888888"
         }
-    },
+      ]
+    }
+  },
     {
-        "view": "team",
-        "module": "Stats",
-        "position": "side",
-        "name": "Team Stats",
-        "options": {
-            "list": [
-                {
-                    "name": "Initiation Cross",
-                    "path": "averages.tarmacCrossTime",
-                    "multiplier": -0.001,
-                    "addend": 150,
-                    "decimals": 2,
-					"hideIfValue": 150,
-					"sort": -1,
-                    "unit": "s in"
-                },
-                {
-                    "name": "Climb Start Time",
-                    "path": "averages.startClimbTime",
-                    "multiplier": 0.001,
-                    "decimals": 2,
-					"hideIfValue": 0,
-					"sort": -1,
-                    "unit": "s to end"
-                },
-                {
-                    "name": "Climb End Time",
-                    "path": "averages.endClimbTime",
-                    "multiplier": 0.001,
-                    "decimals": 2,
-					"hideIfValue": 0,
-					"sort": -1,
-                    "unit": "s to end"
-                },
-				{
-					"name": "Climb Duration",
-					"path": "averages.climbDuration",
-					"multiplier": 0.001,
-					"decimals": 2,
-					"hideIfValue": 0,
-					"sort": -1,
-					"unit": "s"
-				},
-                {
-                    "name": "Time Per Ball",
-                    "path": "timePerBall",
-                    "multiplier": 0.001,
-                    "decimals": 2,
-					"hideIfValue": 0,
-					"sort": -1,
-                    "unit": "s"
-                },
-                {
-                    "name": "Accuracy",
-                    "path": "accuracy",
-                    "multiplier": 100,
-                    "decimals": 1,
-					"sort": 1,
-                    "unit": "%"
-                },
-                {
-                    "name": "Average Auto Points",
-                    "path": "averageScores.auto",
-					"decimals": 2,
-					"sort": 1
-                },
-                {
-                    "name": "Average Climb Points",
-                    "path": "averageScores.endgame",
-					"decimals": 2,
-					"sort": 1
-                },
-                {
-                    "name": "Average Points",
-                    "path": "averageScores.all",
-					"decimals": 2,
-					"sort": 1
-                },
-                {
-                    "name": "Average Upper Hub Shots",
-                    "path": "averages.upperHub",
-					"decimals": 2,
-					"sort": 1
-                },
-                {
-                    "name": "Average Lower Hub Shots",
-                    "path": "averages.lowerHub",
-					"decimals": 2,
-					"sort": 1
-                },
-                {
-                    "name": "Average Misses",
-                    "path": "averages.miss",
-					"decimals": 2,
-					"sort": -1
-                }
-            ]
-        }
+      "view": "team",
+      "module": "PerformanceTimePlot",
+      "name": "Scores Over Time",
+      "position": "main",
+      "options": {
+          "trackedStats": [
+              "scores.auto",
+              "scores.teleop",
+              "scores.dock",
+              "scores.total"
+          ]
+      }
     },
-    {
-        "view": "team",
-        "module": "Pie",
-        "position": "main",
-        "name": "Climb Distribution",
-        "options": {
-            "slices": [
-                {
-                    "name": "No Climb",
-                    "path": "climbLevels.noClimb"
-                },
-                {
-                    "name": "Fall",
-                    "path": "climbLevels.climbF"
-                },
-                {
-                    "name": "Low Rung",
-                    "path": "climbLevels.climb1"
-                },
-                {
-                    "name": "Mid Rung",
-                    "path": "climbLevels.climb2"
-                },
-                {
-                    "name": "High Rung",
-                    "path": "climbLevels.climb3"
-                },
-                {
-                    "name": "Traversal Rung",
-                    "path": "climbLevels.climb4"
-                }
-            ]
-        }
-    },
-    {
-        "view": "team",
-        "module": "Pie",
-        "position": "main",
-        "name": "Shot Distribution",
-        "options": {
-            "slices": [
-                {
-                    "name": "Upper Hub",
-                    "path": "counts.upperHub"
-                },
-                {
-                    "name": "Lower Hub",
-                    "path": "counts.lowerHub"
-                },
-                {
-                    "name": "Miss",
-                    "path": "counts.miss"
-                }
-            ]
-        }
-    },
-	{
+  {
 		"view": "match",
 		"module": "SingleDisplay",
 		"name": "Alliance Score",
 		"position": "main",
 		"options": {
-			"path": "averageScores.all",
+			"path": "averageScores.total",
 			"aggrMethod": "sum",
+			"decimals": 2
+		}
+	},
+    {
+		"view": "match",
+		"module": "SingleDisplay",
+		"name": "Percent Chance of Winning",
+		"position": "main",
+    "wholeMatch": true,
+		"options": {
+            "aggrMethod" : "percentChanceOfWinning",
 			"decimals": 2
 		}
 	},
@@ -237,192 +548,430 @@
 	{
 		"view": "match",
 		"module": "ColumnDisplay",
-		"name": "Climb Points",
+		"name": "Dock Points",
 		"position": "main",
 		"options": {
-			"path": "averageScores.endgame",
+			"path": "averageScores.dock",
 			"sort": 1,
 			"decimals": 1
 		}
 	},
-	{
-		"view": "match",
-		"module": "ColumnDisplay",
-		"name": "Possible Climbs",
-		"position": "main",
-		"options": {
-			"string": true,
-			"path": "possibleClimbs"
-		}
-	},
-	{
-		"view": "match",
-		"module": "ColumnDisplay",
-		"name": "Climb Time",
-		"position": "main",
-		"options": {
-			"path": "averages.climbDuration",
-			"multiplier": 0.001,
-			"decimals": 2,
-			"hideIfValue": 0,
-			"sort": -1,
-			"unit": "s"
-		}
-	},
-	{
-		"view": "match",
-		"module": "ColumnDisplay",
-		"name": "Total Points",
-		"position": "main",
-		"options": {
-			"path": "averageScores.all",
-			"sort": 1,
-			"decimals": 1
-		}
-	},
-	{
-		"view": "match",
-		"module": "ColumnDisplay",
-		"name": "Time Per Ball",
-		"position": "main",
-		"options": {
-			"path": "timePerBall",
-			"multiplier": 0.001,
-			"decimals": 2,
-			"hideIfValue": 0,
-			"sort": -1,
-			"unit": "s"
-		}
-	},
-	{
-		"view": "match",
-		"module": "ColumnDisplay",
-		"name": "Accuracy",
-		"position": "main",
-		"options": {
-			"path": "accuracy",
-			"sort": 1,
-			"decimals": 1,
-			"multiplier": 100,
-			"unit": "%"
-		}
-	},
-	{
-		"view": "match",
-		"module": "ColumnDisplay",
-		"name": "Possible Shots",
-		"position": "main",
-		"options": {
-			"string": true,
-			"path": "possibleShots"
-		}
-	},
-	{
-		"view": "match",
-		"module": "ColumnDisplay",
-		"name": "Drivetrain",
-		"position": "main",
-		"options": {
-			"string": true,
-			"path": "manual.drivetrain"
-		}
-	},
-    {
-        "view": "match",
-        "module": "HeatmapScatterPlot",
-        "name": "Alliance Shot Plot",
-        "position": "main",
-        "options": {
-            "coordinatePath": "other.pos",
-            "aggregatedActionsPath": "aggregatedActions",
-            "actionGroups": [
-                {
-                    "name": "Shots",
-                    "actions": ["upperHub", "lowerHub", "miss"]
-                }
-            ],
-            "actionLabels": {
-                "upperHub": "Upper",
-                "lowerHub": "Lower",
-                "miss": "Miss"
-            },
-            "imgPath": "img/field.svg"
+ 
+  {
+    "view":"match",
+    "module": "Pie",
+    "position":"main",
+    "name":"Avg Cone Pickups",
+    "wholeMatch": false,
+    "options":{
+      "slices":[
+        {
+          "name":"Grid",
+          "path":"averages.conePickupGrid"
+        },
+        {
+          "name":"Community",
+          "path":"averages.conePickupCommunity"
+        },
+        {
+          "name":"Floor",
+          "path":"averages.conePickupFloor"
+        },
+        {
+          "name":"Chute",
+          "path":"averages.conePickupChute"
+        },
+        {
+          "name":"Shelf",
+          "path":"averages.conePickupShelf"
         }
-    },
-	{
-        "view": "match",
-        "module": "HeatmapScatterPlot",
-        "name": "Alliance Pickup Plot",
-        "position": "main",
-        "options": {
-            "coordinatePath": "other.pos",
-            "aggregatedActionsPath": "aggregatedActions",
-            "actionGroups": [
-                {
-                    "name": "Pickups",
-                    "actions": ["groundPickup"]
-                }
-            ],
-            "actionLabels": {
-                "groundPickup": "Ground"
-            },
-            "imgPath": "img/field.svg"
-        }
-    },
-    {
-        "view": "match",
-        "module": "Stats",
-        "position": "side",
-        "name": "Alliance Stats",
-        "options": {
-            "list": [
-                {
-                    "name": "Expected Auto Points",
-                    "path": "averageScores.auto",
-					"decimals": 2,
-                    "aggrMethod": "sum"
-                },
-                {
-                    "name": "Expected Teleop Points",
-                    "path": "averageScores.teleop",
-					"decimals": 2,
-                    "aggrMethod": "sum"
-                },
-                {
-                    "name": "Expected Climb Points",
-                    "path": "averageScores.endgame",
-					"decimals": 2,
-                    "aggrMethod": "sum"
-                },
-                {
-                    "name": "Expected Score",
-                    "path": "averageScores.all",
-					"decimals": 2,
-                    "aggrMethod": "sum"
-                }
-            ]
-        }
-    },
-    {
-        "view": "match",
-        "module": "Pie",
-        "position": "main",
-        "name": "Shot Distribution",
-        "options": {
-            "slices": [
-                {
-                    "name": "Upper Hub",
-                    "path": "averages.upperHub"
-                },
-                {
-                    "name": "Lower Hub",
-                    "path": "averages.lowerHub"
-                },
-                {
-                    "name": "Miss",
-                    "path": "averages.miss"
-                }
-            ]
-        }
+      ]
     }
+  },
+  {
+    "view":"match",
+    "module": "Pie",
+    "position":"main",
+    "name":"Avg Cube Pickups",
+    "options":{
+      "slices":[
+        {
+          "name":"Grid",
+          "path":"averages.cubePickupGrid"
+        },
+        {
+          "name":"Community",
+          "path":"averages.cubePickupCommunity"
+        },
+        {
+          "name":"Floor",
+          "path":"averages.cubePickupFloor"
+        },
+        {
+          "name":"Chute",
+          "path":"averages.cubePickupChute"
+        },
+        {
+          "name":"Shelf",
+          "path":"averages.cubePickupShelf"
+        }
+      ]
+    }
+  },
+  {
+    "view":"match",
+    "module":"Grid",
+    "position":"main",
+    "name":"Avg Auto Placements",
+    "options":{
+      "rows":3,
+      "cols":9,
+      "decimals":2,
+      "min":0,
+      "max":1,
+      "cells":[
+        {
+          "x":1,
+          "y":1,
+          "path":"avgAuto.placement31",
+          "hex":"#f2d53e"
+
+        },
+        {
+          "x":2,
+          "y":1,
+          "path":"avgAuto.placement32",
+          "hex":"#a65de4"
+        },
+        {
+          "x":3,
+          "y":1,
+          "path":"avgAuto.placement33",
+          "hex":"#f2d53e"
+        },
+        {
+          "x":4,
+          "y":1,
+          "path":"avgAuto.placement34",
+          "hex":"#f2d53e"
+        },
+        {
+          "x":5,
+          "y":1,
+          "path":"avgAuto.placement35",
+          "hex":"#a65de4"
+        },
+        {
+          "x":6,
+          "y":1,
+          "path":"avgAuto.placement36",
+          "hex":"#f2d53e"
+        },
+        {
+          "x":7,
+          "y":1,
+          "path":"avgAuto.placement37",
+          "hex":"#f2d53e"
+        },
+        {
+          "x":8,
+          "y":1,
+          "path":"avgAuto.placement38",
+          "hex":"#a65de4"
+        },
+        {
+          "x":9,
+          "y":1,
+          "path":"avgAuto.placement39",
+          "hex":"#f2d53e"
+        },
+        {
+          "x":1,
+          "y":2,
+          "path":"avgAuto.placement21",
+          "hex":"#f2d53e"
+        },
+        {
+          "x":2,
+          "y":2,
+          "path":"avgAuto.placement22",
+          "hex":"#a65de4"
+        },
+        {
+          "x":3,
+          "y":2,
+          "path":"avgAuto.placement23",
+          "hex":"#f2d53e"
+        },
+        {
+          "x":4,
+          "y":2,
+          "path":"avgAuto.placement24",
+          "hex":"#f2d53e"
+        },
+        {
+          "x":5,
+          "y":2,
+          "path":"avgAuto.placement25",
+          "hex":"#a65de4"
+        },
+        {
+          "x":6,
+          "y":2,
+          "path":"avgAuto.placement26",
+          "hex":"#f2d53e"
+        },
+        {
+          "x":7,
+          "y":2,
+          "path":"avgAuto.placement27",
+          "hex":"#f2d53e"
+        },
+        {
+          "x":8,
+          "y":2,
+          "path":"avgAuto.placement28",
+          "hex":"#a65de4"
+        },
+        {
+          "x":9,
+          "y":2,
+          "path":"avgAuto.placement29",
+          "hex":"#f2d53e"
+        },
+        {
+          "x":1,
+          "y":3,
+          "path":"avgAuto.placement11",
+          "hex":"#888888"
+        },
+        {
+          "x":2,
+          "y":3,
+          "path":"avgAuto.placement12",
+          "hex":"#888888"
+        },
+        {
+          "x":3,
+          "y":3,
+          "path":"avgAuto.placement13",
+          "hex":"#888888"
+        },
+        {
+          "x":4,
+          "y":3,
+          "path":"avgAuto.placement14",
+          "hex":"#888888"
+        },
+        {
+          "x":5,
+          "y":3,
+          "path":"avgAuto.placement15",
+          "hex":"#888888"
+        },
+        {
+          "x":6,
+          "y":3,
+          "path":"avgAuto.placement16",
+          "hex":"#888888"
+        },
+        {
+          "x":7,
+          "y":3,
+          "path":"avgAuto.placement17",
+          "hex":"#888888"
+        },
+        {
+          "x":8,
+          "y":3,
+          "path":"avgAuto.placement18",
+          "hex":"#888888"
+        },
+        {
+          "x":9,
+          "y":3,
+          "path":"avgAuto.placement19",
+          "hex":"#888888"
+        }
+      ]
+    }
+  },
+    {
+    "view":"match",
+    "module":"Grid",
+    "position":"main",
+    "name":"Avg Teleop Placements",
+    "options":{
+      "rows":3,
+      "cols":9,
+      "min":0,
+      "max":1,
+      "decimals":2,
+      "cells":[
+        {
+          "x":1,
+          "y":1,
+          "path":"avgTeleop.placement31",
+          "hex":"#f2d53e"
+
+        },
+        {
+          "x":2,
+          "y":1,
+          "path":"avgTeleop.placement32",
+          "hex":"#a65de4"
+        },
+        {
+          "x":3,
+          "y":1,
+          "path":"avgTeleop.placement33",
+          "hex":"#f2d53e"
+        },
+        {
+          "x":4,
+          "y":1,
+          "path":"avgTeleop.placement34",
+          "hex":"#f2d53e"
+        },
+        {
+          "x":5,
+          "y":1,
+          "path":"avgTeleop.placement35",
+          "hex":"#a65de4"
+        },
+        {
+          "x":6,
+          "y":1,
+          "path":"avgTeleop.placement36",
+          "hex":"#f2d53e"
+        },
+        {
+          "x":7,
+          "y":1,
+          "path":"avgTeleop.placement37",
+          "hex":"#f2d53e"
+        },
+        {
+          "x":8,
+          "y":1,
+          "path":"avgTeleop.placement38",
+          "hex":"#a65de4"
+        },
+        {
+          "x":9,
+          "y":1,
+          "path":"avgTeleop.placement39",
+          "hex":"#f2d53e"
+        },
+        {
+          "x":1,
+          "y":2,
+          "path":"avgTeleop.placement21",
+          "hex":"#f2d53e"
+        },
+        {
+          "x":2,
+          "y":2,
+          "path":"avgTeleop.placement22",
+          "hex":"#a65de4"
+        },
+        {
+          "x":3,
+          "y":2,
+          "path":"avgTeleop.placement23",
+          "hex":"#f2d53e"
+        },
+        {
+          "x":4,
+          "y":2,
+          "path":"avgTeleop.placement24",
+          "hex":"#f2d53e"
+        },
+        {
+          "x":5,
+          "y":2,
+          "path":"avgTeleop.placement25",
+          "hex":"#a65de4"
+        },
+        {
+          "x":6,
+          "y":2,
+          "path":"avgTeleop.placement26",
+          "hex":"#f2d53e"
+        },
+        {
+          "x":7,
+          "y":2,
+          "path":"avgTeleop.placement27",
+          "hex":"#f2d53e"
+        },
+        {
+          "x":8,
+          "y":2,
+          "path":"avgTeleop.placement28",
+          "hex":"#a65de4"
+        },
+        {
+          "x":9,
+          "y":2,
+          "path":"avgTeleop.placement29",
+          "hex":"#f2d53e"
+        },
+        {
+          "x":1,
+          "y":3,
+          "path":"avgTeleop.placement11",
+          "hex":"#888888"
+        },
+        {
+          "x":2,
+          "y":3,
+          "path":"avgTeleop.placement12",
+          "hex":"#888888"
+        },
+        {
+          "x":3,
+          "y":3,
+          "path":"avgTeleop.placement13",
+          "hex":"#888888"
+        },
+        {
+          "x":4,
+          "y":3,
+          "path":"avgTeleop.placement14",
+          "hex":"#888888"
+        },
+        {
+          "x":5,
+          "y":3,
+          "path":"avgTeleop.placement15",
+          "hex":"#888888"
+        },
+        {
+          "x":6,
+          "y":3,
+          "path":"avgTeleop.placement16",
+          "hex":"#888888"
+        },
+        {
+          "x":7,
+          "y":3,
+          "path":"avgTeleop.placement17",
+          "hex":"#888888"
+        },
+        {
+          "x":8,
+          "y":3,
+          "path":"avgTeleop.placement18",
+          "hex":"#888888"
+        },
+        {
+          "x":9,
+          "y":3,
+          "path":"avgTeleop.placement19",
+          "hex":"#888888"
+        }
+      ]
+    }
+  }
 ]

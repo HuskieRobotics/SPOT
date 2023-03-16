@@ -1,6 +1,9 @@
 let actionQueue = [];
 let devEnd
-
+var variables = {
+  
+};
+var previousLayers = [];
 (async () => {
     config = await config;
     matchScoutingConfig = await matchScoutingConfig;
@@ -183,9 +186,12 @@ let devEnd
         for (const b of buttons) {
             b.element.style.display = "none";
         }
+        var rendered = []
         for (const b of layers[layer]) {
             b.element.style.display = "flex";
+            rendered.push(b)
         }
+        previousLayers.push(rendered)
     }
 
     // DATA
