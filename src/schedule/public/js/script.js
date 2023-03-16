@@ -6,7 +6,7 @@ let processedMatches = [];
 
     constructApp();
 
-    let matches = 0;
+    var matches = 0;
     let numMatchesInput = document.querySelector("#numMatches");
     numMatchesInput.addEventListener("keydown", function (e){
         if(e.keyCode == 13) {
@@ -22,7 +22,7 @@ let processedMatches = [];
 
 async function constructApp() {
 
-    updateMatches(matches)
+    updateMatches(matches);
     
 
 }
@@ -153,5 +153,9 @@ async function getManualMatches() {
 
 }
 
+fetch('/schedule/matches',{
+    method:"POST",
+    body:JSON.stringify(processedManualMatches)
+})
 
 
