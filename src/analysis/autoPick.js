@@ -88,37 +88,44 @@ function possibleAlliances(teams) {
 	console.log("Possible alliances teams: ")
 	console.log(teams)
 	*/
-	for(let x = 0; x < teams.length; x++) {
-		for(let y = 0; y < teams.length; y++) {
-			for(let z = 0; z < teams.length; z++) { // makes sure there aren't alliances with duplicate teams
-				if(teams[x].robotNumber!=teams[y].robotNumber && teams[y].robotNumber!=teams[z].robotNumber && teams[z].robotNumber!=teams[x].robotNumber){
-					/*
-					console.log("adding alliance: ")
-					console.log(teams[x].robotNumber)
-					console.log(teams[y].robotNumber)
-					console.log(teams[z].robotNumber)
-					*/
-					let validAlliance = true;
-					alliances.forEach(alliance=> // make sure we don't add the same alliance twice
-						{
-							let teams_matching = 0;
-							alliance.forEach(team => {if (team.robotNumber == teams[x].robotNumber || 
-								team.robotNumber == teams[y].robotNumber || 
-								team.robotNumber == teams[z].robotNumber) 
-									{teams_matching++}
-							})
-							if(teams_matching == 3){
-								validAlliance = false;
-							}
-						})
+  for(let x = 0;x < teams.length;x++){
+    if(!alliances.includes(teams[x])){
+      alliances.push([teams[x]])
+    }
+  }
+
+  
+	// for(let x = 0; x < teams.length; x++) {
+	// 	for(let y = 0; y < teams.length; y++) {
+	// 		for(let z = 0; z < teams.length; z++) { // makes sure there aren't alliances with duplicate teams
+	// 			if(teams[x].robotNumber!=teams[y].robotNumber && teams[y].robotNumber!=teams[z].robotNumber && teams[z].robotNumber!=teams[x].robotNumber){
+	// 				/*
+	// 				console.log("adding alliance: ")
+	// 				console.log(teams[x].robotNumber)
+	// 				console.log(teams[y].robotNumber)
+	// 				console.log(teams[z].robotNumber)
+	// 				*/
+	// 				let validAlliance = true;
+	// 				alliances.forEach(alliance=> // make sure we don't add the same alliance twice
+	// 					{
+	// 						let teams_matching = 0;
+	// 						alliance.forEach(team => {if (team.robotNumber == teams[x].robotNumber || 
+	// 							team.robotNumber == teams[y].robotNumber || 
+	// 							team.robotNumber == teams[z].robotNumber) 
+	// 								{teams_matching++}
+	// 						})
+	// 						if(teams_matching == 3){
+	// 							validAlliance = false;
+	// 						}
+	// 					})
 					
-					if(validAlliance){alliances.push([teams[x], teams[y], teams[z]])
-					}
-				}
+	// 				if(validAlliance){alliances.push([teams[x], teams[y], teams[z]])
+	// 				}
+	// 			}
 				
-			}
-		}
-	}
+	// 		}
+	// 	}
+	// }
 	return alliances
 }
 /**
@@ -259,7 +266,7 @@ function compareAllTeams(teams) {
 	}
 	//console.log("alliance with score length" + alliancesWithScore.length)
 	for(let allianceNum = 0; allianceNum < alliancesWithScore.length;allianceNum++){
-		for(let team = 0; team <3; team++){ // access each team on the alliance
+		for(let team = 0; team <alliancesWithScore[allianceNum].alliance.length; team++){ // access each team on the alliance
 			//console.log("team that probability is added to: ")
 			//console.log(alliancesWithScore[allianceNum].alliance[team])
 			alliancesWithScore[allianceNum].alliance[team].avgProbability += alliancesWithScore[allianceNum].probability;
