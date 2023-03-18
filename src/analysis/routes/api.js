@@ -30,31 +30,32 @@ router.get("/csv", async (req,res) => {
 
     //create rows
     let rows = [];
-    let headerRow = false;
-    for (let [teamNumber,team] of Object.entries(dataset.teams) ) {
-        console.log(team.counts)
-        if (!headerRow) {
-            headerRow = true;
-            rows.push(["Team Number", 
-                ...Object.entries(team.counts).map(([i,x]) => i+" Count"), //all counts
-                ...Object.entries(team.averages).map(([i,x]) => i+" Average"), //all averages
-                ...Object.entries(team.averageScores).map(([i,x]) => i+" Average Score"), //average scores
-                "Time Per Ball",
-                "Possible Climbs",
-                "Accuracy", //accuracy,
-				...Object.entries(team.averageScores).map(([i,x]) => i+"Average"), //all averages
-            ])
-        }
-        rows.push([teamNumber, 
-            ...Object.entries(team.counts).map(([i,x]) => x), //all counts
-            ...Object.entries(team.averages).map(([i,x]) => x), //all averages
-            ...Object.entries(team.averageScores).map(([i,x]) => x), //all averages
-            team.timePerBall,
-            team.possibleClimbs,
-            team.accuracy, //accuracy
-			...Object.entries(team.averageScores).map(([i,x]) => x), //all averages
-        ])
+    let headerRow = true;
+    let checkData  = function(team){
+      if(Object.entries(team).filter(([key,value])=>key!="manual").length == 0){
+        return false
+      } 
+      return true
     }
+
+    for (let [teamNumber,team] of Object.entries(dataset.teams).filter(([num,team])=>checkData(team)) ) {
+      if(headerRow){
+        headerRow = false;
+        rows.push(["Team #",
+          ...Object.entries(team.averages).filter(([key,value])=>!isNaN(value)&&value).map(([i,x]) => i+" Average"), //all averages
+            ...Object.entries(team.averageScores).filter(item=>!isNaN(item)).map(([i,x]) => i+" Score Average"), //all averages
+            "Average Cycle",
+            "Average Completed Cycle"
+        ])
+      }
+      rows.push([teamNumber,
+            ...Object.entries(team.averages).filter(([key,value])=>!isNaN(value)&&value).map(([i,x]) => x), //all averages
+            ...Object.entries(team.averageScores).filter(item=>!isNaN(item)).map(([i,x]) => x), //all averages
+            team.cycle.averageTime,
+            team.cycle.averageTimeComplete
+      ])
+
+    } 
 
     //make into csv
     let csv = rows.map(row => row.reduce((acc,value) => acc+`,${value}`)).reduce((acc,row) => acc+`${row}\n`, "");
