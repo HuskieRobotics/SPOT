@@ -3,6 +3,40 @@
       "view":"team",
       "module":"Stats",
       "position":"side",
+      "name":"Average Scores",
+      "options":{
+        "list":[
+          {
+            "name":"Avg Score",
+            "path":"averageScores.total",
+            "decimals":2,
+            "sort":1
+          },
+          {
+            "name":"Avg Auto",
+            "path":"averageScores.auto",
+            "decimals":2,
+            "sort":1
+          },
+          {
+            "name":"Avg Teleop",
+            "path":"averageScores.teleop",
+            "decimals":2,
+            "sort":1
+          },
+          {
+            "name":"Avg Dock",
+            "path":"averageScores.dock",
+            "decimals":2,
+            "sort":1
+          }
+        ]
+      }
+    },
+    {
+      "view":"team",
+      "module":"Stats",
+      "position":"side",
       "name":"Charging Dock Averages",
       "options": {
         "list":[
@@ -77,6 +111,22 @@
         "multiplier":0.001,
         "unit":" sec"
       }
+      ]
+    }
+  },
+  {
+    "view":"team",
+    "module":"Stats",
+    "position":"side",
+    "name":"Broken Rate",
+    "options":{
+      "list":[
+        {
+          "name":"Rate",
+          "path":"averages.broken",
+          "decimals":2,
+          "sort":-1
+        }
       ]
     }
   },
