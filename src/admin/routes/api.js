@@ -92,8 +92,9 @@ router.get("/matches", async (req,res) => {
 //1 check if there is a manual schedu,e
 //2 if there is a manual schedule, send it instead of the TBA one
 //3 if there isnt send the TBA one
-  let manualSchedule = await axios.get('http://localhost:8080/schedule/matches') // temp fix
-  if(manualSchedule){
+  let manualSchedule = await axios.get('http://localhost:8080/schedule/matches').then(res=>res.data) // temp fix
+  console.log(manualSchedule)
+  if(manualSchedule != {}){ // find a better way to check if its empty
     res.json({
       "allMatches": manualSchedule,
       "currentMatch": ScoutingSync.match

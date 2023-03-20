@@ -12,8 +12,9 @@ let processedMatches = [];
         if(e.keyCode == 13) {
             matches = numMatchesInput.value
             console.log(matches);
+            makeMatchSchedule(matches);
             updateMatches(matches);
-            makeMatchSchedule(matches); // make a match schedule form
+             // make a match schedule form
             //FormData.clear;
         }
     })
@@ -129,7 +130,6 @@ function makeMatchSchedule(matchTotalNum){
 }
 
 
-
 async function processTeams(matchNum, teams) {
     // inserts data into the correct spot
     let data = await teams;
@@ -146,6 +146,17 @@ async function processTeams(matchNum, teams) {
     processedManualMatches[matchNum-1].robots.red = redTeams; //attempting to change the object properties
     processedManualMatches[matchNum-1].robots.blue = blueTeams;
 
+    console.log(processedManualMatches); // is it because after stringify its not an object anymore? or does that not work
+    fetch('/schedule/matches',{
+        method:"POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body:{
+         "matches":processedManualMatches
+        }
+    })
+
 }
 
 async function getManualMatches() {
@@ -153,9 +164,6 @@ async function getManualMatches() {
 
 }
 
-fetch('/schedule/matches',{
-    method:"POST",
-    body:JSON.stringify(processedManualMatches)
-})
+
 
 

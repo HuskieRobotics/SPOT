@@ -5,7 +5,7 @@ const chalk = require("chalk");
 const fs = require("fs");
 
 app.set("view engine", "ejs");
-let bodyParser = require("body-parser");
+var bodyParser = require("body-parser");
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
