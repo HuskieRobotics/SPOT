@@ -191,15 +191,21 @@ class ScouterDisplay {
         this.scouter = scouter;
 
         this.scouterElement = document.createElement("button");
+       
         this.scouterElement.innerHTML = `
         <div class="match-number"></div>
         <div class="scouter-id"></div>
         <div class="robot-number"></div>
         <div class="scouter-status"></div>
-        <input type="disconnect" class="disconnect">
         `;
         this.scouterElement.classList.add("scouter");
+        
+        this.scouterElement.onclick = dissconnect();
 
+        function dissconnect() {
+            console.log("dissconnect");
+            //scouter.socket.disconnect();
+        }
         document.querySelector("#scouter-list").appendChild(this.scouterElement);
 
         this.updateScouterElement();

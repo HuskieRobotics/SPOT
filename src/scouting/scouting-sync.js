@@ -169,7 +169,7 @@ class ScoutingSync {
     static getScouters() {
         let out = ScoutingSync.scouters.map(x => {return { ...x }} );
         for (let scouter of out) { //remove sockets from all the scouters so there isn't circular dependency
-            delete scouter.socket;
+            delete scouter.socket;//maybe don't do this bc why
         }
         return out;
     }
