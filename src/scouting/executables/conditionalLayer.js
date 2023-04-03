@@ -8,6 +8,8 @@ executables["conditionalLayer"] = {
         for (let button of layers.flat()) { //hide all buttons
             button.element.style.display = "none"
         }
+      console.log("variables");
+      console.log(variables)
         var renderedButtons = [] 
         for (let button of layers[toLayer]) {
           var targetVariables = [];

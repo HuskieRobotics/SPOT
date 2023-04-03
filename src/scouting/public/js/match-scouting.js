@@ -10,6 +10,15 @@ var previousLayers = [];
     //initiate timing
     let time = matchScoutingConfig.timing.totalTime;
     let timerActive = false;
+
+    //intialize variables
+    let varNames = Object.keys(matchScoutingConfig.variables)
+    for(let key of varNames){
+     variables[key] = {
+            "current":matchScoutingConfig.variables[key],
+            "previous":[]
+          }
+    }
     //create grid
     const grid = document.querySelector("#match-scouting .button-grid");
     grid.style.gridTemplateColumns = `repeat(${matchScoutingConfig.layout.gridColumns}, 1fr)`;
