@@ -2,9 +2,43 @@
 let processedMatches = [];
 
 ;(async () => {
-    // const authRequest = await fetch("./api/auth").then(res => res.json())
+    const authRequest = await fetch("./api/auth").then(res => res.json())
 
-    constructApp();
+    if (authRequest.status !== 2) {
+        const authModal = new Modal("small", false).header("Sign In")
+        const accessCodeInput = createDOMElement("input", "access-input")
+        accessCodeInput.placeholder = "Access Code"
+        accessCodeInput.type = "password"
+        accessCodeInput.addEventListener("keydown", (e) => {
+            if (e.keyCode == 13) {
+                validate(accessCodeInput.value, authModal)
+            }
+        })
+        authModal.element.appendChild(accessCodeInput)
+        authModal.action("Submit", async () => {
+            validate(accessCodeInput.value, authModal)
+        })
+    } else {
+        await constructApp()
+    }
+
+    async function validate(accessCode, authModal) {
+        const auth = await fetch("./api/auth", {
+            headers: {
+                Authorization: accessCode
+            }
+        }).then(res => res.json())
+
+        if (auth.status === 1) {
+            await constructApp(accessCode)
+            authModal.modalExit()
+        } else {
+            new Popup("error", "Wrong Access Code")
+        }
+    }
+
+
+    //constructApp();
 
     var matches = 0;
     let numMatchesInput = document.querySelector("#numMatches");
@@ -153,9 +187,7 @@ async function processTeams(matchNum, teams) {
         headers: {
             "Content-Type": "application/json",
         },
-        body:JSON.stringify({
-         "matches":processedManualMatches
-        })
+        body:JSON.stringify(processedManualMatches)
     }).catch(e=>console.log(e))
 
 }

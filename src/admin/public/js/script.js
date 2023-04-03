@@ -127,7 +127,7 @@ async function updateMatches(accessCode) {
     //rebuild matches view
     console.log("all matches")
     console.log(allMatches)
-    for (let match of allMatches.matches) {
+    for (let match of allMatches) {
         let matchElement = document.createElement("div");
         matchElement.classList.add("match");
         matchElement.innerHTML = `
