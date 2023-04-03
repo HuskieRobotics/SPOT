@@ -122,8 +122,8 @@ function makeMatchSchedule(matchTotalNum){
             number: i, 
             match_string: `2023temp_q${i}`, // i use temp bc we don't need event keys and don't have one
             robots: {
-                red: null, // these should be arrays
-                blue: null,
+                red: [null, null, null], // these should be arrays
+                blue: [null, null, null],
             }
         });
     }
