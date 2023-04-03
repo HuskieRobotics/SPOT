@@ -146,16 +146,17 @@ async function processTeams(matchNum, teams) {
     processedManualMatches[matchNum-1].robots.red = redTeams; //attempting to change the object properties
     processedManualMatches[matchNum-1].robots.blue = blueTeams;
 
-    console.log(processedManualMatches); // is it because after stringify its not an object anymore? or does that not work
+    console.log(processedManualMatches);
+    console.log(JSON.stringify(processedManualMatches)) // is it because after stringify its not an object anymore? or does that not work
     fetch('/schedule/matches',{
         method:"POST",
         headers: {
             "Content-Type": "application/json",
         },
-        body:{
+        body:JSON.stringify({
          "matches":processedManualMatches
-        }
-    })
+        })
+    }).catch(e=>console.log(e))
 
 }
 

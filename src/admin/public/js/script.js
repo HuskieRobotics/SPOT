@@ -125,7 +125,9 @@ async function updateMatches(accessCode) {
     document.querySelector("#match-list").innerHTML = "";
 
     //rebuild matches view
-    for (let match of allMatches) {
+    console.log("all matches")
+    console.log(allMatches)
+    for (let match of allMatches.matches) {
         let matchElement = document.createElement("div");
         matchElement.classList.add("match");
         matchElement.innerHTML = `

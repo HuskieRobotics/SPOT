@@ -10,9 +10,11 @@ router.get("/", (req,res) => {
 })
 
 router.post('/matches',(req,res)=>{
+    
     console.log("req body on /schedule/matches")
     console.log(req.body)
     schedule = req.body;
+    res.send(200)
 })
 router.get('/matches',(req,res)=>{
     res.send(schedule)
