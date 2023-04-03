@@ -15,9 +15,9 @@ var previousLayers = [];
     let varNames = Object.keys(matchScoutingConfig.variables)
     for(let key of varNames){
      variables[key] = {
-            "current":matchScoutingConfig.variables[key],
-            "previous":[]
-          }
+        "current":matchScoutingConfig.variables[key],
+        "previous":[]
+      }
     }
     //create grid
     const grid = document.querySelector("#match-scouting .button-grid");
