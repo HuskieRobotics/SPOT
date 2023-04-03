@@ -200,11 +200,12 @@ class ScouterDisplay {
         `;
         this.scouterElement.classList.add("scouter");
         
-        this.scouterElement.onclick = dissconnect();
+        this.scouterElement.onclick = dissconnect;
 
         function dissconnect() {
             console.log("dissconnect");
-            //scouter.socket.disconnect();
+            console.log(this.scouter)
+            scouter.socket.disconnect();
         }
         document.querySelector("#scouter-list").appendChild(this.scouterElement);
 
