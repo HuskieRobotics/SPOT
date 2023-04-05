@@ -41,6 +41,9 @@ let processedMatches = [];
     //constructApp();
 
     var matches = 0;
+
+    // if it is checked, readonly, otherwise
+
     let numMatchesInput = document.querySelector("#numMatches");
     numMatchesInput.addEventListener("keydown", function (e){
         if(e.keyCode == 13) {

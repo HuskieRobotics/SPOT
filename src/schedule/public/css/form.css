@@ -46,6 +46,35 @@
     width: 100%;
 }
 
+
+/* .input .input-select {
+  width: calc(.75 * 80px);
+  height: calc(.75 * 80px);
+  margin-right: 14px;
+  appearance: none;
+  background-color: var(--text);
+  display: grid;
+  place-content: center;
+  border-radius: 10px;
+  align-self: center;
+}
+
+
+.input .input-select::before {
+  content: "";
+  width: calc(.4 * 100px);
+  height: calc(.4 * 100px);
+  transform: scale(0);
+  transition: 120ms transform cubic-bezier(.37,-0.02,.47,1.77);
+  background: center url("../img/lock_closed.png");
+
+}
+
+.input .input-select:checked::before {
+  transform: scale(1);
+  
+} */
+
 #form {
     display: flex;
     align-items: center;
