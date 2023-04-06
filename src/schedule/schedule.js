@@ -20,7 +20,6 @@ router.get('/matches',(req,res)=>{
     res.send(schedule)
 })
 
-//add a method that gets at the schedule and then call that method from the serverside file to grab it (no need for route or axios)
 router.use("/api", require("./routes/api.js"));
 
 module.exports = router;

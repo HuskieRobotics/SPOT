@@ -1,6 +1,6 @@
-
+// matches array 
 let processedMatches = [];
-
+// authentication 
 ;(async () => {
     const authRequest = await fetch("./api/auth").then(res => res.json())
 
@@ -38,26 +38,24 @@ let processedMatches = [];
     }
 
 
-    //constructApp();
-
+    // number of matches input; after enter is clicked make match schedule
     var matches = 0;
 
-    // if it is checked, readonly, otherwise
 
-    let numMatchesInput = document.querySelector("#numMatches");
+   let numMatchesInput = document.querySelector("#numMatches");
     numMatchesInput.addEventListener("keydown", function (e){
         if(e.keyCode == 13) {
             matches = numMatchesInput.value
             console.log(matches);
             makeMatchSchedule(matches);
             updateMatches(matches);
-             // make a match schedule form
-            //FormData.clear;
+         
         }
     })
 
 })()
 
+// construct app 
 async function constructApp() {
 
     
@@ -78,10 +76,9 @@ async function updateMatches(matchNumber) {
     document.querySelector("#match-list").innerHTML = "";
     for(let i=1; i<=matchNumber; i++)
     {
-        //   <input type="image" src="./img/lock_closed.png" class="lock-img">
-        let matchElement = document.createElement("div") // test 
+        let matchElement = document.createElement("div") 
         document.querySelector("#match-list").appendChild(matchElement);
-        matchElement.classList.add("match"); // Add a button to add name intead of "manual" on table 
+        matchElement.classList.add("match"); 
         matchElement.innerHTML = `
         <div class="match-header"><strong>${i}</strong> - ${"MANUAL"}-<strong>${"QM" + i}</strong></div> 
         <input type="checkbox" class="match-select" id="${i}">
@@ -98,14 +95,12 @@ async function updateMatches(matchNumber) {
         </div>
         `
 
-        // make a way to distruguishing between divs (with ids like qm1 etc)
         let checkbox = matchElement.querySelector(".match-select")
         checkbox.addEventListener("input", () => {
             console.log(checkbox.checked)
             if (checkbox.checked) { //if its already selected, do nothing
                 //disable editable inputs
 
-                //let element = document.getElementsByClassName('match-team')
                 let element = document.getElementsByClassName(`m${i}`);
                 for(team of element)
                 {
@@ -149,18 +144,19 @@ function getTeams(num) {
 }
 
 var processedManualMatches = [];
-// make an array which will get filled in a format
+// make an array which will get filled in tba format
 
 function makeMatchSchedule(matchTotalNum){
     // creates a blank form with the correct number of matches
     processedManualMatches = [];
 
+        // tba formatted data 
     for (let i=1; i<=matchTotalNum; i++) {
         processedManualMatches.push({
             number: i, 
-            match_string: `2023temp_q${i}`, // i use temp bc we don't need event keys and don't have one
+            match_string: `2023temp_q${i}`, // use temp bc we don't need event keys and don't have one
             robots: {
-                red: [null, null, null], // these should be arrays
+                red: [null, null, null], // empty arrays to get filled 
                 blue: [null, null, null],
             }
         });
@@ -181,11 +177,12 @@ async function processTeams(matchNum, teams) {
     }
 
     // acccess the correct match object and then adding to properties
-    processedManualMatches[matchNum-1].robots.red = redTeams; //attempting to change the object properties
+    processedManualMatches[matchNum-1].robots.red = redTeams; 
     processedManualMatches[matchNum-1].robots.blue = blueTeams;
 
+        // post request to send schedule to admin 
     console.log(processedManualMatches);
-    console.log(JSON.stringify(processedManualMatches)) // is it because after stringify its not an object anymore? or does that not work
+    console.log(JSON.stringify(processedManualMatches)) 
     fetch('/schedule/matches',{
         method:"POST",
         headers: {
