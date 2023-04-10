@@ -1,5 +1,5 @@
 executables["multiplier"] = {
-    execute(button, layers, numActions) {
+    execute(button, layers,time, numActions) {
         if (button.type != "action") {
             console.warn("The 'multiplier' executable should only be used with 'action' buttons! Using it with buttons of other types can lead to unexpected results.")
         }
@@ -12,7 +12,7 @@ executables["multiplier"] = {
             });
         }
     },
-    reverse(button, layers, numActions) {
+    reverse(button, layers,time, numActions) {
         //add numActions-1 actions to the action queue
         for (let i = 0; i < numActions - 1; i++) {
             actionQueue.pop();

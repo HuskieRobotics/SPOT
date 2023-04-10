@@ -13,7 +13,7 @@ let lockedPosition;
 let lockedTime;
 
 executables["position"] = {
-    execute(button, layers) {
+    execute(button, layers,time) {
         //position lock check
         if (lockedTime + positionConfig.POSITION_LOCK_DELAY_MS > Date.now()) { // if there's a position in lockedPosition, put it in the action.
             if (!actionQueue[actionQueue.length - 1].other) actionQueue[actionQueue.length - 1].other = {}
@@ -92,7 +92,7 @@ executables["position"] = {
             document.body.removeChild(positionContainer);
         })
     },
-    reverse(button, layers) {
+    reverse(button, layers,time) {
         //nothing to do on reverse, but the function needs to be there
     }
 }

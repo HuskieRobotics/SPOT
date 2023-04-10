@@ -4,12 +4,13 @@ var variables = {
   
 };
 var previousLayers = [];
+var previousTimer = [];
 (async () => {
     config = await config;
     matchScoutingConfig = await matchScoutingConfig;
     //initiate timing
-    let time = matchScoutingConfig.timing.totalTime;
-    let timerActive = false;
+    var time = matchScoutingConfig.timing.totalTime;
+    var timerActive = false;
 
     //intialize variables
     let varNames = Object.keys(matchScoutingConfig.variables)
@@ -56,7 +57,7 @@ var previousLayers = [];
                     "id": button.id,
                     "ts": time,
                 })
-                doExecutables(button)
+                doExecutables(button,time)
 				updateLastAction()
             })
         },
@@ -79,7 +80,7 @@ var previousLayers = [];
                 for (const executable of undoneButton.executables) {
                     executables[executable.type].reverse(undoneButton,layers,...executable.args) //reverse any executables associated with the undone button
                 }
-                doExecutables(button)
+                doExecutables(button,time)
 				updateLastAction()
             })
         },
@@ -92,7 +93,7 @@ var previousLayers = [];
                     "ts": time,
                     "temp": true
                 })
-                doExecutables(button)
+                doExecutables(button,time)
 				updateLastAction()
             })
         },
@@ -136,7 +137,7 @@ var previousLayers = [];
                 button.timerInterval = setInterval(() => {
                     if (time <= transitions[0]) { //move to the next transition if it is time
                         displayText = matchScoutingConfig.timing.timeTransitions[transitions[0]].displayText;
-                        // showLayer(matchScoutingConfig.timing.timeTransitions[transitions[0]].layer);
+                        showLayer(matchScoutingConfig.timing.timeTransitions[transitions[0]].layer);
                         transitions.shift()
                     }
                     if (time <= 0) {
@@ -180,10 +181,10 @@ var previousLayers = [];
 
     showLayer(0); //initially show layer 0
 
-    function doExecutables(button) {
+    function doExecutables(button,time) {
         for (const executable of button.executables) {
             try {
-                executables[executable.type].execute(button, layers, ...executable.args);
+                executables[executable.type].execute(button, layers,time, ...executable.args);
             } catch (e) {
                 console.error(e);
                 throw new Error(`Error occured within ${executable.type} executable!`)
@@ -202,6 +203,45 @@ var previousLayers = [];
         }
         previousLayers.push(rendered)
     }
+  function conditionalLayer(){
+    var renderedButtons = [] 
+        for (let button of layers[toLayer]) {
+          var targetVariables = [];
+          var targetValues = [];
+          var thingsToCheck = {
+            
+          }
+          console.log(`testing ${button.id}`)
+          for(let [variable,valueData] of Object.entries(conditionalRender)){
+            for(let [value,idList] of Object.entries(valueData)) {
+              if(idList.includes(button.id)){
+                if(thingsToCheck[variable]){
+                  thingsToCheck[variable].push(value)
+                } else {
+                  thingsToCheck[variable] = [value]
+                }
+                
+                
+              }
+            }
+          }
+          
+          var display = false;
+          for(let [variable,values] of Object.entries(thingsToCheck)){
+            if(values.includes(variables[variable].current)){
+              display = true
+            }
+          }
+          
+          if(alwaysRender.includes(button.id) || (display)){
+            console.log(`rendering ${button.id}`)
+            button.element.style.display = "flex"
+            renderedButtons.push(button)
+          }
+          
+        }
+        previousLayers.push(renderedButtons)
+  }
 
     // DATA
     class TeamMatchPerformance {

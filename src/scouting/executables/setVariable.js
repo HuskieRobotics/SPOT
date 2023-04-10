@@ -1,5 +1,5 @@
 executables["setVariable"] = {
-    execute(button, layers, name, value) {
+    execute(button, layers,time, name, value) {
         if(!variables[name]){
           variables[name] = {
             "current":value,
@@ -11,7 +11,7 @@ executables["setVariable"] = {
         }
         console.log(variables)
     },
-    reverse(button, layers, name, value) {
+    reverse(button, layers,time, name, value) {
       variables[name].current = variables[name].previous.pop()
     }
 }

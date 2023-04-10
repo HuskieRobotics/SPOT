@@ -4,7 +4,7 @@
  * @param toLayer the layer which the executable is transitioning to (the layer that will be shown).
  */
 executables["conditionalLayer"] = {
-    execute(button,layers,fromLayer,toLayer,alwaysRender,conditionalRender) {
+    execute(button,layers,time,fromLayer,toLayer,alwaysRender,conditionalRender) {
         for (let button of layers.flat()) { //hide all buttons
             button.element.style.display = "none"
         }
@@ -48,7 +48,7 @@ executables["conditionalLayer"] = {
         }
         previousLayers.push(renderedButtons)
     },
-    reverse(button,layers,fromLayer,toLayer,alwaysRender,conditionalRender) {
+    reverse(button,layers,time,fromLayer,toLayer,alwaysRender,conditionalRender) {
         for (let button of layers.flat()) { //hide all buttons
             button.element.style.display = "none"
         }
@@ -57,12 +57,16 @@ executables["conditionalLayer"] = {
       console.log(previousLayers)
       
       previousLayers.pop();
-      previousLayers.pop();
+      if(previousLayers.length>1){previousLayers.pop();}
+
+      
       console.log("post")
       console.log(previousLayers)
-      for (let button of previousLayers[previousLayers.length-1]) {
-            
-        button.element.style.display = "flex"
+      if(previousLayers.length-1 > 0){
+        for (let button of previousLayers[previousLayers.length-1]) {
+          console.log("displaying previous layer")
+          button.element.style.display = "flex"
+        }
       }
     }
 }

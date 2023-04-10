@@ -1,11 +1,11 @@
 executables["constantPosition"] = {
-    execute(button, layers, position) {
+    execute(button, layers,time, position) {
         //add the constant position to the action
         if (!actionQueue[actionQueue.length - 1].other) actionQueue[actionQueue.length - 1].other = {}
         actionQueue[actionQueue.length - 1].other.pos = position;
 
 },
-    reverse(button, layers, args) {
+    reverse(button, layers,time, args) {
         //nothing to undo
     }
 }
