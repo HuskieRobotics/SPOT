@@ -1,0 +1,59 @@
+/*****************************************************************
+                        !!!WARNING!!!
+               EVERYTHING HERE IS VERY IMPORTANT
+DO NOT REMOVE OR MODIFY ANYTHING UNLESS YOU KNOW WHAT YOU'RE DOING
+*****************************************************************/
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+}
+
+html {
+    height: 100%;
+    width: 100%;
+}
+
+#spinner {
+    height: 300px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: -1;
+}
+
+.main-svg {
+    border-radius: var(--border-radius);
+}
+
+/* width */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: var(--gray);
+    filter: saturate(0.8);
+    transition: 0.2s background;
+    border-radius: 999px;
+    width: 4px;
+    border: 3px solid rgba(0,0,0,0);
+    background-clip: padding-box;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: var(--text);
+    width: 4px;
+    border: 3px solid rgba(0,0,0,0);
+    background-clip: padding-box;
+}
