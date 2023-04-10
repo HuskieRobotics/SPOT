@@ -1,0 +1,200 @@
+body {
+    background-color: var(--bg);
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+  
+  #app {
+    height: 100vh;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 275px auto;
+    grid-template-rows: 75px 30px auto;
+    transition: 0.3s visibility, opacity;
+    opacity: 0;
+    visibility: hidden;
+    background-color: var(--bg);
+    overflow: hidden;
+  }
+  
+  #app.visible {
+    visibility: unset;
+    opacity: 1;
+    transition: visibility 0s 0s, opacity 0.3s 0s;
+  }
+  
+  .access-input {
+    border-radius: 8px;
+    border: 2px solid var(--text);
+    background-color: var(--bg-alt);
+    color: var(--text);
+    padding: 8px 12px;
+    font-size: 1.5em;
+}
+  /* styling for page header */
+  #header {
+    background: var(--text);
+    height: 100px;
+    width: 100px;
+    border-bottom: 0.25vh solid white;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+    box-shadow: 0 0 12px -2px #ff6030;
+    grid-area: 1 / 2 / 2 / 4;
+  }
+  /* styling for logo */
+  #logo {
+    height: 95px;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    grid-area: 1 / 1 / 3 / 2;
+    gap: 25px;
+    
+    background-color: var(--accent-alt);
+  }
+  
+  #logo-img {
+    height: 60px;
+  }
+  
+  #logo-text {
+    color: white;
+    font-size: 2.5rem;
+  }
+  
+  #lock-img {
+    height: 40px;
+  }
+
+  #matches {
+    padding: 20px;
+    padding-top: 24px;
+    border: 2px solid var(--text);
+    border-radius: 10px;
+    position: relative;
+    margin-top: 10px;
+    min-height: 0;
+  
+
+}
+
+.title {
+    position: absolute;
+    background-color: var(--bg);
+    border-radius: 10px;
+    top: 0px;
+    left: 40px;
+    font: 2em/1em "Cairo";
+    padding: 0 6px;
+    transform: translateY(-50%);
+}
+
+#match-list {
+    height: 100%;
+    width: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    gap: 12px;
+    display: flex;
+    flex-direction: column;
+  
+}
+
+#matches .match {
+    display: grid;
+    width: 100%;
+    grid-template-columns: calc(.75 * 80px + 14px) repeat(2,1fr);
+    grid-template-rows: 30% 70%;
+    border: 2px solid var(--text);
+    border-radius: 10px;
+    padding: 10px 15px;
+    background: var(--bg-alt);
+}
+
+.match .match-select {
+    width: calc(.75 * 80px);
+    height: calc(.75 * 80px);
+    margin-right: 14px;
+    appearance: none;
+    background-color: var(--text);
+    display: grid;
+    place-content: center;
+    border-radius: 10px;
+    align-self: center;
+}
+
+
+.match .match-select::before {
+    content: "";
+    width: calc(.4 * 100px);
+    height: calc(.4 * 100px);
+    transform: scale(0);
+    /* border-radius: 16px; */
+    transition: 120ms transform cubic-bezier(.37,-0.02,.47,1.77);
+    background: center url("../img/lock_closed.png");
+    /* box-shadow: inset calc(.75 * 80px) calc(.75 * 80px) var(--accent); */
+
+}
+  
+.match .match-select:checked::before {
+    transform: scale(1);
+    
+}
+
+
+.match .match-header {
+    grid-area: 1 / 1 / 2 / 4;
+    font-size: 1.2em;
+    line-height: 1em;
+}
+
+.match .match-teams {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+    text-align: center;
+    font: 1.8em/calc(80px * .75) "Cairo";
+    color: var(--bg-alt);   
+}
+
+.match .match-teams.red {
+    background: #ff6666;
+    border-radius: 10px 0 0 10px;
+}
+
+.match .match-teams.blue {
+    background: #6666ff;
+    border-radius: 0 10px 10px 0;
+}
+
+  
+  @media screen and (max-width: 1100px) {
+      html {
+          font-size: 75%;
+      }
+  
+      #app {
+          grid-template-columns: 200px auto;
+          grid-template-rows: 40px 20px auto;
+      }
+  
+      #dashboard > div.visible {
+          height: calc(100vh - 40px);
+      }
+  
+      #main-list {
+          padding: 25px 0;
+      }
+  
+      #side-list {
+          padding: 25px 0;
+      }
+  }
+  
