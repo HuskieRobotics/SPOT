@@ -5,6 +5,7 @@ class Grid {
     constructor(moduleConfig) {
         this.moduleConfig = moduleConfig
         this.container = createDOMElement("div", "container grid")
+        this.container.innerHTML = '<div style = "font-size: 2em; text-align:center; margin-top:50px; margin-bottom:50px;">No Team Selected</div>'
     }
 
     formatData(teams, dataset) {
@@ -16,7 +17,7 @@ class Grid {
         let newObj = {
           x:cell.x,
           y:cell.y,
-          data:teams.map((team)=>{let data = getPath(dataset.teams[team],cell.path,0).toFixed(this.moduleConfig.options.decimals);console.log(data);return data }).reduce((acc, i) => acc + parseFloat(i), 0).toFixed(this.moduleConfig.options.decimals),
+          data:teams.map((team)=>{let data = getPath(dataset.teams[team],cell.path,0).toFixed(this.moduleConfig.options.decimals);return data }).reduce((acc, i) => acc + parseFloat(i), 0).toFixed(this.moduleConfig.options.decimals),
           hex:cell.hex,
         }
         return newObj

@@ -8,16 +8,23 @@ executables["layer"] = {
         for (let button of layers.flat()) { //hide all buttons
             button.element.style.display = "none"
         }
+        var renderedButtons = []
         for (let button of layers[toLayer]) {
-            button.element.style.display = "flex"
+            button.element.style.display = "flex";
+            renderedButtons.push(button)
         }
+        previousLayers.push(renderedButtons)
     },
     reverse(button,layers,fromLayer,toLayer) {
         for (let button of layers.flat()) { //hide all buttons
             button.element.style.display = "none"
         }
-        for (let button of layers[fromLayer]) {
-            button.element.style.display = "flex"
+        previousLayers.pop();
+        previousLayers.pop();
+        console.log(previousLayers)
+        for (let button of previousLayers[previousLayers.length-1]) {
+              
+          button.element.style.display = "flex"
         }
     }
 }

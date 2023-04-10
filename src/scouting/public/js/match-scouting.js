@@ -1,12 +1,24 @@
 let actionQueue = [];
 let devEnd
-
+var variables = {
+  
+};
+var previousLayers = [];
 (async () => {
     config = await config;
     matchScoutingConfig = await matchScoutingConfig;
     //initiate timing
     let time = matchScoutingConfig.timing.totalTime;
     let timerActive = false;
+
+    //intialize variables
+    let varNames = Object.keys(matchScoutingConfig.variables)
+    for(let key of varNames){
+     variables[key] = {
+            "current":matchScoutingConfig.variables[key],
+            "previous":[]
+          }
+    }
     //create grid
     const grid = document.querySelector("#match-scouting .button-grid");
     grid.style.gridTemplateColumns = `repeat(${matchScoutingConfig.layout.gridColumns}, 1fr)`;
@@ -183,9 +195,12 @@ let devEnd
         for (const b of buttons) {
             b.element.style.display = "none";
         }
+        var rendered = []
         for (const b of layers[layer]) {
             b.element.style.display = "flex";
+            rendered.push(b)
         }
+        previousLayers.push(rendered)
     }
 
     // DATA

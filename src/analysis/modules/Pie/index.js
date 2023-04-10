@@ -5,11 +5,14 @@ class Pie {
     constructor(moduleConfig) {
         this.moduleConfig = moduleConfig
         this.container = createDOMElement("div", "container pie")
+        //this.container.innerHTML = '<div style = "font-size: 2em; text-align:center;">No Team Selected</div>'
     }
 
     formatData(teams, dataset) {
+        console.log(`pie teams recieved: ${teams}`);
+        let filteredTeams = teams.filter(team=>team!="|");
         const values = this.moduleConfig.options.slices.map((slice) => {
-            const summed = teams.map(team => {console.log(team);return getPath(dataset.teams[team], slice.path)}).flat().reduce((acc, i) => acc + i, 0)
+            const summed = filteredTeams.map(team => {let data = getPath(dataset.teams[team], slice.path); console.log(`${slice.path}: ${data}`);return data}).flat().reduce((acc, i) => acc + i, 0)
             if (slice.aggrMethod == "sum") { //optionally summed
                 return summed
             } else { //default is average
@@ -32,7 +35,6 @@ class Pie {
             }
         ]
 
-		console.log(data)
 
         return data
     }
@@ -41,7 +43,7 @@ class Pie {
         const layout = {
             margin: {
                 pad: 12,
-                b: 30,
+                b: 30
             },
             title: {
                 text: this.moduleConfig.name,
@@ -62,6 +64,7 @@ class Pie {
             },
             paper_bgcolor: "#FEFEFE",
             plot_bgfcolor: "#FEFEFE",
+            
         }
 
         const config = {
