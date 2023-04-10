@@ -1,0 +1,28 @@
+:root {
+    --bg: #EFEFEF;
+    --text: #232323;
+    --bg-alt: #FEFEFE;
+    --accent: #30a2ff;
+    --accent-alt: #ff6030;
+    --error: #ff5166;
+    --light-gray: #bebebe;
+    --gray: #757575;
+    --green: #4caf50;
+    --placeholder: #a3a3a3;
+    --border-radius: 16px;
+    --font: Cairo, sans-serif
+}
+html {
+      overflow: hidden;
+      height: 100%;
+      position: fixed;
+}
+
+body {
+    height: 100%;
+    position: relative;
+}
+
+* {
+    font-family: var(--font, sans-serif)
+}
