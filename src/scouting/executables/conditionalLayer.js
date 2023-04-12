@@ -4,7 +4,7 @@
  * @param toLayer the layer which the executable is transitioning to (the layer that will be shown).
  */
 executables["conditionalLayer"] = {
-    execute(button,layers,time,fromLayer,toLayer,alwaysRender,conditionalRender) {
+    execute(button,layers,fromLayer,toLayer,alwaysRender,conditionalRender) {
         for (let button of layers.flat()) { //hide all buttons
             button.element.style.display = "none"
         }
@@ -48,7 +48,7 @@ executables["conditionalLayer"] = {
         }
         previousLayers.push(renderedButtons)
     },
-    reverse(button,layers,time,fromLayer,toLayer,alwaysRender,conditionalRender) {
+    reverse(button,layers,fromLayer,toLayer,alwaysRender,conditionalRender) {
         for (let button of layers.flat()) { //hide all buttons
             button.element.style.display = "none"
         }

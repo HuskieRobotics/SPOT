@@ -1,8 +1,8 @@
 executables["flashBorder"] = {
-    execute(button, layers,time, args) {
+    execute(button, layers, args) {
         //when the button is pressed, do this
     },
-    reverse(button, layers,time, args) {
+    reverse(button, layers,args) {
         //when the button is undone, do this. This should undo EVERYTHING done by execute
     }
 }
