@@ -3,12 +3,12 @@
  * @param fromLayer the layer number the executable is transitioning from (normally the layer which contains the button)
  * @param toLayer the layer which the executable is transitioning to (the layer that will be shown).
  */
-executables["conditionalLayerUndo"] = {
+executables["conditionalLayer"] = {
     execute(button,layers,fromLayer,toLayer,alwaysRender,conditionalRender) {
         for (let button of layers.flat()) { //hide all buttons
             button.element.style.display = "none"
         }
-      console.log("CONDITIONAL LAYER(UNDO) --------------------------------------")
+      console.log("CONDITIONAL LAYER --------------------------------------")
       console.log("variables");
       console.log(variables)
         var renderedButtons = [] 

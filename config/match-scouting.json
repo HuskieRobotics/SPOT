@@ -527,6 +527,79 @@
                "class":"pink",
                "type":"action",
                "executables":[
+                 {
+                     "type":"conditionalLayer",
+                     "args":[
+                        1,
+                        1,
+                        [
+                           "chargingDock",
+                           "broken",
+                           "startGame",
+                           "undo"
+                        ],
+                        {
+                           "heldPiece":{
+                              "cone":[
+                                 "placement31",
+                                 "placement33",
+                                 "placement34",
+                                 "placement36",
+                                 "placement37",
+                                 "placement39",
+                                 "placement21",
+                                 "placement23",
+                                 "placement24",
+                                 "placement26",
+                                 "placement27",
+                                 "placement29",
+                                 "placement11",
+                                 "placement12",
+                                 "placement13",
+                                 "placement14",
+                                 "placement15",
+                                 "placement16",
+                                 "placement17",
+                                 "placement18",
+                                 "placement19",
+                                 "dropCone"
+                              ],
+                              "cube":[
+                                 "placement32",
+                                 "placement35",
+                                 "placement38",
+                                 "placement22",
+                                 "placement25",
+                                 "placement28",
+                                 "placement11",
+                                 "placement12",
+                                 "placement13",
+                                 "placement14",
+                                 "placement15",
+                                 "placement16",
+                                 "placement17",
+                                 "placement18",
+                                 "placement19",
+                                 "dropCube"
+                              ],
+                              "none":[
+                                 "conePickup",
+                                 "cubePickup"
+                              ]
+                           },
+                           "leftCommunity":{
+                              "false":[
+                                 "leaveCommunity"
+                              ]
+                           },
+                           "showPark":{
+                              "true":[
+                                 "park"
+                              ]
+                           }
+                        }
+                     ]
+                  },
                   {
                      "type":"setVariable",
                      "args":[
@@ -605,13 +678,6 @@
                               ]
                            }
                         }
-                     ]
-                  },
-                   {
-                     "type":"setVariable",
-                     "args":[
-                        "showPark",
-                        "false"
                      ]
                   }
                ]
