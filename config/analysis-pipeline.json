@@ -500,6 +500,30 @@
 		"options": {
 			"path" : "scores.total"
 		}
-	}
+	},
+  {
+    "type":"team",
+    "name":"average",
+    "outputPath":"averagePark",
+    "options":{
+      "path":"counts.park"
+    }
+  },
+  {
+    "type":"tmp",
+    "name":"actionTime",
+    "outputPath":"leaveTime",
+    "options":{
+      "path":"leaveCommunity"
+    }
+  },
+  {
+    "type":"team",
+    "name":"average",
+    "outputPath":"averageLeave",
+    "options":{
+      "path":"leaveTime"
+    }
+  }
 
 ]

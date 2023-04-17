@@ -5,7 +5,7 @@ const chalk = require("chalk");
 const fs = require("fs");
 
 app.set("view engine", "ejs");
-var bodyParser = require("body-parser");
+let bodyParser = require("body-parser");
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
@@ -19,7 +19,7 @@ if (fs.existsSync("config/config.json")) {
     app.use("/admin", require("./admin/admin.js"));
     app.use("/setup", require("./setup/setup.js"));
     app.use("/checklist", require("./checklist/checklist.js"));
-    app.use("/schedule", require("./schedule/schedule.js")); 
+    app.use("/schedule", require("./schedule/schedule.js"));
 } else {
     console.log(chalk.cyan.bold.underline("config.json not detected! First time setup flow enabled on server."))
     app.use("/",require("./setup/setup.js"));

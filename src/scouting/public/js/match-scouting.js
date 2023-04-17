@@ -4,20 +4,21 @@ var variables = {
   
 };
 var previousLayers = [];
+var previousTimer = [];
 (async () => {
     config = await config;
     matchScoutingConfig = await matchScoutingConfig;
     //initiate timing
-    let time = matchScoutingConfig.timing.totalTime;
-    let timerActive = false;
+    var time = matchScoutingConfig.timing.totalTime;
+    var timerActive = false;
 
     //intialize variables
     let varNames = Object.keys(matchScoutingConfig.variables)
     for(let key of varNames){
      variables[key] = {
-            "current":matchScoutingConfig.variables[key],
-            "previous":[]
-          }
+        "current":matchScoutingConfig.variables[key],
+        "previous":[]
+      }
     }
     //create grid
     const grid = document.querySelector("#match-scouting .button-grid");
@@ -79,7 +80,7 @@ var previousLayers = [];
                 for (const executable of undoneButton.executables) {
                     executables[executable.type].reverse(undoneButton,layers,...executable.args) //reverse any executables associated with the undone button
                 }
-                doExecutables(button)
+                doExecutables(button,time)
 				updateLastAction()
             })
         },
@@ -92,7 +93,7 @@ var previousLayers = [];
                     "ts": time,
                     "temp": true
                 })
-                doExecutables(button)
+                doExecutables(button,time)
 				updateLastAction()
             })
         },
@@ -136,7 +137,13 @@ var previousLayers = [];
                 button.timerInterval = setInterval(() => {
                     if (time <= transitions[0]) { //move to the next transition if it is time
                         displayText = matchScoutingConfig.timing.timeTransitions[transitions[0]].displayText;
-                        // showLayer(matchScoutingConfig.timing.timeTransitions[transitions[0]].layer);
+                      console.log(Object.keys(matchScoutingConfig.timing.timeTransitions[transitions[0]].variables))  
+                      for(let key of Object.keys(matchScoutingConfig.timing.timeTransitions[transitions[0]].variables)){
+                          variables[key].previous.push(variables[key].current) 
+                          variables[key].current = matchScoutingConfig.timing.timeTransitions[transitions[0]].variables[key]
+                          console.log(`set ${key} to ${variables[key]}`)
+                        }
+                        showLayer(matchScoutingConfig.timing.timeTransitions[transitions[0]].layer,matchScoutingConfig.timing.timeTransitions[transitions[0]].conditional,matchScoutingConfig.timing.timeTransitions[transitions[0]].always);
                         transitions.shift()
                     }
                     if (time <= 0) {
@@ -191,17 +198,95 @@ var previousLayers = [];
         }
     }
 
-    function showLayer(layer) {
-        for (const b of buttons) {
+    function showLayer(layer,conditional={},always=[]) {
+      for (const b of buttons) {
             b.element.style.display = "none";
+      }
+      if(Object.keys(conditional).length > 0){
+        var renderedButtons = [] 
+        for (let button of layers[layer]) {
+          var targetVariables = [];
+          var targetValues = [];
+          var thingsToCheck = {
+            
+          }
+          for(let [variable,valueData] of Object.entries(conditional)){
+            for(let [value,idList] of Object.entries(valueData)) {
+              if(idList.includes(button.id)){
+                if(thingsToCheck[variable]){
+                  thingsToCheck[variable].push(value)
+                } else {
+                  thingsToCheck[variable] = [value]
+                }
+                
+                
+              }
+            }
+          }
+          
+          var display = false;
+          for(let [variable,values] of Object.entries(thingsToCheck)){
+            if(values.includes(variables[variable].current)){
+              display = true
+            }
+          }
+          
+          if(always.includes(button.id) || (display)){
+            button.element.style.display = "flex"
+            renderedButtons.push(button)
+          }
+          
         }
+        previousLayers.push(renderedButtons)
+      } else {
+        
         var rendered = []
         for (const b of layers[layer]) {
             b.element.style.display = "flex";
             rendered.push(b)
         }
         previousLayers.push(rendered)
+      }
     }
+  function conditionalLayer(){
+    var renderedButtons = [] 
+        for (let button of layers[toLayer]) {
+          var targetVariables = [];
+          var targetValues = [];
+          var thingsToCheck = {
+            
+          }
+          console.log(`testing ${button.id}`)
+          for(let [variable,valueData] of Object.entries(conditionalRender)){
+            for(let [value,idList] of Object.entries(valueData)) {
+              if(idList.includes(button.id)){
+                if(thingsToCheck[variable]){
+                  thingsToCheck[variable].push(value)
+                } else {
+                  thingsToCheck[variable] = [value]
+                }
+                
+                
+              }
+            }
+          }
+          
+          var display = false;
+          for(let [variable,values] of Object.entries(thingsToCheck)){
+            if(values.includes(variables[variable].current)){
+              display = true
+            }
+          }
+          
+          if(alwaysRender.includes(button.id) || (display)){
+            console.log(`rendering ${button.id}`)
+            button.element.style.display = "flex"
+            renderedButtons.push(button)
+          }
+          
+        }
+        previousLayers.push(renderedButtons)
+  }
 
     // DATA
     class TeamMatchPerformance {

@@ -1,4 +1,20 @@
 [
+  {
+      "view":"team",
+      "module":"Stats",
+      "position":"side",
+      "name":"Mobility",
+      "options":{
+        "list":[
+          {
+            "name":"Avg Time to Leave",
+            "path":"averageLeave",
+            "decimals":2,
+            "sort":1
+          }
+        ]
+      }
+    },
     {
       "view":"team",
       "module":"Stats",
@@ -77,7 +93,13 @@
         "sort":-1,
         "multiplier":0.001,
         "unit":" sec"
-      }
+      },
+          {
+            "name":"Park Rate",
+            "path":"averagePark",
+            "decimals":2,
+            "sort":-1
+          }
         ]
       }
     },

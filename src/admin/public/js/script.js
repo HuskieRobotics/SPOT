@@ -125,8 +125,6 @@ async function updateMatches(accessCode) {
     document.querySelector("#match-list").innerHTML = "";
 
     //rebuild matches view
-    console.log("all matches")
-    console.log(allMatches)
     for (let match of allMatches) {
         let matchElement = document.createElement("div");
         matchElement.classList.add("match");
@@ -162,14 +160,12 @@ async function updateMatches(accessCode) {
             checkbox.checked = false; //set it to unchecked while processing the request
 
             //send a post request with the new match
-            console.log(match)
             fetch("/admin/api/setMatch", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                     Authorization: accessCode
                 },
-                
                 body: JSON.stringify(match),
             }).then((res) => res.json()).then((success) => {
                 if (success === true) { //if the match is successfully updated on the server-side
