@@ -193,32 +193,41 @@ class ScouterDisplay {
         this.scouterElement = document.createElement("button");
        
         this.scouterElement.innerHTML = `
-        <div class="match-number"></div>
+        <div class="match-number" scouter=${this.scouter.state.scouterId}></div>
         <div class="scouter-id"></div>
         <div class="robot-number"></div>
         <div class="scouter-status"></div>
         `;
         this.scouterElement.classList.add("scouter");
         
-        this.scouterElement.onclick = dissconnect;
+        this.scouterElement.onclick = (e)=>{
+            console.log("hello scouter button clicked")
+            console.log(typeof e)
+            console.log(Object.keys(e))
+            var scouterID = e.getAttribute("scouter");
+            let scouter  = Object.values(scouters).find(s => s.scouter.state.scouterId == scouterID)
+            console.log(scouters)
+            console.log(scouter)
+        };
 
-        function dissconnect() {
-            console.log("dissconnect");
-            console.log(this.scouter)
-            scouter.socket.disconnect();
-        }
+        
         document.querySelector("#scouter-list").appendChild(this.scouterElement);
 
         this.updateScouterElement();
         
     }
-
+    dissconnect(e) {
+        var scouterID = e.scouter;
+        let scouter  = Object.values(scouters).find(s => s.scouter.state.scouterId == scouterID)
+        console.log(scouters)
+        console.log(scouter)
+    }
     
     updateScouterElement(state) {
 
         //update state
         this.scouter.state = state || this.scouter.state;
-
+        this.scouterElement.scouter = this.scouter.state.scouterId
         //write all text
         this.scouterElement.querySelector(".scouter-id").innerText = this.scouter.state.scouterId;
         this.scouterElement.querySelector(".match-number").innerText = this.scouter.state.matchNumber;
