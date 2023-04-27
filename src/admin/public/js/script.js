@@ -201,6 +201,7 @@ class ScouterDisplay {
         this.scouterElement.classList.add("scouter");
         
         this.scouterElement.onclick = (e)=>{
+            // fetch("url",{
             console.log("hello scouter button clicked")
             
             var scouterID = this.scouterElement.getAttribute("scouter");
