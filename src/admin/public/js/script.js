@@ -202,11 +202,12 @@ class ScouterDisplay {
         
         this.scouterElement.onclick = (e)=>{
             console.log("hello scouter button clicked")
-            console.log(typeof e)
-            console.log(Object.keys(e))
-            var scouterID = e.getAttribute("scouter");
-            let scouter  = Object.values(scouters).find(s => s.scouter.state.scouterId == scouterID)
-            console.log(scouters)
+            
+            var scouterID = this.scouterElement.getAttribute("scouter");
+            console.log(scouterID)
+            var scouter  = Object.values(scouters).find(s => s.scouter.state.scouterId == scouterID)
+            
+            scouter.scouter.state.connected = false;
             console.log(scouter)
         };
 
@@ -227,7 +228,7 @@ class ScouterDisplay {
 
         //update state
         this.scouter.state = state || this.scouter.state;
-        this.scouterElement.scouter = this.scouter.state.scouterId
+        this.scouterElement.setAttribute("scouter",this.scouter.state.scouterId)
         //write all text
         this.scouterElement.querySelector(".scouter-id").innerText = this.scouter.state.scouterId;
         this.scouterElement.querySelector(".match-number").innerText = this.scouter.state.matchNumber;
