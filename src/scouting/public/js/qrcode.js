@@ -33,6 +33,13 @@ class QREncoder {
         return val.toString(2).padStart(bits,"0");
     }
 
+    /**
+     * 
+     * @returns should pop up a qr code that can be scanned by the decoder
+     * all the data is stored in local data 
+     * button that pops up a new tab with a list of matches scored (should be on starting page)
+     * clicking on the match pops up qr code 
+     */
     async encodeTeamMatchPerformance(teamMatchPerformance) {
         await this.ready;
         let out = "" //store everything in strings. This is inefficient, but I haven't found a better way to do this in browser js and it probably doesnt matter.
@@ -98,7 +105,12 @@ function getVal(obj,path) {
     return getVal(obj[path.shift()],path.join("."));
 }
 
-
+/**
+ * in admin a button called scan qr code should be added
+ * when opened it should open a camera view that can scan and decode qr codes 
+ * after a qr code is found a snap shot should be taken and the admins hould be able to confirm the qr code
+ * then once you have the tmp it can be added like any ohter tmp to the database 
+ */
 /* decoder, move this to admin
 async function decodeQRCodeUrl(image_url) {
     let img = new Image();
