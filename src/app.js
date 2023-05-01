@@ -20,8 +20,6 @@ if (fs.existsSync("config/config.json")) {
     app.use("/setup", require("./setup/setup.js"));
     app.use("/checklist", require("./checklist/checklist.js"));
     app.use("/schedule", require("./schedule/schedule.js"));
-
-    app.use("/qr", require("./qr/qr.js")); // temporary and we need to make the qr js file (testing enviorn for qr)
 } else {
     console.log(chalk.cyan.bold.underline("config.json not detected! First time setup flow enabled on server."))
     app.use("/",require("./setup/setup.js"));

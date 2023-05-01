@@ -46,6 +46,8 @@ class LocalData {
         })
     }
 
+    // this is where the qr code could go ?
+
     static async storeTeamMatchPerformance(teamMatchPerformance) {
         //Sync with local
         const storedMatchIds = (await LocalData.getAllTeamMatchPerformances()).map(teamMatchPerformance => teamMatchPerformance.matchId)
