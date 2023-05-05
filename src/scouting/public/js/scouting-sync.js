@@ -20,12 +20,14 @@ class ScoutingSync {
 
     static async initialize() {
         ScoutingSync.socket = io();
+
 		ScoutingSync.matches = (await fetch("/admin/api/matches").then(res => res.json())).allMatches
         function onConnect() {
             if (ScoutingSync.state.connected) return; //only run connect events once
             ScoutingSync.state.offlineMode = false; //the user connected so disable offlineMode
             ScoutingSync.state.connected = true;
             ScoutingSync.socket.emit("updateState", ScoutingSync.state) //send the server your initial state
+            ScoutingSync.socket.emit("updateScouterID", ScoutingSync.scouterId) //send the server your scouter id
             document.querySelector(".status .socket-status").innerText = "Connected"
 			document.querySelector(".status .socket-status").classList.add("connected")
 			document.querySelector(".status .socket-status").classList.remove("disconnected")

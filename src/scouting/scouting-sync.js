@@ -47,8 +47,11 @@ class ScoutingSync {
         
         //new scouter flow
         io.on("connection", (socket) => {
-            let newScouter = new Scouter(socket);
-            newScouter.socket.on("disconnect", () => {
+            let socket = socket;
+            newScouter.socket.on("updateScouterID", (scouterID) => {
+                let newScouter = new Scouter(socket, scouterID);
+            })
+            newScouter.soc ket.on("disconnect", () => {
                 setTimeout(() => {
                     if (!newScouter.connected) { //remove old disconnnected scouters
                         ScoutingSync.scouters = ScoutingSync.scouters.filter(x=>!( !x.connected && x.timestamp == newScouter.timestamp ) )
@@ -185,12 +188,14 @@ class Scouter {
         connected: true, //connected by default
         offlineMode: false, //they are connected to the server, they can't be offline
     };
+    scouterID;
     socket;
     timestamp;
 
-    constructor(socket) {
+    constructor(socket,scouterID) {
         this.socket = socket;
         this.timestamp = Date.now();
+        this.scouterID = scouterID;
         
         //socket listeners below
 
