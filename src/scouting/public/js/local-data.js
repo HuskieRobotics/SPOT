@@ -47,6 +47,7 @@ class LocalData {
     }
 
     // this is where the qr code could go ?
+    // make a page for qr fcode after the submit time
 
     static async storeTeamMatchPerformance(teamMatchPerformance) {
         
