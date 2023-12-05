@@ -173,7 +173,7 @@ async function processTeams(matchNum, teams) {
 
     for(let i = 0; i < 3; i++)
     {
-        if (data[i] === null || data[i+3] === null) {
+        if (data[i] === "" || data[i+3] === "") {
             new Popup("error", "You can't leave team numbers empty. Match wasn't uploaded.");
             return;
         }
