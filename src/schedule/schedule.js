@@ -20,15 +20,17 @@ router.post('/matches',(req,res)=>{
 
     res.send(200)
 })
-router.get('/matches',(req,res)=>{
-    res.send(schedule);
-})
 
 router.use("/api", require("./routes/api.js"));
 
-router.get("/tempteams", async (req, res) => {
-    res.send(tempTeams);
-});
+function getManualMatches() {
+    return schedule;
+}
+
+function getTempTeams() {
+    return tempTeams;
+}
+
 
 const addTeam = (matchLists) => {
     var teams = [];
@@ -52,4 +54,4 @@ const addTeam = (matchLists) => {
     tempTeams = teams;
 }
 
-module.exports = router;
+module.exports = {router, getTempTeams, getManualMatches};

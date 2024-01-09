@@ -2,6 +2,7 @@ const { Router } = require("express");
 const executeAnalysisPipeline = require("../analysisPipeline.js")
 const axios = require("axios")
 const config = require("../../../config/config.json");
+const {getTempTeams} = require("../../schedule/schedule");
 
 let router = Router();
 
@@ -18,18 +19,18 @@ router.get("/teams", async (req, res) => {
         return res.json([]); //no key, no teams
     }
 
-    var teams = [];
+    let teams = [];
 
-    teams = await axios.get(`http://localhost:${process.env.PORT || 8080}/schedule/tempteams`).then(res=> res.data);
-    if (teams.length == 0) {
+    teams = getTempTeams();
+
+    if (teams.length === 0) {
         teams = (await axios.get(`https://www.thebluealliance.com/api/v3/event/${config.TBA_EVENT_KEY}/teams`, {
             headers: {
                 "X-TBA-Auth-Key": config.secrets.TBA_API_KEY
             }
-        }).catch(e => console.log(e,chalk.bold.red("\nError fetching teams from Blue Alliance API!")))).data;
+        }).catch(e => console.error(e, chalk.bold.red("\nError fetching teams from Blue Alliance API!")))).data;
     }
 
-    console.log(teams);
     res.json(teams);
 })
 
