@@ -1,0 +1,124 @@
+.modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 99;
+    background-color: var(--bg-alt);
+    border-radius: 10px;
+    padding: 40px;
+    transition: 0.3s all;
+    opacity: 0;
+    visibility: hidden;
+    display: flex;
+    flex-direction: column;
+}
+  
+.modal.visible {
+    visibility: unset;
+    opacity: 1;
+    transition: visibility 0s 0s, opacity 0.3s 0s;
+}
+  
+.modal-blind {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;;
+    width: 100%;
+    background-color: black;
+    z-index: 98;
+    cursor: pointer;
+    transition: 0.3s all;
+    opacity: 0;
+    visibility: hidden;
+}
+  
+.modal-blind.visible {
+    visibility: unset;
+    opacity: 0.7;
+    transition: visibility 0s 0s, opacity 0.3s 0s;
+}
+  
+.modal-close {
+    font-size: 1.5em;
+    color: var(--text);
+    cursor: pointer;
+    position: absolute;
+    transform: translate(50%, -50%);
+    top: 25px;
+    right: 25px;
+}
+
+.modal.large {
+    min-width: 800px;
+    min-height: 500px;
+}
+  
+.modal.medium {
+    min-width: 600px;
+    min-height: 375px;
+}
+  
+.modal.small {
+    min-width: 400px;
+    min-height: 250px;
+}
+
+.modal.main-center {
+    justify-content: center;
+}
+
+.modal.alt-center {
+    align-items: center;
+}
+
+.modal img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    border-radius: 10px;
+}
+
+.modal.image > img {
+    height: 100%;
+}
+
+.modal > div.header {
+    font-size: 2.5em;
+    font-weight: bold;
+    line-height: 1.5em;
+    margin-bottom: 8px;
+}
+
+.modal > div.text {
+    font-size: 1.25em;
+}
+
+.modal > button {
+    border: none;
+    background-color: var(--accent);
+    border-radius: 10px;
+    color: white;
+    font-size: 1.5em;
+    padding: 4px 20px;
+    margin-top: 20px;
+}
+
+.popup {
+    position: fixed;
+    top: 0px;
+    left: 50%;
+    border-radius: 8px;
+    color: white;
+    margin: 0;
+    font-size: 1.4rem;
+    line-height: 1.75rem;
+    padding: 6px 18px;
+    text-align: center;
+    transition: 0.6s cubic-bezier(.76,-0.47,.24,1.47);
+    z-index: 100;
+    transform: translate(-50%, -100%);
+    box-shadow: 0 0 2px var(--text);
+    max-width: 100%;
+}
