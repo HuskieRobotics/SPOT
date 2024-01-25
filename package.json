@@ -30,9 +30,11 @@
     "express-session": "^1.17.2",
     "fs": "0.0.1-security",
     "google-auth-library": "^7.10.2",
+    "jimp": "^0.22.10",
     "mongoose": "^6.4.6",
     "nodemon": "^2.0.15",
-    "qrcode": "^1.4.4",
+    "qrcode": "^1.5.3",
+    "qrcode-reader": "^1.0.4",
     "simple-statistics": "^7.8.3",
     "socket.io": "^4.4.1"
   }
