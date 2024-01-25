@@ -24,12 +24,15 @@ router.get("/teams", async (req, res) => {
     teams = getTempTeams();
 
     if (teams.length === 0) {
+
         teams = (await axios.get(`https://www.thebluealliance.com/api/v3/event/${config.TBA_EVENT_KEY}/teams`, {
             headers: {
                 "X-TBA-Auth-Key": config.secrets.TBA_API_KEY
             }
+
         }).catch(e => console.error(e, chalk.bold.red("\nError fetching teams from Blue Alliance API!")))).data;
     }
+
 
     res.json(teams);
 })

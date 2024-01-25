@@ -88,9 +88,11 @@ router.post("/setMatch", (req,res) => {
 });
 
 router.get("/matches", async (req,res) => {
+
   let manualSchedule = getManualMatches()
 
   if(manualSchedule === {}){
+
     res.json({
       "allMatches": manualSchedule,
       "currentMatch": ScoutingSync.match

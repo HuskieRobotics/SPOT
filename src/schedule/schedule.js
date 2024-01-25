@@ -21,6 +21,7 @@ router.post('/matches',(req,res)=>{
     res.send(200)
 })
 
+
 router.use("/api", require("./routes/api.js"));
 
 function getManualMatches() {
@@ -54,4 +55,6 @@ const addTeam = (matchLists) => {
     tempTeams = teams;
 }
 
+
 module.exports = {router, getTempTeams, getManualMatches};
+
