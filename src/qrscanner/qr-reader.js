@@ -2,27 +2,33 @@ const jimp = require('jimp');
 const fs = require('fs');
 const qrcodeReader = require('qrcode-reader');
 
-function readQRCode(filePath) {
+/**
+ * Returns a promise that later resolves to the data embedded in the QR
+ * code, or to an error during the reading process
+ * @param {string} filePath The file path of the qr code image
+ * @returns A promise of the embedded data
+ */
+async function readQRCode(filePath) {
     const buffer = fs.readFileSync(filePath);
 
-    jimp.read(buffer, function(err, image) {
-        if (err) {
-            console.error(err);
-        }
-
-        const qrCodeInstance = new qrcodeReader();
-
-        qrCodeInstance.callback = function(err, value) {
+    return new Promise(async (resolve, reject) => {
+        await jimp.read(await buffer, (err, image) => {
             if (err) {
-                console.error(err);
-                return undefined;
+                reject(err);
             }
 
-            return value.result;
-        }
+            const qrCodeInstance = new qrcodeReader();
 
-        
-        qrCodeInstance.decode(image.bitmap);
+            qrCodeInstance.callback = function(err, value) {
+                if (err) {
+                    reject(err);
+                }
+
+                resolve(value.result);
+            }
+
+            qrCodeInstance.decode(image.bitmap);
+        });
     });
 }
 

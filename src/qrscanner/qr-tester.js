@@ -17,5 +17,9 @@ const sampleData = {
 
 generateQRCode(sampleData, filePath);
 
-const returnedData = readQRCode(filePath);
-console.log(returnedData);
+async function help() {
+    const data = await readQRCode(filePath);
+    console.log(`Returned Data: ${data}`);
+}
+
+help();
