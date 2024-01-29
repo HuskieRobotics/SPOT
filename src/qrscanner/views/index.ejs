@@ -26,11 +26,43 @@
         <link href="./css/style.css" rel="stylesheet" type="text/css" />
         <link href="./css/ui-elements.css" rel="stylesheet" type="text/css" />
         <link href="./css/global.css" rel="stylesheet" type="text/css" />
-        <link href="./css/internal.css" rel="stylesheet" type="text/css" />
-      </head>
+        <link href="./css/internal.css" rel="stylesheet" type="text/css" />    
+        <style>
+            video {
+                width: 500px;
+                height: 400px;
+                object-fit: cover;
+            }
+        </style>
+    </head>
 <body>
     <div id="scouters">
         <div class="title">QR Code Scanner</div>
     </div>
+
+    <div>
+        <video id="vid"></video>
+    </div>
+    <br />
+    <button id="but" autoplay>Open WebCam</button>
 </body>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        let but = document.getElementById('but');
+        let video = document.getElementById('vid');
+        let mediaDevices = navigator.mediaDevices;
+        video.muted = true;
+        but.addEventListener('click', () => {
+            mediaDevices.getUserMedia({
+                video: true,
+                audio: true,
+            }).then((stream) => {
+                video.srcObject = stream;
+                video.addEventListener('loadedmetadata', () => {
+                    video.play();
+                });
+            }).catch(alert);
+        });
+    });
+</script>
 </html>
