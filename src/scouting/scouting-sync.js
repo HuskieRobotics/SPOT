@@ -47,11 +47,11 @@ class ScoutingSync {
         
         //new scouter flow
         io.on("connection", (socket) => {
-            let socket = socket;
+            let newScouter = new Scouter(socket);
             newScouter.socket.on("updateScouterID", (scouterID) => {
                 let newScouter = new Scouter(socket, scouterID);
             })
-            newScouter.soc ket.on("disconnect", () => {
+            newScouter.socket.on("disconnect", () => {
                 setTimeout(() => {
                     if (!newScouter.connected) { //remove old disconnnected scouters
                         ScoutingSync.scouters = ScoutingSync.scouters.filter(x=>!( !x.connected && x.timestamp == newScouter.timestamp ) )
@@ -116,7 +116,7 @@ class ScoutingSync {
      */
     static assignScouters() {
         let nextRobots = new Set(ScoutingSync.match.robots.red.concat(ScoutingSync.match.robots.blue)); //the robots that are next in line to be assigned to scouters
-        
+         
 
         //if someone is ACTIVELY scouting the robot, remove it from the set of robots to be scouted
         for (let scouter of ScoutingSync.scouters) {
@@ -127,6 +127,12 @@ class ScoutingSync {
 
         //assign the rest of the robots to waiting scouters
         for (let scouter of ScoutingSync.scouters) {
+            if(scouter.scouterID === "JakeSmith")
+            {
+                fetch(`api/dissconnectScouter/${this.scouterElement.getAttribute("scouter")}`).then(res => res.json())
+                console.log("disconnected scouter")
+                scouter.state = 4;
+            }
             if (scouter.state.connected && scouter.state.status === ScoutingSync.SCOUTER_STATUS.WAITING) {
                 //check to see if nextRobots is empty, if so repopulate it with all the robots in the match
                 if (nextRobots.size === 0) new Set(ScoutingSync.match.robots.red.concat(ScoutingSync.match.robots.blue));
