@@ -27,19 +27,25 @@
         <link href="./css/ui-elements.css" rel="stylesheet" type="text/css" />
         <link href="./css/global.css" rel="stylesheet" type="text/css" />
         <link href="./css/internal.css" rel="stylesheet" type="text/css" />    
-        <style>
-            video {
-                width: 500px;
-                height: 400px;
-                object-fit: cover;
-            }
-        </style>
+        <link rel="stylesheet" href="./css/qrcode.css" type="text/css">
     </head>
 <body>
-    <div id="scouters">
-        <div class="title">QR Code Scanner</div>
+    <div class="qrscanbox">
+        <div class="qrtitletext">QR Code Scanner</div><br>
+        <div class="row">
+          <div class="col">
+            <div style="width:500px;" id="reader"></div>
+          </div>
+            <h4>Scan Result</h4>
+            <div id="result">Result Here</div> 
+          </div>
+        </div>
     </div>
+    <script src="./js/html5-qrcode.min.js"></script>
+    <script src="./js/results.js"></script>
 </body>
+
+<!--
 <script src="./js/html5-qrcode.min.js"></script>
 <style>
   .result{
@@ -71,4 +77,5 @@ var html5QrcodeScanner = new Html5QrcodeScanner(
     "reader", { fps: 30, qrbox: 250 });
 html5QrcodeScanner.render(onScanSuccess, onScanError);
 </script>
+-->
 </html>
