@@ -9,7 +9,7 @@ const {TeamMatchPerformance} = require("../lib/db.js");
 const axios = require("axios");
 const config = require("../../config/config.json");
 const chalk = require("chalk");
-const DEMO = true;
+const DEMO = false;
 module.exports = (server) => {
     if (!ScoutingSync.initialized) {
         if (!server) {
@@ -127,11 +127,11 @@ class ScoutingSync {
 
         //assign the rest of the robots to waiting scouters
         for (let scouter of ScoutingSync.scouters) {
-            if(scouter.scouterID === "JakeSmith")
             {
-                fetch(`api/dissconnectScouter/${this.scouterElement.getAttribute("scouter")}`).then(res => res.json())
-                console.log("disconnected scouter")
-                scouter.state = 4;
+
+                // fetch(`api/dissconnectScouter/${this.scouterElement.getAttribute("scouter")}`).then(res => res.json())
+                // console.log("disconnected scouter")
+                // scouter.state = 4;
             }
             if (scouter.state.connected && scouter.state.status === ScoutingSync.SCOUTER_STATUS.WAITING) {
                 //check to see if nextRobots is empty, if so repopulate it with all the robots in the match
