@@ -85,6 +85,18 @@
                     "path": "averages.miss",
                     "decimals": 0,
                     "sort": -1
+                },
+                {
+                    "name": "Average Brokens",
+                    "path": "averages.broken",
+                    "decimals": 0,
+                    "sort": -1
+                },
+                {
+                    "name": "Average A-Stops",
+                    "path": "averages.aStop",
+                    "decimals": 0,
+                    "sort": -1
                 }
             ]
         }
@@ -117,6 +129,24 @@
     },
     {
         "view": "team",
+        "module": "Pie",
+        "position": "main",
+        "name": "Pickup Distribution",
+        "options": {
+            "slices": [
+                {
+                    "name": "Source",
+                    "path": "counts.sourcePickup"
+                },
+                {
+                    "name": "Ground",
+                    "path": "counts.groundPickup"
+                }
+            ]
+        }
+    },
+    {
+        "view": "team",
         "module": "Bar",
         "position": "main",
         "name": "Stage",
@@ -137,6 +167,137 @@
                 {
                     "name": "Spotlit",
                     "path": "averages.spotlit"
+                }
+            ]
+        }
+    },
+	{
+		"view": "match",
+		"module": "SingleDisplay",
+		"name": "Alliance Score",
+		"position": "main",
+		"options": {
+			"path": "averageScores.total",
+			"aggrMethod": "sum",
+			"decimals": 2
+		}
+	},
+	{
+		"view": "match",
+		"module": "ColumnDisplay",
+		"name": "Auto Points",
+		"position": "main",
+		"options": {
+			"path": "averageScores.auto",
+			"sort": 1,
+			"decimals": 1
+		}
+	},
+	{
+		"view": "match",
+		"module": "ColumnDisplay",
+		"name": "Stage Points",
+		"position": "main",
+		"options": {
+			"path": "averageScores.climb",
+			"sort": 1,
+			"decimals": 1
+		}
+	},
+	{
+		"view": "match",
+		"module": "ColumnDisplay",
+		"name": "Total Points",
+		"position": "main",
+		"options": {
+			"path": "averageScores.total",
+			"sort": 1,
+			"decimals": 1
+		}
+	},
+	{
+		"view": "match",
+		"module": "ColumnDisplay",
+		"name": "Time Per Note",
+		"position": "main",
+		"options": {
+			"path": "timePerNote",
+			"multiplier": 0.001,
+			"decimals": 2,
+			"hideIfValue": 0,
+			"sort": -1,
+			"unit": "s"
+		}
+	},
+	{
+		"view": "match",
+		"module": "ColumnDisplay",
+		"name": "Accuracy",
+		"position": "main",
+		"options": {
+			"path": "accuracy",
+			"sort": 1,
+			"decimals": 1,
+			"multiplier": 100,
+			"unit": "%"
+		}
+	},
+    {
+        "view": "match",
+        "module": "Stats",
+        "position": "side",
+        "name": "Alliance Stats",
+        "options": {
+            "list": [
+                {
+                    "name": "Expected Auto Points",
+                    "path": "averageScores.auto",
+					"decimals": 2,
+                    "aggrMethod": "sum"
+                },
+                {
+                    "name": "Expected Teleop Points",
+                    "path": "averageScores.teleop",
+					"decimals": 2,
+                    "aggrMethod": "sum"
+                },
+                {
+                    "name": "Expected Stage Points",
+                    "path": "averageScores.climb",
+					"decimals": 2,
+                    "aggrMethod": "sum"
+                },
+                {
+                    "name": "Expected Score",
+                    "path": "averageScores.total",
+					"decimals": 2,
+                    "aggrMethod": "sum"
+                }
+            ]
+        }
+    },
+    {
+        "view": "match",
+        "module": "Pie",
+        "position": "main",
+        "name": "Shot Distribution",
+        "options": {
+            "slices": [
+                {
+                    "name": "Amp",
+                    "path": "averages.scoreAmp"
+                },
+                {
+                    "name": "Speaker",
+                    "path": "averages.scoreSpeaker"
+                },
+                {
+                    "name": "Amped Speaker",
+                    "path": "averages.scoreAmpedSpeaker"
+                },
+                {
+                    "name": "Miss",
+                    "path": "averages.miss"
                 }
             ]
         }
