@@ -244,69 +244,69 @@
     {
         "type": "tmp",
         "name": "cycle",
-        "outputPath": "climbCycle",
+        "outputPath": "stageCycle",
         "options": {
             "pickups": [
-                "stage"
+                "park"
             ],
             "scores": [
-                "climb"
+                "onstage"
             ],
             "misses": [
-                "stageBack",
-                "stageFall"
+                "unpark",
+                "onstageFall"
             ]
         }
     },
     {
         "type": "team",
         "name": "aggregateArray",
-        "outputPath": "climbCycle.all",
+        "outputPath": "stageCycle.all",
         "options": {
-            "path": "climbCycle.all"
+            "path": "stageCycle.all"
         }
     },
     {
         "type": "team",
         "name": "aggregateArray",
-        "outputPath": "climbCycle.allComplete",
+        "outputPath": "stageCycle.allComplete",
         "options": {
-            "path": "climbCycle.allComplete"
+            "path": "stageCycle.allComplete"
         }
     },
     {
         "type": "team",
         "name": "averageArray",
-        "outputPath": "climbCycle.averageTime",
+        "outputPath": "stageCycle.averageTime",
         "options": {
-            "arrayPath": "climbCycle.all",
+            "arrayPath": "stageCycle.all",
             "valuePath": "timeDifferential"
         }
     },
     {
         "type": "team",
         "name": "averageArray",
-        "outputPath": "climbCycle.averageTimeComplete",
+        "outputPath": "stageCycle.averageTimeComplete",
         "options": {
-            "arrayPath": "climbCycle.allComplete",
+            "arrayPath": "stageCycle.allComplete",
             "valuePath": "timeDifferential"
         }
     },
     {
         "type": "tmp",
         "name": "finalActionOccurence",
-        "outputPath": "finalClimb",
+        "outputPath": "finalStage",
         "options": {
             "actionArrayPath": "teleopFilter",
             "ids": [
-                "climb",
+                "onstage",
                 "park",
                 "spotlit",
-                "stageBack",
-                "stageFall"
+                "unpark",
+                "onstageFall"
             ],
             "default": {
-                "id": "noClimb",
+                "id": "noStage",
                 "ts": 0
             }
         }
@@ -314,17 +314,39 @@
     {
         "type": "tmp",
         "name": "map",
-        "outputPath": "scores.climb",
+        "outputPath": "scores.stageExclusive",
         "options": {
-            "path": "finalClimb.id",
+            "path": "finalStage.id",
             "map": {
-                "noClimb": 0,
-                "climb": 3,
+                "noStage": 0,
+                "onstage": 3,
                 "park": 1,
                 "spotlit": 4,
-                "stageBack": 0,
-                "stageFall": 0
+                "unpark": 0,
+                "onstageFall": 0
             }
+        }
+    },
+    {
+        "type": "tmp",
+        "name": "weightedSum",
+        "outputPath": "scores.stageInclusive",
+        "options": {
+            "weightedPaths": {
+                "countsTeleop.trap": 5,
+                "countsTeleop.harmony": 2
+            }
+        }
+    },
+    {
+        "type": "tmp",
+        "name": "sum",
+        "outputPath": "scores.stage",
+        "options": {
+            "addends": [
+                "scores.stageExclusive",
+                "scores.stageInclusive"
+           ]
         }
     },
     {
@@ -335,7 +357,7 @@
             "addends": [
                 "scores.auto",
                 "scores.teleop",
-                "scores.climb"
+                "scores.stage"
             ]
         }
     },

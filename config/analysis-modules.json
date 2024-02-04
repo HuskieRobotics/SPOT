@@ -8,7 +8,7 @@
             "trackedStats": [
                 "scores.auto",
                 "scores.teleop",
-                "scores.climb",
+                "scores.stage",
                 "scores.total",
                 "accuracy"
             ]
@@ -52,7 +52,7 @@
                 },
                 {
                     "name": "Average Stage Points",
-                    "path": "averageScores.climb",
+                    "path": "averageScores.stage",
                     "decimals": 2,
                     "sort": 1
                 },
@@ -153,12 +153,12 @@
         "options": {
             "bars": [
                 {
-                    "name": "On Stage",
-                    "path": "averages.stage"
+                    "name": "Park",
+                    "path": "averages.park"
                 },
                 {
-                    "name": "Climb",
-                    "path": "averages.climb"
+                    "name": "Onstage",
+                    "path": "averages.onstage"
                 },
                 {
                     "name": "Harmony",
@@ -199,7 +199,7 @@
 		"name": "Stage Points",
 		"position": "main",
 		"options": {
-			"path": "averageScores.climb",
+			"path": "averageScores.stage",
 			"sort": 1,
 			"decimals": 1
 		}
@@ -263,7 +263,7 @@
                 },
                 {
                     "name": "Expected Stage Points",
-                    "path": "averageScores.climb",
+                    "path": "averageScores.stage",
 					"decimals": 2,
                     "aggrMethod": "sum"
                 },

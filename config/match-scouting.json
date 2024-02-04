@@ -228,8 +228,8 @@
                     "executables": []
                 },
                 {
-                    "id": "stage",
-                    "displayText": "Stage",
+                    "id": "park",
+                    "displayText": "Park",
                     "gridArea": [
                         "3",
                         "4",
@@ -376,8 +376,8 @@
                     "executables": []
                 },
                 {
-                    "id": "stage",
-                    "displayText": "Stage",
+                    "id": "park",
+                    "displayText": "Park",
                     "gridArea": [
                         "3",
                         "4",
@@ -498,8 +498,8 @@
                     "executables": []
                 },
                 {
-                    "id": "climb",
-                    "displayText": "Climb",
+                    "id": "onstage",
+                    "displayText": "Onstage",
                     "gridArea": [
                         "3",
                         "4",
@@ -511,7 +511,7 @@
                     "executables": []
                 },
                 {
-                    "id": "stageFall",
+                    "id": "onstageFall",
                     "displayText": "Fall",
                     "gridArea": [
                         "3",
@@ -562,19 +562,6 @@
                     "displayText": "Trap",
                     "gridArea": [
                         "6",
-                        "1",
-                        "7",
-                        "3"
-                    ],
-                    "class": "gray",
-                    "type": "action",
-                    "executables": []
-                },
-                {
-                    "id": "park",
-                    "displayText": "Park",
-                    "gridArea": [
-                        "6",
                         "4",
                         "7",
                         "7"
@@ -584,8 +571,8 @@
                     "executables": []
                 },
                 {
-                    "id": "stageBack",
-                    "displayText": "Back",
+                    "id": "unpark",
+                    "displayText": "Unpark",
                     "gridArea": [
                         "6",
                         "1",
