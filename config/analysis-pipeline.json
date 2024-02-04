@@ -23,6 +23,7 @@
             "addends": [
                 "counts.scoreAmp",
                 "counts.scoreSpeaker",
+                "counts.scoreAmpedSpeaker",
                 "counts.miss"
             ]
         }
@@ -60,7 +61,8 @@
             ],
             "scores": [
                 "scoreAmp",
-                "scoreSpeaker"
+                "scoreSpeaker",
+                "scoreAmpedSpeaker"
             ],
             "misses": [
                 "miss"
@@ -116,11 +118,13 @@
         "options": {
             "numerator": [
                 "counts.scoreAmp",
-                "counts.scoreSpeaker"
+                "counts.scoreSpeaker",
+                "counts.scoreAmpedSpeaker"
             ],
             "denominator": [
                 "counts.scoreAmp",
                 "counts.scoreSpeaker",
+                "counts.scoreAmpedSpeaker",
                 "counts.miss"
             ],
             "divByZero": 0
@@ -133,11 +137,13 @@
         "options": {
             "numerator": [
                 "counts.scoreAmp",
-                "counts.scoreSpeaker"
+                "counts.scoreSpeaker",
+                "counts.scoreAmpedSpeaker"
             ],
             "denominator": [
                 "counts.scoreAmp",
                 "counts.scoreSpeaker",
+                "counts.scoreAmpedSpeaker",
                 "counts.miss"
             ],
             "divByZero": 0

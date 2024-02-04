@@ -22,35 +22,8 @@
         "options": {
             "list": [
                 {
-                    "name": "Climb Start Time",
-                    "path": "averages.startClimbTime",
-                    "multiplier": 0.001,
-                    "decimals": 2,
-                    "hideIfValue": 0,
-                    "sort": -1,
-                    "unit": "s to end"
-                },
-                {
-                    "name": "Climb End Time",
-                    "path": "averages.endClimbTime",
-                    "multiplier": 0.001,
-                    "decimals": 2,
-                    "hideIfValue": 0,
-                    "sort": -1,
-                    "unit": "s to end"
-                },
-                {
-                    "name": "Climb Duration",
-                    "path": "averages.climbDuration",
-                    "multiplier": 0.001,
-                    "decimals": 2,
-                    "hideIfValue": 0,
-                    "sort": -1,
-                    "unit": "s"
-                },
-                {
-                    "name": "Time Per Ball",
-                    "path": "timePerBall",
+                    "name": "Time Per Note",
+                    "path": "timePerNote",
                     "multiplier": 0.001,
                     "decimals": 2,
                     "hideIfValue": 0,
@@ -72,34 +45,98 @@
                     "sort": 1
                 },
                 {
-                    "name": "Average Climb Points",
-                    "path": "averageScores.endgame",
+                    "name": "Average Teleop Points",
+                    "path": "averageScores.teleop",
+                    "decimals": 2,
+                    "sort": 1
+                },
+                {
+                    "name": "Average Stage Points",
+                    "path": "averageScores.climb",
                     "decimals": 2,
                     "sort": 1
                 },
                 {
                     "name": "Average Points",
-                    "path": "averageScores.all",
+                    "path": "averageScores.total",
                     "decimals": 2,
                     "sort": 1
                 },
                 {
-                    "name": "Average Upper Hub Shots",
-                    "path": "averages.upperHub",
-                    "decimals": 2,
+                    "name": "Average Amp",
+                    "path": "averages.scoreAmp",
+                    "decimals": 0,
                     "sort": 1
                 },
                 {
-                    "name": "Average Lower Hub Shots",
-                    "path": "averages.lowerHub",
-                    "decimals": 2,
+                    "name": "Average Speaker",
+                    "path": "averages.scoreSpeaker",
+                    "decimals": 0,
+                    "sort": 1
+                },
+                {
+                    "name": "Average Amped Speaker",
+                    "path": "averages.scoreAmpedSpeaker",
+                    "decimals": 0,
                     "sort": 1
                 },
                 {
                     "name": "Average Misses",
                     "path": "averages.miss",
-                    "decimals": 2,
+                    "decimals": 0,
                     "sort": -1
+                }
+            ]
+        }
+    },
+    {
+        "view": "team",
+        "module": "Pie",
+        "position": "main",
+        "name": "Shot Distribution",
+        "options": {
+            "slices": [
+                {
+                    "name": "Amp",
+                    "path": "counts.scoreAmp"
+                },
+                {
+                    "name": "Speaker",
+                    "path": "counts.scoreSpeaker"
+                },
+                {
+                    "name": "Amped Speaker",
+                    "path": "counts.scoreAmpedSpeaker"
+                },
+                {
+                    "name": "Miss",
+                    "path": "counts.miss"
+                }
+            ]
+        }
+    },
+    {
+        "view": "team",
+        "module": "Bar",
+        "position": "main",
+        "name": "Stage",
+        "options": {
+            "bars": [
+                {
+                    "name": "On Stage",
+                    "path": "averages.stage"
+                },
+                {
+                    "name": "Climb",
+                    "path": "averages.climb"
+                },
+                {
+                    "name": "Harmony",
+                    "path": "averages.harmony"
+                },
+                {
+                    "name": "Spotlit",
+                    "path": "averages.spotlit"
                 }
             ]
         }
