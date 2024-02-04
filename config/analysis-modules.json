@@ -157,8 +157,16 @@
                     "path": "averages.park"
                 },
                 {
+                    "name": "Unpark",
+                    "path": "averages.unpark"
+                },
+                {
                     "name": "Onstage",
                     "path": "averages.onstage"
+                },
+                {
+                    "name": "Onstage Fall",
+                    "path": "averages.onstageFall"
                 },
                 {
                     "name": "Harmony",
