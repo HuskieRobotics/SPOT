@@ -87,15 +87,15 @@
                     "sort": -1
                 },
                 {
-                    "name": "Average Brokens",
-                    "path": "averages.broken",
-                    "decimals": 1,
+                    "name": "Total Brokens",
+                    "path": "counts.broken",
+                    "decimals": 0,
                     "sort": -1
                 },
                 {
-                    "name": "Average A-Stops",
-                    "path": "averages.aStop",
-                    "decimals": 1,
+                    "name": "Total A-Stops",
+                    "path": "counts.aStop",
+                    "decimals": 0,
                     "sort": -1
                 }
             ]
