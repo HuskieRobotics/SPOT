@@ -164,19 +164,19 @@
             "bars": [
                 {
                     "name": "Park",
-                    "path": "averages.park"
+                    "path": "avgStage.park"
                 },
                 {
                     "name": "Unpark",
-                    "path": "averages.unpark"
+                    "path": "avgStage.unpark"
                 },
                 {
                     "name": "Onstage",
-                    "path": "averages.onstage"
+                    "path": "avgStage.onstage"
                 },
                 {
                     "name": "Onstage Fall",
-                    "path": "averages.onstageFall"
+                    "path": "avgStage.onstageFall"
                 },
                 {
                     "name": "Harmony",
@@ -184,7 +184,7 @@
                 },
                 {
                     "name": "Spotlit",
-                    "path": "averages.spotlit"
+                    "path": "avgStage.spotlit"
                 }
             ]
         }

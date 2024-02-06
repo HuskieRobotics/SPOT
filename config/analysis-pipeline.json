@@ -335,8 +335,112 @@
                 "park": 1,
                 "spotlit": 4,
                 "unpark": 0,
+                "onstageFall": 1
+            }
+        }
+    },
+    {
+        "type": "tmp",
+        "name": "map",
+        "outputPath": "stage.noStage",
+        "options": {
+            "path": "finalStage.id",
+            "map": {
+                "noStage": 1,
+                "onstage": 0,
+                "park": 0,
+                "spotlit": 0,
+                "unpark": 0,
                 "onstageFall": 0
             }
+        }
+    },
+    {
+        "type": "tmp",
+        "name": "map",
+        "outputPath": "stage.onstage",
+        "options": {
+            "path": "finalStage.id",
+            "map": {
+                "noStage": 0,
+                "onstage": 1,
+                "park": 0,
+                "spotlit": 0,
+                "unpark": 0,
+                "onstageFall": 0
+            }
+        }
+    },
+    {
+        "type": "tmp",
+        "name": "map",
+        "outputPath": "stage.park",
+        "options": {
+            "path": "finalStage.id",
+            "map": {
+                "noStage": 0,
+                "onstage": 0,
+                "park": 1,
+                "spotlit": 0,
+                "unpark": 0,
+                "onstageFall": 0
+            }
+        }
+    },
+    {
+        "type": "tmp",
+        "name": "map",
+        "outputPath": "stage.spotlit",
+        "options": {
+            "path": "finalStage.id",
+            "map": {
+                "noStage": 0,
+                "onstage": 0,
+                "park": 0,
+                "spotlit": 1,
+                "unpark": 0,
+                "onstageFall": 0
+            }
+        }
+    },
+    {
+        "type": "tmp",
+        "name": "map",
+        "outputPath": "stage.unpark",
+        "options": {
+            "path": "finalStage.id",
+            "map": {
+                "noStage": 0,
+                "onstage": 0,
+                "park": 0,
+                "spotlit": 0,
+                "unpark": 1,
+                "onstageFall": 0
+            }
+        }
+    },
+    {
+        "type": "tmp",
+        "name": "map",
+        "outputPath": "stage.onstageFall",
+        "options": {
+            "path": "finalStage.id",
+            "map": {
+                "noStage": 0,
+                "onstage": 0,
+                "park": 0,
+                "spotlit": 0,
+                "unpark": 0,
+                "onstageFall": 1
+            }
+        }
+    },
+    {
+        "type": "team",
+        "name": "average",
+        "outputPath": "avgStage",
+        "options": {
+            "path": "stage"
         }
     },
     {
