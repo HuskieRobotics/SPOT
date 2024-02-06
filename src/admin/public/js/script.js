@@ -3,12 +3,14 @@ const SCOUTER_STATUS = {
     "WAITING": 1, //scouters not actively in the process of scouting (dont have the scouting ui open)
     "SCOUTING": 2, //scouters actively scouting a match
     "COMPLETE": 3,
+    "DISCONNECTEDBYADMIN": 4,
 }
 const SCOUTER_STATUS_REVERSE = {
     "0": "NEW",
     "1": "WAITING",
     "2": "SCOUTING",
-    "3": "COMPLETE"
+    "3": "COMPLETE",
+    "4": "DISCONNECTEDBYADMIN"
 }
 
 const scouters = {};
@@ -262,6 +264,13 @@ class ScouterDisplay {
             this.scouterElement.querySelector(".match-number").style.backgroundColor = SCOUTER_STATUS_COLOR[this.scouter.state.status];
             this.scouterElement.querySelector(".match-number").style.borderColor = SCOUTER_STATUS_COLOR[this.scouter.state.status];
             this.scouterElement.querySelector(".scouter-status").innerText = SCOUTER_STATUS_REVERSE[this.scouter.state.status];
+        }
+        if (!this.scouter.state.connected && !(this.scouter.state.status == DISCONNECTEDBYADMIN)) { //disconnected by admin
+            this.scouterElement.querySelector(".scouter-status").style.color = DISCONNECTED_COLOR;
+            this.scouterElement.style.borderColor = DISCONNECTED_COLOR;
+            this.scouterElement.querySelector(".match-number").style.backgroundColor = DISCONNECTED_COLOR;
+            this.scouterElement.querySelector(".match-number").style.borderColor = DISCONNECTED_COLOR;
+            this.scouterElement.querySelector(".scouter-status").innerText = "ADMIN DISCONNECT";
         }
     }
     destruct() {
