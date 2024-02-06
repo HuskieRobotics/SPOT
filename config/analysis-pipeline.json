@@ -219,9 +219,7 @@
             "weightedPaths": {
                 "countsTeleop.scoreAmp": 1,
                 "countsTeleop.scoreSpeaker": 2,
-                "countsTeleop.scoreAmpedSpeaker": 5,
-                "countsTeleop.trap": 5,
-                "countsTeleop.harmony": 2
+                "countsTeleop.scoreAmpedSpeaker": 5
             }
         }
     },
