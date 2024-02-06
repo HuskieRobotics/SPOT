@@ -19,7 +19,7 @@ if (fs.existsSync("config/config.json")) {
     app.use("/admin", require("./admin/admin.js"));
     app.use("/setup", require("./setup/setup.js"));
     app.use("/checklist", require("./checklist/checklist.js"));
-    app.use("/schedule", require("./schedule/schedule.js"));
+    app.use("/schedule", require("./schedule/schedule").router);
 } else {
     console.log(chalk.cyan.bold.underline("config.json not detected! First time setup flow enabled on server."))
     app.use("/",require("./setup/setup.js"));
