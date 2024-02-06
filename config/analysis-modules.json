@@ -86,6 +86,16 @@
                     "decimals": 1,
                     "sort": -1
                 },
+
+                {
+                    "name": "Average Onstage Time",
+                    "path": "stageCycle.averageTimeComplete",
+                    "multiplier": 0.001,
+                    "decimals": 2,
+                    "hideIfValue": 0,
+                    "sort": -1,
+                    "unit": "s"
+                },
                 {
                     "name": "Total Brokens",
                     "path": "counts.broken",
