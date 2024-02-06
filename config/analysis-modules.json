@@ -65,37 +65,37 @@
                 {
                     "name": "Average Amp",
                     "path": "averages.scoreAmp",
-                    "decimals": 0,
+                    "decimals": 1,
                     "sort": 1
                 },
                 {
                     "name": "Average Speaker",
                     "path": "averages.scoreSpeaker",
-                    "decimals": 0,
+                    "decimals": 1,
                     "sort": 1
                 },
                 {
                     "name": "Average Amped Speaker",
                     "path": "averages.scoreAmpedSpeaker",
-                    "decimals": 0,
+                    "decimals": 1,
                     "sort": 1
                 },
                 {
                     "name": "Average Misses",
                     "path": "averages.miss",
-                    "decimals": 0,
+                    "decimals": 1,
                     "sort": -1
                 },
                 {
                     "name": "Average Brokens",
                     "path": "averages.broken",
-                    "decimals": 0,
+                    "decimals": 1,
                     "sort": -1
                 },
                 {
                     "name": "Average A-Stops",
                     "path": "averages.aStop",
-                    "decimals": 0,
+                    "decimals": 1,
                     "sort": -1
                 }
             ]
