@@ -499,7 +499,7 @@
                 },
                 {
                     "id": "onstage",
-                    "displayText": "Onstage",
+                    "displayText": "Onstage/Climb",
                     "gridArea": [
                         "3",
                         "4",
