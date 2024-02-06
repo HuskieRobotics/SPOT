@@ -106,13 +106,16 @@ var previousTimer = [];
 					for (const button of buttons) {
 						button.element.classList.add("disabled")
 					}
-                    new Popup("notice","Submitting Data...",1000);
-                    await LocalData.storeTeamMatchPerformance(new TeamMatchPerformance(actionQueue).data);
-                    setTimeout(() => {
-						new Popup("error","Couldn't submit, syncing later",1000);
-						setTimeout(() => {
-							window.location.reload()
-						}, 1000)
+            new Popup("notice","Submitting Data...",1000);
+            console.log('Submitting data...');
+            await LocalData.storeTeamMatchPerformance(new TeamMatchPerformance(actionQueue).data);
+            console.log('Finished submitting data!');
+            setTimeout(() => {
+              new Popup("error","Couldn't submit, syncing later",1000);
+
+              setTimeout(() => {
+                window.location.reload()
+              }, 1000)
 					}, 5000)
 					await ScoutingSync.sync();
                     await ScoutingSync.updateState({status: ScoutingSync.SCOUTER_STATUS.COMPLETE});
