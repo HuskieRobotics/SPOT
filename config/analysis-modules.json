@@ -10,7 +10,7 @@
                 "scores.teleop",
                 "scores.stage",
                 "scores.total",
-                "accuracy"
+                "accuracy%"
             ]
         }
     },

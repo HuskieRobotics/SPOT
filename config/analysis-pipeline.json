@@ -131,6 +131,20 @@
         }
     },
     {
+        "type": "tmp",
+        "name": "ratio",
+        "outputPath": "accuracy%",
+        "options": {
+            "numerator": [
+                "accuracy"
+            ],
+            "denominator": [
+                0.01
+            ],
+            "divByZero": 0
+        }
+    },
+    {
         "type": "team",
         "name": "ratio",
         "outputPath": "accuracy",
