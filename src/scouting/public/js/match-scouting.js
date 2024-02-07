@@ -107,9 +107,7 @@ var previousTimer = [];
 						button.element.classList.add("disabled")
 					}
             new Popup("notice","Submitting Data...",1000);
-            console.log('Submitting data...');
             await LocalData.storeTeamMatchPerformance(new TeamMatchPerformance(actionQueue).data);
-            console.log('Finished submitting data!');
             setTimeout(() => {
               new Popup("error","Couldn't submit, syncing later",1000);
 
