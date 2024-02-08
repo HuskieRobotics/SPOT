@@ -1840,7 +1840,7 @@
                       "gridArea": ["4", "6", "5", "7"],
                       "class": "yellow",
                       "type": "action",
-                      "executables": {"type": "layer", "args":[12,7]}]
+                      "executables": [{"type": "layer", "args":[12,7]}]
                 },
               {
                       "id": "placement37",
@@ -1992,7 +1992,7 @@
                       "gridArea": ["6", "7", "7", "8"],
                       "class": "gray",
                       "type": "action",
-                      "executables": {"type": "layer", "args":[12,7]}]
+                      "executables": [{"type": "layer", "args":[12,7]}]
                 },
               {
                       "id": "placement18",
@@ -2008,7 +2008,7 @@
                       "gridArea": ["6", "9", "7", "10"],
                       "class": "gray",
                       "type": "action",
-                      "executables": {"type": "layer", "args":[12,7]}]
+                      "executables": [{"type": "layer", "args":[12,7]}]
                 }
             ]
         ]
