@@ -3,14 +3,14 @@ const SCOUTER_STATUS = {
     "WAITING": 1, //scouters not actively in the process of scouting (dont have the scouting ui open)
     "SCOUTING": 2, //scouters actively scouting a match
     "COMPLETE": 3,
-    "DISCONNECTEDBYADMIN": 4,
+    "DISCONNECTED_BY_ADMIN": 4,
 }
 const SCOUTER_STATUS_REVERSE = {
     "0": "NEW",
     "1": "WAITING",
     "2": "SCOUTING",
     "3": "COMPLETE",
-    "4": "DISCONNECTEDBYADMIN"
+    "4": "DISCONNECTED_BY_ADMIN"
 }
 
 const scouters = {};

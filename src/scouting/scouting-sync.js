@@ -30,7 +30,7 @@ class ScoutingSync {
         "WAITING": 1, //scouters not actively in the process of scouting (dont have the scouting ui open)
         "SCOUTING": 2, //scouters actively scouting a match
         "COMPLETE": 3,
-        "DISCONNECTEDBYADMIN": 4,
+        "DISCONNECTED_BY_ADMIN": 4,
     }
 
     static async initialize(server) {
@@ -244,6 +244,10 @@ class Scouter {
     updateState(stateUpdate) {
         this.state = Object.assign(this.state, stateUpdate);
         this.socket.emit("updateState", stateUpdate);
+    }
+
+    getScouterID(){
+        return this.scouterID;
     }
 
     sync() {
