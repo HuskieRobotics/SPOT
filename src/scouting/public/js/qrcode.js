@@ -9,7 +9,9 @@ class QREncoder {
             qrConfig = await qrConfig;
 
             this.ACTION_SCHEMA = qrConfig.ACTION_SCHEMA;
-            this.ID_ENUM = QREncoder.generateIdEnum(config.layout.layers.flat());
+            const response = await fetch('./config/match-scouting.json');
+            const scoutingConfig = await response.json();
+            this.ID_ENUM = QREncoder.generateIdEnum(scoutingConfig.layout.layers.flat());
             this.ID_ENUM_REVERSE = Object.assign({}, ...Object.entries(this.ID_ENUM).map(([key,index]) => ({ [index]: key })));
         })()
     }
@@ -41,19 +43,23 @@ class QREncoder {
      * clicking on the match pops up qr code 
      */
     async encodeTeamMatchPerformance(teamMatchPerformance) {
+        // This code isn't needed to encode the team's match performance
+
         await this.ready;
         let out = "" //store everything in strings. This is inefficient, but I haven't found a better way to do this in browser js and it probably doesnt matter.
 
         /****** Match Info (80 bits) ******/
         let [majorVersion,minorVersion] = teamMatchPerformance.clientVersion.split(".").map(x => parseInt(x));
+
+        // console.log(parseInt(teamMatchPerformance.matchId_rand, "32"), 2 ** 64 - 1);
         
         out += QREncoder.encodeValue(majorVersion, 255, 0, 8); // major version (8 bits)
         out += QREncoder.encodeValue(minorVersion, 255, 0, 8); // minor version (8 bits)
         out += QREncoder.encodeValue(teamMatchPerformance.eventNumber, 255, 0, 8) //event number (8 bits)
         out += QREncoder.encodeValue(parseInt(teamMatchPerformance.matchNumber), 255, 0, 8) // match number (8 bits)
         out += QREncoder.encodeValue(parseInt(teamMatchPerformance.robotNumber), 65535, 0, 16) // team number (16 bits)
-        out += QREncoder.encodeValue(parseInt(teamMatchPerformance.matchId_rand,"32"),2 ** 32 - 1, 0, 32); // matchId_rand (32 bits)
-        
+        // out += QREncoder.encodeValue(parseInt(teamMatchPerformance.matchId_rand,"32"),2 ** 32 - 1, 0, 32); // matchId_rand (32 bits)
+        out += QREncoder.encodeValue(parseInt(teamMatchPerformance.matchId_rand, "32"), 2 ** 64 - 1, 0, 32); // Updated to 64 bits since matchId_rand was too big
         /****** Action Queue ******/
         for (let action of teamMatchPerformance.actionQueue) {
             //action's values are defined by the ACTION_SCHEMA in qr.json
@@ -68,13 +74,31 @@ class QREncoder {
         }
 
         out += "11111111" //filled byte to signify the end of the action queue
-        console.log("hex bytes", out.match(/.{1,8}/g).map(x=>parseInt(x,2).toString(16)))
+        console.log("hex bytes", out.match(/.{1,8}/g).map(x=>parseInt(x,2).toString(16)));
+
+        // const data = new Uint8ClampedArray(out.match(/.{1,8}/g).map(x => parseInt(x, 2)));
+        
+
         let dataUrl = await QRCode.toDataURL([{
             data: new Uint8ClampedArray(out.match(/.{1,8}/g).map(x=>parseInt(x,2))), 
             mode: "byte"
         }], {
             errorCorrectionLevel: "L", 
-        })
+        });
+
+        /*
+        const data = JSON.stringify(teamMatchPerformance);
+
+        let dataUrl;
+        await QRCode.toDataURL(data, {
+            errorCorrectionLevel: "M",
+        }, (err, url) => {
+            if (err) {
+                console.log(err);
+            }
+            dataUrl = url;
+        });
+        */
 
         let qrContainer = document.createElement("div");
         let qrText = document.createElement("div");

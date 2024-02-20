@@ -112,12 +112,12 @@ var previousTimer = [];
               new Popup("error","Couldn't submit, syncing later",1000);
 
               setTimeout(() => {
-                window.location.reload()
+                // window.location.reload() // Don't want to reload the page so that the QR Code can be scanned
               }, 1000)
 					}, 5000)
 					await ScoutingSync.sync();
                     await ScoutingSync.updateState({status: ScoutingSync.SCOUTER_STATUS.COMPLETE});
-                    window.location.reload();
+                    // window.location.reload(); // Don't want to reload the page so that the QR Code can be scanned
                 }
                 
                 if (timerActive) return;
