@@ -80,22 +80,23 @@ class QREncoder {
             }
         }
 
-        console.log(out);
-
         out += "11111111" //filled byte to signify the end of the action queue
         console.log("hex bytes", out.match(/.{1,8}/g).map(x=>parseInt(x,2).toString(16)));
 
-        const data = out.match(/.{1,8}/g).map(x=>parseInt(x, 2));
-        console.log(`Data: ${data}`);
-        const dataUintArray = new Uint8ClampedArray(data);
-        console.log(`Uint Array: ${dataUintArray}`);
+        const data = new Uint8ClampedArray(out.match(/.{1,8}/g).map(x=>parseInt(x, 2)));
 
-        const dataAsString = btoa(String.fromCharCode.apply(null, dataUintArray));
+        const dataB64 = btoa(String.fromCharCode.apply(null, data));
+        console.log(`Data Encoded As B64 String: ${dataB64}`);
 
-        console.log(`Data String: ${dataAsString}`)
+        const decodedData = new Uint8ClampedArray(Array.from(atob(dataB64), (char) => {
+            return char.charCodeAt(0);
+        }));
+
+        console.log(`Original Uint8ClampedArray: ${data}`);
+        console.log(`Decoded Uint8ClampedArray: ${decodedData}`);
 
         let dataUrl;
-        await QRCode.toDataURL(dataAsString, {
+        await QRCode.toDataURL(dataB64, {
             errorCorrectionLevel: "M",
         }, (err, url) => {
             if (err) {
