@@ -88,13 +88,6 @@ class QREncoder {
         const dataB64 = btoa(String.fromCharCode.apply(null, data));
         console.log(`Data Encoded As B64 String: ${dataB64}`);
 
-        const decodedData = new Uint8ClampedArray(Array.from(atob(dataB64), (char) => {
-            return char.charCodeAt(0);
-        }));
-
-        console.log(`Original Uint8ClampedArray: ${data}`);
-        console.log(`Decoded Uint8ClampedArray: ${decodedData}`);
-
         let dataUrl;
         await QRCode.toDataURL(dataB64, {
             errorCorrectionLevel: "M",
