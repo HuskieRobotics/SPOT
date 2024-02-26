@@ -50,8 +50,6 @@ class QREncoder {
      * clicking on the match pops up qr code 
      */
     async encodeTeamMatchPerformance(teamMatchPerformance) {
-        // This code isn't needed to encode the team's match performance
-
         await this.init();
 
         let out = "" //store everything in strings. This is inefficient, but I haven't found a better way to do this in browser js and it probably doesnt matter.
@@ -89,6 +87,7 @@ class QREncoder {
         console.log(`Data Encoded As B64 String: ${dataB64}`);
 
         let dataUrl;
+        try {
         await QRCode.toDataURL(dataB64, {
             errorCorrectionLevel: "M",
         }, (err, url) => {
@@ -98,6 +97,9 @@ class QREncoder {
 
             dataUrl = url;
         })
+        } catch (e) {
+            window.location = `/${e}`;
+        }
         
         /*
         let dataUrl = await QRCode.toDataURL([{
