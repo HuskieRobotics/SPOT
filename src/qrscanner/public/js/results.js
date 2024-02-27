@@ -61,6 +61,8 @@ async function decodeQRCodeUrl(image_url) {
 
    let bytes = decodeData(image_url);
    let bits = bytes.reduce((acc, x) => acc+x.toString(2).padStart(8, "0"), "");
+    console.log(bits);
+
     console.log("hex bytes", bytes.map(x=>x.toString(16)));
 
     //parse bits
@@ -86,8 +88,6 @@ async function decodeQRCodeUrl(image_url) {
     
     let nextAction = actionQueueBits.slice(0,actionSize);
     actionQueueBits = actionQueueBits.slice(actionSize);
-
-    console.log(actionQueueBits);
 
     let numOf = 0;
 

@@ -1,3 +1,5 @@
+import { QREncoder } from "./qrcode";
+
 /* LOCAL DATABASE */
 class LocalData {
     static db

@@ -7,8 +7,7 @@ let router = express.Router();
 router.use(express.static(__dirname + "/public"));
 
 router.get("/build/qrcode.js", (req,res) => {
-    // res.sendFile(path.resolve(__dirname, "../../node_modules/qrcode/build/qrcode.js"));
-    res.sendFile(path.resolve(__dirname, "../../node_modules/qrcode/lib/core/qrcode.js"));
+    res.sendFile(path.resolve(__dirname, "../../node_modules/qrcode/build/qrcode.js"));
 })
 
 router.get("/", (req,res) => {

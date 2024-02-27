@@ -1,3 +1,5 @@
+import jsQR from "jsqr";
+
 class QREncoder {
     initialized;
     ACTION_SCHEMA;
@@ -86,8 +88,8 @@ class QREncoder {
         const dataB64 = btoa(String.fromCharCode.apply(null, data));
         console.log(`Data Encoded As B64 String: ${dataB64}`);
 
+        /*
         let dataUrl;
-        try {
         await QRCode.toDataURL(dataB64, {
             errorCorrectionLevel: "M",
         }, (err, url) => {
@@ -96,10 +98,10 @@ class QREncoder {
             }
 
             dataUrl = url;
-        })
-        } catch (e) {
-            window.location = `/${e}`;
-        }
+        });
+        */
+       const dataUrl = jsQR(dataB64);
+       console.log(dataUrl);
         
         /*
         let dataUrl = await QRCode.toDataURL([{
@@ -152,6 +154,8 @@ function getVal(obj,path) {
     path = path.split(".");
     return getVal(obj[path.shift()],path.join("."));
 }
+
+export { QREncoder };
 
 /**
  * in admin a button called scan qr code should be added
