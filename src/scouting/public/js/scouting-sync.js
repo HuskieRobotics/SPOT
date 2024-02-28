@@ -7,10 +7,12 @@ class ScoutingSync {
         "WAITING": 1, //scouters not actively in the process of scouting (up to when they click the start button)
         "SCOUTING": 2, //scouters actively scouting a match
         "COMPLETE": 3,
+        "DISCONNECTED_BY_ADMIN": 4
     }
 
     static state = {
         connected: false, 
+        
         offlineMode: true, //offline mode is for users who never connect to the server and access the app without internet.
         status: ScoutingSync.SCOUTER_STATUS.NEW,
         scouterId: "",
@@ -65,6 +67,10 @@ class ScoutingSync {
 
         ScoutingSync.socket.on("syncRequest", () => {
             ScoutingSync.sync();
+        })
+
+        ScoutingSync.socket.on("adminDisconnect", () => {
+            ScoutingSync.scouters = ScoutingSync.scouters.filter(x=>!( !x.connected && x.timestamp == newScouter.timestamp ))
         })
 
         //store previous robot and match number for comparison

@@ -247,7 +247,7 @@ class Scouter {
     }
 
     getScouterID(){
-        return this.scouterID;
+        return scouterID;
     }
 
     sync() {

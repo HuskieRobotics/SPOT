@@ -74,13 +74,11 @@ router.get("/dissconnectScouter/:scouterId", async (req,res) => {
     console.log("got disconnect req")
     if (true){//req.headers.authorization === config.secrets.ACCESS_CODE) {
       console.log("Authorized")
-      for (let scouter of ScoutingSync.scouters) {
-        scouter.state.status = ScoutingSync.SCOUTER_STATUS.DISCONNECTEDBYADMIN;
+      for (let scout of ScoutingSync.scouters) {
         console.log("params.ScouterID " + req.params.scouterId)
-        console.log("state.ScouterID " + scouter.state.scouterID)
-        scouter.state.scouterID = req.params.scouterId;
-            if (scouter.state.scouterID == req.params.scouterId){
-              scouter.socket.disconnect();  
+        console.log("state.ScouterID " + )
+        if (scout.scouterId === req.params.scouterId){
+              scout.updateState({status: ScoutingSync.SCOUTER_STATUS.DISCONNECTED_BY_ADMIN});
             }
         }
         res.json(true);
