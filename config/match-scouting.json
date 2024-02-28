@@ -136,11 +136,50 @@
                 },
                 {
                     "id": "scoreSpeaker",
-                    "displayText": "Speaker",
+                    "displayText": "Subwoofer",
                     "gridArea": [
                         "3",
                         "4",
                         "4",
+                        "7"
+                    ],
+                    "class": "gray",
+                    "type": "action",
+                    "executables": []
+                },
+                {
+                    "id": "scoreSpeaker",
+                    "displayText": "Podium",
+                    "gridArea": [
+                        "4",
+                        "4",
+                        "5",
+                        "7"
+                    ],
+                    "class": "gray",
+                    "type": "action",
+                    "executables": []
+                },
+                {
+                    "id": "scoreSpeaker",
+                    "displayText": "Wing",
+                    "gridArea": [
+                        "5",
+                        "4",
+                        "6",
+                        "7"
+                    ],
+                    "class": "gray",
+                    "type": "action",
+                    "executables": []
+                },
+                { 
+                    "id": "scoreSpeaker",
+                    "displayText": "Midfield",
+                    "gridArea": [
+                        "6",
+                        "4",
+                        "7",
                         "7"
                     ],
                     "class": "gray",
@@ -284,7 +323,7 @@
                 },
                 {
                     "id": "scoreSpeaker",
-                    "displayText": "Speaker",
+                    "displayText": "Subwoofer",
                     "gridArea": [
                         "3",
                         "4",
@@ -295,6 +334,47 @@
                     "type": "action",
                     "executables": []
                 },
+                {
+                    "id": "scoreSpeaker",
+                    "displayText": "Podium",
+                    "gridArea": [
+                        "4",
+                        "4",
+                        "5",
+                        "7"
+                    ],
+                    "class": "gray",
+                    "type": "action",
+                    "executables": []
+                },
+                {
+                    "id": "scoreSpeaker",
+                    "displayText": "Wing",
+                    "gridArea": [
+                        "5",
+                        "4",
+                        "6",
+                        "7"
+                    ],
+                    "class": "gray",
+                    "type": "action",
+                    "executables": []
+                },
+                { 
+                    "id": "scoreSpeaker",
+                    "displayText": "Midfield",
+                    "gridArea": [
+                        "6",
+                        "4",
+                        "7",
+                        "7"
+                    ],
+                    "class": "gray",
+                    "type": "action",
+                    "executables": []
+                },
+
+
                 {
                     "id": "miss",
                     "displayText": "Miss",
@@ -432,11 +512,50 @@
                 },
                 {
                     "id": "scoreAmpedSpeaker",
-                    "displayText": "Speaker",
+                    "displayText": "Subwoofer",
                     "gridArea": [
                         "3",
                         "4",
                         "4",
+                        "7"
+                    ],
+                    "class": "green",
+                    "type": "action",
+                    "executables": []
+                },
+                {
+                    "id": "scoreAmpedSpeaker",
+                    "displayText": "Podium",
+                    "gridArea": [
+                        "4",
+                        "4",
+                        "5",
+                        "7"
+                    ],
+                    "class": "green",
+                    "type": "action",
+                    "executables": []
+                },
+                {
+                    "id": "scoreAmpedSpeaker",
+                    "displayText": "Wing",
+                    "gridArea": [
+                        "5",
+                        "4",
+                        "6",
+                        "7"
+                    ],
+                    "class": "green",
+                    "type": "action",
+                    "executables": []
+                },
+                { 
+                    "id": "scoreAmpedSpeaker",
+                    "displayText": "Midfield",
+                    "gridArea": [
+                        "6",
+                        "4",
+                        "7",
                         "7"
                     ],
                     "class": "green",
