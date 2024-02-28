@@ -149,7 +149,7 @@
                 },
                 {
                     "id": "scoreSpeaker",
-                    "displayText": "Podium",
+                    "displayText": "Wing",
                     "gridArea": [
                         "4",
                         "4",
@@ -162,7 +162,7 @@
                 },
                 {
                     "id": "scoreSpeaker",
-                    "displayText": "Wing",
+                    "displayText": "Podium",
                     "gridArea": [
                         "5",
                         "4",
@@ -336,7 +336,7 @@
                 },
                 {
                     "id": "scoreSpeaker",
-                    "displayText": "Podium",
+                    "displayText": "Wing",
                     "gridArea": [
                         "4",
                         "4",
@@ -349,7 +349,7 @@
                 },
                 {
                     "id": "scoreSpeaker",
-                    "displayText": "Wing",
+                    "displayText": "Podium",
                     "gridArea": [
                         "5",
                         "4",
@@ -525,7 +525,7 @@
                 },
                 {
                     "id": "scoreAmpedSpeaker",
-                    "displayText": "Podium",
+                    "displayText": "Wing",
                     "gridArea": [
                         "4",
                         "4",
@@ -538,7 +538,7 @@
                 },
                 {
                     "id": "scoreAmpedSpeaker",
-                    "displayText": "Wing",
+                    "displayText": "Podium",
                     "gridArea": [
                         "5",
                         "4",
