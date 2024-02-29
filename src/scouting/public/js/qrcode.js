@@ -50,6 +50,8 @@ class QREncoder {
      * clicking on the match pops up qr code 
      */
     async encodeTeamMatchPerformance(teamMatchPerformance) {
+        console.log(teamMatchPerformance);
+
         await this.init();
 
         let out = "" //store everything in strings. This is inefficient, but I haven't found a better way to do this in browser js and it probably doesnt matter.
@@ -79,6 +81,8 @@ class QREncoder {
         }
 
         out += "11111111" //filled byte to signify the end of the action queue
+        console.log(`Bits: ${out}`);
+
         console.log("hex bytes", out.match(/.{1,8}/g).map(x=>parseInt(x,2).toString(16)));
 
         const data = new Uint8ClampedArray(out.match(/.{1,8}/g).map(x=>parseInt(x, 2)));
