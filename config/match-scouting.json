@@ -135,7 +135,7 @@
                     "executables": []
                 },
                 {
-                    "id": "scoreSpeaker",
+                    "id": "scoreSubwoofer",
                     "displayText": "Subwoofer",
                     "gridArea": [
                         "3",
@@ -148,7 +148,7 @@
                     "executables": []
                 },
                 {
-                    "id": "scoreSpeaker",
+                    "id": "scoreWing",
                     "displayText": "Wing",
                     "gridArea": [
                         "4",
@@ -161,7 +161,7 @@
                     "executables": []
                 },
                 {
-                    "id": "scoreSpeaker",
+                    "id": "scorePodium",
                     "displayText": "Podium",
                     "gridArea": [
                         "5",
@@ -174,7 +174,7 @@
                     "executables": []
                 },
                 { 
-                    "id": "scoreSpeaker",
+                    "id": "scoreMidfield",
                     "displayText": "Midfield",
                     "gridArea": [
                         "6",
@@ -322,7 +322,7 @@
                     ]
                 },
                 {
-                    "id": "scoreSpeaker",
+                    "id": "scoreSubwoofer",
                     "displayText": "Subwoofer",
                     "gridArea": [
                         "3",
@@ -335,7 +335,7 @@
                     "executables": []
                 },
                 {
-                    "id": "scoreSpeaker",
+                    "id": "scoreWing",
                     "displayText": "Wing",
                     "gridArea": [
                         "4",
@@ -348,7 +348,7 @@
                     "executables": []
                 },
                 {
-                    "id": "scoreSpeaker",
+                    "id": "scorePodium",
                     "displayText": "Podium",
                     "gridArea": [
                         "5",
@@ -361,7 +361,7 @@
                     "executables": []
                 },
                 { 
-                    "id": "scoreSpeaker",
+                    "id": "scoreMidfield",
                     "displayText": "Midfield",
                     "gridArea": [
                         "6",

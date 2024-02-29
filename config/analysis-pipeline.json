@@ -1,4 +1,17 @@
 [
+    {  
+        "type": "team",
+        "name": "sum",
+        "outputPath": "counts.scoreSpeaker",
+        "options": {
+            "addends": [
+                "counts.scoreSubwoofer",
+                "counts.scoreWing",
+                "counts.scorePodium",
+                "counts.scoreMidfield"
+            ]
+        }
+    },
     {
         "type": "tmp",
         "name": "countActions",
@@ -61,7 +74,10 @@
             ],
             "scores": [
                 "scoreAmp",
-                "scoreSpeaker",
+                "scoreSubwoofer",
+                "scoreWing",
+                "scorePodium",
+                "scoreMidfield",
                 "scoreAmpedSpeaker"
             ],
             "misses": [
@@ -221,7 +237,10 @@
             "weightedPaths": {
                 "countsAuto.leave": 2,
                 "countsAuto.scoreAmp": 2,
-                "countsAuto.scoreSpeaker": 5
+                "countsAuto.scoreSubwoofer": 5,
+                "countsAuto.scoreWing": 5,
+                "countsAuto.scorePodium": 5,
+                "countsAuto.scoreMidfield": 5
             }
         }
     },
@@ -232,7 +251,10 @@
         "options": {
             "weightedPaths": {
                 "countsTeleop.scoreAmp": 1,
-                "countsTeleop.scoreSpeaker": 2,
+                "countsTeleop.scoreSubwoofer": 2,
+                "countsTeleop.scoreWing": 2,
+                "countsTeleop.scorePodium": 2,
+                "countsTeleop.scoreMidfield": 2,
                 "countsTeleop.scoreAmpedSpeaker": 5
             }
         }

@@ -157,6 +157,32 @@
     },
     {
         "view": "team",
+        "module": "Pie",
+        "position": "main",
+        "name": "Shot Location Distribution",
+        "options": {
+            "slices": [
+                {
+                    "name": "Subwoofer",
+                    "path": "counts.scoreSubwoofer"
+                },
+                {
+                    "name": "Wing",
+                    "path": "counts.scoreWing"
+                },
+                {
+                    "name": "Podium",
+                    "path": "counts.scorePodium"
+                },
+                {
+                    "name": "Midfield",
+                    "path": "counts.scoreMidfield"
+                }
+            ]
+        }
+    },
+    {
+        "view": "team",
         "module": "Bar",
         "position": "main",
         "name": "Stage",
