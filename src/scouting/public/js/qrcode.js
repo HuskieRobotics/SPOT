@@ -156,8 +156,6 @@ function getVal(obj,path) {
     return getVal(obj[path.shift()],path.join("."));
 }
 
-export { QREncoder };
-
 /**
  * in admin a button called scan qr code should be added
  * when opened it should open a camera view that can scan and decode qr codes 
