@@ -61,11 +61,10 @@ class QREncoder {
         
         out += QREncoder.encodeValue(majorVersion, 255, 0, 8); // major version (8 bits)
         out += QREncoder.encodeValue(minorVersion, 255, 0, 8); // minor version (8 bits)
-        out += QREncoder.encodeValue(teamMatchPerformance.eventNumber, 255, 0, 8) //event number (8 bits)
+        out += QREncoder.encodeValue(parseInt(teamMatchPerformance.eventNumber), 255, 0, 8) //event number (8 bits)
         out += QREncoder.encodeValue(parseInt(teamMatchPerformance.matchNumber), 255, 0, 8) // match number (8 bits)
         out += QREncoder.encodeValue(parseInt(teamMatchPerformance.robotNumber), 65535, 0, 16) // team number (16 bits)
-        // out += QREncoder.encodeValue(parseInt(teamMatchPerformance.matchId_rand,"32"),2 ** 32 - 1, 0, 32); // matchId_rand (32 bits)
-        out += QREncoder.encodeValue(parseInt(teamMatchPerformance.matchId_rand,"32"),2 ** 64 - 1, 0, 32); // matchId_rand (64 bits)
+        out += QREncoder.encodeValue(parseInt(teamMatchPerformance.matchId_rand,"32"),2 ** 64 - 1, 0, 64); // matchId_rand (64 bits)
 
         /****** Action Queue ******/
         for (let action of teamMatchPerformance.actionQueue) {
@@ -81,21 +80,12 @@ class QREncoder {
         }
 
         out += "11111111" //filled byte to signify the end of the action queue
-        console.log(`Bits: ${out}`);
 
-        console.log("hex bytes", out.match(/.{1,8}/g).map(x=>parseInt(x,2).toString(16)));
+        // console.log("hex bytes", out.match(/.{1,8}/g).map(x=>parseInt(x,2).toString(16)));
 
         const data = new Uint8ClampedArray(out.match(/.{1,8}/g).map(x=>parseInt(x, 2)));
 
         const dataB64 = btoa(String.fromCharCode.apply(null, data));
-        console.log(`Data Encoded As B64 String: ${dataB64}`);
-
-        const decodedData = new Uint8ClampedArray(Array.from(atob(dataB64), (char) => {
-            return char.charCodeAt(0);
-        }));
-
-        console.log(`Original Uint8ClampedArray: ${data}`);
-        console.log(`Decoded Uint8ClampedArray: ${decodedData}`);
 
         let dataUrl;
         await QRCode.toDataURL(dataB64, {
@@ -107,36 +97,14 @@ class QREncoder {
 
             dataUrl = url;
         })
-        
-        /*
-        let dataUrl = await QRCode.toDataURL([{
-            data: new Uint8ClampedArray(out.match(/.{1,8}/g).map(x=>parseInt(x,2))), 
-            mode: "byte"
-        }], {
-            errorCorrectionLevel: "L", 
-        });
-        */
-
-        /*
-        const data = JSON.stringify(teamMatchPerformance);
-
-        let dataUrl;
-        await QRCode.toDataURL(data, {
-            errorCorrectionLevel: "M",
-        }, (err, url) => {
-            if (err) {
-                console.log(err);
-            }
-            dataUrl = url;
-        });
-        */
 
         let qrContainer = document.createElement("div");
-        let qrText = document.createElement("div");
+        let qrText = document.createElement("button");
         let qrImg = document.createElement("img");
 
         qrContainer.classList.add("qr-container");
         qrText.classList.add("qr-text");
+        qrText.classList.add('button-grid');
         qrImg.classList.add("qr-img");
 
         qrImg.src = dataUrl;
@@ -159,70 +127,3 @@ function getVal(obj,path) {
     path = path.split(".");
     return getVal(obj[path.shift()],path.join("."));
 }
-
-/**
- * in admin a button called scan qr code should be added
- * when opened it should open a camera view that can scan and decode qr codes 
- * after a qr code is found a snap shot should be taken and the admins hould be able to confirm the qr code
- * then once you have the tmp it can be added like any ohter tmp to the database 
- */
-/* decoder, move this to admin
-async function decodeQRCodeUrl(image_url) {
-    let img = new Image();
-    let canvas = document.createElement("canvas");
-    await new Promise(r => img.onload=r, img.src=image_url);
-
-    canvas.width = img.width;
-    canvas.height = img.height;
-
-    let ctx = canvas.getContext("2d");
-    ctx.drawImage(img,0,0);
-    let imageData = ctx.getImageData(0,0,img.width,img.height);
-    
-    let bytes = jsQR(imageData.data, imageData.width, imageData.height).binaryData;
-    let bits = bytes.reduce((acc,x) => acc+x.toString(2).padStart(8,"0"),"")
-    console.log("hex bytes", bytes.map(x=>x.toString(16)))
-
-    //parse bits
-    let matchInfo = bits.slice(0,80);
-    let actionQueueBits = bits.slice(80);
-
-    console.log(matchInfo)
-    let teamMatchPerformance = {
-        timestamp: Date.now(),
-        clientVersion: `${parseInt(matchInfo.slice(0,8),2)}.${parseInt(matchInfo.slice(8,16),2)}`, //major.minor
-        scouterId: "qrcode",
-        eventNumber: parseInt(bits.slice(16,24),2),
-        matchNumber: String(parseInt(bits.slice(24,32),2)),
-        robotNumber: String(parseInt(bits.slice(32,48),2)),
-        matchId_rand: parseInt(bits.slice(48,80),2).toString(32),
-        actionQueue: []
-    };
-    teamMatchPerformance.matchId = `${teamMatchPerformance.eventNumber}-${teamMatchPerformance.matchNumber}-${teamMatchPerformance.robotNumber}-${teamMatchPerformance.matchId_rand}`;
-    
-    let actionSize = ACTION_SCHEMA.reduce((acc,x) => acc+x.bits, 0);
-    
-    let nextAction = actionQueueBits.slice(0,actionSize);
-    actionQueueBits = actionQueueBits.slice(actionSize)
-    
-    while (nextAction.slice(0,8) != "11111111") {
-        let action = {};
-
-        for (let {key,bits} of ACTION_SCHEMA) {
-            if (key == "id") {
-                action[key] = ID_ENUM_REVERSE[parseInt(nextAction.slice(0,bits),2)];
-            } else {
-                action[key] = parseInt(nextAction.slice(0,bits),2);
-                nextAction = nextAction.slice(bits);
-            }
-
-        }
-        teamMatchPerformance.actionQueue.push(action);
-        nextAction = actionQueueBits.slice(0,actionSize);
-        actionQueueBits = actionQueueBits.slice(actionSize)
-    }
-
-    
-    return teamMatchPerformance;     
-}
-*/

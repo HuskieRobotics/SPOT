@@ -298,8 +298,11 @@ var previousTimer = [];
                 x.ts = Math.max(x.ts,0);
                 return x;
             })
+            const rand = Math.floor((Math.random() * 2 ** 32)).toString(32);
+
             this.data = {
-                matchId: `${ScoutingSync.state.matchNumber}-${ScoutingSync.state.robotNumber}-${ScoutingSync.state.scouterId}-${Math.floor((Math.random() * 2 ** 32)).toString(32)}`,
+                matchId: `${ScoutingSync.state.matchNumber}-${ScoutingSync.state.robotNumber}-${ScoutingSync.state.scouterId}-${rand}`,
+                matchId_rand: rand,
                 timestamp: Date.now(),
                 clientVersion: config.VERSION,
                 scouterId: ScoutingSync.state.scouterId, // from scouting-sync.js
