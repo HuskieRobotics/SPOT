@@ -70,7 +70,9 @@ class ScoutingSync {
         })
 
         ScoutingSync.socket.on("adminDisconnect", () => {
-            ScoutingSync.scouters = ScoutingSync.scouters.filter(x=>!( !x.connected && x.timestamp == newScouter.timestamp ))
+            console.log("adminDisconnectStarted")
+            switchPage("landing");
+            console.log("adminDisconnectComplete")
         })
 
         //store previous robot and match number for comparison
