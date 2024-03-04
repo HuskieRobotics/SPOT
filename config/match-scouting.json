@@ -7,7 +7,7 @@
                 "displayText": "Auto",
                 "variables": {}
             },
-            "131000": {
+            "135000": {
                 "layer": 2,
                 "displayText": "Teleop",
                 "variables": {}
@@ -112,10 +112,10 @@
                     "id": "leave",
                     "displayText": "Leave",
                     "gridArea": [
-                        "3",
-                        "4",
-                        "4",
-                        "7"
+                        "6",
+                        "8",
+                        "7",
+                        "10"
                     ],
                     "class": "gray",
                     "type": "action",
@@ -135,15 +135,54 @@
                     "executables": []
                 },
                 {
-                    "id": "scoreSpeaker",
-                    "displayText": "Speaker",
+                    "id": "scoreSubwoofer",
+                    "displayText": "Subwoofer",
+                    "gridArea": [
+                        "3",
+                        "4",
+                        "4",
+                        "7"
+                    ],
+                    "class": "gray",
+                    "type": "action",
+                    "executables": []
+                },
+                {
+                    "id": "scoreWing",
+                    "displayText": "Wing",
+                    "gridArea": [
+                        "4",
+                        "4",
+                        "5",
+                        "7"
+                    ],
+                    "class": "gray",
+                    "type": "action",
+                    "executables": []
+                },
+                {
+                    "id": "scorePodium",
+                    "displayText": "Podium",
+                    "gridArea": [
+                        "5",
+                        "4",
+                        "6",
+                        "7"
+                    ],
+                    "class": "gray",
+                    "type": "action",
+                    "executables": []
+                },
+                { 
+                    "id": "scoreMidfield",
+                    "displayText": "Midfield",
                     "gridArea": [
                         "6",
-                        "8",
+                        "4",
                         "7",
-                        "10"
+                        "7"
                     ],
-                    "class": "green",
+                    "class": "gray",
                     "type": "action",
                     "executables": []
                 },
@@ -231,10 +270,10 @@
                     "id": "park",
                     "displayText": "Park",
                     "gridArea": [
-                        "3",
-                        "4",
-                        "4",
-                        "7"
+                        "6",
+                        "8",
+                        "7",
+                        "10"
                     ],
                     "class": "gray",
                     "type": "action",
@@ -283,18 +322,59 @@
                     ]
                 },
                 {
-                    "id": "scoreSpeaker",
-                    "displayText": "Speaker",
+                    "id": "scoreSubwoofer",
+                    "displayText": "Subwoofer",
                     "gridArea": [
-                        "6",
-                        "8",
-                        "7",
-                        "10"
+                        "3",
+                        "4",
+                        "4",
+                        "7"
                     ],
                     "class": "gray",
                     "type": "action",
                     "executables": []
                 },
+                {
+                    "id": "scoreWing",
+                    "displayText": "Wing",
+                    "gridArea": [
+                        "4",
+                        "4",
+                        "5",
+                        "7"
+                    ],
+                    "class": "gray",
+                    "type": "action",
+                    "executables": []
+                },
+                {
+                    "id": "scorePodium",
+                    "displayText": "Podium",
+                    "gridArea": [
+                        "5",
+                        "4",
+                        "6",
+                        "7"
+                    ],
+                    "class": "gray",
+                    "type": "action",
+                    "executables": []
+                },
+                { 
+                    "id": "scoreMidfield",
+                    "displayText": "Midfield",
+                    "gridArea": [
+                        "6",
+                        "4",
+                        "7",
+                        "7"
+                    ],
+                    "class": "gray",
+                    "type": "action",
+                    "executables": []
+                },
+
+
                 {
                     "id": "miss",
                     "displayText": "Miss",
@@ -379,10 +459,10 @@
                     "id": "park",
                     "displayText": "Park",
                     "gridArea": [
-                        "3",
-                        "4",
-                        "4",
-                        "7"
+                        "6",
+                        "8",
+                        "7",
+                        "10"
                     ],
                     "class": "gray",
                     "type": "action",
@@ -390,7 +470,7 @@
                         {
                             "type": "layer",
                             "args": [
-                                2,
+                                3,
                                 4
                             ]
                         }
@@ -432,12 +512,51 @@
                 },
                 {
                     "id": "scoreAmpedSpeaker",
-                    "displayText": "Speaker",
+                    "displayText": "Subwoofer",
+                    "gridArea": [
+                        "3",
+                        "4",
+                        "4",
+                        "7"
+                    ],
+                    "class": "green",
+                    "type": "action",
+                    "executables": []
+                },
+                {
+                    "id": "scoreAmpedSpeaker",
+                    "displayText": "Wing",
+                    "gridArea": [
+                        "4",
+                        "4",
+                        "5",
+                        "7"
+                    ],
+                    "class": "green",
+                    "type": "action",
+                    "executables": []
+                },
+                {
+                    "id": "scoreAmpedSpeaker",
+                    "displayText": "Podium",
+                    "gridArea": [
+                        "5",
+                        "4",
+                        "6",
+                        "7"
+                    ],
+                    "class": "green",
+                    "type": "action",
+                    "executables": []
+                },
+                { 
+                    "id": "scoreAmpedSpeaker",
+                    "displayText": "Midfield",
                     "gridArea": [
                         "6",
-                        "8",
+                        "4",
                         "7",
-                        "10"
+                        "7"
                     ],
                     "class": "green",
                     "type": "action",
