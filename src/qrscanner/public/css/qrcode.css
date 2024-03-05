@@ -1,10 +1,5 @@
-.qrscanbox {
-    border: 2px solid black;
+.qr-button {
     border-radius: 10px;
-    padding: 10px 10px;
-    margin: 1vw 10vw;
-}
-
-.qrtitletext {
-    margin: 0vw 0vw;
+    background: #6666ff;
+    color: var(--bg-alt);   
 }
