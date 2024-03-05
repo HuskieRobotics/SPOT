@@ -81,6 +81,7 @@ class ScoutingSync {
             matchNumber: null
         }
         ScoutingSync.socket.on("enterMatch", () => {
+            console.log("enterMatch")
             setTimeout(() => { //wait an extra 100ms to guarantee you are on the waiting screen
                 console.log(ScoutingSync.state, previousMatchInfo);
                 if (ScoutingSync.state.robotNumber == previousMatchInfo.robotNumber && 
