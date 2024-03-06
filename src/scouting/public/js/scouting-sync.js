@@ -73,7 +73,7 @@ class ScoutingSync {
             console.log("adminDisconnectStarted") 
             switchPage("landing");
             ScoutingSync.state.status = ScoutingSync.SCOUTER_STATUS.DISCONNECTED_BY_ADMIN;
-            ScoutingSync.scouters = ScoutingSync.scouters.filter(x=>!( x.state.status == ScoutingSync.SCOUTER_STATUS.DISCONNECTED_BY_ADMIN))
+            console.log(ScoutingSync.scouters);
             ScoutingSync.assignScouters();
             console.log("adminDisconnectComplete")
         })
