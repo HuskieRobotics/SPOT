@@ -91,17 +91,21 @@ router.get("/matches", async (req,res) => {
 
   let manualSchedule = getManualMatches()
 
-  if(manualSchedule === {}){
+    console.log("matches below");
+    console.log(manualSchedule);
 
-    res.json({
-      "allMatches": manualSchedule,
-      "currentMatch": ScoutingSync.match
-    })
+    console.log(await ScoutingSync.getMatches());
+
+  if(manualSchedule === {}){
+      res.json({
+          "allMatches": await ScoutingSync.getMatches(),
+          "currentMatch": ScoutingSync.match
+      })
   } else {
-    res.json({
-      "allMatches": await ScoutingSync.getMatches(),
-      "currentMatch": ScoutingSync.match
-    })
+      res.json({
+          "allMatches": manualSchedule,
+          "currentMatch": ScoutingSync.match
+      })
   }
 })
 module.exports = router;

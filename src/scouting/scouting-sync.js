@@ -69,11 +69,18 @@ class ScoutingSync {
         if (!config.secrets.TBA_API_KEY) {
             return []; //no key, no matches
         }
+
         let tbaMatches = (await axios.get(`https://www.thebluealliance.com/api/v3/event/${config.TBA_EVENT_KEY}/matches`, {
             headers: {
                 "X-TBA-Auth-Key": config.secrets.TBA_API_KEY
             }
-        }).catch(e => console.log(e,chalk.bold.red("\nError fetching matches from Blue Alliance Api!")))).data;
+        }).catch(e => console.log(e,chalk.bold.red("\nError fetching matches from Blue Alliance Api!"))));
+
+        if (tbaMatches === undefined) {
+            return [];
+        } else {
+            tbaMatches = tbaMatches.data;
+        }
 
         //determine match numbers linearly (eg. if there are 10 quals, qf1 would be match 11)
         const matchLevels = ["qm", "ef", "qf", "sf", "f"];
