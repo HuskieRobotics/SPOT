@@ -40,7 +40,31 @@
                             ]
                         }
                     ]
+                },
+
+                {
+                    "id": "startGameW/Note",
+                    "displayText": "Start w/ Note",
+                    "gridArea": [
+                        "4",
+                        "1",
+                        "6",
+                        "10"
+                    ],
+                    "class": "orange",
+                    "type": "action",
+                    "executables": [
+                        {
+                            "type": "layer",
+                            "args": [
+                                0,
+                                1
+                            ]
+                        }
+                    ]
                 }
+
+
             ],
             [
                 {
@@ -187,11 +211,24 @@
                     "executables": []
                 },
                 {
+                    "id": "drop",
+                    "displayText": "Drop",
+                    "gridArea": [
+                        "5",
+                        "8",
+                        "6",
+                        "9"
+                    ],
+                    "class": "yellow",
+                    "type": "action",
+                    "executables": []
+                },
+                {
                     "id": "miss",
                     "displayText": "Miss",
                     "gridArea": [
                         "5",
-                        "8",
+                        "9",
                         "6",
                         "10"
                     ],
@@ -373,14 +410,25 @@
                     "type": "action",
                     "executables": []
                 },
-
-
+                {
+                    "id": "drop",
+                    "displayText": "Drop",
+                    "gridArea": [
+                        "5",
+                        "8",
+                        "6",
+                        "9"
+                    ],
+                    "class": "yellow",
+                    "type": "action",
+                    "executables": []
+                },
                 {
                     "id": "miss",
                     "displayText": "Miss",
                     "gridArea": [
                         "5",
-                        "8",
+                        "9",
                         "6",
                         "10"
                     ],
@@ -563,11 +611,24 @@
                     "executables": []
                 },
                 {
+                    "id": "drop",
+                    "displayText": "Drop",
+                    "gridArea": [
+                        "5",
+                        "8",
+                        "6",
+                        "9"
+                    ],
+                    "class": "yellow",
+                    "type": "action",
+                    "executables": []
+                },
+                {
                     "id": "miss",
                     "displayText": "Miss",
                     "gridArea": [
                         "5",
-                        "8",
+                        "9",
                         "6",
                         "10"
                     ],
