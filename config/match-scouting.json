@@ -162,9 +162,9 @@
                     "id": "scoreSubwoofer",
                     "displayText": "Subwoofer",
                     "gridArea": [
-                        "3",
+                        "6",
                         "4",
-                        "4",
+                        "7",
                         "7"
                     ],
                     "class": "gray",
@@ -201,9 +201,9 @@
                     "id": "scoreMidfield",
                     "displayText": "Midfield",
                     "gridArea": [
-                        "6",
+                        "3",
                         "4",
-                        "7",
+                        "4",
                         "7"
                     ],
                     "class": "gray",
@@ -362,9 +362,9 @@
                     "id": "scoreSubwoofer",
                     "displayText": "Subwoofer",
                     "gridArea": [
-                        "3",
+                        "6",
                         "4",
-                        "4",
+                        "7",
                         "7"
                     ],
                     "class": "gray",
@@ -401,9 +401,9 @@
                     "id": "scoreMidfield",
                     "displayText": "Midfield",
                     "gridArea": [
-                        "6",
+                        "3",
                         "4",
-                        "7",
+                        "4",
                         "7"
                     ],
                     "class": "gray",
@@ -559,12 +559,12 @@
                     ]
                 },
                 {
-                    "id": "scoreAmpedSpeaker",
+                    "id": "scoreAmpedSubwoofer",
                     "displayText": "Subwoofer",
                     "gridArea": [
-                        "3",
+                        "6",
                         "4",
-                        "4",
+                        "7",
                         "7"
                     ],
                     "class": "green",
@@ -572,7 +572,7 @@
                     "executables": []
                 },
                 {
-                    "id": "scoreAmpedSpeaker",
+                    "id": "scoreAmpedWing",
                     "displayText": "Wing",
                     "gridArea": [
                         "4",
@@ -585,7 +585,7 @@
                     "executables": []
                 },
                 {
-                    "id": "scoreAmpedSpeaker",
+                    "id": "scoreAmpedPodium",
                     "displayText": "Podium",
                     "gridArea": [
                         "5",
@@ -598,12 +598,12 @@
                     "executables": []
                 },
                 { 
-                    "id": "scoreAmpedSpeaker",
+                    "id": "scoreAmpedMidfield",
                     "displayText": "Midfield",
                     "gridArea": [
-                        "6",
+                        "3",
                         "4",
-                        "7",
+                        "4",
                         "7"
                     ],
                     "class": "green",
