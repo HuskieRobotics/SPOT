@@ -122,14 +122,12 @@
                     "name": "Amp",
                     "path": "counts.scoreAmp"
                 },
+                
                 {
-                    "name": "Speaker",
-                    "path": "counts.scoreSpeaker"
+                    "name": "Total Speaker",
+                    "path": "counts.totalSpeaker"
                 },
-                {
-                    "name": "Amped Speaker",
-                    "path": "counts.scoreAmpedSpeaker"
-                },
+               
                 {
                     "name": "Miss",
                     "path": "counts.miss"
@@ -164,19 +162,19 @@
             "slices": [
                 {
                     "name": "Subwoofer",
-                    "path": "counts.scoreSubwoofer"
+                    "path": "counts.totalSubwoofer"
                 },
                 {
                     "name": "Wing",
-                    "path": "counts.scoreWing"
+                    "path": "counts.totalWing"
                 },
                 {
                     "name": "Podium",
-                    "path": "counts.scorePodium"
+                    "path": "counts.totalPodium"
                 },
                 {
                     "name": "Midfield",
-                    "path": "counts.scoreMidfield"
+                    "path": "counts.totalMidfield"
                 }
             ]
         }
@@ -332,12 +330,8 @@
                     "path": "averages.scoreAmp"
                 },
                 {
-                    "name": "Speaker",
-                    "path": "averages.scoreSpeaker"
-                },
-                {
-                    "name": "Amped Speaker",
-                    "path": "averages.scoreAmpedSpeaker"
+                    "name": "Total Speaker",
+                    "path": "averages.totalSpeaker"
                 },
                 {
                     "name": "Miss",

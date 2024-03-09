@@ -1,6 +1,22 @@
 [
-    {  
+    {
+        "type": "tmp",
+        "name": "countActions",
+        "outputPath": "counts",
+        "options": {
+            "all": true
+        }
+      },
+      {
         "type": "team",
+        "name": "countActions",
+        "outputPath": "counts",
+        "options": {
+            "all": true
+        }
+      },
+    {  
+        "type": "tmp",
         "name": "sum",
         "outputPath": "counts.scoreSpeaker",
         "options": {
@@ -12,6 +28,60 @@
             ]
         }
     },
+    {  
+        "type": "team",
+        "name": "sum",
+        "outputPath": "counts.totalSubwoofer",
+        "options": {
+            "addends": [
+                "counts.scoreSubwoofer",
+                "counts.scoreAmpedSubwoofer"
+            ]
+        }
+    },
+    {  
+        "type": "team",
+        "name": "sum",
+        "outputPath": "counts.totalPodium",
+        "options": {
+            "addends": [
+                "counts.scorePodium",
+                "counts.scoreAmpedPodium"
+            ]
+        }
+    },
+
+    {  
+        "type": "team",
+        "name": "sum",
+        "outputPath": "counts.totalWing",
+        "options": {
+            "addends": [
+                "counts.scoreWing",
+                "counts.scoreAmpedWing"
+            ]
+        }
+    },
+    {  
+        "type": "team",
+        "name": "sum",
+        "outputPath": "counts.totalMidfield",
+        "options": {
+            "addends": [
+                "counts.scoreMidfield",
+                "counts.scoreAmpedMidfield"
+            ]
+        }
+    },
+    {  
+        "type": "team",
+        "name": "test",
+        "outputPath": "",
+        "options": {
+            "path": ""
+        }
+    },
+
     {  
         "type": "team",
         "name": "average",
@@ -29,16 +99,36 @@
         }
     },
     {  
-        "type": "team",
+        "type": "tmp",
         "name": "sum",
         "outputPath": "counts.scoreAmpedSpeaker",
         "options": {
             "addends": [
-                "counts.scoreSubwoofer",
-                "counts.scoreWing",
-                "counts.scorePodium",
-                "counts.scoreMidfield"
+                "counts.scoreAmpedSubwoofer",
+                "counts.scoreAmpedWing",
+                "counts.scoreAmpedPodium",
+                "counts.scoreAmpedMidfield"
             ]
+        }
+    },
+    {  
+        "type": "team",
+        "name": "sum",
+        "outputPath": "counts.totalSpeaker",
+        "options": {
+            "addends": [
+                "counts.scoreAmpedSpeaker",
+                "counts.scoreSpeaker"
+            ]
+        }
+    },
+
+    {  
+        "type": "team",
+        "name": "average",
+        "outputPath": "averages.totalSpeaker",
+        "options": {
+            "path": "counts.totalSpeaker"
         }
     },
     {  
@@ -50,7 +140,7 @@
         }
     },
     {
-        "type": "tmp",
+        "type": "team",
         "name": "countActions",
         "outputPath": "counts",
         "options": {
