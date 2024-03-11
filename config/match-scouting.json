@@ -43,8 +43,8 @@
                 },
 
                 {
-                    "id": "startGameW/Note",
-                    "displayText": "Start w/ Note",
+                    "id": "preloadNote",
+                    "displayText": "Preload Note",
                     "gridArea": [
                         "4",
                         "1",
@@ -53,15 +53,7 @@
                     ],
                     "class": "orange",
                     "type": "action",
-                    "executables": [
-                        {
-                            "type": "layer",
-                            "args": [
-                                0,
-                                1
-                            ]
-                        }
-                    ]
+                    "executables": []
                 }
 
 

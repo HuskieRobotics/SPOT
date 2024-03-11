@@ -31,7 +31,7 @@
     {  
         "type": "team",
         "name": "sum",
-        "outputPath": "counts.totalSubwoofer",
+        "outputPath": "CountsTotalSubwoofer",
         "options": {
             "addends": [
                 "counts.scoreSubwoofer",
@@ -42,7 +42,7 @@
     {  
         "type": "team",
         "name": "sum",
-        "outputPath": "counts.totalPodium",
+        "outputPath": "CountsTotalPodium",
         "options": {
             "addends": [
                 "counts.scorePodium",
@@ -50,11 +50,10 @@
             ]
         }
     },
-
     {  
         "type": "team",
         "name": "sum",
-        "outputPath": "counts.totalWing",
+        "outputPath": "CountsTotalWing",
         "options": {
             "addends": [
                 "counts.scoreWing",
@@ -63,9 +62,10 @@
         }
     },
     {  
+
         "type": "team",
         "name": "sum",
-        "outputPath": "counts.totalMidfield",
+        "outputPath": "CountsTotalMidfield",
         "options": {
             "addends": [
                 "counts.scoreMidfield",
@@ -114,7 +114,7 @@
     {  
         "type": "team",
         "name": "sum",
-        "outputPath": "counts.totalSpeaker",
+        "outputPath": "CountsTotalSpeaker",
         "options": {
             "addends": [
                 "counts.scoreAmpedSpeaker",
@@ -128,7 +128,7 @@
         "name": "average",
         "outputPath": "averages.totalSpeaker",
         "options": {
-            "path": "counts.totalSpeaker"
+            "path": "CountsTotalSpeaker"
         }
     },
     {  
@@ -137,14 +137,6 @@
         "outputPath": "averages.scoreAmpedSpeaker",
         "options": {
             "path": "counts.scoreAmpedSpeaker"
-        }
-    },
-    {
-        "type": "team",
-        "name": "countActions",
-        "outputPath": "counts",
-        "options": {
-            "all": true
         }
     },
     {

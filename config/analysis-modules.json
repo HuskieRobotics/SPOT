@@ -122,11 +122,6 @@
                     "name": "Amp",
                     "path": "counts.scoreAmp"
                 },
-                
-                {
-                    "name": "Total Speaker",
-                    "path": "counts.totalSpeaker"
-                },
                
                 {
                     "name": "Miss",
@@ -149,32 +144,6 @@
                 {
                     "name": "Ground",
                     "path": "counts.groundPickup"
-                }
-            ]
-        }
-    },
-    {
-        "view": "team",
-        "module": "Pie",
-        "position": "main",
-        "name": "Shot Location Distribution",
-        "options": {
-            "slices": [
-                {
-                    "name": "Subwoofer",
-                    "path": "counts.totalSubwoofer"
-                },
-                {
-                    "name": "Wing",
-                    "path": "counts.totalWing"
-                },
-                {
-                    "name": "Podium",
-                    "path": "counts.totalPodium"
-                },
-                {
-                    "name": "Midfield",
-                    "path": "counts.totalMidfield"
                 }
             ]
         }
@@ -314,28 +283,6 @@
                     "path": "averageScores.total",
 					"decimals": 2,
                     "aggrMethod": "sum"
-                }
-            ]
-        }
-    },
-    {
-        "view": "match",
-        "module": "Pie",
-        "position": "main",
-        "name": "Shot Distribution",
-        "options": {
-            "slices": [
-                {
-                    "name": "Amp",
-                    "path": "averages.scoreAmp"
-                },
-                {
-                    "name": "Total Speaker",
-                    "path": "averages.totalSpeaker"
-                },
-                {
-                    "name": "Miss",
-                    "path": "averages.miss"
                 }
             ]
         }
