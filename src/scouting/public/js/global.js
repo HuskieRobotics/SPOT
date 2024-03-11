@@ -17,6 +17,6 @@ document.querySelector(".reload").addEventListener("click", () => {
 		.header("Warning")
 		.text("Are you sure you want to reload?")
 		.action("Reload", 
-			() => window.location.reload()
+			() => console.log('reload disabled') // window.location.reload()
 		)
 })

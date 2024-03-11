@@ -55,9 +55,9 @@ class LocalData {
         const storedMatchIds = (await LocalData.getAllTeamMatchPerformances()).map(teamMatchPerformance => teamMatchPerformance.matchId)
         let objectStore = LocalData.db.transaction(LocalData.dbName, "readwrite").objectStore(LocalData.dbName)
 
-        const testQR = new QREncoder(); // Updated
-        const data = testQR.encodeTeamMatchPerformance(teamMatchPerformance); // testing it here
-        console.log(data);
+        const encoder = new QREncoder(); // Updated
+        const data = await encoder.encodeTeamMatchPerformance(teamMatchPerformance); // testing it here
+        console.log(`Data: ${data}`);
 
         if (!storedMatchIds.includes(teamMatchPerformance.matchId)) {
             await new Promise(resolve => {

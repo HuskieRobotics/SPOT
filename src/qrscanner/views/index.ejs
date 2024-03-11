@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
+      <!--
         <meta charset="utf-8">
         <meta name='viewport' content='width=device-width, initial-scale=1, user-scalable=no, viewport-fit=cover'>
         <meta name="apple-mobile-web-app-capable" content="yes">
@@ -28,19 +29,24 @@
         <link href="./css/global.css" rel="stylesheet" type="text/css" />
         <link href="./css/internal.css" rel="stylesheet" type="text/css" />    
         <link rel="stylesheet" href="./css/qrcode.css" type="text/css">
+      -->
+      \
+      <!--
+      <meta charset="utf-8">
+      <meta name='viewport' content='width=device-width, initial-scale=1, user-scalable=no, viewport-fit=cover'>
+      <meta name="apple-mobile-web-app-capable" content="yes">
+      <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+      <link href="./css/style.css" rel="stylesheet" type="text/css" />
+      <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;700&family=Saira:wght@300;400;700&family=Tajawal:wght@300;400;700&display=swap" rel="stylesheet">
+      <link href="./css/global.css" rel="stylesheet" type="text/css" />
+      <link href="./css/qrcode.css" rel="stylesheet" type="text/css" />
+      <title>SPOT - QR Code</title>
+      -->
     </head>
 <body>
-    <div class="qrscanbox">
-        <div class="qrtitletext">QR Code Scanner</div><br>
-        <div class="row">
-          <div class="col">
             <div style="width:500px;" id="reader"></div>
-          </div>
             <h4>Scan Result</h4>
-            <div id="result">Result Here</div> 
-          </div>
-        </div>
-    </div>
+            <div id="result"></div>
     <script src="./js/html5-qrcode.min.js"></script>
     <script src="./js/results.js"></script>
 </body>
