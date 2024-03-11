@@ -267,7 +267,7 @@ class ScouterDisplay {
             this.scouterElement.querySelector(".match-number").style.borderColor = SCOUTER_STATUS_COLOR[this.scouter.state.status];
             this.scouterElement.querySelector(".scouter-status").innerText = SCOUTER_STATUS_REVERSE[this.scouter.state.status];
         }
-        if (!this.scouter.state.connected && !(this.scouter.state.status == DISCONNECTEDBYADMIN)) { //disconnected by admin
+        if (!this.scouter.state.connected && !(this.scouter.state.status ==  SCOUTER_STATUS.DISCONNECTED_BY_ADMIN)) { //disconnected by admin
             this.scouterElement.querySelector(".scouter-status").style.color = DISCONNECTED_COLOR;
             this.scouterElement.style.borderColor = DISCONNECTED_COLOR;
             this.scouterElement.querySelector(".match-number").style.backgroundColor = DISCONNECTED_COLOR;

@@ -80,13 +80,15 @@ router.get("/dissconnectScouter/:scouterId", async (req,res) => {
         if (scout.state.scouterId === req.params.scouterId){
             console.log("disconnecting")
             scout.socket.emit("adminDisconnect");
-            scout.socket.emit("disconnect");
-            console.log("Current Scouters ")
+            scout.socket.disconnect();
+            console.log("Done disconnecting")
+          }
+        }
+      
+      console.log("Current Scouters ")
             for (let scout of ScoutingSync.scouters) {
               console.log(scout.state.scouterId)
-          }
-            console.log("Done disconnecting")
-        }
+
       }
         res.json(true);
     } else {
