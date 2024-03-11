@@ -4,12 +4,14 @@ let submitButton;
 async function onScanSuccess(qrCodeMessage) {
     const data = await decodeQRCodeUrl(qrCodeMessage);
 
-    if (!exists) {
-        submitButton = document.createElement('button');
-        submitButton.classList.add('qr-button');
-        submitButton.textContent = 'Data is Correct (Submit/Cache)';
-        exists = true;
+    if (submitButton) {
+        document.removeChild(submitButton);
     }
+
+    submitButton = document.createElement('button');
+    submitButton.classList.add('qr-button');
+    submitButton.textContent = 'Data is Correct (Submit/Cache)';
+    exists = true;
 
     // document.body.appendChild(submitButton);
 
@@ -25,6 +27,20 @@ async function onScanSuccess(qrCodeMessage) {
     document.body.insertBefore(submitButton, result);
 
     document.getElementById('result').innerHTML = html;
+
+    submitButton.addEventListener("click", async () => {
+        const response = await (await fetch("/qrscanner/teamMatchPerformance", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data),
+        }));
+
+        if (response.ok) {
+            console.log('Okay!');
+        }
+    });
 }
 
 function onScanError(errorMessage) {

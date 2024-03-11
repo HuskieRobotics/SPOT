@@ -1,4 +1,5 @@
 const express = require('express');
+const { TeamMatchPerformance } = require('../lib/db.js');
 
 let route = express.Router();
 
@@ -8,10 +9,14 @@ route.get("/", (req, res) => {
     res.render(__dirname + "/views/index.ejs");
 });
 
-route.get("/temp", (req, res) => {-
+route.get("/temp", (req, res) => {
     res.render(__dirname + "/views/temp.ejs");
 });
 
-route.use("/api", require("./routes/api.js"));
+route.post('/teamMatchPerformance', (req, res) => {
+    console.log(req.body);
+});
+
+route.use("/api", require('./routes/api.js'));
 
 module.exports = route;
