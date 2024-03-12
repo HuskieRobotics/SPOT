@@ -13,10 +13,6 @@ route.get("/temp", (req, res) => {
     res.render(__dirname + "/views/temp.ejs");
 });
 
-route.post('/teamMatchPerformance', (req, res) => {
-    console.log(req.body);
-});
-
 route.use("/api", require('./routes/api.js'));
 
 module.exports = route;
