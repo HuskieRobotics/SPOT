@@ -5,15 +5,13 @@ async function onScanSuccess(qrCodeMessage) {
     const data = await decodeQRCodeUrl(qrCodeMessage);
 
     if (submitButton) {
-        document.removeChild(submitButton);
+        document.body.removeChild(submitButton);
     }
 
     submitButton = document.createElement('button');
     submitButton.classList.add('qr-button');
     submitButton.textContent = 'Data is Correct (Submit/Cache)';
     exists = true;
-
-    // document.body.appendChild(submitButton);
 
     let html = `Timestamp: ${data.timestamp}<br>Client Version: ${data.clientVersion}<br>Scouter ID: ${data.scouterId}`;
     html += `<br>Event Number: ${data.eventNumber}<br>Match Number: ${data.matchNumber}<br>Robot Number: ${data.robotNumber}<br>Action Queue: [<br></p>`;
@@ -29,7 +27,7 @@ async function onScanSuccess(qrCodeMessage) {
     document.getElementById('result').innerHTML = html;
 
     submitButton.addEventListener("click", async () => {
-        const response = await (await fetch("/qrscanner/teamMatchPerformance", {
+        const response = await (await fetch("./api/teamMatchPerformance", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -39,6 +37,8 @@ async function onScanSuccess(qrCodeMessage) {
 
         if (response.ok) {
             console.log('Okay!');
+        } else {
+            console.log('need to cache data');
         }
     });
 }
