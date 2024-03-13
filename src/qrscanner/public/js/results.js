@@ -36,9 +36,12 @@ async function onScanSuccess(qrCodeMessage) {
         }));
 
         if (response.ok) {
-            console.log('Okay!');
+            localStorage.setItem('teamMatchPerformance', JSON.stringify(data));
+            console.log('Data submitted');
         } else {
-            console.log('need to cache data');
+            localStorage.setItem('teamMatchPerformance', JSON.stringify(data));
+            console.log('Data submitted');
+
         }
     });
 }
