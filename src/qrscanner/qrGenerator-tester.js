@@ -15,6 +15,38 @@ const sampleData = {
     eight: 1.1,
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 generateQRCode(sampleData, filePath);
 
 async function help() {
