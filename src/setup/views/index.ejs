@@ -92,6 +92,36 @@
                     <span>Event Number</span>
                 </label>
             </div>
+            <div>
+                <h1>Demo Mode</h1>
+                <p> Demo mode disables certain functionality in order to allow use without altering the database</p>
+                <label class="switch">
+                    <span class="switch-text-left">Off</span>
+        <input type="checkbox">
+        <span class="slider round"></span>
+        <span class="switch-text-right">On</span>
+                  </label>
+            </div>
+        
+            <script>
+                let DEMO = false; // Initial value
+        
+                const toggleSwitch = document.getElementById('toggleSwitch');
+        
+                toggleSwitch.addEventListener('change', function() {
+                    if (this.checked) {
+                        DEMO = true;
+                        console.log("Switch is ON");
+                    } else {
+                        DEMO = false;
+                        console.log("Switch is OFF");
+                    }
+        
+                    // Example: You can perform other actions based on the toggle state here
+                    // For demonstration, I'm just logging the value of DEMO
+                    console.log("DEMO value: " + DEMO);
+                });
+            </script>
         </form>
 
         <button id="submit">Submit</button>
