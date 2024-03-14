@@ -34,7 +34,8 @@ async function onScanSuccess(qrCodeMessage) {
             },
             body: JSON.stringify(data),
         }));
-        if (response.ok && localStorage.getItem('teamMatchPerformance') === null ){
+
+        if (response.ok && localStorage.getItem('teamMatchPerformance') !== JSON.stringify(data) ){
             localStorage.setItem('teamMatchPerformance', JSON.stringify(data));
             console.log("new line")
             console.log(localStorage.getItem('teamMatchPerformance'));
