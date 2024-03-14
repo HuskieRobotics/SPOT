@@ -34,14 +34,13 @@ async function onScanSuccess(qrCodeMessage) {
             },
             body: JSON.stringify(data),
         }));
-
-        if (response.ok) {
+        if (response.ok && localStorage.getItem('teamMatchPerformance') === null ){
             localStorage.setItem('teamMatchPerformance', JSON.stringify(data));
-            console.log('Data submitted');
-        } else {
+            console.log("new line")
+            console.log(localStorage.getItem('teamMatchPerformance'));
+        } else if (localStorage.getItem('teamMatchPerformance') === null){
             localStorage.setItem('teamMatchPerformance', JSON.stringify(data));
-            console.log('Data submitted');
-
+            console.log(localStorage.getItem('teamMatchPerformance'));
         }
     });
 }
