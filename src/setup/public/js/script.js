@@ -65,6 +65,7 @@ async function constructApp(accessCode) {
         document.querySelector("#GOOGLE_CLIENT_ID").value = config.GOOGLE_CLIENT_ID || ""
         document.querySelector("#GOOGLE_CLIENT_SECRET").value = config.GOOGLE_CLIENT_SECRET || ""
         document.querySelector("#EVENT_NUMBER").value = config.EVENT_NUMBER || ""
+        document.querySelector("#DEMO").value = config.DEMO || ""
     }
 
     document.querySelector("#setup-container").classList.add("visible")

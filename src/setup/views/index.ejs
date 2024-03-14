@@ -96,7 +96,7 @@
                 <h1>Demo Mode</h1>
                 <p> Demo mode disables certain functionality in order to allow use without altering the database</p>
                 <label class="switch" id="toggleSwitch">
-                    <input type="checkbox">
+                    <input type="checkbox" id="DEMO" name="DEMO" value="false">
                     <span class="slider round"></span>
                     <span class="on">ON</span>
                     <span class="off">OFF</span>
@@ -111,9 +111,13 @@
                 toggleSwitch.addEventListener('change', function() {
                     if (this.checked) {
                         DEMO = true;
+                        toggleSwitch.value = "true";
+                        console.log(toggleSwitch.value);
                         console.log("Switch is ON");
                     } else {
+                        toggleSwitch.value = "false";
                         DEMO = false;
+                        console.log(toggleSwitch.value);
                         console.log("Switch is OFF");
                     }
 

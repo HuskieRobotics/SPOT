@@ -5,7 +5,7 @@ const config = require("../../../config/config.json");
 const { TeamMatchPerformance } = require("../../lib/db");
 let axios = require("axios")
 const {getManualMatches} = require("../../schedule/schedule");
-const DEMO = false;
+const DEMO = config.DEMO == 'true';
 
 router.use((req,res,next) => {
     if (!ScoutingSync.initialized) {
@@ -17,6 +17,7 @@ router.use((req,res,next) => {
 
 router.get("/auth", (req, res) => {
   if(!DEMO){
+    console.log(DEMO)
     if (config.secrets.ACCESS_CODE === "") {
         res.json({status: 2})
     } else if (config.secrets.ACCESS_CODE == req.headers.authorization) {
@@ -30,6 +31,7 @@ router.get("/auth", (req, res) => {
 })
 
 router.get("/scouters", (req,res) => {
+  console.log(DEMO)
   if(!DEMO){
     if (req.headers.authorization === config.secrets.ACCESS_CODE) {
         res.json(ScoutingSync.getScouters())
