@@ -112,7 +112,7 @@
         }
     },
     {  
-        "type": "team",
+        "type": "tmp",
         "name": "sum",
         "outputPath": "CountsTotalSpeaker",
         "options": {
