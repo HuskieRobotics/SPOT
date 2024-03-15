@@ -122,14 +122,7 @@
                     "name": "Amp",
                     "path": "counts.scoreAmp"
                 },
-                {
-                    "name": "Speaker",
-                    "path": "counts.scoreSpeaker"
-                },
-                {
-                    "name": "Amped Speaker",
-                    "path": "counts.scoreAmpedSpeaker"
-                },
+               
                 {
                     "name": "Miss",
                     "path": "counts.miss"
@@ -151,32 +144,6 @@
                 {
                     "name": "Ground",
                     "path": "counts.groundPickup"
-                }
-            ]
-        }
-    },
-    {
-        "view": "team",
-        "module": "Pie",
-        "position": "main",
-        "name": "Shot Location Distribution",
-        "options": {
-            "slices": [
-                {
-                    "name": "Subwoofer",
-                    "path": "counts.scoreSubwoofer"
-                },
-                {
-                    "name": "Wing",
-                    "path": "counts.scoreWing"
-                },
-                {
-                    "name": "Podium",
-                    "path": "counts.scorePodium"
-                },
-                {
-                    "name": "Midfield",
-                    "path": "counts.scoreMidfield"
                 }
             ]
         }
@@ -316,32 +283,6 @@
                     "path": "averageScores.total",
 					"decimals": 2,
                     "aggrMethod": "sum"
-                }
-            ]
-        }
-    },
-    {
-        "view": "match",
-        "module": "Pie",
-        "position": "main",
-        "name": "Shot Distribution",
-        "options": {
-            "slices": [
-                {
-                    "name": "Amp",
-                    "path": "averages.scoreAmp"
-                },
-                {
-                    "name": "Speaker",
-                    "path": "averages.scoreSpeaker"
-                },
-                {
-                    "name": "Amped Speaker",
-                    "path": "averages.scoreAmpedSpeaker"
-                },
-                {
-                    "name": "Miss",
-                    "path": "averages.miss"
                 }
             ]
         }
