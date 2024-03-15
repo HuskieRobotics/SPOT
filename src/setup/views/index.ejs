@@ -104,24 +104,20 @@
             </div>
 
             <script>
-                let DEMO = false; // Initial value
         
                 const toggleSwitch = document.getElementById('toggleSwitch').querySelector('input[type="checkbox"]');
         
                 toggleSwitch.addEventListener('change', function() {
                     if (this.checked) {
-                        DEMO = true;
                         toggleSwitch.value = "true";
                         console.log(toggleSwitch.value);
                         console.log("Switch is ON");
                     } else {
                         toggleSwitch.value = "false";
-                        DEMO = false;
                         console.log(toggleSwitch.value);
                         console.log("Switch is OFF");
                     }
 
-                    console.log("DEMO value: " + DEMO);
                 });
             </script>
         </form>

@@ -5,7 +5,7 @@ const config = require("../../../config/config.json");
 const { TeamMatchPerformance } = require("../../lib/db");
 let axios = require("axios")
 const {getManualMatches} = require("../../schedule/schedule");
-const DEMO = config.DEMO == 'true';
+const DEMO = 'false';
 
 router.use((req,res,next) => {
     if (!ScoutingSync.initialized) {
@@ -91,9 +91,9 @@ router.post("/setMatch", (req,res) => {
 
 router.get("/matches", async (req,res) => {
 
-  let manualSchedule = getManualMatches()
+  let manualSchedule = getManualMatches() 
 
-  if(manualSchedule === {}){
+  if(manualSchedule == {}){ //changed from === to == because it was having an error.
 
     res.json({
       "allMatches": manualSchedule,
