@@ -49,9 +49,22 @@
                         "4",
                         "1",
                         "6",
-                        "10"
+                        "5"
                     ],
                     "class": "orange",
+                    "type": "action",
+                    "executables": []
+                },
+                {
+                    "id": "preloadNone",
+                    "displayText": "Preload None",
+                    "gridArea": [
+                        "4",
+                        "6",
+                        "6",
+                        "10"
+                    ],
+                    "class": "gray",
                     "type": "action",
                     "executables": []
                 }
