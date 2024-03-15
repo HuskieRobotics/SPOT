@@ -46,6 +46,8 @@ if (debug) console.log("loaded all manual data!");
 async function execute(dataset) {
     /* get tmps from database */
     dataset = new Dataset((await TeamMatchPerformance.find({eventNumber: config.EVENT_NUMBER})).map((o) => o.toObject()));
+    console.log(dataset);
+    console.log('------');
     
     for (let tfConfig of pipelineConfig) {
         if (debug) console.log(`running ${tfConfig.name} - ${JSON.stringify(tfConfig.options)}`)
