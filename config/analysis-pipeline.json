@@ -75,15 +75,6 @@
     },
     {  
         "type": "team",
-        "name": "test",
-        "outputPath": "",
-        "options": {
-            "path": ""
-        }
-    },
-
-    {  
-        "type": "team",
         "name": "average",
         "outputPath": "averages.scoreSpeaker",
         "options": {
