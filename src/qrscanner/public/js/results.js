@@ -34,15 +34,34 @@ async function onScanSuccess(qrCodeMessage) {
             },
             body: JSON.stringify(data),
         }));
-        if (response.ok && localStorage.getItem('teamMatchPerformance') === null ){
-            localStorage.setItem('teamMatchPerformance', JSON.stringify(data));
-            console.log("new line")
-            console.log(localStorage.getItem('teamMatchPerformance'));
-        } else if (localStorage.getItem('teamMatchPerformance') === null){
-            localStorage.setItem('teamMatchPerformance', JSON.stringify(data));
-            console.log(localStorage.getItem('teamMatchPerformance'));
-        }
-    });
+        const teamMatchPerformances = []
+
+            if (response.ok){
+                let teamMatchPerformances = localStorage.getItem('teamMatchPerformances');
+                if (teamMatchPerformances) {
+                    teamMatchPerformances = JSON.parse(teamMatchPerformances);
+                } else {
+                    teamMatchPerformances = [];
+                }
+                let newPerformance = JSON.stringify(data);
+                if (!teamMatchPerformances.includes(newPerformance)) {
+                    // If not, add it to the cache
+                    teamMatchPerformances.push(newPerformance);
+                    localStorage.setItem('teamMatchPerformances', JSON.stringify(teamMatchPerformances));
+                    console.log(localStorage.getItem('teamMatchPerformances'));
+                }
+                
+            } 
+            else if (localStorage.getItem('teamMatchPerformances') == null){
+                for(let i = 0; i < teamMatchPerformances.length; i++) {
+                    if (teamMatchPerformances[i] !== JSON.stringify(data)) {
+                        teamMatchPerformances.push(JSON.stringify(data));
+                    }
+                }
+                localStorage.setItem('teamMatchPerformances', teamMatchPerformances);
+                console.log(localStorage.getItem('teamMatchPerformances'));
+            }
+        });
 }
 
 function onScanError(errorMessage) {
