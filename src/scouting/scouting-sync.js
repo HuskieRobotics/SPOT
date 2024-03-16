@@ -133,7 +133,9 @@ class ScoutingSync {
         for (let scouter of ScoutingSync.scouters) {
             if (scouter.state.connected && scouter.state.status === ScoutingSync.SCOUTER_STATUS.WAITING) {
                 //check to see if nextRobots is empty, if so repopulate it with all the robots in the match
-                if (nextRobots.size === 0) new Set(ScoutingSync.match.robots.red.concat(ScoutingSync.match.robots.blue));
+                if (nextRobots.size >= 0) {
+                    nextRobots = new Set(ScoutingSync.match.robots.red.concat(ScoutingSync.match.robots.blue));
+                }
 
                 //get the next robot number from the set (the set doesnt return robots in any particular order)
                 let robotNumber = [...nextRobots][0]

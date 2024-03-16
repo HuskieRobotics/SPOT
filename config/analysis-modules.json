@@ -124,7 +124,19 @@
                 },
                 {
                     "name": "Speaker",
-                    "path": "counts.scoreSpeaker"
+                    "path": "counts.scoreSubwoofer"
+                },
+                {
+                    "name": "Speaker",
+                    "path": "counts.scoreWing"
+                },
+                {
+                    "name": "Speaker",
+                    "path": "counts.scorePodium"
+                },
+                {
+                    "name": "Speaker",
+                    "path": "counts.scoreMidfield"
                 },
                 {
                     "name": "Amped Speaker",
@@ -333,11 +345,23 @@
                 },
                 {
                     "name": "Speaker",
-                    "path": "averages.scoreSpeaker"
+                    "path": "counts.scoreSubwoofer"
                 },
                 {
-                    "name": "Amped Speaker",
-                    "path": "averages.scoreAmpedSpeaker"
+                    "name": "Speaker",
+                    "path": "counts.scoreWing"
+                },
+                {
+                    "name": "Speaker",
+                    "path": "counts.scorePodium"
+                },
+                {
+                    "name": "Speaker",
+                    "path": "counts.scoreMidfield"
+                },
+                {
+                      "name": "Amped Speaker",
+                      "path": "averages.scoreAmpedSpeaker"
                 },
                 {
                     "name": "Miss",
