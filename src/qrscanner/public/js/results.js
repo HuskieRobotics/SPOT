@@ -1,12 +1,12 @@
 let submitButton;
 let undoButton;
 
-const CACHE = false;
+const CACHE = true;
 
 async function onScanSuccess(qrCodeMessage) {
     const data = await decodeQRCodeUrl(qrCodeMessage);
 
-    if (submitButton) {
+    if (document.body.contains(submitButton)) {
         document.body.removeChild(submitButton);
     }
 
@@ -39,13 +39,15 @@ async function onScanSuccess(qrCodeMessage) {
 
         undoButton = document.createElement('button');
         undoButton.textContent = 'Undo Last';
+        document.body.appendChild(undoButton);
 
         if (!CACHE){
             // DATABASE UNDO IMPLEMENTATION
             document.body.addEventListener('click', () => {
 
             });
-        } else if (localStorage.getItem('teamMatchPerformances') == null){
+        }
+        else{
             let teamMatchPerformances = localStorage.getItem('teamMatchPerformances');
             if (teamMatchPerformances) {
                 teamMatchPerformances = JSON.parse(teamMatchPerformances);
@@ -59,10 +61,19 @@ async function onScanSuccess(qrCodeMessage) {
                 localStorage.setItem('teamMatchPerformances', JSON.stringify(teamMatchPerformances));
                 console.log(localStorage.getItem('teamMatchPerformances'));
             }
-
             // CACHE UNDO IMPLEMENTATION
             document.body.addEventListener('click', () => {
-
+                let teamMatchPerformances = localStorage.getItem('teamMatchPerformances');
+                if (teamMatchPerformances) {
+                    teamMatchPerformances = JSON.parse(teamMatchPerformances);
+                    // Remove the most recent entry
+                    teamMatchPerformances.pop();
+                    // Store the modified array back in the cache
+                    localStorage.setItem('teamMatchPerformances', JSON.stringify(teamMatchPerformances));
+                    console.log(localStorage.getItem('teamMatchPerformances'));
+                } else {
+                    console.log('No entries to delete.');
+                }
             });
         }
 
