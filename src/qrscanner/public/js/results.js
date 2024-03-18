@@ -1,5 +1,7 @@
-let exists;
 let submitButton;
+let undoButton;
+
+const CACHE = false;
 
 async function onScanSuccess(qrCodeMessage) {
     const data = await decodeQRCodeUrl(qrCodeMessage);
@@ -11,7 +13,6 @@ async function onScanSuccess(qrCodeMessage) {
     submitButton = document.createElement('button');
     submitButton.classList.add('qr-button');
     submitButton.textContent = 'Data is Correct (Submit/Cache)';
-    exists = true;
 
     let html = `Timestamp: ${data.timestamp}<br>Client Version: ${data.clientVersion}<br>Scouter ID: ${data.scouterId}`;
     html += `<br>Event Number: ${data.eventNumber}<br>Match Number: ${data.matchNumber}<br>Robot Number: ${data.robotNumber}<br>Action Queue: [<br></p>`;
@@ -34,34 +35,39 @@ async function onScanSuccess(qrCodeMessage) {
             },
             body: JSON.stringify(data),
         }));
-        const teamMatchPerformances = []
+        const teamMatchPerformances = [];
 
-            if (response.ok){
-                let teamMatchPerformances = localStorage.getItem('teamMatchPerformances');
-                if (teamMatchPerformances) {
-                    teamMatchPerformances = JSON.parse(teamMatchPerformances);
-                } else {
-                    teamMatchPerformances = [];
-                }
-                let newPerformance = JSON.stringify(data);
-                if (!teamMatchPerformances.includes(newPerformance)) {
-                    // If not, add it to the cache
-                    teamMatchPerformances.push(newPerformance);
-                    localStorage.setItem('teamMatchPerformances', JSON.stringify(teamMatchPerformances));
-                    console.log(localStorage.getItem('teamMatchPerformances'));
-                }
-                
-            } 
-            else if (localStorage.getItem('teamMatchPerformances') == null){
-                for(let i = 0; i < teamMatchPerformances.length; i++) {
-                    if (teamMatchPerformances[i] !== JSON.stringify(data)) {
-                        teamMatchPerformances.push(JSON.stringify(data));
-                    }
-                }
-                localStorage.setItem('teamMatchPerformances', teamMatchPerformances);
+        undoButton = document.createElement('button');
+        undoButton.textContent = 'Undo Last';
+
+        if (!CACHE){
+            // DATABASE UNDO IMPLEMENTATION
+            document.body.addEventListener('click', () => {
+
+            });
+        } else if (localStorage.getItem('teamMatchPerformances') == null){
+            let teamMatchPerformances = localStorage.getItem('teamMatchPerformances');
+            if (teamMatchPerformances) {
+                teamMatchPerformances = JSON.parse(teamMatchPerformances);
+            } else {
+                teamMatchPerformances = [];
+            }
+            let newPerformance = JSON.stringify(data);
+            if (!teamMatchPerformances.includes(newPerformance)) {
+                // If not, add it to the cache
+                teamMatchPerformances.push(newPerformance);
+                localStorage.setItem('teamMatchPerformances', JSON.stringify(teamMatchPerformances));
                 console.log(localStorage.getItem('teamMatchPerformances'));
             }
-        });
+
+            // CACHE UNDO IMPLEMENTATION
+            document.body.addEventListener('click', () => {
+
+            });
+        }
+
+        document.body.removeChild(submitButton);
+    });
 }
 
 function onScanError(errorMessage) {
