@@ -1,7 +1,7 @@
 let submitButton;
 let undoButton;
 
-const CACHE = false;
+const CACHE = true;
 
 async function onScanSuccess(qrCodeMessage) {
     const data = await decodeQRCodeUrl(qrCodeMessage);
@@ -57,7 +57,8 @@ async function onScanSuccess(qrCodeMessage) {
                     console.log('Failed to undo database op');
                 }
             });
-        } else if (localStorage.getItem('teamMatchPerformances') == null){
+        }
+        else{
             let teamMatchPerformances = localStorage.getItem('teamMatchPerformances');
             if (teamMatchPerformances) {
                 teamMatchPerformances = JSON.parse(teamMatchPerformances);
@@ -71,10 +72,19 @@ async function onScanSuccess(qrCodeMessage) {
                 localStorage.setItem('teamMatchPerformances', JSON.stringify(teamMatchPerformances));
                 console.log(localStorage.getItem('teamMatchPerformances'));
             }
-
             // CACHE UNDO IMPLEMENTATION
             document.body.addEventListener('click', () => {
-
+                let teamMatchPerformances = localStorage.getItem('teamMatchPerformances');
+                if (teamMatchPerformances) {
+                    teamMatchPerformances = JSON.parse(teamMatchPerformances);
+                    // Remove the most recent entry
+                    teamMatchPerformances.pop();
+                    // Store the modified array back in the cache
+                    localStorage.setItem('teamMatchPerformances', JSON.stringify(teamMatchPerformances));
+                    console.log(localStorage.getItem('teamMatchPerformances'));
+                } else {
+                    console.log('No entries to delete.');
+                }
             });
         }
 
