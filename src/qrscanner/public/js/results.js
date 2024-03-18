@@ -6,7 +6,7 @@ const CACHE = false;
 async function onScanSuccess(qrCodeMessage) {
     const data = await decodeQRCodeUrl(qrCodeMessage);
 
-    if (submitButton) {
+    if (document.body.contains(submitButton)) {
         document.body.removeChild(submitButton);
     }
 
@@ -39,11 +39,23 @@ async function onScanSuccess(qrCodeMessage) {
 
         undoButton = document.createElement('button');
         undoButton.textContent = 'Undo Last';
+        document.body.appendChild(undoButton);
 
         if (!CACHE){
             // DATABASE UNDO IMPLEMENTATION
-            document.body.addEventListener('click', () => {
+            document.body.addEventListener('click', async () => {
+                const response = await (await fetch("./api/undo", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                }));
 
+                if (response.ok) {
+                    console.log('Successfully undid database op');
+                } else {
+                    console.log('Failed to undo database op');
+                }
             });
         } else if (localStorage.getItem('teamMatchPerformances') == null){
             let teamMatchPerformances = localStorage.getItem('teamMatchPerformances');

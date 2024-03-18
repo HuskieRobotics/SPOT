@@ -1,7 +1,8 @@
 const { Router } = require("express");
 const { TeamMatchPerformance } = require('../../lib/db');
 
-let router = Router();
+const router = Router();
+let previousTimestamp;
 
 router.post('/teamMatchPerformance', (req, res) => {
     let teamMatchPerformance;
@@ -18,15 +19,31 @@ router.post('/teamMatchPerformance', (req, res) => {
         });
     } catch (err) {
         console.log(err);
-        res.status(500).end();
+        res.status(400).end();
+        return;
     }
     try {
         teamMatchPerformance.save();
     } catch (err) {
         console.log(err);
+        res.status(500).end();
+        return;
     }
 
+    previousTimestamp = req.body.timestamp;
+
     res.status(201).end();
+});
+
+router.post('/undo', async (req, res) => {
+    try {
+        await TeamMatchPerformance.deleteOne({ timestamp:  previousTimestamp});
+    } catch (err) {
+        console.log(err);
+        res.status(500).end();
+        return;
+    }
+    res.status(200).end();
 });
 
 module.exports = router;
