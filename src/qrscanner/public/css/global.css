@@ -13,9 +13,7 @@
     --font: Cairo, sans-serif
 }
 html {
-      overflow: hidden;
       height: 100%;
-      position: fixed;
 }
 
 body {

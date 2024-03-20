@@ -1,0 +1,15 @@
+.qr-container {
+    display: flex;
+    justify-content: center;
+}
+
+.qr-scanner {
+    width: 500px;
+    border: none;
+    outline: none;
+}
+
+.qr-scanner div {
+    border: none;
+    outline: none;
+}
