@@ -89,19 +89,18 @@ router.post("/setMatch", (req,res) => {
 
 router.get("/matches", async (req,res) => {
 
-  let manualSchedule = getManualMatches()
+  let manualSchedule = getManualMatches();
 
-  if(manualSchedule === {}){
-
-    res.json({
-      "allMatches": manualSchedule,
-      "currentMatch": ScoutingSync.match
-    })
+  if(manualSchedule.length === 0){
+      res.json({
+          "allMatches": await ScoutingSync.getMatches(),
+          "currentMatch": ScoutingSync.match
+      });
   } else {
-    res.json({
-      "allMatches": await ScoutingSync.getMatches(),
-      "currentMatch": ScoutingSync.match
-    })
+      res.json({
+          "allMatches": manualSchedule,
+          "currentMatch": ScoutingSync.match
+      });
   }
 })
 module.exports = router;

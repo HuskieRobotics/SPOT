@@ -69,11 +69,18 @@ class ScoutingSync {
         if (!config.secrets.TBA_API_KEY) {
             return []; //no key, no matches
         }
+
         let tbaMatches = (await axios.get(`https://www.thebluealliance.com/api/v3/event/${config.TBA_EVENT_KEY}/matches`, {
             headers: {
                 "X-TBA-Auth-Key": config.secrets.TBA_API_KEY
             }
-        }).catch(e => console.log(e,chalk.bold.red("\nError fetching matches from Blue Alliance Api!")))).data;
+        }).catch(e => console.log(e,chalk.bold.red("\nError fetching matches from Blue Alliance Api!"))));
+
+        if (tbaMatches === undefined) {
+            return [];
+        } else {
+            tbaMatches = tbaMatches.data;
+        }
 
         //determine match numbers linearly (eg. if there are 10 quals, qf1 would be match 11)
         const matchLevels = ["qm", "ef", "qf", "sf", "f"];
@@ -126,7 +133,9 @@ class ScoutingSync {
         for (let scouter of ScoutingSync.scouters) {
             if (scouter.state.connected && scouter.state.status === ScoutingSync.SCOUTER_STATUS.WAITING) {
                 //check to see if nextRobots is empty, if so repopulate it with all the robots in the match
-                if (nextRobots.size === 0) new Set(ScoutingSync.match.robots.red.concat(ScoutingSync.match.robots.blue));
+                if (nextRobots.size >= 0) {
+                    nextRobots = new Set(ScoutingSync.match.robots.red.concat(ScoutingSync.match.robots.blue));
+                }
 
                 //get the next robot number from the set (the set doesnt return robots in any particular order)
                 let robotNumber = [...nextRobots][0]
