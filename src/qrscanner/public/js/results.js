@@ -1,8 +1,6 @@
 let submitButton;
 let undoButton;
 
-const CACHE = true;
-
 async function onScanSuccess(qrCodeMessage) {
     const data = await decodeQRCodeUrl(qrCodeMessage);
 
@@ -35,30 +33,33 @@ async function onScanSuccess(qrCodeMessage) {
             },
             body: JSON.stringify(data),
         }));
-        const teamMatchPerformances = [];
 
         undoButton = document.createElement('button');
         undoButton.textContent = 'Undo Last';
         document.body.appendChild(undoButton);
 
-        if (!CACHE){
+        undoButton.addEventListener('click', () => {
+            document.body.removeChild(undoButton);
+        });
+
+        if (response.ok){
             // DATABASE UNDO IMPLEMENTATION
-            document.body.addEventListener('click', async () => {
-                const response = await (await fetch("./api/undo", {
+            undoButton.addEventListener('click', async () => {
+                const res = await (await fetch("./api/undo", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
                     },
                 }));
 
-                if (response.ok) {
+                if (res.ok) {
                     console.log('Successfully undid database op');
                 } else {
                     console.log('Failed to undo database op');
                 }
             });
-        }
-        else{
+        // If saving to the database fails for whatever reason, store it in local storage for later usage
+        } else {
             let teamMatchPerformances = localStorage.getItem('teamMatchPerformances');
             if (teamMatchPerformances) {
                 teamMatchPerformances = JSON.parse(teamMatchPerformances);
@@ -73,7 +74,7 @@ async function onScanSuccess(qrCodeMessage) {
                 console.log(localStorage.getItem('teamMatchPerformances'));
             }
             // CACHE UNDO IMPLEMENTATION
-            document.body.addEventListener('click', () => {
+            undoButton.addEventListener('click', () => {
                 let teamMatchPerformances = localStorage.getItem('teamMatchPerformances');
                 if (teamMatchPerformances) {
                     teamMatchPerformances = JSON.parse(teamMatchPerformances);
