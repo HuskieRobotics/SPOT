@@ -40,25 +40,25 @@
                 },
                 {
                     "name": "Average Auto Points",
-                    "path": "averageScores.auto",
+                    "path": "avgAutoPoints",
                     "decimals": 2,
                     "sort": 1
                 },
                 {
                     "name": "Average Teleop Points",
-                    "path": "averageScores.teleop",
+                    "path": "avgTeleopPoints",
                     "decimals": 2,
                     "sort": 1
                 },
                 {
                     "name": "Average Stage Points",
-                    "path": "averageScores.stage",
+                    "path": "avgStagePoints",
                     "decimals": 2,
                     "sort": 1
                 },
                 {
                     "name": "Average Points",
-                    "path": "averageScores.total",
+                    "path": "avgTotalPoints",
                     "decimals": 2,
                     "sort": 1
                 },
@@ -69,8 +69,8 @@
                     "sort": 1
                 },
                 {
-                    "name": "Average Speaker",
-                    "path": "averages.scoreSpeaker",
+                    "name": "Average Unamped Speaker",
+                    "path": "averages.scoreUnampedSpeaker",
                     "decimals": 1,
                     "sort": 1
                 },
@@ -86,7 +86,6 @@
                     "decimals": 1,
                     "sort": -1
                 },
-
                 {
                     "name": "Average Onstage Time",
                     "path": "stageCycle.averageTimeComplete",
@@ -119,13 +118,42 @@
         "options": {
             "slices": [
                 {
-                    "name": "Amp",
-                    "path": "counts.scoreAmp"
+                    "name": "Subwoofer",
+                    "path": "counts.scoreCombinedSubwoofer"
                 },
-               
+                {
+                    "name": "Podium",
+                    "path": "counts.scoreCombinedPodium"
+                },
+                {
+                    "name": "Wing",
+                    "path": "counts.scoreCombinedSubwoofer"
+                },
+                {
+                    "name": "Midfield",
+                    "path": "counts.scoreCombinedMidfield"
+                },
                 {
                     "name": "Miss",
                     "path": "counts.miss"
+                }
+            ]
+        }
+    },
+    {
+        "view": "team",
+        "module": "Pie",
+        "position": "main",
+        "name": "Amp / Speaker Distribution",
+        "options": {
+            "slices": [
+                {
+                    "name": "Speaker",
+                    "path": "counts.scoreCombinedSpeaker"
+                },
+                {
+                    "name": "Amp",
+                    "path": "counts.scoreAmp"
                 }
             ]
         }
@@ -188,7 +216,7 @@
 		"name": "Alliance Score",
 		"position": "main",
 		"options": {
-			"path": "averageScores.total",
+			"path": "avgTotalPoints",
 			"aggrMethod": "sum",
 			"decimals": 2
 		}
@@ -199,7 +227,18 @@
 		"name": "Auto Points",
 		"position": "main",
 		"options": {
-			"path": "averageScores.auto",
+			"path": "avgAutoPoints",
+			"sort": 1,
+			"decimals": 1
+		}
+	},
+	{
+		"view": "match",
+		"module": "ColumnDisplay",
+		"name": "Teleop Points",
+		"position": "main",
+		"options": {
+			"path": "avgTeleopPoints",
 			"sort": 1,
 			"decimals": 1
 		}
@@ -210,7 +249,7 @@
 		"name": "Stage Points",
 		"position": "main",
 		"options": {
-			"path": "averageScores.stage",
+			"path": "avgStagePoints",
 			"sort": 1,
 			"decimals": 1
 		}
@@ -221,7 +260,7 @@
 		"name": "Total Points",
 		"position": "main",
 		"options": {
-			"path": "averageScores.total",
+			"path": "avgTotalPoints",
 			"sort": 1,
 			"decimals": 1
 		}
@@ -262,25 +301,25 @@
             "list": [
                 {
                     "name": "Expected Auto Points",
-                    "path": "averageScores.auto",
+                    "path": "avgAutoPoints",
 					"decimals": 2,
                     "aggrMethod": "sum"
                 },
                 {
                     "name": "Expected Teleop Points",
-                    "path": "averageScores.teleop",
+                    "path": "avgTeleopPoints",
 					"decimals": 2,
                     "aggrMethod": "sum"
                 },
                 {
                     "name": "Expected Stage Points",
-                    "path": "averageScores.stage",
+                    "path": "avgStagePoints",
 					"decimals": 2,
                     "aggrMethod": "sum"
                 },
                 {
                     "name": "Expected Score",
-                    "path": "averageScores.total",
+                    "path": "avgTotalPoints",
 					"decimals": 2,
                     "aggrMethod": "sum"
                 }
