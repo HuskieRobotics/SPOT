@@ -1,15 +1,44 @@
 .qr-container {
     display: flex;
     justify-content: center;
+    min-height: 150px;
+    position: relative !important;
+    margin-top: 10px !important;
+    padding: 21px !important;
+    padding-top: 24px !important;
 }
 
 .qr-scanner {
+    border: 2px solid var(--text) !important;
+    border-radius: 10px !important;
     width: 500px;
-    border: none;
-    outline: none;
+    max-width: 750px !important;
 }
 
-.qr-scanner div {
-    border: none;
-    outline: none;
+.qr-scanner > button {
+    border: 2px solid var(--text) !important;
+    background-color: var(--accent) !important;
+    color: var(--bg-alt) !important;
+    border-radius: 10px !important;
+    position: absolute !important;
+    bottom: -3px !important;
+    left: 50% !important;
+    transform: translate(-50%, 50%) !important;
+    font: 1.4em/1em Cairo !important;
+    padding: 5px 20px !important;
+    cursor: pointer !important;
+}
+
+.qr-scanner > input {
+    border: 2px solid var(--text) !important;
+    background-color: var(--accent) !important;
+    color: var(--bg-alt) !important;
+    border-radius: 10px !important;
+    position: absolute !important;
+    bottom: -3px !important;
+    left: 50% !important;
+    transform: translate(-50%, 50%) !important;
+    font: 1.4em/1em Cairo !important;
+    padding: 5px 20px !important;
+    cursor: pointer !important;
 }
