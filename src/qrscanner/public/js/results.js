@@ -1,17 +1,23 @@
+// Declare variables for submit and undo buttons
 let submitButton;
 let undoButton;
 
+// Function that is called when a QR code is successfully scanned
 async function onScanSuccess(qrCodeMessage) {
+    // Decode the QR code URL to get the data
     const data = await decodeQRCodeUrl(qrCodeMessage);
 
+    // If the submit button already exists, remove it from the document
     if (document.body.contains(submitButton)) {
         document.body.removeChild(submitButton);
     }
 
+    // Create a new submit button
     submitButton = document.createElement('button');
     submitButton.classList.add('qr-button');
     submitButton.textContent = 'Data is Correct (Submit/Cache)';
 
+    // Create a string of HTML to display the data
     let html = `Timestamp: ${data.timestamp}<br>Client Version: ${data.clientVersion}<br>Scouter ID: ${data.scouterId}`;
     html += `<br>Event Number: ${data.eventNumber}<br>Match Number: ${data.matchNumber}<br>Robot Number: ${data.robotNumber}<br>Action Queue: [<br></p>`;
     for (const action of data.actionQueue) {
@@ -19,12 +25,16 @@ async function onScanSuccess(qrCodeMessage) {
     }
     html += ']';
 
+    // Get the result element
     const result = document.getElementById('result');
 
+    // Insert the submit button before the result element
     document.body.insertBefore(submitButton, result);
 
+    // Set the inner HTML of the result element to the HTML string
     document.getElementById('result').innerHTML = html;
 
+    // Add an event listener to the submit button that sends a POST request when clicked
     submitButton.addEventListener("click", async () => {
         const response = await (await fetch("./api/teamMatchPerformance", {
             method: "POST",
@@ -34,14 +44,17 @@ async function onScanSuccess(qrCodeMessage) {
             body: JSON.stringify(data),
         }));
 
+        // Create an undo button
         undoButton = document.createElement('button');
         undoButton.textContent = 'Undo Last';
         document.body.appendChild(undoButton);
 
+        // Add an event listener to the undo button that removes it from the document when clicked
         undoButton.addEventListener('click', () => {
             document.body.removeChild(undoButton);
         });
 
+        // If the response from the POST request is OK, add an event listener to the undo button
         if (response.ok){
             // DATABASE UNDO IMPLEMENTATION
             undoButton.addEventListener('click', async () => {
@@ -147,7 +160,7 @@ async function decodeQRCodeUrl(image_url) {
         matchNumber: String(parseInt(bits.slice(24,32),2)),
         robotNumber: String(parseInt(bits.slice(32,48),2)),
         matchId_rand: parseInt(bits.slice(48,112),2).toString(32),
-        actionQueue: []
+        actionQueue: []``
     };
     
     teamMatchPerformance.matchId = `${teamMatchPerformance.matchNumber}-${teamMatchPerformance.robotNumber}-${teamMatchPerformance.scouterId}-${teamMatchPerformance.matchId_rand}`;
