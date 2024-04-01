@@ -42,3 +42,10 @@
     padding: 5px 20px !important;
     cursor: pointer !important;
 }
+
+.results {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column
+}

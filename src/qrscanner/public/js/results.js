@@ -1,9 +1,12 @@
+const result = document.getElementById('result');
+
 let submitButton;
 let undoButton;
 
 async function onScanSuccess(qrCodeMessage) {
     const data = await decodeQRCodeUrl(qrCodeMessage);
 
+    /*
     if (document.body.contains(submitButton)) {
         document.body.removeChild(submitButton);
     }
@@ -11,19 +14,24 @@ async function onScanSuccess(qrCodeMessage) {
     submitButton = document.createElement('button');
     submitButton.classList.add('qr-button');
     submitButton.textContent = 'Data is Correct (Submit/Cache)';
+    */
 
-    let html = `Timestamp: ${data.timestamp}<br>Client Version: ${data.clientVersion}<br>Scouter ID: ${data.scouterId}`;
+    let html = `Timestamp: ${data.timestamp}<br>Client Version: ${data.clientVersion}<br>Scouter ID: ${data.scouterId}<br>Match ID Rand: ${data.matchId_rand}`;
     html += `<br>Event Number: ${data.eventNumber}<br>Match Number: ${data.matchNumber}<br>Robot Number: ${data.robotNumber}<br>Action Queue: [<br></p>`;
     for (const action of data.actionQueue) {
         html += `{ id: '${action.id}', ts: ${action.ts} }<br>`
     }
     html += ']';
 
+    result.innerHTML = html;
+
+    /*
     const result = document.getElementById('result');
 
     document.body.insertBefore(submitButton, result);
 
     document.getElementById('result').innerHTML = html;
+    */
 
     submitButton.addEventListener("click", async () => {
         const response = await (await fetch("./api/teamMatchPerformance", {

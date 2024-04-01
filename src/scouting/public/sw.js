@@ -12,6 +12,8 @@ const filesToCache = [
     "/img/gear.svg",
     "/img/logo.png",
     "/img/spinner.svg",
+    "/js/lib/qrcode.js",
+    "/js/qrcode.js",
     "/js/form.js",
     "/js/global.js",
     "/js/internal.js",

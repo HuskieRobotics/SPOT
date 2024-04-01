@@ -4,7 +4,22 @@ const { TeamMatchPerformance } = require('../../lib/db');
 const router = Router();
 let previousTimestamp;
 
-router.post('/teamMatchPerformance', (req, res) => {
+router.post('/teamMatchPerformance', async (req, res) => {
+    try {
+        const duplicate = await TeamMatchPerformance.findOne({ matchId_rand: req.body.matchId_rand });
+
+        console.log(duplicate);
+
+        if (duplicate) {
+            res.status(204).end();
+            return;
+        }
+    } catch (err) {
+        console.log(err);
+        res.status(400).end();
+        return;
+    }
+
     let teamMatchPerformance;
     try {
         teamMatchPerformance = new TeamMatchPerformance({
@@ -22,8 +37,9 @@ router.post('/teamMatchPerformance', (req, res) => {
         res.status(400).end();
         return;
     }
+    
     try {
-        teamMatchPerformance.save();
+        await teamMatchPerformance.save();
     } catch (err) {
         console.log(err);
         res.status(500).end();
