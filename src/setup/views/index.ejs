@@ -96,34 +96,18 @@
                 <h1>Demo Mode</h1>
                 <p> Demo mode disables certain functionality in order to allow use without altering the database</p>
                 <label class="switch" id="toggleSwitch">
-                    <input type="checkbox" id="DEMO" name="DEMO" value= "false" class="input" required>
+                    <input class="switch-input" type="checkbox" id="DEMO" name="DEMO" value= "false" class="input" required>
                     <span class="slider round"></span>
                     <span class="on">ON</span>
                     <span class="off">OFF</span>
                 </label>
             </div>
-
-            <script>
-        
-                const toggleSwitch = document.getElementById('toggleSwitch').querySelector('input[type="checkbox"]');
-        
-                toggleSwitch.addEventListener('change', function() {
-                    if (this.checked) {
-                        toggleSwitch.value = "true";
-                        console.log(toggleSwitch.value);
-                        console.log("Switch is ON");
-                    } else {
-                        toggleSwitch.value = "false";
-                        console.log(toggleSwitch.value);
-                        console.log("Switch is OFF");
-                    }
-
-                });
-            </script>
         </form>
 
         <button id="submit">Submit</button>
     </div>
+
+    <script src="demo.js"></script>
     <script src="./js/ui-elements.js"></script>
     <script src="./js/script.js"></script>
 </body>

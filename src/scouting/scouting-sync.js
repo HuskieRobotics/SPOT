@@ -10,6 +10,7 @@ const axios = require("axios");
 const config = require("../../config/config.json");
 const chalk = require("chalk");
 const DEMO = 'false';
+
 module.exports = (server) => {
     if (!ScoutingSync.initialized) {
         if (!server) {
