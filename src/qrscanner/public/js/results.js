@@ -88,6 +88,24 @@ async function onScanSuccess(qrCodeMessage) {
         // If the response from the POST request is OK, add an event listener to the undo button
         if (response.ok) {
             console.log('Successfully uploaded scouting data to database');
+            // Create a new div element for the notification
+            let notification = document.createElement('div');
+            notification.textContent = 'Successfully uploaded scouting data to database';
+            notification.style.position = 'fixed';
+            notification.style.bottom = '20px';
+            notification.style.right = '20px';
+            notification.style.padding = '10px';
+            notification.style.backgroundColor = '#4CAF50';
+            notification.style.color = 'white';
+            notification.style.borderRadius = '5px'; // Add this for a similar style to the rest of the buttons
+
+            // Append the notification to the body
+            document.body.appendChild(notification);
+
+            // Set a timeout to remove the notification after 3 seconds
+            setTimeout(() => {
+                document.body.removeChild(notification);
+            }, 3000);
             const undoEvent = async () => {
                 const res = await (await fetch("./api/undo", {
                     method: "POST",
@@ -115,19 +133,37 @@ async function onScanSuccess(qrCodeMessage) {
         // If saving to the database fails for whatever reason, store it in local storage for later usage
         } else {
             console.log('Failed to connect to database, storing TMP data in cache');
-            let teamMatchPerformances = localStorage.getItem('teamMatchPerformances');
-            if (teamMatchPerformances) {
-                teamMatchPerformances = JSON.parse(teamMatchPerformances);
-            } else {
-                teamMatchPerformances = [];
-            }
-            let newPerformance = JSON.stringify(data);
-            if (!teamMatchPerformances.includes(newPerformance)) {
+            // Create a new div element for the notification
+            //let notification = document.createElement('div');
+            //notification.textContent = 'Failed to connect to database, storing TMP data in cache';
+            //notification.style.position = 'fixed';
+            //notification.style.bottom = '20px';
+            //notification.style.right = '20px';
+            //notification.style.padding = '10px';
+            //notification.style.backgroundColor = '#4CAF50';
+            //notification.style.color = 'white';
+            //notification.style.borderRadius = '5px'; // Add this for a similar style to the rest of the buttons
+
+            // Append the notification to the body
+            //document.body.appendChild(notification);
+
+            // Set a timeout to remove the notification after 3 seconds
+            //setTimeout(() => {
+                //document.body.removeChild(notification);
+            //}, 3000);
+            //let teamMatchPerformances = localStorage.getItem('teamMatchPerformances');
+            //if (teamMatchPerformances) {
+            //    teamMatchPerformances = JSON.parse(teamMatchPerformances);
+            //} else {
+            //    teamMatchPerformances = [];
+            //}
+            //let newPerformance = JSON.stringify(data);
+            //if (!teamMatchPerformances.includes(newPerformance)) {
                 // If not, add it to the cache
-                teamMatchPerformances.push(newPerformance);
-                localStorage.setItem('teamMatchPerformances', JSON.stringify(teamMatchPerformances));
-                console.log(localStorage.getItem('teamMatchPerformances'));
-            }
+            //    teamMatchPerformances.push(newPerformance);
+            //    localStorage.setItem('teamMatchPerformances', JSON.stringify(teamMatchPerformances));
+            //    console.log(localStorage.getItem('teamMatchPerformances'));
+            //}
 
             const undoEvent = () => {
                 let teamMatchPerformances = localStorage.getItem('teamMatchPerformances');
