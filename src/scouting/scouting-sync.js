@@ -81,17 +81,17 @@ class ScoutingSync {
 
         if (tbaMatches === undefined) {
             if (config.secrets.FMS_API_KEY) {
-                let uri = `https://frc-api.firstinspires.org/v3.0/${config.TBA_EVENT_KEY.substring(0, 3)}/schedule/${config.TBA_EVENT_KEY.substring(4, config.TBA_EVENT_KEY.length - 1)}?tournamentLevel=practice`;
+                let uri = `https://frc-api.firstinspires.org/v3.0/${config.TBA_EVENT_KEY.substring(0, 4)}/schedule/${config.TBA_EVENT_KEY.substring(4, config.TBA_EVENT_KEY.length)}?tournamentLevel=practice`;
 
-                let frcPraticeMatches = (await axios.get(uri, {
+                let frcPracticeMatches = (await axios.get(uri, {
                     auth: {
-                        username: config.secrets.FMS_AUTH.FMS_API_USERNAME,
-                        password: config.secrets.FMS_AUTH.FMS_API_KEY
+                        username: config.secrets.FMS_API_USERNAME,
+                        password: config.secrets.FMS_API_KEY
                     }
                 }).catch(e => console.log(e, chalk.bold.red("\nError fetching practice matches from FMS!"))));
 
-                if (frcPraticeMatches === undefined) return formattedMatches;
-                formattedMatches = this.formatFMSMatches(frcPraticeMatches.data);
+                if (frcPracticeMatches === undefined) return formattedMatches;
+                formattedMatches = this.formatFMSMatches(frcPracticeMatches.data);
             } else {
                 return formattedMatches;
             }
@@ -103,14 +103,13 @@ class ScoutingSync {
     }
 
     static formatFMSMatches(matches) {
-        console.log("fms matches");
         let processedMatches = [];
 
-        for (let match of matches) {
+        for (let match of matches.Schedule) {
             let redTeams = [];
             let blueTeams = [];
 
-            for (const team of teams) {
+            for (const team of match.teams) {
                 if (new RegExp("Red").test(team.station)) {
                     redTeams.push(team.teamNumber);
                 } else {
@@ -122,17 +121,18 @@ class ScoutingSync {
 
             processedMatches.push({
                 number: match.matchNumber, //adjust match number with the offset
-                match_string: match.description,
+                match_string: `${config.TBA_EVENT_KEY}_pm${match.matchNumber}`,
                 robots: {
                     red: redTeams,
                     blue: blueTeams
                 }
             });
         }
+
+        return processedMatches;
     }
 
     static formatTBAMatches(matches) {
-        console.log("tba matches");
         //determine match numbers linearly (eg. if there are 10 quals, qf1 would be match 11)
         const matchLevels = ["qm", "ef", "qf", "sf", "f"];
         let levelCounts = {};
