@@ -1,6 +1,6 @@
 // the toggle switch for demo
 document.addEventListener('DOMContentLoaded', function () {
-    const toggleSwitch = document.getElementById('toggleSwitch').querySelector('input[type="checkbox"]');
+    const toggleSwitch = document.getElementById('DEMO');
 
     toggleSwitch.addEventListener('change', function () {
         if (this.checked) {

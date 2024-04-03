@@ -5,7 +5,7 @@ const config = require("../../../config/config.json");
 const { TeamMatchPerformance } = require("../../lib/db");
 let axios = require("axios")
 const {getManualMatches} = require("../../schedule/schedule");
-const DEMO = 'false';
+const DEMO = (config.DEMO == 'true');
 
 router.use((req,res,next) => {
     if (!ScoutingSync.initialized) {
