@@ -1,67 +1,94 @@
 const result = document.getElementById('result');
 
 // Declare variables for submit and undo buttons
-let submitButton;
-let undoButton;
+const submitButton = document.getElementById('submit');
+const undoButton = document.getElementById('undo');
+
+let previousEvent;
+let previousUndoEvent;
 
 // Function that is called when a QR code is successfully scanned
 async function onScanSuccess(qrCodeMessage) {
     // Decode the QR code URL to get the data
     const data = await decodeQRCodeUrl(qrCodeMessage);
 
-    /*
-    if (document.body.contains(submitButton)) {
-        document.body.removeChild(submitButton);
+   result.innerHTML = '';
+
+   const labels = [];
+
+    const timestamp = document.createElement('p');
+    timestamp.innerHTML = `<b>Timestamp: </b>${data.timestamp}`;
+    labels.push(timestamp);
+
+    const clientVersion = document.createElement('p');
+    clientVersion.innerHTML = `<b>Client Version: </b>${data.clientVersion}`;
+    labels.push(clientVersion);
+
+    const scouterId = document.createElement('p');
+    scouterId.innerHTML = `<b>Scouter ID: </b>${data.scouterId}`;
+    labels.push(scouterId);
+
+    const eventNumber = document.createElement('p');
+    eventNumber.innerHTML = `<b>Event Number: </b>${data.eventNumber}`;
+    labels.push(eventNumber);
+
+    const matchNumber = document.createElement('p');
+    matchNumber.innerHTML = `<b>Match Number: </b>${data.matchNumber}`;
+    labels.push(matchNumber);
+
+    const robotNumber = document.createElement('p');
+    robotNumber.innerHTML = `<b>Robot Number: </b>${data.robotNumber}`;
+    labels.push(robotNumber);
+
+    for (const label of labels) {
+        label.className = 'result-text';
+        result.appendChild(label);
     }
 
-    // Create a new submit button
-    submitButton = document.createElement('button');
-    submitButton.classList.add('qr-button');
-    submitButton.textContent = 'Data is Correct (Submit/Cache)';
-    */
+    const divider = document.createElement('div');
+    divider.className = 'result-divider';
+    result.appendChild(divider);
 
-    let html = `Timestamp: ${data.timestamp}<br>Client Version: ${data.clientVersion}<br>Scouter ID: ${data.scouterId}`;
-    html += `<br>Event Number: ${data.eventNumber}<br>Match Number: ${data.matchNumber}<br>Robot Number: ${data.robotNumber}<br>Action Queue: [<br></p>`;
+    const queue = document.createElement('p');
+    queue.innerHTML = `<b>Action Queue</b>`;
+    result.appendChild(queue);
+
     for (const action of data.actionQueue) {
-        html += `{ id: '${action.id}', ts: ${action.ts} }<br>`
+        const div = document.createElement('div');
+        div.className = 'action-queue';
+
+        const id = document.createElement('p');
+        id.innerHTML = `<b>ID: </b>${action.id}`;
+
+        const ts = document.createElement('p');
+        ts.innerHTML = `<b>TS: </b>${action.ts}`;
+
+        div.appendChild(id);
+        div.appendChild(ts);
+
+        result.appendChild(div);
     }
-    html += ']';
-
-    result.innerHTML = html;
-
-    /*
-    const result = document.getElementById('result');
-
-    document.body.insertBefore(submitButton, result);
-
-    // Set the inner HTML of the result element to the HTML string
-    document.getElementById('result').innerHTML = html;
-    */
 
     // Add an event listener to the submit button that sends a POST request when clicked
-    submitButton.addEventListener("click", async () => {
-        const response = await (await fetch("./api/teamMatchPerformance", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(data),
-        }));
-
-        // Create an undo button
-        undoButton = document.createElement('button');
-        undoButton.textContent = 'Undo Last';
-        document.body.appendChild(undoButton);
-
-        // Add an event listener to the undo button that removes it from the document when clicked
-        undoButton.addEventListener('click', () => {
-            document.body.removeChild(undoButton);
-        });
+    const event = async () => {
+        console.log('Attempting to submit');
+        let response;
+        try {
+            response = await (await fetch("./api/teamMatchPerformance", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data),
+            }));
+        } catch (err) {
+            response = {}.ok = false;
+        }
 
         // If the response from the POST request is OK, add an event listener to the undo button
-        if (response.ok){
-            // DATABASE UNDO IMPLEMENTATION
-            undoButton.addEventListener('click', async () => {
+        if (response.ok) {
+            console.log('Successfully uploaded scouting data to database');
+            const undoEvent = async () => {
                 const res = await (await fetch("./api/undo", {
                     method: "POST",
                     headers: {
@@ -70,13 +97,24 @@ async function onScanSuccess(qrCodeMessage) {
                 }));
 
                 if (res.ok) {
-                    console.log('Successfully undid database op');
+                    console.log('Successfully removed previous TMP from database');
                 } else {
-                    console.log('Failed to undo database op');
+                    console.log('Failed to removed previous TMP from database');
                 }
-            });
+            }
+
+            if (previousUndoEvent) {
+                undoButton.removeEventListener('click', previousUndoEvent);
+            }
+
+            // DATABASE UNDO IMPLEMENTATION
+            undoButton.addEventListener('click', undoEvent);
+
+            previousUndoEvent = undoEvent;
+
         // If saving to the database fails for whatever reason, store it in local storage for later usage
         } else {
+            console.log('Failed to connect to database, storing TMP data in cache');
             let teamMatchPerformances = localStorage.getItem('teamMatchPerformances');
             if (teamMatchPerformances) {
                 teamMatchPerformances = JSON.parse(teamMatchPerformances);
@@ -90,8 +128,8 @@ async function onScanSuccess(qrCodeMessage) {
                 localStorage.setItem('teamMatchPerformances', JSON.stringify(teamMatchPerformances));
                 console.log(localStorage.getItem('teamMatchPerformances'));
             }
-            // CACHE UNDO IMPLEMENTATION
-            undoButton.addEventListener('click', () => {
+
+            const undoEvent = () => {
                 let teamMatchPerformances = localStorage.getItem('teamMatchPerformances');
                 if (teamMatchPerformances) {
                     teamMatchPerformances = JSON.parse(teamMatchPerformances);
@@ -103,11 +141,26 @@ async function onScanSuccess(qrCodeMessage) {
                 } else {
                     console.log('No entries to delete.');
                 }
-            });
-        }
+            }
 
-        document.body.removeChild(submitButton);
-    });
+            if (previousUndoEvent) {
+                undoButton.removeEventListener('click', previousUndoEvent);
+            }
+
+            // CACHE UNDO IMPLEMENTATION
+            undoButton.addEventListener('click', undoEvent);
+
+            previousUndoEvent = undoEvent;
+        }
+    }
+
+    if (previousEvent) {
+        submitButton.removeEventListener('click', previousEvent);
+    }
+
+    submitButton.addEventListener("click", event);
+
+    previousEvent = event;
 }
 
 function onScanError(errorMessage) {
@@ -164,7 +217,7 @@ async function decodeQRCodeUrl(image_url) {
         matchNumber: String(parseInt(bits.slice(24,32),2)),
         robotNumber: String(parseInt(bits.slice(32,48),2)),
         matchId_rand: parseInt(bits.slice(48,112),2).toString(32),
-        actionQueue: []``
+        actionQueue: [],
     };
     
     teamMatchPerformance.matchId = `${teamMatchPerformance.matchNumber}-${teamMatchPerformance.robotNumber}-${teamMatchPerformance.scouterId}-${teamMatchPerformance.matchId_rand}`;
