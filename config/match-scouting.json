@@ -134,7 +134,7 @@
                         "10"
                     ],
                     "class": "orange",
-                    "type": "action",
+                    "type": "none",
                     "executables": [
                         {
                             "type": "layer",
