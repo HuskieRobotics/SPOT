@@ -22,7 +22,8 @@ const filesToCache = [
     "/js/waiting.js",
     "/manifest.json",
     "/executables.js",
-    "/analysis",
+    "/analysis/",
+    "/analysis/modules.js",
     "/analysis/css/style.css",
     "/analysis/css/internal.css",
     "/analysis/css/global.css",
@@ -35,7 +36,8 @@ const filesToCache = [
     "/analysis/js/ui.js",
     "/analysis/js/util.js",
     "/analysis/api/dataset",
-    "/analysis/api/teams"
+    "/analysis/api/teams",
+    "/config/analysis-modules.json",
 ]
 
 self.addEventListener('install', function(event) {
@@ -66,4 +68,4 @@ self.addEventListener('fetch', (event) => {
             })
         })
     );
-  });
+});
