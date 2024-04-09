@@ -161,7 +161,27 @@ async function onScanSuccess(qrCodeMessage) {
             if (!teamMatchPerformances.includes(newPerformance)) {
                 //If not, add it to the cache
                 teamMatchPerformances.push(newPerformance);
-                localStorage.setItem('teamMatchPerformances', JSON.stringify(teamMatchPerformances));
+                localStorage.setItem('teamMatchPerformances', JSON.stringify(teamMatchPerformances))
+
+                // Create a new div element for the notification
+                let notification = document.createElement('div');
+                notification.textContent = 'Data has been successfully cached';
+                notification.style.position = 'fixed';
+                notification.style.bottom = '20px';
+                notification.style.right = '20px';
+                notification.style.padding = '10px';
+                notification.style.backgroundColor = '#4CAF50';
+                notification.style.color = 'white';
+                notification.style.borderRadius = '5px'; // Add this for a similar style to the rest of the buttons
+
+                // Append the notification to the body
+                document.body.appendChild(notification);
+
+                // Set a timeout to remove the notification after 3 seconds
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 3000);
+
                 console.log(localStorage.getItem('teamMatchPerformances'));
             }
 
@@ -173,7 +193,25 @@ async function onScanSuccess(qrCodeMessage) {
                     teamMatchPerformances.pop();
                     // Store the modified array back in the cache
                     localStorage.setItem('teamMatchPerformances', JSON.stringify(teamMatchPerformances));
-                    console.log(localStorage.getItem('teamMatchPerformances'));
+                    console.log(localStorage.getItem('teamMatchPerformances'));  
+                    // Create a new div element for the notification
+                    let notification = document.createElement('div');
+                    notification.textContent = 'Data has been successfully removed from cache';
+                    notification.style.position = 'fixed';
+                    notification.style.bottom = '20px';
+                    notification.style.right = '20px';
+                    notification.style.padding = '10px';
+                    notification.style.backgroundColor = '#4CAF50';
+                    notification.style.color = 'white';
+                    notification.style.borderRadius = '5px'; // Add this for a similar style to the rest of the buttons
+
+                    // Append the notification to the body
+                    document.body.appendChild(notification);
+
+                    // Set a timeout to remove the notification after 3 seconds
+                    setTimeout(() => {
+                        document.body.removeChild(notification);
+                    }, 3000);
                 } else {
                     console.log('No entries to delete.');
                 }
