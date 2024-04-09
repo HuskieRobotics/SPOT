@@ -71,30 +71,17 @@ router.get("/enterMatch", async (req,res) => {
   }
 })
 router.get("/dissconnectScouter/:scouterId", async (req,res) => {
-    console.log("got disconnect req")
     if (true){//req.headers.authorization === config.secrets.ACCESS_CODE) {
-      console.log("Authorized")
       for (let scout of ScoutingSync.scouters) {
-        console.log("params.ScouterID " + req.params.scouterId)
-        console.log("state.ScouterID " + scout.state.scouterId)
         if (scout.state.scouterId === req.params.scouterId){
-            console.log("disconnecting")
             scout.socket.emit("adminDisconnect");
             scout.socket.disconnect();
-            console.log("Done disconnecting")
+            console.log("Disconnected Scouter " + scout.state.scouterId)
           }
         }
-      
-      console.log("Current Scouters ")
-            for (let scout of ScoutingSync.scouters) {
-              console.log(scout.state.scouterId)
-
-      }
-        res.json(true);
-    } else {
-        res.json({error: "Not Authorized"})
-    }
-  })
+    res.json(true);
+  } 
+})
 router.post("/setMatch", (req,res) => {
   if(!DEMO){
     if (req.headers.authorization === config.secrets.ACCESS_CODE) {

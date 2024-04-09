@@ -203,15 +203,22 @@ class ScouterDisplay {
         this.scouterElement.classList.add("scouter");
         
         this.scouterElement.onclick = (e)=>{
-            fetch(`api/dissconnectScouter/${this.scouterElement.getAttribute("scouter")}`).then(res => res.json())
-            console.log("hello scouter button clicked")
+            let disconnectModal = new Modal("small", false).header("Do you want to Disconnect " + this.scouter.state.scouterId + "?")
+            disconnectModal.scale(0.75)
+            disconnectModal.action("Yes", () => {
+                fetch(`api/dissconnectScouter/${this.scouterElement.getAttribute("scouter")}`).then(res => res.json())
             
-            var scouterID = this.scouterElement.getAttribute("scouter");
-            console.log(scouterID)
-            var scouter  = Object.values(scouters).find(s => s.scouter.state.scouterId == scouterID)
+                var scouterID = this.scouterElement.getAttribute("scouter");
+                var scouter  = Object.values(scouters).find(s => s.scouter.state.scouterId == scouterID)
             
-            scouter.scouter.state.connected = false;
-            console.log(scouter)
+                scouter.scouter.state.connected = false;
+                new Popup("success", `Scouter ${scouterID} Disconnected!`,2000);
+                disconnectModal.modalExit()
+            })
+            disconnectModal.action("No", () => {
+                new Popup("notice", `Disconnect Canceled`,2000);
+                disconnectModal.modalExit()
+            })
         };
 
         
@@ -220,13 +227,6 @@ class ScouterDisplay {
         this.updateScouterElement();
         
     }
-    
-    // dissconnect(e) {
-    //     var scouterID = e.scouter;
-    //     let scouter  = Object.values(scouters).find(s => s.scouter.state.scouterId == scouterID)
-    //     console.log(scouters)
-    //     console.log(scouter)
-    // }
     
     updateScouterElement(state) {
 
