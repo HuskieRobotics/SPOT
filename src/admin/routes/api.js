@@ -17,7 +17,6 @@ router.use((req,res,next) => {
 
 router.get("/auth", (req, res) => {
   if(!DEMO){
-    console.log(DEMO)
     if (config.secrets.ACCESS_CODE === "") {
         res.json({status: 2})
     } else if (config.secrets.ACCESS_CODE == req.headers.authorization) {

@@ -4,11 +4,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
     toggleSwitch.addEventListener('change', function () {
         if (this.checked) {
-            toggleSwitch.value = "true";
+            toggleSwitch.value = true;
             console.log(toggleSwitch.value);
             console.log("Switch is ON");
         } else {
-            toggleSwitch.value = "false";
+            toggleSwitch.value = false;
             console.log(toggleSwitch.value);
             console.log("Switch is OFF");
         }
