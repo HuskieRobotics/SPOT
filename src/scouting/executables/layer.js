@@ -20,7 +20,7 @@ executables["layer"] = {
             button.element.style.display = "none"
         }
         previousLayers.pop();
-        previousLayers.pop();
+       
         console.log(previousLayers)
         for (let button of previousLayers[previousLayers.length-1]) {
               
