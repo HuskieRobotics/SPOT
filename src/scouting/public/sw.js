@@ -24,6 +24,7 @@ const filesToCache = [
     "/js/waiting.js",
     "/manifest.json",
     "/executables.js",
+    // Offline Analysis Page
     "/analysis/",
     "/analysis/modules.js",
     "/analysis/css/style.css",
@@ -45,7 +46,13 @@ const filesToCache = [
 	"/config/qr.json",
 	"/icons/site.webmanifest",
 	"/icons/favicon-16x16.png",
-	"/icons/favicon-32x32.png"
+	"/icons/favicon-32x32.png",
+    // Offline QRCode Page
+    "/qrscanner/",
+    "/qrscanner/css/global.css",
+    "/qrscanner/css/scanner.css",
+    "/qrscanner/js/html5-qrcode.min.js",
+    "/qrscanner/js/results.js",
 ]
 
 self.addEventListener('install', function(event) {
@@ -53,7 +60,11 @@ self.addEventListener('install', function(event) {
     event.waitUntil(
         caches.open(cacheVersion)
         .then(function(cache) {
-            return cache.addAll(filesToCache);
+            for (const file in filesToCache) {
+                console.log(`${filesToCache[file]} @ ${file}`);
+                cache.add(filesToCache[file]);
+            }
+            // return cache.addAll(filesToCache);
         })
     );
 });
