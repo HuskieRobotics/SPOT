@@ -92,8 +92,9 @@ async function onScanSuccess(qrCodeMessage) {
             let notification = document.createElement('div');
             notification.textContent = 'Successfully uploaded scouting data to database';
             notification.style.position = 'fixed';
-            notification.style.bottom = '20px';
-            notification.style.right = '20px';
+            notification.style.top = '20px';
+            notification.style.left = '50%';
+            notification.style.transform = 'translateX(-50%)';
             notification.style.padding = '10px';
             notification.style.backgroundColor = '#4CAF50';
             notification.style.color = 'white';
@@ -165,10 +166,11 @@ async function onScanSuccess(qrCodeMessage) {
 
                 // Create a new div element for the notification
                 let notification = document.createElement('div');
-                notification.textContent = 'Data has been successfully cached';
+                notification.textContent = 'Data has been successfully stored in cache';
                 notification.style.position = 'fixed';
-                notification.style.bottom = '20px';
-                notification.style.right = '20px';
+                notification.style.top = '20px';
+                notification.style.left = '50%';
+                notification.style.transform = 'translateX(-50%)';
                 notification.style.padding = '10px';
                 notification.style.backgroundColor = '#4CAF50';
                 notification.style.color = 'white';
@@ -198,8 +200,9 @@ async function onScanSuccess(qrCodeMessage) {
                     let notification = document.createElement('div');
                     notification.textContent = 'Data has been successfully removed from cache';
                     notification.style.position = 'fixed';
-                    notification.style.bottom = '20px';
-                    notification.style.right = '20px';
+                    notification.style.top = '20px';
+                    notification.style.left = '50%';
+                    notification.style.transform = 'translateX(-50%)';
                     notification.style.padding = '10px';
                     notification.style.backgroundColor = '#4CAF50';
                     notification.style.color = 'white';
