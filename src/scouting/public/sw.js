@@ -24,7 +24,8 @@ const filesToCache = [
     "/js/waiting.js",
     "/manifest.json",
     "/executables.js",
-    "/analysis",
+    "/analysis/",
+    "/analysis/modules.js",
     "/analysis/css/style.css",
     "/analysis/css/internal.css",
     "/analysis/css/global.css",
@@ -37,6 +38,7 @@ const filesToCache = [
     "/analysis/js/util.js",
     "/analysis/api/dataset",
     "/analysis/api/teams",
+    "/config/analysis-modules.json",,
 	"/admin/api/matches",
 	"/config/config.json",
 	"/config/match-scouting.json",
@@ -72,4 +74,4 @@ self.addEventListener('fetch', (event) => {
             })
         })
     );
-  });
+});
