@@ -89,6 +89,55 @@
             ]
         }
     },
+    {  
+        "type": "tmp",
+        "name": "actionTime",
+        "outputPath": "autoNoteTimes.ampMost",
+        "options": {
+            "actionId" : "autoNoteAmpMost"
+        }
+    },
+    {  
+        "type": "tmp",
+        "name": "actionTime",
+        "outputPath": "autoNoteTimes.ampMid",
+        "options": {
+            "actionId" : "autoNoteAmpMid"
+        }
+    },
+    {  
+        "type": "tmp",
+        "name": "actionTime",
+        "outputPath": "autoNoteTimes.middle",
+        "options": {
+            "actionId" : "autoNoteMiddle"
+        }
+    },
+    {  
+        "type": "tmp",
+        "name": "actionTime",
+        "outputPath": "autoNoteTimes.sourceMid",
+        "options": {
+            "actionId" : "autoNoteSourceMid"
+        }
+    },
+    {  
+        "type": "tmp",
+        "name": "actionTime",
+        "outputPath": "autoNoteTimes.sourceMost",
+        "options": {
+            "actionId" : "autoNoteSourceMost"
+        }
+    },
+    {  
+        "type": "tmp",
+        "name": "actionTime",
+        "outputPath": "autoNoteTimes.wing",
+        "options": {
+            "actionId" : "autoNoteWing"
+        }
+    },
+
     {
         "type": "tmp",
         "name": "cycle",
@@ -179,6 +228,7 @@
             "actionArrayPath": "teleopFilter"
         }
     },
+  
     {
         "type": "tmp",
         "name": "weightedSum",
