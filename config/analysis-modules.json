@@ -140,6 +140,7 @@
             ]
         }
     },
+    
     {
         "view": "team",
         "module": "Pie",
@@ -173,6 +174,22 @@
                     "name": "Ground",
                     "path": "counts.groundPickup"
                 }
+            ]
+        }
+    },
+    {
+        "view": "team",
+        "module": "PerformanceTimePlot",
+        "name": "Auto Note Pickup Time",
+        "position": "main",
+        "options": {
+            "trackedStats": [
+                "autoNoteTimes.ampMost",
+                "autoNoteTimes.ampMid",
+                "autoNoteTimes.middle",
+                "autoNoteTimes.sourceMid",
+                "autoNoteTimes.sourceMost",
+                "autoNoteTimes.wing"
             ]
         }
     },
