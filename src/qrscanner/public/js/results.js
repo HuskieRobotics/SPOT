@@ -138,8 +138,9 @@ async function onScanSuccess(qrCodeMessage) {
             let notification = document.createElement('div');
             notification.textContent = 'Failed to connect to database, storing TMP data in cache';
             notification.style.position = 'fixed';
-            notification.style.bottom = '20px';
-            notification.style.right = '20px';
+            notification.style.top = '20px';
+            notification.style.left = '50%';
+            notification.style.transform = 'translateX(-50%)';
             notification.style.padding = '10px';
             notification.style.backgroundColor = '#4CAF50';
             notification.style.color = 'white';
@@ -163,6 +164,8 @@ async function onScanSuccess(qrCodeMessage) {
                 //If not, add it to the cache
                 teamMatchPerformances.push(newPerformance);
                 localStorage.setItem('teamMatchPerformances', JSON.stringify(teamMatchPerformances))
+                
+                
 
                 // Create a new div element for the notification
                 let notification = document.createElement('div');
@@ -177,7 +180,9 @@ async function onScanSuccess(qrCodeMessage) {
                 notification.style.borderRadius = '5px'; // Add this for a similar style to the rest of the buttons
 
                 // Append the notification to the body
-                document.body.appendChild(notification);
+                setTimeout(() => {
+                    document.body.appendChild(notification);
+                }, 4000);
 
                 // Set a timeout to remove the notification after 3 seconds
                 setTimeout(() => {
