@@ -29,7 +29,14 @@ if ('serviceWorker' in navigator) {
 		const modulesConfig = await fetch(`/config/analysis-modules.json`).then(res => res.json());
 		dataset = await fetchDataset()
 		matches = (await fetch("/admin/api/matches").then(res => res.json())).allMatches
-		console.log(dataset)
+
+		const qrcodeTmps = JSON.parse(localStorage.getItem('teamMatchPerformances')).map((tmp) => JSON.parse(tmp));
+
+		dataset.tmps = [...dataset.tmps, ...qrcodeTmps];
+		console.log(dataset.tmps);
+
+		console.log(dataset);
+		
 		initDashboard(dataset, modulesConfig)
 		await new Promise(r => setTimeout(r, 300))
 	})
