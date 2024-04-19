@@ -1,12 +1,12 @@
 const { Router } = require("express");
-const executeAnalysisPipeline = require("../analysisPipeline.js")
+const { execute, transformers, manual } = require("../analysisPipeline.js")
 const axios = require("axios")
 const config = require("../../../config/config.json");
 
 let router = Router();
 
 router.get("/dataset", async (req, res) => {
-    res.json(await executeAnalysisPipeline())
+    res.json(await execute())
 })
 
 if (!config.secrets.TBA_API_KEY) {
@@ -25,8 +25,16 @@ router.get("/teams", async (req, res) => {
     res.json(tbaTeams)
 })
 
+router.get("/transformers", async (req, res) => {
+  res.json(transformers);
+});
+
+router.get("/manual", async (req, res) => {
+  res.json(manual);
+});
+
 router.get("/csv", async (req,res) => {
-    let dataset = await executeAnalysisPipeline();
+    let dataset = await execute();
 
     //create rows
     let rows = [];

@@ -76,6 +76,10 @@ async function execute(dataset) {
     return dataset
 }
 
-module.exports = execute
+module.exports = { 
+    execute,
+    transformers,
+    manual,
+}
 
 // (async () => console.log((await execute()).teams["3061"] ) )();
