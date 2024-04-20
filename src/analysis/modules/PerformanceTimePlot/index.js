@@ -25,7 +25,6 @@ class PerformanceTimePlot {
 
         for (let tmp of teamTmps) {
             for (let stat of trackedStats) {
-                console.log(tmp);
                 trackedStatTraces[stat].y.push(getPath(tmp,stat));
             }
         }

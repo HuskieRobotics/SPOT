@@ -2,6 +2,7 @@ const { Router } = require("express");
 const { execute, transformers, manual } = require("../analysisPipeline.js")
 const axios = require("axios")
 const config = require("../../../config/config.json");
+const { DataTransformer } = require("../DataTransformer.js");
 
 let router = Router();
 
@@ -26,7 +27,28 @@ router.get("/teams", async (req, res) => {
 })
 
 router.get("/transformers", async (req, res) => {
-  res.json(transformers);
+  const cleanedTransformers = {};
+  const tmp = {};
+  const team = {};
+
+  const tmpTransformers = Object.keys(transformers.tmp);
+
+  for (const transformer of tmpTransformers) {
+    tmp[transformer] = {};
+    tmp[transformer].execute = transformers.tmp[transformer].execFunc.toString();
+  }
+
+  const teamTransformers = Object.keys(transformers.team);
+
+  for (const transformer of teamTransformers) {
+    team[transformer] = {};
+    team[transformer].execute = transformers.team[transformer].execFunc.toString();
+  }
+
+  cleanedTransformers.tmp = tmp;
+  cleanedTransformers.team = team;
+
+  res.json(cleanedTransformers);
 });
 
 router.get("/manual", async (req, res) => {

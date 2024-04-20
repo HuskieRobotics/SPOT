@@ -21,4 +21,8 @@ router.get("/analysis-modules.json", (req,res) => {
     res.sendFile(path.resolve(__dirname, "../config/analysis-modules.json"));
 })
 
+router.get("/analysis-pipeline.json", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "../config/analysis-pipeline.json"))
+});
+
 module.exports = router;

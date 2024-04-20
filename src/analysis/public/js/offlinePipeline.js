@@ -1,16 +1,20 @@
-async function execute(dataset) {
+async function executeOfflinePipeline(dataset, debug) {
     /* get tmps from database */
     // dataset = new Dataset((await TeamMatchPerformance.find({eventNumber: config.EVENT_NUMBER})).map((o) => o.toObject()));
     // console.log(dataset);
     // console.log('------');
 
-    const pipelineConfig = await fetch('../../config/analysis-pipeline.json');
-    console.log(pipelineConfig);
+    const matchScoutingConfig = await fetch('../../config/match-scouting.json').then((res) => res.json());
+    const actionIds = matchScoutingConfig.layout.layers.flat().reduce((acc,button) => acc.includes(button.id) ? acc : acc.concat(button.id), []);
+
+    const pipelineConfig = await fetch('../../config/analysis-pipeline.json').then((res) => res.json());
+    const manual = await fetch('./api/manual').then((res) => res.json());
+    const transformers = await fetch('./api/transformers').then((res) => res.json());
     
-    /*
     for (let tfConfig of pipelineConfig) {
         if (debug) console.log(`running ${tfConfig.name} - ${JSON.stringify(tfConfig.options)}`)
-        dataset = transformers[tfConfig.type][tfConfig.name].execute(dataset, tfConfig.outputPath, tfConfig.options);
+        const func = eval(transformers[tfConfig.type][tfConfig.name].execute);
+        dataset = func(dataset, tfConfig.outputPath, tfConfig.options);
     }
 
 	dataset.tmps = dataset.tmps.concat(manual.tmps.map(tmp => ({
@@ -33,7 +37,6 @@ async function execute(dataset) {
     if (debug) console.log("complete!")
 
     return dataset
-    */
 }
 
-execute();
+// executeOfflinePipeline();
