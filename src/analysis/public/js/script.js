@@ -27,9 +27,11 @@ if ('serviceWorker' in navigator) {
 	let matches
 	await loadAround(async () => {
 		const modulesConfig = await fetch(`/config/analysis-modules.json`).then(res => res.json());
-		dataset = await fetchDataset()
+		// dataset = await fetchDataset()
+		dataset = await executeOfflinePipeline();
 		matches = (await fetch("/admin/api/matches").then(res => res.json())).allMatches
 
+		/*
 		const storage = localStorage.getItem('teamMatchPerformances');
 		if (storage) {
 			const qrcodeTmps = JSON.parse(localStorage.getItem('teamMatchPerformances')).map((tmp) => JSON.parse(tmp));
@@ -51,6 +53,7 @@ if ('serviceWorker' in navigator) {
 
 			dataset = await executeOfflinePipeline(dataset);
 		}
+		*/
 		
 		initDashboard(dataset, modulesConfig)
 		await new Promise(r => setTimeout(r, 300))

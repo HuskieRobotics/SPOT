@@ -1,4 +1,19 @@
-async function executeOfflinePipeline(dataset, debug) {
+async function executeOfflinePipeline(debug) {
+    let tmps = await fetch("./api/rawDataset").then(res => res.json());
+    const storage = localStorage.getItem('teamMatchPerformances');
+    if (storage) {
+        const qrcodeTmps = JSON.parse(localStorage.getItem('teamMatchPerformances')).map((tmp) => JSON.parse(tmp));
+        tmps = [...tmps, ...qrcodeTmps];
+    }
+
+    const teams = [];
+
+    for (const tmp of tmps) {
+        teams[tmp.robotNumber] = {};
+    }
+
+    let dataset = { tmps, teams }
+
     /* get tmps from database */
     // dataset = new Dataset((await TeamMatchPerformance.find({eventNumber: config.EVENT_NUMBER})).map((o) => o.toObject()));
     // console.log(dataset);

@@ -1,6 +1,7 @@
 const { Router } = require("express");
 const { execute, transformers, manual } = require("../analysisPipeline.js")
-const axios = require("axios")
+const { TeamMatchPerformance } = require('../../lib/db.js');
+ const axios = require("axios")
 const config = require("../../../config/config.json");
 const { DataTransformer } = require("../DataTransformer.js");
 
@@ -8,7 +9,11 @@ let router = Router();
 
 router.get("/dataset", async (req, res) => {
     res.json(await execute())
-})
+});
+
+router.get("/rawDataset", async (req, res) => {
+  res.json(await TeamMatchPerformance.find({eventNumber: config.EVENT_NUMBER}));
+});
 
 if (!config.secrets.TBA_API_KEY) {
     console.error(chalk.whiteBright.bgRed.bold("TBA_API_KEY not found in config.json file! SPOT will not properly function without this."))
