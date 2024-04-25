@@ -1,4 +1,16 @@
 const cacheVersion = "scouting-cache-v1"
+
+/**
+ * These are all the files that need to be cached for offline functionality. 
+ * In the event that a user does not have connection to the internet, they
+ * will instead be served these files that have been cached, but must first
+ * connect to the site with an internet connection to initially cache them. 
+ * Some routes, such as /analysis/api/rawDataset return data, such as a JS object,
+ * instead of an actual file. When doing a fetch request (such as 
+ * await fetch('./api/rawDataset')), it will instead grab the most recently cached version, 
+ * and NOT the most up-to-date version from the server
+ */
+
 const filesToCache = [
     "/",
     "/css/form.css",
