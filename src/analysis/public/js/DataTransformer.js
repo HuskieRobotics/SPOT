@@ -1,6 +1,3 @@
-const { TeamMatchPerformance } = require("../lib/db");
-
-
 class DataTransformer {
     name;
     execFunc;
@@ -32,7 +29,7 @@ class Dataset {
     tmps;
     teams;
     /**
-     * @param {TeamMatchPerformance[]} teamMatchPerformances 
+     * @param {} teamMatchPerformances 
      */
     constructor(teamMatchPerformances) {
         this.tmps = [];

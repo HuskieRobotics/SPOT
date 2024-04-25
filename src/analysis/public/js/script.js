@@ -27,15 +27,33 @@ if ('serviceWorker' in navigator) {
 	let matches
 	await loadAround(async () => {
 		const modulesConfig = await fetch(`/config/analysis-modules.json`).then(res => res.json());
-		dataset = await fetchDataset()
+		// dataset = await fetchDataset()
+		dataset = await executeOfflinePipeline();
 		matches = (await fetch("/admin/api/matches").then(res => res.json())).allMatches
 
-		const qrcodeTmps = JSON.parse(localStorage.getItem('teamMatchPerformances')).map((tmp) => JSON.parse(tmp));
+		/*
+		const storage = localStorage.getItem('teamMatchPerformances');
+		if (storage) {
+			const qrcodeTmps = JSON.parse(localStorage.getItem('teamMatchPerformances')).map((tmp) => JSON.parse(tmp));
 
-		dataset.tmps = [...dataset.tmps, ...qrcodeTmps];
-		console.log(dataset.tmps);
+			dataset.tmps = [...dataset.tmps, ...qrcodeTmps];
 
-		console.log(dataset);
+			const allTeams = new Set();
+
+			for (const tmp of dataset.tmps) {
+				allTeams.add(parseInt(tmp.robotNumber));
+			}
+
+			const teams = Object.keys(dataset.teams);
+			for (const team of teams) {
+				if (!allTeams.has(parseInt(team))) {
+					delete dataset.teams[team];
+				}
+			}
+
+			dataset = await executeOfflinePipeline(dataset);
+		}
+		*/
 		
 		initDashboard(dataset, modulesConfig)
 		await new Promise(r => setTimeout(r, 300))

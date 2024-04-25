@@ -15,12 +15,6 @@ route.get("/", (req, res) => {
     res.render(__dirname + "/views/index.ejs");
 });
 
-// Define a route for GET requests to the "/temp" URL
-route.get("/temp", (req, res) => {
-    // Render the temp.ejs file in the views directory
-    res.render(__dirname + "/views/temp.ejs");
-});
-
 // Use the router object from the api.js file in the routes directory for all routes starting with "/api"
 route.use("/api", require('./routes/api.js'));
 

@@ -8,7 +8,7 @@ SPOT is an open-source modular scouting app framework for FRC developed by Team 
 * Admin view for live scouter management at competition.
 * Preconfigured for the 2022 Rapid React game with no additional game-specific customization required.
 * Easy deployment experience when teams run a server on Glitch
-* Optimized for teams who have internet access while scouting, completely functional for teams with no internet access.
+* Optimized for teams who have internet access while scouting, completely functional for teams with no internet access [(workflow found here)](https://docs.google.com/document/d/1S9zSXNIVrG0YoSWFu3pOi88QUAdK8fgov6C5f9-s21U/edit?usp=sharing).
 * Quick setup with a built-in first-run wizard to walk teams through configuring their scouting app, connecting to The Blue Alliance, and setting up their database.
 * Completely configurable analysis and scouting view without the need for a single line of code.
 

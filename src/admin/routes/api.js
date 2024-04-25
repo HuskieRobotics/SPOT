@@ -4,6 +4,7 @@ let router = Router();
 const config = require("../../../config/config.json");
 const { TeamMatchPerformance } = require("../../lib/db");
 let axios = require("axios")
+const {getManualMatches} = require("../../schedule/schedule");
 const DEMO = false;
 
 router.use((req,res,next) => {
@@ -87,20 +88,19 @@ router.post("/setMatch", (req,res) => {
 });
 
 router.get("/matches", async (req,res) => {
-//1 check if there is a manual schedu,e
-//2 if there is a manual schedule, send it instead of the TBA one
-//3 if there isnt send the TBA one
-  let manualSchedule = await axios.get('http://localhost:8080/schedule/matches').then(res=>res.data) // temp fix
-  if(Object.keys(manualSchedule).length != 0){ // find a better way to check if its empty
-    res.json({
-      "allMatches": manualSchedule,
-      "currentMatch": ScoutingSync.match
-    })
+
+  let manualSchedule = getManualMatches();
+
+  if(manualSchedule.length === 0){
+      res.json({
+          "allMatches": await ScoutingSync.getMatches(),
+          "currentMatch": ScoutingSync.match
+      });
   } else {
-    res.json({
-      "allMatches": await ScoutingSync.getMatches(),
-      "currentMatch": ScoutingSync.match
-    })
+      res.json({
+          "allMatches": manualSchedule,
+          "currentMatch": ScoutingSync.match
+      });
   }
 })
 module.exports = router;

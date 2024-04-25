@@ -4,7 +4,7 @@
   "description": "SPOT is an open-source modular scouting app framework for FRC developed by Team 3061 Huskie Robotics. SPOT provides a simple platform upon which a team can build a scouting app with little to no prior experience.",
   "main": "./src/app.js",
   "scripts": {
-    "start": "node src/app.js",
+    "start": "nodemon src/app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -12,7 +12,7 @@
     "url": "git+https://github.com/HuskieRobotics/spot.git"
   },
   "engines": {
-    "node": "12.x"
+    "node": "16.x"
   },
   "author": "",
   "license": "ISC",
@@ -21,21 +21,18 @@
   },
   "homepage": "https://github.com/HuskieRobotics/spot#readme",
   "dependencies": {
-    "axios": "^0.25.0",
+    "axios": "^1.6.5",
     "body-parser": "^1.19.0",
     "chalk": "^4.1.2",
-    "dotenv": "^10.0.0",
-    "ejs": "^3.1.6",
-    "express": "^4.17.1",
-    "express-session": "^1.17.2",
+    "dotenv": "^16.3.1",
+    "ejs": "^3.1.9",
+    "express": "^4.18.2",
+    "express-session": "^1.17.3",
     "fs": "0.0.1-security",
     "google-auth-library": "^7.10.2",
-    "jimp": "^0.22.10",
-    "mongoose": "^6.4.6",
-    "nodemon": "^2.0.15",
-    "qr-scanner": "^1.4.2",
+    "mongoose": "^7.4.0",
+    "nodemon": "^3.0.2",
     "qrcode": "^1.5.1",
-    "qrcode-reader": "^1.0.4",
     "simple-statistics": "^7.8.3",
     "socket.io": "^4.4.1"
   }
