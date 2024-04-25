@@ -1,20 +1,16 @@
 const result = document.getElementById('result');
 
-// Declare variables for submit and undo buttons
+// Declare variable for submit button
 const submitButton = document.getElementById('submit');
-const undoButton = document.getElementById('undo');
-
-let previousEvent;
-let previousUndoEvent;
 
 // Function that is called when a QR code is successfully scanned
 async function onScanSuccess(qrCodeMessage) {
     // Decode the QR code URL to get the data
     const data = await decodeQRCodeUrl(qrCodeMessage);
 
-   result.innerHTML = '';
+    result.innerHTML = '';
 
-   const labels = [];
+    const labels = [];
 
     const timestamp = document.createElement('p');
     timestamp.innerHTML = `<b>Timestamp: </b>${data.timestamp}`;
@@ -52,6 +48,7 @@ async function onScanSuccess(qrCodeMessage) {
     const queue = document.createElement('p');
     queue.innerHTML = `<b>Action Queue</b>`;
     result.appendChild(queue);
+}
 
     for (const action of data.actionQueue) {
         const div = document.createElement('div');
@@ -107,30 +104,6 @@ async function onScanSuccess(qrCodeMessage) {
             setTimeout(() => {
                 document.body.removeChild(notification);
             }, 3000);
-            const undoEvent = async () => {
-                const res = await (await fetch("./api/undo", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                }));
-
-                if (res.ok) {
-                    console.log('Successfully removed previous TMP from database');
-                } else {
-                    console.log('Failed to removed previous TMP from database');
-                }
-            }
-
-            if (previousUndoEvent) {
-                undoButton.removeEventListener('click', previousUndoEvent);
-            }
-
-            // DATABASE UNDO IMPLEMENTATION
-            undoButton.addEventListener('click', undoEvent);
-
-                        previousUndoEvent = undoEvent;
-
         // If saving to the database fails for whatever reason, store it in local storage for later usage
         } else {
             console.log('Failed to connect to database, storing TMP data in cache');
@@ -191,48 +164,6 @@ async function onScanSuccess(qrCodeMessage) {
 
                 console.log(localStorage.getItem('teamMatchPerformances'));
             }
-
-            const undoEvent = () => {
-                let teamMatchPerformances = localStorage.getItem('teamMatchPerformances');
-                if (teamMatchPerformances) {
-                    teamMatchPerformances = JSON.parse(teamMatchPerformances);
-                    // Remove the most recent entry
-                    teamMatchPerformances.pop();
-                    // Store the modified array back in the cache
-                    localStorage.setItem('teamMatchPerformances', JSON.stringify(teamMatchPerformances));
-                    console.log(localStorage.getItem('teamMatchPerformances'));  
-                    // Create a new div element for the notification
-                    let notification = document.createElement('div');
-                    notification.textContent = 'Data has been successfully removed from cache';
-                    notification.style.position = 'fixed';
-                    notification.style.top = '20px';
-                    notification.style.left = '50%';
-                    notification.style.transform = 'translateX(-50%)';
-                    notification.style.padding = '10px';
-                    notification.style.backgroundColor = '#4CAF50';
-                    notification.style.color = 'white';
-                    notification.style.borderRadius = '5px'; // Add this for a similar style to the rest of the buttons
-
-                    // Append the notification to the body
-                    document.body.appendChild(notification);
-
-                    // Set a timeout to remove the notification after 3 seconds
-                    setTimeout(() => {
-                        document.body.removeChild(notification);
-                    }, 3000);
-                } else {
-                    console.log('No entries to delete.');
-                }
-            }
-
-            if (previousUndoEvent) {
-                undoButton.removeEventListener('click', previousUndoEvent);
-            }
-
-            // CACHE UNDO IMPLEMENTATION
-            undoButton.addEventListener('click', undoEvent);
-
-            previousUndoEvent = undoEvent;
         }
     }
 
@@ -243,7 +174,7 @@ async function onScanSuccess(qrCodeMessage) {
     submitButton.addEventListener("click", event);
 
     previousEvent = event;
-}
+
 
 function onScanError(errorMessage) {
 
