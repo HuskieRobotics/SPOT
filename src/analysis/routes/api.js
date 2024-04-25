@@ -4,6 +4,7 @@ const { TeamMatchPerformance } = require('../../lib/db.js');
  const axios = require("axios")
 const config = require("../../../config/config.json");
 const { DataTransformer } = require("../DataTransformer.js");
+const {getTempTeams} = require("../../schedule/schedule");
 
 let router = Router();
 
@@ -67,30 +68,30 @@ router.get("/csv", async (req,res) => {
     let rows = [];
     let headerRow = true;
     let checkData  = function(team){
-      if(Object.entries(team).filter(([key,value])=>key!="manual").length == 0){
-        return false
-      } 
-      return true
+        if(Object.entries(team).filter(([key,value])=>key!="manual").length == 0){
+            return false
+        }
+        return true
     }
 
     for (let [teamNumber,team] of Object.entries(dataset.teams).filter(([num,team])=>checkData(team)) ) {
-      if(headerRow){
-        headerRow = false;
-        rows.push(["Team #",
-          ...Object.entries(team.averages).filter(([key,value])=>!isNaN(value)&&value).map(([i,x]) => i+" Average"), //all averages
-            ...Object.entries(team.averageScores).filter(item=>!isNaN(item)).map(([i,x]) => i+" Score Average"), //all averages
-            "Average Cycle",
-            "Average Completed Cycle"
-        ])
-      }
-      rows.push([teamNumber,
+        if(headerRow){
+            headerRow = false;
+            rows.push(["Team #",
+                ...Object.entries(team.averages).filter(([key,value])=>!isNaN(value)&&value).map(([i,x]) => i+" Average"), //all averages
+                ...Object.entries(team.averageScores).filter(item=>!isNaN(item)).map(([i,x]) => i+" Score Average"), //all averages
+                "Average Cycle",
+                "Average Completed Cycle"
+            ])
+        }
+        rows.push([teamNumber,
             ...Object.entries(team.averages).filter(([key,value])=>!isNaN(value)&&value).map(([i,x]) => x), //all averages
             ...Object.entries(team.averageScores).filter(item=>!isNaN(item)).map(([i,x]) => x), //all averages
             team.cycle.averageTime,
             team.cycle.averageTimeComplete
-      ])
+        ])
 
-    } 
+    }
 
     //make into csv
     let csv = rows.map(row => row.reduce((acc,value) => acc+`,${value}`)).reduce((acc,row) => acc+`${row}\n`, "");

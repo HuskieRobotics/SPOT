@@ -165,13 +165,19 @@ function makeMatchSchedule(matchTotalNum){
 
 
 async function processTeams(matchNum, teams) {
-    // inserts data into the correct spot
     let data = await teams;
     console.log(data);
+
     let redTeams = [];
     let blueTeams = [];
+
     for(let i = 0; i < 3; i++)
     {
+        if (data[i] === "" || data[i+3] === "") {
+            new Popup("error", "You can't leave team numbers empty. Match wasn't uploaded.");
+            return;
+        }
+
         redTeams.push(data[i]);
         blueTeams.push(data[i+3]);
     }

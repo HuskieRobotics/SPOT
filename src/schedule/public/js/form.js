@@ -34,5 +34,6 @@ function updateForm() {
         }
     } catch (e) {
         //keep going even if this errors, we need them to be able to input data
+        console.log(e);
     }
 }
