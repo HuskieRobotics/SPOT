@@ -1,10 +1,14 @@
 async function executeOfflinePipeline(debug) {
+    console.log('executing');
+
     let tmps = await fetch("./api/rawDataset").then(res => res.json());
     const storage = localStorage.getItem('teamMatchPerformances');
     if (storage) {
         const qrcodeTmps = JSON.parse(localStorage.getItem('teamMatchPerformances')).map((tmp) => JSON.parse(tmp));
         tmps = [...tmps, ...qrcodeTmps];
     }
+
+    console.log(tmps);
 
     const teams = [];
 
@@ -13,11 +17,6 @@ async function executeOfflinePipeline(debug) {
     }
 
     let dataset = { tmps, teams }
-
-    /* get tmps from database */
-    // dataset = new Dataset((await TeamMatchPerformance.find({eventNumber: config.EVENT_NUMBER})).map((o) => o.toObject()));
-    // console.log(dataset);
-    // console.log('------');
 
     const matchScoutingConfig = await fetch('../../config/match-scouting.json').then((res) => res.json());
     const actionIds = matchScoutingConfig.layout.layers.flat().reduce((acc,button) => acc.includes(button.id) ? acc : acc.concat(button.id), []);
