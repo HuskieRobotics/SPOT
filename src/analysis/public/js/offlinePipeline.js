@@ -1,6 +1,6 @@
-async function executeOfflinePipeline(debug) {
-    console.log('executing');
+const transformers = {};
 
+async function executeOfflinePipeline(debug) {
     let tmps = await fetch("./api/rawDataset").then(res => res.json());
     const storage = localStorage.getItem('teamMatchPerformances');
     if (storage) {
@@ -23,7 +23,7 @@ async function executeOfflinePipeline(debug) {
 
     const pipelineConfig = await fetch('../../config/analysis-pipeline.json').then((res) => res.json());
     const manual = await fetch('./api/manual').then((res) => res.json());
-    const transformers = await fetch('./api/transformers').then((res) => res.json());
+    // const transformers = await fetch('./api/transformers').then((res) => res.json());
     
     for (let tfConfig of pipelineConfig) {
         if (debug) console.log(`running ${tfConfig.name} - ${JSON.stringify(tfConfig.options)}`)
@@ -52,5 +52,3 @@ async function executeOfflinePipeline(debug) {
 
     return dataset
 }
-
-// executeOfflinePipeline();
