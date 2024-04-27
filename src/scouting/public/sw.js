@@ -5,9 +5,9 @@ const cacheVersion = "scouting-cache-v1"
  * In the event that a user does not have connection to the internet, they
  * will instead be served these files that have been cached, but must first
  * connect to the site with an internet connection to initially cache them. 
- * Some routes, such as /analysis/api/rawDataset return data, such as a JS object,
+ * Some routes, such as /analysis/api/dataset return data, such as a JS object,
  * instead of an actual file. When doing a fetch request (such as 
- * await fetch('./api/rawDataset')), it will instead grab the most recently cached version, 
+ * await fetch('./api/dataset')), it will instead grab the most recently cached version, 
  * and NOT the most up-to-date version from the server
  */
 
@@ -52,10 +52,9 @@ const filesToCache = [
     "/analysis/js/util.js",
     "/analysis/js/analysisPipeline.js",
     "/analysis/js/DataTransformer.js",
-    "/analysis/api/rawDataset",
+    "/analysis/api/dataset",
     "/analysis/api/teams",
     "/analysis/api/manual",
-    "/analysis/api/transformers",
     // Config
     "/config/analysis-pipeline.json",
     "/config/analysis-modules.json",
@@ -80,11 +79,7 @@ self.addEventListener('install', function(event) {
     event.waitUntil(
         caches.open(cacheVersion)
         .then(function(cache) {
-            for (const file in filesToCache) {
-                console.log(`${filesToCache[file]} @ ${file}`);
-                cache.add(filesToCache[file]);
-            }
-            // return cache.addAll(filesToCache);
+            return cache.addAll(filesToCache);
         })
     );
 });

@@ -6,7 +6,7 @@
  * @param options.actionArrayPath {String} optional, the path to the array of actions in the tmp
  */
 /* <TMP> */
-new DataTransformer("finalActionOccurence",(dataset,outputPath,options) => {
+new DataTransformer("finalActionOccurrence",(dataset,outputPath,options) => {
     /* find which action ids should be examined */
     if (!options) throw new Error("no options provided! Please provide an array of ids or set all to true")
     let countedIds = options.ids;

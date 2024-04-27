@@ -2,7 +2,6 @@ const express = require("express");
 const path = require("path")
 const fs = require("fs")
 let router = express.Router();
-const { execute } = require("./analysisPipeline.js")
 const compareAllTeams = require("./autoPick.js")
 const { setPath } = require("../lib/util");
 const ss = require("simple-statistics")
@@ -42,8 +41,8 @@ router.get('/transformers.js', async (req, res) => {
     let tmp = 'tmp: {\n';
     let team = 'team: {\n';
 
-    for (const file of fs.readdirSync(path.resolve(__dirname, 'offline-transformers'))) {
-        const contents = fs.readFileSync(`${__dirname}/offline-transformers/${file}`).toString();
+    for (const file of fs.readdirSync(path.resolve(__dirname, 'transformers'))) {
+        const contents = fs.readFileSync(`${__dirname}/transformers/${file}`).toString();
         if (file === '!.js') {
             output += contents + '\n\n';
             continue;

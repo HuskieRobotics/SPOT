@@ -1,5 +1,5 @@
 async function executeOfflinePipeline(debug) {
-    let tmps = await fetch("./api/rawDataset").then(res => res.json());
+    let tmps = await fetch("./api/dataset").then(res => res.json());
     const storage = localStorage.getItem('teamMatchPerformances');
     if (storage) {
         const qrcodeTmps = JSON.parse(localStorage.getItem('teamMatchPerformances')).map((tmp) => JSON.parse(tmp));
