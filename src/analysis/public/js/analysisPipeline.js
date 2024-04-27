@@ -1,5 +1,3 @@
-const transformers = {};
-
 async function executeOfflinePipeline(debug) {
     let tmps = await fetch("./api/rawDataset").then(res => res.json());
     const storage = localStorage.getItem('teamMatchPerformances');
@@ -8,27 +6,20 @@ async function executeOfflinePipeline(debug) {
         tmps = [...tmps, ...qrcodeTmps];
     }
 
-    console.log(tmps);
-
     const teams = [];
 
     for (const tmp of tmps) {
         teams[tmp.robotNumber] = {};
     }
 
-    let dataset = { tmps, teams }
+    let dataset = { tmps, teams };
 
-    const matchScoutingConfig = await fetch('../../config/match-scouting.json').then((res) => res.json());
-    const actionIds = matchScoutingConfig.layout.layers.flat().reduce((acc,button) => acc.includes(button.id) ? acc : acc.concat(button.id), []);
+    const manual = await fetch('./api/manual').then(res => res.json());
+    const pipelineConfig = await fetch("../../../config/analysis-pipeline.json").then(res => res.json());
+    const transformers = await getTransformers();
 
-    const pipelineConfig = await fetch('../../config/analysis-pipeline.json').then((res) => res.json());
-    const manual = await fetch('./api/manual').then((res) => res.json());
-    // const transformers = await fetch('./api/transformers').then((res) => res.json());
-    
     for (let tfConfig of pipelineConfig) {
-        if (debug) console.log(`running ${tfConfig.name} - ${JSON.stringify(tfConfig.options)}`)
-        const func = eval(transformers[tfConfig.type][tfConfig.name].execute);
-        dataset = func(dataset, tfConfig.outputPath, tfConfig.options);
+        dataset = transformers[tfConfig.type][tfConfig.name].execute(dataset, tfConfig.outputPath, tfConfig.options);
     }
 
 	dataset.tmps = dataset.tmps.concat(manual.tmps.map(tmp => ({
@@ -48,7 +39,5 @@ async function executeOfflinePipeline(debug) {
 		}
 	}
 
-    if (debug) console.log("complete!")
-
-    return dataset
+    return dataset;
 }

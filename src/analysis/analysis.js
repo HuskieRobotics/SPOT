@@ -33,6 +33,41 @@ router.get("/modules.js", (req,res) => {
         res.send(output);
     }
 })
+
+router.get('/transformers.js', async (req, res) => {
+    const tmpPattern = new RegExp(`/\\* <TMP> \\*/\\s*([\\s\\S]*?)\\s*/\\* </TMP> \\*/`, 'i');
+    const teamPattern = new RegExp(`/\\* <TEAM> \\*/\\s*([\\s\\S]*?)\\s*/\\* </TEAM> \\*/`, 'i');
+
+    let output = 'async function getTransformers() {\n';
+    let tmp = 'tmp: {\n';
+    let team = 'team: {\n';
+
+    for (const file of fs.readdirSync(path.resolve(__dirname, 'offline-transformers'))) {
+        const contents = fs.readFileSync(`${__dirname}/offline-transformers/${file}`).toString();
+        if (file === '!.js') {
+            output += contents + '\n\n';
+            continue;
+        }
+
+        const tmpMatch = tmpPattern.exec(contents);
+        if (tmpMatch) {
+            tmp += `${file.split('.')[0]}: ${tmpMatch[1].trim()},\n`;
+        }
+
+        const teamMatch = teamPattern.exec(contents);
+        if (teamMatch) {
+            team += `${file.split('.')[0]}: ${teamMatch[1].trim()},\n`;
+        }
+    }
+
+    tmp += '}';
+    team += '}';
+
+    output += `const offlineTransformers = {\n${tmp},\n${team}};\n\nreturn offlineTransformers;\n}`;
+
+    res.send(output);
+});
+
 router.get('/autoPick',async (req,res)=>{
     let dataset = await execute();
     let teams = [];

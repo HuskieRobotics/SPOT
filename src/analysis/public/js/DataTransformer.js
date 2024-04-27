@@ -29,7 +29,7 @@ class Dataset {
     tmps;
     teams;
     /**
-     * @param {} teamMatchPerformances 
+     * @param {*} teamMatchPerformances 
      */
     constructor(teamMatchPerformances) {
         this.tmps = [];
@@ -42,5 +42,3 @@ class Dataset {
         }
     }
 }
-
-module.exports = {DataTransformer,Dataset};
