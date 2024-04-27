@@ -34,36 +34,73 @@ router.get("/modules.js", (req,res) => {
 })
 
 router.get('/transformers.js', async (req, res) => {
+    // Get the analysis transformer, containing important information about
+    // how to build the client-side transformers conjugate file
     const analysisTransformer = require('../../config/analysis-transformers.json');
 
+    // Set the output to the template file
     let output = fs.readFileSync(`${__dirname}/transformers/${analysisTransformer.template.file}`).toString();
 
+    // Set each transformer's data to "name: {", leaving the object open to add
+    // transformers to it
     for (const transformerType of analysisTransformer.types) {
         transformerType.data = `${transformerType.name}: {\n`;
     }
 
     for (const file of fs.readdirSync(path.resolve(__dirname, 'transformers'))) {
-        const contents = fs.readFileSync(`${__dirname}/transformers/${file}`).toString();
-        if (file === analysisTransformer.template.file) {
+        // Make sure the file isn't a file that should be ignored
+        if (analysisTransformer.ignore.includes(file)) {
             continue;
         }
 
+        // Get the contents of the JS file
+        const contents = fs.readFileSync(`${__dirname}/transformers/${file}`).toString();
+
+        // Check the file for each type of transformer (i.e. tmp, team, etc.)
         for (const transformerType of analysisTransformer.types) {
             const pattern = new RegExp(`/\\* <${transformerType.identifier}> \\*/\\s*([\\s\\S]*?)\\s*/\\* </${transformerType.identifier}> \\*/`, 'i');
             const match = pattern.exec(contents);
+
+            // If it contains that type of transformer, add it to the list
             if (match) {
+                // Add "identifier: new DataTransformer(...)" tp the transformer type's data,
+                // plus a comma to allow for the next data transformer
                 transformerType.data += `${file.split('.')[0]}: ${match[1].trim()},\n`;
+
+                // Would look something like:
+                /*
+                    name: {
+                        identifier: new DataTransformer(...),
+                        identifier2: new DataTransformer(...),
+                        etc.
+                */
             }
         }
     }
 
+    // Add all of the files together to build the conjugate
     let conjugate = '';
     for (const transformerType of analysisTransformer.types) {
+        // Add individual data to conjugate and add a } to the end to complete
+        // the object's declaration, as well as a comma 
         conjugate += `\n${transformerType.data}},`;
     }
 
+    // Ends up looking like:
+    /*
+        tmp: {
+            actionTime: new DataTransformer(...),
+        },
+        team: {
+            aggregateArray: new DataTransformer(...),
+        }
+        etc.
+    */
+
+    // Replace the placeholder with the conjugate to finish the output
     output = output.replace(analysisTransformer.template.placeholder, conjugate);
 
+    // Send the output to the client
     res.send(output);
 });
 

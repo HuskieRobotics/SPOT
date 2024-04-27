@@ -14,5 +14,9 @@
             "identifier": "TEAM",
             "data": ""
         }
+    ],
+    "ignore": [
+        "_template.template.js",
+        "transformers.md"
     ]
 }
