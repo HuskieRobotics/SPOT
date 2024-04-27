@@ -29,6 +29,7 @@ router.post('/teamMatchPerformance', async (req, res) => {
             robotNumber: req.body.robotNumber,
             matchNumber: req.body.matchNumber,
             eventNumber: req.body.eventNumber,
+            matchId: req.body.matchId,
             matchId_rand: req.body.matchId_rand,
             actionQueue: req.body.actionQueue,
         });
@@ -59,6 +60,61 @@ router.post('/undo', async (req, res) => {
         res.status(500).end();
         return;
     }
+    res.status(200).end();
+});
+
+router.post('/sync', async (req, res) => {
+    const syncTmps = req.body;
+
+    try {
+        const dbTmps = await TeamMatchPerformance.find({});
+
+        for (const syncTmp of syncTmps) {
+            let exists = false;
+
+            database: for (const dbTmp of dbTmps) {
+                if (syncTmp.robotNumber != dbTmp.robotNumber || syncTmp.eventNumber != dbTmp.eventNumber || syncTmp.matchNumber != dbTmp.matchNumber) {
+                    continue;
+                }
+
+                if (syncTmp.actionQueue.length === dbTmp.actionQueue.length) {
+                    for (const index in syncTmp.actionQueue) {
+                        if (syncTmp.actionQueue[index].id !== dbTmp.actionQueue[index].id) {
+                            break database;
+                        }
+                    }
+
+                    exists = true;
+                }
+            }
+
+            if (!exists) {
+                try {
+                    const teamMatchPerformance = new TeamMatchPerformance({
+                        timestamp: syncTmp.timestamp,
+                        clientVersion: syncTmp.clientVersion,
+                        scouterId: syncTmp.scouterId,
+                        robotNumber: syncTmp.robotNumber,
+                        matchNumber: syncTmp.matchNumber,
+                        eventNumber: syncTmp.eventNumber,
+                        matchId: syncTmp.matchId,
+                        matchId_rand: syncTmp.matchId_rand,
+                        actionQueue: syncTmp.actionQueue,
+                    });
+                    await teamMatchPerformance.save();
+                } catch (err) {
+                    console.log(err);
+                    res.status(400).end();
+                    return;
+                }
+            }
+        }
+    } catch (err) {
+        console.log(err);
+        res.status(400).end();
+        return;
+    }
+
     res.status(200).end();
 });
 

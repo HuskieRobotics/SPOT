@@ -74,6 +74,11 @@ class LocalData {
             })
         }
     }
+
+    static async clearTeamMatchPerformances() {
+        const objectStore = LocalData.db.transaction(LocalData.dbName, "readwrite").objectStore(LocalData.dbName);
+        const request = await objectStore.clear();
+    }
 }
 
 LocalData.initialize("development2")
