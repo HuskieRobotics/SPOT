@@ -1,6 +1,5 @@
 const result = document.getElementById('result');
 
-// Declare variable for submit button
 const submitButton = document.getElementById('submit');
 const undoButtton = document.getElementById('undo');
 
@@ -12,43 +11,54 @@ function createDataDisplay(data) {
 
     const labels = [];
 
+    // Create time stamp
     const timestamp = document.createElement('p');
     timestamp.innerHTML = `<b>Timestamp: </b>${data.timestamp}`;
     labels.push(timestamp);
 
+    // Create client version
     const clientVersion = document.createElement('p');
     clientVersion.innerHTML = `<b>Client Version: </b>${data.clientVersion}`;
     labels.push(clientVersion);
 
+    // Create scouter ID label
     const scouterId = document.createElement('p');
     scouterId.innerHTML = `<b>Scouter ID: </b>${data.scouterId}`;
     labels.push(scouterId);
 
+    // Create event number label
     const eventNumber = document.createElement('p');
     eventNumber.innerHTML = `<b>Event Number: </b>${data.eventNumber}`;
     labels.push(eventNumber);
 
+    // Create match number label
     const matchNumber = document.createElement('p');
     matchNumber.innerHTML = `<b>Match Number: </b>${data.matchNumber}`;
     labels.push(matchNumber);
 
+    // Create robot number label
     const robotNumber = document.createElement('p');
     robotNumber.innerHTML = `<b>Robot Number: </b>${data.robotNumber}`;
     labels.push(robotNumber);
 
+    // Set all the label's classes and append them to the results div
     for (const label of labels) {
         label.className = 'result-text';
         result.appendChild(label);
     }
 
+    // Add a divider to create a visual distinction between misc info and
+    // the action queue
     const divider = document.createElement('div');
     divider.className = 'result-divider';
     result.appendChild(divider);
 
+    // Create the queue text
     const queue = document.createElement('p');
     queue.innerHTML = `<b>Action Queue</b>`;
     result.appendChild(queue);
 
+    // Add all actions to the queue div
     for (const action of data.actionQueue) {
         const div = document.createElement('div');
         div.className = 'action-queue';
@@ -67,13 +77,16 @@ function createDataDisplay(data) {
 }
 
 submitButton.addEventListener('click', async () => {
+    // Skip if there isn't any data
     if (!data) {
         return;
     }
 
+    // Attempt to submit to the database
     console.log('Attempting to submit');
     let response;
     try {
+        // Route for submitting a TMP on the qr code page
         response = await (await fetch("./api/teamMatchPerformance", {
             method: "POST",
             headers: {
@@ -82,11 +95,15 @@ submitButton.addEventListener('click', async () => {
             body: JSON.stringify(data),
         }));
     } catch (err) {
+        // Might be a better way to do this, just makes sure that
+        // if there is an error with the post req response.ok is
+        // still defined
         response = {}.ok = false;
     }
 
-    // If the response from the POST request is OK, add an event listener to the undo button
+    // If the response from the POST request is OK, set the undo function to the database version
     if (response.ok) {
+        // Database undo function
         undoFunction = async () => {
             await fetch('./api/undo', {
                 method: 'POST',
@@ -153,10 +170,43 @@ submitButton.addEventListener('click', async () => {
 
             console.log(localStorage.getItem('teamMatchPerformances'));
         }
+
+        // Undo function for the cache
+        undoFunction = () => {
+            let teamMatchPerformances = localStorage.getItem('teamMatchPerformances');
+            if (teamMatchPerformances) {
+                teamMatchPerformances = JSON.parse(teamMatchPerformances);
+                // Remove the most recent entry
+                teamMatchPerformances.pop();
+                // Store the modified array back in the cache
+                localStorage.setItem('teamMatchPerformances', JSON.stringify(teamMatchPerformances));
+                console.log(localStorage.getItem('teamMatchPerformances'));  
+                // Create a new div element for the notification
+                let notification = document.createElement('div');
+                notification.textContent = 'Data has been successfully removed from cache';
+                notification.className = 'notification';
+
+                // Append the notification to the body
+                document.body.appendChild(notification);
+
+                // Set a timeout to remove the notification after 3 seconds
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 3000);
+            } else {
+                console.log('No entries to delete.');
+            }
+
+            undoFunction = undefined;
+        }
     }
 });
 
 undoButtton.addEventListener('click', async () => {
+    if (!undoFunction) {
+        return;
+    }
+
     await undoFunction();
 });
 
@@ -231,6 +281,8 @@ async function decodeQRCodeUrl(image_url) {
     let nextAction = actionQueueBits.slice(0,actionSize);
     actionQueueBits = actionQueueBits.slice(actionSize);
 
+    // This code was like 3 years old when it was handed down to me with absolutely zero
+    // documentation, I have no idea how it works but it does
     while (nextAction.slice(0,8) != "11111111") {
         let action = {};
         
