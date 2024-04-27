@@ -1,0 +1,18 @@
+{
+    "template": {
+        "file": "_template.template.js",
+        "placeholder": "__TRANSFORMERS__"
+    },
+    "types": [
+        {
+            "name": "tmp",
+            "identifier": "TMP",
+            "data": ""
+        }, 
+        {
+            "name": "team",
+            "identifier": "TEAM",
+            "data": ""
+        }
+    ]
+}

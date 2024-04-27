@@ -34,35 +34,35 @@ router.get("/modules.js", (req,res) => {
 })
 
 router.get('/transformers.js', async (req, res) => {
-    const tmpPattern = new RegExp(`/\\* <TMP> \\*/\\s*([\\s\\S]*?)\\s*/\\* </TMP> \\*/`, 'i');
-    const teamPattern = new RegExp(`/\\* <TEAM> \\*/\\s*([\\s\\S]*?)\\s*/\\* </TEAM> \\*/`, 'i');
+    const analysisTransformer = require('../../config/analysis-transformers.json');
 
-    let output = 'async function getTransformers() {\n';
-    let tmp = 'tmp: {\n';
-    let team = 'team: {\n';
+    let output = fs.readFileSync(`${__dirname}/transformers/${analysisTransformer.template.file}`).toString();
+
+    for (const transformerType of analysisTransformer.types) {
+        transformerType.data = `${transformerType.name}: {\n`;
+    }
 
     for (const file of fs.readdirSync(path.resolve(__dirname, 'transformers'))) {
         const contents = fs.readFileSync(`${__dirname}/transformers/${file}`).toString();
-        if (file === '!.js') {
-            output += contents + '\n\n';
+        if (file === analysisTransformer.template.file) {
             continue;
         }
 
-        const tmpMatch = tmpPattern.exec(contents);
-        if (tmpMatch) {
-            tmp += `${file.split('.')[0]}: ${tmpMatch[1].trim()},\n`;
-        }
-
-        const teamMatch = teamPattern.exec(contents);
-        if (teamMatch) {
-            team += `${file.split('.')[0]}: ${teamMatch[1].trim()},\n`;
+        for (const transformerType of analysisTransformer.types) {
+            const pattern = new RegExp(`/\\* <${transformerType.identifier}> \\*/\\s*([\\s\\S]*?)\\s*/\\* </${transformerType.identifier}> \\*/`, 'i');
+            const match = pattern.exec(contents);
+            if (match) {
+                transformerType.data += `${file.split('.')[0]}: ${match[1].trim()},\n`;
+            }
         }
     }
 
-    tmp += '}';
-    team += '}';
+    let conjugate = '';
+    for (const transformerType of analysisTransformer.types) {
+        conjugate += `\n${transformerType.data}},`;
+    }
 
-    output += `const offlineTransformers = {\n${tmp},\n${team}};\n\nreturn offlineTransformers;\n}`;
+    output = output.replace(analysisTransformer.template.placeholder, conjugate);
 
     res.send(output);
 });
