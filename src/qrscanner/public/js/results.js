@@ -2,12 +2,12 @@ const result = document.getElementById('result');
 
 // Declare variable for submit button
 const submitButton = document.getElementById('submit');
+const undoButtton = document.getElementById('undo');
 
-// Function that is called when a QR code is successfully scanned
-async function onScanSuccess(qrCodeMessage) {
-    // Decode the QR code URL to get the data
-    const data = await decodeQRCodeUrl(qrCodeMessage);
+let data;
+let undoFunction;
 
+function createDataDisplay(data) {
     result.innerHTML = '';
 
     const labels = [];
@@ -48,7 +48,6 @@ async function onScanSuccess(qrCodeMessage) {
     const queue = document.createElement('p');
     queue.innerHTML = `<b>Action Queue</b>`;
     result.appendChild(queue);
-}
 
     for (const action of data.actionQueue) {
         const div = document.createElement('div');
@@ -65,116 +64,108 @@ async function onScanSuccess(qrCodeMessage) {
 
         result.appendChild(div);
     }
+}
 
-    // Add an event listener to the submit button that sends a POST request when clicked
-    const event = async () => {
-        console.log('Attempting to submit');
-        let response;
-        try {
-            response = await (await fetch("./api/teamMatchPerformance", {
-                method: "POST",
+submitButton.addEventListener('click', async () => {
+    if (!data) {
+        return;
+    }
+
+    console.log('Attempting to submit');
+    let response;
+    try {
+        response = await (await fetch("./api/teamMatchPerformance", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data),
+        }));
+    } catch (err) {
+        response = {}.ok = false;
+    }
+
+    // If the response from the POST request is OK, add an event listener to the undo button
+    if (response.ok) {
+        undoFunction = async () => {
+            await fetch('./api/undo', {
+                method: 'POST',
                 headers: {
-                    "Content-Type": "application/json"
+                    'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(data),
-            }));
-        } catch (err) {
-            response = {}.ok = false;
+            });
         }
 
-        // If the response from the POST request is OK, add an event listener to the undo button
-        if (response.ok) {
-            console.log('Successfully uploaded scouting data to database');
-            // Create a new div element for the notification
-            let notification = document.createElement('div');
-            notification.textContent = 'Successfully uploaded scouting data to database';
-            notification.style.position = 'fixed';
-            notification.style.top = '20px';
-            notification.style.left = '50%';
-            notification.style.transform = 'translateX(-50%)';
-            notification.style.padding = '10px';
-            notification.style.backgroundColor = '#4CAF50';
-            notification.style.color = 'white';
-            notification.style.borderRadius = '5px'; // Add this for a similar style to the rest of the buttons
+        console.log('Successfully uploaded scouting data to database');
+        // Create a new div element for the notification
+        let notification = document.createElement('div');
+        notification.textContent = 'Successfully uploaded scouting data to database';
+        notification.className = 'notification';
 
-            // Append the notification to the body
-            document.body.appendChild(notification);
+        // Append the notification to the body
+        document.body.appendChild(notification);
 
-            // Set a timeout to remove the notification after 3 seconds
-            setTimeout(() => {
-                document.body.removeChild(notification);
-            }, 3000);
-        // If saving to the database fails for whatever reason, store it in local storage for later usage
+        // Set a timeout to remove the notification after 3 seconds
+        setTimeout(() => {
+            document.body.removeChild(notification);
+        }, 3000);
+    // If saving to the database fails for whatever reason, store it in local storage for later usage
+    } else {
+        console.log('Failed to connect to database, storing TMP data in cache');
+        // Create a new div element for the notification
+        let notification = document.createElement('div');
+        notification.textContent = 'Failed to connect to database, storing TMP data in cache';
+        notification.className = 'notification';
+
+        // Append the notification to the body
+        document.body.appendChild(notification);
+
+        // Set a timeout to remove the notification after 3 seconds
+        setTimeout(() => {
+            document.body.removeChild(notification);
+        }, 3000);
+        let teamMatchPerformances = localStorage.getItem('teamMatchPerformances');
+        if (teamMatchPerformances) {
+            teamMatchPerformances = JSON.parse(teamMatchPerformances);
         } else {
-            console.log('Failed to connect to database, storing TMP data in cache');
+            teamMatchPerformances = [];
+        }
+        let newPerformance = JSON.stringify(data);
+        if (!teamMatchPerformances.includes(newPerformance)) {
+            //If not, add it to the cache
+            teamMatchPerformances.push(newPerformance);
+            localStorage.setItem('teamMatchPerformances', JSON.stringify(teamMatchPerformances))
+            
             // Create a new div element for the notification
             let notification = document.createElement('div');
-            notification.textContent = 'Failed to connect to database, storing TMP data in cache';
-            notification.style.position = 'fixed';
-            notification.style.top = '20px';
-            notification.style.left = '50%';
-            notification.style.transform = 'translateX(-50%)';
-            notification.style.padding = '10px';
-            notification.style.backgroundColor = '#4CAF50';
-            notification.style.color = 'white';
-            notification.style.borderRadius = '5px'; // Add this for a similar style to the rest of the buttons
+            notification.textContent = 'Data has been successfully stored in cache';
+            notification.className = 'notification';
 
             // Append the notification to the body
-            document.body.appendChild(notification);
+            setTimeout(() => {
+                document.body.appendChild(notification);
+            }, 4000);
 
             // Set a timeout to remove the notification after 3 seconds
             setTimeout(() => {
                 document.body.removeChild(notification);
-            }, 3000);
-            let teamMatchPerformances = localStorage.getItem('teamMatchPerformances');
-            if (teamMatchPerformances) {
-                teamMatchPerformances = JSON.parse(teamMatchPerformances);
-            } else {
-                teamMatchPerformances = [];
-            }
-            let newPerformance = JSON.stringify(data);
-            if (!teamMatchPerformances.includes(newPerformance)) {
-                //If not, add it to the cache
-                teamMatchPerformances.push(newPerformance);
-                localStorage.setItem('teamMatchPerformances', JSON.stringify(teamMatchPerformances))
-                
-                
+            }, 7000);
 
-                // Create a new div element for the notification
-                let notification = document.createElement('div');
-                notification.textContent = 'Data has been successfully stored in cache';
-                notification.style.position = 'fixed';
-                notification.style.top = '20px';
-                notification.style.left = '50%';
-                notification.style.transform = 'translateX(-50%)';
-                notification.style.padding = '10px';
-                notification.style.backgroundColor = '#4CAF50';
-                notification.style.color = 'white';
-                notification.style.borderRadius = '5px'; // Add this for a similar style to the rest of the buttons
-
-                // Append the notification to the body
-                setTimeout(() => {
-                    document.body.appendChild(notification);
-                }, 4000);
-
-                // Set a timeout to remove the notification after 3 seconds
-                setTimeout(() => {
-                    document.body.removeChild(notification);
-                }, 3000);
-
-                console.log(localStorage.getItem('teamMatchPerformances'));
-            }
+            console.log(localStorage.getItem('teamMatchPerformances'));
         }
     }
+});
 
-    if (previousEvent) {
-        submitButton.removeEventListener('click', previousEvent);
-    }
+undoButtton.addEventListener('click', async () => {
+    await undoFunction();
+});
 
-    submitButton.addEventListener("click", event);
-
-    previousEvent = event;
-
+// Function that is called when a QR code is successfully scanned
+async function onScanSuccess(qrCodeMessage) {
+    // Decode the QR code URL to get the data
+    data = await decodeQRCodeUrl(qrCodeMessage);
+    createDataDisplay(data);
+}
 
 function onScanError(errorMessage) {
 

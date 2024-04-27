@@ -1,4 +1,4 @@
-async function executeOfflinePipeline(debug) {
+async function executePipeline() {
     let tmps = await fetch("./api/dataset").then(res => res.json());
     const storage = localStorage.getItem('teamMatchPerformances');
     if (storage) {
@@ -13,6 +13,8 @@ async function executeOfflinePipeline(debug) {
     }
 
     let dataset = { tmps, teams };
+
+    console.log(dataset);
 
     const manual = await fetch('./api/manual').then(res => res.json());
     const pipelineConfig = await fetch("../../../config/analysis-pipeline.json").then(res => res.json());

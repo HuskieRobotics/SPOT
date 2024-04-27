@@ -2,7 +2,7 @@ const { Router } = require("express");
 const { TeamMatchPerformance } = require('../../lib/db');
 
 const router = Router();
-let previousTimestamp;
+let previousMatchIDRand;
 
 router.post('/teamMatchPerformance', async (req, res) => {
     try {
@@ -46,14 +46,14 @@ router.post('/teamMatchPerformance', async (req, res) => {
         return;
     }
 
-    previousTimestamp = req.body.timestamp;
+    previousMatchIDRand = req.body.matchId_rand;
 
     res.status(201).end();
 });
 
 router.post('/undo', async (req, res) => {
     try {
-        await TeamMatchPerformance.deleteOne({ timestamp:  previousTimestamp});
+        await TeamMatchPerformance.deleteOne({ matchId_rand:  previousMatchIDRand});
     } catch (err) {
         console.log(err);
         res.status(500).end();
