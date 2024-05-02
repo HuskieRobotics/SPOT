@@ -59,20 +59,32 @@ class QREncoder {
         /****** Match Info (80 bits) ******/
         let [majorVersion,minorVersion] = teamMatchPerformance.clientVersion.split(".").map(x => parseInt(x));
         
+        console.log("1");
         out += QREncoder.encodeValue(majorVersion, 255, 0, 8); // major version (8 bits)
+        console.log("2");
         out += QREncoder.encodeValue(minorVersion, 255, 0, 8); // minor version (8 bits)
+        console.log("3");
         out += QREncoder.encodeValue(parseInt(teamMatchPerformance.eventNumber), 255, 0, 8) //event number (8 bits)
+        console.log("4");
         out += QREncoder.encodeValue(parseInt(teamMatchPerformance.matchNumber), 255, 0, 8) // match number (8 bits)
+        console.log("5");
         out += QREncoder.encodeValue(parseInt(teamMatchPerformance.robotNumber), 65535, 0, 16) // team number (16 bits)
+        console.log("6");
         out += QREncoder.encodeValue(parseInt(teamMatchPerformance.matchId_rand,"32"),2 ** 64 - 1, 0, 64); // matchId_rand (64 bits)
-
+        
+        console.log("7");
+        console.log(this.ID_ENUM);
         /****** Action Queue ******/
         for (let action of teamMatchPerformance.actionQueue) {
             //action's values are defined by the ACTION_SCHEMA in qr.json
             for (let {key,bits} of this.ACTION_SCHEMA) {
                 if (key == "id") {
+                    console.log('ID:');
+                    console.log(this.ID_ENUM[getVal(action, key)]);
                     out += QREncoder.encodeValue(this.ID_ENUM[getVal(action,key)], 2 ** bits - 2, 0, bits) //254 max unique ids, probably enough for 99.9% of scouting apps
                 } else {
+                    console.log('ts:');
+                    console.log(parseInt(getVal(action, key)));
                     out += QREncoder.encodeValue(parseInt(getVal(action,key)), 2 ** bits - 1, 0, bits)
                 }
                 //encode the value parseInt'd to allow for strings that contain an integer number. max is 2^bits - 2 for id and 2^bits - 1 for all other numbers as an action of 2^(total bits)-1 indicates the end of the action queue
