@@ -65,7 +65,13 @@ async function constructApp(accessCode) {
         document.querySelector("#GOOGLE_CLIENT_ID").value = config.GOOGLE_CLIENT_ID || ""
         document.querySelector("#GOOGLE_CLIENT_SECRET").value = config.GOOGLE_CLIENT_SECRET || ""
         document.querySelector("#EVENT_NUMBER").value = config.EVENT_NUMBER || ""
-        document.querySelector("#DEMO").value = (config.DEMO === true) || ""
+        if (config.DEMO == 1) {
+            document.querySelector("#DEMO").value = config.DEMO;
+            document.querySelector("#DEMO").checked = true
+        }else{
+            document.querySelector("#DEMO").value = 0;
+            document.querySelector("#DEMO").checked = false
+        }
     }
 
     document.querySelector("#setup-container").classList.add("visible")
@@ -74,7 +80,9 @@ async function constructApp(accessCode) {
 document.querySelector("#submit").addEventListener("click", async () => {
     let secrets = ["ACCESS_CODE", "DATABASE_URL", "TBA_API_KEY", "GOOGLE_CLIENT_ID", "GOOGLE_CLIENT_SECRET"]
     let config = { secrets: {} };
+    console.log(new FormData(document.getElementById("setup-form")));
     for (let [key, value] of new FormData(document.getElementById("setup-form"))) {
+        console.log(key, value)
         if (value === "") continue; //dont send unset config values (eg, no ACCESS_CODE)
         if (secrets.includes(key)) {
             config.secrets[key] = value;
