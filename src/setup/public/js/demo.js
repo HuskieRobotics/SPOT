@@ -2,15 +2,15 @@
 
 document.addEventListener('DOMContentLoaded', function () {
     const toggleSwitch = document.getElementById('DEMO');
-    toggleSwitch.value = 0;
+    toggleSwitch.value = false;
 
     toggleSwitch.addEventListener('change', function () {
         if (this.checked) {
-            toggleSwitch.value = 1;
+            toggleSwitch.value = true;
             console.log(toggleSwitch.value);
             console.log("Switch is ON");
         } else {
-            toggleSwitch.value = 0;
+            toggleSwitch.value = false;
             console.log(toggleSwitch.value);
             console.log("Switch is OFF");
         }
