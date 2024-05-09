@@ -1,4 +1,5 @@
 // the toggle switch for demo
+
 document.addEventListener('DOMContentLoaded', function () {
     const toggleSwitch = document.getElementById('DEMO');
     toggleSwitch.value = 0;
