@@ -43,7 +43,7 @@ The analysis transformers config file is what outlines the specific details of h
     * `placeholder`: Placeholder text to look for, that is then replaced with all of the transformers
 * `types`: An array containing all of the transformer types to look for (i.e. `tmp`, `team`, etc.)
     * `name`: The name of the type, which will be the key in the transformer object returned by the function created by the template file (i.e. `getTransformers()[name]` returns an array of the transformers associated with that name)
-    * `identifier`: The tag to look for in each transformer file, creating an association between the identifier and the name (i.e. `/* <identifier> */` and `/* </identifier> */`) 
+    * `identifier`: The tag to look for in each transformer file, creating an association between the identifier and the name (i.e. `__IDENTIFIER__` and `__/IDENTIFIER__`) (This should (hopefully) later be changed to use file directories instead of relying on text in the file) 
     * `data`: This value should be left as an empty string. At runtime it will contain all of the transformers for that type
 * `ignore`: An array of any files to ignore when searching for transformers 
 
@@ -56,48 +56,48 @@ Creating a new transformer is a relatively simple process, but requires you to f
  * @param options.xyz {type} explanation of what options.xyz is
  * etc.
  */
-/* <IDENTIFIER> */
+__IDENTIFIER__
 new DataTransformer("TRANSFORMER_NAME", (dataset, outputPath, options) => {
     // ... Transformer code here ...
 })
-/* </IDENTIFIER> */
+__/IDENTIFIER__
 ```
 The most important things to note here are:
 - `TRANSFORMER_NAME`: should be the same as the file name for ease of use (and differences between the two could cause things to break)
-- `IDENTIFIER`: This is how the server identifies what kind of transformer it is (i.e. one for a tmp, a team, etc.). All valid identifiers can be found in `'/config/analysis-transformers.json'` under `"types"`. If need be, add any new identifiers to the JSON file. Only code within the tag (opened with `/* <IDENTIFIER> */` and closed with `/* </IDENTIFIER> */` similarly to HTML) will be included in the compiled file. This should pretty much only be the new DataTransformer object, as other code may break the compiled file by causing syntax errors in the array of transformers
+- `IDENTIFIER`: This is how the server identifies what kind of transformer it is (i.e. one for a tmp, a team, etc.). All valid identifiers can be found in `'/config/analysis-transformers.json'` under `"types"`. If need be, add any new identifiers to the JSON file. Only code within the tag (opened with `__IDENTIFIER__` and closed with `__/IDENTIFIER__` similarly to HTML) will be included in the compiled file. This should pretty much only be the new DataTransformer object, as other code may break the compiled file by causing syntax errors in the array of transformers
 
 Transformer files can also have multiple transformers, but they must be of __different__ types due to current implementation limitations.
 Example 1:
 ```js
 // This IS valid and will work as expected :)
 
-/* <TMP> */
+__TMP__
 new DataTransformer("TRANSFORMER_NAME", (dataset, outputPath, options) => {
     // ... Transformer code here ...
 })
-/* </TMP> */
+__/TMP__
 
-/* <TEAM> */
+__TEAM__
 new DataTransformer("TRANSFORMER_NAME", (dataset, outputPath, options) => {
     // ... Transformer code here ...
 })
-/* </TEAM> */
+__/TEAM__
 ```
 Example 2:
 ```js
 // This is NOT valid and may not work as intended :(
 
-/* <TEAM> */
+__TEAM__
 new DataTransformer("TRANSFORMER_NAME", (dataset, outputPath, options) => {
     // ... Transformer code here ...
 })
-/* </TEAM> */
+__/TEAM__
 
-/* <TEAM> */
+__TEAM__
 new DataTransformer("TRANSFORMER_NAME", (dataset, outputPath, options) => {
     // ... Transformer code here ...
 })
-/* </TEAM> */
+__/TEAM__
 ```
 
 Another important detail to note is that, if you need to define a variable __outside__ of the DataTransformer object (or really execute __any__ code outside of the DataTransformer), it should be put in the template file and __not__ the transformer file, as this could cause issues when the compiled file is created. Additionally, make sure code added to the template file is client friendly, and __DO NOT PUT A SEMI-COLON AT THE END OF THE DATA TRANSFORMER__, as this will cause the compiled file to break
