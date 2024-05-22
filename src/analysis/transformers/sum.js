@@ -2,7 +2,7 @@
  * @type {DataTransformer}
  * @param options.addends {String[]} array of MatchTeamPerformance outputPaths 
  */
-/* <TMP> */
+__TMP__
 new DataTransformer("sum", (dataset, outputPath, options) => {
     for (const tmp of dataset.tmps) {
         const summed = options.addends.reduce((acc, i) => {
@@ -14,13 +14,13 @@ new DataTransformer("sum", (dataset, outputPath, options) => {
 
     return dataset;
 })
-/* </TMP> */
+__/TMP__
 
 /**
  * @type {DataTransformer}
  * @param options.addends {String[]} array of Team outputPaths
  */
-/* <TEAM> */
+__TEAM__
 new DataTransformer("sum", (dataset, outputPath, options) => {
     for (const [teamNumber, team] of Object.entries(dataset.teams)) {
         const summed = options.addends.reduce((acc, i) => {
@@ -32,4 +32,4 @@ new DataTransformer("sum", (dataset, outputPath, options) => {
 
     return dataset;
 })
-/* </TEAM> */
+__/TEAM__

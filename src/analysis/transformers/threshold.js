@@ -5,7 +5,7 @@
  * @param options.none {String} a string to return if no values pass. a separator is required for this parameter to be used (optional)
  * @param options.paths {Object} an object whose keys are paths to numeric values and whose values are names to be returned if the numeric value passes the threshold
  */
-/* <TEAM> */
+__TEAM__
 new DataTransformer("threshold", (dataset, outputPath, options) => {
 	for (const team of Object.values(dataset.teams)) {
 		const passingNames = []
@@ -32,4 +32,4 @@ new DataTransformer("threshold", (dataset, outputPath, options) => {
 
 	return dataset;
 })
-/* </TEAM> */
+__/TEAM__

@@ -4,7 +4,7 @@
  * @param options.ids {String[]} the array of actionIds to be counted
  * @param actionArrayPath {String} optional, the path to the array of actions in the tmp
  */
-/* <TMP> */
+__TMP__
 new DataTransformer("countActions",(dataset,outputPath,options) => { //options {all: Boolean, ids: String[]}
     /* find which action ids should be counted */
     if (!options) throw new Error("no options provided! Please provide an array of ids or set all to true")
@@ -29,7 +29,7 @@ new DataTransformer("countActions",(dataset,outputPath,options) => { //options {
     }
     return dataset;
 })
-/* </TMP> */
+__/TMP__
 
 /**
  * @type {DataTransformer}
@@ -37,7 +37,7 @@ new DataTransformer("countActions",(dataset,outputPath,options) => { //options {
  * @param options.ids {String[]} the array of actionIds to be counted
  * @param actionArrayPath {String} optional, the path to the array of actions in the tmp
  */
-/* <TEAM> */
+__TEAM__
 new DataTransformer("countActions",(dataset,outputPath,options) => {
     /* find which action ids should be counted */
     if (!options) throw new Error("no options provided! Please provide an array of ids or set all to true")
@@ -66,4 +66,4 @@ new DataTransformer("countActions",(dataset,outputPath,options) => {
     }
     return dataset;
 })
-/* </TEAM> */
+__/TEAM__

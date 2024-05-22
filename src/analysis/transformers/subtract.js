@@ -3,7 +3,7 @@
  * @param options.minuend {String} a MatchTeamPerformance outputPath with the minuend
  * @param options.subtrahend {String} a MatchTeamPerformance outputPath with the subtrahend
  */
-/* <TMP> */
+__TMP__
 new DataTransformer("subtract", (dataset, outputPath, options) => {
     for (const tmp of dataset.tmps) {
         const difference = getPath(tmp, options.minuend, 0) - getPath(tmp, options.subtrahend, 0)
@@ -13,13 +13,13 @@ new DataTransformer("subtract", (dataset, outputPath, options) => {
 
     return dataset;
 })
-/* </TMP> */
+__/TMP__
 
 /**
  * @param options.minuend {String} a MatchTeamPerformance outputPath with the minuend
  * @param options.subtrahend {String} a MatchTeamPerformance outputPath with the subtrahend
  */
-/* <TEAM> */
+__TEAM__
 new DataTransformer("subtract", (dataset, outputPath, options) => {
     for (const [teamNumber, team] of Object.entries(dataset.teams)) {
         const difference = getPath(team, options.minuend, 0) - getPath(team, options.subtrahend, 0)
@@ -29,4 +29,4 @@ new DataTransformer("subtract", (dataset, outputPath, options) => {
 
     return dataset;
 })
-/* </TEAM> */
+__/TEAM__

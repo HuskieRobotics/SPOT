@@ -2,18 +2,18 @@
  * @type {DataTransformer}
  * @param options.example {String} example parameter description
  */
-/* <TMP> */
+__TMP__
 new DataTransformer("name", (dataset, outputPath, options) => {
     return dataset;
 })
-/* </TMP> */
+__/TMP__
 
 /**
  * @type {DataTransformer}
  * @param options.example {String} example parameter description
  */
-/* <TEAM> */
+__TEAM__
 new DataTransformer("name", (dataset, outputPath, options) => {
     return dataset;
 })
-/* </TEAM> */
+__/TEAM__

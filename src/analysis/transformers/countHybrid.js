@@ -5,7 +5,7 @@ count number of each piece placed in hybrid slots
   * @param options.hybrid {String[]} ids of hybrid slots
   * @param options.actionArrayPath {String} path to array of actions
   */
-/* <TMP> */
+__TMP__
 new DataTransformer("countHybrid", (dataset, outputPath, options) => {
   var actionArrayPath = options.actionArrayPath || "actionQueue"
   for(let tmp of dataset.tmps){
@@ -26,14 +26,14 @@ new DataTransformer("countHybrid", (dataset, outputPath, options) => {
   }  
   return dataset;
 })
-/* </TMP> */
+__/TMP__
 
 /**
  * @type {DataTransformer}
  * @param options.example {String} example parameter description
  */
-/* <TEAM> */
+__TEAM__
 new DataTransformer("countHybrid", (dataset, outputPath, options) => {
     return dataset;
 })
-/* </TEAM> */
+__/TEAM__

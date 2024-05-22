@@ -4,7 +4,7 @@
  * @param options.timeMin {Number} the minimum remaining time of returned actions
  * @param options.timeMax {Number} the maximum remaining time of the returned actions
  */
-/* <TMP> */
+__TMP__
 new DataTransformer("actionTimeFilter", (dataset, outputPath, options) => {
     let [timeMin, timeMax] = [options.timeMin || 0, options.timeMax || matchScoutingConfig.timing.totalTime];
 
@@ -22,4 +22,4 @@ new DataTransformer("actionTimeFilter", (dataset, outputPath, options) => {
     }
     return dataset;
 })
-/* </TMP> */
+__/TMP__

@@ -4,7 +4,7 @@
  * @param options.denominator {String[]} array of TeamMatchPerformance output paths OR numbers summed to become denominator of the ratio
  * @param options.divByZero {Object} value to return if denominator sum is zero
  */
-/* <TMP> */
+__TMP__
 new DataTransformer("ratio", (dataset,outputPath,options) => {
 
     /* iterate through TeamMatchPerformances */
@@ -32,7 +32,7 @@ new DataTransformer("ratio", (dataset,outputPath,options) => {
 
     return dataset;
 })
-/* </TMP> */
+__/TMP__
 
 /**
  * @type {DataTransformer}
@@ -40,7 +40,7 @@ new DataTransformer("ratio", (dataset,outputPath,options) => {
  * @param options.denominator {String[]} array of Team output paths OR numbers summed to become denominator of the ratio
  * @param options.divByZero {Object} value to return if denominator sum is zero
  */
-/* <TEAM> */
+__TEAM__
 new DataTransformer("ratio", (dataset,outputPath,options) => {
     /* iterate through TeamMatchPerformances */
     for (let [teamNumber, team] of Object.entries(dataset.teams)) {
@@ -67,4 +67,4 @@ new DataTransformer("ratio", (dataset,outputPath,options) => {
 
     return dataset;
 })
-/* </TEAM> */
+__/TEAM__

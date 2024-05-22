@@ -5,7 +5,7 @@
  * @param options.default {Object} a default object if a final action occurance isnt found
  * @param options.actionArrayPath {String} optional, the path to the array of actions in the tmp
  */
-/* <TMP> */
+__TMP__
 new DataTransformer("finalActionOccurrence",(dataset,outputPath,options) => {
     /* find which action ids should be examined */
     if (!options) throw new Error("no options provided! Please provide an array of ids or set all to true")
@@ -25,4 +25,4 @@ new DataTransformer("finalActionOccurrence",(dataset,outputPath,options) => {
     }
     return dataset;
 })
-/* </TMP> */
+__/TMP__

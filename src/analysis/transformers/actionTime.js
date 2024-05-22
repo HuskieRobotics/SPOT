@@ -4,7 +4,7 @@
  * @param options.actionId {String} the actionId of the action to find the time of.
  * @param options.default {Object} the default value (if it didn't occur)
  */
-/* <TMP> */
+__TMP__
 new DataTransformer("actionTime", (dataset, outputPath, options) => {
     for (let tmp of dataset.tmps) {
         for (let action of tmp.actionQueue) {
@@ -17,4 +17,4 @@ new DataTransformer("actionTime", (dataset, outputPath, options) => {
     }
     return dataset;
 })
-/* </TMP> */
+__/TMP__

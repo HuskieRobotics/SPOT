@@ -2,7 +2,7 @@
  * @type {DataTransformer}
  * @param options.path {String} the path at which the arrays to concatenate exist
  */
-/* <TEAM> */
+__TEAM__
 new DataTransformer("aggregateArray", (dataset, outputPath, options) => {
     for (let [teamNumber,team] of Object.entries(dataset.teams)) {
         let teamTmps = dataset.tmps.filter(x=>x.robotNumber == teamNumber); //only the tmps that are this team's
@@ -15,4 +15,4 @@ new DataTransformer("aggregateArray", (dataset, outputPath, options) => {
     }
     return dataset;
 })
-/* </TEAM> */
+__/TEAM__

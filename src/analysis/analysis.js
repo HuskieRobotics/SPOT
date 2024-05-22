@@ -58,7 +58,7 @@ router.get('/transformers.js', async (req, res) => {
 
         // Check the file for each type of transformer (i.e. tmp, team, etc.)
         for (const transformerType of analysisTransformer.types) {
-            const pattern = new RegExp(`/\\* <${transformerType.identifier}> \\*/\\s*([\\s\\S]*?)\\s*/\\* </${transformerType.identifier}> \\*/`, 'i');
+            const pattern = new RegExp(`__${transformerType.identifier}__\\s*([\\s\\S]*?)\\s*__/${transformerType.identifier}__`, 'i');
             const match = pattern.exec(contents);
 
             // If it contains that type of transformer, add it to the list

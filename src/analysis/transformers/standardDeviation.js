@@ -8,7 +8,7 @@ const n = array.length
 const mean = array.reduce((a, b) => a + b) / n
 return Math.sqrt(array.map(x => Math.pow(x - mean, 2)).reduce((a, b) => a + b) / n)
 */
-/* <TEAM> */
+__TEAM__
 new DataTransformer("standardDeviation", (dataset, outputPath, options) => {
   for (let [teamNumber,team] of Object.entries(dataset.teams)) {
     let teamTmps = dataset.tmps.filter(x=>x.robotNumber == teamNumber); //only the tmps that are this team's
@@ -27,4 +27,4 @@ new DataTransformer("standardDeviation", (dataset, outputPath, options) => {
   
   return dataset;
 })
-/* </TEAM> */
+__/TEAM__

@@ -3,7 +3,7 @@
  * @type {DataTransformer}
  * @param options.weightedPaths {Object} {"pathString": weight} (eg. {"counts.upperHub": 2} ) 
  */
-/* <TMP> */
+__TMP__
 new DataTransformer("weightedSum", (dataset, outputPath, options) => {
     for (let tmp of dataset.tmps) {
         let sum = 0;
@@ -14,4 +14,4 @@ new DataTransformer("weightedSum", (dataset, outputPath, options) => {
     }
     return dataset;
 })
-/* </TMP> */
+__/TMP__

@@ -2,7 +2,7 @@
  * @type {DataTransformer}
  * @param options.weight {Number} a scalar multiplicative factor the multiply the matches by (eg. for counting total time)
  */
-/* <TEAM> */
+__TEAM__
 new DataTransformer("countMatches", (dataset, outputPath, options) => {
     for (let [teamNumber,team] of Object.entries(dataset.teams)) {
         let matches = new Set(dataset.tmps //use a set to avoid duplicates
@@ -13,4 +13,4 @@ new DataTransformer("countMatches", (dataset, outputPath, options) => {
 
     return dataset;
 })
-/* </TEAM> */
+__/TEAM__

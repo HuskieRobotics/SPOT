@@ -4,7 +4,7 @@
  * @param options.scores {String[]} a list of actionIds that correspond to game piece "scores" (eg. upper hub, lower hub)
  * @param options.misses {String[]} a list of acitonIds that correspond to game piece "misses" (eg. miss)
  */
-/* <TMP> */
+__TMP__
 new DataTransformer("cycle", (dataset, outputPath, options) => {
     for (let tmp of dataset.tmps) {
         let out = {
@@ -55,4 +55,4 @@ new DataTransformer("cycle", (dataset, outputPath, options) => {
 
     return dataset;
 })
-/* </TMP> */
+__/TMP__

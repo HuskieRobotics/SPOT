@@ -2,7 +2,7 @@
  * @type {DataTransformer}
  * @param options.path {String} a numerical path in a tmp to be averaged, or a path containing an object with numerical paths to be averaged
  */
-/* <TEAM> */
+__TEAM__
 new DataTransformer("average", (dataset, outputPath, options) => {
     for (const [teamNumber, team] of Object.entries(dataset.teams)) {
         const teamTmps = dataset.tmps.filter(x=>x.robotNumber == teamNumber); //only the tmps that are this team's
@@ -31,4 +31,4 @@ new DataTransformer("average", (dataset, outputPath, options) => {
 
     return dataset;
 })
-/* </TEAM> */
+__/TEAM__

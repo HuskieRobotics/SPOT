@@ -3,7 +3,7 @@
  * @param options.arrayPath {String} the path at which the arrays to concatenate exist
  * @param options.valuePath {String} the path to the field to be averaged
  */
-/* <TMP> */
+__TMP__
 new DataTransformer("averageArray", (dataset, outputPath, options) => {
     for (let tmp of dataset.tmps) {
         let array = getPath(tmp,options.arrayPath);
@@ -13,14 +13,14 @@ new DataTransformer("averageArray", (dataset, outputPath, options) => {
         setPath(tmp, outputPath, avg);
     }
 })
-/* </TMP> */
+__/TMP__
 
 /** takes the average of a field in an array
  * @type {DataTransformer}
  * @param options.arrayPath {String} the path at which the arrays to concatenate exist
  * @param options.valuePath {String} the path to the field to be averaged
  */
-/* <TEAM> */
+__TEAM__
 new DataTransformer("averageArray", (dataset, outputPath, options) => {
     for (let [teamNumber,team] of Object.entries(dataset.teams)) {
         let array = getPath(team,options.arrayPath);
@@ -31,4 +31,4 @@ new DataTransformer("averageArray", (dataset, outputPath, options) => {
     }
     return dataset;
 })
-/* </TEAM> */
+__/TEAM__
