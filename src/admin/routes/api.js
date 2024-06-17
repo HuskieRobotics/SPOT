@@ -30,7 +30,6 @@ router.get("/auth", (req, res) => {
 })
 
 router.get("/scouters", (req,res) => {
-  console.log(DEMO)
   if(!DEMO){
     if (req.headers.authorization === config.secrets.ACCESS_CODE) {
         res.json(ScoutingSync.getScouters())
@@ -92,7 +91,7 @@ router.get("/matches", async (req,res) => {
 
   let manualSchedule = getManualMatches() 
 
-  if(manualSchedule == {}){ //changed from === to == because it was having an error.
+  if(manualSchedule.length){
 
     res.json({
       "allMatches": manualSchedule,

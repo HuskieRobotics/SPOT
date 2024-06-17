@@ -2,7 +2,7 @@ const { unwatchFile } = require("fs");
 
 express = require("express");
 
-var schedule = {};
+var schedule = [];
 var tempTeams = [];
 
 let router = express.Router();
