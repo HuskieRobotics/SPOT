@@ -3,12 +3,14 @@ const SCOUTER_STATUS = {
     "WAITING": 1, //scouters not actively in the process of scouting (dont have the scouting ui open)
     "SCOUTING": 2, //scouters actively scouting a match
     "COMPLETE": 3,
+    "DISCONNECTED_BY_ADMIN": 4,
 }
 const SCOUTER_STATUS_REVERSE = {
     "0": "NEW",
     "1": "WAITING",
     "2": "SCOUTING",
-    "3": "COMPLETE"
+    "3": "COMPLETE",
+    "4": "DISCONNECTED_BY_ADMIN"
 }
 
 const scouters = {};
@@ -93,7 +95,7 @@ async function updateScouters(accessCode) { //scouter fetch interval (every 2.5s
             scouters[scouter.timestamp].updateScouterElement(scouter.state);
         } else {
             if (scouter.state.status == SCOUTER_STATUS.COMPLETE || !scouter.state.connected) continue; //it's already submitted/disconnected, dont show it.
-            scouters[scouter.timestamp] = new ScouterDisplay(scouter);
+            scouters[scouter.timestamp] = new ScouterDisplay(scouter, accessCode);
         }
         if (scouter.state.status == SCOUTER_STATUS.COMPLETE || !scouter.state.connected) { //prune offline/complete scouters from the list
             setTimeout(() => {
@@ -186,27 +188,53 @@ class ScouterDisplay {
     scouterElement;
     scouter;
 
-    constructor (scouter) {
+    constructor (scouter, accessCode) {
         this.scouter = scouter;
 
-        this.scouterElement = document.createElement("div");
+        this.scouterElement = document.createElement("button");
+       
         this.scouterElement.innerHTML = `
-        <div class="match-number"></div>
+        <div class="match-number" scouter=${this.scouter.state.scouterId}></div>
         <div class="scouter-id"></div>
         <div class="robot-number"></div>
         <div class="scouter-status"></div>
         `;
         this.scouterElement.classList.add("scouter");
+        
+        this.scouterElement.onclick = (e)=>{
+            let disconnectModal = new Modal("small", false).header("Do you want to Disconnect " + this.scouter.state.scouterId + "?")
+            disconnectModal.scale(0.75)
+            disconnectModal.action("Yes", () => {
+                fetch(`api/disconnectScouter/${this.scouterElement.getAttribute("scouter")}`,{
+                    headers: {
+                        Authorization: accessCode
+                    }}).then(res => res.json())
+            
+                var scouterID = this.scouterElement.getAttribute("scouter");
+                var scouter  = Object.values(scouters).find(s => s.scouter.state.scouterId == scouterID)
+            
+                scouter.scouter.state.connected = false;
+                new Popup("success", `Scouter ${scouterID} Disconnected!`,2000);
+                disconnectModal.modalExit()
+            })
+            disconnectModal.action("No", () => {
+                new Popup("notice", `Disconnect Canceled`,2000);
+                disconnectModal.modalExit()
+            })
+        };
 
+        
         document.querySelector("#scouter-list").appendChild(this.scouterElement);
 
         this.updateScouterElement();
         
     }
+    
     updateScouterElement(state) {
 
         //update state
-        this.scouter.state = state || this.scouter.state;
+        this.scouter.state = state || this.scouter.state;        
+        this.scouterElement.setAttribute("scouter",this.scouter.state.scouterId);
 
         //write all text
         this.scouterElement.querySelector(".scouter-id").innerText = this.scouter.state.scouterId;
@@ -240,6 +268,13 @@ class ScouterDisplay {
             this.scouterElement.querySelector(".match-number").style.backgroundColor = SCOUTER_STATUS_COLOR[this.scouter.state.status];
             this.scouterElement.querySelector(".match-number").style.borderColor = SCOUTER_STATUS_COLOR[this.scouter.state.status];
             this.scouterElement.querySelector(".scouter-status").innerText = SCOUTER_STATUS_REVERSE[this.scouter.state.status];
+        }
+        if (!this.scouter.state.connected && !(this.scouter.state.status ==  SCOUTER_STATUS.DISCONNECTED_BY_ADMIN)) { //disconnected by admin
+            this.scouterElement.querySelector(".scouter-status").style.color = DISCONNECTED_COLOR;
+            this.scouterElement.style.borderColor = DISCONNECTED_COLOR;
+            this.scouterElement.querySelector(".match-number").style.backgroundColor = DISCONNECTED_COLOR;
+            this.scouterElement.querySelector(".match-number").style.borderColor = DISCONNECTED_COLOR;
+            this.scouterElement.querySelector(".scouter-status").innerText = "ADMIN DISCONNECT";
         }
     }
     destruct() {

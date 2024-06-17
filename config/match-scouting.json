@@ -1,8 +1,8 @@
 {
     "timing": {
-        "totalTime": 150000,
+        "totalTime": 153000,
         "timeTransitions": {
-            "149990": {
+            "152999": {
                 "layer": 1,
                 "displayText": "Auto",
                 "variables": {}
@@ -40,7 +40,36 @@
                             ]
                         }
                     ]
+                },
+
+                {
+                    "id": "preloadNote",
+                    "displayText": "Preload Note",
+                    "gridArea": [
+                        "4",
+                        "1",
+                        "6",
+                        "5"
+                    ],
+                    "class": "orange",
+                    "type": "action",
+                    "executables": []
+                },
+                {
+                    "id": "preloadNone",
+                    "displayText": "Preload None",
+                    "gridArea": [
+                        "4",
+                        "6",
+                        "6",
+                        "10"
+                    ],
+                    "class": "gray",
+                    "type": "action",
+                    "executables": []
                 }
+
+
             ],
             [
                 {
@@ -105,8 +134,17 @@
                         "10"
                     ],
                     "class": "orange",
-                    "type": "action",
-                    "executables": []
+                    "type": "none",
+                    "executables": [
+                        {
+                            "type": "layer",
+                            "args": [
+                                1,
+                                5
+                            ]
+                        }
+
+                    ]
                 },
                 {
                     "id": "leave",
@@ -138,9 +176,9 @@
                     "id": "scoreSubwoofer",
                     "displayText": "Subwoofer",
                     "gridArea": [
-                        "3",
+                        "6",
                         "4",
-                        "4",
+                        "7",
                         "7"
                     ],
                     "class": "gray",
@@ -177,12 +215,25 @@
                     "id": "scoreMidfield",
                     "displayText": "Midfield",
                     "gridArea": [
-                        "6",
+                        "3",
                         "4",
-                        "7",
+                        "4",
                         "7"
                     ],
                     "class": "gray",
+                    "type": "action",
+                    "executables": []
+                },
+                {
+                    "id": "drop",
+                    "displayText": "Drop",
+                    "gridArea": [
+                        "5",
+                        "8",
+                        "6",
+                        "9"
+                    ],
+                    "class": "yellow",
                     "type": "action",
                     "executables": []
                 },
@@ -191,7 +242,7 @@
                     "displayText": "Miss",
                     "gridArea": [
                         "5",
-                        "8",
+                        "9",
                         "6",
                         "10"
                     ],
@@ -325,9 +376,9 @@
                     "id": "scoreSubwoofer",
                     "displayText": "Subwoofer",
                     "gridArea": [
-                        "3",
+                        "6",
                         "4",
-                        "4",
+                        "7",
                         "7"
                     ],
                     "class": "gray",
@@ -364,23 +415,34 @@
                     "id": "scoreMidfield",
                     "displayText": "Midfield",
                     "gridArea": [
-                        "6",
+                        "3",
                         "4",
-                        "7",
+                        "4",
                         "7"
                     ],
                     "class": "gray",
                     "type": "action",
                     "executables": []
                 },
-
-
+                {
+                    "id": "drop",
+                    "displayText": "Drop",
+                    "gridArea": [
+                        "5",
+                        "8",
+                        "6",
+                        "9"
+                    ],
+                    "class": "yellow",
+                    "type": "action",
+                    "executables": []
+                },
                 {
                     "id": "miss",
                     "displayText": "Miss",
                     "gridArea": [
                         "5",
-                        "8",
+                        "9",
                         "6",
                         "10"
                     ],
@@ -511,12 +573,12 @@
                     ]
                 },
                 {
-                    "id": "scoreAmpedSpeaker",
+                    "id": "scoreAmpedSubwoofer",
                     "displayText": "Subwoofer",
                     "gridArea": [
-                        "3",
+                        "6",
                         "4",
-                        "4",
+                        "7",
                         "7"
                     ],
                     "class": "green",
@@ -524,7 +586,7 @@
                     "executables": []
                 },
                 {
-                    "id": "scoreAmpedSpeaker",
+                    "id": "scoreAmpedWing",
                     "displayText": "Wing",
                     "gridArea": [
                         "4",
@@ -537,7 +599,7 @@
                     "executables": []
                 },
                 {
-                    "id": "scoreAmpedSpeaker",
+                    "id": "scoreAmpedPodium",
                     "displayText": "Podium",
                     "gridArea": [
                         "5",
@@ -550,15 +612,28 @@
                     "executables": []
                 },
                 { 
-                    "id": "scoreAmpedSpeaker",
+                    "id": "scoreAmpedMidfield",
                     "displayText": "Midfield",
                     "gridArea": [
-                        "6",
+                        "3",
                         "4",
-                        "7",
+                        "4",
                         "7"
                     ],
                     "class": "green",
+                    "type": "action",
+                    "executables": []
+                },
+                {
+                    "id": "drop",
+                    "displayText": "Drop",
+                    "gridArea": [
+                        "5",
+                        "8",
+                        "6",
+                        "9"
+                    ],
+                    "class": "yellow",
                     "type": "action",
                     "executables": []
                 },
@@ -567,7 +642,7 @@
                     "displayText": "Miss",
                     "gridArea": [
                         "5",
-                        "8",
+                        "9",
                         "6",
                         "10"
                     ],
@@ -698,6 +773,356 @@
                             "args": [
                                 4,
                                 2
+                            ]
+                        }
+                    ]
+                }
+            ],
+            [
+                {
+                    "id": "startGame",
+                    "displayText": "Start",
+                    "gridArea": [
+                        "1",
+                        "4",
+                        "2",
+                        "7"
+                    ],
+                    "class": "silver timer",
+                    "type": "match-control",
+                    "executables": []
+                },
+                {
+                    "id": "undo",
+                    "displayText": "Undo",
+                    "gridArea": [
+                        "1",
+                        "8",
+                        "2",
+                        "10"
+                    ],
+                    "class": "pink",
+                    "type": "undo",
+                    "executables": []
+                },
+                { 
+                    "id": "autoNoteWing",
+                    "displayText": "Wing",
+                    "gridArea": [
+                        "3",
+                        "1",
+                        "6",
+                        "3"
+                    ],
+                    "class": "red",
+                    "type": "action",
+                    "executables": [
+                        {
+                            "type": "layer",
+                            "args": [
+                                5,
+                                1
+                            ]
+                        }
+                    ]
+                },
+                { 
+                    "id": "autoNoteWing",
+                    "displayText": "Wing",
+                    "gridArea": [
+                        "3",
+                        "8",
+                        "6",
+                        "10"
+                    ],
+                    "class": "navy",
+                    "type": "action",
+                    "executables": [
+                        {
+                            "type": "layer",
+                            "args": [
+                                5,
+                                1
+                            ]
+                        }
+                    ]
+                }, 
+                {    
+                    "id": "autoNoteSourceMost",
+                    "displayText": "O",
+                    "gridArea": [
+                        "2",
+                        "5",
+                        "3",
+                        "6"
+                    ],
+                    "class": "orange",
+                    "type": "action",
+                    "executables": [
+                        {
+                            "type": "layer",
+                            "args": [
+                                5,
+                                1
+                            ]
+                        }
+                    ]
+                },
+                { 
+                    "id": "autoNoteSourceMid",
+                    "displayText": "O",
+                    "gridArea": [
+                        "3",
+                        "5",
+                        "4",
+                        "6"
+                    ],
+                    "class": "orange",
+                    "type": "action",
+                    "executables": [
+                        {
+                            "type": "layer",
+                            "args": [
+                                5,
+                                1
+                            ]
+                        }
+                    ]
+                },
+                { 
+                    "id": "autoNoteMiddle",
+                    "displayText": "O",
+                    "gridArea": [
+                        "4",
+                        "5",
+                        "5",
+                        "6"
+                    ],
+                    "class": "orange",
+                    "type": "action",
+                    "executables": [
+                        {
+                            "type": "layer",
+                            "args": [
+                                5,
+                                1
+                            ]
+                        }
+                    ]
+                },
+                { 
+                    "id": "autoNoteAmpMid",
+                    "displayText": "O",
+                    "gridArea": [
+                        "5",
+                        "5",
+                        "6",
+                        "6"
+                    ],
+                    "class": "orange",
+                    "type": "action",
+                    "executables": [
+                        {
+                            "type": "layer",
+                            "args": [
+                                5,
+                                1
+                            ]
+                        }
+                    ]
+                },
+                { 
+                    "id": "autoNoteAmpMost",
+                    "displayText": "O",
+                    "gridArea": [
+                        "6",
+                        "5",
+                        "7",
+                        "6"
+                    ],
+                    "class": "orange",
+                    "type": "action",
+                    "executables": [
+                        {
+                            "type": "layer",
+                            "args": [
+                                5,
+                                1
+                            ]
+                        }
+                    ]
+                }
+            ],
+            [
+                {
+                    "id": "startGame",
+                    "displayText": "Start",
+                    "gridArea": [
+                        "1",
+                        "4",
+                        "2",
+                        "7"
+                    ],
+                    "class": "silver timer",
+                    "type": "match-control",
+                    "executables": []
+                },
+                {
+                    "id": "undo",
+                    "displayText": "Undo",
+                    "gridArea": [
+                        "1",
+                        "8",
+                        "2",
+                        "10"
+                    ],
+                    "class": "pink",
+                    "type": "undo",
+                    "executables": []
+                },
+                { 
+                    "id": "autoNoteWing",
+                    "displayText": "Wing",
+                    "gridArea": [
+                        "3",
+                        "1",
+                        "6",
+                        "3"
+                    ],
+                    "class": "navy",
+                    "type": "action",
+                    "executables": [
+                        {
+                            "type": "layer",
+                            "args": [
+                                6,
+                                1
+                            ]
+                        }
+                    ]
+                },
+                { 
+                    "id": "autoNoteWing",
+                    "displayText": "Wing",
+                    "gridArea": [
+                        "3",
+                        "8",
+                        "6",
+                        "10"
+                    ],
+                    "class": "red",
+                    "type": "action",
+                    "executables": [
+                        {
+                            "type": "layer",
+                            "args": [
+                                6,
+                                1
+                            ]
+                        }
+                    ]
+                }, 
+                {    
+                    "id": "autoNoteAmpMost",
+                    "displayText": "O",
+                    "gridArea": [
+                        "2",
+                        "5",
+                        "3",
+                        "6"
+                    ],
+                    "class": "orange",
+                    "type": "action",
+                    "executables": [
+                        {
+                            "type": "layer",
+                            "args": [
+                                6,
+                                1
+                            ]
+                        }
+                    ]
+                },
+                { 
+                    "id": "autoNoteAmpMid",
+                    "displayText": "O",
+                    "gridArea": [
+                        "3",
+                        "5",
+                        "4",
+                        "6"
+                    ],
+                    "class": "orange",
+                    "type": "action",
+                    "executables": [
+                        {
+                            "type": "layer",
+                            "args": [
+                                6,
+                                1
+                            ]
+                        }
+                    ]
+                },
+                { 
+                    "id": "autoNoteMiddle",
+                    "displayText": "O",
+                    "gridArea": [
+                        "4",
+                        "5",
+                        "5",
+                        "6"
+                    ],
+                    "class": "orange",
+                    "type": "action",
+                    "executables": [
+                        {
+                            "type": "layer",
+                            "args": [
+                                6,
+                                1
+                            ]
+                        }
+                    ]
+                },
+                { 
+                    "id": "autoNoteSourceMid",
+                    "displayText": "O",
+                    "gridArea": [
+                        "5",
+                        "5",
+                        "6",
+                        "6"
+                    ],
+                    "class": "orange",
+                    "type": "action",
+                    "executables": [
+                        {
+                            "type": "layer",
+                            "args": [
+                                6,
+                                1
+                            ]
+                        }
+                    ]
+                },
+                { 
+                    "id": "autoNoteSourceMost",
+                    "displayText": "O",
+                    "gridArea": [
+                        "6",
+                        "5",
+                        "7",
+                        "6"
+                    ],
+                    "class": "orange",
+                    "type": "action",
+                    "executables": [
+                        {
+                            "type": "layer",
+                            "args": [
+                                6,
+                                1
                             ]
                         }
                     ]

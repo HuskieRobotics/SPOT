@@ -62,6 +62,8 @@ async function constructApp(accessCode) {
         document.querySelector("#DATABASE_URL").value = config.secrets.DATABASE_URL || ""
         document.querySelector("#TBA_API_KEY").value = config.secrets.TBA_API_KEY || ""
         document.querySelector("#TBA_EVENT_KEY").value = config.TBA_EVENT_KEY || ""
+        document.querySelector("#FMS_API_USERNAME").value = config.secrets.FMS_API_USERNAME || ""
+        document.querySelector("#FMS_API_KEY").value = config.secrets.FMS_API_KEY || ""
         document.querySelector("#GOOGLE_CLIENT_ID").value = config.GOOGLE_CLIENT_ID || ""
         document.querySelector("#GOOGLE_CLIENT_SECRET").value = config.GOOGLE_CLIENT_SECRET || ""
         document.querySelector("#EVENT_NUMBER").value = config.EVENT_NUMBER || ""
@@ -78,7 +80,7 @@ async function constructApp(accessCode) {
 }
 
 document.querySelector("#submit").addEventListener("click", async () => {
-    let secrets = ["ACCESS_CODE", "DATABASE_URL", "TBA_API_KEY", "GOOGLE_CLIENT_ID", "GOOGLE_CLIENT_SECRET"]
+    let secrets = ["ACCESS_CODE", "DATABASE_URL", "TBA_API_KEY", "GOOGLE_CLIENT_ID", "GOOGLE_CLIENT_SECRET", "FMS_API_KEY", "FMS_API_USERNAME"]
     let config = { secrets: {} };
     for (let [key, value] of new FormData(document.getElementById("setup-form"))) {
         if (value === "") continue; //dont send unset config values (eg, no ACCESS_CODE)

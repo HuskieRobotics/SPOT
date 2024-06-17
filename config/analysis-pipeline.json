@@ -1,8 +1,16 @@
 [
+    {
+        "type": "tmp",
+        "name": "countActions",
+        "outputPath": "counts",
+        "options": {
+            "all": true
+        }
+    },
     {  
-        "type": "team",
+        "type": "tmp",
         "name": "sum",
-        "outputPath": "counts.scoreSpeaker",
+        "outputPath": "counts.scoreUnampedSpeaker",
         "options": {
             "addends": [
                 "counts.scoreSubwoofer",
@@ -12,57 +20,124 @@
             ]
         }
     },
-    {
+    {  
         "type": "tmp",
-        "name": "countActions",
-        "outputPath": "counts",
-        "options": {
-            "all": true
-        }
-    },
-    {
-        "type": "team",
-        "name": "countActions",
-        "outputPath": "counts",
-        "options": {
-            "all": true
-        }
-    },
-    {
-        "type": "team",
         "name": "sum",
-        "outputPath": "counts.notes",
+        "outputPath": "counts.scoreAmpedSpeaker",
         "options": {
             "addends": [
-                "counts.scoreAmp",
-                "counts.scoreSpeaker",
+                "counts.scoreAmpedSubwoofer",
+                "counts.scoreAmpedWing",
+                "counts.scoreAmpedPodium",
+                "counts.scoreAmpedMidfield"
+            ]
+        }
+    },
+    {  
+        "type": "tmp",
+        "name": "sum",
+        "outputPath": "counts.scoreCombinedSubwoofer",
+        "options": {
+            "addends": [
+                "counts.scoreSubwoofer",
+                "counts.scoreAmpedSubwoofer"
+            ]
+        }
+    },
+    {  
+        "type": "tmp",
+        "name": "sum",
+        "outputPath": "counts.scoreCombinedPodium",
+        "options": {
+            "addends": [
+                "counts.scorePodium",
+                "counts.scoreAmpedPodium"
+            ]
+        }
+    },
+    {  
+        "type": "tmp",
+        "name": "sum",
+        "outputPath": "counts.scoreCombinedWing",
+        "options": {
+            "addends": [
+                "counts.scoreWing",
+                "counts.scoreAmpedWing"
+            ]
+        }
+    },
+    {  
+
+        "type": "tmp",
+        "name": "sum",
+        "outputPath": "counts.scoreCombinedMidfield",
+        "options": {
+            "addends": [
+                "counts.scoreMidfield",
+                "counts.scoreAmpedMidfield"
+            ]
+        }
+    },
+    {  
+        "type": "tmp",
+        "name": "sum",
+        "outputPath": "counts.scoreCombinedSpeaker",
+        "options": {
+            "addends": [
                 "counts.scoreAmpedSpeaker",
-                "counts.miss"
+                "counts.scoreUnampedSpeaker"
             ]
         }
     },
-    {
-        "type": "team",
-        "name": "countMatches",
-        "outputPath": "temp.totalTimeMs",
+    {  
+        "type": "tmp",
+        "name": "actionTime",
+        "outputPath": "autoNoteTimes.ampMost",
         "options": {
-            "weight": 150000
+            "actionId" : "autoNoteAmpMost"
         }
     },
-    {
-        "type": "team",
-        "name": "ratio",
-        "outputPath": "timePerNote",
+    {  
+        "type": "tmp",
+        "name": "actionTime",
+        "outputPath": "autoNoteTimes.ampMid",
         "options": {
-            "numerator": [
-                "temp.totalTimeMs"
-            ],
-            "denominator": [
-                "counts.notes"
-            ]
-        },
-        "divByZero": 150000
+            "actionId" : "autoNoteAmpMid"
+        }
     },
+    {  
+        "type": "tmp",
+        "name": "actionTime",
+        "outputPath": "autoNoteTimes.middle",
+        "options": {
+            "actionId" : "autoNoteMiddle"
+        }
+    },
+    {  
+        "type": "tmp",
+        "name": "actionTime",
+        "outputPath": "autoNoteTimes.sourceMid",
+        "options": {
+            "actionId" : "autoNoteSourceMid"
+        }
+    },
+    {  
+        "type": "tmp",
+        "name": "actionTime",
+        "outputPath": "autoNoteTimes.sourceMost",
+        "options": {
+            "actionId" : "autoNoteSourceMost"
+        }
+    },
+    {  
+        "type": "tmp",
+        "name": "actionTime",
+        "outputPath": "autoNoteTimes.wing",
+        "options": {
+            "actionId" : "autoNoteWing"
+        }
+    },
+
     {
         "type": "tmp",
         "name": "cycle",
@@ -78,53 +153,14 @@
                 "scoreWing",
                 "scorePodium",
                 "scoreMidfield",
-                "scoreAmpedSpeaker"
+                "scoreAmpedSubwoofer",
+                "scoreAmpedWing",
+                "scoreAmpedPodium",
+                "scoreAmpedMidfield"
             ],
             "misses": [
                 "miss"
             ]
-        }
-    },
-    {
-        "type": "team",
-        "name": "aggregateArray",
-        "outputPath": "cycle.all",
-        "options": {
-            "path": "cycle.all"
-        }
-    },
-    {
-        "type": "team",
-        "name": "aggregateArray",
-        "outputPath": "cycle.allComplete",
-        "options": {
-            "path": "cycle.allComplete"
-        }
-    },
-    {
-        "type": "team",
-        "name": "averageArray",
-        "outputPath": "cycle.averageTime",
-        "options": {
-            "arrayPath": "cycle.all",
-            "valuePath": "timeDifferential"
-        }
-    },
-    {
-        "type": "team",
-        "name": "averageArray",
-        "outputPath": "cycle.averageTimeComplete",
-        "options": {
-            "arrayPath": "cycle.allComplete",
-            "valuePath": "timeDifferential"
-        }
-    },
-    {
-        "type": "team",
-        "name": "average",
-        "outputPath": "averages",
-        "options": {
-            "path": "counts"
         }
     },
     {
@@ -134,13 +170,11 @@
         "options": {
             "numerator": [
                 "counts.scoreAmp",
-                "counts.scoreSpeaker",
-                "counts.scoreAmpedSpeaker"
+                "counts.scoreCombinedSpeaker"
             ],
             "denominator": [
                 "counts.scoreAmp",
-                "counts.scoreSpeaker",
-                "counts.scoreAmpedSpeaker",
+                "counts.scoreCombinedSpeaker",
                 "counts.miss"
             ],
             "divByZero": 0
@@ -158,41 +192,6 @@
                 0.01
             ],
             "divByZero": 0
-        }
-    },
-    {
-        "type": "team",
-        "name": "ratio",
-        "outputPath": "accuracy",
-        "options": {
-            "numerator": [
-                "counts.scoreAmp",
-                "counts.scoreSpeaker",
-                "counts.scoreAmpedSpeaker"
-            ],
-            "denominator": [
-                "counts.scoreAmp",
-                "counts.scoreSpeaker",
-                "counts.scoreAmpedSpeaker",
-                "counts.miss"
-            ],
-            "divByZero": 0
-        }
-    },
-    {
-        "type": "team",
-        "name": "aggregateArray",
-        "outputPath": "aggregatedActions",
-        "options": {
-            "path": "actionQueue"
-        }
-    },
-    {
-        "type": "team",
-        "name": "average",
-        "outputPath": "averages",
-        "options": {
-            "path": "counts"
         }
     },
     {
@@ -229,6 +228,7 @@
             "actionArrayPath": "teleopFilter"
         }
     },
+  
     {
         "type": "tmp",
         "name": "weightedSum",
@@ -255,26 +255,14 @@
                 "countsTeleop.scoreWing": 2,
                 "countsTeleop.scorePodium": 2,
                 "countsTeleop.scoreMidfield": 2,
-                "countsTeleop.scoreAmpedSpeaker": 5
+                "countsTeleop.scoreAmpedSubwoofer": 5,
+                "countsTeleop.scoreAmpedWing": 5,
+                "countsTeleop.scoreAmpedPodium": 5,
+                "countsTeleop.scoreAmpedMidfield": 5
             }
         }
     },
-    {
-        "type": "team",
-        "name": "average",
-        "outputPath": "avgAuto",
-        "options": {
-            "path": "countsAuto"
-        }
-    },
-    {
-        "type": "team",
-        "name": "average",
-        "outputPath": "avgTeleop",
-        "options": {
-            "path": "countsTeleop"
-        }
-    },
+
     {
         "type": "tmp",
         "name": "cycle",
@@ -290,40 +278,6 @@
                 "unpark",
                 "onstageFall"
             ]
-        }
-    },
-    {
-        "type": "team",
-        "name": "aggregateArray",
-        "outputPath": "stageCycle.all",
-        "options": {
-            "path": "stageCycle.all"
-        }
-    },
-    {
-        "type": "team",
-        "name": "aggregateArray",
-        "outputPath": "stageCycle.allComplete",
-        "options": {
-            "path": "stageCycle.allComplete"
-        }
-    },
-    {
-        "type": "team",
-        "name": "averageArray",
-        "outputPath": "stageCycle.averageTime",
-        "options": {
-            "arrayPath": "stageCycle.all",
-            "valuePath": "timeDifferential"
-        }
-    },
-    {
-        "type": "team",
-        "name": "averageArray",
-        "outputPath": "stageCycle.averageTimeComplete",
-        "options": {
-            "arrayPath": "stageCycle.allComplete",
-            "valuePath": "timeDifferential"
         }
     },
     {
@@ -458,14 +412,6 @@
         }
     },
     {
-        "type": "team",
-        "name": "average",
-        "outputPath": "avgStage",
-        "options": {
-            "path": "stage"
-        }
-    },
-    {
         "type": "tmp",
         "name": "weightedSum",
         "outputPath": "scores.stageInclusive",
@@ -501,10 +447,219 @@
     },
     {
         "type": "team",
-        "name": "average",
-        "outputPath": "averageScores",
+        "name": "countActions",
+        "outputPath": "counts",
         "options": {
-            "path": "scores"
+            "all": true
+        }
+    },
+    {
+        "type": "team",
+        "name": "average",
+        "outputPath": "averages",
+        "options": {
+            "path": "counts"
+        }
+    },
+
+    {  
+        "type": "team",
+        "name": "sum",
+        "outputPath": "counts.scoreUnampedSpeaker",
+        "options": {
+            "addends": [
+                "counts.scoreSubwoofer",
+                "counts.scoreWing",
+                "counts.scorePodium",
+                "counts.scoreMidfield"
+            ]
+        }
+    },
+    {  
+        "type": "team",
+        "name": "sum",
+        "outputPath": "counts.scoreAmpedSpeaker",
+        "options": {
+            "addends": [
+                "counts.scoreAmpedSubwoofer",
+                "counts.scoreAmpedWing",
+                "counts.scoreAmpedPodium",
+                "counts.scoreAmpedMidfield"
+            ]
+        }
+    },
+    {  
+        "type": "team",
+        "name": "sum",
+        "outputPath": "counts.scoreCombinedSubwoofer",
+        "options": {
+            "addends": [
+                "counts.scoreSubwoofer",
+                "counts.scoreAmpedSubwoofer"
+            ]
+        }
+    },
+    {  
+        "type": "team",
+        "name": "sum",
+        "outputPath": "counts.scoreCombinedPodium",
+        "options": {
+            "addends": [
+                "counts.scorePodium",
+                "counts.scoreAmpedPodium"
+            ]
+        }
+    },
+    {  
+        "type": "team",
+        "name": "sum",
+        "outputPath": "counts.scoreCombinedWing",
+        "options": {
+            "addends": [
+                "counts.scoreWing",
+                "counts.scoreAmpedWing"
+            ]
+        }
+    },
+    {  
+
+        "type": "team",
+        "name": "sum",
+        "outputPath": "counts.scoreCombinedMidfield",
+        "options": {
+            "addends": [
+                "counts.scoreMidfield",
+                "counts.scoreAmpedMidfield"
+            ]
+        }
+    },
+    {  
+        "type": "team",
+        "name": "sum",
+        "outputPath": "counts.scoreCombinedSpeaker",
+        "options": {
+            "addends": [
+                "counts.scoreAmpedSpeaker",
+                "counts.scoreUnampedSpeaker"
+            ]
+        }
+    },
+    {
+        "type": "team",
+        "name": "sum",
+        "outputPath": "counts.notes",
+        "options": {
+            "addends": [
+                "counts.scoreAmp",
+                "counts.scoreCombinedSpeaker",
+                "counts.miss"
+            ]
+        }
+    },
+    {
+        "type": "team",
+        "name": "countMatches",
+        "outputPath": "temp.totalTimeMs",
+        "options": {
+            "weight": 150000
+        }
+    },
+    {
+        "type": "team",
+        "name": "ratio",
+        "outputPath": "timePerNote",
+        "options": {
+            "numerator": [
+                "temp.totalTimeMs"
+            ],
+            "denominator": [
+                "counts.notes"
+            ]
+        },
+        "divByZero": 150000
+    },
+
+    {
+        "type": "team",
+        "name": "aggregateArray",
+        "outputPath": "cycle.all",
+        "options": {
+            "path": "cycle.all"
+        }
+    },
+    {
+        "type": "team",
+        "name": "aggregateArray",
+        "outputPath": "cycle.allComplete",
+        "options": {
+            "path": "cycle.allComplete"
+        }
+    },
+    {
+        "type": "team",
+        "name": "averageArray",
+        "outputPath": "cycle.averageTime",
+        "options": {
+            "arrayPath": "cycle.all",
+            "valuePath": "timeDifferential"
+        }
+    },
+    {
+        "type": "team",
+        "name": "averageArray",
+        "outputPath": "cycle.averageTimeComplete",
+        "options": {
+            "arrayPath": "cycle.allComplete",
+            "valuePath": "timeDifferential"
+        }
+    },
+    {
+        "type": "team",
+        "name": "ratio",
+        "outputPath": "accuracy",
+        "options": {
+            "numerator": [
+                "counts.scoreAmp",
+                "counts.scoreCombinedSpeaker"
+            ],
+            "denominator": [
+                "counts.scoreAmp",
+                "counts.scoreCombinedSpeaker",
+                "counts.miss"
+            ],
+            "divByZero": 0
+        }
+    },
+    {
+        "type": "team",
+        "name": "average",
+        "outputPath": "avgAutoPoints",
+        "options": {
+            "path": "scores.auto"
+        }
+    },
+    {
+        "type": "team",
+        "name": "average",
+        "outputPath": "avgTeleopPoints",
+        "options": {
+            "path": "scores.teleop"
+        }
+    },
+    {
+        "type": "team",
+        "name": "average",
+        "outputPath": "avgStagePoints",
+        "options": {
+            "path": "scores.stage"
+        }
+    },
+    {
+        "type": "team",
+        "name": "average",
+        "outputPath": "avgTotalPoints",
+        "options": {
+            "path": "scores.total"
         }
     },
     {
@@ -513,6 +668,48 @@
         "outputPath": "standardDeviation",
         "options": {
             "path": "scores.total"
+        }
+    },
+    {
+        "type": "team",
+        "name": "aggregateArray",
+        "outputPath": "stageCycle.all",
+        "options": {
+            "path": "stageCycle.all"
+        }
+    },
+    {
+        "type": "team",
+        "name": "aggregateArray",
+        "outputPath": "stageCycle.allComplete",
+        "options": {
+            "path": "stageCycle.allComplete"
+        }
+    },
+    {
+        "type": "team",
+        "name": "averageArray",
+        "outputPath": "stageCycle.averageTime",
+        "options": {
+            "arrayPath": "stageCycle.all",
+            "valuePath": "timeDifferential"
+        }
+    },
+    {
+        "type": "team",
+        "name": "averageArray",
+        "outputPath": "stageCycle.averageTimeComplete",
+        "options": {
+            "arrayPath": "stageCycle.allComplete",
+            "valuePath": "timeDifferential"
+        }
+    },
+    {
+        "type": "team",
+        "name": "average",
+        "outputPath": "avgStage",
+        "options": {
+            "path": "stage"
         }
     }
 ]

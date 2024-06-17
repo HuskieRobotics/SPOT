@@ -71,6 +71,18 @@ router.get("/enterMatch", async (req,res) => {
     res.json();
   }
 })
+router.get("/disconnectScouter/:scouterId", async (req,res) => {
+    if (req.headers.authorization === config.secrets.ACCESS_CODE) {
+      for (let scout of ScoutingSync.scouters) {
+        if (scout.state.scouterId === req.params.scouterId){
+            scout.socket.emit("adminDisconnect");
+            scout.socket.disconnect();
+            console.log("Disconnected Scouter " + scout.state.scouterId)
+          }
+        }
+    res.json(true);
+  } 
+})
 router.post("/setMatch", (req,res) => {
   if(!DEMO){
     if (req.headers.authorization === config.secrets.ACCESS_CODE) {
@@ -92,7 +104,6 @@ router.get("/matches", async (req,res) => {
   let manualSchedule = getManualMatches() 
 
   if(manualSchedule.length){
-
     res.json({
       "allMatches": manualSchedule,
       "currentMatch": ScoutingSync.match
@@ -101,7 +112,7 @@ router.get("/matches", async (req,res) => {
     res.json({
       "allMatches": await ScoutingSync.getMatches(),
       "currentMatch": ScoutingSync.match
-    })
+  });
   }
 })
 module.exports = router;

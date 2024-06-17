@@ -157,12 +157,12 @@ function matchAverage(alliance1, alliance2) {
 	//console.log("alliance1")
 	//console.log(alliance1);
 	for (let a = 0; a < alliance1.length; a++) { 
-		data = getPath(alliance1[a],"averageScores.total",0)
+		data = getPath(alliance1[a],"avgTotalPoints",0)
 		alliance1Avg += data
 	}
 	let alliance2Avg = 0
 	for (let a = 0; a < alliance2.length; a++) {
-		data = getPath(alliance2[a],"averageScores.total",0)
+		data = getPath(alliance2[a],"avgTotalPoints",0)
 		alliance2Avg += data
 	}
 	return alliance1Avg - alliance2Avg
