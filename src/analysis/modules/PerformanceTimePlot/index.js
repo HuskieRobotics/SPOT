@@ -5,6 +5,7 @@ class PerformanceTimePlot {
     constructor(moduleConfig) {
         this.moduleConfig = moduleConfig
         this.container = createDOMElement("div", "container line")
+        //this.container.innerHTML = '<div style = "font-size: 2em; text-align:center; margin-top:15%">No Team Selected</div>'
     }
 
     async formatData(teams, dataset) {

@@ -3,7 +3,8 @@ const ScoutingSync = require("../../scouting/scouting-sync")();
 let router = Router();
 const config = require("../../../config/config.json");
 const { TeamMatchPerformance } = require("../../lib/db");
-
+let axios = require("axios")
+const {getManualMatches} = require("../../schedule/schedule");
 const DEMO = false;
 
 router.use((req,res,next) => {
@@ -67,7 +68,7 @@ router.get("/enterMatch", async (req,res) => {
         if (scouter.state.status == ScoutingSync.SCOUTER_STATUS.WAITING)
             scouter.socket.emit("enterMatch");
     }
-    // res.json();
+    res.json();
   }
 })
 router.get("/disconnectScouter/:scouterId", async (req,res) => {
@@ -99,9 +100,19 @@ router.post("/setMatch", (req,res) => {
 });
 
 router.get("/matches", async (req,res) => {
-	res.json({
-		"allMatches": await ScoutingSync.getMatches(),
-		"currentMatch": ScoutingSync.match
-	})
+
+  let manualSchedule = getManualMatches();
+
+  if(manualSchedule.length === 0){
+      res.json({
+          "allMatches": await ScoutingSync.getMatches(),
+          "currentMatch": ScoutingSync.match
+      });
+  } else {
+      res.json({
+          "allMatches": manualSchedule,
+          "currentMatch": ScoutingSync.match
+      });
+  }
 })
 module.exports = router;

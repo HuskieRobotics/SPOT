@@ -1,456 +1,585 @@
 [
-  {
-    "type": "tmp",
-    "name": "countActions",
-    "outputPath": "counts",
-    "options": {
-        "all": true
-    }
-  },
-  {
-    "type": "team",
-    "name": "countActions",
-    "outputPath": "counts",
-    "options": {
-        "all": true
-    }
-  },
-  {
-    "type": "team",
-    "name": "sum",
-    "outputPath": "counts.totalScored",
-    "options":{
-      "addends":[
-        "counts.placement11",
-        "counts.placement12",
-        "counts.placement13",
-        "counts.placement14",
-        "counts.placement15",
-        "counts.placement16",
-        "counts.placement17",
-        "counts.placement18",
-        "counts.placement19",
-        "counts.placement21",
-        "counts.placement22",
-        "counts.placement23",
-        "counts.placement24",
-        "counts.placement25",
-        "counts.placement26",
-        "counts.placement27",
-        "counts.placement28",
-        "counts.placement29",
-        "counts.placement31",
-        "counts.placement32",
-        "counts.placement33",
-        "counts.placement34",
-        "counts.placement35",
-        "counts.placement36",
-        "counts.placement37",
-        "counts.placement38",
-        "counts.placement39"
-      ]
-    }
-  },
-  {
-    "type":"tmp",
-    "name":"countHybrid",
-    "outputPath": "counts.hybrid",
-    "options":{
-      "pickup":["conePickupGrid","conePickupCommunity","conePickupFloor","conePickupChute","conePickupShelf","cubePickupGrid","cubePickupCommunity","cubePickupFloor","cubePickupChute","cubePickupShelf"],
-      "hybrid":["placement11","placement12","placement13","placement14","placement15","placement16","placement17","placement18","placement19"]
-    }
-  },
-  {
+    {
+        "type": "tmp",
+        "name": "countActions",
+        "outputPath": "counts",
+        "options": {
+            "all": true
+        }
+    },
+    {  
+        "type": "tmp",
+        "name": "sum",
+        "outputPath": "counts.scoreUnampedSpeaker",
+        "options": {
+            "addends": [
+                "counts.scoreSubwoofer",
+                "counts.scoreWing",
+                "counts.scorePodium",
+                "counts.scoreMidfield"
+            ]
+        }
+    },
+    {  
+        "type": "tmp",
+        "name": "sum",
+        "outputPath": "counts.scoreAmpedSpeaker",
+        "options": {
+            "addends": [
+                "counts.scoreAmpedSubwoofer",
+                "counts.scoreAmpedWing",
+                "counts.scoreAmpedPodium",
+                "counts.scoreAmpedMidfield"
+            ]
+        }
+    },
+    {  
+        "type": "tmp",
+        "name": "sum",
+        "outputPath": "counts.scoreCombinedSubwoofer",
+        "options": {
+            "addends": [
+                "counts.scoreSubwoofer",
+                "counts.scoreAmpedSubwoofer"
+            ]
+        }
+    },
+    {  
+        "type": "tmp",
+        "name": "sum",
+        "outputPath": "counts.scoreCombinedPodium",
+        "options": {
+            "addends": [
+                "counts.scorePodium",
+                "counts.scoreAmpedPodium"
+            ]
+        }
+    },
+    {  
+        "type": "tmp",
+        "name": "sum",
+        "outputPath": "counts.scoreCombinedWing",
+        "options": {
+            "addends": [
+                "counts.scoreWing",
+                "counts.scoreAmpedWing"
+            ]
+        }
+    },
+    {  
+
+        "type": "tmp",
+        "name": "sum",
+        "outputPath": "counts.scoreCombinedMidfield",
+        "options": {
+            "addends": [
+                "counts.scoreMidfield",
+                "counts.scoreAmpedMidfield"
+            ]
+        }
+    },
+    {  
+        "type": "tmp",
+        "name": "sum",
+        "outputPath": "counts.scoreCombinedSpeaker",
+        "options": {
+            "addends": [
+                "counts.scoreAmpedSpeaker",
+                "counts.scoreUnampedSpeaker"
+            ]
+        }
+    },
+    {  
+        "type": "tmp",
+        "name": "actionTime",
+        "outputPath": "autoNoteTimes.ampMost",
+        "options": {
+            "actionId" : "autoNoteAmpMost"
+        }
+    },
+    {  
+        "type": "tmp",
+        "name": "actionTime",
+        "outputPath": "autoNoteTimes.ampMid",
+        "options": {
+            "actionId" : "autoNoteAmpMid"
+        }
+    },
+    {  
+        "type": "tmp",
+        "name": "actionTime",
+        "outputPath": "autoNoteTimes.middle",
+        "options": {
+            "actionId" : "autoNoteMiddle"
+        }
+    },
+    {  
+        "type": "tmp",
+        "name": "actionTime",
+        "outputPath": "autoNoteTimes.sourceMid",
+        "options": {
+            "actionId" : "autoNoteSourceMid"
+        }
+    },
+    {  
+        "type": "tmp",
+        "name": "actionTime",
+        "outputPath": "autoNoteTimes.sourceMost",
+        "options": {
+            "actionId" : "autoNoteSourceMost"
+        }
+    },
+    {  
+        "type": "tmp",
+        "name": "actionTime",
+        "outputPath": "autoNoteTimes.wing",
+        "options": {
+            "actionId" : "autoNoteWing"
+        }
+    },
+
+    {
+        "type": "tmp",
+        "name": "cycle",
+        "outputPath": "cycle",
+        "options": {
+            "pickups": [
+                "groundPickup",
+                "sourcePickup"
+            ],
+            "scores": [
+                "scoreAmp",
+                "scoreSubwoofer",
+                "scoreWing",
+                "scorePodium",
+                "scoreMidfield",
+                "scoreAmpedSubwoofer",
+                "scoreAmpedWing",
+                "scoreAmpedPodium",
+                "scoreAmpedMidfield"
+            ],
+            "misses": [
+                "miss"
+            ]
+        }
+    },
+    {
+        "type": "tmp",
+        "name": "ratio",
+        "outputPath": "accuracy",
+        "options": {
+            "numerator": [
+                "counts.scoreAmp",
+                "counts.scoreCombinedSpeaker"
+            ],
+            "denominator": [
+                "counts.scoreAmp",
+                "counts.scoreCombinedSpeaker",
+                "counts.miss"
+            ],
+            "divByZero": 0
+        }
+    },
+    {
+        "type": "tmp",
+        "name": "ratio",
+        "outputPath": "accuracy%",
+        "options": {
+            "numerator": [
+                "accuracy"
+            ],
+            "denominator": [
+                0.01
+            ],
+            "divByZero": 0
+        }
+    },
+    {
+        "type": "tmp",
+        "name": "actionTimeFilter",
+        "outputPath": "autoFilter",
+        "options": {
+            "timeMin": 135000
+        }
+    },
+    {
+        "type": "tmp",
+        "name": "actionTimeFilter",
+        "outputPath": "teleopFilter",
+        "options": {
+            "timeMax": 135000
+        }
+    },
+    {
+        "type": "tmp",
+        "name": "countActions",
+        "outputPath": "countsAuto",
+        "options": {
+            "all": true,
+            "actionArrayPath": "autoFilter"
+        }
+    },
+    {
+        "type": "tmp",
+        "name": "countActions",
+        "outputPath": "countsTeleop",
+        "options": {
+            "all": true,
+            "actionArrayPath": "teleopFilter"
+        }
+    },
+  
+    {
+        "type": "tmp",
+        "name": "weightedSum",
+        "outputPath": "scores.auto",
+        "options": {
+            "weightedPaths": {
+                "countsAuto.leave": 2,
+                "countsAuto.scoreAmp": 2,
+                "countsAuto.scoreSubwoofer": 5,
+                "countsAuto.scoreWing": 5,
+                "countsAuto.scorePodium": 5,
+                "countsAuto.scoreMidfield": 5
+            }
+        }
+    },
+    {
+        "type": "tmp",
+        "name": "weightedSum",
+        "outputPath": "scores.teleop",
+        "options": {
+            "weightedPaths": {
+                "countsTeleop.scoreAmp": 1,
+                "countsTeleop.scoreSubwoofer": 2,
+                "countsTeleop.scoreWing": 2,
+                "countsTeleop.scorePodium": 2,
+                "countsTeleop.scoreMidfield": 2,
+                "countsTeleop.scoreAmpedSubwoofer": 5,
+                "countsTeleop.scoreAmpedWing": 5,
+                "countsTeleop.scoreAmpedPodium": 5,
+                "countsTeleop.scoreAmpedMidfield": 5
+            }
+        }
+    },
+
+    {
+        "type": "tmp",
+        "name": "cycle",
+        "outputPath": "stageCycle",
+        "options": {
+            "pickups": [
+                "park"
+            ],
+            "scores": [
+                "onstage"
+            ],
+            "misses": [
+                "unpark",
+                "onstageFall"
+            ]
+        }
+    },
+    {
+        "type": "tmp",
+        "name": "finalActionOccurence",
+        "outputPath": "finalStage",
+        "options": {
+            "actionArrayPath": "teleopFilter",
+            "ids": [
+                "onstage",
+                "park",
+                "spotlit",
+                "unpark",
+                "onstageFall"
+            ],
+            "default": {
+                "id": "noStage",
+                "ts": 0
+            }
+        }
+    },
+    {
+        "type": "tmp",
+        "name": "map",
+        "outputPath": "scores.stageExclusive",
+        "options": {
+            "path": "finalStage.id",
+            "map": {
+                "noStage": 0,
+                "onstage": 3,
+                "park": 1,
+                "spotlit": 4,
+                "unpark": 0,
+                "onstageFall": 1
+            }
+        }
+    },
+    {
+        "type": "tmp",
+        "name": "map",
+        "outputPath": "stage.noStage",
+        "options": {
+            "path": "finalStage.id",
+            "map": {
+                "noStage": 1,
+                "onstage": 0,
+                "park": 0,
+                "spotlit": 0,
+                "unpark": 0,
+                "onstageFall": 0
+            }
+        }
+    },
+    {
+        "type": "tmp",
+        "name": "map",
+        "outputPath": "stage.onstage",
+        "options": {
+            "path": "finalStage.id",
+            "map": {
+                "noStage": 0,
+                "onstage": 1,
+                "park": 0,
+                "spotlit": 0,
+                "unpark": 0,
+                "onstageFall": 0
+            }
+        }
+    },
+    {
+        "type": "tmp",
+        "name": "map",
+        "outputPath": "stage.park",
+        "options": {
+            "path": "finalStage.id",
+            "map": {
+                "noStage": 0,
+                "onstage": 0,
+                "park": 1,
+                "spotlit": 0,
+                "unpark": 0,
+                "onstageFall": 0
+            }
+        }
+    },
+    {
+        "type": "tmp",
+        "name": "map",
+        "outputPath": "stage.spotlit",
+        "options": {
+            "path": "finalStage.id",
+            "map": {
+                "noStage": 0,
+                "onstage": 0,
+                "park": 0,
+                "spotlit": 1,
+                "unpark": 0,
+                "onstageFall": 0
+            }
+        }
+    },
+    {
+        "type": "tmp",
+        "name": "map",
+        "outputPath": "stage.unpark",
+        "options": {
+            "path": "finalStage.id",
+            "map": {
+                "noStage": 0,
+                "onstage": 0,
+                "park": 0,
+                "spotlit": 0,
+                "unpark": 1,
+                "onstageFall": 0
+            }
+        }
+    },
+    {
+        "type": "tmp",
+        "name": "map",
+        "outputPath": "stage.onstageFall",
+        "options": {
+            "path": "finalStage.id",
+            "map": {
+                "noStage": 0,
+                "onstage": 0,
+                "park": 0,
+                "spotlit": 0,
+                "unpark": 0,
+                "onstageFall": 1
+            }
+        }
+    },
+    {
+        "type": "tmp",
+        "name": "weightedSum",
+        "outputPath": "scores.stageInclusive",
+        "options": {
+            "weightedPaths": {
+                "countsTeleop.trap": 5,
+                "countsTeleop.harmony": 2
+            }
+        }
+    },
+    {
+        "type": "tmp",
+        "name": "sum",
+        "outputPath": "scores.stage",
+        "options": {
+            "addends": [
+                "scores.stageExclusive",
+                "scores.stageInclusive"
+           ]
+        }
+    },
+    {
+        "type": "tmp",
+        "name": "sum",
+        "outputPath": "scores.total",
+        "options": {
+            "addends": [
+                "scores.auto",
+                "scores.teleop",
+                "scores.stage"
+            ]
+        }
+    },
+    {
+        "type": "team",
+        "name": "countActions",
+        "outputPath": "counts",
+        "options": {
+            "all": true
+        }
+    },
+    {
+        "type": "team",
+        "name": "average",
+        "outputPath": "averages",
+        "options": {
+            "path": "counts"
+        }
+    },
+
+    {  
+        "type": "team",
+        "name": "sum",
+        "outputPath": "counts.scoreUnampedSpeaker",
+        "options": {
+            "addends": [
+                "counts.scoreSubwoofer",
+                "counts.scoreWing",
+                "counts.scorePodium",
+                "counts.scoreMidfield"
+            ]
+        }
+    },
+    {  
+        "type": "team",
+        "name": "sum",
+        "outputPath": "counts.scoreAmpedSpeaker",
+        "options": {
+            "addends": [
+                "counts.scoreAmpedSubwoofer",
+                "counts.scoreAmpedWing",
+                "counts.scoreAmpedPodium",
+                "counts.scoreAmpedMidfield"
+            ]
+        }
+    },
+    {  
+        "type": "team",
+        "name": "sum",
+        "outputPath": "counts.scoreCombinedSubwoofer",
+        "options": {
+            "addends": [
+                "counts.scoreSubwoofer",
+                "counts.scoreAmpedSubwoofer"
+            ]
+        }
+    },
+    {  
+        "type": "team",
+        "name": "sum",
+        "outputPath": "counts.scoreCombinedPodium",
+        "options": {
+            "addends": [
+                "counts.scorePodium",
+                "counts.scoreAmpedPodium"
+            ]
+        }
+    },
+    {  
+        "type": "team",
+        "name": "sum",
+        "outputPath": "counts.scoreCombinedWing",
+        "options": {
+            "addends": [
+                "counts.scoreWing",
+                "counts.scoreAmpedWing"
+            ]
+        }
+    },
+    {  
+
+        "type": "team",
+        "name": "sum",
+        "outputPath": "counts.scoreCombinedMidfield",
+        "options": {
+            "addends": [
+                "counts.scoreMidfield",
+                "counts.scoreAmpedMidfield"
+            ]
+        }
+    },
+    {  
+        "type": "team",
+        "name": "sum",
+        "outputPath": "counts.scoreCombinedSpeaker",
+        "options": {
+            "addends": [
+                "counts.scoreAmpedSpeaker",
+                "counts.scoreUnampedSpeaker"
+            ]
+        }
+    },
+    {
+        "type": "team",
+        "name": "sum",
+        "outputPath": "counts.notes",
+        "options": {
+            "addends": [
+                "counts.scoreAmp",
+                "counts.scoreCombinedSpeaker",
+                "counts.miss"
+            ]
+        }
+    },
+    {
         "type": "team",
         "name": "countMatches",
         "outputPath": "temp.totalTimeMs",
         "options": {
             "weight": 150000
         }
-  },
-  {
-    "type": "team",
-    "name": "aggregateArray",
-    "outputPath": "aggregatedActions",
-    "options": {
-        "path": "actionQueue"
-    }
-  },
-  {
-    "type": "team",
-    "name": "average",
-    "outputPath": "averages",
-    "options": {
-        "path": "counts"
-    }
-  },
-  {
-    "type":"tmp",
-    "name":"actionTimeFilter",
-    "outputPath":"autoFilter",
-    "options":{
-      "timeMin":135000
-    }
-  },
-  {
-    "type":"tmp",
-    "name":"actionTimeFilter",
-    "outputPath":"teleopFilter",
-    "options":{
-      "timeMax":135000
-    }
-  },
-  {
-    "type":"tmp",
-    "name":"countActions",
-    "outputPath":"countsAuto",
-    "options":{
-      "all":true,
-      "actionArrayPath":"autoFilter"
-    }
-  },
-  {
-    "type":"tmp",
-    "name":"countActions",
-    "outputPath":"countsTeleop",
-    "options":{
-      "all":true,
-      "actionArrayPath":"teleopFilter"
-    }
-  },
-  {
-    "type":"tmp",
-    "name":"countHybrid",
-    "outputPath":"autoCounts.hybrid",
-    "options":{
-      "pickup":["conePickupGrid","conePickupCommunity","conePickupFloor","conePickupChute","conePickupShelf","cubePickupGrid","cubePickupCommunity","cubePickupFloor","cubePickupChute","cubePickupShelf"],
-      "hybrid":["placement11","placement12","placement13","placement14","placement15","placement16","placement17","placement18","placement19"],
-      "actionArrayPath":"autoFilter"
-    }
-  },
-  {
-    "type":"tmp",
-    "name":"countHybrid",
-    "outputPath":"teleopCounts.hybrid",
-    "options":{
-      "pickup":["conePickupGrid","conePickupCommunity","conePickupFloor","conePickupChute","conePickupShelf","cubePickupGrid","cubePickupCommunity","cubePickupFloor","cubePickupChute","cubePickupShelf"],
-      "hybrid":["placement11","placement12","placement13","placement14","placement15","placement16","placement17","placement18","placement19"],
-      "actionArrayPath":"teleopFilter"
-    }
-  },
-  {
-    "type":"tmp",
-    "name":"weightedSum",
-    "outputPath":"scores.auto",
-    "options":{
-      "weightedPaths":{
-        "countsAuto.placement31":6,
-        "countsAuto.placement32":6,
-        "countsAuto.placement33":6,
-        "countsAuto.placement34":6,
-        "countsAuto.placement35":6,
-        "countsAuto.placement36":6,
-        "countsAuto.placement37":6,
-        "countsAuto.placement38":6,
-        "countsAuto.placement39":6,
-        "countsAuto.placement21":4,
-        "countsAuto.placement22":4,
-        "countsAuto.placement23":4,
-        "countsAuto.placement24":4,
-        "countsAuto.placement25":4,
-        "countsAuto.placement26":4,
-        "countsAuto.placement27":4,
-        "countsAuto.placement28":4,
-        "countsAuto.placement29":4,
-        "autoCounts.hybrid.conePickupGrid":3,
-        "autoCounts.hybrid.conePickupCommunity":3,
-        "autoCounts.hybrid.conePickupFloor":3,
-        "autoCounts.hybrid.conePickupChute":3,
-        "autoCounts.hybrid.conePickupPlatform":3,
-        "autoCounts.hybrid.cubePickupGrid":3,
-        "autoCounts.hybrid.cubePickupCommunity":3,
-        "autoCounts.hybrid.cubePickupFloor":3,
-        "autoCounts.hybrid.cubePickupChute":3,
-        "autoCounts.hybrid.cubePickupPlatform":3
-      }
-    }
-  },
-  {
-    "type":"tmp",
-    "name":"weightedSum",
-    "outputPath":"scores.teleop",
-    "options":{
-      "weightedPaths":{
-        "countsTeleop.placement31":5,
-        "countsTeleop.placement32":5,
-        "countsTeleop.placement33":5,
-        "countsTeleop.placement34":5,
-        "countsTeleop.placement35":5,
-        "countsTeleop.placement36":5,
-        "countsTeleop.placement37":5,
-        "countsTeleop.placement38":5,
-        "countsTeleop.placement39":5,
-        "countsTeleop.placement21":3,
-        "countsTeleop.placement22":3,
-        "countsTeleop.placement23":3,
-        "countsTeleop.placement24":3,
-        "countsTeleop.placement25":3,
-        "countsTeleop.placement26":3,
-        "countsTeleop.placement27":3,
-        "countsTeleop.placement28":3,
-        "countsTeleop.placement29":3,
-        "teleopCounts.hybrid.conePickupGrid":2,
-        "teleopCounts.hybrid.conePickupCommunity":2,
-        "teleopCounts.hybrid.conePickupFloor":2,
-        "teleopCounts.hybrid.conePickupChute":2,
-        "teleopCounts.hybrid.conePickupPlatform":2,
-        "teleopCounts.hybrid.cubePickupGrid":2,
-        "teleopCounts.hybrid.cubePickupCommunity":2,
-        "teleopCounts.hybrid.cubePickupFloor":2,
-        "teleopCounts.hybrid.cubePickupChute":2,
-        "teleopCounts.hybrid.cubePickupPlatform":2
-      }
-    }
-  },
-  {
-    "type":"team",
-    "name":"average",
-    "outputPath":"avgAuto",
-    "options":{
-      "path":"countsAuto"
-    }
-  },
-  {
-    "type":"team",
-    "name":"average",
-    "outputPath":"avgTeleop",
-    "options":{
-      "path":"countsTeleop"
-    }
-  },
-  {
-    "type":"tmp",
-    "name":"cycle",
-    "outputPath":"dockCycle",
-    "options":{
-      "pickups":[
-        "platformDocked"
-      ],
-      "scores":[
-        "platformEngaged"
-      ],
-      "misses":[
-        "platformLeave",
-        "platformFall"
-      ]
-    }
-  },
-  {
-        "type": "team",
-        "name": "aggregateArray",
-        "outputPath": "dockCycle.all",
-        "options": {
-            "path": "dockCycle.all"
-        }
     },
-  {
+    {
         "type": "team",
-        "name": "aggregateArray",
-        "outputPath": "dockCycle.allComplete",
+        "name": "ratio",
+        "outputPath": "timePerNote",
         "options": {
-            "path": "dockCycle.allComplete"
-        }
+            "numerator": [
+                "temp.totalTimeMs"
+            ],
+            "denominator": [
+                "counts.notes"
+            ]
+        },
+        "divByZero": 150000
     },
-  {
-        "type": "team",
-        "name": "averageArray",
-        "outputPath": "dockCycle.averageTime",
-        "options": {
-            "arrayPath": "dockCycle.all",
-            "valuePath": "timeDifferential"
-        }
-    },
-  {
-        "type": "team",
-        "name": "averageArray",
-        "outputPath": "dockCycle.averageTimeComplete",
-        "options": {
-            "arrayPath": "dockCycle.allComplete",
-            "valuePath": "timeDifferential"
-        }
-  },
-	{
-				"type": "tmp",
-				"name": "finalActionOccurence",
-        "outputPath": "finalAutoDock",
-        "options": {
-          "actionArrayPath": "autoFilter",
-          "ids":[
-            "platformFall",
-            "platformEngaged",
-            "platformLeave",
-            "platformDocked"
-          ],
-          "default": {
-            "id": "noDock",
-            "ts": 0
-          }
-        }
-	},
-  {
-				"type": "tmp",
-				"name": "finalActionOccurence",
-        "outputPath": "finalTeleopDock",
-        "options": {
-          "actionArrayPath": "teleopFilter",
-          "ids":[
-            "platformFall",
-            "platformEngaged",
-            "platformLeave",
-            "platformDocked"
-          ],
-          "default": {
-            "id": "noDock",
-            "ts": 0
-          }
-        }
-	},
-  {
-      "type": "tmp",
-      "name": "map",
-      "outputPath": "scores.autoDock",
-      "options": {
-        "path":"finalAutoDock.id",
-        "map":{
-          "noDock":0,
-          "platformDock":8,
-          "platformEngaged":12,
-          "platformFall":0,
-          "platformLeave":0
-        }
-      }
-  },
-  {
-      "type": "tmp",
-      "name": "map",
-      "outputPath": "scores.teleopDock",
-      "options": {
-        "path":"finalTeleopDock.id",
-        "map":{
-          "noDock":0,
-          "platformDock":6,
-          "platformEngaged":10,
-          "platformFall":0,
-          "platformLeave":0
-        }
-      }
-  },
-  {
-    "type":"tmp",
-    "name":"sum",
-    "outputPath":"scores.dock",
-    "options":{
-      "addends":["scores.autoDock","scores.teleopDock"]
-    }
-  },
-  {
-    "type":"tmp",
-    "name":"sum",
-    "outputPath":"scores.total",
-    "options":{
-      "addends":["scores.auto","scores.teleop","scores.dock"]
-    }
-  },
-  {
-    "type":"tmp",
-    "name":"cycle",
-    "outputPath":"coneCycle",
-    "options":{
-      "pickups":["conePickupGrid","conePickupCommunity","conePickupFloor","conePickupChute","conePickupShelf"],
-      "scores":["placement31","placement21","placement33","placement23","placement34","placement24","placement36","placement26","placement37","placement27","placement39","placement29","counts.hybrid.conePickupGrid","counts.hybrid.conePickupCommunity","counts.hybrid.conePickupFloor","counts.hybrid.conePickupChute","counts.hybrid.conePickupPlatform"],
-      "misses":["dropCone"]
-    }
-  },
-  {
-        "type": "team",
-        "name": "aggregateArray",
-        "outputPath": "coneCycle.all",
-        "options": {
-            "path": "coneCycle.all"
-        }
-    },
-  {
-        "type": "team",
-        "name": "aggregateArray",
-        "outputPath": "coneCycle.allComplete",
-        "options": {
-            "path": "coneCycle.allComplete"
-        }
-    },
-  {
-        "type": "team",
-        "name": "averageArray",
-        "outputPath": "coneCycle.averageTime",
-        "options": {
-            "arrayPath": "coneCycle.all",
-            "valuePath": "timeDifferential"
-        }
-    },
-  {
-    "type":"tmp",
-    "name":"cycle",
-    "outputPath":"cubeCycle",
-    "options":{
-      "pickups":["cubePickupGrid","cubePickupCommunity","cubePickupFloor","cubePickupChute","cubePickupShelf","conePickupGrid","conePickupCommunity","conePickupFloor","conePickupChute","conePickupShelf"],
-      "scores":["placement32","placement22","placement35","placement25","placement38","placement28","counts.hybrid.cubePickupGrid","counts.hybrid.cubePickupCommunity","counts.hybrid.cubePickupFloor","counts.hybrid.cubePickupChute","counts.hybrid.cubePickupPlatform"],
-      "misses":["dropCube"]
-    }
-  },
-  {
-        "type": "team",
-        "name": "aggregateArray",
-        "outputPath": "cubeCycle.all",
-        "options": {
-            "path": "cubeCycle.all"
-        }
-    },
-  {
-        "type": "team",
-        "name": "aggregateArray",
-        "outputPath": "cubeCycle.allComplete",
-        "options": {
-            "path": "cubeCycle.allComplete"
-        }
-    },
-  {
-        "type": "team",
-        "name": "averageArray",
-        "outputPath": "cubeCycle.averageTime",
-        "options": {
-            "arrayPath": "cubeCycle.all",
-            "valuePath": "timeDifferential"
-        }
-    },
-  {
-        "type": "team",
-        "name": "averageArray",
-        "outputPath": "cubeCycle.averageTimeComplete",
-        "options": {
-            "arrayPath": "cubeCycle.allComplete",
-            "valuePath": "timeDifferential"
-        }
-    },
-  {
-    "type":"tmp",
-    "name":"cycle",
-    "outputPath":"cycle",
-    "options":{
-      "pickups":["cubePickupGrid","cubePickupCommunity","cubePickupFloor","cubePickupChute","cubePickupShelf","conePickupGrid","conePickupCommunity","conePickupFloor","conePickupChute","conePickupShelf"],
-      "scores":["placement32","placement22","placement35","placement25","placement38","placement28","counts.hybrid.cubePickupGrid","counts.hybrid.cubePickupCommunity","counts.hybrid.cubePickupFloor","counts.hybrid.cubePickupChute","counts.hybrid.cubePickupPlatform","placement31","placement21","placement33","placement23","placement34","placement24","placement36","placement26","placement37","placement27","placement39","placement29","counts.hybrid.conePickupGrid","counts.hybrid.conePickupCommunity","counts.hybrid.conePickupFloor","counts.hybrid.conePickupChute","counts.hybrid.conePickupPlatform"],
-      "misses":["dropCube","dropCone"]
-    }
-  },
-  {
+
+    {
         "type": "team",
         "name": "aggregateArray",
         "outputPath": "cycle.all",
@@ -458,7 +587,7 @@
             "path": "cycle.all"
         }
     },
-  {
+    {
         "type": "team",
         "name": "aggregateArray",
         "outputPath": "cycle.allComplete",
@@ -466,7 +595,7 @@
             "path": "cycle.allComplete"
         }
     },
-  {
+    {
         "type": "team",
         "name": "averageArray",
         "outputPath": "cycle.averageTime",
@@ -475,7 +604,7 @@
             "valuePath": "timeDifferential"
         }
     },
-  {
+    {
         "type": "team",
         "name": "averageArray",
         "outputPath": "cycle.averageTimeComplete",
@@ -486,20 +615,101 @@
     },
     {
         "type": "team",
-        "name": "average",
-        "outputPath": "averageScores",
+        "name": "ratio",
+        "outputPath": "accuracy",
         "options": {
-            "path": "scores"
+            "numerator": [
+                "counts.scoreAmp",
+                "counts.scoreCombinedSpeaker"
+            ],
+            "denominator": [
+                "counts.scoreAmp",
+                "counts.scoreCombinedSpeaker",
+                "counts.miss"
+            ],
+            "divByZero": 0
         }
     },
-	
     {
-		"type": "team",
-		"name": "standardDeviation",
-		"outputPath": "standardDeviation",
-		"options": {
-			"path" : "scores.total"
-		}
-	}
-
+        "type": "team",
+        "name": "average",
+        "outputPath": "avgAutoPoints",
+        "options": {
+            "path": "scores.auto"
+        }
+    },
+    {
+        "type": "team",
+        "name": "average",
+        "outputPath": "avgTeleopPoints",
+        "options": {
+            "path": "scores.teleop"
+        }
+    },
+    {
+        "type": "team",
+        "name": "average",
+        "outputPath": "avgStagePoints",
+        "options": {
+            "path": "scores.stage"
+        }
+    },
+    {
+        "type": "team",
+        "name": "average",
+        "outputPath": "avgTotalPoints",
+        "options": {
+            "path": "scores.total"
+        }
+    },
+    {
+        "type": "team",
+        "name": "standardDeviation",
+        "outputPath": "standardDeviation",
+        "options": {
+            "path": "scores.total"
+        }
+    },
+    {
+        "type": "team",
+        "name": "aggregateArray",
+        "outputPath": "stageCycle.all",
+        "options": {
+            "path": "stageCycle.all"
+        }
+    },
+    {
+        "type": "team",
+        "name": "aggregateArray",
+        "outputPath": "stageCycle.allComplete",
+        "options": {
+            "path": "stageCycle.allComplete"
+        }
+    },
+    {
+        "type": "team",
+        "name": "averageArray",
+        "outputPath": "stageCycle.averageTime",
+        "options": {
+            "arrayPath": "stageCycle.all",
+            "valuePath": "timeDifferential"
+        }
+    },
+    {
+        "type": "team",
+        "name": "averageArray",
+        "outputPath": "stageCycle.averageTimeComplete",
+        "options": {
+            "arrayPath": "stageCycle.allComplete",
+            "valuePath": "timeDifferential"
+        }
+    },
+    {
+        "type": "team",
+        "name": "average",
+        "outputPath": "avgStage",
+        "options": {
+            "path": "stage"
+        }
+    }
 ]

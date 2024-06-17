@@ -120,7 +120,11 @@ class SingleDisplay {
 			alliance2SD += Math.pow(data, 2)
 		}
 		alliance2SD = Math.sqrt(alliance2SD)
-		return Math.sqrt(Math.pow(alliance1SD, 2) + Math.pow(alliance2SD, 2))
+		let zscore = Math.sqrt(Math.pow(alliance1SD, 2) + Math.pow(alliance2SD, 2))
+		if (zscore < 0.01) {
+			zscore = 0.01
+		}
+		return zscore
 	}
 	
 	/**

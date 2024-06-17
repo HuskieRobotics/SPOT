@@ -2,7 +2,10 @@ const express = require("express");
 const path = require("path")
 const fs = require("fs")
 let router = express.Router();
-
+const executeAnalysisPipeline = require("./analysisPipeline.js")
+const compareAllTeams = require("./autoPick.js")
+const { setPath } = require("../lib/util");
+const ss = require("simple-statistics")
 router.use(express.static(__dirname + "/public"));
 
 router.get("/", (req,res) => {
@@ -30,7 +33,21 @@ router.get("/modules.js", (req,res) => {
         res.send(output);
     }
 })
-
+router.get('/autoPick',async (req,res)=>{
+    let dataset = await executeAnalysisPipeline();
+    let teams = [];
+    for(const [teamNumber, team] of Object.entries(dataset.teams)){
+        if(dataset.tmps.filter(tmp => tmp.robotNumber == teamNumber).length > 0){
+            setPath(team, "robotNumber", teamNumber)
+            teams.push(team);
+        }
+    } 
+    compareAllTeams(teams);
+    res.send(teams.map((team)=>{return {
+        "robotNumber":team.robotNumber,
+        "avgProbability":team.avgProbability
+    }}))
+})
 let modulesStyleOutput;
 router.get("/modules.css", (req,res) => {
     if (modulesStyleOutput) {

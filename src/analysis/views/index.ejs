@@ -40,28 +40,35 @@
 
 	<img id="spinner" src="./img/spinner.svg">
 
-
+	
 	<div id="app">
-		<div id="logo">
-			<img src="./img/logo.png" id="logo-img">
-			<div id="logo-text">SPOT</div>
-		</div>
 
-		<div id="sidebar">
-			<button id="match-view-switch">Simulate Match</button>
-			<div id="search-container">
-				<div id="search">
-					<input placeholder="Search Teams" id="search-input" required />
-					<i id="search-icon" class="fa fa-search"></i>
+		<div id = "menu">
+			<div id="logo">
+				<img src="./img/logo.png" id="logo-img">
+				<div id="logo-text">SPOT</div>
+			</div>
+
+			<div id="sidebar">
+				<button id="match-view-switch">Simulate Match</button>
+				<button id="auto-pick-switch">Auto Pick List</button>
+				<div id="search-container">
+					<div id="search">
+						<input placeholder="Search Teams" id="search-input" required />
+						<i id="search-icon" class="fa fa-search"></i>
+					</div>
+				</div>
+
+				<div id="team-list">
+
 				</div>
 			</div>
-
-			<div id="team-list">
-
-			</div>
 		</div>
 
-		
+		<!-- black bar -->
+		<!-- <div id="header">
+
+		</div> -->
 
 		<div id="dashboard">
 			<div id="welcome" class="visible">
@@ -122,10 +129,22 @@
 					</div>
 				</div>
 			</div>
+			<div id = "auto-pick-view">
+				<div id = "team-list-container">
+					<div id = "pick-list-text">Auto Pick List</div>
+					<div id = "auto-pick-team-list"></div>
+				</div>
+				<div id = "auto-pick-main">
+				</div>
+				<div id = "auto-pick-side">
+					<div id = "auto-pick-stats"></div>	
+				</div>
+			</div>
 		</div>
 	</div>
 	<script src="https://unpkg.com/simple-statistics@7.8.0/dist/simple-statistics.min.js"></script>
 	<script src="./js/util.js"></script>
+	<script src="./js/autoPick.js"></script>
 	<script src="./js/ui.js"></script>
 	<script src="./js/elements.js"></script>
 	<script src="https://rawgit.com/farzher/fuzzysort/master/fuzzysort.js"></script>

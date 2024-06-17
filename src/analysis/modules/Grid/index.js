@@ -5,6 +5,7 @@ class Grid {
     constructor(moduleConfig) {
         this.moduleConfig = moduleConfig
         this.container = createDOMElement("div", "container grid")
+        this.container.innerHTML = '<div style = "font-size: 2em; text-align:center; margin-top:50px; margin-bottom:50px;">No Team Selected</div>'
     }
 
     formatData(teams, dataset) {

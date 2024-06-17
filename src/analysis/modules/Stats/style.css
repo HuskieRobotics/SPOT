@@ -1,6 +1,6 @@
 .stats.container {
-    width: 90%;
-    padding: 30px 40px;
+    width: 95% !important;
+    padding: 15px 15px;
     display: flex;
     flex-direction: column;
     background-color: var(--bg-alt);
@@ -9,7 +9,7 @@
 }
 
 .stats .header {
-    font-size: 2em;
+    font-size: 1.5em;
     line-height: 1em;
     text-align: center;
     color: var(--text);
@@ -18,7 +18,7 @@
 
 .stats .list {
     display: flex;
-    font-size: 1.25em;
+    font-size: 1em;
     flex-direction: column;
     width: 100%;
     color: var(--text);
@@ -34,6 +34,12 @@
 
 .stats .rank.top50 {
 	color: var(--orange-light);
+}
+
+.noData{
+    width: 95%;
+    background-color: var(--bg-alt);
+    border:none;
 }
 
 @media screen and (max-width: 1100px) {

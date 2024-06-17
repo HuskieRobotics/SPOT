@@ -53,7 +53,7 @@
             <div>
                 <h1>TheBlueAlliance Setup</h1>
                 <p>SPOT uses TheBlueAlliance to help load in matches automatically. For SPOT to function correctly you need a TheBlueAlliance API Key and event-specific Event Key.</p><br>
-                <p>To obtain an api key, visit <a href="https://www.thebluealliance.com/">their site</a>, navigate to the "account" page under "more" in the navbar. Login if you have to, then under the "Read API Keys" section, add a new API Key. Copy that key and paste it into the box below.</p> 
+                <p>To obtain an API key, visit <a href="https://www.thebluealliance.com/">their site</a>, navigate to the "account" page under "more" in the navbar. Login if you have to, then under the "Read API Keys" section, add a new API Key. Copy that key and paste it into the box below.</p>
                 <video controls muted playsinline>
                     <source src="./img/TBA_API_KEY.webm" type="video/webm">
                 </video>
@@ -69,6 +69,19 @@
                 <label class="label">
                     <input type="text" id="TBA_EVENT_KEY" name="TBA_EVENT_KEY" class="input" required>
                     <span>TBA Event Key</span>
+                </label>
+            </div>
+            <div>
+                <h1>FIRST Robotics Setup</h1>
+                <p>SPOT can <strong>optionally</strong> use the FRC API to get information that doesn't show up on TheBlueAlliance, like practice matches. To obtain an api key and username, visit <a href="https://frc-events.firstinspires.org/services/api/register">their API Registration</a>, and enter the data they ask from you. Once you finish, check your email for the username and key (you'll need them both), and enter them below.</p>
+                <label class="label">
+                    <input type="text" id="FMS_API_USERNAME" name="FMS_API_USERNAME" class="input" required>
+                    <span>FRC API username</span>
+                </label>
+                <br>
+                <label class="label">
+                    <input type="text" id="FMS_API_KEY" name="FMS_API_KEY" class="input" required>
+                    <span>FRC API key</span>
                 </label>
             </div>
             <div>
