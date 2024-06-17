@@ -80,9 +80,7 @@ async function constructApp(accessCode) {
 document.querySelector("#submit").addEventListener("click", async () => {
     let secrets = ["ACCESS_CODE", "DATABASE_URL", "TBA_API_KEY", "GOOGLE_CLIENT_ID", "GOOGLE_CLIENT_SECRET"]
     let config = { secrets: {} };
-    console.log(new FormData(document.getElementById("setup-form")));
     for (let [key, value] of new FormData(document.getElementById("setup-form"))) {
-        console.log(key, value)
         if (value === "") continue; //dont send unset config values (eg, no ACCESS_CODE)
         if (secrets.includes(key)) {
             config.secrets[key] = value;
