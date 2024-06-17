@@ -95,7 +95,7 @@ async function updateScouters(accessCode) { //scouter fetch interval (every 2.5s
             scouters[scouter.timestamp].updateScouterElement(scouter.state);
         } else {
             if (scouter.state.status == SCOUTER_STATUS.COMPLETE || !scouter.state.connected) continue; //it's already submitted/disconnected, dont show it.
-            scouters[scouter.timestamp] = new ScouterDisplay(scouter);
+            scouters[scouter.timestamp] = new ScouterDisplay(scouter, accessCode);
         }
         if (scouter.state.status == SCOUTER_STATUS.COMPLETE || !scouter.state.connected) { //prune offline/complete scouters from the list
             setTimeout(() => {
@@ -184,12 +184,11 @@ async function updateMatches(accessCode) {
     }
 }
 
-0
 class ScouterDisplay {
     scouterElement;
     scouter;
 
-    constructor (scouter) {
+    constructor (scouter, accessCode) {
         this.scouter = scouter;
 
         this.scouterElement = document.createElement("button");
@@ -206,7 +205,10 @@ class ScouterDisplay {
             let disconnectModal = new Modal("small", false).header("Do you want to Disconnect " + this.scouter.state.scouterId + "?")
             disconnectModal.scale(0.75)
             disconnectModal.action("Yes", () => {
-                fetch(`api/dissconnectScouter/${this.scouterElement.getAttribute("scouter")}`).then(res => res.json())
+                fetch(`api/disconnectScouter/${this.scouterElement.getAttribute("scouter")}`,{
+                    headers: {
+                        Authorization: accessCode
+                    }}).then(res => res.json())
             
                 var scouterID = this.scouterElement.getAttribute("scouter");
                 var scouter  = Object.values(scouters).find(s => s.scouter.state.scouterId == scouterID)
@@ -232,7 +234,7 @@ class ScouterDisplay {
 
         //update state
         this.scouter.state = state || this.scouter.state;        
-        this.scouterElement.setAttribute("scouter",this.scouter.state.scouterId)
+        this.scouterElement.setAttribute("scouter",this.scouter.state.scouterId);
 
         //write all text
         this.scouterElement.querySelector(".scouter-id").innerText = this.scouter.state.scouterId;

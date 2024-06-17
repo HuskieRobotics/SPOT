@@ -70,8 +70,8 @@ router.get("/enterMatch", async (req,res) => {
     // res.json();
   }
 })
-router.get("/dissconnectScouter/:scouterId", async (req,res) => {
-    if (true){//req.headers.authorization === config.secrets.ACCESS_CODE) {
+router.get("/disconnectScouter/:scouterId", async (req,res) => {
+    if (req.headers.authorization === config.secrets.ACCESS_CODE) {
       for (let scout of ScoutingSync.scouters) {
         if (scout.state.scouterId === req.params.scouterId){
             scout.socket.emit("adminDisconnect");

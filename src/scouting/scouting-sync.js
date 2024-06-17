@@ -130,7 +130,7 @@ class ScoutingSync {
         for (let scouter of ScoutingSync.scouters) {
         
 
-                // fetch(`api/dissconnectScouter/${this.scouterElement.getAttribute("scouter")}`).then(res => res.json())
+                // fetch(`api/disconnectScouter/${this.scouterElement.getAttribute("scouter")}`).then(res => res.json())
                 // console.log("disconnected scouter")
                 // scouter.state = 4;
                 
