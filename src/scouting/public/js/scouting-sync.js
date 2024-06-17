@@ -7,10 +7,12 @@ class ScoutingSync {
         "WAITING": 1, //scouters not actively in the process of scouting (up to when they click the start button)
         "SCOUTING": 2, //scouters actively scouting a match
         "COMPLETE": 3,
+        "DISCONNECTED_BY_ADMIN": 4
     }
 
     static state = {
         connected: false, 
+        
         offlineMode: true, //offline mode is for users who never connect to the server and access the app without internet.
         status: ScoutingSync.SCOUTER_STATUS.NEW,
         scouterId: "",
@@ -20,12 +22,14 @@ class ScoutingSync {
 
     static async initialize() {
         ScoutingSync.socket = io();
+
 		ScoutingSync.matches = (await fetch("/admin/api/matches").then(res => res.json())).allMatches
         function onConnect() {
             if (ScoutingSync.state.connected) return; //only run connect events once
             ScoutingSync.state.offlineMode = false; //the user connected so disable offlineMode
             ScoutingSync.state.connected = true;
             ScoutingSync.socket.emit("updateState", ScoutingSync.state) //send the server your initial state
+            ScoutingSync.socket.emit("updateScouterID", ScoutingSync.scouterId) //send the server your scouter id
             document.querySelector(".status .socket-status").innerText = "Connected"
 			document.querySelector(".status .socket-status").classList.add("connected")
 			document.querySelector(".status .socket-status").classList.remove("disconnected")
@@ -65,12 +69,20 @@ class ScoutingSync {
             ScoutingSync.sync();
         })
 
+        ScoutingSync.socket.on("adminDisconnect", () => {
+            console.log("adminDisconnectStarted") 
+            switchPage("landing");
+            ScoutingSync.state.status = ScoutingSync.SCOUTER_STATUS.DISCONNECTED_BY_ADMIN;
+            console.log("adminDisconnectComplete")
+        })
+
         //store previous robot and match number for comparison
         let previousMatchInfo = {
             robotNumber: null,
             matchNumber: null
         }
         ScoutingSync.socket.on("enterMatch", () => {
+            console.log("enterMatch")
             setTimeout(() => { //wait an extra 100ms to guarantee you are on the waiting screen
                 if ((ScoutingSync.state.robotNumber == previousMatchInfo.robotNumber &&
                     ScoutingSync.state.matchNumber == previousMatchInfo.matchNumber) || ScoutingSync.state.status === ScoutingSync.SCOUTER_STATUS.NEW)

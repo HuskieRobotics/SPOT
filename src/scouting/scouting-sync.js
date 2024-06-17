@@ -9,7 +9,6 @@ const {TeamMatchPerformance} = require("../lib/db.js");
 const axios = require("axios");
 const config = require("../../config/config.json");
 const chalk = require("chalk");
-const {blue} = require("chalk");
 const DEMO = false;
 module.exports = (server) => {
     if (!ScoutingSync.initialized) {
@@ -31,6 +30,7 @@ class ScoutingSync {
         "WAITING": 1, //scouters not actively in the process of scouting (dont have the scouting ui open)
         "SCOUTING": 2, //scouters actively scouting a match
         "COMPLETE": 3,
+        "DISCONNECTED_BY_ADMIN": 4,
     }
 
     static async initialize(server) {
@@ -169,7 +169,7 @@ class ScoutingSync {
      */
     static assignScouters() {
         let nextRobots = new Set(ScoutingSync.match.robots.red.concat(ScoutingSync.match.robots.blue)); //the robots that are next in line to be assigned to scouters
-        
+         
 
         //if someone is ACTIVELY scouting the robot, remove it from the set of robots to be scouted
         for (let scouter of ScoutingSync.scouters) {

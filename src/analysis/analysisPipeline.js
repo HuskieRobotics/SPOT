@@ -7,7 +7,7 @@ const chalk = require("chalk");
 const { setPath } = require("../lib/util");
 
 //enable debug logs
-const debug = false
+const debug = false;
 
 /* load transformers */
 const transformers = {
