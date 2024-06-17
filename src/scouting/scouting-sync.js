@@ -180,12 +180,6 @@ class ScoutingSync {
 
         //assign the rest of the robots to waiting scouters
         for (let scouter of ScoutingSync.scouters) {
-        
-
-                // fetch(`api/disconnectScouter/${this.scouterElement.getAttribute("scouter")}`).then(res => res.json())
-                // console.log("disconnected scouter")
-                // scouter.state = 4;
-                
             if (scouter.state.connected && scouter.state.status === ScoutingSync.SCOUTER_STATUS.WAITING) {
                 //check to see if nextRobots is empty, if so repopulate it with all the robots in the match
                 if (nextRobots.size <= 0) {
@@ -233,7 +227,7 @@ class ScoutingSync {
     static getScouters() {
         let out = ScoutingSync.scouters.map(x => {return { ...x }} );
         for (let scouter of out) { //remove sockets from all the scouters so there isn't circular dependency
-            delete scouter.socket;//maybe don't do this bc why
+            delete scouter.socket;
         }
         return out;
     }
