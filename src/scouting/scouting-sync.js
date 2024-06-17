@@ -9,7 +9,8 @@ const {TeamMatchPerformance} = require("../lib/db.js");
 const axios = require("axios");
 const config = require("../../config/config.json");
 const chalk = require("chalk");
-const DEMO = false;
+const DEMO = config.DEMO ;
+
 module.exports = (server) => {
     if (!ScoutingSync.initialized) {
         if (!server) {
@@ -30,6 +31,7 @@ class ScoutingSync {
         "WAITING": 1, //scouters not actively in the process of scouting (dont have the scouting ui open)
         "SCOUTING": 2, //scouters actively scouting a match
         "COMPLETE": 3,
+        "DISCONNECTED_BY_ADMIN": 4,
     }
 
     static async initialize(server) {
@@ -70,6 +72,8 @@ class ScoutingSync {
             return []; //no key, no matches
         }
 
+        let formattedMatches = [];
+
         let tbaMatches = (await axios.get(`https://www.thebluealliance.com/api/v3/event/${config.TBA_EVENT_KEY}/matches`, {
             headers: {
                 "X-TBA-Auth-Key": config.secrets.TBA_API_KEY
@@ -77,16 +81,64 @@ class ScoutingSync {
         }).catch(e => console.log(e,chalk.bold.red("\nError fetching matches from Blue Alliance Api!"))));
 
         if (tbaMatches === undefined) {
-            return [];
+            if (config.secrets.FMS_API_KEY) {
+                let uri = `https://frc-api.firstinspires.org/v3.0/${config.TBA_EVENT_KEY.substring(0, 4)}/schedule/${config.TBA_EVENT_KEY.substring(4, config.TBA_EVENT_KEY.length)}?tournamentLevel=practice`;
+
+                let frcPracticeMatches = (await axios.get(uri, {
+                    auth: {
+                        username: config.secrets.FMS_API_USERNAME,
+                        password: config.secrets.FMS_API_KEY
+                    }
+                }).catch(e => console.log(e, chalk.bold.red("\nError fetching practice matches from FMS!"))));
+
+                if (frcPracticeMatches === undefined) return formattedMatches;
+                formattedMatches = this.formatFMSMatches(frcPracticeMatches.data);
+            } else {
+                return formattedMatches;
+            }
         } else {
-            tbaMatches = tbaMatches.data;
+            formattedMatches = this.formatTBAMatches(tbaMatches.data);
         }
 
+        return formattedMatches;
+    }
+
+    static formatFMSMatches(matches) {
+        let processedMatches = [];
+
+        for (let match of matches.Schedule) {
+            let redTeams = [];
+            let blueTeams = [];
+
+            for (const team of match.teams) {
+                if (new RegExp("Red").test(team.station)) {
+                    redTeams.push(team.teamNumber);
+                } else {
+                    blueTeams.push(team.teamNumber);
+                }
+            }
+
+
+
+            processedMatches.push({
+                number: match.matchNumber, //adjust match number with the offset
+                match_string: `${config.TBA_EVENT_KEY}_pm${match.matchNumber}`,
+                robots: {
+                    red: redTeams,
+                    blue: blueTeams
+                }
+            });
+        }
+
+        return processedMatches;
+    }
+
+    static formatTBAMatches(matches) {
         //determine match numbers linearly (eg. if there are 10 quals, qf1 would be match 11)
         const matchLevels = ["qm", "ef", "qf", "sf", "f"];
         let levelCounts = {};
         for (let level of matchLevels) {
-            levelCounts[level] = tbaMatches.filter(x=>x.comp_level == level).length
+            levelCounts[level] = matches.filter(x=>x.comp_level == level).length
         }
 
         //find the offset to apply to each level of match
@@ -94,11 +146,11 @@ class ScoutingSync {
         for (let [index,level] of matchLevels.entries()) {
             levelOffsets[level] = matchLevels.slice(0,index).reduce((acc,level) => acc+levelCounts[level],0);
         }
-        
+
         let processedMatches = [];
 
         //add the level offset to each match and simplify structure
-        for (let match of tbaMatches) {
+        for (let match of matches) {
             processedMatches.push({
                 number: match.match_number + levelOffsets[match.comp_level], //adjust match number with the offset
                 match_string: match.key,
@@ -110,9 +162,7 @@ class ScoutingSync {
         }
 
         //sort the processed matches by number
-        processedMatches = processedMatches.sort((a,b) => a.number - b.number);
-
-        return processedMatches;
+        return processedMatches.sort((a,b) => a.number - b.number);
     }
 
     /**
@@ -120,7 +170,7 @@ class ScoutingSync {
      */
     static assignScouters() {
         let nextRobots = new Set(ScoutingSync.match.robots.red.concat(ScoutingSync.match.robots.blue)); //the robots that are next in line to be assigned to scouters
-        
+         
 
         //if someone is ACTIVELY scouting the robot, remove it from the set of robots to be scouted
         for (let scouter of ScoutingSync.scouters) {

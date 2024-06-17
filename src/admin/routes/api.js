@@ -5,7 +5,7 @@ const config = require("../../../config/config.json");
 const { TeamMatchPerformance } = require("../../lib/db");
 let axios = require("axios")
 const {getManualMatches} = require("../../schedule/schedule");
-const DEMO = false;
+const DEMO = config.DEMO ;
 
 router.use((req,res,next) => {
     if (!ScoutingSync.initialized) {
@@ -71,6 +71,18 @@ router.get("/enterMatch", async (req,res) => {
     res.json();
   }
 })
+router.get("/disconnectScouter/:scouterId", async (req,res) => {
+    if (req.headers.authorization === config.secrets.ACCESS_CODE) {
+      for (let scout of ScoutingSync.scouters) {
+        if (scout.state.scouterId === req.params.scouterId){
+            scout.socket.emit("adminDisconnect");
+            scout.socket.disconnect();
+            console.log("Disconnected Scouter " + scout.state.scouterId)
+          }
+        }
+    res.json(true);
+  } 
+})
 router.post("/setMatch", (req,res) => {
   if(!DEMO){
     if (req.headers.authorization === config.secrets.ACCESS_CODE) {
@@ -89,18 +101,18 @@ router.post("/setMatch", (req,res) => {
 
 router.get("/matches", async (req,res) => {
 
-  let manualSchedule = getManualMatches();
+  let manualSchedule = getManualMatches() 
 
-  if(manualSchedule.length === 0){
-      res.json({
-          "allMatches": await ScoutingSync.getMatches(),
-          "currentMatch": ScoutingSync.match
-      });
+  if(manualSchedule.length){
+    res.json({
+      "allMatches": manualSchedule,
+      "currentMatch": ScoutingSync.match
+    })
   } else {
-      res.json({
-          "allMatches": manualSchedule,
-          "currentMatch": ScoutingSync.match
-      });
+    res.json({
+      "allMatches": await ScoutingSync.getMatches(),
+      "currentMatch": ScoutingSync.match
+  });
   }
 })
 module.exports = router;

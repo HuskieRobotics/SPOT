@@ -38,6 +38,11 @@ class Modal {
     return this
   }
 
+  scale(factor) {
+    this.element.style.transform = `translate(-50%, -50%) scale(${factor})`
+    return this
+  }
+
   assignCancel(cancelFunction) {
     this.blind.addEventListener("click", cancelFunction)
     this.close.addEventListener("click", cancelFunction)
