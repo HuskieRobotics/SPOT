@@ -5,7 +5,9 @@
         "GOOGLE_AUTH": {
             "CLIENT_ID": "",
             "CLIENT_SECRET": ""
-        }
+        },
+        "FMS_API_USERNAME": "",
+        "FMS_API_KEY": ""
     },
     
     "EVENT_NUMBER": 0,
