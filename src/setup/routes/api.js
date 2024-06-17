@@ -70,7 +70,9 @@ router.post("/config", async (req,res) => {
             res.json({success: false, reason:"Invalid TBA_API_KEY!"});
             return;
         }
-
+        if (!('DEMO' in config)) {
+            config.DEMO = false;
+        }
         fs.writeFileSync("config/config.json",JSON.stringify(config));
 
         res.json({success: true});

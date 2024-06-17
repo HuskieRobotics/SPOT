@@ -5,7 +5,7 @@ const config = require("../../../config/config.json");
 const { TeamMatchPerformance } = require("../../lib/db");
 let axios = require("axios")
 const {getManualMatches} = require("../../schedule/schedule");
-const DEMO = false;
+const DEMO = config.DEMO ;
 
 router.use((req,res,next) => {
     if (!ScoutingSync.initialized) {
@@ -101,18 +101,18 @@ router.post("/setMatch", (req,res) => {
 
 router.get("/matches", async (req,res) => {
 
-  let manualSchedule = getManualMatches();
+  let manualSchedule = getManualMatches() 
 
-  if(manualSchedule.length === 0){
-      res.json({
-          "allMatches": await ScoutingSync.getMatches(),
-          "currentMatch": ScoutingSync.match
-      });
+  if(manualSchedule.length){
+    res.json({
+      "allMatches": manualSchedule,
+      "currentMatch": ScoutingSync.match
+    })
   } else {
-      res.json({
-          "allMatches": manualSchedule,
-          "currentMatch": ScoutingSync.match
-      });
+    res.json({
+      "allMatches": await ScoutingSync.getMatches(),
+      "currentMatch": ScoutingSync.match
+  });
   }
 })
 module.exports = router;

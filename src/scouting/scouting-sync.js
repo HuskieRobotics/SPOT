@@ -9,7 +9,8 @@ const {TeamMatchPerformance} = require("../lib/db.js");
 const axios = require("axios");
 const config = require("../../config/config.json");
 const chalk = require("chalk");
-const DEMO = false;
+const DEMO = config.DEMO ;
+
 module.exports = (server) => {
     if (!ScoutingSync.initialized) {
         if (!server) {

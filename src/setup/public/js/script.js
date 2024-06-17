@@ -67,6 +67,13 @@ async function constructApp(accessCode) {
         document.querySelector("#GOOGLE_CLIENT_ID").value = config.GOOGLE_CLIENT_ID || ""
         document.querySelector("#GOOGLE_CLIENT_SECRET").value = config.GOOGLE_CLIENT_SECRET || ""
         document.querySelector("#EVENT_NUMBER").value = config.EVENT_NUMBER || ""
+        if (config.DEMO ) {
+            document.querySelector("#DEMO").value = config.DEMO;
+            document.querySelector("#DEMO").checked = true
+        }else{
+            document.querySelector("#DEMO").value = 0;
+            document.querySelector("#DEMO").checked = false
+        }
     }
 
     document.querySelector("#setup-container").classList.add("visible")

@@ -105,10 +105,22 @@
                     <span>Event Number</span>
                 </label>
             </div>
+            <div>
+                <h1>Demo Mode</h1>
+                <p> Demo mode disables certain functionality in order to allow use without altering the database</p>
+                <label class="switch"  id="toggleSwitch">
+                    <input class="switch-input" type="checkbox" id="DEMO" name="DEMO" class="input">
+                    <span class="slider round"></span>
+                    <span class="on">ON</span>
+                    <span class="off">OFF</span>
+                </label>
+            </div>
         </form>
 
         <button id="submit">Submit</button>
     </div>
+
+    <script src="./js/demo.js"></script>
     <script src="./js/ui-elements.js"></script>
     <script src="./js/script.js"></script>
 </body>
