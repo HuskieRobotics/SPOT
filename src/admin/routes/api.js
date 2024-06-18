@@ -4,7 +4,6 @@ let router = Router();
 const config = require("../../../config/config.json");
 const { TeamMatchPerformance } = require("../../lib/db");
 let axios = require("axios");
-const { getManualMatches } = require("../../schedule/schedule");
 const DEMO = config.DEMO;
 
 router.use((req, res, next) => {
@@ -99,8 +98,7 @@ router.post("/setMatch", (req, res) => {
 });
 
 router.get("/matches", async (req, res) => {
-  let manualSchedule = getManualMatches();
-
+  let manualSchedule = (await axios.get("/schedule/api/matches")).data;
   if (manualSchedule.length) {
     res.json({
       allMatches: manualSchedule,
