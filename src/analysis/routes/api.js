@@ -27,7 +27,7 @@ router.get("/teams", async (req, res) => {
             headers: {
                 "X-TBA-Auth-Key": config.secrets.TBA_API_KEY
             }
-        }).catch(e => console.log(e,chalk.bold.red("\nError fetching teams from Blue Alliance API!")))).data;
+        }).catch(e => console.error(e,chalk.bold.red("\nError fetching teams from Blue Alliance API!")))).data;
     }
     res.json(teams);
 });
