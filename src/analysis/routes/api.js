@@ -2,7 +2,6 @@ const { Router } = require("express");
 const { TeamMatchPerformance } = require("../../lib/db.js");
 const axios = require("axios");
 const config = require("../../../config/config.json");
-const { getTempTeams } = require("../../schedule/schedule");
 
 let router = Router();
 
@@ -26,7 +25,7 @@ router.get("/teams", async (req, res) => {
   }
   let teams = [];
 
-  teams = getTempTeams();
+  teams = (await axios.get("/schedule/api/tempTeams")).data;
 
   if (teams.length === 0) {
     teams = (

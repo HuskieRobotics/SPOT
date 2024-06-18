@@ -8,6 +8,9 @@ const server = app.listen(process.env.PORT || 8080, () => {
 const chalk = require("chalk");
 const fs = require("fs");
 
+const axios = require("axios");
+axios.defaults.baseURL = `http://localhost:${process.env.PORT || 8080}`;
+
 app.set("view engine", "ejs");
 let bodyParser = require("body-parser");
 app.use(bodyParser.json());
@@ -23,7 +26,6 @@ if (fs.existsSync("config/config.json")) {
   app.use("/admin", require("./admin/admin.js"));
   app.use("/qrscanner", require("./qrscanner/qrscanner.js"));
   app.use("/setup", require("./setup/setup.js"));
-  app.use("/checklist", require("./checklist/checklist.js"));
   app.use("/schedule", require("./schedule/schedule").router);
 } else {
   console.log(

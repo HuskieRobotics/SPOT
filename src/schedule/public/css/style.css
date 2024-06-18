@@ -106,7 +106,7 @@ body {
 #matches .match {
   display: grid;
   width: 100%;
-  grid-template-columns: calc(0.75 * 80px + 14px) repeat(2, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   grid-template-rows: 30% 70%;
   border: 2px solid var(--text);
   border-radius: 10px;
