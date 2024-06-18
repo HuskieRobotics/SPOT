@@ -13,11 +13,10 @@
 // document.querySelector(".debug-switcher").appendChild(syncButton)
 
 document.querySelector(".reload").addEventListener("click", () => {
-  new Modal("small")
-    .header("Warning")
-    .text("Are you sure you want to reload?")
-    .action(
-      "Reload",
-      () => console.log("reload disabled") // window.location.reload()
-    );
-});
+	new Modal("small")
+		.header("Warning")
+		.text("Are you sure you want to reload?")
+		.action("Reload", 
+			() => console.log('reload disabled') // window.location.reload()
+		)
+})

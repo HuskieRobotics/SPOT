@@ -1,1 +1,1 @@
-const matchElement = document.getElementById("match-list");
+const matchElement = document.getElementById("match-list")

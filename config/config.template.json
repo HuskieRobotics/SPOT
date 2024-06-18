@@ -1,16 +1,16 @@
 {
-  "secrets": {
-    "DATABASE_URL": "",
-    "TBA_API_KEY": "",
-    "GOOGLE_AUTH": {
-      "CLIENT_ID": "",
-      "CLIENT_SECRET": ""
+    "secrets": {
+        "DATABASE_URL": "",
+        "TBA_API_KEY": "",
+        "GOOGLE_AUTH": {
+            "CLIENT_ID": "",
+            "CLIENT_SECRET": ""
+        },
+        "FMS_API_USERNAME": "",
+        "FMS_API_KEY": ""
     },
-    "FMS_API_USERNAME": "",
-    "FMS_API_KEY": ""
-  },
 
-  "EVENT_NUMBER": 0,
-  "VERSION": "0.0",
-  "TBA_EVENT_KEY": ""
+    "EVENT_NUMBER": 0,
+    "VERSION": "0.0",
+    "TBA_EVENT_KEY": ""
 }
