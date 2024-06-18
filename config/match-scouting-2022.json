@@ -1,255 +1,255 @@
 {
-    "timing": {
-        "totalTime": 150000,
-        "timeTransitions": {
-            "149990": {
-                "layer": 1,
-                "displayText": "Auto"
-            },
-            "131000": {
-                "layer": 3,
-                "displayText": "Teleop"
-            }
-        }
-    },
-    "layout": {
-        "gridRows": 5,
-        "gridColumns": 5,
-        "layers": [
-            [
-                {
-                    "id": "startGame",
-                    "displayText": "Start",
-                    "gridArea": ["1", "2", "2", "5"],
-                    "class": "gray timer",
-                    "type": "match-control",
-                    "executables": []
-                }
-            ],
-            [
-                {
-                    "id": "startGame",
-                    "displayText": "Start",
-                    "gridArea": ["1", "2", "2", "5"],
-                    "class": "gray timer",
-                    "type": "match-control",
-                    "executables": []
-                },
-                {
-                    "id": "leaveTarmac",
-                    "displayText": "Leave Tarmac Zone",
-                    "gridArea": ["3", "2", "4", "5"],
-                    "class": "gray largeAction",
-                    "type": "action",
-                    "executables": [{"type": "hide", "args": []}]
-                },
-                {
-                    "id": "undo",
-                    "displayText": "Undo",
-                    "gridArea": ["5", "2", "6", "3"],
-                    "class": "green",
-                    "type": "undo",
-                    "executables": []
-                },
-                {
-                    "id": "groundPickup",
-                    "displayText": "Ball Pickup",
-                    "gridArea": ["5", "1", "6", "2"],
-                    "class": "navy",
-                    "type": "action",
-                    "executables": [{"type": "position", "args":[]}]
-                },
-                {
-                    "id": "upperHub",
-                    "displayText": "Upper Hub",
-                    "gridArea": ["4", "5", "5", "6"],
-                    "class": "orange",
-                    "type": "action",
-                    "executables": [{"type": "position", "args":[]}]
-                },
-                {
-                    "id": "lowerHub",
-                    "displayText": "Lower Hub",
-                    "gridArea": ["5", "5", "6", "6"],
-                    "class": "orange",
-                    "type": "action",
-                    "executables": [{"type": "position", "args":[]}]
-                },
-                {
-                    "id": "miss",
-                    "displayText": "Miss",
-                    "gridArea": ["5", "4", "6", "5"],
-                    "class": "red",
-                    "type": "action",
-                    "executables": [{"type": "position", "args":[]}]
-                }
-            ],
-            [
-                {
-                    "id": "startGame",
-                    "displayText": "Start",
-                    "gridArea": ["1", "2", "2", "5"],
-                    "class": "gray",
-                    "type": "match-control",
-                    "executables": []
-                },
-                {
-                    "id": "undo",
-                    "displayText": "Undo",
-                    "gridArea": ["5", "2", "6", "3"],
-                    "class": "green",
-                    "type": "undo",
-                    "executables": []
-                },
-                {
-                    "id": "groundPickup",
-                    "displayText": "Ball Pickup",
-                    "gridArea": ["5", "1", "6", "2"],
-                    "class": "navy",
-                    "type": "action",
-                    "executables": [{"type": "position", "args":[]}]
-                },
-                {
-                    "id": "upperHub",
-                    "displayText": "Upper Hub",
-                    "gridArea": ["4", "5", "5", "6"],
-                    "class": "orange",
-                    "type": "action",
-                    "executables": [{"type": "position", "args":[]}]
-                },
-                {
-                    "id": "lowerHub",
-                    "displayText": "Lower Hub",
-                    "gridArea": ["5", "5", "6", "6"],
-                    "class": "orange",
-                    "type": "action",
-                    "executables": [{"type": "position", "args":[]}]
-                },
-                {
-                    "id": "miss",
-                    "displayText": "Miss",
-                    "gridArea": ["5", "4", "6", "5"],
-                    "class": "red",
-                    "type": "action",
-                    "executables": [{"type": "position", "args":[]}]
-                }
-            ],
-            [
-                {
-                    "id": "startGame",
-                    "displayText": "Start",
-                    "gridArea": ["1", "2", "2", "5"],
-                    "class": "gray",
-                    "type": "match-control",
-                    "executables": []
-                },
-                {
-                    "id": "undo",
-                    "displayText": "Undo",
-                    "gridArea": ["5", "2", "6", "3"],
-                    "class": "green",
-                    "type": "undo",
-                    "executables": []
-                },
-                {
-                    "id": "groundPickup",
-                    "displayText": "Ball Pickup",
-                    "gridArea": ["5", "1", "6", "2"],
-                    "class": "navy",
-                    "type": "action",
-                    "executables": [{"type": "position", "args":[]}]
-                },
-                {
-                    "id": "upperHub",
-                    "displayText": "Upper Hub",
-                    "gridArea": ["4", "5", "5", "6"],
-                    "class": "orange",
-                    "type": "action",
-                    "executables": [{"type": "position", "args":[]}]
-                },
-                {
-                    "id": "lowerHub",
-                    "displayText": "Lower Hub",
-                    "gridArea": ["5", "5", "6", "6"],
-                    "class": "orange",
-                    "type": "action",
-                    "executables": [{"type": "position", "args":[]}]
-                },
-                {
-                    "id": "miss",
-                    "displayText": "Miss",
-                    "gridArea": ["5", "4", "6", "5"],
-                    "class": "red",
-                    "type": "action",
-                    "executables": [{"type": "position", "args":[]}]
-                },
-                {
-                    "id": "startClimb",
-                    "displayText": "Start Climb",
-                    "gridArea": ["3", "2", "4", "5"],
-                    "class": "gray",
-                    "type": "action",
-                    "executables": [{"type": "layer", "args":[3,4]}]
-                }
-            ],
-            [
-                {
-                    "id": "startGame",
-                    "displayText": "Start",
-                    "gridArea": ["1", "2", "2", "5"],
-                    "class": "gray",
-                    "type": "match-control",
-                    "executables": []
-                },
-                {
-                    "id": "undo",
-                    "displayText": "Undo",
-                    "gridArea": ["5", "2", "6", "5"],
-                    "class": "green",
-                    "type": "undo",
-                    "executables": []
-                },
-                {
-                    "id": "climb1",
-                    "displayText": "1",
-                    "gridArea": ["3", "1", "4", "2"],
-                    "class": "pink",
-                    "type": "action",
-                    "executables": [{"type":"climbHighlight","args":[]}]
-                },
-                {
-                    "id": "climb2",
-                    "displayText": "2",
-                    "gridArea": ["3", "2", "4", "3"],
-                    "class": "pink",
-                    "type": "action",
-                    "executables": [{"type":"climbHighlight","args":[]}]
-                },
-                {
-                    "id": "climb3",
-                    "displayText": "3",
-                    "gridArea": ["3", "3", "4", "4"],
-                    "class": "pink",
-                    "type": "action",
-                    "executables": [{"type":"climbHighlight","args":[]}]
-                },
-                {
-                    "id": "climb4",
-                    "displayText": "4",
-                    "gridArea": ["3", "4", "4", "5"],
-                    "class": "pink",
-                    "type": "action",
-                    "executables": [{"type":"climbHighlight","args":[]}]
-                },
-                {
-                    "id": "climbF",
-                    "displayText": "Fall",
-                    "gridArea": ["3", "5", "4", "6"],
-                    "class": "red",
-                    "type": "action",
-                    "executables": [{"type": "layer", "args":[4,3]}]
-                }
-            ]
-        ]
+  "timing": {
+    "totalTime": 150000,
+    "timeTransitions": {
+      "149990": {
+        "layer": 1,
+        "displayText": "Auto"
+      },
+      "131000": {
+        "layer": 3,
+        "displayText": "Teleop"
+      }
     }
+  },
+  "layout": {
+    "gridRows": 5,
+    "gridColumns": 5,
+    "layers": [
+      [
+        {
+          "id": "startGame",
+          "displayText": "Start",
+          "gridArea": ["1", "2", "2", "5"],
+          "class": "gray timer",
+          "type": "match-control",
+          "executables": []
+        }
+      ],
+      [
+        {
+          "id": "startGame",
+          "displayText": "Start",
+          "gridArea": ["1", "2", "2", "5"],
+          "class": "gray timer",
+          "type": "match-control",
+          "executables": []
+        },
+        {
+          "id": "leaveTarmac",
+          "displayText": "Leave Tarmac Zone",
+          "gridArea": ["3", "2", "4", "5"],
+          "class": "gray largeAction",
+          "type": "action",
+          "executables": [{ "type": "hide", "args": [] }]
+        },
+        {
+          "id": "undo",
+          "displayText": "Undo",
+          "gridArea": ["5", "2", "6", "3"],
+          "class": "green",
+          "type": "undo",
+          "executables": []
+        },
+        {
+          "id": "groundPickup",
+          "displayText": "Ball Pickup",
+          "gridArea": ["5", "1", "6", "2"],
+          "class": "navy",
+          "type": "action",
+          "executables": [{ "type": "position", "args": [] }]
+        },
+        {
+          "id": "upperHub",
+          "displayText": "Upper Hub",
+          "gridArea": ["4", "5", "5", "6"],
+          "class": "orange",
+          "type": "action",
+          "executables": [{ "type": "position", "args": [] }]
+        },
+        {
+          "id": "lowerHub",
+          "displayText": "Lower Hub",
+          "gridArea": ["5", "5", "6", "6"],
+          "class": "orange",
+          "type": "action",
+          "executables": [{ "type": "position", "args": [] }]
+        },
+        {
+          "id": "miss",
+          "displayText": "Miss",
+          "gridArea": ["5", "4", "6", "5"],
+          "class": "red",
+          "type": "action",
+          "executables": [{ "type": "position", "args": [] }]
+        }
+      ],
+      [
+        {
+          "id": "startGame",
+          "displayText": "Start",
+          "gridArea": ["1", "2", "2", "5"],
+          "class": "gray",
+          "type": "match-control",
+          "executables": []
+        },
+        {
+          "id": "undo",
+          "displayText": "Undo",
+          "gridArea": ["5", "2", "6", "3"],
+          "class": "green",
+          "type": "undo",
+          "executables": []
+        },
+        {
+          "id": "groundPickup",
+          "displayText": "Ball Pickup",
+          "gridArea": ["5", "1", "6", "2"],
+          "class": "navy",
+          "type": "action",
+          "executables": [{ "type": "position", "args": [] }]
+        },
+        {
+          "id": "upperHub",
+          "displayText": "Upper Hub",
+          "gridArea": ["4", "5", "5", "6"],
+          "class": "orange",
+          "type": "action",
+          "executables": [{ "type": "position", "args": [] }]
+        },
+        {
+          "id": "lowerHub",
+          "displayText": "Lower Hub",
+          "gridArea": ["5", "5", "6", "6"],
+          "class": "orange",
+          "type": "action",
+          "executables": [{ "type": "position", "args": [] }]
+        },
+        {
+          "id": "miss",
+          "displayText": "Miss",
+          "gridArea": ["5", "4", "6", "5"],
+          "class": "red",
+          "type": "action",
+          "executables": [{ "type": "position", "args": [] }]
+        }
+      ],
+      [
+        {
+          "id": "startGame",
+          "displayText": "Start",
+          "gridArea": ["1", "2", "2", "5"],
+          "class": "gray",
+          "type": "match-control",
+          "executables": []
+        },
+        {
+          "id": "undo",
+          "displayText": "Undo",
+          "gridArea": ["5", "2", "6", "3"],
+          "class": "green",
+          "type": "undo",
+          "executables": []
+        },
+        {
+          "id": "groundPickup",
+          "displayText": "Ball Pickup",
+          "gridArea": ["5", "1", "6", "2"],
+          "class": "navy",
+          "type": "action",
+          "executables": [{ "type": "position", "args": [] }]
+        },
+        {
+          "id": "upperHub",
+          "displayText": "Upper Hub",
+          "gridArea": ["4", "5", "5", "6"],
+          "class": "orange",
+          "type": "action",
+          "executables": [{ "type": "position", "args": [] }]
+        },
+        {
+          "id": "lowerHub",
+          "displayText": "Lower Hub",
+          "gridArea": ["5", "5", "6", "6"],
+          "class": "orange",
+          "type": "action",
+          "executables": [{ "type": "position", "args": [] }]
+        },
+        {
+          "id": "miss",
+          "displayText": "Miss",
+          "gridArea": ["5", "4", "6", "5"],
+          "class": "red",
+          "type": "action",
+          "executables": [{ "type": "position", "args": [] }]
+        },
+        {
+          "id": "startClimb",
+          "displayText": "Start Climb",
+          "gridArea": ["3", "2", "4", "5"],
+          "class": "gray",
+          "type": "action",
+          "executables": [{ "type": "layer", "args": [3, 4] }]
+        }
+      ],
+      [
+        {
+          "id": "startGame",
+          "displayText": "Start",
+          "gridArea": ["1", "2", "2", "5"],
+          "class": "gray",
+          "type": "match-control",
+          "executables": []
+        },
+        {
+          "id": "undo",
+          "displayText": "Undo",
+          "gridArea": ["5", "2", "6", "5"],
+          "class": "green",
+          "type": "undo",
+          "executables": []
+        },
+        {
+          "id": "climb1",
+          "displayText": "1",
+          "gridArea": ["3", "1", "4", "2"],
+          "class": "pink",
+          "type": "action",
+          "executables": [{ "type": "climbHighlight", "args": [] }]
+        },
+        {
+          "id": "climb2",
+          "displayText": "2",
+          "gridArea": ["3", "2", "4", "3"],
+          "class": "pink",
+          "type": "action",
+          "executables": [{ "type": "climbHighlight", "args": [] }]
+        },
+        {
+          "id": "climb3",
+          "displayText": "3",
+          "gridArea": ["3", "3", "4", "4"],
+          "class": "pink",
+          "type": "action",
+          "executables": [{ "type": "climbHighlight", "args": [] }]
+        },
+        {
+          "id": "climb4",
+          "displayText": "4",
+          "gridArea": ["3", "4", "4", "5"],
+          "class": "pink",
+          "type": "action",
+          "executables": [{ "type": "climbHighlight", "args": [] }]
+        },
+        {
+          "id": "climbF",
+          "displayText": "Fall",
+          "gridArea": ["3", "5", "4", "6"],
+          "class": "red",
+          "type": "action",
+          "executables": [{ "type": "layer", "args": [4, 3] }]
+        }
+      ]
+    ]
+  }
 }

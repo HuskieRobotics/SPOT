@@ -1,20 +1,18 @@
 class Divider {
-    container;
-	title;
-    moduleConfig;
+  container;
+  title;
+  moduleConfig;
 
-    constructor(moduleConfig) {
-        this.moduleConfig = moduleConfig
-        this.container = createDOMElement("div", "container divider")
-		this.title = createDOMElement("div", "title")
-		this.container.appendChild(this.title)
-    }
+  constructor(moduleConfig) {
+    this.moduleConfig = moduleConfig;
+    this.container = createDOMElement("div", "container divider");
+    this.title = createDOMElement("div", "title");
+    this.container.appendChild(this.title);
+  }
 
-    async formatData() {
-		
-    }
+  async formatData() {}
 
-    async setData() {
-		this.title.innerText = this.moduleConfig.name
-    }
+  async setData() {
+    this.title.innerText = this.moduleConfig.name;
+  }
 }
