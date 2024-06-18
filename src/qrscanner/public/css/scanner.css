@@ -1,115 +1,115 @@
 .qr-container {
-    display: flex;
-    justify-content: center;
-    min-height: 150px;
-    position: relative !important;
-    margin-top: 10px !important;
-    padding: 21px !important;
-    padding-top: 24px !important;
+  display: flex;
+  justify-content: center;
+  min-height: 150px;
+  position: relative !important;
+  margin-top: 10px !important;
+  padding: 21px !important;
+  padding-top: 24px !important;
 }
 
 .qr-scanner {
-    border: 2px solid var(--text) !important;
-    border-radius: 10px !important;
-    width: 500px;
-    max-width: 750px !important;
+  border: 2px solid var(--text) !important;
+  border-radius: 10px !important;
+  width: 500px;
+  max-width: 750px !important;
 }
 
 .qr-scanner > button {
-    border: 2px solid var(--text) !important;
-    background-color: var(--accent) !important;
-    color: var(--bg-alt) !important;
-    border-radius: 10px !important;
-    position: absolute !important;
-    bottom: -3px !important;
-    left: 50% !important;
-    transform: translate(-50%, 50%) !important;
-    font: 1.4em/1em Cairo !important;
-    padding: 5px 20px !important;
-    cursor: pointer !important;
+  border: 2px solid var(--text) !important;
+  background-color: var(--accent) !important;
+  color: var(--bg-alt) !important;
+  border-radius: 10px !important;
+  position: absolute !important;
+  bottom: -3px !important;
+  left: 50% !important;
+  transform: translate(-50%, 50%) !important;
+  font: 1.4em/1em Cairo !important;
+  padding: 5px 20px !important;
+  cursor: pointer !important;
 }
 
 .qr-scanner > input {
-    border: 2px solid var(--text) !important;
-    background-color: var(--accent) !important;
-    color: var(--bg-alt) !important;
-    border-radius: 10px !important;
-    position: absolute !important;
-    bottom: -3px !important;
-    left: 50% !important;
-    transform: translate(-50%, 50%) !important;
-    font: 1.4em/1em Cairo !important;
-    padding: 5px 20px !important;
-    cursor: pointer !important;
+  border: 2px solid var(--text) !important;
+  background-color: var(--accent) !important;
+  color: var(--bg-alt) !important;
+  border-radius: 10px !important;
+  position: absolute !important;
+  bottom: -3px !important;
+  left: 50% !important;
+  transform: translate(-50%, 50%) !important;
+  font: 1.4em/1em Cairo !important;
+  padding: 5px 20px !important;
+  cursor: pointer !important;
 }
 
 .results {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 
 .result {
-    border: 2px solid var(--text);
-    border-radius: 10px;
-    width: 500px;
-    padding-left: 10px;
-    padding-right: 10px;
-    padding-bottom: 10px;
+  border: 2px solid var(--text);
+  border-radius: 10px;
+  width: 500px;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-bottom: 10px;
 }
 
 .result-text {
-    font-size: 20px;
+  font-size: 20px;
 }
 
 .result-divider {
-    justify-self: center;
-    width: 500px;
-    box-sizing: border-box;
-    border: 1px solid var(--accent-alt);
-    border-radius: 10px;
+  justify-self: center;
+  width: 500px;
+  box-sizing: border-box;
+  border: 1px solid var(--accent-alt);
+  border-radius: 10px;
 }
 
 .action-queue {
-    box-sizing: border-box;
-    border: 2px solid var(--accent);
-    padding-left: 10px;
-    border-radius: 10px;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    width: 500px;
+  box-sizing: border-box;
+  border: 2px solid var(--accent);
+  padding-left: 10px;
+  border-radius: 10px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  width: 500px;
 }
 
 .scanner-button {
-    border: 2px solid var(--text);
-    margin-top: 10px;
-    background-color: var(--accent);
-    color: var(--bg-alt);
-    border-radius: 10px;
-    font: 1.4em/1em Cairo;
-    padding: 5px 20px;
-    cursor: pointer;
+  border: 2px solid var(--text);
+  margin-top: 10px;
+  background-color: var(--accent);
+  color: var(--bg-alt);
+  border-radius: 10px;
+  font: 1.4em/1em Cairo;
+  padding: 5px 20px;
+  cursor: pointer;
 }
 
 .scanner-undo {
-    border: 2px solid var(--text);
-    margin-top: 10px;
-    background-color: var(--accent-alt);
-    color: var(--bg-alt);
-    border-radius: 10px;
-    font: 1.4em/1em Cairo;
-    padding: 5px 20px;
-    cursor: pointer;
+  border: 2px solid var(--text);
+  margin-top: 10px;
+  background-color: var(--accent-alt);
+  color: var(--bg-alt);
+  border-radius: 10px;
+  font: 1.4em/1em Cairo;
+  padding: 5px 20px;
+  cursor: pointer;
 }
 
 .notification {
-    position: fixed;
-    top: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    padding: 10px;
-    background-color: #4CAF50;
-    color: white;
-    border-radius: 5px;
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 10px;
+  background-color: #4caf50;
+  color: white;
+  border-radius: 5px;
 }

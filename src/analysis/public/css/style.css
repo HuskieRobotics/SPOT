@@ -79,7 +79,7 @@ body {
 }
 
 #main-list > div.hidden {
-	display: none;
+  display: none;
 }
 
 #side-list {
@@ -93,7 +93,7 @@ body {
 }
 
 #side-list > div.hidden {
-	display: none;
+  display: none;
 }
 
 #logo {
@@ -109,7 +109,7 @@ body {
 }
 
 #logo-img {
-  height: 50px;;
+  height: 50px;
 }
 
 #logo-text {
@@ -149,8 +149,9 @@ body {
   transition: 0.3s color;
 }
 
-#search-input:focus + #search-icon, #search-input:valid + #search-icon {
-  color: var(--accent)
+#search-input:focus + #search-icon,
+#search-input:valid + #search-icon {
+  color: var(--accent);
 }
 
 #loading-bar-container {
@@ -169,7 +170,7 @@ body {
   transition: 0.3s all;
 }
 
-.team-container { 
+.team-container {
   border-radius: 16px;
   border: 2px solid var(--accent-alt);
   background-color: var(--bg);
@@ -204,7 +205,8 @@ body {
   border-top-width: 2px;
 }
 
-.team-container.selected > .team-number, .team-container.selected > .team-name {
+.team-container.selected > .team-number,
+.team-container.selected > .team-name {
   color: var(--bg-alt);
 }
 
@@ -254,7 +256,8 @@ body {
   transition: visibility 0s 0s, opacity 0.3s 0s;
 }
 
-#match-view-switch,#auto-pick-switch {
+#match-view-switch,
+#auto-pick-switch {
   background-color: var(--bg);
   border: 3px solid var(--accent);
   border-radius: var(--border-radius);
@@ -266,9 +269,10 @@ body {
   margin-bottom: 10px;
 }
 
-#match-view-switch.selected,#auto-pick-switch.selected {
+#match-view-switch.selected,
+#auto-pick-switch.selected {
   background-color: var(--accent);
-  color: var(--bg-alt)
+  color: var(--bg-alt);
 }
 
 #match-view {
@@ -294,9 +298,9 @@ body {
 }
 
 #auto-pick-view {
-  display:grid;
+  display: grid;
   grid-template-columns: 1fr 3fr 1fr;
-  overflow:auto;
+  overflow: auto;
   /*
   display: flex;
   flex-direction:row;
@@ -304,59 +308,57 @@ body {
   */
 }
 
-#pick-list-text{
+#pick-list-text {
   font-size: 25px;
   line-height: 1em;
   color: var(--accent-alt);
-  margin-top:32px;
-  margin-bottom:10px;
+  margin-top: 32px;
+  margin-bottom: 10px;
 }
 
-#team-list-container{
+#team-list-container {
   display: flex;
-  flex-direction:column;
-  
-  align-items:center;
-  margin-left:40px;
+  flex-direction: column;
+
+  align-items: center;
+  margin-left: 40px;
   gap: 10px;
   overflow: auto;
   min-width: 150px;
   min-height: 600px;
 }
 
-#auto-pick-team-list{
+#auto-pick-team-list {
   display: flex;
-  flex-direction:column;
-  flex-basis:auto;
-  margin-bottom:15px;
+  flex-direction: column;
+  flex-basis: auto;
+  margin-bottom: 15px;
   gap: 10px;
-  overflow:auto;
+  overflow: auto;
 }
 
-#auto-pick-main{
-  width:95%;
+#auto-pick-main {
+  width: 95%;
   min-width: 475px;
   min-height: 600px;
-  flex-direction:column;
-  overflow:auto;  
-  margin:auto;
-  margin-bottom:10px;
+  flex-direction: column;
+  overflow: auto;
+  margin: auto;
+  margin-bottom: 10px;
   gap: 10px;
-  margin-top:32px;
-  
-}
-
-#auto-pick-side{
-  display: flex;
-  flex-direction:column;
-  overflow:auto;
-  gap: 10px;
-  min-width: 200px;
-  min-height: 600px;
-  margin-bottom:15px;
   margin-top: 32px;
 }
 
+#auto-pick-side {
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+  gap: 10px;
+  min-width: 200px;
+  min-height: 600px;
+  margin-bottom: 15px;
+  margin-top: 32px;
+}
 
 #alliance-vs {
   font-size: 1.5rem;
@@ -369,40 +371,40 @@ body {
 }
 
 .alliance-selects > select {
-	width: 90px;
+  width: 90px;
 }
 
 .select {
-	border-radius: var(--border-radius);
-	border: 2px solid var(--text);
-	font-size: 1.2rem;
-	text-align: center;
-	color: var(--text);
-	background-color: var(--bg-alt);
-	transition: 0.2s border-color;
+  border-radius: var(--border-radius);
+  border: 2px solid var(--text);
+  font-size: 1.2rem;
+  text-align: center;
+  color: var(--text);
+  background-color: var(--bg-alt);
+  transition: 0.2s border-color;
 }
 
 .select > option {
-	text-align: center;
+  text-align: center;
 }
 
 .select.filled {
-	border-color: var(--accent-alt);
+  border-color: var(--accent-alt);
 }
 
 #match-select-label {
-	font-size: 1.4em;
-	/* font-weight: 00; */
+  font-size: 1.4em;
+  /* font-weight: 00; */
 }
 
 #match-select-container {
-	display: flex;
-	align-items: center;
-	gap: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 #match-select {
-	width: 100px;
+  width: 100px;
 }
 
 #alliance-module-container {
@@ -427,11 +429,11 @@ body {
 }
 
 .alliance-modules > div.hidden {
-	display: none;
+  display: none;
 }
 
-#auto-pick-stats{
-  overflow:auto;
+#auto-pick-stats {
+  overflow: auto;
   /*
   margin-left:75px;
   margin-top:50px;
@@ -439,30 +441,29 @@ body {
   border-width:5px;
   border-color:red;
   */
-} 
-
+}
 
 @media screen and (max-width: 1100px) {
-	html {
-		font-size: 75%;
-	}
+  html {
+    font-size: 75%;
+  }
 
-	#app {
-		grid-template-columns: 200px auto;
-		grid-template-rows: 40px 20px auto;
-	}
+  #app {
+    grid-template-columns: 200px auto;
+    grid-template-rows: 40px 20px auto;
+  }
 
-	#x > div.visible {
-		height: calc(100vh - 40px);
-	}
+  #x > div.visible {
+    height: calc(100vh - 40px);
+  }
 
-	#main-list {
-		padding: 25px 0;
-	}
+  #main-list {
+    padding: 25px 0;
+  }
 
-	#side-list {
-		padding: 25px 0;
-	}
+  #side-list {
+    padding: 25px 0;
+  }
 
   /* #menu {
     width: 100px;
@@ -489,6 +490,4 @@ body {
   #app{
     grid-template-columns: 100px auto;
   } */
-
-  
 }

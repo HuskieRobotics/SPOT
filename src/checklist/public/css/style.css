@@ -1,142 +1,140 @@
 body {
-    background-color: var(--bg);
-  }
-  
-  #app {
-    height: 100vh;
-    width: 100%;
-    display: grid;
-    grid-template-columns: 275px auto;
-    grid-template-rows: 75px 30px auto;
-    transition: 0.3s visibility, opacity;
-    opacity: 0;
-    visibility: hidden;
-    background-color: var(--bg);
-    overflow: hidden;
-  }
-  
-  #app.visible {
-    visibility: unset;
-    opacity: 1;
-    transition: visibility 0s 0s, opacity 0.3s 0s;
-  }
-  
-  /* styling for page header */
-  #header {
-    background: var(--text);
-    height: 100px;
-    width: 100px;
-    border-bottom: 0.25vh solid white;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 20px;
-    box-shadow: 0 0 12px -2px #ff6030;
-    grid-area: 1 / 2 / 2 / 4;
-  }
-  /* styling for logo */
-  #logo {
-    height: 95px;
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    grid-area: 1 / 1 / 3 / 2;
-    gap: 25px;
-    
-    background-color: var(--accent-alt);
-  }
-  
-  #logo-img {
-    height: 50px;;
-  }
-  
-  #logo-text {
-    color: white;
-    font-size: 2.5rem;
-  }
-  /* styling for buttons  */
-  .team-container { 
-    border-radius: 16px;
-    border: 2px solid var(--accent-alt);
-    background-color: var(--bg);
-    padding: 16px;
-    border-top-width: 2px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    cursor: pointer;
-    transition: 0.3s border, 0.3s background-color;
-    width: 75%;
-    justify-items: center;
+  background-color: var(--bg);
+}
 
+#app {
+  height: 100vh;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 275px auto;
+  grid-template-rows: 75px 30px auto;
+  transition: 0.3s visibility, opacity;
+  opacity: 0;
+  visibility: hidden;
+  background-color: var(--bg);
+  overflow: hidden;
+}
+
+#app.visible {
+  visibility: unset;
+  opacity: 1;
+  transition: visibility 0s 0s, opacity 0.3s 0s;
+}
+
+/* styling for page header */
+#header {
+  background: var(--text);
+  height: 100px;
+  width: 100px;
+  border-bottom: 0.25vh solid white;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+  box-shadow: 0 0 12px -2px #ff6030;
+  grid-area: 1 / 2 / 2 / 4;
+}
+/* styling for logo */
+#logo {
+  height: 95px;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  grid-area: 1 / 1 / 3 / 2;
+  gap: 25px;
+
+  background-color: var(--accent-alt);
+}
+
+#logo-img {
+  height: 50px;
+}
+
+#logo-text {
+  color: white;
+  font-size: 2.5rem;
+}
+/* styling for buttons  */
+.team-container {
+  border-radius: 16px;
+  border: 2px solid var(--accent-alt);
+  background-color: var(--bg);
+  padding: 16px;
+  border-top-width: 2px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  cursor: pointer;
+  transition: 0.3s border, 0.3s background-color;
+  width: 75%;
+  justify-items: center;
+}
+/* team number */
+.team-container > .team-number {
+  text-align: center;
+  text-justify: center;
+  width: 100%;
+  color: var(--accent-alt);
+  font-weight: 600;
+  font-size: 2rem;
+  line-height: 2rem;
+  transition: 0.3s color;
+}
+/* team name */
+.team-container > .team-name {
+  text-align: center;
+  text-justify: center;
+  width: 100%;
+  font-size: 1.8rem;
+  line-height: 1.6rem;
+  color: var(--text);
+  transition: 0.3s color;
+}
+/* styling for buttons when selected */
+.team-container.selected {
+  background-color: var(--accent-alt);
+  border-top-width: 2px;
+}
+
+.team-container.selected > .team-number,
+.team-container.selected > .team-name {
+  color: var(--bg);
+}
+/* styling for pick list  */
+#pick-list {
+  height: 100%;
+  width: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  gap: 20px;
+  display: flex;
+  flex-direction: column;
+  padding-top: 20px;
+  align-items: center;
+}
+
+@media screen and (max-width: 1100px) {
+  html {
+    font-size: 75%;
   }
-  /* team number */
-  .team-container > .team-number {
-    text-align: center;
-    text-justify: center;
-    width: 100%;
-    color: var(--accent-alt);
-    font-weight: 600;
-    font-size: 2.0rem;
-    line-height: 2.0rem;
-    transition: 0.3s color;
+
+  #app {
+    grid-template-columns: 200px auto;
+    grid-template-rows: 40px 20px auto;
   }
-  /* team name */
-  .team-container > .team-name {
-    text-align: center;
-    text-justify: center;
-    width: 100%;
-    font-size: 1.8rem;
-    line-height: 1.6rem;
-    color: var(--text);
-    transition: 0.3s color;
+
+  #dashboard > div.visible {
+    height: calc(100vh - 40px);
   }
-  /* styling for buttons when selected */
-  .team-container.selected {
-    background-color: var(--accent-alt);
-    border-top-width: 2px;
+
+  #main-list {
+    padding: 25px 0;
   }
-  
-  .team-container.selected > .team-number, .team-container.selected > .team-name {
-    color: var(--bg);
+
+  #side-list {
+    padding: 25px 0;
   }
- /* styling for pick list  */
-  #pick-list {
-    height: 100%;
-    width: 100%;
-    overflow-y: auto;
-    overflow-x: hidden;
-    gap: 20px;
-    display: flex;
-    flex-direction: column;
-    padding-top: 20px;
-    align-items: center;
-  }
-  
-  
-  @media screen and (max-width: 1100px) {
-      html {
-          font-size: 75%;
-      }
-  
-      #app {
-          grid-template-columns: 200px auto;
-          grid-template-rows: 40px 20px auto;
-      }
-  
-      #dashboard > div.visible {
-          height: calc(100vh - 40px);
-      }
-  
-      #main-list {
-          padding: 25px 0;
-      }
-  
-      #side-list {
-          padding: 25px 0;
-      }
-  }
-  
+}

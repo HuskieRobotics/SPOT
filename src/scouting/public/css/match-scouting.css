@@ -1,47 +1,47 @@
 #match-scouting {
-    background-color: var(--bg, #EFEFEF);
+  background-color: var(--bg, #efefef);
 }
 
 #match-scouting .grid-container {
-    display: flex;
-    justify-content: center;
-    width: 100%;
-    height: 100%;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
 }
 
 #match-scouting .button-grid {
-    margin-top: 5.5vh;
-    width: 99%;
-    height: 93.5%;
-    display: grid;
-    grid-gap: 3vw;
-    border-radius: var(--border-radius, 16px);
-    padding: .5vmin
+  margin-top: 5.5vh;
+  width: 99%;
+  height: 93.5%;
+  display: grid;
+  grid-gap: 3vw;
+  border-radius: var(--border-radius, 16px);
+  padding: 0.5vmin;
 }
 
 #match-scouting .grid-button {
-    border-radius: var(--border-radius, 16px);
-    color: var(--light-alt, #FEFEFE);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    font-size: max(3.2vw, 20px);
-    line-height: 1em;
-    text-align: center;
-    cursor: pointer;
-    user-select: none;
-    overflow: hidden;
-    box-shadow: 0 0 8px 0px #838383;
-	transition: 0.2s border, 0.2s box-shadow
+  border-radius: var(--border-radius, 16px);
+  color: var(--light-alt, #fefefe);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: max(3.2vw, 20px);
+  line-height: 1em;
+  text-align: center;
+  cursor: pointer;
+  user-select: none;
+  overflow: hidden;
+  box-shadow: 0 0 8px 0px #838383;
+  transition: 0.2s border, 0.2s box-shadow;
 }
 #match-scouting .grid-button:active {
-    box-shadow: 0 0 12px 0px #222222;
-    font-size: 3.3vw;
+  box-shadow: 0 0 12px 0px #222222;
+  font-size: 3.3vw;
 }
 
 #match-scouting .grid-button.gray {
-    background-color: #2D2D2D
+  background-color: #2d2d2d;
 }
 
 .button-padding {
@@ -50,42 +50,42 @@
 
 .silver {
   border: 3px solid #2d2d2d;
-  background-color: #919191
+  background-color: #919191;
 }
 
 .green {
-    background-color: #4caf50
+  background-color: #4caf50;
 }
 
 .orange {
-    background-color: #ef6c00   
+  background-color: #ef6c00;
 }
 
 .red {
-    background-color: #ff4436;
+  background-color: #ff4436;
 }
 
 .navy {
-    background-color: #3f51b5;
+  background-color: #3f51b5;
 }
 
 .pink {
-    background-color: #f06292;
+  background-color: #f06292;
 }
 
-.yellow{
-  background-color:#d8c24f;
+.yellow {
+  background-color: #d8c24f;
 }
 
-.border{
+.border {
   border: 4px solid #37cde1;
 }
 
 .highlight {
-    background-color: #72409c;
+  background-color: #72409c;
 }
 
 .disabled {
-	opacity: 0.6;
-	pointer-events: none;
+  opacity: 0.6;
+  pointer-events: none;
 }
