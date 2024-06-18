@@ -1,0 +1,16 @@
+{
+  // Formatting and linting
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+  "editor.formatOnPaste": true,
+  "editor.tabCompletion": "on",
+  "editor.tabSize": 2,
+  "eslint.lintTask.enable": true,
+  "eslint.workingDirectories": [{ "mode": "auto" }], // important for mono-repo projects
+  "files.autoSave": "onFocusChange", // hero
+  "prettier.endOfLine": "auto", // cross-platform
+
+  // Language-Specific
+  "javascript.updateImportsOnFileMove.enabled": "always",
+  "cSpell.words": []
+}
