@@ -106,17 +106,18 @@ var previousTimer = [];
 					for (const button of buttons) {
 						button.element.classList.add("disabled")
 					}
-                    new Popup("notice","Submitting Data...",1000);
-                    await LocalData.storeTeamMatchPerformance(new TeamMatchPerformance(actionQueue).data);
-                    setTimeout(() => {
-						new Popup("error","Couldn't submit, syncing later",1000);
-						setTimeout(() => {
-							window.location.reload()
-						}, 1000)
+            new Popup("notice","Submitting Data...",1000);
+            await LocalData.storeTeamMatchPerformance(new TeamMatchPerformance(actionQueue).data);
+            setTimeout(() => {
+              new Popup("error","Couldn't submit, syncing later",1000);
+
+              setTimeout(() => {
+                // window.location.reload() // Don't want to reload the page so that the QR Code can be scanned
+              }, 1000)
 					}, 5000)
 					await ScoutingSync.sync();
                     await ScoutingSync.updateState({status: ScoutingSync.SCOUTER_STATUS.COMPLETE});
-                    window.location.reload();
+                    // window.location.reload(); // Don't want to reload the page so that the QR Code can be scanned
                 }
                 
                 if (timerActive) return;
@@ -297,8 +298,11 @@ var previousTimer = [];
                 x.ts = Math.max(x.ts,0);
                 return x;
             })
+            const rand = Math.floor((Math.random() * 2 ** 32)).toString(32);
+
             this.data = {
-                matchId: `${ScoutingSync.state.matchNumber}-${ScoutingSync.state.robotNumber}-${ScoutingSync.state.scouterId}-${Math.floor((Math.random() * 2 ** 32)).toString(32)}`,
+                matchId: `${ScoutingSync.state.matchNumber}-${ScoutingSync.state.robotNumber}-${ScoutingSync.state.scouterId}-${rand}`,
+                matchId_rand: rand,
                 timestamp: Date.now(),
                 clientVersion: config.VERSION,
                 scouterId: ScoutingSync.state.scouterId, // from scouting-sync.js

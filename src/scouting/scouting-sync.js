@@ -271,8 +271,14 @@ class Scouter {
 
         this.socket.on("syncData", async (clientTeamMatchPerformanceIds, requestTeamMatchPerformances) => {
           if(!DEMO){  
-            const serverTeamMatchPerformanceIds = (await TeamMatchPerformance.find()).map(teamMatchPerformance => teamMatchPerformance.matchId)
-            requestTeamMatchPerformances(clientTeamMatchPerformanceIds.filter(clientTeamMatchPerformanceId => !serverTeamMatchPerformanceIds.includes(clientTeamMatchPerformanceId)))
+            const serverTeamMatchPerformanceIds = (await TeamMatchPerformance.find()).map(teamMatchPerformance => teamMatchPerformance.matchId);
+            let filteredTmps = clientTeamMatchPerformanceIds.filter(clientTeamMatchPerformanceId => !serverTeamMatchPerformanceIds.includes(clientTeamMatchPerformanceId));
+            filteredTmps = filteredTmps.filter(clientTeamMatchPerformanceId => {
+                const parts = clientTeamMatchPerformanceId.split('-');
+                const newId = `${parts[0]}-${parts[1]}-qrcode-${parts[3]}`;
+                return !serverTeamMatchPerformanceIds.includes(newId);
+            });
+            requestTeamMatchPerformances(filteredTmps);
           } else {
             requestTeamMatchPerformances([]) //dont request any tmps for the demo
           }        

@@ -1,4 +1,16 @@
 const cacheVersion = "scouting-cache-v1"
+
+/**
+ * These are all the files that need to be cached for offline functionality. 
+ * In the event that a user does not have connection to the internet, they
+ * will instead be served these files that have been cached, but must first
+ * connect to the site with an internet connection to initially cache them. 
+ * Some routes, such as /analysis/api/dataset return data, such as a JS object,
+ * instead of an actual file. When doing a fetch request (such as 
+ * await fetch('./api/dataset')), it will instead grab the most recently cached version, 
+ * and NOT the most up-to-date version from the server
+ */
+
 const filesToCache = [
     "/",
     "/css/form.css",
@@ -12,6 +24,8 @@ const filesToCache = [
     "/img/gear.svg",
     "/img/logo.png",
     "/img/spinner.svg",
+    "/js/lib/qrcode.js",
+    "/js/qrcode.js",
     "/js/form.js",
     "/js/global.js",
     "/js/internal.js",
@@ -22,7 +36,10 @@ const filesToCache = [
     "/js/waiting.js",
     "/manifest.json",
     "/executables.js",
-    "/analysis",
+    // Offline Analysis Page
+    "/analysis/",
+    "/analysis/modules.js",
+    "/analysis/transformers.js",
     "/analysis/css/style.css",
     "/analysis/css/internal.css",
     "/analysis/css/global.css",
@@ -33,15 +50,28 @@ const filesToCache = [
     "/analysis/js/script.js",
     "/analysis/js/ui.js",
     "/analysis/js/util.js",
+    "/analysis/js/analysisPipeline.js",
+    "/analysis/js/DataTransformer.js",
     "/analysis/api/dataset",
     "/analysis/api/teams",
+    "/analysis/api/manual",
+    // Config
+    "/config/analysis-pipeline.json",
+    "/config/analysis-modules.json",
 	"/admin/api/matches",
 	"/config/config.json",
 	"/config/match-scouting.json",
 	"/config/qr.json",
+    // Icons
 	"/icons/site.webmanifest",
 	"/icons/favicon-16x16.png",
-	"/icons/favicon-32x32.png"
+	"/icons/favicon-32x32.png",
+    // Offline QRCode Page
+    "/qrscanner/",
+    "/qrscanner/css/global.css",
+    "/qrscanner/css/scanner.css",
+    "/qrscanner/js/html5-qrcode.min.js",
+    "/qrscanner/js/results.js",
 ]
 
 self.addEventListener('install', function(event) {
@@ -70,4 +100,4 @@ self.addEventListener('fetch', (event) => {
             })
         })
     );
-  });
+});

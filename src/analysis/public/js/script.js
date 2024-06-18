@@ -27,9 +27,9 @@ if ('serviceWorker' in navigator) {
 	let matches
 	await loadAround(async () => {
 		const modulesConfig = await fetch(`/config/analysis-modules.json`).then(res => res.json());
-		dataset = await fetchDataset()
+		dataset = await executePipeline();
 		matches = (await fetch("/admin/api/matches").then(res => res.json())).allMatches
-		console.log(dataset)
+		
 		initDashboard(dataset, modulesConfig)
 		await new Promise(r => setTimeout(r, 300))
 	})

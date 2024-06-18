@@ -1,19 +1,19 @@
-const {DataTransformer} = require("../DataTransformer");
+/**
+ * @type {DataTransformer}
+ * @param options.example {String} example parameter description
+ */
+__TMP__
+new DataTransformer("name", (dataset, outputPath, options) => {
+    return dataset;
+})
+__/TMP__
 
-module.exports = {
-    /**
-     * @type {DataTransformer}
-     * @param options.example {String} example parameter description
-     */
-    tmp: new DataTransformer("name", (dataset, outputPath, options) => {
-        return dataset;
-    }),
-
-    /**
-     * @type {DataTransformer}
-     * @param options.example {String} example parameter description
-     */
-    team: new DataTransformer("name", (dataset, outputPath, options) => {
-        return dataset;
-    })
-}
+/**
+ * @type {DataTransformer}
+ * @param options.example {String} example parameter description
+ */
+__TEAM__
+new DataTransformer("name", (dataset, outputPath, options) => {
+    return dataset;
+})
+__/TEAM__

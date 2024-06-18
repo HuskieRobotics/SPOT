@@ -135,6 +135,7 @@ class ScoutingSync {
                 ScoutingSync.socket.emit("teamMatchPerformances", teamMatchPerformances.filter(teamMatchPerformance => requestedTeamMatchPerformanceIds.includes(teamMatchPerformance.matchId)), () => {
                     new Popup("success","Data Sync Complete!",2000);
                     clearTimeout(timeout);
+                    LocalData.clearTeamMatchPerformances();
                     res(true)
                 });
             })

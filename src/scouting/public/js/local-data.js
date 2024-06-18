@@ -46,10 +46,18 @@ class LocalData {
         })
     }
 
+    // this is where the qr code could go ?
+    // make a page for qr fcode after the submit time
+
     static async storeTeamMatchPerformance(teamMatchPerformance) {
+        
         //Sync with local
         const storedMatchIds = (await LocalData.getAllTeamMatchPerformances()).map(teamMatchPerformance => teamMatchPerformance.matchId)
         let objectStore = LocalData.db.transaction(LocalData.dbName, "readwrite").objectStore(LocalData.dbName)
+
+        const encoder = new QREncoder(); // Updated
+        const data = await encoder.encodeTeamMatchPerformance(teamMatchPerformance); // testing it here
+        console.log(`Data: ${data}`);
 
         if (!storedMatchIds.includes(teamMatchPerformance.matchId)) {
             await new Promise(resolve => {
@@ -65,6 +73,11 @@ class LocalData {
                 }
             })
         }
+    }
+
+    static async clearTeamMatchPerformances() {
+        const objectStore = LocalData.db.transaction(LocalData.dbName, "readwrite").objectStore(LocalData.dbName);
+        const request = await objectStore.clear();
     }
 }
 

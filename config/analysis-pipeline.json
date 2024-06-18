@@ -282,7 +282,7 @@
     },
     {
         "type": "tmp",
-        "name": "finalActionOccurence",
+        "name": "finalActionOccurrence",
         "outputPath": "finalStage",
         "options": {
             "actionArrayPath": "teleopFilter",
