@@ -1,139 +1,141 @@
 .input {
-    background-color: var(--bg-alt);
-    border: black 2px solid;
-    color: black;
-    cursor: pointer;
-    text-align: left;
-    border-radius: var(--border-radius);
-    font-size: 1.4em;
-    padding: 8px 12px;
-    transition: 0.3s color, 0.3s border;
-    outline: none;
+  background-color: var(--bg-alt);
+  border: black 2px solid;
+  color: black;
+  cursor: pointer;
+  text-align: left;
+  border-radius: var(--border-radius);
+  font-size: 1.4em;
+  padding: 8px 12px;
+  transition: 0.3s color, 0.3s border;
+  outline: none;
 }
 
 .input:focus {
-    border: var(--accent-alt) 2px solid;
+  border: var(--accent-alt) 2px solid;
 }
 
 .label {
-    position: relative;
-    align-self: center;
-    margin: 20px 0;
-    padding: 16px 0;
-    border-top: 1px solid var(--accent-alt);
-    box-shadow: 0 -6px 10px -10px var(--accent-alt), 0 6px 10px -10px var(--accent-alt);
-    border-bottom: 1px solid var(--accent-alt);
-    border-radius: 6px
+  position: relative;
+  align-self: center;
+  margin: 20px 0;
+  padding: 16px 0;
+  border-top: 1px solid var(--accent-alt);
+  box-shadow: 0 -6px 10px -10px var(--accent-alt),
+    0 6px 10px -10px var(--accent-alt);
+  border-bottom: 1px solid var(--accent-alt);
+  border-radius: 6px;
 }
 
 .label:last-child {
-    margin-bottom: 0;
+  margin-bottom: 0;
 }
 
 .label > span {
-    position: absolute;
-    padding: 0 5px;
-    left: 14px;
-    background-color: var(--bg-alt);
-    top: 24px;
-    border-radius: 20px;
-    font-size: 1.5em;
-    transition: 0.2s transform, 0.2s top;
-    pointer-events: none;
-    color: var(--placeholder);
+  position: absolute;
+  padding: 0 5px;
+  left: 14px;
+  background-color: var(--bg-alt);
+  top: 24px;
+  border-radius: 20px;
+  font-size: 1.5em;
+  transition: 0.2s transform, 0.2s top;
+  pointer-events: none;
+  color: var(--placeholder);
 }
 
-.input:focus + span, .input:valid + span {
-    transform: scale(0.75) translate(-20px, -46px);
-    color: black !important;
-    top: 30px;
+.input:focus + span,
+.input:valid + span {
+  transform: scale(0.75) translate(-20px, -46px);
+  color: black !important;
+  top: 30px;
 }
 
 .input {
-    max-width: 400px;
-    width: 100%;
+  max-width: 400px;
+  width: 100%;
 }
 
 body {
-    background-color: var(--bg);
+  background-color: var(--bg);
 }
 
 a {
-    color: var(--accent);
+  color: var(--accent);
 }
 
 h1 {
-    text-align: center;
-    margin-bottom: 12px;
+  text-align: center;
+  margin-bottom: 12px;
 }
 
 code {
-    background-color: var(--bg);
+  background-color: var(--bg);
 }
 
 video {
-    margin: 24px 0;
+  margin: 24px 0;
 }
 
 #setup-form {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 25px;
-    max-width: 800px;
-    width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 25px;
+  max-width: 800px;
+  width: 100%;
 }
 
 #setup-form > div {
-    padding: 40px;
-    border: 2px solid var(--accent-alt);
-    background-color: var(--bg-alt);
-    border-radius: var(--border-radius);
-    width: 100%;
-    display: flex;
-    flex-direction: column;
+  padding: 40px;
+  border: 2px solid var(--accent-alt);
+  background-color: var(--bg-alt);
+  border-radius: var(--border-radius);
+  width: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 #setup-header {
-    font-size: 4rem;
-    line-height: 1em;
-    margin: 40px 0;
+  font-size: 4rem;
+  line-height: 1em;
+  margin: 40px 0;
 }
 
 #submit {
-    color: var(--bg-alt);
-    background-color: var(--accent-alt);
-    font-size: 2em;
-    line-height: 1em;
-    margin: 40px 0;
-    border: none;
-    padding: 15px 60px;
-    border-radius: var(--border-radius);
+  color: var(--bg-alt);
+  background-color: var(--accent-alt);
+  font-size: 2em;
+  line-height: 1em;
+  margin: 40px 0;
+  border: none;
+  padding: 15px 60px;
+  border-radius: var(--border-radius);
 }
 
 #setup-container {
-    width: 100%;
-    opacity: 0;
-    transition: 0.3s visibility, opacity;
-    visibility: hidden;
-    background-color: var(--bg);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 0 5vw;
+  width: 100%;
+  opacity: 0;
+  transition: 0.3s visibility, opacity;
+  visibility: hidden;
+  background-color: var(--bg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 5vw;
 }
 
 #setup-container.visible {
-    visibility: unset;
-    opacity: 1;
-    transition: visibility 0s 0s, opacity 0.3s 0s;
+  visibility: unset;
+  opacity: 1;
+  transition: visibility 0s 0s, opacity 0.3s 0s;
 }
 
 .access-input {
-    border-radius: 8px;
-    border: 2px solid var(--text);
-    background-color: var(--bg-alt);
-    color: var(--text);
-    padding: 8px 12px;
-    font-size: 1.5em;
+  border-radius: 8px;
+  border: 2px solid var(--text);
+  background-color: var(--bg-alt);
+  color: var(--text);
+  padding: 8px 12px;
+  font-size: 1.5em;
 }

@@ -4,7 +4,7 @@
     "name": "countActions",
     "outputPath": "counts",
     "options": {
-        "all": true
+      "all": true
     }
   },
   {
@@ -12,15 +12,15 @@
     "name": "countActions",
     "outputPath": "counts",
     "options": {
-        "all": true
+      "all": true
     }
   },
   {
     "type": "team",
     "name": "sum",
     "outputPath": "counts.totalScored",
-    "options":{
-      "addends":[
+    "options": {
+      "addends": [
         "counts.placement11",
         "counts.placement12",
         "counts.placement13",
@@ -52,28 +52,49 @@
     }
   },
   {
-    "type":"tmp",
-    "name":"countHybrid",
+    "type": "tmp",
+    "name": "countHybrid",
     "outputPath": "counts.hybrid",
-    "options":{
-      "pickup":["conePickupGrid","conePickupCommunity","conePickupFloor","conePickupChute","conePickupShelf","cubePickupGrid","cubePickupCommunity","cubePickupFloor","cubePickupChute","cubePickupShelf"],
-      "hybrid":["placement11","placement12","placement13","placement14","placement15","placement16","placement17","placement18","placement19"]
+    "options": {
+      "pickup": [
+        "conePickupGrid",
+        "conePickupCommunity",
+        "conePickupFloor",
+        "conePickupChute",
+        "conePickupShelf",
+        "cubePickupGrid",
+        "cubePickupCommunity",
+        "cubePickupFloor",
+        "cubePickupChute",
+        "cubePickupShelf"
+      ],
+      "hybrid": [
+        "placement11",
+        "placement12",
+        "placement13",
+        "placement14",
+        "placement15",
+        "placement16",
+        "placement17",
+        "placement18",
+        "placement19"
+      ]
     }
   },
   {
-        "type": "team",
-        "name": "countMatches",
-        "outputPath": "temp.totalTimeMs",
-        "options": {
-            "weight": 150000
-        }
+    "type": "team",
+    "name": "countMatches",
+    "outputPath": "temp.totalTimeMs",
+    "options": {
+      "weight": 150000
+    }
   },
   {
     "type": "team",
     "name": "aggregateArray",
     "outputPath": "aggregatedActions",
     "options": {
-        "path": "actionQueue"
+      "path": "actionQueue"
     }
   },
   {
@@ -81,449 +102,570 @@
     "name": "average",
     "outputPath": "averages",
     "options": {
-        "path": "counts"
+      "path": "counts"
     }
   },
   {
-    "type":"tmp",
-    "name":"actionTimeFilter",
-    "outputPath":"autoFilter",
-    "options":{
-      "timeMin":135000
+    "type": "tmp",
+    "name": "actionTimeFilter",
+    "outputPath": "autoFilter",
+    "options": {
+      "timeMin": 135000
     }
   },
   {
-    "type":"tmp",
-    "name":"actionTimeFilter",
-    "outputPath":"teleopFilter",
-    "options":{
-      "timeMax":135000
+    "type": "tmp",
+    "name": "actionTimeFilter",
+    "outputPath": "teleopFilter",
+    "options": {
+      "timeMax": 135000
     }
   },
   {
-    "type":"tmp",
-    "name":"countActions",
-    "outputPath":"countsAuto",
-    "options":{
-      "all":true,
-      "actionArrayPath":"autoFilter"
+    "type": "tmp",
+    "name": "countActions",
+    "outputPath": "countsAuto",
+    "options": {
+      "all": true,
+      "actionArrayPath": "autoFilter"
     }
   },
   {
-    "type":"tmp",
-    "name":"countActions",
-    "outputPath":"countsTeleop",
-    "options":{
-      "all":true,
-      "actionArrayPath":"teleopFilter"
+    "type": "tmp",
+    "name": "countActions",
+    "outputPath": "countsTeleop",
+    "options": {
+      "all": true,
+      "actionArrayPath": "teleopFilter"
     }
   },
   {
-    "type":"tmp",
-    "name":"countHybrid",
-    "outputPath":"autoCounts.hybrid",
-    "options":{
-      "pickup":["conePickupGrid","conePickupCommunity","conePickupFloor","conePickupChute","conePickupShelf","cubePickupGrid","cubePickupCommunity","cubePickupFloor","cubePickupChute","cubePickupShelf"],
-      "hybrid":["placement11","placement12","placement13","placement14","placement15","placement16","placement17","placement18","placement19"],
-      "actionArrayPath":"autoFilter"
+    "type": "tmp",
+    "name": "countHybrid",
+    "outputPath": "autoCounts.hybrid",
+    "options": {
+      "pickup": [
+        "conePickupGrid",
+        "conePickupCommunity",
+        "conePickupFloor",
+        "conePickupChute",
+        "conePickupShelf",
+        "cubePickupGrid",
+        "cubePickupCommunity",
+        "cubePickupFloor",
+        "cubePickupChute",
+        "cubePickupShelf"
+      ],
+      "hybrid": [
+        "placement11",
+        "placement12",
+        "placement13",
+        "placement14",
+        "placement15",
+        "placement16",
+        "placement17",
+        "placement18",
+        "placement19"
+      ],
+      "actionArrayPath": "autoFilter"
     }
   },
   {
-    "type":"tmp",
-    "name":"countHybrid",
-    "outputPath":"teleopCounts.hybrid",
-    "options":{
-      "pickup":["conePickupGrid","conePickupCommunity","conePickupFloor","conePickupChute","conePickupShelf","cubePickupGrid","cubePickupCommunity","cubePickupFloor","cubePickupChute","cubePickupShelf"],
-      "hybrid":["placement11","placement12","placement13","placement14","placement15","placement16","placement17","placement18","placement19"],
-      "actionArrayPath":"teleopFilter"
+    "type": "tmp",
+    "name": "countHybrid",
+    "outputPath": "teleopCounts.hybrid",
+    "options": {
+      "pickup": [
+        "conePickupGrid",
+        "conePickupCommunity",
+        "conePickupFloor",
+        "conePickupChute",
+        "conePickupShelf",
+        "cubePickupGrid",
+        "cubePickupCommunity",
+        "cubePickupFloor",
+        "cubePickupChute",
+        "cubePickupShelf"
+      ],
+      "hybrid": [
+        "placement11",
+        "placement12",
+        "placement13",
+        "placement14",
+        "placement15",
+        "placement16",
+        "placement17",
+        "placement18",
+        "placement19"
+      ],
+      "actionArrayPath": "teleopFilter"
     }
   },
   {
-    "type":"tmp",
-    "name":"weightedSum",
-    "outputPath":"scores.auto",
-    "options":{
-      "weightedPaths":{
-        "countsAuto.placement31":7.666,
-        "countsAuto.placement32":7.666,
-        "countsAuto.placement33":7.666,
-        "countsAuto.placement34":7.666,
-        "countsAuto.placement35":7.666,
-        "countsAuto.placement36":7.666,
-        "countsAuto.placement37":7.666,
-        "countsAuto.placement38":7.666,
-        "countsAuto.placement39":7.666,
-        "countsAuto.placement21":5.666,
-        "countsAuto.placement22":5.666,
-        "countsAuto.placement23":5.666,
-        "countsAuto.placement24":5.666,
-        "countsAuto.placement25":5.666,
-        "countsAuto.placement26":5.666,
-        "countsAuto.placement27":5.666,
-        "countsAuto.placement28":5.666,
-        "countsAuto.placement29":5.666,
-        "autoCounts.hybrid.conePickupGrid":4.666,
-        "autoCounts.hybrid.conePickupCommunity":4.666,
-        "autoCounts.hybrid.conePickupFloor":4.666,
-        "autoCounts.hybrid.conePickupChute":4.666,
-        "autoCounts.hybrid.conePickupPlatform":4.666,
-        "autoCounts.hybrid.cubePickupGrid":4.666,
-        "autoCounts.hybrid.cubePickupCommunity":4.666,
-        "autoCounts.hybrid.cubePickupFloor":4.666,
-        "autoCounts.hybrid.cubePickupChute":4.666,
-        "autoCounts.hybrid.cubePickupPlatform":4.666
+    "type": "tmp",
+    "name": "weightedSum",
+    "outputPath": "scores.auto",
+    "options": {
+      "weightedPaths": {
+        "countsAuto.placement31": 7.666,
+        "countsAuto.placement32": 7.666,
+        "countsAuto.placement33": 7.666,
+        "countsAuto.placement34": 7.666,
+        "countsAuto.placement35": 7.666,
+        "countsAuto.placement36": 7.666,
+        "countsAuto.placement37": 7.666,
+        "countsAuto.placement38": 7.666,
+        "countsAuto.placement39": 7.666,
+        "countsAuto.placement21": 5.666,
+        "countsAuto.placement22": 5.666,
+        "countsAuto.placement23": 5.666,
+        "countsAuto.placement24": 5.666,
+        "countsAuto.placement25": 5.666,
+        "countsAuto.placement26": 5.666,
+        "countsAuto.placement27": 5.666,
+        "countsAuto.placement28": 5.666,
+        "countsAuto.placement29": 5.666,
+        "autoCounts.hybrid.conePickupGrid": 4.666,
+        "autoCounts.hybrid.conePickupCommunity": 4.666,
+        "autoCounts.hybrid.conePickupFloor": 4.666,
+        "autoCounts.hybrid.conePickupChute": 4.666,
+        "autoCounts.hybrid.conePickupPlatform": 4.666,
+        "autoCounts.hybrid.cubePickupGrid": 4.666,
+        "autoCounts.hybrid.cubePickupCommunity": 4.666,
+        "autoCounts.hybrid.cubePickupFloor": 4.666,
+        "autoCounts.hybrid.cubePickupChute": 4.666,
+        "autoCounts.hybrid.cubePickupPlatform": 4.666
       }
     }
   },
   {
-    "type":"tmp",
-    "name":"weightedSum",
-    "outputPath":"scores.teleop",
-    "options":{
-      "weightedPaths":{
-        "countsTeleop.placement31":6.666,
-        "countsTeleop.placement32":6.666,
-        "countsTeleop.placement33":6.666,
-        "countsTeleop.placement34":6.666,
-        "countsTeleop.placement35":6.666,
-        "countsTeleop.placement36":6.666,
-        "countsTeleop.placement37":6.666,
-        "countsTeleop.placement38":6.666,
-        "countsTeleop.placement39":6.666,
-        "countsTeleop.placement21":4.666,
-        "countsTeleop.placement22":4.666,
-        "countsTeleop.placement23":4.666,
-        "countsTeleop.placement24":4.666,
-        "countsTeleop.placement25":4.666,
-        "countsTeleop.placement26":4.666,
-        "countsTeleop.placement27":4.666,
-        "countsTeleop.placement28":4.666,
-        "countsTeleop.placement29":4.666,
-        "teleopCounts.hybrid.conePickupGrid":3.666,
-        "teleopCounts.hybrid.conePickupCommunity":3.666,
-        "teleopCounts.hybrid.conePickupFloor":3.666,
-        "teleopCounts.hybrid.conePickupChute":3.666,
-        "teleopCounts.hybrid.conePickupPlatform":3.666,
-        "teleopCounts.hybrid.cubePickupGrid":3.666,
-        "teleopCounts.hybrid.cubePickupCommunity":3.666,
-        "teleopCounts.hybrid.cubePickupFloor":3.666,
-        "teleopCounts.hybrid.cubePickupChute":3.666,
-        "teleopCounts.hybrid.cubePickupPlatform":3.666
+    "type": "tmp",
+    "name": "weightedSum",
+    "outputPath": "scores.teleop",
+    "options": {
+      "weightedPaths": {
+        "countsTeleop.placement31": 6.666,
+        "countsTeleop.placement32": 6.666,
+        "countsTeleop.placement33": 6.666,
+        "countsTeleop.placement34": 6.666,
+        "countsTeleop.placement35": 6.666,
+        "countsTeleop.placement36": 6.666,
+        "countsTeleop.placement37": 6.666,
+        "countsTeleop.placement38": 6.666,
+        "countsTeleop.placement39": 6.666,
+        "countsTeleop.placement21": 4.666,
+        "countsTeleop.placement22": 4.666,
+        "countsTeleop.placement23": 4.666,
+        "countsTeleop.placement24": 4.666,
+        "countsTeleop.placement25": 4.666,
+        "countsTeleop.placement26": 4.666,
+        "countsTeleop.placement27": 4.666,
+        "countsTeleop.placement28": 4.666,
+        "countsTeleop.placement29": 4.666,
+        "teleopCounts.hybrid.conePickupGrid": 3.666,
+        "teleopCounts.hybrid.conePickupCommunity": 3.666,
+        "teleopCounts.hybrid.conePickupFloor": 3.666,
+        "teleopCounts.hybrid.conePickupChute": 3.666,
+        "teleopCounts.hybrid.conePickupPlatform": 3.666,
+        "teleopCounts.hybrid.cubePickupGrid": 3.666,
+        "teleopCounts.hybrid.cubePickupCommunity": 3.666,
+        "teleopCounts.hybrid.cubePickupFloor": 3.666,
+        "teleopCounts.hybrid.cubePickupChute": 3.666,
+        "teleopCounts.hybrid.cubePickupPlatform": 3.666
       }
     }
   },
   {
-    "type":"team",
-    "name":"average",
-    "outputPath":"avgAuto",
-    "options":{
-      "path":"countsAuto"
+    "type": "team",
+    "name": "average",
+    "outputPath": "avgAuto",
+    "options": {
+      "path": "countsAuto"
     }
   },
   {
-    "type":"team",
-    "name":"average",
-    "outputPath":"avgTeleop",
-    "options":{
-      "path":"countsTeleop"
+    "type": "team",
+    "name": "average",
+    "outputPath": "avgTeleop",
+    "options": {
+      "path": "countsTeleop"
     }
   },
   {
-    "type":"tmp",
-    "name":"cycle",
-    "outputPath":"dockCycle",
-    "options":{
-      "pickups":[
+    "type": "tmp",
+    "name": "cycle",
+    "outputPath": "dockCycle",
+    "options": {
+      "pickups": ["platformDocked"],
+      "scores": ["platformEngaged"],
+      "misses": ["platformLeave", "platformFall"]
+    }
+  },
+  {
+    "type": "team",
+    "name": "aggregateArray",
+    "outputPath": "dockCycle.all",
+    "options": {
+      "path": "dockCycle.all"
+    }
+  },
+  {
+    "type": "team",
+    "name": "aggregateArray",
+    "outputPath": "dockCycle.allComplete",
+    "options": {
+      "path": "dockCycle.allComplete"
+    }
+  },
+  {
+    "type": "team",
+    "name": "averageArray",
+    "outputPath": "dockCycle.averageTime",
+    "options": {
+      "arrayPath": "dockCycle.all",
+      "valuePath": "timeDifferential"
+    }
+  },
+  {
+    "type": "team",
+    "name": "averageArray",
+    "outputPath": "dockCycle.averageTimeComplete",
+    "options": {
+      "arrayPath": "dockCycle.allComplete",
+      "valuePath": "timeDifferential"
+    }
+  },
+  {
+    "type": "tmp",
+    "name": "finalActionOccurence",
+    "outputPath": "finalAutoDock",
+    "options": {
+      "actionArrayPath": "autoFilter",
+      "ids": [
+        "platformFall",
+        "platformEngaged",
+        "platformLeave",
         "platformDocked"
       ],
-      "scores":[
-        "platformEngaged"
-      ],
-      "misses":[
+      "default": {
+        "id": "noDock",
+        "ts": 0
+      }
+    }
+  },
+  {
+    "type": "tmp",
+    "name": "finalActionOccurence",
+    "outputPath": "finalTeleopDock",
+    "options": {
+      "actionArrayPath": "teleopFilter",
+      "ids": [
+        "platformFall",
+        "platformEngaged",
         "platformLeave",
-        "platformFall"
-      ]
-    }
-  },
-  {
-        "type": "team",
-        "name": "aggregateArray",
-        "outputPath": "dockCycle.all",
-        "options": {
-            "path": "dockCycle.all"
-        }
-    },
-  {
-        "type": "team",
-        "name": "aggregateArray",
-        "outputPath": "dockCycle.allComplete",
-        "options": {
-            "path": "dockCycle.allComplete"
-        }
-    },
-  {
-        "type": "team",
-        "name": "averageArray",
-        "outputPath": "dockCycle.averageTime",
-        "options": {
-            "arrayPath": "dockCycle.all",
-            "valuePath": "timeDifferential"
-        }
-    },
-  {
-        "type": "team",
-        "name": "averageArray",
-        "outputPath": "dockCycle.averageTimeComplete",
-        "options": {
-            "arrayPath": "dockCycle.allComplete",
-            "valuePath": "timeDifferential"
-        }
-  },
-	{
-				"type": "tmp",
-				"name": "finalActionOccurence",
-        "outputPath": "finalAutoDock",
-        "options": {
-          "actionArrayPath": "autoFilter",
-          "ids":[
-            "platformFall",
-            "platformEngaged",
-            "platformLeave",
-            "platformDocked"
-          ],
-          "default": {
-            "id": "noDock",
-            "ts": 0
-          }
-        }
-	},
-  {
-				"type": "tmp",
-				"name": "finalActionOccurence",
-        "outputPath": "finalTeleopDock",
-        "options": {
-          "actionArrayPath": "teleopFilter",
-          "ids":[
-            "platformFall",
-            "platformEngaged",
-            "platformLeave",
-            "platformDocked"
-          ],
-          "default": {
-            "id": "noDock",
-            "ts": 0
-          }
-        }
-	},
-  {
-      "type": "tmp",
-      "name": "map",
-      "outputPath": "scores.autoDock",
-      "options": {
-        "path":"finalAutoDock.id",
-        "map":{
-          "noDock":0,
-          "platformDock":8,
-          "platformEngaged":12,
-          "platformFall":0,
-          "platformLeave":0
-        }
+        "platformDocked"
+      ],
+      "default": {
+        "id": "noDock",
+        "ts": 0
       }
+    }
   },
   {
-      "type": "tmp",
-      "name": "map",
-      "outputPath": "scores.teleopDock",
-      "options": {
-        "path":"finalTeleopDock.id",
-        "map":{
-          "noDock":0,
-          "platformDock":6,
-          "platformEngaged":10,
-          "platformFall":0,
-          "platformLeave":0
-        }
+    "type": "tmp",
+    "name": "map",
+    "outputPath": "scores.autoDock",
+    "options": {
+      "path": "finalAutoDock.id",
+      "map": {
+        "noDock": 0,
+        "platformDock": 8,
+        "platformEngaged": 12,
+        "platformFall": 0,
+        "platformLeave": 0
       }
-  },
-  {
-    "type":"tmp",
-    "name":"sum",
-    "outputPath":"scores.dock",
-    "options":{
-      "addends":["scores.autoDock","scores.teleopDock"]
     }
   },
   {
-    "type":"tmp",
-    "name":"sum",
-    "outputPath":"scores.total",
-    "options":{
-      "addends":["scores.auto","scores.teleop","scores.dock"]
+    "type": "tmp",
+    "name": "map",
+    "outputPath": "scores.teleopDock",
+    "options": {
+      "path": "finalTeleopDock.id",
+      "map": {
+        "noDock": 0,
+        "platformDock": 6,
+        "platformEngaged": 10,
+        "platformFall": 0,
+        "platformLeave": 0
+      }
     }
   },
   {
-    "type":"tmp",
-    "name":"cycle",
-    "outputPath":"coneCycle",
-    "options":{
-      "pickups":["conePickupGrid","conePickupCommunity","conePickupFloor","conePickupChute","conePickupShelf"],
-      "scores":["placement31","placement21","placement33","placement23","placement34","placement24","placement36","placement26","placement37","placement27","placement39","placement29","counts.hybrid.conePickupGrid","counts.hybrid.conePickupCommunity","counts.hybrid.conePickupFloor","counts.hybrid.conePickupChute","counts.hybrid.conePickupPlatform"],
-      "misses":["dropCone"]
+    "type": "tmp",
+    "name": "sum",
+    "outputPath": "scores.dock",
+    "options": {
+      "addends": ["scores.autoDock", "scores.teleopDock"]
     }
   },
   {
-        "type": "team",
-        "name": "aggregateArray",
-        "outputPath": "coneCycle.all",
-        "options": {
-            "path": "coneCycle.all"
-        }
-    },
-  {
-        "type": "team",
-        "name": "aggregateArray",
-        "outputPath": "coneCycle.allComplete",
-        "options": {
-            "path": "coneCycle.allComplete"
-        }
-    },
-  {
-        "type": "team",
-        "name": "averageArray",
-        "outputPath": "coneCycle.averageTime",
-        "options": {
-            "arrayPath": "coneCycle.all",
-            "valuePath": "timeDifferential"
-        }
-    },
-  {
-    "type":"tmp",
-    "name":"cycle",
-    "outputPath":"cubeCycle",
-    "options":{
-      "pickups":["cubePickupGrid","cubePickupCommunity","cubePickupFloor","cubePickupChute","cubePickupShelf","conePickupGrid","conePickupCommunity","conePickupFloor","conePickupChute","conePickupShelf"],
-      "scores":["placement32","placement22","placement35","placement25","placement38","placement28","counts.hybrid.cubePickupGrid","counts.hybrid.cubePickupCommunity","counts.hybrid.cubePickupFloor","counts.hybrid.cubePickupChute","counts.hybrid.cubePickupPlatform"],
-      "misses":["dropCube"]
+    "type": "tmp",
+    "name": "sum",
+    "outputPath": "scores.total",
+    "options": {
+      "addends": ["scores.auto", "scores.teleop", "scores.dock"]
     }
   },
   {
-        "type": "team",
-        "name": "aggregateArray",
-        "outputPath": "cubeCycle.all",
-        "options": {
-            "path": "cubeCycle.all"
-        }
-    },
-  {
-        "type": "team",
-        "name": "aggregateArray",
-        "outputPath": "cubeCycle.allComplete",
-        "options": {
-            "path": "cubeCycle.allComplete"
-        }
-    },
-  {
-        "type": "team",
-        "name": "averageArray",
-        "outputPath": "cubeCycle.averageTime",
-        "options": {
-            "arrayPath": "cubeCycle.all",
-            "valuePath": "timeDifferential"
-        }
-    },
-  {
-        "type": "team",
-        "name": "averageArray",
-        "outputPath": "cubeCycle.averageTimeComplete",
-        "options": {
-            "arrayPath": "cubeCycle.allComplete",
-            "valuePath": "timeDifferential"
-        }
-    },
-  {
-    "type":"tmp",
-    "name":"cycle",
-    "outputPath":"cycle",
-    "options":{
-      "pickups":["cubePickupGrid","cubePickupCommunity","cubePickupFloor","cubePickupChute","cubePickupShelf","conePickupGrid","conePickupCommunity","conePickupFloor","conePickupChute","conePickupShelf"],
-      "scores":["placement32","placement22","placement35","placement25","placement38","placement28","counts.hybrid.cubePickupGrid","counts.hybrid.cubePickupCommunity","counts.hybrid.cubePickupFloor","counts.hybrid.cubePickupChute","counts.hybrid.cubePickupPlatform","placement31","placement21","placement33","placement23","placement34","placement24","placement36","placement26","placement37","placement27","placement39","placement29","counts.hybrid.conePickupGrid","counts.hybrid.conePickupCommunity","counts.hybrid.conePickupFloor","counts.hybrid.conePickupChute","counts.hybrid.conePickupPlatform"],
-      "misses":["dropCube","dropCone"]
+    "type": "tmp",
+    "name": "cycle",
+    "outputPath": "coneCycle",
+    "options": {
+      "pickups": [
+        "conePickupGrid",
+        "conePickupCommunity",
+        "conePickupFloor",
+        "conePickupChute",
+        "conePickupShelf"
+      ],
+      "scores": [
+        "placement31",
+        "placement21",
+        "placement33",
+        "placement23",
+        "placement34",
+        "placement24",
+        "placement36",
+        "placement26",
+        "placement37",
+        "placement27",
+        "placement39",
+        "placement29",
+        "counts.hybrid.conePickupGrid",
+        "counts.hybrid.conePickupCommunity",
+        "counts.hybrid.conePickupFloor",
+        "counts.hybrid.conePickupChute",
+        "counts.hybrid.conePickupPlatform"
+      ],
+      "misses": ["dropCone"]
     }
   },
   {
-        "type": "team",
-        "name": "aggregateArray",
-        "outputPath": "cycle.all",
-        "options": {
-            "path": "cycle.all"
-        }
-    },
-  {
-        "type": "team",
-        "name": "aggregateArray",
-        "outputPath": "cycle.allComplete",
-        "options": {
-            "path": "cycle.allComplete"
-        }
-    },
-  {
-        "type": "team",
-        "name": "averageArray",
-        "outputPath": "cycle.averageTime",
-        "options": {
-            "arrayPath": "cycle.all",
-            "valuePath": "timeDifferential"
-        }
-    },
-  {
-        "type": "team",
-        "name": "averageArray",
-        "outputPath": "cycle.averageTimeComplete",
-        "options": {
-            "arrayPath": "cycle.allComplete",
-            "valuePath": "timeDifferential"
-        }
-    },
-    {
-        "type": "team",
-        "name": "average",
-        "outputPath": "averageScores",
-        "options": {
-            "path": "scores"
-        }
-    },
-	
-    {
-		"type": "team",
-		"name": "standardDeviation",
-		"outputPath": "standardDeviation",
-		"options": {
-			"path" : "scores.total"
-		}
-	},
-  {
-    "type":"team",
-    "name":"average",
-    "outputPath":"averagePark",
-    "options":{
-      "path":"counts.park"
+    "type": "team",
+    "name": "aggregateArray",
+    "outputPath": "coneCycle.all",
+    "options": {
+      "path": "coneCycle.all"
     }
   },
   {
-    "type":"tmp",
-    "name":"actionTime",
-    "outputPath":"leaveTime",
-    "options":{
-      "path":"leaveCommunity"
+    "type": "team",
+    "name": "aggregateArray",
+    "outputPath": "coneCycle.allComplete",
+    "options": {
+      "path": "coneCycle.allComplete"
     }
   },
   {
-    "type":"team",
-    "name":"average",
-    "outputPath":"averageLeave",
-    "options":{
-      "path":"leaveTime"
+    "type": "team",
+    "name": "averageArray",
+    "outputPath": "coneCycle.averageTime",
+    "options": {
+      "arrayPath": "coneCycle.all",
+      "valuePath": "timeDifferential"
+    }
+  },
+  {
+    "type": "tmp",
+    "name": "cycle",
+    "outputPath": "cubeCycle",
+    "options": {
+      "pickups": [
+        "cubePickupGrid",
+        "cubePickupCommunity",
+        "cubePickupFloor",
+        "cubePickupChute",
+        "cubePickupShelf",
+        "conePickupGrid",
+        "conePickupCommunity",
+        "conePickupFloor",
+        "conePickupChute",
+        "conePickupShelf"
+      ],
+      "scores": [
+        "placement32",
+        "placement22",
+        "placement35",
+        "placement25",
+        "placement38",
+        "placement28",
+        "counts.hybrid.cubePickupGrid",
+        "counts.hybrid.cubePickupCommunity",
+        "counts.hybrid.cubePickupFloor",
+        "counts.hybrid.cubePickupChute",
+        "counts.hybrid.cubePickupPlatform"
+      ],
+      "misses": ["dropCube"]
+    }
+  },
+  {
+    "type": "team",
+    "name": "aggregateArray",
+    "outputPath": "cubeCycle.all",
+    "options": {
+      "path": "cubeCycle.all"
+    }
+  },
+  {
+    "type": "team",
+    "name": "aggregateArray",
+    "outputPath": "cubeCycle.allComplete",
+    "options": {
+      "path": "cubeCycle.allComplete"
+    }
+  },
+  {
+    "type": "team",
+    "name": "averageArray",
+    "outputPath": "cubeCycle.averageTime",
+    "options": {
+      "arrayPath": "cubeCycle.all",
+      "valuePath": "timeDifferential"
+    }
+  },
+  {
+    "type": "team",
+    "name": "averageArray",
+    "outputPath": "cubeCycle.averageTimeComplete",
+    "options": {
+      "arrayPath": "cubeCycle.allComplete",
+      "valuePath": "timeDifferential"
+    }
+  },
+  {
+    "type": "tmp",
+    "name": "cycle",
+    "outputPath": "cycle",
+    "options": {
+      "pickups": [
+        "cubePickupGrid",
+        "cubePickupCommunity",
+        "cubePickupFloor",
+        "cubePickupChute",
+        "cubePickupShelf",
+        "conePickupGrid",
+        "conePickupCommunity",
+        "conePickupFloor",
+        "conePickupChute",
+        "conePickupShelf"
+      ],
+      "scores": [
+        "placement32",
+        "placement22",
+        "placement35",
+        "placement25",
+        "placement38",
+        "placement28",
+        "counts.hybrid.cubePickupGrid",
+        "counts.hybrid.cubePickupCommunity",
+        "counts.hybrid.cubePickupFloor",
+        "counts.hybrid.cubePickupChute",
+        "counts.hybrid.cubePickupPlatform",
+        "placement31",
+        "placement21",
+        "placement33",
+        "placement23",
+        "placement34",
+        "placement24",
+        "placement36",
+        "placement26",
+        "placement37",
+        "placement27",
+        "placement39",
+        "placement29",
+        "counts.hybrid.conePickupGrid",
+        "counts.hybrid.conePickupCommunity",
+        "counts.hybrid.conePickupFloor",
+        "counts.hybrid.conePickupChute",
+        "counts.hybrid.conePickupPlatform"
+      ],
+      "misses": ["dropCube", "dropCone"]
+    }
+  },
+  {
+    "type": "team",
+    "name": "aggregateArray",
+    "outputPath": "cycle.all",
+    "options": {
+      "path": "cycle.all"
+    }
+  },
+  {
+    "type": "team",
+    "name": "aggregateArray",
+    "outputPath": "cycle.allComplete",
+    "options": {
+      "path": "cycle.allComplete"
+    }
+  },
+  {
+    "type": "team",
+    "name": "averageArray",
+    "outputPath": "cycle.averageTime",
+    "options": {
+      "arrayPath": "cycle.all",
+      "valuePath": "timeDifferential"
+    }
+  },
+  {
+    "type": "team",
+    "name": "averageArray",
+    "outputPath": "cycle.averageTimeComplete",
+    "options": {
+      "arrayPath": "cycle.allComplete",
+      "valuePath": "timeDifferential"
+    }
+  },
+  {
+    "type": "team",
+    "name": "average",
+    "outputPath": "averageScores",
+    "options": {
+      "path": "scores"
+    }
+  },
+
+  {
+    "type": "team",
+    "name": "standardDeviation",
+    "outputPath": "standardDeviation",
+    "options": {
+      "path": "scores.total"
+    }
+  },
+  {
+    "type": "team",
+    "name": "average",
+    "outputPath": "averagePark",
+    "options": {
+      "path": "counts.park"
+    }
+  },
+  {
+    "type": "tmp",
+    "name": "actionTime",
+    "outputPath": "leaveTime",
+    "options": {
+      "path": "leaveCommunity"
+    }
+  },
+  {
+    "type": "team",
+    "name": "average",
+    "outputPath": "averageLeave",
+    "options": {
+      "path": "leaveTime"
     }
   }
-
 ]

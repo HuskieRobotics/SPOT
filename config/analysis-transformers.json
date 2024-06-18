@@ -1,22 +1,19 @@
 {
-    "template": {
-        "file": "_template.template.js",
-        "placeholder": "__TRANSFORMERS__"
+  "template": {
+    "file": "_template.template.js",
+    "placeholder": "__TRANSFORMERS__"
+  },
+  "types": [
+    {
+      "name": "tmp",
+      "identifier": "TMP",
+      "data": ""
     },
-    "types": [
-        {
-            "name": "tmp",
-            "identifier": "TMP",
-            "data": ""
-        }, 
-        {
-            "name": "team",
-            "identifier": "TEAM",
-            "data": ""
-        }
-    ],
-    "ignore": [
-        "_template.template.js",
-        "transformers.md"
-    ]
+    {
+      "name": "team",
+      "identifier": "TEAM",
+      "data": ""
+    }
+  ],
+  "ignore": ["_template.template.js", "transformers.md"]
 }

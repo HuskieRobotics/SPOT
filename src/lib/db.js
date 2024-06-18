@@ -2,18 +2,27 @@ const mongoose = require("mongoose");
 const chalk = require("chalk");
 const config = require("../../config/config.json");
 
-mongoose.connect(config.secrets.DATABASE_URL, {useNewUrlParser: true, useUnifiedTopology: true}).catch(e => {
-    console.error(e,chalk.whiteBright.bgRed.bold(`\nError connecting to MongoDB! This could be because DATABASE_URL is incorrect in your config.json file. SPOT will not properly function without a database.`))
-})
+mongoose
+  .connect(config.secrets.DATABASE_URL, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .catch((e) => {
+    console.error(
+      e,
+      chalk.whiteBright.bgRed.bold(
+        `\nError connecting to MongoDB! This could be because DATABASE_URL is incorrect in your config.json file. SPOT will not properly function without a database.`
+      )
+    );
+  });
 
+const db = mongoose.connection;
 
-const db = mongoose.connection
+db.on("error", (e) => console.log(`Error: ${e}`));
 
-db.on('error', (e) => console.log(`Error: ${e}`))
-
-db.once('open', () => {
-    console.log(chalk.green("Successfully Connected to the Database"))
-})
+db.once("open", () => {
+  console.log(chalk.green("Successfully Connected to the Database"));
+});
 
 /*
 example tmp
@@ -42,7 +51,8 @@ tmp = {
     ]
 }
 */
-const teamMatchPerformanceSchema = new mongoose.Schema({
+const teamMatchPerformanceSchema = new mongoose.Schema(
+  {
     timestamp: Number,
     clientVersion: String,
     scouterId: String,
@@ -52,17 +62,22 @@ const teamMatchPerformanceSchema = new mongoose.Schema({
     matchId: String,
     matchId_rand: String,
     actionQueue: [
-        {
-            id: String, //button id
-            ts: Number, //timestamp of action
-            other: {}, //extra information like position, tied to the ACTION not the team or robot
-        }
-    ]     
-}, {collection: "teamMatchPerformances"})
+      {
+        id: String, //button id
+        ts: Number, //timestamp of action
+        other: {}, //extra information like position, tied to the ACTION not the team or robot
+      },
+    ],
+  },
+  { collection: "teamMatchPerformances" }
+);
 
-const TeamMatchPerformance = new mongoose.model("TeamMatchPerformance", teamMatchPerformanceSchema)
+const TeamMatchPerformance = new mongoose.model(
+  "TeamMatchPerformance",
+  teamMatchPerformanceSchema
+);
 
 module.exports = {
-    db,
-    TeamMatchPerformance
-}
+  db,
+  TeamMatchPerformance,
+};

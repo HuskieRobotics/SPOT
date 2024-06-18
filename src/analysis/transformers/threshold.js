@@ -5,31 +5,34 @@
  * @param options.none {String} a string to return if no values pass. a separator is required for this parameter to be used (optional)
  * @param options.paths {Object} an object whose keys are paths to numeric values and whose values are names to be returned if the numeric value passes the threshold
  */
-__TEAM__
+__TEAM__;
 new DataTransformer("threshold", (dataset, outputPath, options) => {
-	for (const team of Object.values(dataset.teams)) {
-		const passingNames = []
+  for (const team of Object.values(dataset.teams)) {
+    const passingNames = [];
 
-		for (const [path, name] of Object.entries(options.paths)) {
-			if (options.threshold === undefined || getPath(team, path, 0) > options.threshold) {
-				passingNames.push(name)
-			}
-		}
+    for (const [path, name] of Object.entries(options.paths)) {
+      if (
+        options.threshold === undefined ||
+        getPath(team, path, 0) > options.threshold
+      ) {
+        passingNames.push(name);
+      }
+    }
 
-		let result
-		if (options.separator === undefined) {
-			result = passingNames
-		} else {
-			if (passingNames.length === 0 && options.none !== "") {
-				result = options.none
-			} else {
-				result = passingNames.join(options.separator)
-			}
-		}
+    let result;
+    if (options.separator === undefined) {
+      result = passingNames;
+    } else {
+      if (passingNames.length === 0 && options.none !== "") {
+        result = options.none;
+      } else {
+        result = passingNames.join(options.separator);
+      }
+    }
 
-		setPath(team, outputPath, result)
-	}
+    setPath(team, outputPath, result);
+  }
 
-	return dataset;
-})
-__/TEAM__
+  return dataset;
+});
+__ / TEAM__;

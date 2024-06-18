@@ -1,81 +1,81 @@
 :root {
-    --bg: #EFEFEF;
-    --text: #232323;
-    --bg-alt: #FEFEFE;
-    --accent: #30a2ff;
-    --accent-alt: #ff6030;
-    --error: #ff5166;
-    --light-gray: #bebebe;
-    --gray: #757575;
-    --green: #4caf50;
-    --placeholder: #a3a3a3;
-    --border-radius: 16px;
-    --font: Cairo, sans-serif
+  --bg: #efefef;
+  --text: #232323;
+  --bg-alt: #fefefe;
+  --accent: #30a2ff;
+  --accent-alt: #ff6030;
+  --error: #ff5166;
+  --light-gray: #bebebe;
+  --gray: #757575;
+  --green: #4caf50;
+  --placeholder: #a3a3a3;
+  --border-radius: 16px;
+  --font: Cairo, sans-serif;
 }
 
 html {
-      overflow: hidden;
-      height: 100%;
-      position: fixed;
+  overflow: hidden;
+  height: 100%;
+  position: fixed;
 }
 
 body {
-    overflow: auto;
-    height: 100%;
-    position: relative;
+  overflow: auto;
+  height: 100%;
+  position: relative;
 }
 
 .debug-switcher {
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: 9999;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 9999;
 }
 
 .status {
-	position: absolute;
-	top: 1.5vh;
-	left: 0;
-	line-height: 1em;
-	width: 100%;
-	z-index: 9999;
-	display: flex;
-	justify-content: space-between;
-	padding: 0 20px;
-	font-size: min(3.5vmin, 20px);
+  position: absolute;
+  top: 1.5vh;
+  left: 0;
+  line-height: 1em;
+  width: 100%;
+  z-index: 9999;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 20px;
+  font-size: min(3.5vmin, 20px);
 }
 
 .connection-status {
-	display:flex;
-	align-items: center;
-	gap: max(1vw, 10px);
+  display: flex;
+  align-items: center;
+  gap: max(1vw, 10px);
 }
 
 .socket-status {
-	font-weight: 700
+  font-weight: 700;
 }
 
 .socket-status.connected {
-	color: var(--green);
+  color: var(--green);
 }
 
 .socket-status.disconnected {
-	color: var(--error);
+  color: var(--error);
 }
 
 .reload {
-	cursor: pointer;
-	font-size: min(8vmin, 25px)
+  cursor: pointer;
+  font-size: min(8vmin, 25px);
 }
 
 .scouting-info {
-	display: none;
-	position: absolute;
-	top: 0;
-	left: 50%;
-	transform: translateX(-50%);
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 * {
-    font-family: var(--font, sans-serif)
+  font-family: var(--font, sans-serif);
 }

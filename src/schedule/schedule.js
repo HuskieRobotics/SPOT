@@ -9,52 +9,48 @@ let router = express.Router();
 
 router.use(express.static(__dirname + "/public"));
 
-router.get("/", (req,res) => {
-    res.render(__dirname + "/views/index.ejs");
-})
+router.get("/", (req, res) => {
+  res.render(__dirname + "/views/index.ejs");
+});
 
-router.post('/matches',(req,res)=>{
-    console.log("req body on /schedule/matches")
-    schedule = req.body;
-    addTeam(req.body);
+router.post("/matches", (req, res) => {
+  console.log("req body on /schedule/matches");
+  schedule = req.body;
+  addTeam(req.body);
 
-    res.send(200)
-})
-
+  res.send(200);
+});
 
 router.use("/api", require("./routes/api.js"));
 
 function getManualMatches() {
-    return schedule;
+  return schedule;
 }
 
 function getTempTeams() {
-    return tempTeams;
+  return tempTeams;
 }
-
 
 const addTeam = (matchLists) => {
-    var teams = [];
+  var teams = [];
 
-    for (let i = 0; i < matchLists.length; i++) {
-        const element = matchLists[i];
+  for (let i = 0; i < matchLists.length; i++) {
+    const element = matchLists[i];
 
-        element.robots.blue.forEach(teamNumber => {
-            if (!teams.includes(teamNumber)) {
-                teams.push({team_number: teamNumber, nickname: "temp team"});
-            }
-        });
+    element.robots.blue.forEach((teamNumber) => {
+      if (!teams.includes(teamNumber)) {
+        teams.push({ team_number: teamNumber, nickname: "temp team" });
+      }
+    });
 
-        element.robots.red.forEach(teamNumber => {
-            if (!teams.includes(teamNumber)) {
-                teams.push({team_number: teamNumber, nickname: "temp team"});
-            }
-        });
-    }
+    element.robots.red.forEach((teamNumber) => {
+      if (!teams.includes(teamNumber)) {
+        teams.push({ team_number: teamNumber, nickname: "temp team" });
+      }
+    });
+  }
 
-    tempTeams = teams;
-}
+  tempTeams = teams;
+};
 
-
-module.exports = {router, getTempTeams, getManualMatches};
-
+module.exports = { router, getTempTeams, getManualMatches };

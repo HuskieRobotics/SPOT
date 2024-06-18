@@ -1,49 +1,49 @@
 .stats.container {
-    width: 95% !important;
-    padding: 15px 15px;
-    display: flex;
-    flex-direction: column;
-    background-color: var(--bg-alt);
-    border-radius: var(--border-radius);
-    border: 2px solid var(--accent-alt);
+  width: 95% !important;
+  padding: 15px 15px;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--bg-alt);
+  border-radius: var(--border-radius);
+  border: 2px solid var(--accent-alt);
 }
 
 .stats .header {
-    font-size: 1.5em;
-    line-height: 1em;
-    text-align: center;
-    color: var(--text);
-    margin-bottom: 12px;
+  font-size: 1.5em;
+  line-height: 1em;
+  text-align: center;
+  color: var(--text);
+  margin-bottom: 12px;
 }
 
 .stats .list {
-    display: flex;
-    font-size: 1em;
-    flex-direction: column;
-    width: 100%;
-    color: var(--text);
+  display: flex;
+  font-size: 1em;
+  flex-direction: column;
+  width: 100%;
+  color: var(--text);
 }
 
 .stats .rank.top5 {
-	color: var(--accent);
+  color: var(--accent);
 }
 
 .stats .rank.top25 {
-	color: var(--green);
+  color: var(--green);
 }
 
 .stats .rank.top50 {
-	color: var(--orange-light);
+  color: var(--orange-light);
 }
 
-.noData{
-    width: 95%;
-    background-color: var(--bg-alt);
-    border:none;
+.noData {
+  width: 95%;
+  background-color: var(--bg-alt);
+  border: none;
 }
 
 @media screen and (max-width: 1100px) {
-	.stats.container {
-		padding: 25px 20px;
-	}
+  .stats.container {
+    padding: 25px 20px;
+  }
 }

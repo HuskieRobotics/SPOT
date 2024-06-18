@@ -4,17 +4,18 @@
  * @param options.actionId {String} the actionId of the action to find the time of.
  * @param options.default {Object} the default value (if it didn't occur)
  */
-__TMP__
+__TMP__;
 new DataTransformer("actionTime", (dataset, outputPath, options) => {
-    for (let tmp of dataset.tmps) {
-        for (let action of tmp.actionQueue) {
-            if (action.id == options.actionId) {
-                setPath(tmp, outputPath, action.ts);
-            }
-        }
-        if (!getPath(tmp,outputPath,false)) //no action of options.actionId found
-            setPath(tmp,outputPath,options.default || null);
+  for (let tmp of dataset.tmps) {
+    for (let action of tmp.actionQueue) {
+      if (action.id == options.actionId) {
+        setPath(tmp, outputPath, action.ts);
+      }
     }
-    return dataset;
-})
-__/TMP__
+    if (!getPath(tmp, outputPath, false))
+      //no action of options.actionId found
+      setPath(tmp, outputPath, options.default || null);
+  }
+  return dataset;
+});
+__ / TMP__;

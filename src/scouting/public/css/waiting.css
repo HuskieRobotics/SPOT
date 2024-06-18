@@ -1,95 +1,90 @@
 #waiting {
-    background-color: var(--bg);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    line-height: 1.4;
-    padding: 64px 12px 0 12px;
+  background-color: var(--bg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  line-height: 1.4;
+  padding: 64px 12px 0 12px;
 }
-
 
 /* scale text based on height */
 #waiting {
-    font-size: 1.2em;
+  font-size: 1.2em;
 }
 
 @media screen and (min-height: 500px) {
-    #waiting {
-        font-size: 1.5em;
-    }
-    #waiting .hint {
-        bottom: 40px !important;
-    }
+  #waiting {
+    font-size: 1.5em;
+  }
+  #waiting .hint {
+    bottom: 40px !important;
+  }
 }
 
-
 #waiting .title {
-    background-color: var(--bg-alt);
-    max-width: 75%;
-    padding: 0.5em calc(0.5em + var(--border-radius));
-    border-radius: 0 0 var(--border-radius) var(--border-radius);
-    text-align: center;
-    position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translate(-50%, 0)
-
+  background-color: var(--bg-alt);
+  max-width: 75%;
+  padding: 0.5em calc(0.5em + var(--border-radius));
+  border-radius: 0 0 var(--border-radius) var(--border-radius);
+  text-align: center;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, 0);
 }
 
 #waiting .gear {
-    animation: spin 3200ms ease-in-out infinite;
-    filter: invert(1) brightness(.35) sepia(1) hue-rotate(180deg) saturate(2);
-    height: 0;
-    max-height: 500px;
-    flex-grow: 1;
-    user-select: none;
-    pointer-events: none;
-    /* border: 1px solid black */
+  animation: spin 3200ms ease-in-out infinite;
+  filter: invert(1) brightness(0.35) sepia(1) hue-rotate(180deg) saturate(2);
+  height: 0;
+  max-height: 500px;
+  flex-grow: 1;
+  user-select: none;
+  pointer-events: none;
+  /* border: 1px solid black */
 }
 
 @keyframes spin {
-    0% {
-        transform: rotate(0deg) scale(1)
-    }
-    50% {
-        transform: rotate(180deg) scale(0.9)
-        
-    }
-    100% {
-        transform: rotate(360deg) scale(1)
-    }
+  0% {
+    transform: rotate(0deg) scale(1);
+  }
+  50% {
+    transform: rotate(180deg) scale(0.9);
+  }
+  100% {
+    transform: rotate(360deg) scale(1);
+  }
 }
 
 #waiting .hint {
-    width: 100%;
-    position: absolute;
-    left: 50%;
-    bottom: 20px;
-    transform: translate(-50%, 0);
-    color: transparent;
-    transition: 0.2s;
+  width: 100%;
+  position: absolute;
+  left: 50%;
+  bottom: 20px;
+  transform: translate(-50%, 0);
+  color: transparent;
+  transition: 0.2s;
 }
 
 #waiting .hint .hint-text {
-    position: absolute;
-    color: black;
-    bottom: 0px;
-    left: 50%;
-    transform: translate(-50%,0);
-    background-color: var(--bg-alt);
-    max-width: 75%;
-    padding: 0.5em var(--border-radius);
-    border-radius: 0 var(--border-radius);
-    text-align: center;
-    visibility: hidden;
-    transition: visibility 0.2s, opacity 0.2s;
-    opacity: 0;
-    
+  position: absolute;
+  color: black;
+  bottom: 0px;
+  left: 50%;
+  transform: translate(-50%, 0);
+  background-color: var(--bg-alt);
+  max-width: 75%;
+  padding: 0.5em var(--border-radius);
+  border-radius: 0 var(--border-radius);
+  text-align: center;
+  visibility: hidden;
+  transition: visibility 0.2s, opacity 0.2s;
+  opacity: 0;
 }
 
 #waiting .hint .hint-text.visible {
-    visibility: unset;
-    opacity: 1;
-    transition: visibility 0s 0s, opacity 0.2s 0s;
+  visibility: unset;
+  opacity: 1;
+  transition: visibility 0s 0s, opacity 0.2s 0s;
 }
