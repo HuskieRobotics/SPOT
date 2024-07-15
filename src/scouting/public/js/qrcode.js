@@ -154,26 +154,6 @@ class QREncoder {
       }
     );
 
-    let qrContainer = document.createElement("div");
-    let qrText = document.createElement("button");
-    let qrImg = document.createElement("img");
-
-    qrContainer.classList.add("qr-container");
-    qrText.classList.add("qr-text");
-    qrText.classList.add("button-grid");
-    qrImg.classList.add("qr-img");
-
-    qrImg.src = dataUrl;
-    qrText.innerText = "Tap to Dismiss";
-
-    qrContainer.appendChild(qrImg);
-    qrContainer.appendChild(qrText);
-    document.body.appendChild(qrContainer);
-
-    qrContainer.addEventListener("click", () => {
-      document.body.removeChild(qrContainer);
-    });
-
     return dataUrl;
   }
 }
