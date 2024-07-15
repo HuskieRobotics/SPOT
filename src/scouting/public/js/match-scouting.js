@@ -115,21 +115,43 @@ var previousTimer = [];
             button.element.classList.add("disabled");
           }
           new Popup("notice", "Submitting Data...", 1000);
-          await LocalData.storeTeamMatchPerformance(
-            new TeamMatchPerformance(actionQueue).data
-          );
-          setTimeout(() => {
-            new Popup("error", "Couldn't submit, syncing later", 1000);
+          const teamMatchPerformance = new TeamMatchPerformance(actionQueue)
+            .data;
+          await LocalData.storeTeamMatchPerformance(teamMatchPerformance);
 
-            setTimeout(() => {
-              // window.location.reload() // Don't want to reload the page so that the QR Code can be scanned
-            }, 1000);
-          }, 5000);
-          await ScoutingSync.sync();
-          await ScoutingSync.updateState({
-            status: ScoutingSync.SCOUTER_STATUS.COMPLETE,
-          });
-          // window.location.reload(); // Don't want to reload the page so that the QR Code can be scanned
+          if (await ScoutingSync.sync()) {
+            await ScoutingSync.updateState({
+              status: ScoutingSync.SCOUTER_STATUS.COMPLETE,
+            });
+            window.location.reload();
+          } else {
+            // display QR code
+            const encoder = new QREncoder(); // Updated
+            const dataUrl = await encoder.encodeTeamMatchPerformance(
+              teamMatchPerformance
+            );
+
+            let qrContainer = document.createElement("div");
+            let qrText = document.createElement("button");
+            let qrImg = document.createElement("img");
+
+            qrContainer.classList.add("qr-container");
+            qrText.classList.add("qr-text");
+            qrText.classList.add("button-grid");
+            qrImg.classList.add("qr-img");
+
+            qrImg.src = dataUrl;
+            qrText.innerText = "Tap to Dismiss";
+
+            qrContainer.appendChild(qrImg);
+            qrContainer.appendChild(qrText);
+            document.body.appendChild(qrContainer);
+
+            qrContainer.addEventListener("click", () => {
+              document.body.removeChild(qrContainer);
+              window.location.reload();
+            });
+          }
         }
 
         if (timerActive) return;

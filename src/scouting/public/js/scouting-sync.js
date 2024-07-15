@@ -158,13 +158,13 @@ class ScoutingSync {
       let timeout = setTimeout(() => {
         new Popup("error", "failed to sync data!");
         res(false); //resolve, just so that the program can continue
-      }, 10000);
+      }, 5000);
       const teamMatchPerformances =
         await LocalData.getAllTeamMatchPerformances();
       const teamMatchPerformanceIds = teamMatchPerformances.map(
         (teamMatchPerformance) => teamMatchPerformance.matchId
       );
-      new Popup("notice", "Syncing Data...", 1000);
+      new Popup("notice", "Syncing Data...", 5000);
       ScoutingSync.socket.emit(
         "syncData",
         teamMatchPerformanceIds,
