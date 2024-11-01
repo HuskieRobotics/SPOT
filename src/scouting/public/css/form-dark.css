@@ -1,11 +1,11 @@
 #form {
-  background-color: var(--purple);
+  background-color: var(--dark-black);
 }
 
 #form .input {
-  background-color: var(--luke-border);
+  background-color: var(--purple);
   border: black 2px solid;
-  color: black;
+  color: var(--bg);
   cursor: pointer;
   text-align: left;
   border-radius: 8px;
@@ -16,7 +16,7 @@
 }
 
 #form .input:focus {
-  border: var(--purple) 2px solid;
+  border: var(--dark-black) 2px solid;
 }
 
 #form .label {
@@ -27,13 +27,13 @@
   position: absolute;
   padding: 0 5px;
   left: 12px;
-  background-color: var(--luke-border);
+  background-color: var(--purple);
   top: -8px;
   border-radius: 20px;
   font-size: 1.5em;
   transition: 0.2s transform;
   pointer-events: none;
-  color: var(--purple);
+  color: var(--dark-black);
 }
 
 .input:focus + span,
@@ -52,7 +52,7 @@
   justify-content: center;
 }
 #form .form {
-  background-color: var(--luke-border);
+  background-color: var(--purple);
   border-radius: var(--border-radius);
   display: grid;
   grid-template-columns: 50% 50%;
@@ -75,9 +75,9 @@
   grid-area: 4/1/5/3;
   font-size: 1.75em;
   width: 90%;
-  background-color: var(--purple);
+  background-color: var(--dark-black);
   border-radius: var(--border-radius);
-  color: var(--light-purple);
+  color: var(--bg);
   border: none;
   margin: 6px 0;
   height: 2em;

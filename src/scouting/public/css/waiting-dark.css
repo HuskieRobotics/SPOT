@@ -1,5 +1,5 @@
 #waiting {
-  background-color: var(--purple);
+  background-color: var(--dark-black);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -23,7 +23,8 @@
 }
 
 #waiting .title {
-  background-color: var(--luke-border);
+  background-color: var(--purple);
+  color: var(--bg);
   max-width: 75%;
   padding: 0.5em calc(0.5em + var(--border-radius));
   border-radius: 0 0 var(--border-radius) var(--border-radius);
@@ -69,11 +70,11 @@
 
 #waiting .hint .hint-text {
   position: absolute;
-  color: black;
+  color: var(--bg);
   bottom: 0px;
   left: 50%;
   transform: translate(-50%, 0);
-  background-color: var(--luke-border);
+  background-color: var(--purple);
   max-width: 75%;
   padding: 0.5em var(--border-radius);
   border-radius: 0 var(--border-radius);

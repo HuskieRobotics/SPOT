@@ -1,5 +1,5 @@
 #match-scouting {
-  background-color: var(--purple);
+  background-color: var(--dark-black);
 }
 
 #match-scouting .grid-container {
@@ -21,7 +21,6 @@
 
 #match-scouting .grid-button {
   border-radius: var(--border-radius, 16px);
-  color: var(--purple);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -32,16 +31,17 @@
   cursor: pointer;
   user-select: none;
   overflow: hidden;
-  box-shadow: 0 0 8px 0px var(--light-purple);
+  box-shadow: 0 0 8px 0px var(--purple);
   transition: 0.2s border, 0.2s box-shadow;
 }
 #match-scouting .grid-button:active {
-  box-shadow: 0 0 12px 0px #222222;
+  box-shadow: 0 0 12px 0px var(--purple);
   font-size: 3.3vw;
 }
 
 #match-scouting .grid-button.gray {
   background-color: #2d2d2d;
+  color: #efefef;
 }
 
 .button-padding {
@@ -49,8 +49,9 @@
 }
 
 .silver {
-  border: 3px solid var(--purple);
-  background-color: var(--light-purple);
+  border: 3px solid var(--dark-black);
+  background-color: var(--purple);
+  color: var(--bg);
 }
 
 .green {
@@ -58,7 +59,7 @@
 }
 
 .orange {
-  background-color: var(--light-purple);
+  background-color: var(--bg);
 }
 
 .red {

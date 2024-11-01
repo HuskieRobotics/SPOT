@@ -12,12 +12,15 @@ function changesheet() {
     form.setAttribute("href", "css/form-dark.css");
     scout.setAttribute("href", "css/match-scouting-dark.css");
     wait.setAttribute("href", "css/waiting-dark.css");
-    vstr.style.background = "#4f0d6b";
+    vstr.style.background = "#191b1c";
+    vstr.style.color = "#efefef";
   } else {
     theme.setAttribute("href", "/css/landing.css");
     status.style.color = "#4caf50";
     form.setAttribute("href", "css/form.css");
     scout.setAttribute("href", "css/match-scouting.css");
     wait.setAttribute("href", "css/waiting.css");
+    vstr.style.background = "#efefef";
+    vstr.style.color = "#191b1c";
   }
 }
