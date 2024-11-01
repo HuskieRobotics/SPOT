@@ -47,7 +47,7 @@
 	<div class="status">
 		<div class="connection-status">
 			<i class="reload fa-solid fa-arrow-rotate-right"></i>
-			<div class="socket-status">Not Connected</div>
+			<div class="socket-status" id="connection-status">Not Connected</div>
 		</div>
 		<div class="scouting-info"></div>
 		<div class="last-actions"></div>
@@ -57,5 +57,6 @@
         <div id=<%=filename.replace(".ejs","")%> class="page <%= filename === landingPage + ".ejs" ? "visible" : ""%>"><%- include(`pages/${filename}`) %></div>
     <% } %>
     <script src="./js/global.js"></script>
+    <script src="/js/changecolor.js"></script>
   </body>
 </html>

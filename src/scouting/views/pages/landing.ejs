@@ -1,29 +1,36 @@
-<link rel="stylesheet" href="/css/landing.css" />
+<link id="pagestyle" rel="stylesheet" href="/css/landing2.css" />
 
-<div class="spinner-container visible">
-  <div class="spinner-body">
-    <div class="spinner">
-      <div></div>
+<body>
+  <div class="spinner-container visible">
+    <div class="spinner-body">
+      <div class="spinner">
+        <div></div>
+      </div>
     </div>
   </div>
-</div>
 
-<div class="auth landing-screen">
-  <img class="logo" src="/img/logo.png" />
-  <span class="sign-in-text">SPOT</span>
-  <div class="auth-buttons">
-    <div class="google active">
-      <i class="fab fa-google"></i>
-      <span>Sign in with Google</span>
-    </div>
-    <div class="manual active">
-      <i class="fas fa-pen-square"></i>
-      <span>Sign in Manually</span>
+  <div class="auth landing-screen">
+    <img class="logo" src="/img/logo.png" />
+    <span class="sign-in-text">SPOT</span>
+    <div class="auth-buttons">
+      <div class="google active">
+        <i class="fab fa-google"></i>
+        <span>Sign in with Google</span>
+      </div>
+      <div class="manual active">
+        <i class="fas fa-pen-square"></i>
+        <span>Sign in Manually</span>
+      </div>
+      <div class="button-outside">
+        <button class="buttonz" onclick="changesheet()">Dark Mode.</button>
+      </div>
+      </div>
     </div>
   </div>
-</div>
 
-<div class="versionString">2024 Beta v3.0.0-beta.0</div>
+  <div class="versionString">2024 Beta v3.0.0-beta.0</div>
+</body>
 
 <script src="https://apis.google.com/js/platform.js"></script>
 <script src="/js/landing.js"></script>
+<script src="/js/changecolor.js"></script>
