@@ -79,9 +79,9 @@
 }
 
 #landing .button-outside {
-  font-size: 5em;
+  font-size: 4em;
   line-height: 1em;
-  margin-bottom: 12px;
+  margin-bottom: 1px;
   color: var(--dark-black);
 }
 

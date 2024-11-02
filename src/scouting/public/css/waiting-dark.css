@@ -27,7 +27,7 @@
   color: var(--bg);
   max-width: 75%;
   padding: 0.5em calc(0.5em + var(--border-radius));
-  border-radius: 0 0 var(--border-radius) var(--border-radius);
+  border-radius: var(--border-radius);
   text-align: center;
   position: absolute;
   top: 0;
