@@ -66,27 +66,29 @@ var previousTimer = [];
 
     undo: (button) => {
       button.element.addEventListener("click", () => {
-        const undoneId = actionQueue.pop().id; //remove the last action from the action queue
-        const undoneButton = buttons.find((x) => x.id === undoneId);
+        if (actionQueue.length > 2) {
+          const undoneId = actionQueue.pop().id; //remove the last action from the action queue
+          const undoneButton = buttons.find((x) => x.id === undoneId);
 
-        //special case for match-control buttons which have extra undo funcitonality without executables
-        if (undoneButton.type === "match-control") {
-          time = matchScoutingConfig.timing.totalTime; //reset timer
-          ScoutingSync.updateState({
-            status: ScoutingSync.SCOUTER_STATUS.WAITING,
-          }); //tell the server that you are now waiting to start
-          clearInterval(undoneButton.timerInterval); //clear the timing interval
-          undoneButton.element.innerText = "Start Match";
-          timerActive = false;
-          showLayer(0);
-        }
+          //special case for match-control buttons which have extra undo funcitonality without executables
+          if (undoneButton.type === "match-control") {
+            time = matchScoutingConfig.timing.totalTime; //reset timer
+            ScoutingSync.updateState({
+              status: ScoutingSync.SCOUTER_STATUS.WAITING,
+            }); //tell the server that you are now waiting to start
+            clearInterval(undoneButton.timerInterval); //clear the timing interval
+            undoneButton.element.innerText = "Start Match";
+            timerActive = false;
+            showLayer(0);
+          }
 
-        for (const executable of undoneButton.executables) {
-          executables[executable.type].reverse(
-            undoneButton,
-            layers,
-            ...executable.args
-          ); //reverse any executables associated with the undone button
+          for (const executable of undoneButton.executables) {
+            executables[executable.type].reverse(
+              undoneButton,
+              layers,
+              ...executable.args
+            ); //reverse any executables associated with the undone button
+          }
         }
         doExecutables(button, time);
         updateLastAction();
