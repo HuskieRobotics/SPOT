@@ -1,15 +1,15 @@
 {
   "timing": {
-    "totalTime": 153000,
+    "totalTime": 100000,
     "timeTransitions": {
-      "152999": {
+      "99999": {
         "layer": 1,
-        "displayText": "Auto",
+        "displayText": "This is a random period!",
         "variables": {}
       },
-      "135000": {
+      "93000": {
         "layer": 2,
-        "displayText": "Teleop",
+        "displayText": "Where are we?",
         "variables": {}
       }
     }
@@ -62,23 +62,23 @@
         },
         {
           "id": "broken",
-          "displayText": "Disabled",
+          "displayText": "hello",
           "gridArea": ["1", "1", "2", "3"],
-          "class": "red",
+          "class": "pink",
           "type": "action",
           "executables": []
         },
         {
           "id": "aStop",
-          "displayText": "A-Stop",
+          "displayText": "hello",
           "gridArea": ["2", "1", "3", "3"],
-          "class": "red",
+          "class": "pink",
           "type": "action",
           "executables": []
         },
         {
           "id": "undo",
-          "displayText": "Undo",
+          "displayText": "hello",
           "gridArea": ["1", "8", "2", "10"],
           "class": "pink",
           "type": "undo",
@@ -86,9 +86,9 @@
         },
         {
           "id": "groundPickup",
-          "displayText": "Ground",
+          "displayText": "hello",
           "gridArea": ["3", "8", "4", "10"],
-          "class": "orange",
+          "class": "pink",
           "type": "none",
           "executables": [
             {
@@ -101,7 +101,7 @@
           "id": "leave",
           "displayText": "Leave",
           "gridArea": ["6", "8", "7", "10"],
-          "class": "gray",
+          "class": "pink",
           "type": "action",
           "executables": []
         },
@@ -109,7 +109,7 @@
           "id": "scoreAmp",
           "displayText": "Score Amp",
           "gridArea": ["6", "1", "7", "3"],
-          "class": "green",
+          "class": "pink",
           "type": "action",
           "executables": []
         },
@@ -117,7 +117,7 @@
           "id": "scoreSubwoofer",
           "displayText": "Subwoofer",
           "gridArea": ["6", "4", "7", "7"],
-          "class": "gray",
+          "class": "pink",
           "type": "action",
           "executables": []
         },
@@ -125,7 +125,7 @@
           "id": "scoreWing",
           "displayText": "Wing",
           "gridArea": ["4", "4", "5", "7"],
-          "class": "gray",
+          "class": "pink",
           "type": "action",
           "executables": []
         },
@@ -133,7 +133,7 @@
           "id": "scorePodium",
           "displayText": "Podium",
           "gridArea": ["5", "4", "6", "7"],
-          "class": "gray",
+          "class": "pink",
           "type": "action",
           "executables": []
         },
@@ -141,7 +141,7 @@
           "id": "scoreMidfield",
           "displayText": "Midfield",
           "gridArea": ["3", "4", "4", "7"],
-          "class": "gray",
+          "class": "pink",
           "type": "action",
           "executables": []
         },
