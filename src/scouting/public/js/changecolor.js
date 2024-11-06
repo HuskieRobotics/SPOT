@@ -24,3 +24,7 @@ function changesheet() {
     vstr.style.color = "#191b1c";
   }
 }
+
+function goto() {
+  window.open("https://scouting.team3061.org/analysis/").focus;
+}
