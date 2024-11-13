@@ -15,7 +15,7 @@
     }
   },
   "variables": {
-    "min": 2
+    "minOfQueueLength": 2
   },
   "layout": {
     "gridRows": 6,
