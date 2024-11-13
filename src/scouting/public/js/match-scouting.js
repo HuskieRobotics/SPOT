@@ -66,7 +66,9 @@ var previousTimer = [];
 
     undo: (button) => {
       button.element.addEventListener("click", () => {
-        if (actionQueue.length > 2) {
+        if (actionQueue.length > matchScoutingConfig.variables.min) {
+          // Basically, if this code was not in place (^), then you would be able to undo the start of the game.
+
           const undoneId = actionQueue.pop().id; //remove the last action from the action queue
           const undoneButton = buttons.find((x) => x.id === undoneId);
 
