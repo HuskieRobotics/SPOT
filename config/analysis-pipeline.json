@@ -23,6 +23,15 @@
   {
     "type": "tmp",
     "name": "sum",
+    "outputPath": "counts.combinedNodeManipulations",
+    "options": {
+      "addends": ["counts.miss", "counts.drop"]
+    }
+  },
+
+  {
+    "type": "tmp",
+    "name": "sum",
     "outputPath": "counts.scoreAmpedSpeaker",
     "options": {
       "addends": [
