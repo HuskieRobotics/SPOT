@@ -14,7 +14,9 @@
       }
     }
   },
-  "variables": {},
+  "variables": {
+    "minOfQueueLength": 2
+  },
   "layout": {
     "gridRows": 6,
     "gridColumns": 9,
