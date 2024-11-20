@@ -356,6 +356,12 @@ body {
   #match-list {
     gap: 8px;
   }
+  #analysisButton{
+    height: 100px;
+    padding: 6px 10px 0;
+    width: 115px;
+
+  }
 }
 
 @media only screen and (max-width: 450px) {
