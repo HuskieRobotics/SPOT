@@ -20,14 +20,6 @@
       ]
     }
   },
-  {
-    "type": "tmp",
-    "name": "sum",
-    "outputPath": "counts.combinedNodeManipulations",
-    "options": {
-      "addends": ["counts.miss", "counts.drop"]
-    }
-  },
 
   {
     "type": "tmp",
@@ -151,6 +143,7 @@
       "misses": ["miss"]
     }
   },
+
   {
     "type": "tmp",
     "name": "ratio",
@@ -574,6 +567,14 @@
     "outputPath": "avgAutoPoints",
     "options": {
       "path": "scores.auto"
+    }
+  },
+  {
+    "type": "tmp",
+    "name": "sum",
+    "outputPath": "counts.dropsAndMisses",
+    "options": {
+      "addends": ["counts.drop", "counts.miss"]
     }
   },
   {
