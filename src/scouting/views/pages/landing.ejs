@@ -11,6 +11,10 @@
 
   <div class="auth landing-screen">
     <img class="logo" src="/img/logo.png" />
+    <div class="menu-out">
+      <img class="menu" src="/img/menu-button.png" />
+      <button class="menu-button" onclick="toggleSettingsMenu()"></button>
+    </div>
     <span class="sign-in-text">SPOT</span>
     <div class="auth-buttons">
       <div class="google active">
@@ -21,19 +25,24 @@
         <i class="fas fa-pen-square"></i>
         <span>Sign in Manually</span>
       </div>
+    </div>
+  </div>
+
+  <div id="settingsOverlay" class="settings-overlay" style="display: none">
+    <div id="settingsMenu" class="settings-menu">
       <div class="button-outside">
-        <button class="buttonz" onclick="changesheet()">Dark Mode.</button>
+        <button class="buttonz" onclick="toggleDarkMode()">Dark Mode</button>
       </div>
       <div class="button-outside">
         <button class="buttonz" onclick="goto()">Go To Analysis</button>
       </div>
-      </div>
     </div>
   </div>
 
-  <div style="background-color: #efefef;" id="v-string" class="versionString">2024 Beta v3.0.0-beta.0</div>
-</body>
+  <div style="background-color: #efefef" id="v-string" class="versionString">
+    2024 Beta v3.0.0-beta.0
+  </div>
 
-<script src="https://apis.google.com/js/platform.js"></script>
-<script src="/js/landing.js"></script>
-<script src="/js/changecolor.js"></script>
+  <script src="https://apis.google.com/js/platform.js"></script>
+  <script src="/js/landing.js"></script>
+</body>

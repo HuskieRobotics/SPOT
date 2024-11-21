@@ -1,5 +1,5 @@
 #landing {
-  background-color: #212425;
+  background-color: var(--dark-black);
 }
 
 #landing .spinner-container {
@@ -78,6 +78,82 @@
   color: var(--bg);
 }
 
+#landing .landing-screen {
+  width: 100%;
+  height: 100%;
+}
+
+#landing .sign-in-text {
+  font-size: 5em;
+  line-height: 1em;
+  margin-bottom: 12px;
+  z-index: 1;
+  color: var(--bg);
+}
+
+#landing .menu-out {
+  position: absolute; /* Position the menu-out absolutely */
+  top: 0; /* Position at the top of the page */
+  right: 0; /* Position at the right of the page */
+  width: fit-content; /* Make the menu-out only as wide as its content */
+  height: fit-content; /* Make the menu-out only as tall as its content */
+}
+
+#landing .menu-out .menu {
+  display: block; /* Ensure the image is treated as a block element */
+  width: 100px; /* Set a specific width for the menu image */
+  height: auto; /* Maintain the aspect ratio of the image */
+}
+
+#landing .menu-out .menu-button {
+  position: absolute; /* Position the button absolutely within the menu-out */
+  top: 0;
+  left: 0;
+  width: 100%; /* Make the button cover the entire menu */
+  height: 100%;
+  z-index: 1; /* Ensure the button is above the menu */
+  background: transparent; /* Make the button background transparent */
+  border: none; /* Remove any default button border */
+  cursor: pointer; /* Change cursor to pointer to indicate it's clickable */
+}
+
+#landing .menu-out .menu-button:hover {
+  background-color: rgba(
+    255,
+    255,
+    255,
+    0.1
+  ); /* Adjust hover color for dark mode */
+}
+
+#landing .settings-overlay {
+  display: none; /* Hide the overlay by default */
+  position: fixed; /* Position the overlay fixed to cover the entire screen */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+  backdrop-filter: blur(5px); /* Blur the background */
+  z-index: 2; /* Ensure the overlay is above other elements */
+  justify-content: center; /* Center the settings menu horizontally */
+  align-items: center; /* Center the settings menu vertically */
+  display: flex; /* Use flexbox for centering */
+}
+
+#landing .settings-menu {
+  background-color: var(--dark-black); /* Set background color for dark mode */
+  border: 1px solid var(--dark-border); /* Add a border */
+  padding: 20px; /* Add some padding */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Add a shadow for better visibility */
+  z-index: 3; /* Ensure the settings menu is above the overlay */
+  border-radius: var(--border-radius, 16px); /* Add rounded corners */
+}
+
+#landing .settings-menu .button-outside {
+  margin-bottom: 10px; /* Add some space between buttons */
+}
+
 #landing .button-outside {
   font-size: 3em;
   line-height: 1em;
@@ -110,7 +186,7 @@
 #landing .logo {
   height: 90vmin;
   position: absolute;
-  opacity: 0.05;
+  opacity: 0.1;
   z-index: 1;
 }
 
