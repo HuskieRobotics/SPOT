@@ -38,19 +38,31 @@ body {
   position: absolute;
   top: 1.5vh;
   left: 0;
-  line-height: 1em;
   width: 100%;
   z-index: 9999;
   display: flex;
   justify-content: space-between;
   padding: 0 20px;
   font-size: min(3.5vmin, 20px);
+  background-color: var(
+    --background-color
+  ); /* Ensure background color is set */
+  box-sizing: border-box; /* Include padding in the element's total width and height */
 }
 
 .connection-status {
   display: flex;
   align-items: center;
   gap: max(1vw, 10px);
+  line-height: 1em; /* Ensure line-height is consistent */
+  padding: 0 10px; /* Adjust padding to prevent overflow */
+  max-width: calc(
+    100% - 40px
+  ); /* Ensure it doesn't exceed the parent's width minus padding */
+  box-sizing: border-box; /* Include padding in the element's total width */
+  overflow: hidden; /* Prevent content from overflowing */
+  white-space: nowrap; /* Prevent text from wrapping */
+  text-overflow: ellipsis; /* Add ellipsis if text overflows */
 }
 
 .socket-status {

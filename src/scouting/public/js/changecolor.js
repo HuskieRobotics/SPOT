@@ -27,8 +27,8 @@ function toggleDarkMode() {
   let form = document.getElementById("landing-style");
   let scout = document.getElementById("match-color");
   let wait = document.getElementById("wait-color");
+  let action = document.getElementById("last-actions");
 
-  var statusElements = document.querySelectorAll(".status");
   var menuImage = document.querySelector("#landing .menu-out .menu");
   body.classList.toggle("dark-mode");
 
@@ -37,15 +37,13 @@ function toggleDarkMode() {
     document
       .getElementById("pagestyle")
       .setAttribute("href", "/css/landing-dark.css");
-    statusElements.forEach(function (element) {
-      element.style.backgroundColor = "var(--dark-black)";
-    });
     vstr.style.background = "#191b1c";
     vstr.style.color = "#efefef";
     status.style.color = "#ac56d1";
     form.setAttribute("href", "css/form-dark.css");
     scout.setAttribute("href", "css/match-scouting-dark.css");
     wait.setAttribute("href", "css/waiting-dark.css");
+    action.style.color = "#efefef";
   } else {
     menuImage.src = "/img/menu-button.png";
     document
@@ -57,7 +55,6 @@ function toggleDarkMode() {
     form.setAttribute("href", "css/form.css");
     scout.setAttribute("href", "css/match-scouting.css");
     wait.setAttribute("href", "css/waiting.css");
-        statusElements.forEach(function(element)
-    element.style.backgroundColor = "var(--bg)";
+    action.style.color = "#232323";
   }
 }
