@@ -10,6 +10,7 @@
   --light-gray: #bebebe;
   --gray: #757575;
   --green: #4caf50;
+  --reload-color: #000000;
   --placeholder: #a3a3a3;
   --border-radius: 16px;
   --font: Cairo, sans-serif;
@@ -80,6 +81,7 @@ body {
 .reload {
   cursor: pointer;
   font-size: min(8vmin, 25px);
+  color: var(--reload-color);
 }
 
 .scouting-info {
