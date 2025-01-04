@@ -26,6 +26,7 @@ function toggleDarkMode() {
   let scout = document.getElementById("match-color");
   let wait = document.getElementById("wait-color");
   let action = document.getElementById("last-actions");
+  let reloadPopup = document.getElementById("internal");
 
   var menuImage = document.querySelector("#landing .menu-out .menu");
 
@@ -41,6 +42,7 @@ function toggleDarkMode() {
     vStr.style.background = "#191b1c";
     vStr.style.color = "#efefef";
     status.style.color = "#ac56d1";
+    reloadPopup.setAttribute("href", "css/internal-dark.css");
     form.setAttribute("href", "css/form-dark.css");
     scout.setAttribute("href", "css/match-scouting-dark.css");
     wait.setAttribute("href", "css/waiting-dark.css");
@@ -55,6 +57,7 @@ function toggleDarkMode() {
     vStr.style.background = "#efefef";
     vStr.style.color = "#191b1c";
     status.style.color = "#4caf50";
+    reloadPopup.setAttribute("href", "css/internal.css");
     form.setAttribute("href", "css/form.css");
     scout.setAttribute("href", "css/match-scouting.css");
     wait.setAttribute("href", "css/waiting.css");
