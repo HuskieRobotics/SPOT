@@ -112,6 +112,10 @@ var previousTimer = [];
       });
     },
 
+    label: (button) => {
+      //add a temporary event to the action queue with no id which will be removed before the action queue is sent
+    },
+
     "match-control": (button) => {
       button.element.innerText = "Start Match";
       button.element.addEventListener("click", async () => {
