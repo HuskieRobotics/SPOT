@@ -35,7 +35,6 @@
             }
           ]
         },
-
         {
           "id": "preloadNote",
           "displayText": "Preload Note",
@@ -438,57 +437,36 @@
           "executables": []
         },
         {
-          "id": "onstage",
-          "displayText": "Onstage/Climb",
+          "id": "l4",
+          "displayText": "L4",
           "gridArea": ["3", "4", "4", "7"],
           "class": "gray",
           "type": "action",
           "executables": []
         },
         {
-          "id": "onstageFall",
-          "displayText": "Fall",
-          "gridArea": ["3", "8", "4", "10"],
+          "id": "l3",
+          "displayText": "L3",
+          "gridArea": ["4", "4", "5", "7"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "l2",
+          "displayText": "L2",
+          "gridArea": ["5", "4", "6", "7"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "l1",
+          "displayText": "L1",
+          "gridArea": ["6", "4", "7", "7"],
           "class": "red",
           "type": "action",
           "executables": []
-        },
-        {
-          "id": "harmony",
-          "displayText": "Harmony",
-          "gridArea": ["3", "1", "4", "3"],
-          "class": "gray",
-          "type": "action",
-          "executables": []
-        },
-        {
-          "id": "spotlit",
-          "displayText": "Spotlit",
-          "gridArea": ["6", "8", "7", "10"],
-          "class": "gray",
-          "type": "action",
-          "executables": []
-        },
-        {
-          "id": "trap",
-          "displayText": "Trap",
-          "gridArea": ["6", "4", "7", "7"],
-          "class": "gray",
-          "type": "action",
-          "executables": []
-        },
-        {
-          "id": "unpark",
-          "displayText": "Unpark",
-          "gridArea": ["6", "1", "7", "3"],
-          "class": "orange",
-          "type": "action",
-          "executables": [
-            {
-              "type": "layer",
-              "args": [4, 2]
-            }
-          ]
         }
       ],
       [
