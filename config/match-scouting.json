@@ -38,9 +38,9 @@
 
         {
           "id": "preloadNote",
-          "displayText": "Preload Note",
+          "displayText": "Preload Coral",
           "gridArea": ["4", "1", "6", "5"],
-          "class": "orange",
+          "class": "lightCoral",
           "type": "action",
           "executables": []
         },
