@@ -89,3 +89,14 @@
   opacity: 0.6;
   pointer-events: none;
 }
+.bluegreen {
+  background-color: #0babab;
+}
+
+.lightbluegreen {
+  background-color: #56b8b8;
+}
+
+.darkbluegreen {
+  background-color: #077777;
+}
