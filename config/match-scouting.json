@@ -93,7 +93,7 @@
           "executables": [
             {
               "type": "layer",
-              "args": [1, 5]
+              "args": [1, 6]
             }
           ]
         },
@@ -616,36 +616,18 @@
           "executables": []
         },
         {
-          "id": "autoNoteWing",
-          "displayText": "Wing",
-          "gridArea": ["3", "1", "6", "3"],
-          "class": "navy",
-          "type": "action",
-          "executables": [
-            {
-              "type": "layer",
-              "args": [6, 1]
-            }
-          ]
-        },
-        {
-          "id": "autoNoteWing",
-          "displayText": "Wing",
-          "gridArea": ["3", "8", "6", "10"],
+          "id": "broken",
+          "displayText": "Disabled",
+          "gridArea": ["1", "1", "2", "3"],
           "class": "red",
           "type": "action",
-          "executables": [
-            {
-              "type": "layer",
-              "args": [6, 1]
-            }
-          ]
+          "executables": []
         },
         {
-          "id": "autoNoteAmpMost",
+          "id": "autoAlgaeLeft",
           "displayText": "O",
-          "gridArea": ["2", "5", "3", "6"],
-          "class": "orange",
+          "gridArea": ["3", "1", "6", "4"],
+          "class": "bluegreen",
           "type": "action",
           "executables": [
             {
@@ -655,10 +637,10 @@
           ]
         },
         {
-          "id": "autoNoteAmpMid",
+          "id": "autoAlgaeCenter",
           "displayText": "O",
-          "gridArea": ["3", "5", "4", "6"],
-          "class": "orange",
+          "gridArea": ["3", "4", "6", "7"],
+          "class": "darkbluegreen",
           "type": "action",
           "executables": [
             {
@@ -668,10 +650,10 @@
           ]
         },
         {
-          "id": "autoNoteMiddle",
+          "id": "autoAlgaeRight",
           "displayText": "O",
-          "gridArea": ["4", "5", "5", "6"],
-          "class": "orange",
+          "gridArea": ["3", "7", "6", "10"],
+          "class": "bluegreen",
           "type": "action",
           "executables": [
             {
@@ -679,30 +661,69 @@
               "args": [6, 1]
             }
           ]
+        }
+      ],
+      [
+        {
+          "id": "startGame",
+          "displayText": "Start",
+          "gridArea": ["1", "4", "2", "7"],
+          "class": "silver timer",
+          "type": "match-control",
+          "executables": []
         },
         {
-          "id": "autoNoteSourceMid",
-          "displayText": "O",
-          "gridArea": ["5", "5", "6", "6"],
-          "class": "orange",
+          "id": "undo",
+          "displayText": "Undo",
+          "gridArea": ["1", "8", "2", "10"],
+          "class": "pink",
+          "type": "undo",
+          "executables": []
+        },
+        {
+          "id": "broken",
+          "displayText": "Disabled",
+          "gridArea": ["1", "1", "2", "3"],
+          "class": "red",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "autoCoralLeft",
+          "displayText": "I",
+          "gridArea": ["3", "1", "6", "4"],
+          "class": "coral",
           "type": "action",
           "executables": [
             {
               "type": "layer",
-              "args": [6, 1]
+              "args": [7, 1]
             }
           ]
         },
         {
-          "id": "autoNoteSourceMost",
-          "displayText": "O",
-          "gridArea": ["6", "5", "7", "6"],
-          "class": "orange",
+          "id": "autoCoralCenter",
+          "displayText": "I",
+          "gridArea": ["3", "4", "6", "7"],
+          "class": "darkcoral",
           "type": "action",
           "executables": [
             {
               "type": "layer",
-              "args": [6, 1]
+              "args": [7, 1]
+            }
+          ]
+        },
+        {
+          "id": "autoCoralRight",
+          "displayText": "I",
+          "gridArea": ["3", "7", "6", "10"],
+          "class": "coral",
+          "type": "action",
+          "executables": [
+            {
+              "type": "layer",
+              "args": [7, 1]
             }
           ]
         }
