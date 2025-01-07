@@ -328,7 +328,7 @@
           "id": "shallow",
           "displayText": "Shallow Cage",
           "gridArea": ["4", "4", "5", "7"],
-          "class": "gray",
+          "class": "shallowBlue",
           "type": "action",
           "executables": []
         },
@@ -336,7 +336,7 @@
           "id": "deep",
           "displayText": "Deep Cage",
           "gridArea": ["5", "4", "6", "7"],
-          "class": "gray",
+          "class": "deepBlue",
           "type": "action",
           "executables": []
         },
@@ -344,7 +344,7 @@
           "id": "bargeFall",
           "displayText": "Fall",
           "gridArea": ["6", "4", "7", "7"],
-          "class": "gray",
+          "class": "red",
           "type": "action",
           "executables": []
         }

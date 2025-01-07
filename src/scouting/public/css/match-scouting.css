@@ -32,6 +32,7 @@
   cursor: pointer;
   user-select: none;
   overflow: hidden;
+  padding: 5px;
   box-shadow: 0 0 8px 0px #838383;
   transition: 0.2s border, 0.2s box-shadow;
 }
@@ -102,6 +103,14 @@
 
 .darkCoral {
   background-color: #c71585;
+}
+
+.deepBlue {
+  background-color: #001f3f;
+}
+
+.shallowBlue {
+  background-color: #73a9e5;
 }
 
 .border {
