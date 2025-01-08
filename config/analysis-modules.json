@@ -1,15 +1,46 @@
 [
   {
     "view": "team",
-    "module": "PerformanceTimePlot",
-    "name": "Performance Over Time",
+    "module": "Pie",
+    "name": "Coral Pickup Distribution",
     "position": "main",
     "options": {
-      "trackedStats": [
-        "scores.auto",
-        "scores.teleop",
-        "scores.total",
-        "accuracy%"
+      "slices": [{ "name": "Ground", "path": "counts.groundPickupCoral" }]
+    }
+  },
+  {
+    "view": "team",
+    "module": "Pie",
+    "name": "Teleop Algae Scored",
+    "position": "main",
+    "options": {
+      "slices": [
+        {
+          "name": "Net",
+          "path": "counts.teleopScoreNet"
+        },
+        {
+          "name": "Processor",
+          "path": "counts.teleopScoreProcessor"
+        }
+      ]
+    }
+  },
+  {
+    "view": "team",
+    "module": "Pie",
+    "name": "Auto Algae Scored",
+    "position": "main",
+    "options": {
+      "slices": [
+        {
+          "name": "Net",
+          "path": "counts.autoScoreNet"
+        },
+        {
+          "name": "Processor",
+          "path": "counts.autoScoreProcessor"
+        }
       ]
     }
   }
