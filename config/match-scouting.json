@@ -1,13 +1,13 @@
 {
   "timing": {
-    "totalTime": 5000,
+    "totalTime": 153000,
     "timeTransitions": {
-      "4999": {
+      "152999": {
         "layer": 1,
         "displayText": "Auto",
         "variables": {}
       },
-      "1000": {
+      "135000": {
         "layer": 2,
         "displayText": "Teleop",
         "variables": {}
@@ -456,7 +456,7 @@
           "id": "autol4",
           "displayText": "L4",
           "gridArea": ["3", "4", "4", "7"],
-          "class": "gray",
+          "class": "lightCoral",
           "type": "action",
           "executables": [
             {
@@ -469,7 +469,7 @@
           "id": "autol3",
           "displayText": "L3",
           "gridArea": ["4", "4", "5", "7"],
-          "class": "gray",
+          "class": "coral",
           "type": "action",
           "executables": [
             {
@@ -482,7 +482,7 @@
           "id": "autol2",
           "displayText": "L2",
           "gridArea": ["5", "4", "6", "7"],
-          "class": "gray",
+          "class": "darkCoral",
           "type": "action",
           "executables": [
             {
@@ -534,7 +534,7 @@
           "id": "autoAlgaeLeft",
           "displayText": "O",
           "gridArea": ["3", "1", "6", "4"],
-          "class": "bluegreen",
+          "class": "lightbluegreen",
           "type": "action",
           "executables": [
             {
@@ -547,7 +547,7 @@
           "id": "autoAlgaeCenter",
           "displayText": "O",
           "gridArea": ["3", "4", "6", "7"],
-          "class": "darkbluegreen",
+          "class": "lightbluegreen",
           "type": "action",
           "executables": [
             {
@@ -560,7 +560,7 @@
           "id": "autoAlgaeRight",
           "displayText": "O",
           "gridArea": ["3", "7", "6", "10"],
-          "class": "bluegreen",
+          "class": "lightbluegreen",
           "type": "action",
           "executables": [
             {
@@ -599,7 +599,7 @@
           "id": "autoCoralLeft",
           "displayText": "I",
           "gridArea": ["3", "1", "6", "4"],
-          "class": "coral",
+          "class": "lightCoral",
           "type": "action",
           "executables": [
             {
@@ -612,7 +612,7 @@
           "id": "autoCoralCenter",
           "displayText": "I",
           "gridArea": ["3", "4", "6", "7"],
-          "class": "darkCoral",
+          "class": "lightCoral",
           "type": "action",
           "executables": [
             {
@@ -625,7 +625,7 @@
           "id": "autoCoralRight",
           "displayText": "I",
           "gridArea": ["3", "7", "6", "10"],
-          "class": "coral",
+          "class": "lightCoral",
           "type": "action",
           "executables": [
             {
@@ -742,7 +742,7 @@
           "id": "teleopl4",
           "displayText": "L4",
           "gridArea": ["3", "4", "4", "7"],
-          "class": "gray",
+          "class": "lightCoral",
           "type": "action",
           "executables": [
             {
@@ -755,7 +755,7 @@
           "id": "teleopl3",
           "displayText": "L3",
           "gridArea": ["4", "4", "5", "7"],
-          "class": "gray",
+          "class": "coral",
           "type": "action",
           "executables": [
             {
@@ -768,7 +768,7 @@
           "id": "teleopl2",
           "displayText": "L2",
           "gridArea": ["5", "4", "6", "7"],
-          "class": "gray",
+          "class": "darkCoral",
           "type": "action",
           "executables": [
             {
