@@ -1,13 +1,13 @@
 {
   "timing": {
-    "totalTime": 153000,
+    "totalTime": 5000,
     "timeTransitions": {
-      "152999": {
+      "4999": {
         "layer": 1,
         "displayText": "Auto",
         "variables": {}
       },
-      "135000": {
+      "1000": {
         "layer": 2,
         "displayText": "Teleop",
         "variables": {}

@@ -112,6 +112,10 @@ var previousTimer = [];
       });
     },
 
+    label: () => {
+      //adds a non-clickable label to the grid
+    },
+
     "match-control": (button) => {
       button.element.innerText = "Start Match";
       button.element.addEventListener("click", async () => {
