@@ -191,6 +191,19 @@
     }
   },
   {
+    "type": "tmp",
+    "name": "sum",
+    "outputPath": "counts.totalMiss",
+    "options": {
+      "addends": [
+        "counts.autoMissProcessor",
+        "counts.autoMissNet",
+        "counts.teleopMissProcessor",
+        "counts.teleopMissNet"
+      ]
+    }
+  },
+  {
     "type": "team",
     "name": "countActions",
     "outputPath": "counts",
@@ -237,19 +250,7 @@
       ]
     }
   },
-  {
-    "type": "team",
-    "name": "sum",
-    "outputPath": "counts.totalMiss",
-    "options": {
-      "addends": [
-        "counts.autoMissProcessor",
-        "counts.autoMissNet",
-        "counts.teleopMissProcessor",
-        "counts.teleopMissNet"
-      ]
-    }
-  },
+
   {
     "type": "team",
     "name": "sum",
@@ -288,6 +289,19 @@
     "outputPath": "counts.scoreL4",
     "options": {
       "addends": ["counts.teleopl4", "counts.autol4"]
+    }
+  },
+  {
+    "type": "team",
+    "name": "sum",
+    "outputPath": "counts.totalMiss",
+    "options": {
+      "addends": [
+        "counts.autoMissProcessor",
+        "counts.autoMissNet",
+        "counts.teleopMissProcessor",
+        "counts.teleopMissNet"
+      ]
     }
   },
   {
