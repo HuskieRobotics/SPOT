@@ -9,14 +9,74 @@
   },
   {
     "type": "tmp",
-    "name": "ratio",
-    "outputPath": "accuracy%",
+    "name": "weightedSum",
+    "outputPath": "scores.auto",
     "options": {
-      "numerator": ["accuracy"],
-      "denominator": [0.01],
-      "divByZero": 0
+      "weightedPaths": {
+        "counts.leave": 2,
+        "counts.autol1": 3,
+        "counts.autol2": 4,
+        "counts.autol3": 6,
+        "counts.autol4": 7,
+        "counts.teleopScoreProcessor": 6,
+        "counts.scoreNet": 4
+      }
     }
   },
+  {
+    "type": "tmp",
+    "name": "weightedSum",
+    "outputPath": "scores.teleop",
+    "options": {
+      "weightedPaths": {
+        "counts.teleopl1": 22,
+        "counts.teleopl2": 3,
+        "counts.teleopl3": 4,
+        "counts.teleopl4": 5,
+        "counts.teleopScoreNet": 4,
+        "counts.teleopScoreProcessor": 6
+      }
+    }
+  },
+  {
+    "type": "tmp",
+    "name": "weightedSum",
+    "outputPath": "counts.scoreTotalCoral",
+    "options": {
+      "weightedPaths": {
+        "counts.teleopl1": 2,
+        "counts.teleopl2": 3,
+        "counts.teleopl3": 4,
+        "counts.teleopl4": 5,
+        "counts.autol1": 3,
+        "counts.autol2": 4,
+        "counts.autol3": 6,
+        "counts.scoreAutol4": 7
+      }
+    }
+  },
+  {
+    "type": "tmp",
+    "name": "weightedSum",
+    "outputPath": "counts.scoreTotalAlgae",
+    "options": {
+      "weightedPaths": {
+        "counts.autoScoreNet": 6,
+        "counts.teleopScoreNet": 6,
+        "counts.autoScoreProcessor": 4,
+        "counts.teleopScoreProcessor": 4
+      }
+    }
+  },
+  {
+    "type": "tmp",
+    "name": "sum",
+    "outputPath": "score.total",
+    "options": {
+      "addends": ["counts.scoreTotalCoral", "counts.scoreTotalAlgae"]
+    }
+  },
+
   {
     "type": "tmp",
     "name": "actionTimeFilter",
@@ -74,12 +134,12 @@
     "outputPath": "scores.teleop",
     "options": {
       "weightedPaths": {
-        "countsTeleop.teleopl1": 2,
-        "countsTeleop.teleopl2": 3,
-        "countsTeleop.teleopl3": 4,
-        "countsTeleop.teleopl4": 5,
-        "countsTeleop.teleopScoreNet": 4,
-        "countsTeleop.teleopScoreProcessor": 6
+        "counts.teleopl1": 2,
+        "counts.teleopl2": 3,
+        "counts.teleopl3": 4,
+        "counts.teleopl4": 5,
+        "counts.teleopScoreNet": 4,
+        "counts.teleopScoreProcessor": 6
       }
     }
   },
@@ -89,14 +149,14 @@
     "outputPath": "counts.scoreTotalCoral",
     "options": {
       "weightedPaths": {
-        "counts.scoreTeleopl1": 2,
-        "counts.scoreTeleopl2": 3,
-        "counts.scoreTeleopl3": 4,
-        "counts.scoreTeleopl4": 5,
-        "counts.scoreAutol1": 3,
-        "counts.scoreAutol2": 4,
-        "counts.scoreAutol3": 6,
-        "counts.scoreAutol4": 7
+        "counts.teleopl1": 2,
+        "counts.teleopl2": 3,
+        "counts.teleopl3": 4,
+        "counts.teleopl4": 5,
+        "counts.autol1": 3,
+        "counts.autol2": 4,
+        "counts.autol3": 6,
+        "counts.autol4": 7
       }
     }
   },
@@ -123,19 +183,19 @@
     }
   },
   {
+    "type": "tmp",
+    "name": "sum",
+    "outputPath": "scores.total",
+    "options": {
+      "addends": ["scores.auto", "scores.teleop"]
+    }
+  },
+  {
     "type": "team",
     "name": "countActions",
     "outputPath": "counts",
     "options": {
       "all": true
-    }
-  },
-  {
-    "type": "team",
-    "name": "average",
-    "outputPath": "averages",
-    "options": {
-      "path": "counts"
     }
   },
 
@@ -147,39 +207,87 @@
       "weight": 150000
     }
   },
-
   {
     "type": "team",
-    "name": "aggregateArray",
-    "outputPath": "cycle.all",
+    "name": "sum",
+    "outputPath": "totalCoralScored",
     "options": {
-      "path": "cycle.all"
+      "addends": [
+        "counts.teleopl1",
+        "counts.teleopl2",
+        "counts.teleopl3",
+        "counts.teleopl4",
+        "counts.autol1",
+        "counts.autol2",
+        "counts.autol3",
+        "counts.autol4"
+      ]
     }
   },
   {
     "type": "team",
-    "name": "aggregateArray",
-    "outputPath": "cycle.allComplete",
+    "name": "sum",
+    "outputPath": "totalAlgaeScored",
     "options": {
-      "path": "cycle.allComplete"
+      "addends": [
+        "counts.autoScoreProcessor",
+        "counts.teleopScoreProcessor",
+        "counts.autoScoreNet",
+        "counts.teleopScoreNet"
+      ]
     }
   },
   {
     "type": "team",
-    "name": "averageArray",
-    "outputPath": "cycle.averageTime",
+    "name": "sum",
+    "outputPath": "counts.totalMiss",
     "options": {
-      "arrayPath": "cycle.all",
-      "valuePath": "timeDifferential"
+      "addends": [
+        "counts.autoMissProcessor",
+        "counts.autoMissNet",
+        "counts.teleopMissProcessor",
+        "counts.teleopMissNet"
+      ]
     }
   },
   {
     "type": "team",
-    "name": "averageArray",
-    "outputPath": "cycle.averageTimeComplete",
+    "name": "sum",
+    "outputPath": "score.total",
     "options": {
-      "arrayPath": "cycle.allComplete",
-      "valuePath": "timeDifferential"
+      "addends": ["counts."]
+    }
+  },
+  {
+    "type": "team",
+    "name": "sum",
+    "outputPath": "counts.scoreL1",
+    "options": {
+      "addends": ["counts.teleopl1", "counts.autol1"]
+    }
+  },
+  {
+    "type": "team",
+    "name": "sum",
+    "outputPath": "counts.scoreL2",
+    "options": {
+      "addends": ["counts.teleopl2", "counts.autol2"]
+    }
+  },
+  {
+    "type": "team",
+    "name": "sum",
+    "outputPath": "counts.scoreL3",
+    "options": {
+      "addends": ["counts.teleopl3", "counts.autol3"]
+    }
+  },
+  {
+    "type": "team",
+    "name": "sum",
+    "outputPath": "counts.scoreL4",
+    "options": {
+      "addends": ["counts.teleopl4", "counts.autol4"]
     }
   },
   {
@@ -208,26 +316,24 @@
   },
   {
     "type": "team",
-    "name": "standardDeviation",
-    "outputPath": "standardDeviation",
-    "options": {
-      "path": "scores.total"
-    }
-  },
-  {
-    "type": "team",
     "name": "average",
-    "outputPath": "totalCoral",
+    "outputPath": "avgTotalMiss",
     "options": {
-      "addends": ["counts.scoreCoral"]
+      "path": "counts.totalMiss"
     }
   },
   {
     "type": "team",
-    "name": "sum",
-    "outputPath": "score.total",
+    "name": "ratio",
+    "outputPath": "totalAccuracy",
     "options": {
-      "addends": ["counts."]
+      "numerator": ["totalCoralScored", "totalAlgaeScored"],
+      "denominator": [
+        "totalCoralScored",
+        "totalAlgaeScored",
+        "counts.totalMiss"
+      ],
+      "divByZero": 0
     }
   }
 ]
