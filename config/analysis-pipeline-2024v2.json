@@ -548,7 +548,7 @@
   {
     "type": "team",
     "name": "ratio",
-    "outputPath": "accuracy",
+    "outputPath": "totalAccuracy",
     "options": {
       "numerator": ["counts.scoreAmp", "counts.scoreCombinedSpeaker"],
       "denominator": [

@@ -2,16 +2,40 @@
   {
     "view": "team",
     "module": "Pie",
-    "name": "Coral Pickup Distribution",
+    "name": "Total Coral Pickup Distribution",
     "position": "main",
     "options": {
-      "slices": [{ "name": "Ground", "path": "counts.groundPickupCoral" }]
+      "slices": [
+        { "name": "Ground", "path": "counts.groundPickupCoral" },
+        {
+          "name": "Station",
+          "path": "counts.stationPickupCoral"
+        }
+      ]
     }
   },
   {
     "view": "team",
     "module": "Pie",
-    "name": "Teleop Algae Scored",
+    "name": "Algae Pickup Distribution",
+    "position": "main",
+    "options": {
+      "slices": [
+        {
+          "name": "Ground",
+          "path": "counts.groundPickupAlgae"
+        },
+        {
+          "name": "Reef",
+          "path": "counts.reefPickupAlgae"
+        }
+      ]
+    }
+  },
+  {
+    "view": "team",
+    "module": "Pie",
+    "name": "Teleop Algae Scored Distribution",
     "position": "main",
     "options": {
       "slices": [
@@ -29,7 +53,7 @@
   {
     "view": "team",
     "module": "Pie",
-    "name": "Auto Algae Scored",
+    "name": "Auto Algae Scored Distribution",
     "position": "main",
     "options": {
       "slices": [
@@ -40,6 +64,198 @@
         {
           "name": "Processor",
           "path": "counts.autoScoreProcessor"
+        }
+      ]
+    }
+  },
+  {
+    "view": "team",
+    "module": "Bar",
+    "name": "Coral Reef Placement",
+    "position": "main",
+    "options": {
+      "bars": [
+        {
+          "name": "Level 1",
+          "path": "counts.scoreL1"
+        },
+        {
+          "name": "Level 2",
+          "path": "counts.scoreL2"
+        },
+        {
+          "name": "Level 3",
+          "path": "counts.scoreL3"
+        },
+        {
+          "name": "Level 4",
+          "path": "counts.scoreL4"
+        }
+      ]
+    }
+  },
+  {
+    "view": "team",
+    "module": "Bar",
+    "name": "Teleop Coral Reef Placement",
+    "position": "main",
+    "options": {
+      "bars": [
+        {
+          "name": "Level 1",
+          "path": "counts.teleopl1"
+        },
+        {
+          "name": "Level 2",
+          "path": "counts.teleopl2"
+        },
+        {
+          "name": "Level 3",
+          "path": "counts.teleopl3"
+        },
+        {
+          "name": "Level 4",
+          "path": "counts.teleopl4"
+        }
+      ]
+    }
+  },
+  {
+    "view": "team",
+    "module": "Bar",
+    "name": "Auto Coral Reef Placement",
+    "position": "main",
+    "options": {
+      "bars": [
+        {
+          "name": "Level 1",
+          "path": "counts.autol1"
+        },
+        {
+          "name": "Level 2",
+          "path": "counts.autol2"
+        },
+        {
+          "name": "Level 3",
+          "path": "counts.autol3"
+        },
+        {
+          "name": "Level 4",
+          "path": "counts.autol4"
+        }
+      ]
+    }
+  },
+  {
+    "view": "team",
+    "module": "Bar",
+    "name": "Barge",
+    "position": "main",
+    "options": {
+      "bars": [
+        {
+          "name": "Park",
+          "path": "counts.park"
+        },
+        {
+          "name": "Fall",
+          "path": "counts.bargeFall"
+        },
+        {
+          "name": "Deep Cage",
+          "path": "counts.deep"
+        },
+        {
+          "name": "Shallow Cage",
+          "path": "counts.shallow"
+        }
+      ]
+    }
+  },
+  {
+    "view": "team",
+    "module": "Bar",
+    "name": "Auto Pickup Distribution",
+    "position": "main",
+    "options": {
+      "bars": [
+        {
+          "name": "Algae Left",
+          "path": "counts.autoAlgaeLeft"
+        },
+        {
+          "name": "Algae Center",
+          "path": "counts.autoAlgaeCenter"
+        },
+        {
+          "name": "Algae Right",
+          "path": "counts.autoAlgaeRight"
+        },
+        {
+          "name": "Coral Left",
+          "path": "counts.autoCoralLeft"
+        },
+        {
+          "name": "Coral Center",
+          "path": "counts.autoCoralCenter"
+        },
+        {
+          "name": "Coral Right",
+          "path": "counts.autoCoralRight"
+        }
+      ]
+    }
+  },
+  {
+    "view": "team",
+    "module": "Stats",
+    "position": "side",
+    "name": "Team Stats",
+    "options": {
+      "list": [
+        {
+          "name": "Accuracy",
+          "path": "totalAccuracy",
+          "multiplier": 100,
+          "decimals": 1,
+          "sort": 1,
+          "unit": "%"
+        },
+        {
+          "name": "Average Auto Points",
+          "path": "avgAutoPoints",
+          "decimals": 2,
+          "sort": 1
+        },
+        {
+          "name": "Average Teleop Points",
+          "path": "avgTeleopPoints",
+          "decimals": 2,
+          "sort": 1
+        },
+        {
+          "name": "Average Points",
+          "path": "avgTotalPoints",
+          "decimals": 2,
+          "sort": 1
+        },
+        {
+          "name": "Average Misses",
+          "path": "avgTotalMiss",
+          "decimals": 1,
+          "sort": -1
+        },
+        {
+          "name": "Total Brokens",
+          "path": "counts.broken",
+          "decimals": 0,
+          "sort": -1
+        },
+        {
+          "name": "Total A-Stops",
+          "path": "counts.aStop",
+          "decimals": 0,
+          "sort": -1
         }
       ]
     }
