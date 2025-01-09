@@ -503,6 +503,19 @@
               "args": [5, 1]
             }
           ]
+        },
+        {
+          "id": "automissCoral",
+          "displayText": "Miss",
+          "gridArea": ["6", "1", "7", "3"],
+          "class": "red",
+          "type": "action",
+          "executables": [
+            {
+              "type": "layer",
+              "args": [5, 1]
+            }
+          ]
         }
       ],
       [
@@ -787,6 +800,19 @@
             {
               "type": "layer",
               "args": [9, 2]
+            }
+          ]
+        },
+        {
+          "id": "teleopmissCoral",
+          "displayText": "Miss",
+          "gridArea": ["6", "1", "7", "3"],
+          "class": "red",
+          "type": "action",
+          "executables": [
+            {
+              "type": "layer",
+              "args": [5, 1]
             }
           ]
         }
