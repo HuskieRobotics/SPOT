@@ -58,7 +58,13 @@
     "outputPath": "scores.auto",
     "options": {
       "weightedPaths": {
-        "countsAuto.leave": 2
+        "countsAuto.leave": 2,
+        "countsAuto.autol1": 3,
+        "countsAuto.autol2": 4,
+        "countsAuto.autol3": 6,
+        "countsAuto.autol4": 7,
+        "countsAuto.scoreProcessor": 6,
+        "countsAuto.scoreNet": 4
       }
     }
   },
@@ -68,14 +74,54 @@
     "outputPath": "scores.teleop",
     "options": {
       "weightedPaths": {
-        "countsTeleop.teleopl1": 1,
-        "countsTeleop.teleopl2": 2,
-        "countsTeleop.teleopl3": 2,
-        "countsTeleop.teleopl4": 2
+        "countsTeleop.teleopl1": 2,
+        "countsTeleop.teleopl2": 3,
+        "countsTeleop.teleopl3": 4,
+        "countsTeleop.teleopl4": 5,
+        "countsTeleop.teleopScoreNet": 4,
+        "countsTeleop.teleopScoreProcessor": 6
+      }
+    }
+  },
+  {
+    "type": "tmp",
+    "name": "weightedSum",
+    "outputPath": "counts.scoreTotalCoral",
+    "options": {
+      "weightedPaths": {
+        "counts.scoreTeleopl1": 2,
+        "counts.scoreTeleopl2": 3,
+        "counts.scoreTeleopl3": 4,
+        "counts.scoreTeleopl4": 5,
+        "counts.scoreAutol1": 3,
+        "counts.scoreAutol2": 4,
+        "counts.scoreAutol3": 6,
+        "counts.scoreAutol4": 7
       }
     }
   },
 
+  {
+    "type": "tmp",
+    "name": "weightedSum",
+    "outputPath": "counts.scoreTotalAlgae",
+    "options": {
+      "weightedPaths": {
+        "counts.autoScoreNet": 6,
+        "counts.teleopScoreNet": 6,
+        "counts.autoScoreProcessor": 4,
+        "counts.teleopScoreProcessor": 4
+      }
+    }
+  },
+  {
+    "type": "tmp",
+    "name": "sum",
+    "outputPath": "score.total",
+    "options": {
+      "addends": ["counts.scoreTotalCoral", "counts.scoreTotalAlgae"]
+    }
+  },
   {
     "type": "team",
     "name": "countActions",
@@ -166,6 +212,22 @@
     "outputPath": "standardDeviation",
     "options": {
       "path": "scores.total"
+    }
+  },
+  {
+    "type": "team",
+    "name": "average",
+    "outputPath": "totalCoral",
+    "options": {
+      "addends": ["counts.scoreCoral"]
+    }
+  },
+  {
+    "type": "team",
+    "name": "sum",
+    "outputPath": "score.total",
+    "options": {
+      "addends": ["counts."]
     }
   }
 ]
