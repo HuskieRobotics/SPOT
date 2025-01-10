@@ -1,13 +1,13 @@
 {
   "timing": {
-    "totalTime": 10000,
+    "totalTime": 153000,
     "timeTransitions": {
-      "9999": {
+      "152999": {
         "layer": 1,
         "displayText": "Auto",
         "variables": {}
       },
-      "4999": {
+      "135000": {
         "layer": 2,
         "displayText": "Teleop",
         "variables": {}
@@ -581,6 +581,14 @@
               "args": [6, 1]
             }
           ]
+        },
+        {
+          "id": "reef",
+          "displayText": "reef",
+          "gridArea": ["6", "4", "7", "7"],
+          "class": "gray",
+          "type": "label",
+          "executables": []
         }
       ],
       [
@@ -646,6 +654,14 @@
               "args": [7, 1]
             }
           ]
+        },
+        {
+          "id": "reef",
+          "displayText": "reef",
+          "gridArea": ["6", "4", "7", "7"],
+          "class": "gray",
+          "type": "label",
+          "executables": []
         }
       ],
       [
@@ -812,7 +828,7 @@
           "executables": [
             {
               "type": "layer",
-              "args": [5, 1]
+              "args": [9, 2]
             }
           ]
         }

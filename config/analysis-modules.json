@@ -1,8 +1,22 @@
 [
   {
     "view": "team",
+    "module": "PerformanceTimePlot",
+    "name": "Performance By Each Match",
+    "position": "main",
+    "options": {
+      "trackedStats": [
+        "scores.auto",
+        "scores.teleop",
+        "scores.barge",
+        "scores.total"
+      ]
+    }
+  },
+  {
+    "view": "team",
     "module": "Pie",
-    "name": "Total Coral Pickup Distribution",
+    "name": "Coral Pickup Distribution",
     "position": "main",
     "options": {
       "slices": [
@@ -76,6 +90,10 @@
     "options": {
       "bars": [
         {
+          "name": "Miss",
+          "path": "coralMiss"
+        },
+        {
           "name": "Level 1",
           "path": "counts.scoreL1"
         },
@@ -97,36 +115,14 @@
   {
     "view": "team",
     "module": "Bar",
-    "name": "Teleop Coral Reef Placement",
-    "position": "main",
-    "options": {
-      "bars": [
-        {
-          "name": "Level 1",
-          "path": "counts.teleopl1"
-        },
-        {
-          "name": "Level 2",
-          "path": "counts.teleopl2"
-        },
-        {
-          "name": "Level 3",
-          "path": "counts.teleopl3"
-        },
-        {
-          "name": "Level 4",
-          "path": "counts.teleopl4"
-        }
-      ]
-    }
-  },
-  {
-    "view": "team",
-    "module": "Bar",
     "name": "Auto Coral Reef Placement",
     "position": "main",
     "options": {
       "bars": [
+        {
+          "name": "Miss",
+          "path": "counts.automissCoral"
+        },
         {
           "name": "Level 1",
           "path": "counts.autol1"
@@ -208,18 +204,62 @@
   },
   {
     "view": "team",
+    "module": "Pie",
+    "name": "Pre-Loads",
+    "position": "main",
+    "options": {
+      "slices": [
+        {
+          "name": "Pre-Loaded Coral",
+          "path": "counts.preloadCoral"
+        },
+        {
+          "name": "Pre-Load None",
+          "path": "counts.preloadNone"
+        }
+      ]
+    }
+  },
+  {
+    "view": "team",
     "module": "Stats",
     "position": "side",
     "name": "Team Stats",
     "options": {
       "list": [
         {
-          "name": "Accuracy",
-          "path": "totalAccuracy",
+          "name": "Algae Accuracy",
+          "path": "algaeAccuracy",
           "multiplier": 100,
           "decimals": 1,
           "sort": 1,
           "unit": "%"
+        },
+        {
+          "name": "Coral Accuracy",
+          "path": "coralAccuracy",
+          "multiplier": 100,
+          "decimals": 1,
+          "sort": 1,
+          "unit": "%"
+        },
+        {
+          "name": "Algae Cycle Time",
+          "path": "cycleAlgae.averageTime",
+          "multiplier": 0.001,
+          "decimals": 2,
+          "hideIfValue": 0,
+          "sort": 1,
+          "unit": "s"
+        },
+        {
+          "name": "Coral Cycle Time",
+          "path": "cycleCoral.averageTime",
+          "multiplier": 0.001,
+          "decimals": 2,
+          "hideIfValue": 0,
+          "sort": 1,
+          "unit": "s"
         },
         {
           "name": "Average Auto Points",
@@ -234,14 +274,33 @@
           "sort": 1
         },
         {
+          "name": "Average Barge Points",
+          "path": "avgBargePoints",
+          "decimals": 2,
+          "sort": 1
+        },
+        {
           "name": "Average Points",
           "path": "avgTotalPoints",
           "decimals": 2,
           "sort": 1
         },
+
         {
           "name": "Average Misses",
           "path": "avgTotalMiss",
+          "decimals": 1,
+          "sort": -1
+        },
+        {
+          "name": "Average Algae Points",
+          "path": "avgAlgaePoints",
+          "decimals": 1,
+          "sort": -1
+        },
+        {
+          "name": "Average Coral Points",
+          "path": "avgCoralPoints",
           "decimals": 1,
           "sort": -1
         },
@@ -256,6 +315,119 @@
           "path": "counts.aStop",
           "decimals": 0,
           "sort": -1
+        }
+      ]
+    }
+  },
+  {
+    "view": "match",
+    "module": "SingleDisplay",
+    "name": "Alliance Score",
+    "position": "main",
+    "options": {
+      "path": "avgTotalPoints",
+      "aggrMethod": "sum",
+      "decimals": 2
+    }
+  },
+  {
+    "view": "match",
+    "module": "ColumnDisplay",
+    "name": "Auto Points",
+    "position": "main",
+    "options": {
+      "path": "avgAutoPoints",
+      "sort": 1,
+      "decimals": 1
+    }
+  },
+  {
+    "view": "match",
+    "module": "ColumnDisplay",
+    "name": "Teleop Points",
+    "position": "main",
+    "options": {
+      "path": "avgTeleopPoints",
+      "sort": 1,
+      "decimals": 1
+    }
+  },
+  {
+    "view": "match",
+    "module": "ColumnDisplay",
+    "name": "Barge Points",
+    "position": "main",
+    "options": {
+      "path": "avgBargePoints",
+      "sort": 1,
+      "decimals": 1
+    }
+  },
+  {
+    "view": "match",
+    "module": "ColumnDisplay",
+    "name": "Total Points",
+    "position": "main",
+    "options": {
+      "path": "avgTotalPoints",
+      "sort": 1,
+      "decimals": 1
+    }
+  },
+  {
+    "view": "match",
+    "module": "ColumnDisplay",
+    "name": "Reef Points",
+    "position": "main",
+    "options": {
+      "path": "avgAlgaePoints",
+      "sort": 1,
+      "decimals": 1
+    }
+  },
+  {
+    "view": "match",
+    "module": "ColumnDisplay",
+    "name": "Accuracy",
+    "position": "main",
+    "options": {
+      "path": "totalAccuracy",
+      "sort": 1,
+      "decimals": 1,
+      "multiplier": 100,
+      "unit": "%"
+    }
+  },
+  {
+    "view": "match",
+    "module": "Stats",
+    "position": "side",
+    "name": "Alliance Stats",
+    "options": {
+      "list": [
+        {
+          "name": "Expected Auto Points",
+          "path": "avgAutoPoints",
+          "decimals": 2,
+          "aggrMethod": "sum"
+        },
+        {
+          "name": "Expected Teleop Points",
+          "path": "avgTeleopPoints",
+          "decimals": 2,
+          "aggrMethod": "sum"
+        },
+        {
+          "name": "Expected Barge Points",
+          "path": "avgBargePoints",
+          "decimals": 2,
+          "aggrMethod": "sum"
+        },
+        {
+          "name": "Expected Score",
+          "path": "avgTotalPoints",
+          "decimals": 2,
+          "aggrMethod": "sum"
         }
       ]
     }
