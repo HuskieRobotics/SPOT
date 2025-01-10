@@ -245,7 +245,7 @@
           "unit": "%"
         },
         {
-          "name": "Time Per Game Piece Scored",
+          "name": "Average Cycle Time",
           "path": "timePerGamePiece",
           "multiplier": 0.001,
           "decimals": 2,
@@ -290,12 +290,23 @@
           "sort": 1
         },
         {
+          "name": "Average Algae Points",
+          "path": "avgAlgaePoints",
+          "decimals": 2,
+          "sort": 1
+        },
+        {
+          "name": "Average Coral Points",
+          "path": "avgCoralPoints",
+          "decimals": 2,
+          "sort": 1
+        },
+        {
           "name": "Average Points",
           "path": "avgTotalPoints",
           "decimals": 2,
           "sort": 1
         },
-
         {
           "name": "Average Misses",
           "path": "avgTotalMiss",
@@ -315,16 +326,10 @@
           "sort": -1
         },
         {
-          "name": "Average Algae Points",
-          "path": "avgAlgaePoints",
+          "name": "Average Drops",
+          "path": "avgDrops",
           "decimals": 2,
-          "sort": 1
-        },
-        {
-          "name": "Average Coral Points",
-          "path": "avgCoralPoints",
-          "decimals": 2,
-          "sort": 1
+          "sort": -1
         },
         {
           "name": "Leave",
@@ -364,7 +369,7 @@
   {
     "view": "match",
     "module": "ColumnDisplay",
-    "name": "Time Per Scored Game Piece",
+    "name": "Average Cycle Time",
     "position": "main",
     "options": {
       "path": "timePerGamePiece",

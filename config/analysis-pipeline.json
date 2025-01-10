@@ -191,6 +191,14 @@
     }
   },
   {
+    "type": "tmp",
+    "name": "sum",
+    "outputPath": "counts.totalDrops",
+    "options": {
+      "addends": ["counts.dropCoral", "counts.dropAlgae"]
+    }
+  },
+  {
     "type": "team",
     "name": "countActions",
     "outputPath": "counts",
@@ -335,6 +343,14 @@
     "outputPath": "avgLeave",
     "options": {
       "path": "counts.leave"
+    }
+  },
+  {
+    "type": "team",
+    "name": "average",
+    "outputPath": "avgDrops",
+    "options": {
+      "path": "counts.totalDrops"
     }
   },
   {
