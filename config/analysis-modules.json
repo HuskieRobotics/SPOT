@@ -232,7 +232,7 @@
           "name": "Algae Accuracy",
           "path": "algaeAccuracy",
           "multiplier": 100,
-          "decimals": 1,
+          "decimals": 2,
           "sort": 1,
           "unit": "%"
         },
@@ -240,12 +240,21 @@
           "name": "Coral Accuracy",
           "path": "coralAccuracy",
           "multiplier": 100,
-          "decimals": 1,
+          "decimals": 2,
           "sort": 1,
           "unit": "%"
         },
         {
-          "name": "Algae Cycle Time",
+          "name": "Time Per Game Piece Scored",
+          "path": "timePerGamePiece",
+          "multiplier": 0.001,
+          "decimals": 2,
+          "hideIfValue": 0,
+          "sort": -1,
+          "unit": "s"
+        },
+        {
+          "name": "Algae Time to Score",
           "path": "cycleAlgae.averageTime",
           "multiplier": 0.001,
           "decimals": 2,
@@ -254,7 +263,7 @@
           "unit": "s"
         },
         {
-          "name": "Coral Cycle Time",
+          "name": "Coral Time to Score",
           "path": "cycleCoral.averageTime",
           "multiplier": 0.001,
           "decimals": 2,
@@ -290,19 +299,31 @@
         {
           "name": "Average Misses",
           "path": "avgTotalMiss",
-          "decimals": 1,
-          "sort": 1
+          "decimals": 2,
+          "sort": -1
+        },
+        {
+          "name": "Average Algae Misses",
+          "path": "avgAlgaeMiss",
+          "decimals": 2,
+          "sort": -1
+        },
+        {
+          "name": "Average Coral Misses",
+          "path": "avgCoralMiss",
+          "decimals": 2,
+          "sort": -1
         },
         {
           "name": "Average Algae Points",
           "path": "avgAlgaePoints",
-          "decimals": 1,
+          "decimals": 2,
           "sort": 1
         },
         {
           "name": "Average Coral Points",
           "path": "avgCoralPoints",
-          "decimals": 1,
+          "decimals": 2,
           "sort": 1
         },
         {
@@ -328,6 +349,7 @@
       ]
     }
   },
+
   {
     "view": "match",
     "module": "SingleDisplay",
@@ -342,12 +364,26 @@
   {
     "view": "match",
     "module": "ColumnDisplay",
+    "name": "Time Per Scored Game Piece",
+    "position": "main",
+    "options": {
+      "path": "timePerGamePiece",
+      "multiplier": 0.001,
+      "decimals": 2,
+      "hideIfValue": 0,
+      "sort": -1,
+      "unit": "s"
+    }
+  },
+  {
+    "view": "match",
+    "module": "ColumnDisplay",
     "name": "Auto Points",
     "position": "main",
     "options": {
       "path": "avgAutoPoints",
       "sort": 1,
-      "decimals": 1
+      "decimals": 2
     }
   },
   {
@@ -358,7 +394,7 @@
     "options": {
       "path": "avgTeleopPoints",
       "sort": 1,
-      "decimals": 1
+      "decimals": 2
     }
   },
   {
@@ -369,7 +405,7 @@
     "options": {
       "path": "avgBargePoints",
       "sort": 1,
-      "decimals": 1
+      "decimals": 2
     }
   },
   {
@@ -380,31 +416,7 @@
     "options": {
       "path": "avgTotalPoints",
       "sort": 1,
-      "decimals": 1
-    }
-  },
-  {
-    "view": "match",
-    "module": "ColumnDisplay",
-    "name": "Reef Points",
-    "position": "main",
-    "options": {
-      "path": "avgAlgaePoints",
-      "sort": 1,
-      "decimals": 1
-    }
-  },
-  {
-    "view": "match",
-    "module": "ColumnDisplay",
-    "name": "Accuracy",
-    "position": "main",
-    "options": {
-      "path": "totalAccuracy",
-      "sort": 1,
-      "decimals": 1,
-      "multiplier": 100,
-      "unit": "%"
+      "decimals": 2
     }
   },
   {

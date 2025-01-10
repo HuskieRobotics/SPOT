@@ -70,40 +70,6 @@
   },
   {
     "type": "tmp",
-    "name": "actionTimeFilter",
-    "outputPath": "autoFilter",
-    "options": {
-      "timeMin": 135000
-    }
-  },
-  {
-    "type": "tmp",
-    "name": "actionTimeFilter",
-    "outputPath": "teleopFilter",
-    "options": {
-      "timeMax": 135000
-    }
-  },
-  {
-    "type": "tmp",
-    "name": "countActions",
-    "outputPath": "countsAuto",
-    "options": {
-      "all": true,
-      "actionArrayPath": "autoFilter"
-    }
-  },
-  {
-    "type": "tmp",
-    "name": "countActions",
-    "outputPath": "countsTeleop",
-    "options": {
-      "all": true,
-      "actionArrayPath": "teleopFilter"
-    }
-  },
-  {
-    "type": "tmp",
     "name": "weightedSum",
     "outputPath": "scores.teleop",
     "options": {
@@ -157,11 +123,73 @@
         "counts.autoMissProcessor",
         "counts.autoMissNet",
         "counts.teleopMissProcessor",
+        "counts.teleopMissNet",
+        "counts.automissCoral",
+        "counts.teleopmissCoral"
+      ]
+    }
+  },
+  {
+    "type": "tmp",
+    "name": "weightedSum",
+    "outputPath": "scores.barge",
+    "options": {
+      "weightedPaths": {
+        "counts.park": 2,
+        "counts.shallow": 6,
+        "counts.deep": 12
+      }
+    }
+  },
+  {
+    "type": "tmp",
+    "name": "sum",
+    "outputPath": "scores.total",
+    "options": {
+      "addends": ["scores.auto", "scores.teleop", "scores.barge"]
+    }
+  },
+  {
+    "type": "tmp",
+    "name": "cycle",
+    "outputPath": "cycleAlgae",
+    "options": {
+      "pickups": ["groundPickupAlgae", "reefPickupAlgae"],
+      "scores": ["teleopScoreProcessor", "teleopScoreNet"],
+      "misses": ["algaeMissTeleop"]
+    }
+  },
+  {
+    "type": "tmp",
+    "name": "cycle",
+    "outputPath": "cycleCoral",
+    "options": {
+      "pickups": ["groundPickupCoral", "stationPickupCoral"],
+      "scores": ["teleopl1", "teleopl2", "teleopl3", "teleopl4"],
+      "misses": ["teleopmissCoral"]
+    }
+  },
+  {
+    "type": "tmp",
+    "name": "sum",
+    "outputPath": "algaeMissTMP",
+    "options": {
+      "addends": [
+        "counts.autoMissProcessor",
+        "counts.autoMissNet",
+        "counts.teleopMissProcessor",
         "counts.teleopMissNet"
       ]
     }
   },
-
+  {
+    "type": "tmp",
+    "name": "sum",
+    "outputPath": "coralMissTMP",
+    "options": {
+      "addends": ["counts.teleopmissCoral", "counts.automissCoral"]
+    }
+  },
   {
     "type": "team",
     "name": "countActions",
@@ -231,46 +259,7 @@
       ]
     }
   },
-  {
-    "type": "tmp",
-    "name": "weightedSum",
-    "outputPath": "scores.barge",
-    "options": {
-      "weightedPaths": {
-        "counts.park": 2,
-        "counts.shallow": 6,
-        "counts.deep": 12
-      }
-    }
-  },
-  {
-    "type": "tmp",
-    "name": "sum",
-    "outputPath": "scores.total",
-    "options": {
-      "addends": ["scores.auto", "scores.teleop", "scores.barge"]
-    }
-  },
-  {
-    "type": "tmp",
-    "name": "cycle",
-    "outputPath": "cycleAlgae",
-    "options": {
-      "pickups": ["groundPickupAlgae", "reefPickupAlgae"],
-      "scores": ["teleopScoreProcessor", "teleopScoreNet"],
-      "misses": ["algaeMissTeleop"]
-    }
-  },
-  {
-    "type": "tmp",
-    "name": "cycle",
-    "outputPath": "cycleCoral",
-    "options": {
-      "pickups": ["groundPickupCoral", "stationPickupCoral"],
-      "scores": ["teleopl1", "teleopl2", "teleopl3", "teleopl4"],
-      "misses": ["teleopmissCoral"]
-    }
-  },
+
   {
     "type": "team",
     "name": "sum",
@@ -346,6 +335,22 @@
     "outputPath": "avgLeave",
     "options": {
       "path": "counts.leave"
+    }
+  },
+  {
+    "type": "team",
+    "name": "average",
+    "outputPath": "avgAlgaeMiss",
+    "options": {
+      "path": "algaeMissTMP"
+    }
+  },
+  {
+    "type": "team",
+    "name": "average",
+    "outputPath": "avgCoralMiss",
+    "options": {
+      "path": "coralMissTMP"
     }
   },
   {
@@ -433,5 +438,23 @@
       "arrayPath": "cycleCoral.all",
       "valuePath": "timeDifferential"
     }
+  },
+  {
+    "type": "team",
+    "name": "countMatches",
+    "outputPath": "temp.totalTimeMs",
+    "options": {
+      "weight": 150000
+    }
+  },
+  {
+    "type": "team",
+    "name": "ratio",
+    "outputPath": "timePerGamePiece",
+    "options": {
+      "numerator": ["temp.totalTimeMs"],
+      "denominator": ["totalAlgaeScored", "totalCoralScored"]
+    },
+    "divByZero": 150000
   }
 ]
