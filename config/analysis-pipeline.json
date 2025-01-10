@@ -373,6 +373,14 @@
   {
     "type": "team",
     "name": "average",
+    "outputPath": "avgLeave",
+    "options": {
+      "path": "counts.leave"
+    }
+  },
+  {
+    "type": "team",
+    "name": "average",
     "outputPath": "avgTotalMiss",
     "options": {
       "path": "counts.totalMiss"

@@ -168,6 +168,7 @@
       ]
     }
   },
+
   {
     "view": "team",
     "module": "Bar",
@@ -296,13 +297,21 @@
           "name": "Average Algae Points",
           "path": "avgAlgaePoints",
           "decimals": 1,
-          "sort": -1
+          "sort": 1
         },
         {
           "name": "Average Coral Points",
           "path": "avgCoralPoints",
           "decimals": 1,
-          "sort": -1
+          "sort": 1
+        },
+        {
+          "name": "% Leave",
+          "path": "avgLeave",
+          "multiplier": 100,
+          "decimals": 2,
+          "sort": 1,
+          "unit": "%"
         },
         {
           "name": "Total Brokens",
