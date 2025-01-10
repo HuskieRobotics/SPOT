@@ -70,19 +70,6 @@
   },
   {
     "type": "tmp",
-    "name": "sum",
-    "outputPath": "score.total",
-    "options": {
-      "addends": [
-        "counts.scoreTotalCoral",
-        "counts.scoreTotalAlgae",
-        "counts.scores.barge"
-      ]
-    }
-  },
-
-  {
-    "type": "tmp",
     "name": "actionTimeFilter",
     "outputPath": "autoFilter",
     "options": {
@@ -161,15 +148,6 @@
       }
     }
   },
-  {
-    "type": "tmp",
-    "name": "sum",
-    "outputPath": "score.total",
-    "options": {
-      "addends": ["counts.scoreTotalCoral", "counts.scoreTotalAlgae"]
-    }
-  },
-
   {
     "type": "tmp",
     "name": "sum",
@@ -291,14 +269,6 @@
       "pickups": ["groundPickupCoral", "stationPickupCoral"],
       "scores": ["teleopl1", "teleopl2", "teleopl3", "teleopl4"],
       "misses": ["teleopmissCoral"]
-    }
-  },
-  {
-    "type": "team",
-    "name": "sum",
-    "outputPath": "score.total",
-    "options": {
-      "addends": ["counts."]
     }
   },
   {

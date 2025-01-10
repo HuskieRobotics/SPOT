@@ -291,7 +291,7 @@
           "name": "Average Misses",
           "path": "avgTotalMiss",
           "decimals": 1,
-          "sort": -1
+          "sort": 1
         },
         {
           "name": "Average Algae Points",
@@ -306,7 +306,7 @@
           "sort": 1
         },
         {
-          "name": "% Leave",
+          "name": "Leave",
           "path": "avgLeave",
           "multiplier": 100,
           "decimals": 2,
@@ -317,13 +317,13 @@
           "name": "Total Brokens",
           "path": "counts.broken",
           "decimals": 0,
-          "sort": -1
+          "sort": 1
         },
         {
           "name": "Total A-Stops",
           "path": "counts.aStop",
           "decimals": 0,
-          "sort": -1
+          "sort": 1
         }
       ]
     }
