@@ -583,8 +583,8 @@
           ]
         },
         {
-          "id": "reef",
-          "displayText": "reef",
+          "id": "Reef",
+          "displayText": "Reef",
           "gridArea": ["6", "4", "7", "7"],
           "class": "gray",
           "type": "label",
@@ -656,8 +656,8 @@
           ]
         },
         {
-          "id": "reef",
-          "displayText": "reef",
+          "id": "Reef",
+          "displayText": "Reef",
           "gridArea": ["6", "4", "7", "7"],
           "class": "gray",
           "type": "label",

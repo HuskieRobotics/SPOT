@@ -307,12 +307,7 @@
           "decimals": 2,
           "sort": 1
         },
-        {
-          "name": "Average Misses",
-          "path": "avgTotalMiss",
-          "decimals": 2,
-          "sort": -1
-        },
+
         {
           "name": "Average Algae Misses",
           "path": "avgAlgaeMiss",
@@ -326,8 +321,14 @@
           "sort": -1
         },
         {
-          "name": "Average Drops",
-          "path": "avgDrops",
+          "name": "Average Algae Drops",
+          "path": "avgAlgaeDrops",
+          "decimals": 2,
+          "sort": -1
+        },
+        {
+          "name": "Average Coral Drops",
+          "path": "avgCoralDrops",
           "decimals": 2,
           "sort": -1
         },
