@@ -301,7 +301,9 @@
         "counts.autoMissProcessor",
         "counts.autoMissNet",
         "counts.teleopMissProcessor",
-        "counts.teleopMissNet"
+        "counts.teleopMissNet",
+        "counts.automissCoral",
+        "counts.teleopmissCoral"
       ]
     }
   },

@@ -307,7 +307,12 @@
           "decimals": 2,
           "sort": 1
         },
-
+        {
+          "name": "Average Misses",
+          "path": "avgTotalMiss",
+          "decimals": 2,
+          "sort": -1
+        },
         {
           "name": "Average Algae Misses",
           "path": "avgAlgaeMiss",
