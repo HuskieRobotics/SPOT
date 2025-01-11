@@ -326,6 +326,12 @@
           "sort": -1
         },
         {
+          "name": "Average Total Drops",
+          "path": "avgTotalDrops",
+          "decimals": 2,
+          "sort": -1
+        },
+        {
           "name": "Average Algae Drops",
           "path": "avgAlgaeDrops",
           "decimals": 2,
@@ -349,13 +355,13 @@
           "name": "Total Brokens",
           "path": "counts.broken",
           "decimals": 0,
-          "sort": 1
+          "sort": -1
         },
         {
           "name": "Total A-Stops",
           "path": "counts.aStop",
           "decimals": 0,
-          "sort": 1
+          "sort": -1
         }
       ]
     }

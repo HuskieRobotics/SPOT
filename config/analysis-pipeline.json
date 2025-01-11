@@ -191,6 +191,14 @@
     }
   },
   {
+    "type": "tmp",
+    "name": "sum",
+    "outputPath": "counts.totalDrops",
+    "options": {
+      "addends": ["counts.algaeDrop", "counts.coralDrop"]
+    }
+  },
+  {
     "type": "team",
     "name": "countActions",
     "outputPath": "counts",
@@ -342,9 +350,17 @@
   {
     "type": "team",
     "name": "average",
+    "outputPath": "avgTotalDrops",
+    "options": {
+      "path": "counts.totalDrops"
+    }
+  },
+  {
+    "type": "team",
+    "name": "average",
     "outputPath": "avgAlgaeDrops",
     "options": {
-      "path": "counts.algaeDrops"
+      "path": "counts.algaeDrop"
     }
   },
   {
@@ -352,7 +368,7 @@
     "name": "average",
     "outputPath": "avgCoralDrops",
     "options": {
-      "path": "counts.coralDrops"
+      "path": "counts.coralDrop"
     }
   },
   {
