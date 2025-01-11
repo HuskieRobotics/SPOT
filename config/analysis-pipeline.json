@@ -199,6 +199,16 @@
     }
   },
   {
+    "type": "tmp",
+    "name": "cycle",
+    "outputPath": "bargeCycle",
+    "options": {
+      "pickups": ["barge"],
+      "scores": ["shallow", "deep"],
+      "misses": ["bargeFall"]
+    }
+  },
+  {
     "type": "team",
     "name": "countActions",
     "outputPath": "counts",
@@ -437,6 +447,40 @@
       "numerator": ["totalCoralScored"],
       "denominator": ["totalCoralScored", "coralMiss"],
       "divByZero": 0
+    }
+  },
+  {
+    "type": "team",
+    "name": "aggregateArray",
+    "outputPath": "bargeCycle.all",
+    "options": {
+      "path": "bargeCycle.all"
+    }
+  },
+  {
+    "type": "team",
+    "name": "aggregateArray",
+    "outputPath": "bargeCycle.allComplete",
+    "options": {
+      "path": "bargeCycle.allComplete"
+    }
+  },
+  {
+    "type": "team",
+    "name": "averageArray",
+    "outputPath": "bargeCycle.averageTime",
+    "options": {
+      "arrayPath": "bargeCycle.all",
+      "valuePath": "timeDifferential"
+    }
+  },
+  {
+    "type": "team",
+    "name": "averageArray",
+    "outputPath": "bargeCycle.averageTimeComplete",
+    "options": {
+      "arrayPath": "bargeCycle.allComplete",
+      "valuePath": "timeDifferential"
     }
   },
   {

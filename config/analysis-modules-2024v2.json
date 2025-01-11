@@ -95,6 +95,7 @@
           "sort": -1,
           "unit": "s"
         },
+
         {
           "name": "Total Brokens",
           "path": "counts.broken",
