@@ -534,5 +534,21 @@
       "denominator": ["totalAlgaeScored", "totalCoralScored"]
     },
     "divByZero": 150000
+  },
+  {
+    "type": "team",
+    "name": "average",
+    "outputPath": "averageScores",
+    "options": {
+      "path": "scores"
+    }
+  },
+  {
+    "type": "team",
+    "name": "standardDeviation",
+    "outputPath": "standardDeviation",
+    "options": {
+      "path": "scores.total"
+    }
   }
 ]
