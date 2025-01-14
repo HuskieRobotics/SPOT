@@ -29,7 +29,7 @@
     "outputPath": "scores.teleop",
     "options": {
       "weightedPaths": {
-        "counts.teleopl1": 22,
+        "counts.teleopl1": 2,
         "counts.teleopl2": 3,
         "counts.teleopl3": 4,
         "counts.teleopl4": 5,
