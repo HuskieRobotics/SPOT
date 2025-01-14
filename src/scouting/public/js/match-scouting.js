@@ -88,7 +88,16 @@ var previousTimer = [];
           }
           for (const executable of undoneButton.executables) {
             if (time < 135000) {
-              showLayer(2);
+              executables[executable.type].reverse(
+                undoneButton,
+                layers,
+                ...executable.args
+              ); //reverse any executables associated with the undone button
+              for (let i = 0; i < layers.length; i++) {
+                if (layers[i].length === 13) {
+                  showLayer(2);
+                }
+              }
             } else {
               executables[executable.type].reverse(
                 undoneButton,
@@ -198,12 +207,6 @@ var previousTimer = [];
             displayText =
               matchScoutingConfig.timing.timeTransitions[transitions[0]]
                 .displayText;
-            console.log(
-              Object.keys(
-                matchScoutingConfig.timing.timeTransitions[transitions[0]]
-                  .variables
-              )
-            );
             for (let key of Object.keys(
               matchScoutingConfig.timing.timeTransitions[transitions[0]]
                 .variables
