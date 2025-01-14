@@ -3,6 +3,7 @@ let devEnd;
 var variables = {};
 var previousLayers = [];
 var previousTimer = [];
+
 (async () => {
   config = await config;
   matchScoutingConfig = await matchScoutingConfig;
@@ -85,13 +86,16 @@ var previousTimer = [];
             timerActive = false;
             showLayer(0);
           }
-
           for (const executable of undoneButton.executables) {
-            executables[executable.type].reverse(
-              undoneButton,
-              layers,
-              ...executable.args
-            ); //reverse any executables associated with the undone button
+            if (time < 135000) {
+              showLayer(2);
+            } else {
+              executables[executable.type].reverse(
+                undoneButton,
+                layers,
+                ...executable.args
+              ); //reverse any executables associated with the undone button
+            }
           }
         }
         doExecutables(button, time);
