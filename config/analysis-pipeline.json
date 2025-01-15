@@ -545,6 +545,14 @@
   },
   {
     "type": "team",
+    "name": "average",
+    "outputPath": "averageScores.total",
+    "options": {
+      "path": "scores.total"
+    }
+  },
+  {
+    "type": "team",
     "name": "standardDeviation",
     "outputPath": "standardDeviation",
     "options": {
