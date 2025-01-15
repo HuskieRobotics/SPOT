@@ -125,7 +125,7 @@
         "counts.teleopMissProcessor",
         "counts.teleopMissNet",
         "counts.automissCoral",
-        "counts.teleopmissCoral"
+        "counts.teleopMissCoral"
       ]
     }
   },
@@ -164,9 +164,13 @@
     "name": "cycle",
     "outputPath": "cycleCoral",
     "options": {
-      "pickups": ["groundPickupCoral", "stationPickupCoral"],
+      "pickups": [
+        "autoGroundPickupCoral",
+        "teleopGroundPickupCoral",
+        "autoStationPickupCoral"
+      ],
       "scores": ["teleopl1", "teleopl2", "teleopl3", "teleopl4"],
-      "misses": ["teleopmissCoral"]
+      "misses": ["teleopMissCoral"]
     }
   },
   {
@@ -187,7 +191,7 @@
     "name": "sum",
     "outputPath": "coralMissTMP",
     "options": {
-      "addends": ["counts.teleopmissCoral", "counts.automissCoral"]
+      "addends": ["counts.teleopMissCoral", "counts.automissCoral"]
     }
   },
   {
@@ -195,7 +199,11 @@
     "name": "sum",
     "outputPath": "counts.totalDrops",
     "options": {
-      "addends": ["counts.algaeDrop", "counts.coralDrop"]
+      "addends": [
+        "counts.algaeDrop",
+        "counts.autoCoralDrop",
+        "counts.teleopCoralDrop"
+      ]
     }
   },
   {
@@ -261,7 +269,7 @@
     "name": "sum",
     "outputPath": "coralMiss",
     "options": {
-      "addends": ["counts.teleopmissCoral", "counts.automissCoral"]
+      "addends": ["counts.teleopMissCoral", "counts.automissCoral"]
     }
   },
   {
@@ -321,7 +329,7 @@
         "counts.teleopMissProcessor",
         "counts.teleopMissNet",
         "counts.automissCoral",
-        "counts.teleopmissCoral"
+        "counts.teleopMissCoral"
       ]
     }
   },
