@@ -86,25 +86,24 @@ var previousTimer = [];
             timerActive = false;
             showLayer(0);
           }
-          for (const executable of undoneButton.executables) {
-            if (time < 135000) {
-              executables[executable.type].reverse(
-                undoneButton,
-                layers,
-                ...executable.args
-              ); //reverse any executables associated with the undone button
-              for (let i = 0; i < layers.length; i++) {
-                if (layers[i].length === 13) {
-                  showLayer(2);
-                }
+
+          if (time < 135000) {
+            for (let i = 0; i < previousLayers.length; i++) {
+              if (previousLayers[i].length === 13) {
+                previousLayers[i] = layers[2];
               }
-            } else {
-              executables[executable.type].reverse(
-                undoneButton,
-                layers,
-                ...executable.args
-              ); //reverse any executables associated with the undone button
             }
+          }
+          console.log(previousLayers[0]);
+          if (previousLayers[0] === 12) {
+            showLayer(2);
+          }
+          for (const executable of undoneButton.executables) {
+            executables[executable.type].reverse(
+              undoneButton,
+              layers,
+              ...executable.args
+            ); //reverse any executables associated with the undone button
           }
         }
         doExecutables(button, time);
