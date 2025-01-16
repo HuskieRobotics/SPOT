@@ -94,7 +94,7 @@ var previousTimer = [];
               }
             }
           }
-          console.log(previousLayers[0]);
+
           if (previousLayers[0] === 12) {
             showLayer(2);
           }
