@@ -820,7 +820,7 @@
           ]
         },
         {
-          "id": "teleopmissCoral",
+          "id": "teleopMissCoral",
           "displayText": "Miss",
           "gridArea": ["6", "1", "7", "3"],
           "class": "red",

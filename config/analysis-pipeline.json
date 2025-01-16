@@ -79,7 +79,7 @@
         "counts.teleopMissProcessor",
         "counts.teleopMissNet",
         "counts.automissCoral",
-        "counts.teleopmissCoral"
+        "counts.teleopMissCoral"
       ]
     }
   },
@@ -134,9 +134,34 @@
     "name": "cycle",
     "outputPath": "cycleCoral",
     "options": {
-      "pickups": ["groundPickupCoral", "stationPickupCoral"],
+      "pickups": [
+        "autoGroundPickupCoral",
+        "teleopGroundPickupCoral",
+        "autoStationPickupCoral"
+      ],
       "scores": ["teleopl1", "teleopl2", "teleopl3", "teleopl4"],
       "misses": ["teleopMissCoral"]
+    }
+  },
+  {
+    "type": "tmp",
+    "name": "sum",
+    "outputPath": "algaeMissTMP",
+    "options": {
+      "addends": [
+        "counts.autoMissProcessor",
+        "counts.autoMissNet",
+        "counts.teleopMissProcessor",
+        "counts.teleopMissNet"
+      ]
+    }
+  },
+  {
+    "type": "tmp",
+    "name": "sum",
+    "outputPath": "coralMissTMP",
+    "options": {
+      "addends": ["counts.teleopMissCoral", "counts.automissCoral"]
     }
   },
   {
@@ -231,7 +256,7 @@
     "name": "sum",
     "outputPath": "coralMiss",
     "options": {
-      "addends": ["counts.teleopmissCoral", "counts.automissCoral"]
+      "addends": ["counts.teleopMissCoral", "counts.automissCoral"]
     }
   },
   {
@@ -291,7 +316,7 @@
         "counts.teleopMissProcessor",
         "counts.teleopMissNet",
         "counts.automissCoral",
-        "counts.teleopmissCoral"
+        "counts.teleopMissCoral"
       ]
     }
   },
