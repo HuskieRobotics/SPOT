@@ -296,6 +296,7 @@ if ("serviceWorker" in navigator) {
     matchViewSwitch.addEventListener("click", () => {
       clearInterface();
       matchViewSwitch.classList.add("selected");
+      bubbleSheetSwitch.classList.remove("selected");
       showFade(matchView);
     });
 
@@ -462,8 +463,19 @@ if ("serviceWorker" in navigator) {
     autoPickSwitch.addEventListener("click", () => {
       clearInterface();
       autoPickSwitch.classList.add("selected");
+      bubbleSheetSwitch.classList.remove("selected");
       loadTeamsAutoPick(dataset, modulesConfig);
       showFade(autoPickView);
+    });
+  }
+
+  // Bubble Sheet UI functions
+  async function loadBubbleGraph(dataset, modulesConfig) {
+    //add event listener to "AutoPickList" button to set reset UI and switch to autopicklist tab
+    bubbleSheetSwitch.addEventListener("click", () => {
+      clearInterface();
+      bubbleSheetSwitch.classList.add("selected");
+      showFade(bubbleSheetView);
     });
   }
 
@@ -583,6 +595,7 @@ if ("serviceWorker" in navigator) {
     loadTeams(dataset, modulesConfig);
     loadMatchView(dataset, modulesConfig);
     loadAutoPickList(dataset, modulesConfig);
+    loadBubbleGraph(dataset, modulesConfig);
 
     searchInput.addEventListener("input", () => {
       if (searchInput.value !== "") {
