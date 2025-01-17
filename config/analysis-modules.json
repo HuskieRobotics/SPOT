@@ -370,24 +370,6 @@
           "path": "counts.aStop",
           "decimals": 0,
           "sort": -1
-        },
-        {
-          "name": "groundPickupCoral",
-          "path": "counts.groundPickupCoral",
-          "decimals": 2,
-          "sort": "sum"
-        },
-        {
-          "name": "groundPickupAlgae",
-          "path": "counts.groundPickupAlgae",
-          "decimals": 2,
-          "sort": "sum"
-        },
-        {
-          "name": "reefPickupAlgae",
-          "path": "counts.reefPickupAlgae",
-          "decimals": 2,
-          "sort": "sum"
         }
       ]
     }
