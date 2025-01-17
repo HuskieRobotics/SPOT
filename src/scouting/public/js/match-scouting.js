@@ -9,6 +9,7 @@ var previousTimer = [];
   matchScoutingConfig = await matchScoutingConfig;
   //initiate timing
   var time = matchScoutingConfig.timing.totalTime;
+  var teleopTime = 135000;
   var timerActive = false;
 
   //intialize variables
@@ -87,7 +88,7 @@ var previousTimer = [];
             showLayer(0);
           }
 
-          if (time < 135000) {
+          if (time < teleopTime) {
             for (let i = 0; i < previousLayers.length; i++) {
               if (previousLayers[i].length === 13) {
                 previousLayers[i] = layers[2];
