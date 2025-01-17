@@ -78,7 +78,7 @@
         "counts.autoMissNet",
         "counts.teleopMissProcessor",
         "counts.teleopMissNet",
-        "counts.automissCoral",
+        "counts.autoMissCoral",
         "counts.teleopMissCoral"
       ]
     }
@@ -98,6 +98,17 @@
   {
     "type": "tmp",
     "name": "sum",
+    "outputPath": "counts.groundPickupCoral",
+    "options": {
+      "addends": [
+        "counts.autoGroundPickupCoral",
+        "counts.teleopGroundPickupCoral"
+      ]
+    }
+  },
+  {
+    "type": "tmp",
+    "name": "sum",
     "outputPath": "scores.total",
     "options": {
       "addends": ["scores.auto", "scores.teleop", "scores.barge"]
@@ -109,6 +120,17 @@
     "outputPath": "algaeMissTeleop",
     "options": {
       "addends": ["counts.teleopMissProcessor", "counts.teleopMissNet"]
+    }
+  },
+  {
+    "type": "tmp",
+    "name": "sum",
+    "outputPath": "counts.stationPickupCoral",
+    "options": {
+      "addends": [
+        "counts.autoStationPickupCoral",
+        "counts.teleopStationPickupCoral"
+      ]
     }
   },
   {
@@ -161,7 +183,7 @@
     "name": "sum",
     "outputPath": "coralMissTMP",
     "options": {
-      "addends": ["counts.teleopMissCoral", "counts.automissCoral"]
+      "addends": ["counts.teleopMissCoral", "counts.autoMissCoral"]
     }
   },
   {
@@ -256,7 +278,7 @@
     "name": "sum",
     "outputPath": "coralMiss",
     "options": {
-      "addends": ["counts.teleopMissCoral", "counts.automissCoral"]
+      "addends": ["counts.teleopMissCoral", "counts.autoMissCoral"]
     }
   },
   {
@@ -308,6 +330,47 @@
   {
     "type": "team",
     "name": "sum",
+    "outputPath": "counts.reefPickupAlgae",
+    "options": {
+      "addends": ["counts.autoReefPickupAlgae", "counts.teleopReefPickupAlgae"]
+    }
+  },
+  {
+    "type": "team",
+    "name": "sum",
+    "outputPath": "counts.groundPickupAlgae",
+    "options": {
+      "addends": [
+        "counts.autoGroundPickupAlgae",
+        "counts.teleopGroundPickupAlgae"
+      ]
+    }
+  },
+  {
+    "type": "team",
+    "name": "sum",
+    "outputPath": "counts.groundPickupCoral",
+    "options": {
+      "addends": [
+        "counts.autoGroundPickupCoral",
+        "counts.teleopGroundPickupCoral"
+      ]
+    }
+  },
+  {
+    "type": "team",
+    "name": "sum",
+    "outputPath": "counts.stationPickupCoral",
+    "options": {
+      "addends": [
+        "counts.autoStationPickupCoral",
+        "counts.teleopStationPickupCoral"
+      ]
+    }
+  },
+  {
+    "type": "team",
+    "name": "sum",
     "outputPath": "counts.totalMiss",
     "options": {
       "addends": [
@@ -315,7 +378,7 @@
         "counts.autoMissNet",
         "counts.teleopMissProcessor",
         "counts.teleopMissNet",
-        "counts.automissCoral",
+        "counts.autoMissCoral",
         "counts.teleopMissCoral"
       ]
     }
