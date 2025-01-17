@@ -90,17 +90,18 @@ var previousTimer = [];
 
           var totalNumberOfButtonsTeleopLayer = 12;
           var totalNumberOfButtonsAutoLayer = 13;
+          var teleopLayerNumber = 2;
 
           if (time < teleopTime) {
             for (let i = 0; i < previousLayers.length; i++) {
               if (previousLayers[i].length === totalNumberOfButtonsAutoLayer) {
-                previousLayers[i] = layers[2];
+                previousLayers[i] = layers[teleopLayerNumber];
               }
             }
           }
 
           if (previousLayers[0] === totalNumberOfButtonsTeleopLayer) {
-            showLayer(2);
+            showLayer(teleopLayerNumber);
           }
           for (const executable of undoneButton.executables) {
             executables[executable.type].reverse(
