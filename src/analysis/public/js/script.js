@@ -477,6 +477,39 @@ if ("serviceWorker" in navigator) {
       bubbleSheetSwitch.classList.add("selected");
       showFade(bubbleSheetView);
     });
+    const bubbleSheetContainer = document.getElementById("bubble-sheet-graph");
+
+    const teams = Object.keys(dataset.teams);
+    const autoScores = teams.map((team) =>
+      getPath(dataset.teams[team], "avgAutoPoints", 0)
+    );
+
+    const teleopScores = teams.map((team) =>
+      getPath(dataset.teams[team], "avgTeleopPoints", 0)
+    );
+
+    const trace = {
+      x: autoScores,
+      y: teleopScores,
+      mode: "markers",
+      type: "scatter",
+      text: teams,
+      marker: { size: 12 },
+    };
+
+    const layout = {
+      title: "Team Scores Scattergram",
+      xaxis: { title: "Average Auto Score" },
+      yaxis: { title: "Average Teleop Score" },
+    };
+
+    Plotly.newPlot(bubbleSheetContainer, [trace], layout);
+
+    // Iterate through each team and extract the scores
+    //for (const [teamNumber, team] of Object.entries(dataset.teams)) {
+    //getPath(team, "avgAutoPoints", 0);
+    //getPath(team, "avgTeleopPoints", 0);
+    //}
   }
 
   //call setData on every module in matches
@@ -645,11 +678,13 @@ if ("serviceWorker" in navigator) {
     hideFade(matchView);
     hideFade(teamView);
     hideFade(autoPickView);
+    hideFade(bubbleSheetView);
     // hideFade(autoPickStats)
     // hideFade(autoPickMain)
     autoPickStats.style.display = "none";
     autoPickMain.style.display = "none";
     matchViewSwitch.classList.remove("selected");
     autoPickSwitch.classList.remove("selected");
+    bubbleSheetSwitch.classList.remove("selected");
   }
 })();
