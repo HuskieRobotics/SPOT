@@ -32,6 +32,7 @@
   cursor: pointer;
   user-select: none;
   overflow: hidden;
+  padding: 5px;
   box-shadow: 0 0 8px 0px #838383;
   transition: 0.2s border, 0.2s box-shadow;
 }
@@ -61,6 +62,10 @@
   background-color: #ef6c00;
 }
 
+.sherbert {
+  background-color: #ffa347;
+}
+
 .red {
   background-color: #ff4436;
 }
@@ -75,6 +80,37 @@
 
 .yellow {
   background-color: #d8c24f;
+}
+
+.bluegreen {
+  background-color: #0babab;
+}
+
+.lightbluegreen {
+  background-color: #56b8b8;
+}
+
+.darkbluegreen {
+  background-color: #077777;
+}
+
+.lightCoral {
+  background-color: #ff69b4;
+}
+.coral {
+  background-color: #ff1493;
+}
+
+.darkCoral {
+  background-color: #c71585;
+}
+
+.deepBlue {
+  background-color: #001f3f;
+}
+
+.shallowBlue {
+  background-color: #73a9e5;
 }
 
 .border {

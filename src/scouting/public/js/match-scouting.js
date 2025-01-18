@@ -3,11 +3,13 @@ let devEnd;
 var variables = {};
 var previousLayers = [];
 var previousTimer = [];
+
 (async () => {
   config = await config;
   matchScoutingConfig = await matchScoutingConfig;
   //initiate timing
   var time = matchScoutingConfig.timing.totalTime;
+  var teleopTime = 135000;
   var timerActive = false;
 
   //intialize variables
@@ -86,6 +88,21 @@ var previousTimer = [];
             showLayer(0);
           }
 
+          var totalNumberOfButtonsTeleopLayer = 12;
+          var totalNumberOfButtonsAutoLayer = 13;
+          var teleopLayerNumber = 2;
+
+          if (time < teleopTime) {
+            for (let i = 0; i < previousLayers.length; i++) {
+              if (previousLayers[i].length === totalNumberOfButtonsAutoLayer) {
+                previousLayers[i] = layers[teleopLayerNumber];
+              }
+            }
+          }
+
+          if (previousLayers[0] === totalNumberOfButtonsTeleopLayer) {
+            showLayer(teleopLayerNumber);
+          }
           for (const executable of undoneButton.executables) {
             executables[executable.type].reverse(
               undoneButton,
@@ -110,6 +127,10 @@ var previousTimer = [];
         doExecutables(button, time);
         updateLastAction();
       });
+    },
+
+    label: () => {
+      //adds a non-clickable label to the grid
     },
 
     "match-control": (button) => {
@@ -190,12 +211,6 @@ var previousTimer = [];
             displayText =
               matchScoutingConfig.timing.timeTransitions[transitions[0]]
                 .displayText;
-            console.log(
-              Object.keys(
-                matchScoutingConfig.timing.timeTransitions[transitions[0]]
-                  .variables
-              )
-            );
             for (let key of Object.keys(
               matchScoutingConfig.timing.timeTransitions[transitions[0]]
                 .variables

@@ -4,13 +4,14 @@ SPOT is an open-source modular scouting app framework for FRC developed by Team 
 
 ## Features
 
-- Easy to use platform for data entry throughout matches.
-- Analysis page to display detailed statistics and charts about matches and teams.
+- An easy-to-use platform for data entry throughout matches.
+- Works on all platforms, from iOS to Android to the web.
+- An analysis page to display detailed statistics and charts about matches and teams.
 - Admin view for live scouter management at competition.
-- Preconfigured for the 2022 Rapid React game with no additional game-specific customization required.
-- Easy deployment experience when teams run a server on Glitch
-- Optimized for teams who have internet access while scouting, completely functional for teams with no internet access [(workflow found here)](https://docs.google.com/document/d/1rMG94uNJxASu9EMIhPnCHs1xF6rNNqMg3j4-tCzr2rI/edit?usp=sharing).
-- Quick setup with a built-in first-run wizard to walk teams through configuring their scouting app, connecting to The Blue Alliance, and setting up their database.
+- Preconfigured for the 2025 REEFSCAPE game with no additional game-specific customization required.
+- Easy deployment experience when teams run a server on Glitch.
+- Optimized for teams who have internet access while scouting but also completely functional for teams with no internet access. [(workflow found here)](https://docs.google.com/document/d/1rMG94uNJxASu9EMIhPnCHs1xF6rNNqMg3j4-tCzr2rI/edit?usp=sharing).
+- Quick setup with a built-in first-run wizard to walk teams through configuring their scouting app, connecting to The Blue Alliance or FRC API, and setting up their database.
 - Completely configurable analysis and scouting view without the need for a single line of code.
 
 SPOT is built with HTML, JS, CSS, and Node.js and operates with a MongoDB database.
@@ -30,7 +31,7 @@ SPOT is built with HTML, JS, CSS, and Node.js and operates with a MongoDB databa
 
 ## Getting Started
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. If you have any questions, feel free to contact us [spot@team3061.org](mailto:spot@team3061.org).
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes, as well as deployed on a server (Glitch or Amazon Web Services). If you have any questions, feel free to contact us [spot@team3061.org](mailto:spot@team3061.org).
 
 ### [Quickstart](https://docs.google.com/document/d/1dATXMC5U7aT0SfnYEOWFiafaeWbu8opabNglWSFCSPE/edit?usp=sharing)
 
