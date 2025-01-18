@@ -62,6 +62,10 @@
   background-color: var(--bg);
 }
 
+.sherbert {
+  background-color: #ffa347;
+}
+
 .red {
   background-color: #d10647;
 }
@@ -76,6 +80,37 @@
 
 .yellow {
   background-color: #a828ed;
+}
+
+.bluegreen {
+  background-color: #0babab;
+}
+
+.lightbluegreen {
+  background-color: #56b8b8;
+}
+
+.darkbluegreen {
+  background-color: #077777;
+}
+
+.lightCoral {
+  background-color: #ff69b4;
+}
+.coral {
+  background-color: #ff1493;
+}
+
+.darkCoral {
+  background-color: #c71585;
+}
+
+.deepBlue {
+  background-color: #001f3f;
+}
+
+.shallowBlue {
+  background-color: #73a9e5;
 }
 
 .border {
