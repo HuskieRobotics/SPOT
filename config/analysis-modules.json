@@ -121,7 +121,7 @@
       "bars": [
         {
           "name": "Miss",
-          "path": "counts.automissCoral"
+          "path": "counts.autoMissCoral"
         },
         {
           "name": "Level 1",
@@ -168,7 +168,6 @@
       ]
     }
   },
-
   {
     "view": "team",
     "module": "Bar",

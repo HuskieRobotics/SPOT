@@ -18,8 +18,8 @@
         "counts.autol2": 4,
         "counts.autol3": 6,
         "counts.autol4": 7,
-        "counts.teleopScoreProcessor": 6,
-        "counts.scoreNet": 4
+        "counts.autoScoreProcessor": 6,
+        "counts.autoScoreNet": 4
       }
     }
   },
@@ -70,52 +70,6 @@
   },
   {
     "type": "tmp",
-    "name": "weightedSum",
-    "outputPath": "scores.teleop",
-    "options": {
-      "weightedPaths": {
-        "counts.teleopl1": 2,
-        "counts.teleopl2": 3,
-        "counts.teleopl3": 4,
-        "counts.teleopl4": 5,
-        "counts.teleopScoreNet": 4,
-        "counts.teleopScoreProcessor": 6
-      }
-    }
-  },
-  {
-    "type": "tmp",
-    "name": "weightedSum",
-    "outputPath": "counts.scoreTotalCoral",
-    "options": {
-      "weightedPaths": {
-        "counts.teleopl1": 2,
-        "counts.teleopl2": 3,
-        "counts.teleopl3": 4,
-        "counts.teleopl4": 5,
-        "counts.autol1": 3,
-        "counts.autol2": 4,
-        "counts.autol3": 6,
-        "counts.autol4": 7
-      }
-    }
-  },
-
-  {
-    "type": "tmp",
-    "name": "weightedSum",
-    "outputPath": "counts.scoreTotalAlgae",
-    "options": {
-      "weightedPaths": {
-        "counts.autoScoreNet": 6,
-        "counts.teleopScoreNet": 6,
-        "counts.autoScoreProcessor": 4,
-        "counts.teleopScoreProcessor": 4
-      }
-    }
-  },
-  {
-    "type": "tmp",
     "name": "sum",
     "outputPath": "counts.totalMiss",
     "options": {
@@ -124,8 +78,8 @@
         "counts.autoMissNet",
         "counts.teleopMissProcessor",
         "counts.teleopMissNet",
-        "counts.automissCoral",
-        "counts.teleopmissCoral"
+        "counts.autoMissCoral",
+        "counts.teleopMissCoral"
       ]
     }
   },
@@ -144,6 +98,17 @@
   {
     "type": "tmp",
     "name": "sum",
+    "outputPath": "counts.groundPickupCoral",
+    "options": {
+      "addends": [
+        "counts.autoGroundPickupCoral",
+        "counts.teleopGroundPickupCoral"
+      ]
+    }
+  },
+  {
+    "type": "tmp",
+    "name": "sum",
     "outputPath": "scores.total",
     "options": {
       "addends": ["scores.auto", "scores.teleop", "scores.barge"]
@@ -151,10 +116,37 @@
   },
   {
     "type": "tmp",
+    "name": "sum",
+    "outputPath": "algaeMissTeleop",
+    "options": {
+      "addends": ["counts.teleopMissProcessor", "counts.teleopMissNet"]
+    }
+  },
+  {
+    "type": "tmp",
+    "name": "sum",
+    "outputPath": "counts.stationPickupCoral",
+    "options": {
+      "addends": [
+        "counts.autoStationPickupCoral",
+        "counts.teleopStationPickupCoral"
+      ]
+    }
+  },
+  {
+    "type": "tmp",
+    "name": "sum",
+    "outputPath": "coralMissTeleop",
+    "options": {
+      "addends": ["counts.teleopMissCoral", "counts.autoMissCoral"]
+    }
+  },
+  {
+    "type": "tmp",
     "name": "cycle",
     "outputPath": "cycleAlgae",
     "options": {
-      "pickups": ["groundPickupAlgae", "reefPickupAlgae"],
+      "pickups": ["teleopGroundPickupAlgae", "teleopReefPickupAlgae"],
       "scores": ["teleopScoreProcessor", "teleopScoreNet"],
       "misses": ["algaeMissTeleop"]
     }
@@ -164,9 +156,13 @@
     "name": "cycle",
     "outputPath": "cycleCoral",
     "options": {
-      "pickups": ["groundPickupCoral", "stationPickupCoral"],
+      "pickups": [
+        "autoGroundPickupCoral",
+        "teleopGroundPickupCoral",
+        "autoStationPickupCoral"
+      ],
       "scores": ["teleopl1", "teleopl2", "teleopl3", "teleopl4"],
-      "misses": ["teleopmissCoral"]
+      "misses": ["teleopMissCoral"]
     }
   },
   {
@@ -187,7 +183,7 @@
     "name": "sum",
     "outputPath": "coralMissTMP",
     "options": {
-      "addends": ["counts.teleopmissCoral", "counts.automissCoral"]
+      "addends": ["counts.teleopMissCoral", "counts.autoMissCoral"]
     }
   },
   {
@@ -195,7 +191,12 @@
     "name": "sum",
     "outputPath": "counts.totalDrops",
     "options": {
-      "addends": ["counts.algaeDrop", "counts.coralDrop"]
+      "addends": [
+        "counts.autoAlgaeDrop",
+        "counts.autoCoralDrop",
+        "counts.teleopAlgaeDrop",
+        "counts.teleopCoralDrop"
+      ]
     }
   },
   {
@@ -206,6 +207,22 @@
       "pickups": ["barge"],
       "scores": ["shallow", "deep"],
       "misses": ["bargeFall"]
+    }
+  },
+  {
+    "type": "tmp",
+    "name": "sum",
+    "outputPath": "counts.totalAlgaeDrops",
+    "options": {
+      "addends": ["counts.autoAlgaeDrop", "counts.teleopAlgaeDrop"]
+    }
+  },
+  {
+    "type": "tmp",
+    "name": "sum",
+    "outputPath": "counts.totalCoralDrops",
+    "options": {
+      "addends": ["counts.autoCoralDrop", "counts.teleopCoralDrop"]
     }
   },
   {
@@ -261,7 +278,7 @@
     "name": "sum",
     "outputPath": "coralMiss",
     "options": {
-      "addends": ["counts.teleopmissCoral", "counts.automissCoral"]
+      "addends": ["counts.teleopMissCoral", "counts.autoMissCoral"]
     }
   },
   {
@@ -313,6 +330,47 @@
   {
     "type": "team",
     "name": "sum",
+    "outputPath": "counts.reefPickupAlgae",
+    "options": {
+      "addends": ["counts.autoReefPickupAlgae", "counts.teleopReefPickupAlgae"]
+    }
+  },
+  {
+    "type": "team",
+    "name": "sum",
+    "outputPath": "counts.groundPickupAlgae",
+    "options": {
+      "addends": [
+        "counts.autoGroundPickupAlgae",
+        "counts.teleopGroundPickupAlgae"
+      ]
+    }
+  },
+  {
+    "type": "team",
+    "name": "sum",
+    "outputPath": "counts.groundPickupCoral",
+    "options": {
+      "addends": [
+        "counts.autoGroundPickupCoral",
+        "counts.teleopGroundPickupCoral"
+      ]
+    }
+  },
+  {
+    "type": "team",
+    "name": "sum",
+    "outputPath": "counts.stationPickupCoral",
+    "options": {
+      "addends": [
+        "counts.autoStationPickupCoral",
+        "counts.teleopStationPickupCoral"
+      ]
+    }
+  },
+  {
+    "type": "team",
+    "name": "sum",
     "outputPath": "counts.totalMiss",
     "options": {
       "addends": [
@@ -320,8 +378,8 @@
         "counts.autoMissNet",
         "counts.teleopMissProcessor",
         "counts.teleopMissNet",
-        "counts.automissCoral",
-        "counts.teleopmissCoral"
+        "counts.autoMissCoral",
+        "counts.teleopMissCoral"
       ]
     }
   },
@@ -370,7 +428,7 @@
     "name": "average",
     "outputPath": "avgAlgaeDrops",
     "options": {
-      "path": "counts.algaeDrop"
+      "path": "counts.totalAlgaeDrops"
     }
   },
   {
@@ -378,7 +436,7 @@
     "name": "average",
     "outputPath": "avgCoralDrops",
     "options": {
-      "path": "counts.coralDrop"
+      "path": "counts.totalCoralDrops"
     }
   },
   {

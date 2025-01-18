@@ -78,7 +78,7 @@
           "executables": []
         },
         {
-          "id": "groundPickupCoral",
+          "id": "autoGroundPickupCoral",
           "displayText": "Pickup Ground",
           "gridArea": ["2", "1", "4", "3"],
           "class": "lightCoral",
@@ -91,7 +91,7 @@
           ]
         },
         {
-          "id": "stationPickupCoral",
+          "id": "autoStationPickupCoral",
           "displayText": "Pickup Station",
           "gridArea": ["4", "1", "6", "3"],
           "class": "lightCoral",
@@ -99,7 +99,7 @@
           "executables": []
         },
         {
-          "id": "coralDrop",
+          "id": "autoCoralDrop",
           "displayText": "Drop",
           "gridArea": ["6", "1", "7", "3"],
           "class": "darkCoral",
@@ -107,7 +107,7 @@
           "executables": []
         },
         {
-          "id": "scoreCoral",
+          "id": "autoScoreCoral",
           "displayText": "Coral",
           "gridArea": ["3", "3", "5", "5"],
           "class": "coral",
@@ -128,7 +128,7 @@
           "executables": []
         },
         {
-          "id": "groundPickupAlgae",
+          "id": "autoGroundPickupAlgae",
           "displayText": "Pickup Ground",
           "gridArea": ["2", "8", "4", "10"],
           "class": "lightbluegreen",
@@ -141,7 +141,7 @@
           ]
         },
         {
-          "id": "reefPickupAlgae",
+          "id": "autoReefPickupAlgae",
           "displayText": "Pickup Reef",
           "gridArea": ["4", "8", "6", "10"],
           "class": "lightbluegreen",
@@ -149,7 +149,7 @@
           "executables": []
         },
         {
-          "id": "scoreAlgae",
+          "id": "autoScoreAlgae",
           "displayText": "Algae",
           "gridArea": ["3", "6", "5", "8"],
           "class": "bluegreen",
@@ -162,7 +162,7 @@
           ]
         },
         {
-          "id": "algaeDrop",
+          "id": "autoAlgaeDrop",
           "displayText": "Drop",
           "gridArea": ["6", "8", "7", "10"],
           "class": "darkbluegreen",
@@ -196,7 +196,7 @@
           "executables": []
         },
         {
-          "id": "groundPickupCoral",
+          "id": "teleopGroundPickupCoral",
           "displayText": "Pickup Ground",
           "gridArea": ["2", "1", "4", "3"],
           "class": "lightCoral",
@@ -204,7 +204,7 @@
           "executables": []
         },
         {
-          "id": "stationPickupCoral",
+          "id": "teleopStationPickupCoral",
           "displayText": "Pickup Station",
           "gridArea": ["4", "1", "6", "3"],
           "class": "lightCoral",
@@ -212,7 +212,7 @@
           "executables": []
         },
         {
-          "id": "coralDrop",
+          "id": "teleopCoralDrop",
           "displayText": "Drop",
           "gridArea": ["6", "1", "7", "3"],
           "class": "darkCoral",
@@ -220,7 +220,7 @@
           "executables": []
         },
         {
-          "id": "scoreCoral",
+          "id": "teleopScoreCoral",
           "displayText": "Coral",
           "gridArea": ["3", "3", "5", "5"],
           "class": "coral",
@@ -241,7 +241,7 @@
           "executables": []
         },
         {
-          "id": "groundPickupAlgae",
+          "id": "teleopGroundPickupAlgae",
           "displayText": "Pickup Ground",
           "gridArea": ["2", "8", "4", "10"],
           "class": "lightbluegreen",
@@ -249,7 +249,7 @@
           "executables": []
         },
         {
-          "id": "reefPickupAlgae",
+          "id": "teleopReefPickupAlgae",
           "displayText": "Pickup Reef",
           "gridArea": ["4", "8", "6", "10"],
           "class": "lightbluegreen",
@@ -257,7 +257,7 @@
           "executables": []
         },
         {
-          "id": "scoreAlgae",
+          "id": "teleopScoreAlgae",
           "displayText": "Algae",
           "gridArea": ["3", "6", "5", "8"],
           "class": "bluegreen",
@@ -270,7 +270,7 @@
           ]
         },
         {
-          "id": "algaeDrop",
+          "id": "teleopAlgaeDrop",
           "displayText": "Drop",
           "gridArea": ["6", "8", "7", "10"],
           "class": "darkbluegreen",
@@ -505,7 +505,7 @@
           ]
         },
         {
-          "id": "automissCoral",
+          "id": "autoMissCoral",
           "displayText": "Miss",
           "gridArea": ["6", "1", "7", "3"],
           "class": "red",
@@ -820,7 +820,7 @@
           ]
         },
         {
-          "id": "teleopmissCoral",
+          "id": "teleopMissCoral",
           "displayText": "Miss",
           "gridArea": ["6", "1", "7", "3"],
           "class": "red",
