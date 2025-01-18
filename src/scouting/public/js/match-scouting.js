@@ -3,11 +3,13 @@ let devEnd;
 var variables = {};
 var previousLayers = [];
 var previousTimer = [];
+
 (async () => {
   config = await config;
   matchScoutingConfig = await matchScoutingConfig;
   //initiate timing
   var time = matchScoutingConfig.timing.totalTime;
+  var teleopTime = 135000;
   var timerActive = false;
 
   //intialize variables
@@ -66,27 +68,48 @@ var previousTimer = [];
 
     undo: (button) => {
       button.element.addEventListener("click", () => {
-        const undoneId = actionQueue.pop().id; //remove the last action from the action queue
-        const undoneButton = buttons.find((x) => x.id === undoneId);
+        if (
+          actionQueue.length > matchScoutingConfig.variables.minOfQueueLength
+        ) {
+          // Basically, if this code was not in place (^), then you would be able to undo the start of the game.
 
-        //special case for match-control buttons which have extra undo funcitonality without executables
-        if (undoneButton.type === "match-control") {
-          time = matchScoutingConfig.timing.totalTime; //reset timer
-          ScoutingSync.updateState({
-            status: ScoutingSync.SCOUTER_STATUS.WAITING,
-          }); //tell the server that you are now waiting to start
-          clearInterval(undoneButton.timerInterval); //clear the timing interval
-          undoneButton.element.innerText = "Start Match";
-          timerActive = false;
-          showLayer(0);
-        }
+          const undoneId = actionQueue.pop().id; //remove the last action from the action queue
+          const undoneButton = buttons.find((x) => x.id === undoneId);
 
-        for (const executable of undoneButton.executables) {
-          executables[executable.type].reverse(
-            undoneButton,
-            layers,
-            ...executable.args
-          ); //reverse any executables associated with the undone button
+          //special case for match-control buttons which have extra undo funcitonality without executables
+          if (undoneButton.type === "match-control") {
+            time = matchScoutingConfig.timing.totalTime; //reset timer
+            ScoutingSync.updateState({
+              status: ScoutingSync.SCOUTER_STATUS.WAITING,
+            }); //tell the server that you are now waiting to start
+            clearInterval(undoneButton.timerInterval); //clear the timing interval
+            undoneButton.element.innerText = "Start Match";
+            timerActive = false;
+            showLayer(0);
+          }
+
+          var totalNumberOfButtonsTeleopLayer = 12;
+          var totalNumberOfButtonsAutoLayer = 13;
+          var teleopLayerNumber = 2;
+
+          if (time < teleopTime) {
+            for (let i = 0; i < previousLayers.length; i++) {
+              if (previousLayers[i].length === totalNumberOfButtonsAutoLayer) {
+                previousLayers[i] = layers[teleopLayerNumber];
+              }
+            }
+          }
+
+          if (previousLayers[0] === totalNumberOfButtonsTeleopLayer) {
+            showLayer(teleopLayerNumber);
+          }
+          for (const executable of undoneButton.executables) {
+            executables[executable.type].reverse(
+              undoneButton,
+              layers,
+              ...executable.args
+            ); //reverse any executables associated with the undone button
+          }
         }
         doExecutables(button, time);
         updateLastAction();
@@ -104,6 +127,10 @@ var previousTimer = [];
         doExecutables(button, time);
         updateLastAction();
       });
+    },
+
+    label: () => {
+      //adds a non-clickable label to the grid
     },
 
     "match-control": (button) => {
@@ -184,12 +211,6 @@ var previousTimer = [];
             displayText =
               matchScoutingConfig.timing.timeTransitions[transitions[0]]
                 .displayText;
-            console.log(
-              Object.keys(
-                matchScoutingConfig.timing.timeTransitions[transitions[0]]
-                  .variables
-              )
-            );
             for (let key of Object.keys(
               matchScoutingConfig.timing.timeTransitions[transitions[0]]
                 .variables
