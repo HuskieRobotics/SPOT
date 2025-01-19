@@ -150,11 +150,22 @@ if ("serviceWorker" in navigator) {
     }
     console.log("teams before avgprob");
     console.log(teams);
-    //console.log("teams type and size: " + typeof(teams)+teams.length+teams[0])
+    // console.log(
+    //   "teams type and size: " + typeof teams + teams.length + teams[0]
+    // );
 
-    let teamsProbability = await fetch("/analysis/autoPick").then((res) =>
-      res.json()
-    );
+    compareAllTeams(teams);
+
+    // console.log("teams after compareAllTeams");
+    // console.log(teams);
+
+    let teamsProbability = teams.map((team) => {
+      return {
+        robotNumber: team.robotNumber,
+        avgProbability: team.avgProbability,
+      };
+    });
+
     console.log("teams w/ avg probability");
     console.log(teamsProbability);
     for (let i = 0; i < teams.length; i++) {

@@ -83,48 +83,42 @@ function possibleAlliances(teams) {
 	console.log(teams)
 	*/
   for (let x = 0; x < teams.length; x++) {
-    for (let y = 0; y < teams.length; y++) {
-      for (let z = 0; z < teams.length; z++) {
-        // makes sure there aren't alliances with duplicate teams
-        if (
-          teams[x].robotNumber != teams[y].robotNumber &&
-          teams[y].robotNumber != teams[z].robotNumber &&
-          teams[z].robotNumber != teams[x].robotNumber
-        ) {
-          /*
-					console.log("adding alliance: ")
-					console.log(teams[x].robotNumber)
-					console.log(teams[y].robotNumber)
-					console.log(teams[z].robotNumber)
-					*/
-          let validAlliance = true;
-          alliances.forEach(
-            (
-              alliance // make sure we don't add the same alliance twice
-            ) => {
-              let teams_matching = 0;
-              alliance.forEach((team) => {
-                if (
-                  team.robotNumber == teams[x].robotNumber ||
-                  team.robotNumber == teams[y].robotNumber ||
-                  team.robotNumber == teams[z].robotNumber
-                ) {
-                  teams_matching++;
-                }
-              });
-              if (teams_matching == 3) {
-                validAlliance = false;
-              }
-            }
-          );
-
-          if (validAlliance) {
-            alliances.push([teams[x], teams[y], teams[z]]);
-          }
-        }
-      }
+    if (!alliances.includes(teams[x])) {
+      alliances.push([teams[x]]);
     }
   }
+
+  // for(let x = 0; x < teams.length; x++) {
+  // 	for(let y = 0; y < teams.length; y++) {
+  // 		for(let z = 0; z < teams.length; z++) { // makes sure there aren't alliances with duplicate teams
+  // 			if(teams[x].robotNumber!=teams[y].robotNumber && teams[y].robotNumber!=teams[z].robotNumber && teams[z].robotNumber!=teams[x].robotNumber){
+  // 				/*
+  // 				console.log("adding alliance: ")
+  // 				console.log(teams[x].robotNumber)
+  // 				console.log(teams[y].robotNumber)
+  // 				console.log(teams[z].robotNumber)
+  // 				*/
+  // 				let validAlliance = true;
+  // 				alliances.forEach(alliance=> // make sure we don't add the same alliance twice
+  // 					{
+  // 						let teams_matching = 0;
+  // 						alliance.forEach(team => {if (team.robotNumber == teams[x].robotNumber ||
+  // 							team.robotNumber == teams[y].robotNumber ||
+  // 							team.robotNumber == teams[z].robotNumber)
+  // 								{teams_matching++}
+  // 						})
+  // 						if(teams_matching == 3){
+  // 							validAlliance = false;
+  // 						}
+  // 					})
+
+  // 				if(validAlliance){alliances.push([teams[x], teams[y], teams[z]])
+  // 				}
+  // 			}
+
+  // 		}
+  // 	}
+  // }
   return alliances;
 }
 /**
@@ -163,12 +157,12 @@ function matchAverage(alliance1, alliance2) {
   //console.log("alliance1")
   //console.log(alliance1);
   for (let a = 0; a < alliance1.length; a++) {
-    data = getPath(alliance1[a], "averageScores.total", 0);
+    data = getPath(alliance1[a], "avgTotalPoints", 0);
     alliance1Avg += data;
   }
   let alliance2Avg = 0;
   for (let a = 0; a < alliance2.length; a++) {
-    data = getPath(alliance2[a], "averageScores.total", 0);
+    data = getPath(alliance2[a], "avgTotalPoints", 0);
     alliance2Avg += data;
   }
   return alliance1Avg - alliance2Avg;
@@ -203,8 +197,8 @@ function matchStandardDeviation(alliance1, alliance2) {
 function compareAlliances(alliance1, alliance2) {
   zscore = ss.zScore(
     0,
-    this.matchAverage(alliance1, alliance2),
-    this.matchStandardDeviation(alliance1, alliance2)
+    matchAverage(alliance1, alliance2),
+    matchStandardDeviation(alliance1, alliance2)
   );
   probAlliance2Wins = ss.cumulativeStdNormalProbability(zscore);
   return 1 - probAlliance2Wins;
@@ -224,9 +218,10 @@ function compareAllTeams(teams) {
   // loop through each alliance, add average probability to each team, average this at the end
   //    so each team has a value of their average chance of winning in any given alliance
 
-  //console.log("ran compare all teams");
-  //console.log("teams: ")
-  //console.log(teams)
+  // console.log("ran compare all teams");
+  // console.log("teams: ");
+  // console.log(teams);
+
   let alliancesWithScore = []; // an array of arrays; Within each list contains an alliance, sum of probabilities, number of alliances compared with, and avg probability
   let alliances = possibleAlliances(teams); // an array of arrays (all possible alliances)
   //let iterator = possibleAlliances(teams).values();  // an iterator that goes through all possible alliances
@@ -295,7 +290,11 @@ function compareAllTeams(teams) {
     allianceNum < alliancesWithScore.length;
     allianceNum++
   ) {
-    for (let team = 0; team < 3; team++) {
+    for (
+      let team = 0;
+      team < alliancesWithScore[allianceNum].alliance.length;
+      team++
+    ) {
       // access each team on the alliance
       //console.log("team that probability is added to: ")
       //console.log(alliancesWithScore[allianceNum].alliance[team])
