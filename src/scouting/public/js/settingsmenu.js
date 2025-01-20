@@ -35,7 +35,7 @@ function toggleDarkMode() {
   if (body.classList.contains("dark-mode")) {
     menuImage.src = "/icons/menu-button-dark.png";
     document.documentElement.style.setProperty("--reload-color", "#efefef");
-
+    document.getElementById("darkModeOn").innerHTML = "Disable Dark Mode";
     document
       .getElementById("pagestyle")
       .setAttribute("href", "/css/landing-dark.css");
@@ -50,6 +50,7 @@ function toggleDarkMode() {
   } else {
     menuImage.src = "/icons/menu-button.png";
     document.documentElement.style.setProperty("--reload-color", "#000000");
+    document.getElementById("darkModeOn").innerHTML = "Enable Dark Mode";
 
     document
       .getElementById("pagestyle")
