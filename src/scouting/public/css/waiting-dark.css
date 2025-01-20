@@ -23,7 +23,7 @@
 }
 
 #waiting .title {
-  background-color: var(--purple);
+  background-color: var(--light-blue);
   color: var(--bg);
   max-width: 75%;
   padding: 0.5em calc(0.5em + var(--border-radius));
@@ -74,7 +74,7 @@
   bottom: 0px;
   left: 50%;
   transform: translate(-50%, 0);
-  background-color: var(--purple);
+  background-color: var(--light-blue);
   max-width: 75%;
   padding: 0.5em var(--border-radius);
   border-radius: 0 var(--border-radius);

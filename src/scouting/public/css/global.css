@@ -4,7 +4,7 @@
   --bg-alt: #fefefe;
   --accent: #30a2ff;
   --dark-black: #191b1c;
-  --purple: #8a24b5;
+  --light-blue: #4798b6;
   --accent-alt: #ff6030;
   --error: #ff5166;
   --light-gray: #bebebe;
@@ -13,6 +13,7 @@
   --reload-color: #000000;
   --placeholder: #a3a3a3;
   --border-radius: 16px;
+  --black: #000000;
   --font: Cairo, sans-serif;
 }
 

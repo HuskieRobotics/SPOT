@@ -3,8 +3,8 @@
 }
 
 #form .input {
-  background-color: var(--purple);
-  border: black 2px solid;
+  background-color: var(--black);
+  border: rgb(255, 255, 255) 2px solid;
   color: var(--bg);
   cursor: pointer;
   text-align: left;
@@ -16,7 +16,7 @@
 }
 
 #form .input:focus {
-  border: var(--dark-black) 2px solid;
+  border: var(--bg) 2px solid;
 }
 
 #form .label {
@@ -27,19 +27,19 @@
   position: absolute;
   padding: 0 5px;
   left: 12px;
-  background-color: var(--purple);
+  background-color: var(--black);
   top: -8px;
   border-radius: 20px;
   font-size: 1.5em;
   transition: 0.2s transform;
   pointer-events: none;
-  color: var(--dark-black);
+  color: var(--bg);
 }
 
 .input:focus + span,
 .input:valid + span {
   transform: scale(0.75) translate(-20px, -46px);
-  color: black !important;
+  color: rgb(255, 255, 255) !important;
 }
 
 .input {
@@ -52,7 +52,7 @@
   justify-content: center;
 }
 #form .form {
-  background-color: var(--purple);
+  background-color: var(--black);
   border-radius: var(--border-radius);
   display: grid;
   grid-template-columns: 50% 50%;
@@ -69,13 +69,14 @@
   grid-area: 1/1/2/3;
   margin: 0px 0;
   font-size: 2em;
+  color: var(--bg);
 }
 
 #form .form .save {
   grid-area: 4/1/5/3;
   font-size: 1.75em;
   width: 90%;
-  background-color: var(--dark-black);
+  background-color: var(--light-blue);
   border-radius: var(--border-radius);
   color: var(--bg);
   border: none;

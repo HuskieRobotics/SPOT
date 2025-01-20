@@ -41,7 +41,7 @@ function toggleDarkMode() {
       .setAttribute("href", "/css/landing-dark.css");
     vStr.style.background = "#191b1c";
     vStr.style.color = "#efefef";
-    status.style.color = "#ac56d1";
+    status.style.color = "#4798b6";
     reloadPopup.setAttribute("href", "css/internal-dark.css");
     form.setAttribute("href", "css/form-dark.css");
     scout.setAttribute("href", "css/match-scouting-dark.css");
