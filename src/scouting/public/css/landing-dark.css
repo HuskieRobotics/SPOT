@@ -107,16 +107,15 @@
   margin: 10px; /* Add a margin around the image */
 }
 
-#landing .menu-out .menu-button {
-  position: absolute; /* Position the button absolutely within the menu-out */
-  top: 0;
-  left: 0;
-  width: 100%; /* Make the button cover the entire menu */
-  height: 100%;
-  z-index: 1; /* Ensure the button is above the menu */
-  background: transparent; /* Make the button background transparent */
-  border: none; /* Remove any default button border */
+#landing .menu-button {
+  position: fixed; /* Fix the button to the screen */
   cursor: pointer; /* Change cursor to pointer to indicate it's clickable */
+  transition: transform 0.2s ease, background-color 0.2s ease; /* Smooth transition for hover effect */
+  width: 35px;
+  height: auto;
+  top: 10px; /* Position the button from the top of the screen */
+  right: 10px; /* Position the button from the right of the screen */
+  z-index: 9999; /* Ensure the button is always above other content */
 }
 
 #landing .menu-out .menu-button:hover {

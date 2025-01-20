@@ -109,13 +109,11 @@
   position: fixed; /* Fix the button to the screen */
   cursor: pointer; /* Change cursor to pointer to indicate it's clickable */
   transition: transform 0.2s ease, background-color 0.2s ease; /* Smooth transition for hover effect */
-  height: 7.5%; /* Control the height of the button */
-  width: 4%; /* Control the width of the button */
+  width: 35px;
+  height: auto;
   top: 10px; /* Position the button from the top of the screen */
   right: 10px; /* Position the button from the right of the screen */
-  padding: 10px;
-  margin-top: 10px;
-  z-index: 1000; /* Ensure the button is always above other content */
+  z-index: 9999; /* Ensure the button is always above other content */
 }
 
 #landing .menu-button:hover {

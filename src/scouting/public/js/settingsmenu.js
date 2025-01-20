@@ -19,6 +19,7 @@ window.onclick = function (event) {
 };
 
 function toggleDarkMode() {
+  console.log("Hello!");
   var body = document.body;
   let vStr = document.getElementById("v-string");
   let status = document.getElementById("connection-status");
@@ -28,12 +29,11 @@ function toggleDarkMode() {
   let action = document.getElementById("last-actions");
   let reloadPopup = document.getElementById("internal");
 
-  var menuImage = document.querySelector("#landing .menu-out .menu");
+  var menuImage = document.querySelector("#landing .menu-button");
 
   body.classList.toggle("dark-mode");
 
   if (body.classList.contains("dark-mode")) {
-    menuImage.src = "/icons/menu-button-dark.png";
     document.documentElement.style.setProperty("--reload-color", "#efefef");
     document.getElementById("darkModeOn").innerHTML = "Disable Dark Mode";
     document
@@ -47,6 +47,7 @@ function toggleDarkMode() {
     scout.setAttribute("href", "css/match-scouting-dark.css");
     wait.setAttribute("href", "css/waiting-dark.css");
     action.style.color = "#efefef";
+    menuImage.src = "/icons/menu-button-dark.png";
   } else {
     menuImage.src = "/icons/menu-button.png";
     document.documentElement.style.setProperty("--reload-color", "#000000");
