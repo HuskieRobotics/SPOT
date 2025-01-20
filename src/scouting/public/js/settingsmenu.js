@@ -1,7 +1,3 @@
-function goToAnalysis() {
-  window.open("https://scouting.team3061.org/analysis/").focus();
-}
-
 function toggleSettingsMenu() {
   var overlay = document.getElementById("settingsOverlay");
   if (overlay.style.display === "none" || overlay.style.display === "") {
@@ -9,6 +5,10 @@ function toggleSettingsMenu() {
   } else {
     overlay.style.display = "none";
   }
+}
+
+function goToAnalysis() {
+  window.open("https://scouting.team3061.org/analysis/").focus();
 }
 
 window.onclick = function (event) {
@@ -19,7 +19,6 @@ window.onclick = function (event) {
 };
 
 function toggleDarkMode() {
-  console.log("Hello!");
   var body = document.body;
   let vStr = document.getElementById("v-string");
   let status = document.getElementById("connection-status");
@@ -30,10 +29,13 @@ function toggleDarkMode() {
   let reloadPopup = document.getElementById("internal");
 
   var menuImage = document.querySelector("#landing .menu-button");
+  var logoImage = document.querySelector("#landing .logo");
 
   body.classList.toggle("dark-mode");
 
   if (body.classList.contains("dark-mode")) {
+    menuImage.src = "/icons/menu-button-dark.png";
+    logoImage.src = "/img/logo-dark-mode.png";
     document.documentElement.style.setProperty("--reload-color", "#efefef");
     document.getElementById("darkModeOn").innerHTML = "Disable Dark Mode";
     document
@@ -47,9 +49,9 @@ function toggleDarkMode() {
     scout.setAttribute("href", "css/match-scouting-dark.css");
     wait.setAttribute("href", "css/waiting-dark.css");
     action.style.color = "#efefef";
-    menuImage.src = "/icons/menu-button-dark.png";
   } else {
     menuImage.src = "/icons/menu-button.png";
+    logoImage.src = "/img/logo.png";
     document.documentElement.style.setProperty("--reload-color", "#000000");
     document.getElementById("darkModeOn").innerHTML = "Enable Dark Mode";
     +document
@@ -64,4 +66,7 @@ function toggleDarkMode() {
     wait.setAttribute("href", "css/waiting.css");
     action.style.color = "#232323";
   }
+
+  var overlay = document.getElementById("settingsOverlay");
+  overlay.style.display = "none";
 }
