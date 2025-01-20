@@ -51,8 +51,7 @@ function toggleDarkMode() {
     menuImage.src = "/icons/menu-button.png";
     document.documentElement.style.setProperty("--reload-color", "#000000");
     document.getElementById("darkModeOn").innerHTML = "Enable Dark Mode";
-
-    document
+    +document
       .getElementById("pagestyle")
       .setAttribute("href", "/css/landing.css");
     vStr.style.background = "#efefef";
