@@ -256,7 +256,9 @@ body {
   transition: visibility 0s 0s, opacity 0.3s 0s;
 }
 
-#button-container {
+#match-view-switch,
+#bubble-sheet-switch,
+#auto-pick-switch {
   background-color: var(--bg);
   border: 3px solid var(--accent);
   border-radius: var(--border-radius);

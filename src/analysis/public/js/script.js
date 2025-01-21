@@ -481,12 +481,25 @@ if ("serviceWorker" in navigator) {
 
     const teams = Object.keys(dataset.teams);
     const autoScores = teams.map((team) =>
-      getPath(dataset.teams[team], "avgAutoPoints", 0)
+      getPath(dataset.teams[team], "avgAutoPoints", 0).toFixed(2)
     );
 
     const teleopScores = teams.map((team) =>
-      getPath(dataset.teams[team], "avgTeleopPoints", 0)
+      getPath(dataset.teams[team], "avgTeleopPoints", 0).toFixed(2)
     );
+
+    const avgAutoScore = (
+      autoScores.reduce((sum, score) => sum + parseFloat(score), 0) /
+      autoScores.length
+    ).toFixed(2);
+    const avgTeleopScore = (
+      teleopScores.reduce((sum, score) => sum + parseFloat(score), 0) /
+      teleopScores.length
+    ).toFixed(2);
+
+    const hoverTexts = teams.map((team, index) => {
+      return `Team: ${team}<br>Auto Score: ${autoScores[index]}<br>Teleop Score: ${teleopScores[index]}`;
+    });
 
     const trace = {
       x: autoScores,
@@ -494,13 +507,46 @@ if ("serviceWorker" in navigator) {
       mode: "markers",
       type: "scatter",
       text: teams,
-      marker: { size: 12 },
+      hovertext: hoverTexts,
+      marker: { size: 12, color: "#FF6030" },
+      hoverlabel: {
+        bgcolor: "white", // Set the background color of the hover menu to white
+        font: { color: "black" }, // Set the font color to black for better readability
+      },
     };
 
     const layout = {
       title: "Team Scores Scattergram",
       xaxis: { title: "Average Auto Score" },
       yaxis: { title: "Average Teleop Score" },
+      shapes: [
+        // Horizontal line for average teleop score
+        {
+          type: "line",
+          x0: Math.min(...autoScores),
+          x1: Math.max(...autoScores),
+          y0: avgTeleopScore,
+          y1: avgTeleopScore,
+          line: {
+            color: "blue",
+            width: 2,
+            dash: "dot",
+          },
+        },
+        // Vertical line for average auto score
+        {
+          type: "line",
+          x0: avgAutoScore,
+          x1: avgAutoScore,
+          y0: Math.min(...teleopScores),
+          y1: Math.max(...teleopScores),
+          line: {
+            color: "blue",
+            width: 2,
+            dash: "dot",
+          },
+        },
+      ],
     };
 
     Plotly.newPlot(bubbleSheetContainer, [trace], layout);
