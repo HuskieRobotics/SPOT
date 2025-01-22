@@ -488,6 +488,14 @@ if ("serviceWorker" in navigator) {
       getPath(dataset.teams[team], "avgTeleopPoints", 0).toFixed(2)
     );
 
+    const stageScores = teams.map((team) =>
+      getPath(dataset.teams[team], "avgStagePoints", 0).toFixed(2)
+    );
+
+    const totalScores = teams.map((team) =>
+      getPath(dataset.teams[team], "avgTotalPoints", 0).toFixed(2)
+    );
+
     const avgAutoScore = (
       autoScores.reduce((sum, score) => sum + parseFloat(score), 0) /
       autoScores.length
@@ -498,13 +506,12 @@ if ("serviceWorker" in navigator) {
     ).toFixed(2);
 
     const hoverTexts = teams.map((team, index) => {
-      return `Team: ${team}<br>Auto Score: ${autoScores[index]}<br>Teleop Score: ${teleopScores[index]}`;
+      return `Team: ${team}<br>Auto Score: ${autoScores[index]}<br>Teleop Score: ${teleopScores[index]}<br>Stage Score: ${stageScores[index]}<br>Total Score: ${totalScores[index]}`;
     });
-
     const trace = {
       x: autoScores,
       y: teleopScores,
-      mode: "markers",
+      mode: "markers+text",
       type: "scatter",
       text: teams,
       hovertext: hoverTexts,
@@ -513,6 +520,8 @@ if ("serviceWorker" in navigator) {
         bgcolor: "white", // Set the background color of the hover menu to white
         font: { color: "black" }, // Set the font color to black for better readability
       },
+      hoverinfo: "text",
+      textposition: "bottom center",
     };
 
     const layout = {
