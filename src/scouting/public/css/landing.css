@@ -156,3 +156,57 @@
   bottom: 10px;
   transform: translateX(-50%);
 }
+
+@media only screen and (max-width: 600px) {
+  #landing .sign-in-text {
+    font-size: 3em;
+    padding: 10px;
+  }
+
+  #landing .logo {
+    height: 50vmin;
+  }
+
+  #landing .auth-buttons {
+    width: 90%;
+    margin: 10px auto;
+  }
+
+  #landing .auth-buttons > div {
+    padding: 10px;
+    margin-bottom: 8px;
+  }
+
+  #landing .auth-buttons > div > i {
+    font-size: 1.25em;
+    padding: 10px;
+  }
+
+  #landing .auth-buttons > div > span {
+    font-size: 1.25em;
+  }
+
+  #landing .versionString {
+    font-size: 0.75em;
+    bottom: 5px;
+  }
+}
+
+@media only screen and (min-width: 601px) {
+  #landing .sign-in-text {
+    font-size: 5em;
+  }
+
+  #landing .logo {
+    height: 90vmin;
+  }
+
+  #landing .auth-buttons > div > i {
+    font-size: 1.75em;
+    padding: 14px;
+  }
+
+  #landing .auth-buttons > div > span {
+    font-size: 1.75em;
+  }
+}
