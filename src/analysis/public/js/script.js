@@ -150,11 +150,22 @@ if ("serviceWorker" in navigator) {
     }
     console.log("teams before avgprob");
     console.log(teams);
-    //console.log("teams type and size: " + typeof(teams)+teams.length+teams[0])
+    // console.log(
+    //   "teams type and size: " + typeof teams + teams.length + teams[0]
+    // );
 
-    let teamsProbability = await fetch("/analysis/autoPick").then((res) =>
-      res.json()
-    );
+    compareAllTeams(teams);
+
+    // console.log("teams after compareAllTeams");
+    // console.log(teams);
+
+    let teamsProbability = teams.map((team) => {
+      return {
+        robotNumber: team.robotNumber,
+        avgProbability: team.avgProbability,
+      };
+    });
+
     console.log("teams w/ avg probability");
     console.log(teamsProbability);
     for (let i = 0; i < teams.length; i++) {
@@ -296,6 +307,7 @@ if ("serviceWorker" in navigator) {
     matchViewSwitch.addEventListener("click", () => {
       clearInterface();
       matchViewSwitch.classList.add("selected");
+      bubbleSheetSwitch.classList.remove("selected");
       showFade(matchView);
     });
 
@@ -462,9 +474,108 @@ if ("serviceWorker" in navigator) {
     autoPickSwitch.addEventListener("click", () => {
       clearInterface();
       autoPickSwitch.classList.add("selected");
+      bubbleSheetSwitch.classList.remove("selected");
       loadTeamsAutoPick(dataset, modulesConfig);
       showFade(autoPickView);
     });
+  }
+
+  // Bubble Sheet UI functions
+  async function loadBubbleGraph(dataset, modulesConfig) {
+    //add event listener to "AutoPickList" button to set reset UI and switch to autopicklist tab
+    bubbleSheetSwitch.addEventListener("click", () => {
+      clearInterface();
+      bubbleSheetSwitch.classList.add("selected");
+      showFade(bubbleSheetView);
+    });
+    const bubbleSheetContainer = document.getElementById("bubble-sheet-graph");
+
+    const teams = Object.keys(dataset.teams);
+    const autoScores = teams.map((team) =>
+      getPath(dataset.teams[team], "avgAutoPoints", 0).toFixed(2)
+    );
+
+    const teleopScores = teams.map((team) =>
+      getPath(dataset.teams[team], "avgTeleopPoints", 0).toFixed(2)
+    );
+
+    const stageScores = teams.map((team) =>
+      getPath(dataset.teams[team], "avgStagePoints", 0).toFixed(2)
+    );
+
+    const totalScores = teams.map((team) =>
+      getPath(dataset.teams[team], "avgTotalPoints", 0).toFixed(2)
+    );
+
+    const avgAutoScore = (
+      autoScores.reduce((sum, score) => sum + parseFloat(score), 0) /
+      autoScores.length
+    ).toFixed(2);
+    const avgTeleopScore = (
+      teleopScores.reduce((sum, score) => sum + parseFloat(score), 0) /
+      teleopScores.length
+    ).toFixed(2);
+
+    const hoverTexts = teams.map((team, index) => {
+      return `Team: ${team}<br>Auto Score: ${autoScores[index]}<br>Teleop Score: ${teleopScores[index]}<br>Stage Score: ${stageScores[index]}<br>Total Score: ${totalScores[index]}`;
+    });
+    const trace = {
+      x: autoScores,
+      y: teleopScores,
+      mode: "markers+text",
+      type: "scatter",
+      text: teams,
+      hovertext: hoverTexts,
+      marker: { size: 12, color: "#FF6030" },
+      hoverlabel: {
+        bgcolor: "white", // Set the background color of the hover menu to white
+        font: { color: "black" }, // Set the font color to black for better readability
+      },
+      hoverinfo: "text",
+      textposition: "bottom center",
+    };
+
+    const layout = {
+      title: "Team Scores Scattergram",
+      xaxis: { title: "Average Auto Score" },
+      yaxis: { title: "Average Teleop Score" },
+      shapes: [
+        // Horizontal line for average teleop score
+        {
+          type: "line",
+          x0: Math.min(...autoScores),
+          x1: Math.max(...autoScores),
+          y0: avgTeleopScore,
+          y1: avgTeleopScore,
+          line: {
+            color: "blue",
+            width: 2,
+            dash: "dot",
+          },
+        },
+        // Vertical line for average auto score
+        {
+          type: "line",
+          x0: avgAutoScore,
+          x1: avgAutoScore,
+          y0: Math.min(...teleopScores),
+          y1: Math.max(...teleopScores),
+          line: {
+            color: "blue",
+            width: 2,
+            dash: "dot",
+          },
+        },
+      ],
+    };
+
+    Plotly.newPlot(bubbleSheetContainer, [trace], layout);
+
+    // Iterate through each team and extract the scores
+    //for (const [teamNumber, team] of Object.entries(dataset.teams)) {
+    //getPath(team, "avgAutoPoints", 0);
+    //getPath(team, "avgTeleopPoints", 0);
+    //}
   }
 
   //call setData on every module in matches
@@ -583,6 +694,7 @@ if ("serviceWorker" in navigator) {
     loadTeams(dataset, modulesConfig);
     loadMatchView(dataset, modulesConfig);
     loadAutoPickList(dataset, modulesConfig);
+    loadBubbleGraph(dataset, modulesConfig);
 
     searchInput.addEventListener("input", () => {
       if (searchInput.value !== "") {
@@ -632,11 +744,13 @@ if ("serviceWorker" in navigator) {
     hideFade(matchView);
     hideFade(teamView);
     hideFade(autoPickView);
+    hideFade(bubbleSheetView);
     // hideFade(autoPickStats)
     // hideFade(autoPickMain)
     autoPickStats.style.display = "none";
     autoPickMain.style.display = "none";
     matchViewSwitch.classList.remove("selected");
     autoPickSwitch.classList.remove("selected");
+    bubbleSheetSwitch.classList.remove("selected");
   }
 })();
