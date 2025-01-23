@@ -15,6 +15,7 @@
   --border-radius: 16px;
   --black: #000000;
   --font: Cairo, sans-serif;
+  --font-family: "Zilla Slab", serif;
 }
 
 html {

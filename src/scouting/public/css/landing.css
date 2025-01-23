@@ -86,7 +86,7 @@
   align-items: center;
   border: 2px solid #30a2ff;
   margin-left: 15px;
-  font-family: var(--font);
+  font-family: var(--font-family);
 }
 
 #landing .buttonz:hover {

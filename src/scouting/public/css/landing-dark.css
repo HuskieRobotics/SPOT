@@ -176,7 +176,7 @@
   align-items: center;
   border: 2px solid var(--light-blue);
   margin-left: 15px;
-  font-family: var(--font);
+  font-family: var(--font-family);
 }
 
 #landing .buttonz:hover {

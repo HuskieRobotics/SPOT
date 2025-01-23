@@ -31,10 +31,11 @@
   cursor: pointer;
   user-select: none;
   overflow: hidden;
-  padding: 5px;
+  padding: 7px;
   box-shadow: 0 0 8px 0px var(--black);
   transition: 0.2s border, 0.2s box-shadow;
 }
+
 #match-scouting .grid-button:active {
   box-shadow: 0 0 12px 0px var(--bg);
   font-size: 3.3vw;
