@@ -12,7 +12,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;700&family=Saira:wght@300;400;700&family=Tajawal:wght@300;400;700&display=swap" rel="stylesheet">
-    <link href="./css/global.css" rel="stylesheet" type="text/css" />
+    <link href="https://fonts.googleapis.com/css2?family=Zilla+Slab:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">    <link href="./css/global.css" rel="stylesheet" type="text/css" />
     <link href="./css/internal.css" rel="stylesheet" type="text/css" />
     <link rel="apple-touch-icon" sizes="180x180" href="./icons/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="./icons/favicon-32x32.png">
@@ -47,15 +47,16 @@
 	<div class="status">
 		<div class="connection-status">
 			<i class="reload fa-solid fa-arrow-rotate-right"></i>
-			<div class="socket-status">Not Connected</div>
+			<div class="socket-status" id="connection-status">Not Connected</div>
 		</div>
 		<div class="scouting-info"></div>
-		<div class="last-actions"></div>
+		<div class="last-actions" id="last-actions"></div>
 	</div>
 
     <% for (let filename of pages) { %>
         <div id=<%=filename.replace(".ejs","")%> class="page <%= filename === landingPage + ".ejs" ? "visible" : ""%>"><%- include(`pages/${filename}`) %></div>
     <% } %>
     <script src="./js/global.js"></script>
+    <script src="/js/settingsmenu.js"></script>
   </body>
 </html>
