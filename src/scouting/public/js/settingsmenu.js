@@ -8,7 +8,7 @@ function toggleSettingsMenu() {
 }
 
 function goToAnalysis() {
-  window.open("https://scouting.team3061.org/analysis/").focus();
+  window.open("https://spotdemo.team3061.org/analysis/").focus();
 }
 
 window.onclick = function (event) {
