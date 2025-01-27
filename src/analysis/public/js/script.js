@@ -486,6 +486,7 @@ if ("serviceWorker" in navigator) {
     bubbleSheetSwitch.addEventListener("click", () => {
       clearInterface();
       bubbleSheetSwitch.classList.add("selected");
+      bubbleGraphContainer.style.display = "block";
       showFade(bubbleSheetView);
     });
     const bubbleSheetContainer = document.getElementById("bubble-sheet-graph");
@@ -749,6 +750,7 @@ if ("serviceWorker" in navigator) {
     // hideFade(autoPickMain)
     autoPickStats.style.display = "none";
     autoPickMain.style.display = "none";
+    bubbleGraphContainer.style.display = "none";
     matchViewSwitch.classList.remove("selected");
     autoPickSwitch.classList.remove("selected");
     bubbleSheetSwitch.classList.remove("selected");
