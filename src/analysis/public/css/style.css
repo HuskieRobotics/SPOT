@@ -255,7 +255,7 @@ body {
   opacity: 1;
   transition: visibility 0s 0s, opacity 0.3s 0s;
 }
-
+#team-view-switch,
 #match-view-switch,
 #bubble-sheet-switch,
 #auto-pick-switch {
@@ -269,7 +269,7 @@ body {
   transition: 0.3s color, 0.3s background-color;
   margin-bottom: 10px;
 }
-
+#team-view-switch.selected,
 #match-view-switch.selected,
 #bubble-sheet-switch.selected,
 #auto-pick-switch.selected {

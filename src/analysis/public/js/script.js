@@ -572,12 +572,25 @@ if ("serviceWorker" in navigator) {
 
     Plotly.newPlot(bubbleSheetContainer, [trace], layout);
 
-    // Iterate through each team and extract the scores
-    //for (const [teamNumber, team] of Object.entries(dataset.teams)) {
-    //getPath(team, "avgAutoPoints", 0);
-    //getPath(team, "avgTeleopPoints", 0);
-    //}
+    //Compare teams UI functions
+
+    // Event listener for the "Compare Two Teams" button
+    document
+      .getElementById("compare-teams-switch")
+      .addEventListener("click", function () {
+        clearInterface();
+        compareTeamsSwitch.classList.add("selected");
+        autoPickSwitch.classList.remove("selected");
+        bubbleSheetSwitch.classList.remove("selected");
+        loadCompareTeams(dataset, modulesConfig);
+        showFade(compareTeamsView);
+      });
   }
+  // Iterate through each team and extract the scores
+  //for (const [teamNumber, team] of Object.entries(dataset.teams)) {
+  //getPath(team, "avgAutoPoints", 0);
+  //getPath(team, "avgTeleopPoints", 0);
+  //}
 
   //call setData on every module in matches
   async function setMatchModules(alliances) {
