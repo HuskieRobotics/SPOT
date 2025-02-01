@@ -282,8 +282,12 @@ class ScouterDisplay {
       this.scouter.state.scouterId;
     this.scouterElement.querySelector(".match-number").innerText =
       this.scouter.state.matchNumber;
-    this.scouterElement.querySelector(".robot-number").innerText =
-      this.scouter.state.robotNumber;
+    if(this.scouter.state.robotNumber) {
+      this.scouterElement.querySelector(".robot-number").style.display = null;
+      this.scouterElement.querySelector(".robot-number").innerText =
+        this.scouter.state.robotNumber;
+    }
+    else this.scouterElement.querySelector(".robot-number").style.display = "none";
 
     //update color
     const SCOUTER_STATUS_COLOR = {
