@@ -94,7 +94,7 @@ class QREncoder {
     ); // team number (16 bits)
     console.log("6");
     out += QREncoder.encodeValue(
-      parseInt(teamMatchPerformance.matchId_rand, "32"),
+      parseInt(teamMatchPerformance.matchId_rand, 32),
       2 ** 64 - 1,
       0,
       64
