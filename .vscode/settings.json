@@ -7,7 +7,7 @@
   "editor.tabSize": 2,
   "eslint.lintTask.enable": true,
   "eslint.workingDirectories": [{ "mode": "auto" }], // important for mono-repo projects
-  "files.autoSave": "onFocusChange", // hero
+  "files.autoSave": "afterDelay", // hero
   "prettier.endOfLine": "auto", // cross-platform
 
   // Language-Specific
