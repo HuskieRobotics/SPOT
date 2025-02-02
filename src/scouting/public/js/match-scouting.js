@@ -52,6 +52,42 @@ var previousTimer = [];
   const layers = deepClone(matchScoutingConfig.layout.layers);
   const buttons = layers.flat();
 
+  const algaePickupButtons = ["autoGroundPickupAlgae", "autoReefPickupAlgae", "teleopGroundPickupAlgae", "teleopReefPickupAlgae"];
+  const algaeScoreButtons = ["autoScoreAlgae", "teleopScoreAlgae", "autoAlgaeDrop", "autoMissProcessor", "autoMissNet", "teleopAlgaeDrop", "teleopMissProcessor", "teleopMissNet"];
+  const coralPickupButtons = ["autoGroundPickupCoral", "autoStationPickupCoral", "teleopGroundPickupCoral", "teleopStationPickupCoral", "preloadCoral"];
+  const coralScoreButtons = ["autoScoreCoral", "teleopScoreCoral", "autoCoralDrop", "autoMissCoral", "teleopCoralDrop", "teleopMissCoral", "preloadNone"];
+
+  function updateButtonStates() {
+    let hasAlgae = false,
+        hasCoral = false;
+    for(const action of actionQueue) {
+      if(algaePickupButtons.includes(action.id)) {
+        hasAlgae = true;
+      } else if(algaeScoreButtons.includes(action.id)) {
+        hasAlgae = false;
+      } else if(coralPickupButtons.includes(action.id)) {
+        hasCoral = true;
+      } else if(coralScoreButtons.includes(action.id)) {
+        hasCoral = false;
+      }
+    }
+    
+    for (const button of buttons) {
+      if (algaeScoreButtons.includes(button.id)) {
+        button.element.classList.toggle("disabled", !hasAlgae);
+      }
+      if (coralScoreButtons.includes(button.id)) {
+        button.element.classList.toggle("disabled", !hasCoral);
+      }
+      if (algaePickupButtons.includes(button.id)) {
+        button.element.classList.toggle("disabled", hasAlgae);
+      }
+      if (coralPickupButtons.includes(button.id)) {
+        button.element.classList.toggle("disabled", hasCoral);
+      }
+    }
+  }
+
   const buttonBuilders = {
     //an object to give buttons type specific things, button type: function (button)
     action: (button) => {
@@ -59,10 +95,11 @@ var previousTimer = [];
       button.element.addEventListener("click", () => {
         actionQueue.push({
           id: button.id,
-          ts: time,
+          ts: Date.now(),
         });
         doExecutables(button);
         updateLastAction();
+        updateButtonStates();
       });
     },
 
@@ -256,6 +293,7 @@ var previousTimer = [];
         }, 10);
         doExecutables(button);
         updateLastAction();
+        updateButtonStates();
       });
     },
   };
@@ -278,6 +316,7 @@ var previousTimer = [];
   }
 
   showLayer(0); //initially show layer 0
+  updateButtonStates(); //initially update button states
 
   function doExecutables(button) {
     for (const executable of button.executables) {
