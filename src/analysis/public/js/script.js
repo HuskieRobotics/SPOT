@@ -475,6 +475,7 @@ if ("serviceWorker" in navigator) {
       clearInterface();
       autoPickSwitch.classList.add("selected");
       bubbleSheetSwitch.classList.remove("selected");
+      teamCompareSwitch.classList.remove("selected");
       loadTeamsAutoPick(dataset, modulesConfig);
       showFade(autoPickView);
     });
@@ -486,6 +487,8 @@ if ("serviceWorker" in navigator) {
     bubbleSheetSwitch.addEventListener("click", () => {
       clearInterface();
       bubbleSheetSwitch.classList.add("selected");
+      autoPickSwitch.classList.remove("selected");
+      teamCompareSwitch.classList.remove("selected");
       bubbleGraphContainer.style.display = "block";
       showFade(bubbleSheetView);
     });
@@ -576,14 +579,14 @@ if ("serviceWorker" in navigator) {
 
     // Event listener for the "Compare Two Teams" button
     document
-      .getElementById("compare-teams-switch")
+      .getElementById("team-compare-switch")
       .addEventListener("click", function () {
         clearInterface();
-        compareTeamsSwitch.classList.add("selected");
+        teamCompareSwitch.classList.add("selected");
         autoPickSwitch.classList.remove("selected");
         bubbleSheetSwitch.classList.remove("selected");
         loadCompareTeams(dataset, modulesConfig);
-        showFade(compareTeamsView);
+        showFade(teamCompareView);
       });
   }
   // Iterate through each team and extract the scores
