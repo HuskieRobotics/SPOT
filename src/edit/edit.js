@@ -8,6 +8,4 @@ router.get("/", (req, res) => {
   res.render(__dirname + "/views/index.ejs");
 });
 
-router.use("/api", require("./routes/api.js"));
-
 module.exports = router;
