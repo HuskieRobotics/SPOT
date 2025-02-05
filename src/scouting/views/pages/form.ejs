@@ -16,13 +16,17 @@
   </div>
   <div>
     <label class="label">
-      <input type="number" class="input match-number" required />
+      <select type="number" class="input match-number" required onchange="updateSelectMenu()">
+        <option disabled selected>Put in a match number</option>
+      </select>
       <span>Match Number</span>
     </label>
   </div>
   <div>
     <label class="label">
-      <input type="text" class="input robot-number" required />
+      <select type="text" class="input robot-number" required>
+        <option disabled selected>Put in a team number</option>
+      </select>
       <span>Robot #</span>
     </label>
   </div>

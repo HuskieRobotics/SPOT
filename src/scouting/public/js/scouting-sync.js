@@ -1,5 +1,8 @@
 class ScoutingSync {
   static socket;
+  /**
+   * @type {{number: any;match_string: string;robots: {red: number[];blue: number[];};}[]}
+   */
   static matches;
 
   static SCOUTER_STATUS = {

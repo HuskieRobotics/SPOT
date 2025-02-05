@@ -13,6 +13,7 @@
   padding: 8px 12px;
   transition: 0.3s color, 0.3s border;
   outline: none;
+  min-width: 200px;
 }
 
 #form .input:focus {
