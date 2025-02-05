@@ -20,3 +20,32 @@ body {
   cursor: pointer;
   font-size: 16px;
 }
+
+.filter-container {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  padding: 10px;
+}
+
+.filter-input {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  flex: 1;
+}
+
+.match-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+}
+
+.trash-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+}
