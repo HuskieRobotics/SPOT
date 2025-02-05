@@ -34,6 +34,7 @@ function toggleDarkMode() {
   body.classList.toggle("dark-mode");
 
   if (body.classList.contains("dark-mode")) {
+    localStorage.setItem("darkMode", "true");
     menuImage.src = "/icons/menu-button-dark.png";
     logoImage.src = "/img/logo-dark-mode.png";
     document.documentElement.style.setProperty("--reload-color", "#efefef");
@@ -50,6 +51,7 @@ function toggleDarkMode() {
     wait.setAttribute("href", "css/waiting-dark.css");
     action.style.color = "#efefef";
   } else {
+    localStorage.setItem("darkMode", "false");
     menuImage.src = "/icons/menu-button.png";
     logoImage.src = "/img/logo.png";
     document.documentElement.style.setProperty("--reload-color", "#000000");
@@ -69,4 +71,22 @@ function toggleDarkMode() {
 
   var overlay = document.getElementById("settingsOverlay");
   overlay.style.display = "none";
+}
+
+if (localStorage.getItem("darkMode") === "true") {
+  var i = 0;
+  // I have no idea why it's switching back(immidiately) to light mode, but this should fix it
+  setTimeout(() => {
+    do {
+      i++
+      localStorage.setItem("darkMode", "true");
+      toggleDarkMode();
+      console.log("Attempting to enable dark mode:", i);
+      if(i > 100) {
+        localStorage.setItem("darkMode", "true");
+        console.warn("Failed to enable dark mode after 100 attempts");
+        break;
+      }
+    } while (localStorage.getItem("darkMode") === "false");
+  }, 1000);
 }
