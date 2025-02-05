@@ -100,7 +100,6 @@ var previousTimer = [];
 
     // Backup data to localStorage incase accidental refresh
     setTimeout(() => {
-      localStorage.setItem("inMatch", "true");
       localStorage.setItem("actions", JSON.stringify(actionQueue));
       localStorage.setItem("start", start);
     }, 2000);
@@ -262,6 +261,7 @@ var previousTimer = [];
           .map((x) => Number(x))
           .sort((a, b) => b - a);
         timerActive = true;
+        localStorage.setItem("inMatch", "true");
         button.timerInterval = setInterval(() => {
           if (time <= transitions[0]) {
             //move to the next transition if it is time
