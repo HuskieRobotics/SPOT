@@ -697,6 +697,26 @@ if ("serviceWorker" in navigator) {
     loadAutoPickList(dataset, modulesConfig);
     loadBubbleGraph(dataset, modulesConfig);
 
+    // Add sidebar toggle functionality
+    const mobileToggle = document.getElementById("mobile-sidebar-toggle");
+    const sidebar = document.getElementById("sidebar");
+
+    if (mobileToggle && sidebar) {
+      // Toggle sidebar when button is clicked
+      mobileToggle.addEventListener("click", function (e) {
+        e.stopPropagation();
+        sidebar.classList.toggle("sidebar-active");
+        sidebar.classList.toggle("sidebar-collapsed");
+      });
+
+      // Close sidebar when clicking outside
+      document.addEventListener("click", function (event) {
+        if (!sidebar.contains(event.target) && event.target !== mobileToggle) {
+          sidebar.classList.remove("sidebar-active");
+          sidebar.classList.add("sidebar-collapsed");
+        }
+      });
+    }
     searchInput.addEventListener("input", () => {
       if (searchInput.value !== "") {
         const sortedTeams = fuzzysort.go(

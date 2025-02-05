@@ -240,57 +240,237 @@
   bottom: 10px;
   transform: translateX(-50%);
 }
+/* Default sidebar styles */
+#sidebar {
+  width: 250px;
+  background-color: var(--bg);
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  overflow-y: auto;
+  transition: transform 0.3s ease;
+}
 
-@media only screen and (max-width: 600px) {
-  #landing .sign-in-text {
-    font-size: 3em;
+/* Hide sidebar by default on mobile */
+#sidebar.sidebar-collapsed {
+  transform: translateX(-100%);
+}
+
+/* Show sidebar when active on mobile */
+#sidebar.sidebar-active {
+  transform: translateX(0);
+}
+
+/* Styles for mobile devices (screens with a max width of 768px) */
+@media screen and (max-width: 768px) {
+  #mobile-sidebar-toggle {
+    display: block;
+    background-color: var(--bg);
+    color: var(--text);
     padding: 10px;
+    text-align: center;
+    cursor: pointer;
+    border: none;
+    width: 100%;
   }
 
-  #landing .logo {
-    height: 50vmin;
+  #sidebar {
+    width: 100%;
+    height: auto;
+    position: relative;
+    transform: translateY(-100%);
   }
 
-  #landing .auth-buttons {
-    width: 90%;
-    margin: 10px auto;
+  #sidebar.sidebar-collapsed {
+    transform: translateY(-100%);
   }
 
-  #landing .auth-buttons > div {
-    padding: 10px;
-    margin-bottom: 8px;
-  }
-
-  #landing .auth-buttons > div > i {
-    font-size: 1.25em;
-    padding: 10px;
-  }
-
-  #landing .auth-buttons > div > span {
-    font-size: 1.25em;
-  }
-
-  #landing .versionString {
-    font-size: 0.75em;
-    bottom: 5px;
+  #sidebar.sidebar-active {
+    transform: translateY(0);
   }
 }
 
-@media only screen and (min-width: 601px) {
-  #landing .sign-in-text {
-    font-size: 5em;
+/* Existing styles */
+#landing {
+  background-color: var(--bg, #efefef);
+}
+
+#landing .spinner-container {
+  width: 100%;
+  height: 100%;
+  background-color: var(--bg-alt);
+  transition: 0.2s opacity, 0.2s visibility;
+  visibility: hidden;
+  opacity: 0;
+  position: absolute;
+  z-index: 3;
+}
+
+#landing .spinner-container.visible {
+  opacity: 1;
+  visibility: unset;
+  transition: visibility 0s 0s, opacity 0.2s 0s;
+}
+
+@keyframes spinner {
+  0% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(180deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.spinner div {
+  position: absolute;
+  animation: spinner 0.35s linear infinite;
+  width: 240px;
+  height: 240px;
+  top: 5px;
+  left: 5px;
+  border-radius: 50%;
+  box-shadow: 0 5.75px 0 0 #30a2ff;
+  transform-origin: 120px 122.875px;
+}
+
+.spinner-body {
+  width: 250px;
+  height: 250px;
+  display: inline-block;
+  overflow: hidden;
+  background: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.spinner {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform: translateZ(0) scale(1);
+  backface-visibility: hidden;
+  transform-origin: 0 0; /* see note above */
+}
+/* Default sidebar styles */
+#sidebar {
+  width: 250px;
+  background-color: var(--bg);
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  overflow-y: auto;
+  transition: transform 0.3s ease;
+}
+
+/* Hide sidebar by default on mobile */
+#sidebar.sidebar-collapsed {
+  transform: translateX(-100%);
+}
+
+/* Show sidebar when active on mobile */
+#sidebar.sidebar-active {
+  transform: translateX(0);
+}
+
+/* Styles for mobile devices (screens with a max width of 768px) */
+@media screen and (max-width: 768px) {
+  #mobile-sidebar-toggle {
+    display: block;
+    background-color: var(--bg);
+    color: var(--text);
+    padding: 10px;
+    text-align: center;
+    cursor: pointer;
+    border: none;
+    width: 100%;
   }
 
-  #landing .logo {
-    height: 90vmin;
+  #sidebar {
+    width: 100%;
+    height: auto;
+    position: relative;
+    transform: translateY(-100%);
   }
 
-  #landing .auth-buttons > div > i {
-    font-size: 1.75em;
-    padding: 14px;
+  #sidebar.sidebar-collapsed {
+    transform: translateY(-100%);
   }
 
-  #landing .auth-buttons > div > span {
-    font-size: 1.75em;
+  #sidebar.sidebar-active {
+    transform: translateY(0);
   }
+}
+
+/* Existing styles */
+#landing {
+  background-color: var(--bg, #efefef);
+}
+
+#landing .spinner-container {
+  width: 100%;
+  height: 100%;
+  background-color: var(--bg-alt);
+  transition: 0.2s opacity, 0.2s visibility;
+  visibility: hidden;
+  opacity: 0;
+  position: absolute;
+  z-index: 3;
+}
+
+#landing .spinner-container.visible {
+  opacity: 1;
+  visibility: unset;
+  transition: visibility 0s 0s, opacity 0.2s 0s;
+}
+
+@keyframes spinner {
+  0% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(180deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.spinner div {
+  position: absolute;
+  animation: spinner 0.35s linear infinite;
+  width: 240px;
+  height: 240px;
+  top: 5px;
+  left: 5px;
+  border-radius: 50%;
+  box-shadow: 0 5.75px 0 0 #30a2ff;
+  transform-origin: 120px 122.875px;
+}
+
+.spinner-body {
+  width: 250px;
+  height: 250px;
+  display: inline-block;
+  overflow: hidden;
+  background: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.spinner {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform: translateZ(0) scale(1);
+  backface-visibility: hidden;
+  transform-origin: 0 0; /* see note above */
 }
