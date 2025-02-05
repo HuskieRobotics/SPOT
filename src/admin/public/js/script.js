@@ -150,9 +150,8 @@ async function updateMatches(accessCode) {
     let matchElement = document.createElement("div");
     matchElement.classList.add("match");
     matchElement.innerHTML = `
-        <div class="match-header"><strong>${match.number}</strong> - ${
-      match.match_string.toUpperCase().split("_")[0]
-    }-<strong>${match.match_string.toUpperCase().split("_")[1]}</strong></div>
+        <div class="match-header"><strong>${match.number}</strong> - ${match.match_string.toUpperCase().split("_")[0]
+      }-<strong>${match.match_string.toUpperCase().split("_")[1]}</strong></div>
         <input type="checkbox" class="match-select">
         <div class="match-teams red"></div>
         <div class="match-teams blue"></div>
@@ -199,8 +198,7 @@ async function updateMatches(accessCode) {
             //if the match is successfully updated on the server-side
             new Popup(
               "success",
-              `Match ${
-                match.number
+              `Match ${match.number
               } - ${match.match_string.toUpperCase()} Selected!`,
               2000
             );
@@ -282,7 +280,7 @@ class ScouterDisplay {
       this.scouter.state.scouterId;
     this.scouterElement.querySelector(".match-number").innerText =
       this.scouter.state.matchNumber;
-    if(this.scouter.state.robotNumber) {
+    if (this.scouter.state.robotNumber) {
       this.scouterElement.querySelector(".robot-number").style.display = null;
       this.scouterElement.querySelector(".robot-number").innerText =
         this.scouter.state.robotNumber;
@@ -343,7 +341,7 @@ class ScouterDisplay {
       this.scouterElement.querySelector(".match-number").style.borderColor =
         DISCONNECTED_COLOR;
       this.scouterElement.querySelector(".scouter-status").innerText =
-        "ADMIN DISCONNECT";
+        "DISCONNECT";
     }
   }
   destruct() {

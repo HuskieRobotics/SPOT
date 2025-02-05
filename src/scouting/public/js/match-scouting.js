@@ -11,6 +11,17 @@ var previousTimer = [];
   var time = matchScoutingConfig.timing.totalTime;
   var teleopTime = 135000;
   var timerActive = false;
+  /**
+   * @type {Number}
+   */
+  var start = null, displayText = "";
+
+  // Restore match state from localStorage if inMatch is true
+  if (localStorage.getItem("inMatch") === "true") {
+    actionQueue = JSON.parse(localStorage.getItem("actions")) || [];
+    start = Number(localStorage.getItem("start")) || null;
+    timerActive = true;
+  }
 
   //intialize variables
   let varNames = Object.keys(matchScoutingConfig.variables);
@@ -59,19 +70,19 @@ var previousTimer = [];
 
   function updateButtonStates() {
     let hasAlgae = false,
-        hasCoral = false;
-    for(const action of actionQueue) {
-      if(algaePickupButtons.includes(action.id)) {
+      hasCoral = false;
+    for (const action of actionQueue) {
+      if (algaePickupButtons.includes(action.id)) {
         hasAlgae = true;
-      } else if(algaeScoreButtons.includes(action.id)) {
+      } else if (algaeScoreButtons.includes(action.id)) {
         hasAlgae = false;
-      } else if(coralPickupButtons.includes(action.id)) {
+      } else if (coralPickupButtons.includes(action.id)) {
         hasCoral = true;
-      } else if(coralScoreButtons.includes(action.id)) {
+      } else if (coralScoreButtons.includes(action.id)) {
         hasCoral = false;
       }
     }
-    
+
     for (const button of buttons) {
       if (algaeScoreButtons.includes(button.id)) {
         button.element.classList.toggle("disabled", !hasAlgae);
@@ -86,6 +97,13 @@ var previousTimer = [];
         button.element.classList.toggle("disabled", hasCoral);
       }
     }
+
+    // Backup data to localStorage incase accidental refresh
+    setTimeout(() => {
+      localStorage.setItem("inMatch", "true");
+      localStorage.setItem("actions", JSON.stringify(actionQueue));
+      localStorage.setItem("start", start);
+    }, 2000);
   }
 
   const buttonBuilders = {
@@ -150,6 +168,7 @@ var previousTimer = [];
         }
         doExecutables(button, time);
         updateLastAction();
+        updateButtonStates();
       });
     },
 
@@ -182,6 +201,8 @@ var previousTimer = [];
           const teamMatchPerformance = new TeamMatchPerformance(actionQueue)
             .data;
           await LocalData.storeTeamMatchPerformance(teamMatchPerformance);
+
+          localStorage.setItem("inMatch", "false"); // Set inMatch to false when match ends
 
           if (await ScoutingSync.sync()) {
             await ScoutingSync.updateState({
@@ -231,8 +252,7 @@ var previousTimer = [];
           status: ScoutingSync.SCOUTER_STATUS.SCOUTING,
         }); //tell the server that you started scouting
 
-        let displayText = "";
-        let start = Date.now();
+        start = Date.now();
         devEnd = () => {
           start = Date.now() - (matchScoutingConfig.timing.totalTime - 1);
         };
@@ -301,7 +321,7 @@ var previousTimer = [];
   //create button objects in layers
   for (const layer of layers) {
     for (const button of layer) {
-      button.element = document.createElement("div");
+      button.element = document.createElement("button");
 
       //give the button element its properties
       button.element.innerText = button.displayText || button.id;
@@ -435,5 +455,73 @@ var previousTimer = [];
         actionQueue: filteredActionQueue,
       };
     }
+  }
+
+  // Restore button states and last action if inMatch is true
+  if (localStorage.getItem("inMatch") === "true") {
+    document.querySelector("#form .save").click();
+    switchPage("match-scouting");
+    const button = buttons
+      .find((x) => x.type === "match-control");
+    devEnd = () => {
+      start = Date.now() - (matchScoutingConfig.timing.totalTime - 1);
+    };
+    const transitions = Object.keys(
+      matchScoutingConfig.timing.timeTransitions
+    )
+      .map((x) => Number(x))
+      .sort((a, b) => b - a);
+    timerActive = true;
+    button.timerInterval = setInterval(() => {
+      if (time <= transitions[0]) {
+        //move to the next transition if it is time
+        displayText =
+          matchScoutingConfig.timing.timeTransitions[transitions[0]]
+            .displayText;
+        for (let key of Object.keys(
+          matchScoutingConfig.timing.timeTransitions[transitions[0]]
+            .variables
+        )) {
+          variables[key].previous.push(variables[key].current);
+          variables[key].current =
+            matchScoutingConfig.timing.timeTransitions[
+              transitions[0]
+            ].variables[key];
+          console.log(`set ${key} to ${variables[key]}`);
+        }
+        showLayer(
+          matchScoutingConfig.timing.timeTransitions[transitions[0]].layer,
+          matchScoutingConfig.timing.timeTransitions[transitions[0]]
+            .conditional,
+          matchScoutingConfig.timing.timeTransitions[transitions[0]].always
+        );
+        transitions.shift();
+      }
+      if (time <= 0) {
+        buttons
+          .filter((x) => x.type === "match-control")
+          .forEach((b) => {
+            //update all match-control buttons (even those in different layers)
+            b.element.innerText = "Match Complete";
+            setTimeout(() => {
+              b.element.innerText = "Submit Match";
+            }, 2000);
+          });
+        clearInterval(button.timerInterval); //clear the timing interval
+
+        return;
+      }
+      time = matchScoutingConfig.timing.totalTime - (Date.now() - start);
+      buttons
+        .filter((x) => x.type === "match-control")
+        .forEach((b) => {
+          //update all match-control buttons (even those in different layers)
+          b.element.innerText = `${(time / 1000).toFixed(
+            2
+          )} | ${displayText}`;
+        });
+    }, 10);
+    updateButtonStates();
+    updateLastAction();
   }
 })();

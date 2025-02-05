@@ -12,5 +12,8 @@
 
   // Language-Specific
   "javascript.updateImportsOnFileMove.enabled": "always",
-  "cSpell.words": []
+  "cSpell.words": [],
+  "[javascript]": {
+    "editor.defaultFormatter": "vscode.typescript-language-features"
+  }
 }

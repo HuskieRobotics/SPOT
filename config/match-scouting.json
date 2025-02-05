@@ -81,7 +81,7 @@
           "id": "autoGroundPickupCoral",
           "displayText": "Pickup Ground",
           "gridArea": ["2", "1", "4", "3"],
-          "class": "lightCoral",
+          "class": "coral",
           "type": "action",
           "executables": [
             {
@@ -94,7 +94,7 @@
           "id": "autoStationPickupCoral",
           "displayText": "Pickup Station",
           "gridArea": ["4", "1", "6", "3"],
-          "class": "lightCoral",
+          "class": "coral",
           "type": "action",
           "executables": []
         },
@@ -131,7 +131,7 @@
           "id": "autoGroundPickupAlgae",
           "displayText": "Pickup Ground",
           "gridArea": ["2", "8", "4", "10"],
-          "class": "lightbluegreen",
+          "class": "bluegreen",
           "type": "action",
           "executables": [
             {
@@ -144,7 +144,7 @@
           "id": "autoReefPickupAlgae",
           "displayText": "Pickup Reef",
           "gridArea": ["4", "8", "6", "10"],
-          "class": "lightbluegreen",
+          "class": "bluegreen",
           "type": "action",
           "executables": []
         },
@@ -199,7 +199,7 @@
           "id": "teleopGroundPickupCoral",
           "displayText": "Pickup Ground",
           "gridArea": ["2", "1", "4", "3"],
-          "class": "lightCoral",
+          "class": "coral",
           "type": "action",
           "executables": []
         },
@@ -207,7 +207,7 @@
           "id": "teleopStationPickupCoral",
           "displayText": "Pickup Station",
           "gridArea": ["4", "1", "6", "3"],
-          "class": "lightCoral",
+          "class": "coral",
           "type": "action",
           "executables": []
         },
@@ -244,7 +244,7 @@
           "id": "teleopGroundPickupAlgae",
           "displayText": "Pickup Ground",
           "gridArea": ["2", "8", "4", "10"],
-          "class": "lightbluegreen",
+          "class": "bluegreen",
           "type": "action",
           "executables": []
         },
@@ -252,7 +252,7 @@
           "id": "teleopReefPickupAlgae",
           "displayText": "Pickup Reef",
           "gridArea": ["4", "8", "6", "10"],
-          "class": "lightbluegreen",
+          "class": "bluegreen",
           "type": "action",
           "executables": []
         },

@@ -35,10 +35,15 @@
   padding: 5px;
   box-shadow: 0 0 8px 0px #838383;
   transition: 0.2s border, 0.2s box-shadow;
+  border: none;
 }
 #match-scouting .grid-button:active {
   box-shadow: 0 0 12px 0px #222222;
   font-size: 3.3vw;
+}
+
+#match-scouting .grid-button:focus {
+  border: lightgreen solid 10px;
 }
 
 #match-scouting .grid-button.gray {
@@ -121,7 +126,8 @@
   background-color: #72409c;
 }
 
-.disabled {
+#match-scouting .grid-button.disabled {
   opacity: 0.6;
   pointer-events: none;
+  border: red solid 5px !important;
 }
