@@ -175,7 +175,12 @@
           "gridArea": ["6", "4", "7", "7"],
           "class": "gray",
           "type": "action",
-          "executables": []
+          "executables": [
+            {
+              "type": "leave",
+              "args": []
+            }
+          ]
         }
       ],
       [
