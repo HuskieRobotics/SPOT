@@ -21,6 +21,7 @@ class ScoutingSync {
     scouterId: "",
     robotNumber: "",
     matchNumber: 0,
+    error: false
   };
 
   static async initialize() {
@@ -33,6 +34,7 @@ class ScoutingSync {
       if (ScoutingSync.state.connected) return; //only run connect events once
       ScoutingSync.state.offlineMode = false; //the user connected so disable offlineMode
       ScoutingSync.state.connected = true;
+      ScoutingSync.state.error = false;
       ScoutingSync.socket.emit("updateState", ScoutingSync.state); //send the server your initial state
       ScoutingSync.socket.emit("updateScouterID", ScoutingSync.scouterId); //send the server your scouter id
       document.querySelector(".status .socket-status").innerText = "Connected";
@@ -56,7 +58,12 @@ class ScoutingSync {
 
     ScoutingSync.socket.on(
       "connect_error",
-      (err) => new Popup("error", err.toString())
+      (err) => {
+        if (!ScoutingSync.state.error) {
+          new Popup("error", err.toString());
+          ScoutingSync.state.error = true;
+        }
+      }
     );
 
     ScoutingSync.socket.on("disconnect", () => {
