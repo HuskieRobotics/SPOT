@@ -20,7 +20,7 @@ var previousTimer = [];
   if (localStorage.getItem("inMatch") === "true") {
     actionQueue = JSON.parse(localStorage.getItem("actions")) || [];
     start = Number(localStorage.getItem("start")) || null;
-    timerActive = true;
+    timerActive = localStorage.getItem("timerActive") === "true";
   }
 
   //intialize variables
@@ -102,6 +102,7 @@ var previousTimer = [];
     setTimeout(() => {
       localStorage.setItem("actions", JSON.stringify(actionQueue));
       localStorage.setItem("start", start);
+      localStorage.setItem("timerActive", JSON.stringify(timerActive));
     }, 2000);
   }
 
@@ -471,7 +472,7 @@ var previousTimer = [];
     )
       .map((x) => Number(x))
       .sort((a, b) => b - a);
-    timerActive = true;
+    timerActive = localStorage.getItem("timerActive") === "true";
     button.timerInterval = setInterval(() => {
       if (time <= transitions[0]) {
         //move to the next transition if it is time
