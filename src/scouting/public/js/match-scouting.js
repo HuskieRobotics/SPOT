@@ -18,9 +18,13 @@ var previousTimer = [];
 
   // Restore match state from localStorage if inMatch is true
   if (localStorage.getItem("inMatch") === "true") {
-    actionQueue = JSON.parse(localStorage.getItem("actions")) || [];
-    start = Number(localStorage.getItem("start")) || null;
-    timerActive = localStorage.getItem("timerActive") === "true";
+    try {
+      actionQueue = JSON.parse(localStorage.getItem("actions")) || [];
+      start = Number(localStorage.getItem("start")) || null;
+      timerActive = localStorage.getItem("timerActive") === "true";
+    } catch {
+      localStorage.clear();
+    }
   }
 
   //intialize variables
