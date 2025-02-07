@@ -5,30 +5,34 @@
 __TEAM__
 new DataTransformer("average", (dataset, outputPath, options) => {
     for (const [teamNumber, team] of Object.entries(dataset.teams)) {
-        const teamTmps = dataset.tmps.filter(x=>x.robotNumber == teamNumber); //only the tmps that are this team's
-        const pathResult = getPath(teamTmps[0], options.path)
+        const teamTmps = dataset.tmps.filter(x => x.robotNumber == teamNumber); //only the tmps that are this team's
+        try {
+            const pathResult = getPath(teamTmps[0], options.path)
 
-        if (typeof pathResult == "object" && pathResult !== null) { //average all properties in object
-            let out = {};
-            for (let subpath in getPath(teamTmps[0], options.path)) {
-                
-                const filteredTeamTmps = teamTmps.filter((tmp) => getPath(tmp, `${options.path}.${subpath}`,null) !== null)
+            if (typeof pathResult == "object" && pathResult !== null) { //average all properties in object
+                let out = {};
+                for (let subpath in getPath(teamTmps[0], options.path)) {
+
+                    const filteredTeamTmps = teamTmps.filter((tmp) => getPath(tmp, `${options.path}.${subpath}`, null) !== null)
+                    let average = filteredTeamTmps.reduce((acc, tmp) => {
+                        return acc + getPath(tmp, `${options.path}.${subpath}`) //if this is causing an error, your tmps may not have the same schema (eg. some keys (which you are trying to average) are not defined in some tmps)
+                    }, 0) / filteredTeamTmps.length;
+                    out[subpath] = average;
+                }
+                setPath(team, outputPath, out)
+            } else { //normal numeric / null average
+                const filteredTeamTmps = teamTmps.filter((tmp) => getPath(tmp, options.path) !== null)
                 let average = filteredTeamTmps.reduce((acc, tmp) => {
-                    return acc + getPath(tmp, `${options.path}.${subpath}`) //if this is causing an error, your tmps may not have the same schema (eg. some keys (which you are trying to average) are not defined in some tmps)
-                }, 0) / filteredTeamTmps.length;
-                out[subpath] = average;
-            }
-            setPath(team, outputPath, out)
-        } else { //normal numeric / null average
-            const filteredTeamTmps = teamTmps.filter((tmp) => getPath(tmp, options.path) !== null)
-            let average = filteredTeamTmps.reduce((acc, tmp) => {
-                return acc + getPath(tmp, options.path)
-            }, 0) / filteredTeamTmps.length
+                    return acc + getPath(tmp, options.path)
+                }, 0) / filteredTeamTmps.length
 
-            setPath(team, outputPath, average)
+                setPath(team, outputPath, average)
+            }
+        } catch (error) {
+            console.error(`Error processing team ${teamNumber}: ${error.message}`);
         }
     }
 
     return dataset;
 })
-__/TEAM__
+__ / TEAM__

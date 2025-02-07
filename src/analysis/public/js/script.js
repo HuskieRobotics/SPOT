@@ -130,7 +130,7 @@ if ("serviceWorker" in navigator) {
       console.log(teamNumber);
       if (
         dataset.tmps.filter((tmp) => tmp.robotNumber == teamNumber).length >
-          0 &&
+        0 &&
         allTeams[teamNumber]
       ) {
         //

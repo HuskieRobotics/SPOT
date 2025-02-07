@@ -1,4 +1,4 @@
-class ThrowError {} //this is probably not best practice, I tried to find a better way but no luck
+class ThrowError { } //this is probably not best practice, I tried to find a better way but no luck
 
 function createDOMElement(tag, classes, id) {
   const element = document.createElement(tag);
@@ -18,7 +18,7 @@ function clearDiv(div) {
 }
 
 function getPath(obj, path, ifnone = ThrowError) {
-  if (typeof obj === "undefined") {
+  if (typeof obj === "undefined" || obj === null) {
     if (ifnone == ThrowError) {
       throw new Error(`path ${path} not traversable!`);
     } else {
