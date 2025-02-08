@@ -230,13 +230,16 @@ var previousTimer = [];
             qrImg.classList.add("qr-img");
 
             qrImg.src = dataUrl;
-            qrText.innerText = "Tap to Dismiss";
+            qrText.innerText = "Double tap to Dismiss";
 
             qrContainer.appendChild(qrImg);
             qrContainer.appendChild(qrText);
             document.body.appendChild(qrContainer);
 
+            var lastTap = 0;
             qrContainer.addEventListener("click", () => {
+              if (Date.now() - lastTap > 200)
+                return lastTap = Date.now();
               document.body.removeChild(qrContainer);
               window.location.reload();
             });
