@@ -68,9 +68,11 @@ var previousTimer = [];
   const buttons = layers.flat();
 
   const algaePickupButtons = ["autoGroundPickupAlgae", "autoReefPickupAlgae", "teleopGroundPickupAlgae", "teleopReefPickupAlgae"];
-  const algaeScoreButtons = ["autoScoreAlgae", "teleopScoreAlgae", "autoAlgaeDrop", "autoMissProcessor", "autoMissNet", "teleopAlgaeDrop", "teleopMissProcessor", "teleopMissNet"];
+  const algaeScoreActions = ["autoScoreProcessor", "teleopScoreProcessor", "autoScoreNet", "teleopScoreNet", "autoAlgaeDrop", "autoMissProcessor", "autoMissNet", "teleopAlgaeDrop", "teleopMissProcessor", "teleopMissNet"];
+  const algaeScoreButtons = ["autoScoreAlgae", "teleopScoreAlgae"];
   const coralPickupButtons = ["autoGroundPickupCoral", "autoStationPickupCoral", "teleopGroundPickupCoral", "teleopStationPickupCoral", "preloadCoral"];
-  const coralScoreButtons = ["autoScoreCoral", "teleopScoreCoral", "autoCoralDrop", "autoMissCoral", "teleopCoralDrop", "teleopMissCoral", "preloadNone"];
+  const coralScoreActions = ["teleopl1", "autol1", "teleopl2", "autol2", "teleopl3", "autol3", "teleopl4", "autol4", "autoCoralDrop", "autoMissCoral", "teleopCoralDrop", "teleopMissCoral", "preloadNone"];
+  const coralScoreButtons = ["autoScoreCoral", "teleopScoreCoral"];
 
   function updateButtonStates() {
     let hasAlgae = false,
@@ -78,20 +80,20 @@ var previousTimer = [];
     for (const action of actionQueue) {
       if (algaePickupButtons.includes(action.id)) {
         hasAlgae = true;
-      } else if (algaeScoreButtons.includes(action.id)) {
+      } else if (algaeScoreActions.includes(action.id)) {
         hasAlgae = false;
       } else if (coralPickupButtons.includes(action.id)) {
         hasCoral = true;
-      } else if (coralScoreButtons.includes(action.id)) {
+      } else if (coralScoreActions.includes(action.id)) {
         hasCoral = false;
       }
     }
 
     for (const button of buttons) {
-      if (algaeScoreButtons.includes(button.id)) {
+      if (algaeScoreActions.includes(button.id) || algaeScoreButtons.includes(button.id)) {
         button.element.classList.toggle("disabled", !hasAlgae);
       }
-      if (coralScoreButtons.includes(button.id)) {
+      if (coralScoreActions.includes(button.id) || coralScoreButtons.includes(button.id)) {
         button.element.classList.toggle("disabled", !hasCoral);
       }
       if (algaePickupButtons.includes(button.id)) {
