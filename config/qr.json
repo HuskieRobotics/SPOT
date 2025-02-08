@@ -1,6 +1,7 @@
 {
   "ACTION_SCHEMA": [
     { "key": "id", "bits": 8 },
-    { "key": "ts", "bits": 32 }
-  ]
+    { "key": "ts", "bits": 25 }
+  ],
+  "TS_START": 1739034545411
 }

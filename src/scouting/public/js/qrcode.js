@@ -119,7 +119,8 @@ class QREncoder {
           console.log("ts:");
           console.log(parseInt(getVal(action, key)));
           out += QREncoder.encodeValue(
-            parseInt(getVal(action, key)),
+            parseInt(getVal(action, key)) -
+              (key == "ts" ? qrConfig.TS_START || 0 : 0),
             2 ** bits - 1,
             0,
             bits

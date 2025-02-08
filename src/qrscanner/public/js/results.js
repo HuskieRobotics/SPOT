@@ -308,6 +308,11 @@ async function decodeQRCodeUrl(image_url) {
     for (let { key, bits } of ACTION_SCHEMA) {
       if (key == "id") {
         action[key] = ID_ENUM_REVERSE[parseInt(nextAction.slice(0, bits), 2)];
+      } else if (key == "ts") {
+        action[key] =
+          parseInt(nextAction.slice(0, bits), 2) +
+          (key == "ts" ? qrConfig.TS_START || 0 : 0);
+        nextAction = nextAction.slice(bits);
       } else {
         action[key] = parseInt(nextAction.slice(0, bits), 2);
         nextAction = nextAction.slice(bits);
