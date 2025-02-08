@@ -240,6 +240,7 @@ var previousTimer = [];
             qrContainer.addEventListener("click", () => {
               if (Date.now() - lastTap > 200)
                 return lastTap = Date.now();
+              localStorage.setItem("prevMatchNum", `${teamMatchPerformance.matchNumber}`);
               document.body.removeChild(qrContainer);
               window.location.reload();
             });

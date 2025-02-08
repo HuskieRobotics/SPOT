@@ -49,8 +49,11 @@ function updateForm() {
       for (let i = matchNum.options.length - 1; i >= 0; i--) {
         matchNum.remove(i);
       }
-      ScoutingSync.matches.forEach((robot) => {
-        matchNum.add(new Option(`Match #${robot.number}`, `${robot.number}`));
+      const nextMatch = Number(localStorage.getItem("prevMatchNum") || 0) + 1;
+      ScoutingSync.matches.forEach((match) => {
+        const opt = new Option(`Match #${match.number}`, `${match.number}`);
+        if(match.number === nextMatch) opt.selected = true;
+        matchNum.add(opt);
       });
       updateSelectMenu();
     } else {
