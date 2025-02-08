@@ -35,3 +35,20 @@ if (fs.existsSync("config/config.json")) {
   );
   app.use("/", require("./setup/setup.js"));
 }
+
+setTimeout(() =>
+  fetch(`http://localhost:${process.env.PORT || 8080}/schedule/api/matches`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(Array(10).fill(0).map((v, i) => ({
+      number: i,
+      match_string: `2023temp_q${i}`,
+      robots: {
+        red: [Math.floor(Math.random() * 10000).toString(), Math.floor(Math.random() * 10000).toString(), Math.floor(Math.random() * 10000).toString()],
+        blue: [Math.floor(Math.random() * 10000).toString(), Math.floor(Math.random() * 10000).toString(), Math.floor(Math.random() * 10000).toString()],
+      },
+    }))),
+  }).then(() => console.log("Successfully applied example schedule"))
+    .catch(e => console.error("Failed to apply example schedule", e)), 5000);
