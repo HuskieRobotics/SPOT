@@ -76,8 +76,15 @@ function updateSelectMenu() {
   }
   const match = ScoutingSync.matches.find((match) => `${match.number}` == document.querySelector("#form .match-number").selectedOptions.item(0).value);
   if (match) {
-    [...match.robots.red, ...match.robots.blue].forEach((robot) => {
-      const opt = new Option(`${match.robots.red.includes(robot) ? "Red " : "Blue"} | ${robot}`, `${robot}`);
+    const deviceTeam = localStorage.getItem("defaultTeam");
+    match.robots.red.forEach((robot, i) => {
+      const opt = new Option(`Red  | ${robot}`, `${robot}`);
+      if (deviceTeam === `R${i + 1}`) opt.selected = true;
+      robotNum.add(opt);
+    });
+    match.robots.blue.forEach((robot, i) => {
+      const opt = new Option(`Blue | ${robot}`, `${robot}`);
+      if(deviceTeam === `B${i + 1}`) opt.selected = true;
       robotNum.add(opt);
     });
   } else {

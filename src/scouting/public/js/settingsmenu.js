@@ -5,6 +5,19 @@ function toggleSettingsMenu() {
   } else {
     overlay.style.display = "none";
   }
+
+  /**
+   * @type {HTMLSelectElement}
+   */
+  const defTeamSelector = document.querySelector("#defaultTeam");
+  try {
+    const defTeam = localStorage.getItem("defaultTeam");
+    // Convert R1 - B3 to 0 - 6, then set the selected option
+    defTeamSelector.options[(defTeam[0] == "B") * 3 + Number(defTeam[1])].selected = true;
+  } catch (e) {
+    console.error("Can't restore select menu option", e);
+    defTeamSelector.options[0].selected = true;
+  }
 }
 
 function goToAnalysis() {
@@ -73,6 +86,16 @@ function toggleDarkMode() {
   overlay.style.display = "none";
 }
 
+// `this` = Select menu with D, R1, R2, R3, B1, B2, B3
+function setDefaultTeam() {
+  /**
+   * @type {HTMLSelectElement}
+   */
+  const defTeamSelector = document.querySelector("#defaultTeam");
+  localStorage.setItem("defaultTeam", defTeamSelector.options[defTeamSelector.selectedIndex].value);
+  console.log("Set default team to", localStorage.getItem("defaultTeam"));
+}
+
 if (localStorage.getItem("darkMode") === "true") {
   var i = 0;
   // I have no idea why it's switching back(immidiately) to light mode, but this should fix it
@@ -82,7 +105,7 @@ if (localStorage.getItem("darkMode") === "true") {
       localStorage.setItem("darkMode", "true");
       toggleDarkMode();
       console.log("Attempting to enable dark mode:", i);
-      if(i > 100) {
+      if (i > 100) {
         localStorage.setItem("darkMode", "true");
         console.warn("Failed to enable dark mode after 100 attempts");
         break;
