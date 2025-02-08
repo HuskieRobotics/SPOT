@@ -302,7 +302,7 @@ async function decodeQRCodeUrl(image_url) {
 
   // This code was like 3 years old when it was handed down to me with absolutely zero
   // documentation, I have no idea how it works but it does
-  while (nextAction.slice(0, 8) != "11111111") {
+  while (nextAction.length > 0 && nextAction.slice(0, 8) != "11111111") {
     let action = {};
 
     for (let { key, bits } of ACTION_SCHEMA) {
