@@ -579,6 +579,42 @@ if ("serviceWorker" in navigator) {
     //}
   }
 
+  async function loadEventSwitch(dataset, modulesConfig) {
+    //add event listener to "AutoPickList" button to set reset UI and switch to autopicklist tab
+    currentEventSwitch.addEventListener("click", () => {
+      clearInterface();
+      currentEventSwitch.classList.add("selected");
+      showFade(eventSelectView);
+    });
+  }
+  // Add to document initialization
+  const eventSelectView = document.getElementById("event-select-view");
+  const eventSwitchButton = document.getElementById("event-switch-button");
+
+  // Add event switch button handler
+  eventSwitchButton.addEventListener("click", () => {
+    clearInterface();
+    eventSwitchButton.classList.add("selected");
+    showFade(eventSelectView);
+    loadEventsList();
+  });
+
+  // Add function to load events
+  async function loadEventsList() {
+    const eventsList = document.getElementById("events-list");
+    const events = await fetchEvents();
+
+    eventsList.innerHTML = "";
+    events.forEach((event) => {
+      const eventDiv = document.createElement("div");
+      eventDiv.className = "event-item";
+      eventDiv.textContent = `${event.name} (${event.year})`;
+      eventDiv.addEventListener("click", () => {
+        selectEvent(event);
+      });
+      eventsList.appendChild(eventDiv);
+    });
+  }
   //call setData on every module in matches
   async function setMatchModules(alliances) {
     for (const module of modules.match.left) {

@@ -258,7 +258,8 @@ body {
 
 #match-view-switch,
 #bubble-sheet-switch,
-#auto-pick-switch {
+#auto-pick-switch,
+#current-event-switch {
   background-color: var(--bg);
   border: 3px solid var(--accent);
   border-radius: var(--border-radius);
@@ -272,7 +273,8 @@ body {
 
 #match-view-switch.selected,
 #bubble-sheet-switch.selected,
-#auto-pick-switch.selected {
+#auto-pick-switch.selected,
+#current-event-switch.selected {
   background-color: var(--accent);
   color: var(--bg-alt);
 }
