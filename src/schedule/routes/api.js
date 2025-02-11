@@ -9,7 +9,8 @@ var tempTeams = [];
 router.get("/auth", (req, res) => {
   if (config.secrets.ACCESS_CODE === "") {
     res.json({ status: 2 });
-  } else if (config.secrets.ACCESS_CODE == req.headers.authorization) {
+  } else if (config.secrets.ACCESS_CODE == req.headers.authorization || req.cookies.auth == config.secrets.ACCESS_CODE) {
+    res.cookie("auth", config.secrets.ACCESS_CODE);
     res.json({ status: 1 });
   } else {
     res.json({ status: 0 });
