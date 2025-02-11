@@ -10,7 +10,7 @@
   --green: #4caf50;
   --placeholder: #a3a3a3;
   --border-radius: 16px;
-  --font: Cairo, sans-serif;
+  --font: "Cairo", sans-serif;
 }
 
 html {

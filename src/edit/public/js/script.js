@@ -97,13 +97,55 @@
         const listItem = document.createElement("div");
         listItem.classList.add("match-item");
 
+        // Create a container for the top row (arrow, info, and trash)
+        const topRow = document.createElement("div");
+        topRow.classList.add("match-item-top");
+
+        const dropdownButton = document.createElement("button");
+        dropdownButton.textContent = "▼";
+        dropdownButton.classList.add("dropdown-button");
+        topRow.appendChild(dropdownButton);
+
         const matchInfo = document.createElement("span");
         matchInfo.textContent = `Match: ${match.matchNumber}, Robot: ${match.robotNumber}, Scouter: ${match.scouterId}`;
-        listItem.appendChild(matchInfo);
+        matchInfo.classList.add("match-info");
+        topRow.appendChild(matchInfo);
 
         const trashButton = document.createElement("button");
         trashButton.textContent = "🗑️";
         trashButton.classList.add("trash-button");
+        topRow.appendChild(trashButton);
+
+        listItem.appendChild(topRow);
+
+        // Add dropdown content after the top row
+        const dropdownContent = document.createElement("div");
+        dropdownContent.classList.add("dropdown-content");
+        dropdownContent.style.display = "none";
+        listItem.appendChild(dropdownContent);
+
+        // Format and display actionQueue data
+        if (match.actionQueue && match.actionQueue.length > 0) {
+          const actionList = document.createElement("ul");
+          match.actionQueue.forEach((action, index) => {
+            const actionItem = document.createElement("li");
+            actionItem.textContent = `${index + 1}. ${action.id}`;
+            actionList.appendChild(actionItem);
+          });
+          dropdownContent.appendChild(actionList);
+        } else {
+          dropdownContent.textContent = "No actions recorded";
+        }
+
+        listItem.appendChild(dropdownContent);
+
+        // Toggle dropdown on button click
+        dropdownButton.onclick = () => {
+          const isHidden = dropdownContent.style.display === "none";
+          dropdownContent.style.display = isHidden ? "block" : "none";
+          dropdownButton.textContent = isHidden ? "▲" : "▼";
+        };
+
         trashButton.onclick = async () => {
           if (
             !confirm("Are you sure you want to delete this match performance?")
