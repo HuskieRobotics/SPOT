@@ -57,7 +57,7 @@
           "executables": [],
           "conditions": {
             "add": "coral",
-            "no": "algae"
+            "no": "coral"
           }
         },
         {
@@ -74,7 +74,7 @@
           "executables": [],
           "conditions": {
             "remove": "coral",
-            "if": "algae"
+            "if": "coral"
           }
         }
       ],
@@ -140,7 +140,7 @@
           ],
           "conditions": {
             "add": "coral",
-            "no": "algae"
+            "no": "coral"
           }
         },
         {
@@ -157,7 +157,7 @@
           "executables": [],
           "conditions": {
             "add": "coral",
-            "no": "algae"
+            "no": "coral"
           }
         },
         {
@@ -174,7 +174,7 @@
           "executables": [],
           "conditions": {
             "remove": "coral",
-            "if": "algae"
+            "if": "coral"
           }
         },
         {
@@ -236,7 +236,7 @@
           ],
           "conditions": {
             "add": "algae",
-            "no": "coral"
+            "no": "algae"
           }
         },
         {
@@ -253,7 +253,7 @@
           "executables": [],
           "conditions": {
             "add": "algae",
-            "no": "coral"
+            "no": "algae"
           }
         },
         {
@@ -294,7 +294,7 @@
           "executables": [],
           "conditions": {
             "remove": "algae",
-            "if": "coral"
+            "if": "algae"
           }
         },
         {
@@ -357,7 +357,7 @@
           "executables": [],
           "conditions": {
             "add": "coral",
-            "no": "algae"
+            "no": "coral"
           }
         },
         {
@@ -374,7 +374,7 @@
           "executables": [],
           "conditions": {
             "add": "coral",
-            "no": "algae"
+            "no": "coral"
           }
         },
         {
@@ -391,7 +391,7 @@
           "executables": [],
           "conditions": {
             "remove": "coral",
-            "if": "algae"
+            "if": "coral"
           }
         },
         {
@@ -445,7 +445,7 @@
           "executables": [],
           "conditions": {
             "add": "algae",
-            "no": "coral"
+            "no": "algae"
           }
         },
         {
@@ -462,7 +462,7 @@
           "executables": [],
           "conditions": {
             "add": "algae",
-            "no": "coral"
+            "no": "algae"
           }
         },
         {
@@ -503,7 +503,7 @@
           "executables": [],
           "conditions": {
             "remove": "algae",
-            "if": "coral"
+            "if": "algae"
           }
         },
         {
@@ -683,7 +683,7 @@
           ],
           "conditions": {
             "remove": "algae",
-            "if": "coral"
+            "if": "algae"
           }
         },
         {
@@ -708,7 +708,7 @@
           ],
           "conditions": {
             "remove": "algae",
-            "if": "coral"
+            "if": "algae"
           }
         },
         {
@@ -733,7 +733,7 @@
           ],
           "conditions": {
             "remove": "algae",
-            "if": "coral"
+            "if": "algae"
           }
         },
         {
@@ -758,7 +758,7 @@
           ],
           "conditions": {
             "remove": "algae",
-            "if": "coral"
+            "if": "algae"
           }
         }
       ],
@@ -824,7 +824,7 @@
           ],
           "conditions": {
             "remove": "coral",
-            "if": "algae"
+            "if": "coral"
           }
         },
         {
@@ -849,7 +849,7 @@
           ],
           "conditions": {
             "remove": "coral",
-            "if": "algae"
+            "if": "coral"
           }
         },
         {
@@ -874,7 +874,7 @@
           ],
           "conditions": {
             "remove": "coral",
-            "if": "algae"
+            "if": "coral"
           }
         },
         {
@@ -899,7 +899,7 @@
           ],
           "conditions": {
             "remove": "coral",
-            "if": "algae"
+            "if": "coral"
           }
         },
         {
@@ -924,7 +924,7 @@
           ],
           "conditions": {
             "remove": "coral",
-            "if": "algae"
+            "if": "coral"
           }
         }
       ],
@@ -1224,7 +1224,7 @@
           ],
           "conditions": {
             "remove": "algae",
-            "if": "coral"
+            "if": "algae"
           }
         },
         {
@@ -1249,7 +1249,7 @@
           ],
           "conditions": {
             "remove": "algae",
-            "if": "coral"
+            "if": "algae"
           }
         },
         {
@@ -1274,7 +1274,7 @@
           ],
           "conditions": {
             "remove": "algae",
-            "if": "coral"
+            "if": "algae"
           }
         },
         {
@@ -1299,7 +1299,7 @@
           ],
           "conditions": {
             "remove": "algae",
-            "if": "coral"
+            "if": "algae"
           }
         }
       ],
@@ -1365,7 +1365,7 @@
           ],
           "conditions": {
             "remove": "coral",
-            "if": "algae"
+            "if": "coral"
           }
         },
         {
@@ -1390,7 +1390,7 @@
           ],
           "conditions": {
             "remove": "coral",
-            "if": "algae"
+            "if": "coral"
           }
         },
         {
@@ -1415,7 +1415,7 @@
           ],
           "conditions": {
             "remove": "coral",
-            "if": "algae"
+            "if": "coral"
           }
         },
         {
@@ -1440,7 +1440,7 @@
           ],
           "conditions": {
             "remove": "coral",
-            "if": "algae"
+            "if": "coral"
           }
         },
         {
@@ -1465,7 +1465,7 @@
           ],
           "conditions": {
             "remove": "coral",
-            "if": "algae"
+            "if": "coral"
           }
         }
       ]
