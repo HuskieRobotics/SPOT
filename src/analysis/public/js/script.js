@@ -584,35 +584,7 @@ if ("serviceWorker" in navigator) {
     currentEventSwitch.addEventListener("click", () => {
       clearInterface();
       currentEventSwitch.classList.add("selected");
-      showFade(eventSelectView);
-    });
-  }
-  // Add to document initialization
-  const eventSelectView = document.getElementById("event-select-view");
-  const eventSwitchButton = document.getElementById("event-switch-button");
-
-  // Add event switch button handler
-  eventSwitchButton.addEventListener("click", () => {
-    clearInterface();
-    eventSwitchButton.classList.add("selected");
-    showFade(eventSelectView);
-    loadEventsList();
-  });
-
-  // Add function to load events
-  async function loadEventsList() {
-    const eventsList = document.getElementById("events-list");
-    const events = await fetchEvents();
-
-    eventsList.innerHTML = "";
-    events.forEach((event) => {
-      const eventDiv = document.createElement("div");
-      eventDiv.className = "event-item";
-      eventDiv.textContent = `${event.name} (${event.year})`;
-      eventDiv.addEventListener("click", () => {
-        selectEvent(event);
-      });
-      eventsList.appendChild(eventDiv);
+      showFade(eventSwitchView);
     });
   }
   //call setData on every module in matches
