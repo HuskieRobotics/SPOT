@@ -2,14 +2,14 @@
   "timing": {
     "totalTime": 153000,
     "timeTransitions": {
-      "152999": {
-        "layer": 1,
-        "displayText": "Auto",
-        "variables": {}
-      },
       "135000": {
         "layer": 2,
         "displayText": "Teleop",
+        "variables": {}
+      },
+      "152999": {
+        "layer": 1,
+        "displayText": "Auto",
         "variables": {}
       }
     }
@@ -25,38 +25,69 @@
         {
           "id": "startGame",
           "displayText": "Start",
-          "gridArea": ["2", "1", "4", "10"],
+          "gridArea": [
+            "2",
+            "1",
+            "4",
+            "10"
+          ],
           "class": "silver timer",
           "type": "match-control",
           "executables": [
             {
               "type": "layer",
-              "args": [0, 1]
+              "args": [
+                0,
+                1
+              ]
             }
           ]
         },
         {
           "id": "preloadCoral",
           "displayText": "Preload Coral",
-          "gridArea": ["4", "1", "6", "5"],
+          "gridArea": [
+            "4",
+            "1",
+            "6",
+            "5"
+          ],
           "class": "lightCoral",
           "type": "action",
-          "executables": []
+          "executables": [],
+          "conditions": {
+            "add": "coral",
+            "no": "algae"
+          }
         },
         {
           "id": "preloadNone",
           "displayText": "Preload None",
-          "gridArea": ["4", "6", "6", "10"],
+          "gridArea": [
+            "4",
+            "6",
+            "6",
+            "10"
+          ],
           "class": "gray",
           "type": "action",
-          "executables": []
+          "executables": [],
+          "conditions": {
+            "remove": "coral",
+            "if": "algae"
+          }
         }
       ],
       [
         {
           "id": "startGame",
           "displayText": "Start",
-          "gridArea": ["1", "4", "2", "7"],
+          "gridArea": [
+            "1",
+            "4",
+            "2",
+            "7"
+          ],
           "class": "silver timer",
           "type": "match-control",
           "executables": []
@@ -64,7 +95,12 @@
         {
           "id": "broken",
           "displayText": "Disabled",
-          "gridArea": ["1", "1", "2", "3"],
+          "gridArea": [
+            "1",
+            "1",
+            "2",
+            "3"
+          ],
           "class": "red",
           "type": "action",
           "executables": []
@@ -72,7 +108,12 @@
         {
           "id": "aStop",
           "displayText": "A-Stop",
-          "gridArea": ["1", "3", "2", "4"],
+          "gridArea": [
+            "1",
+            "3",
+            "2",
+            "4"
+          ],
           "class": "red",
           "type": "action",
           "executables": []
@@ -80,49 +121,95 @@
         {
           "id": "autoGroundPickupCoral",
           "displayText": "Pickup Ground",
-          "gridArea": ["2", "1", "4", "3"],
+          "gridArea": [
+            "2",
+            "1",
+            "4",
+            "3"
+          ],
           "class": "coral",
           "type": "action",
           "executables": [
             {
               "type": "layer",
-              "args": [1, 7]
+              "args": [
+                1,
+                7
+              ]
             }
-          ]
+          ],
+          "conditions": {
+            "add": "coral",
+            "no": "algae"
+          }
         },
         {
           "id": "autoStationPickupCoral",
           "displayText": "Pickup Station",
-          "gridArea": ["4", "1", "6", "3"],
+          "gridArea": [
+            "4",
+            "1",
+            "6",
+            "3"
+          ],
           "class": "coral",
           "type": "action",
-          "executables": []
+          "executables": [],
+          "conditions": {
+            "add": "coral",
+            "no": "algae"
+          }
         },
         {
           "id": "autoCoralDrop",
           "displayText": "Drop",
-          "gridArea": ["6", "1", "7", "3"],
+          "gridArea": [
+            "6",
+            "1",
+            "7",
+            "3"
+          ],
           "class": "darkCoral",
           "type": "action",
-          "executables": []
+          "executables": [],
+          "conditions": {
+            "remove": "coral",
+            "if": "algae"
+          }
         },
         {
           "id": "autoScoreCoral",
           "displayText": "Coral",
-          "gridArea": ["3", "3", "5", "5"],
+          "gridArea": [
+            "3",
+            "3",
+            "5",
+            "5"
+          ],
           "class": "coral",
           "type": "none",
           "executables": [
             {
               "type": "layer",
-              "args": [1, 5]
+              "args": [
+                1,
+                5
+              ]
             }
-          ]
+          ],
+          "conditions": {
+            "if": "coral"
+          }
         },
         {
           "id": "undo",
           "displayText": "Undo",
-          "gridArea": ["1", "8", "2", "10"],
+          "gridArea": [
+            "1",
+            "8",
+            "2",
+            "10"
+          ],
           "class": "sherbert",
           "type": "undo",
           "executables": []
@@ -130,49 +217,95 @@
         {
           "id": "autoGroundPickupAlgae",
           "displayText": "Pickup Ground",
-          "gridArea": ["2", "8", "4", "10"],
+          "gridArea": [
+            "2",
+            "8",
+            "4",
+            "10"
+          ],
           "class": "bluegreen",
           "type": "action",
           "executables": [
             {
               "type": "layer",
-              "args": [1, 6]
+              "args": [
+                1,
+                6
+              ]
             }
-          ]
+          ],
+          "conditions": {
+            "add": "algae",
+            "no": "coral"
+          }
         },
         {
           "id": "autoReefPickupAlgae",
           "displayText": "Pickup Reef",
-          "gridArea": ["4", "8", "6", "10"],
+          "gridArea": [
+            "4",
+            "8",
+            "6",
+            "10"
+          ],
           "class": "bluegreen",
           "type": "action",
-          "executables": []
+          "executables": [],
+          "conditions": {
+            "add": "algae",
+            "no": "coral"
+          }
         },
         {
           "id": "autoScoreAlgae",
           "displayText": "Algae",
-          "gridArea": ["3", "6", "5", "8"],
+          "gridArea": [
+            "3",
+            "6",
+            "5",
+            "8"
+          ],
           "class": "bluegreen",
           "type": "action",
           "executables": [
             {
               "type": "layer",
-              "args": [1, 4]
+              "args": [
+                1,
+                4
+              ]
             }
-          ]
+          ],
+          "conditions": {
+            "if": "algae"
+          }
         },
         {
           "id": "autoAlgaeDrop",
           "displayText": "Drop",
-          "gridArea": ["6", "8", "7", "10"],
+          "gridArea": [
+            "6",
+            "8",
+            "7",
+            "10"
+          ],
           "class": "darkbluegreen",
           "type": "action",
-          "executables": []
+          "executables": [],
+          "conditions": {
+            "remove": "algae",
+            "if": "coral"
+          }
         },
         {
           "id": "leave",
           "displayText": "Leave",
-          "gridArea": ["6", "4", "7", "7"],
+          "gridArea": [
+            "6",
+            "4",
+            "7",
+            "7"
+          ],
           "class": "gray",
           "type": "action",
           "executables": [
@@ -187,7 +320,12 @@
         {
           "id": "startGame",
           "displayText": "Start",
-          "gridArea": ["1", "4", "2", "7"],
+          "gridArea": [
+            "1",
+            "4",
+            "2",
+            "7"
+          ],
           "class": "silver timer",
           "type": "match-control",
           "executables": []
@@ -195,7 +333,12 @@
         {
           "id": "broken",
           "displayText": "Disabled",
-          "gridArea": ["1", "1", "2", "3"],
+          "gridArea": [
+            "1",
+            "1",
+            "2",
+            "3"
+          ],
           "class": "red",
           "type": "action",
           "executables": []
@@ -203,44 +346,87 @@
         {
           "id": "teleopGroundPickupCoral",
           "displayText": "Pickup Ground",
-          "gridArea": ["2", "1", "4", "3"],
+          "gridArea": [
+            "2",
+            "1",
+            "4",
+            "3"
+          ],
           "class": "coral",
           "type": "action",
-          "executables": []
+          "executables": [],
+          "conditions": {
+            "add": "coral",
+            "no": "algae"
+          }
         },
         {
           "id": "teleopStationPickupCoral",
           "displayText": "Pickup Station",
-          "gridArea": ["4", "1", "6", "3"],
+          "gridArea": [
+            "4",
+            "1",
+            "6",
+            "3"
+          ],
           "class": "coral",
           "type": "action",
-          "executables": []
+          "executables": [],
+          "conditions": {
+            "add": "coral",
+            "no": "algae"
+          }
         },
         {
           "id": "teleopCoralDrop",
           "displayText": "Drop",
-          "gridArea": ["6", "1", "7", "3"],
+          "gridArea": [
+            "6",
+            "1",
+            "7",
+            "3"
+          ],
           "class": "darkCoral",
           "type": "action",
-          "executables": []
+          "executables": [],
+          "conditions": {
+            "remove": "coral",
+            "if": "algae"
+          }
         },
         {
           "id": "teleopScoreCoral",
           "displayText": "Coral",
-          "gridArea": ["3", "3", "5", "5"],
+          "gridArea": [
+            "3",
+            "3",
+            "5",
+            "5"
+          ],
           "class": "coral",
           "type": "action",
           "executables": [
             {
               "type": "layer",
-              "args": [2, 9]
+              "args": [
+                2,
+                9
+              ]
             }
-          ]
+          ],
+          "conditions": {
+            "if": "coral"
+          }
         },
         {
           "id": "undo",
           "displayText": "Undo",
-          "gridArea": ["1", "8", "2", "10"],
+          "gridArea": [
+            "1",
+            "8",
+            "2",
+            "10"
+          ],
           "class": "sherbert",
           "type": "undo",
           "executables": []
@@ -248,50 +434,96 @@
         {
           "id": "teleopGroundPickupAlgae",
           "displayText": "Pickup Ground",
-          "gridArea": ["2", "8", "4", "10"],
+          "gridArea": [
+            "2",
+            "8",
+            "4",
+            "10"
+          ],
           "class": "bluegreen",
           "type": "action",
-          "executables": []
+          "executables": [],
+          "conditions": {
+            "add": "algae",
+            "no": "coral"
+          }
         },
         {
           "id": "teleopReefPickupAlgae",
           "displayText": "Pickup Reef",
-          "gridArea": ["4", "8", "6", "10"],
+          "gridArea": [
+            "4",
+            "8",
+            "6",
+            "10"
+          ],
           "class": "bluegreen",
           "type": "action",
-          "executables": []
+          "executables": [],
+          "conditions": {
+            "add": "algae",
+            "no": "coral"
+          }
         },
         {
           "id": "teleopScoreAlgae",
           "displayText": "Algae",
-          "gridArea": ["3", "6", "5", "8"],
+          "gridArea": [
+            "3",
+            "6",
+            "5",
+            "8"
+          ],
           "class": "bluegreen",
           "type": "action",
           "executables": [
             {
               "type": "layer",
-              "args": [2, 8]
+              "args": [
+                2,
+                8
+              ]
             }
-          ]
+          ],
+          "conditions": {
+            "if": "algae"
+          }
         },
         {
           "id": "teleopAlgaeDrop",
           "displayText": "Drop",
-          "gridArea": ["6", "8", "7", "10"],
+          "gridArea": [
+            "6",
+            "8",
+            "7",
+            "10"
+          ],
           "class": "darkbluegreen",
           "type": "action",
-          "executables": []
+          "executables": [],
+          "conditions": {
+            "remove": "algae",
+            "if": "coral"
+          }
         },
         {
           "id": "barge",
           "displayText": "Barge",
-          "gridArea": ["6", "4", "7", "7"],
+          "gridArea": [
+            "6",
+            "4",
+            "7",
+            "7"
+          ],
           "class": "gray",
           "type": "action",
           "executables": [
             {
               "type": "layer",
-              "args": [2, 3]
+              "args": [
+                2,
+                3
+              ]
             }
           ]
         }
@@ -300,7 +532,12 @@
         {
           "id": "startGame",
           "displayText": "Start",
-          "gridArea": ["1", "4", "2", "7"],
+          "gridArea": [
+            "1",
+            "4",
+            "2",
+            "7"
+          ],
           "class": "silver timer",
           "type": "match-control",
           "executables": []
@@ -308,7 +545,12 @@
         {
           "id": "broken",
           "displayText": "Disabled",
-          "gridArea": ["1", "1", "2", "3"],
+          "gridArea": [
+            "1",
+            "1",
+            "2",
+            "3"
+          ],
           "class": "red",
           "type": "action",
           "executables": []
@@ -316,7 +558,12 @@
         {
           "id": "undo",
           "displayText": "Undo",
-          "gridArea": ["1", "8", "2", "10"],
+          "gridArea": [
+            "1",
+            "8",
+            "2",
+            "10"
+          ],
           "class": "sherbert",
           "type": "undo",
           "executables": []
@@ -324,7 +571,12 @@
         {
           "id": "park",
           "displayText": "Park",
-          "gridArea": ["3", "4", "4", "7"],
+          "gridArea": [
+            "3",
+            "4",
+            "4",
+            "7"
+          ],
           "class": "gray",
           "type": "action",
           "executables": []
@@ -332,7 +584,12 @@
         {
           "id": "shallow",
           "displayText": "Shallow Cage",
-          "gridArea": ["4", "4", "5", "7"],
+          "gridArea": [
+            "4",
+            "4",
+            "5",
+            "7"
+          ],
           "class": "shallowBlue",
           "type": "action",
           "executables": []
@@ -340,7 +597,12 @@
         {
           "id": "deep",
           "displayText": "Deep Cage",
-          "gridArea": ["5", "4", "6", "7"],
+          "gridArea": [
+            "5",
+            "4",
+            "6",
+            "7"
+          ],
           "class": "deepBlue",
           "type": "action",
           "executables": []
@@ -348,7 +610,12 @@
         {
           "id": "bargeFall",
           "displayText": "Fall",
-          "gridArea": ["6", "4", "7", "7"],
+          "gridArea": [
+            "6",
+            "4",
+            "7",
+            "7"
+          ],
           "class": "red",
           "type": "action",
           "executables": []
@@ -358,7 +625,12 @@
         {
           "id": "startGame",
           "displayText": "Start",
-          "gridArea": ["1", "4", "2", "7"],
+          "gridArea": [
+            "1",
+            "4",
+            "2",
+            "7"
+          ],
           "class": "silver timer",
           "type": "match-control",
           "executables": []
@@ -366,7 +638,12 @@
         {
           "id": "broken",
           "displayText": "Disabled",
-          "gridArea": ["1", "1", "2", "3"],
+          "gridArea": [
+            "1",
+            "1",
+            "2",
+            "3"
+          ],
           "class": "red",
           "type": "action",
           "executables": []
@@ -374,7 +651,12 @@
         {
           "id": "undo",
           "displayText": "Undo",
-          "gridArea": ["1", "8", "2", "10"],
+          "gridArea": [
+            "1",
+            "8",
+            "2",
+            "10"
+          ],
           "class": "sherbert",
           "type": "undo",
           "executables": []
@@ -382,61 +664,114 @@
         {
           "id": "autoMissProcessor",
           "displayText": "Miss Processor",
-          "gridArea": ["5", "2", "5", "5"],
+          "gridArea": [
+            "5",
+            "2",
+            "5",
+            "5"
+          ],
           "class": "darkbluegreen",
           "type": "action",
           "executables": [
             {
               "type": "layer",
-              "args": [4, 1]
+              "args": [
+                4,
+                1
+              ]
             }
-          ]
+          ],
+          "conditions": {
+            "remove": "algae",
+            "if": "coral"
+          }
         },
         {
           "id": "autoMissNet",
           "displayText": "Miss Net",
-          "gridArea": ["5", "6", "6", "9"],
+          "gridArea": [
+            "5",
+            "6",
+            "6",
+            "9"
+          ],
           "class": "darkbluegreen",
           "type": "action",
           "executables": [
             {
               "type": "layer",
-              "args": [4, 1]
+              "args": [
+                4,
+                1
+              ]
             }
-          ]
+          ],
+          "conditions": {
+            "remove": "algae",
+            "if": "coral"
+          }
         },
         {
           "id": "autoScoreProcessor",
           "displayText": "Score Processor",
-          "gridArea": ["3", "2", "5", "5"],
+          "gridArea": [
+            "3",
+            "2",
+            "5",
+            "5"
+          ],
           "class": "bluegreen",
           "type": "action",
           "executables": [
             {
               "type": "layer",
-              "args": [4, 1]
+              "args": [
+                4,
+                1
+              ]
             }
-          ]
+          ],
+          "conditions": {
+            "remove": "algae",
+            "if": "coral"
+          }
         },
         {
           "id": "autoScoreNet",
           "displayText": "Score Net",
-          "gridArea": ["3", "6", "5", "9"],
+          "gridArea": [
+            "3",
+            "6",
+            "5",
+            "9"
+          ],
           "class": "bluegreen",
           "type": "action",
           "executables": [
             {
               "type": "layer",
-              "args": [4, 1]
+              "args": [
+                4,
+                1
+              ]
             }
-          ]
+          ],
+          "conditions": {
+            "remove": "algae",
+            "if": "coral"
+          }
         }
       ],
       [
         {
           "id": "startGame",
           "displayText": "Start",
-          "gridArea": ["1", "4", "2", "7"],
+          "gridArea": [
+            "1",
+            "4",
+            "2",
+            "7"
+          ],
           "class": "silver timer",
           "type": "match-control",
           "executables": []
@@ -444,7 +779,12 @@
         {
           "id": "broken",
           "displayText": "Disabled",
-          "gridArea": ["1", "1", "2", "3"],
+          "gridArea": [
+            "1",
+            "1",
+            "2",
+            "3"
+          ],
           "class": "red",
           "type": "action",
           "executables": []
@@ -452,7 +792,12 @@
         {
           "id": "undo",
           "displayText": "Undo",
-          "gridArea": ["1", "8", "2", "10"],
+          "gridArea": [
+            "1",
+            "8",
+            "2",
+            "10"
+          ],
           "class": "sherbert",
           "type": "undo",
           "executables": []
@@ -460,74 +805,139 @@
         {
           "id": "autol4",
           "displayText": "L4",
-          "gridArea": ["3", "4", "4", "7"],
+          "gridArea": [
+            "3",
+            "4",
+            "4",
+            "7"
+          ],
           "class": "lightCoral",
           "type": "action",
           "executables": [
             {
               "type": "layer",
-              "args": [5, 1]
+              "args": [
+                5,
+                1
+              ]
             }
-          ]
+          ],
+          "conditions": {
+            "remove": "coral",
+            "if": "algae"
+          }
         },
         {
           "id": "autol3",
           "displayText": "L3",
-          "gridArea": ["4", "4", "5", "7"],
+          "gridArea": [
+            "4",
+            "4",
+            "5",
+            "7"
+          ],
           "class": "coral",
           "type": "action",
           "executables": [
             {
               "type": "layer",
-              "args": [5, 1]
+              "args": [
+                5,
+                1
+              ]
             }
-          ]
+          ],
+          "conditions": {
+            "remove": "coral",
+            "if": "algae"
+          }
         },
         {
           "id": "autol2",
           "displayText": "L2",
-          "gridArea": ["5", "4", "6", "7"],
+          "gridArea": [
+            "5",
+            "4",
+            "6",
+            "7"
+          ],
           "class": "darkCoral",
           "type": "action",
           "executables": [
             {
               "type": "layer",
-              "args": [5, 1]
+              "args": [
+                5,
+                1
+              ]
             }
-          ]
+          ],
+          "conditions": {
+            "remove": "coral",
+            "if": "algae"
+          }
         },
         {
           "id": "autol1",
           "displayText": "L1",
-          "gridArea": ["6", "4", "7", "7"],
+          "gridArea": [
+            "6",
+            "4",
+            "7",
+            "7"
+          ],
           "class": "gray",
           "type": "action",
           "executables": [
             {
               "type": "layer",
-              "args": [5, 1]
+              "args": [
+                5,
+                1
+              ]
             }
-          ]
+          ],
+          "conditions": {
+            "remove": "coral",
+            "if": "algae"
+          }
         },
         {
           "id": "autoMissCoral",
           "displayText": "Miss",
-          "gridArea": ["6", "1", "7", "3"],
+          "gridArea": [
+            "6",
+            "1",
+            "7",
+            "3"
+          ],
           "class": "red",
           "type": "action",
           "executables": [
             {
               "type": "layer",
-              "args": [5, 1]
+              "args": [
+                5,
+                1
+              ]
             }
-          ]
+          ],
+          "conditions": {
+            "remove": "coral",
+            "if": "algae"
+          }
         }
       ],
       [
         {
           "id": "startGame",
           "displayText": "Start",
-          "gridArea": ["1", "4", "2", "7"],
+          "gridArea": [
+            "1",
+            "4",
+            "2",
+            "7"
+          ],
           "class": "silver timer",
           "type": "match-control",
           "executables": []
@@ -535,7 +945,12 @@
         {
           "id": "undo",
           "displayText": "Undo",
-          "gridArea": ["1", "8", "2", "10"],
+          "gridArea": [
+            "1",
+            "8",
+            "2",
+            "10"
+          ],
           "class": "sherbert",
           "type": "undo",
           "executables": []
@@ -543,7 +958,12 @@
         {
           "id": "broken",
           "displayText": "Disabled",
-          "gridArea": ["1", "1", "2", "3"],
+          "gridArea": [
+            "1",
+            "1",
+            "2",
+            "3"
+          ],
           "class": "red",
           "type": "action",
           "executables": []
@@ -551,46 +971,75 @@
         {
           "id": "autoAlgaeLeft",
           "displayText": "O",
-          "gridArea": ["3", "1", "6", "4"],
+          "gridArea": [
+            "3",
+            "1",
+            "6",
+            "4"
+          ],
           "class": "lightbluegreen",
           "type": "action",
           "executables": [
             {
               "type": "layer",
-              "args": [6, 1]
+              "args": [
+                6,
+                1
+              ]
             }
           ]
         },
         {
           "id": "autoAlgaeCenter",
           "displayText": "O",
-          "gridArea": ["3", "4", "6", "7"],
+          "gridArea": [
+            "3",
+            "4",
+            "6",
+            "7"
+          ],
           "class": "lightbluegreen",
           "type": "action",
           "executables": [
             {
               "type": "layer",
-              "args": [6, 1]
+              "args": [
+                6,
+                1
+              ]
             }
           ]
         },
         {
           "id": "autoAlgaeRight",
           "displayText": "O",
-          "gridArea": ["3", "7", "6", "10"],
+          "gridArea": [
+            "3",
+            "7",
+            "6",
+            "10"
+          ],
           "class": "lightbluegreen",
           "type": "action",
           "executables": [
             {
               "type": "layer",
-              "args": [6, 1]
+              "args": [
+                6,
+                1
+              ]
             }
           ]
         },
         {
           "id": "Reef",
           "displayText": "Reef",
-          "gridArea": ["6", "4", "7", "7"],
+          "gridArea": [
+            "6",
+            "4",
+            "7",
+            "7"
+          ],
           "class": "gray",
           "type": "label",
           "executables": []
@@ -600,7 +1049,12 @@
         {
           "id": "startGame",
           "displayText": "Start",
-          "gridArea": ["1", "4", "2", "7"],
+          "gridArea": [
+            "1",
+            "4",
+            "2",
+            "7"
+          ],
           "class": "silver timer",
           "type": "match-control",
           "executables": []
@@ -608,7 +1062,12 @@
         {
           "id": "undo",
           "displayText": "Undo",
-          "gridArea": ["1", "8", "2", "10"],
+          "gridArea": [
+            "1",
+            "8",
+            "2",
+            "10"
+          ],
           "class": "sherbert",
           "type": "undo",
           "executables": []
@@ -616,7 +1075,12 @@
         {
           "id": "broken",
           "displayText": "Disabled",
-          "gridArea": ["1", "1", "2", "3"],
+          "gridArea": [
+            "1",
+            "1",
+            "2",
+            "3"
+          ],
           "class": "red",
           "type": "action",
           "executables": []
@@ -624,46 +1088,75 @@
         {
           "id": "autoCoralLeft",
           "displayText": "I",
-          "gridArea": ["3", "1", "6", "4"],
+          "gridArea": [
+            "3",
+            "1",
+            "6",
+            "4"
+          ],
           "class": "lightCoral",
           "type": "action",
           "executables": [
             {
               "type": "layer",
-              "args": [7, 1]
+              "args": [
+                7,
+                1
+              ]
             }
           ]
         },
         {
           "id": "autoCoralCenter",
           "displayText": "I",
-          "gridArea": ["3", "4", "6", "7"],
+          "gridArea": [
+            "3",
+            "4",
+            "6",
+            "7"
+          ],
           "class": "lightCoral",
           "type": "action",
           "executables": [
             {
               "type": "layer",
-              "args": [7, 1]
+              "args": [
+                7,
+                1
+              ]
             }
           ]
         },
         {
           "id": "autoCoralRight",
           "displayText": "I",
-          "gridArea": ["3", "7", "6", "10"],
+          "gridArea": [
+            "3",
+            "7",
+            "6",
+            "10"
+          ],
           "class": "lightCoral",
           "type": "action",
           "executables": [
             {
               "type": "layer",
-              "args": [7, 1]
+              "args": [
+                7,
+                1
+              ]
             }
           ]
         },
         {
           "id": "Reef",
           "displayText": "Reef",
-          "gridArea": ["6", "4", "7", "7"],
+          "gridArea": [
+            "6",
+            "4",
+            "7",
+            "7"
+          ],
           "class": "gray",
           "type": "label",
           "executables": []
@@ -673,7 +1166,12 @@
         {
           "id": "startGame",
           "displayText": "Start",
-          "gridArea": ["1", "4", "2", "7"],
+          "gridArea": [
+            "1",
+            "4",
+            "2",
+            "7"
+          ],
           "class": "silver timer",
           "type": "match-control",
           "executables": []
@@ -681,7 +1179,12 @@
         {
           "id": "broken",
           "displayText": "Disabled",
-          "gridArea": ["1", "1", "2", "3"],
+          "gridArea": [
+            "1",
+            "1",
+            "2",
+            "3"
+          ],
           "class": "red",
           "type": "action",
           "executables": []
@@ -689,7 +1192,12 @@
         {
           "id": "undo",
           "displayText": "Undo",
-          "gridArea": ["1", "8", "2", "10"],
+          "gridArea": [
+            "1",
+            "8",
+            "2",
+            "10"
+          ],
           "class": "sherbert",
           "type": "undo",
           "executables": []
@@ -697,61 +1205,114 @@
         {
           "id": "teleopMissProcessor",
           "displayText": "Miss Processor",
-          "gridArea": ["5", "2", "5", "5"],
+          "gridArea": [
+            "5",
+            "2",
+            "5",
+            "5"
+          ],
           "class": "darkbluegreen",
           "type": "action",
           "executables": [
             {
               "type": "layer",
-              "args": [8, 2]
+              "args": [
+                8,
+                2
+              ]
             }
-          ]
+          ],
+          "conditions": {
+            "remove": "algae",
+            "if": "coral"
+          }
         },
         {
           "id": "teleopMissNet",
           "displayText": "Miss Net",
-          "gridArea": ["5", "6", "6", "9"],
+          "gridArea": [
+            "5",
+            "6",
+            "6",
+            "9"
+          ],
           "class": "darkbluegreen",
           "type": "action",
           "executables": [
             {
               "type": "layer",
-              "args": [8, 2]
+              "args": [
+                8,
+                2
+              ]
             }
-          ]
+          ],
+          "conditions": {
+            "remove": "algae",
+            "if": "coral"
+          }
         },
         {
           "id": "teleopScoreProcessor",
           "displayText": "Score Processor",
-          "gridArea": ["3", "2", "5", "5"],
+          "gridArea": [
+            "3",
+            "2",
+            "5",
+            "5"
+          ],
           "class": "bluegreen",
           "type": "action",
           "executables": [
             {
               "type": "layer",
-              "args": [8, 2]
+              "args": [
+                8,
+                2
+              ]
             }
-          ]
+          ],
+          "conditions": {
+            "remove": "algae",
+            "if": "coral"
+          }
         },
         {
           "id": "teleopScoreNet",
           "displayText": "Score Net",
-          "gridArea": ["3", "6", "5", "9"],
+          "gridArea": [
+            "3",
+            "6",
+            "5",
+            "9"
+          ],
           "class": "bluegreen",
           "type": "action",
           "executables": [
             {
               "type": "layer",
-              "args": [8, 2]
+              "args": [
+                8,
+                2
+              ]
             }
-          ]
+          ],
+          "conditions": {
+            "remove": "algae",
+            "if": "coral"
+          }
         }
       ],
       [
         {
           "id": "startGame",
           "displayText": "Start",
-          "gridArea": ["1", "4", "2", "7"],
+          "gridArea": [
+            "1",
+            "4",
+            "2",
+            "7"
+          ],
           "class": "silver timer",
           "type": "match-control",
           "executables": []
@@ -759,7 +1320,12 @@
         {
           "id": "broken",
           "displayText": "Disabled",
-          "gridArea": ["1", "1", "2", "3"],
+          "gridArea": [
+            "1",
+            "1",
+            "2",
+            "3"
+          ],
           "class": "red",
           "type": "action",
           "executables": []
@@ -767,7 +1333,12 @@
         {
           "id": "undo",
           "displayText": "Undo",
-          "gridArea": ["1", "8", "2", "10"],
+          "gridArea": [
+            "1",
+            "8",
+            "2",
+            "10"
+          ],
           "class": "sherbert",
           "type": "undo",
           "executables": []
@@ -775,67 +1346,127 @@
         {
           "id": "teleopl4",
           "displayText": "L4",
-          "gridArea": ["3", "4", "4", "7"],
+          "gridArea": [
+            "3",
+            "4",
+            "4",
+            "7"
+          ],
           "class": "lightCoral",
           "type": "action",
           "executables": [
             {
               "type": "layer",
-              "args": [9, 2]
+              "args": [
+                9,
+                2
+              ]
             }
-          ]
+          ],
+          "conditions": {
+            "remove": "coral",
+            "if": "algae"
+          }
         },
         {
           "id": "teleopl3",
           "displayText": "L3",
-          "gridArea": ["4", "4", "5", "7"],
+          "gridArea": [
+            "4",
+            "4",
+            "5",
+            "7"
+          ],
           "class": "coral",
           "type": "action",
           "executables": [
             {
               "type": "layer",
-              "args": [9, 2]
+              "args": [
+                9,
+                2
+              ]
             }
-          ]
+          ],
+          "conditions": {
+            "remove": "coral",
+            "if": "algae"
+          }
         },
         {
           "id": "teleopl2",
           "displayText": "L2",
-          "gridArea": ["5", "4", "6", "7"],
+          "gridArea": [
+            "5",
+            "4",
+            "6",
+            "7"
+          ],
           "class": "darkCoral",
           "type": "action",
           "executables": [
             {
               "type": "layer",
-              "args": [9, 2]
+              "args": [
+                9,
+                2
+              ]
             }
-          ]
+          ],
+          "conditions": {
+            "remove": "coral",
+            "if": "algae"
+          }
         },
         {
           "id": "teleopl1",
           "displayText": "L1",
-          "gridArea": ["6", "4", "7", "7"],
+          "gridArea": [
+            "6",
+            "4",
+            "7",
+            "7"
+          ],
           "class": "gray",
           "type": "action",
           "executables": [
             {
               "type": "layer",
-              "args": [9, 2]
+              "args": [
+                9,
+                2
+              ]
             }
-          ]
+          ],
+          "conditions": {
+            "remove": "coral",
+            "if": "algae"
+          }
         },
         {
           "id": "teleopMissCoral",
           "displayText": "Miss",
-          "gridArea": ["6", "1", "7", "3"],
+          "gridArea": [
+            "6",
+            "1",
+            "7",
+            "3"
+          ],
           "class": "red",
           "type": "action",
           "executables": [
             {
               "type": "layer",
-              "args": [9, 2]
+              "args": [
+                9,
+                2
+              ]
             }
-          ]
+          ],
+          "conditions": {
+            "remove": "coral",
+            "if": "algae"
+          }
         }
       ]
     ]
