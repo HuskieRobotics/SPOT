@@ -4,6 +4,7 @@
 executables["leave"] = {
   execute(button) {
     //when the button is pressed, do this
+    localStorage.removeItem("inMatch");
     location.reload();
   },
   reverse(button) {
