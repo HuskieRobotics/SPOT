@@ -12,7 +12,14 @@
 
   // Language-Specific
   "javascript.updateImportsOnFileMove.enabled": "always",
-  "cSpell.words": [],
+  "cSpell.words": [
+    "autol",
+    "bluegreen",
+    "darkbluegreen",
+    "lightbluegreen",
+    "teleop",
+    "teleopl"
+  ],
   "[javascript]": {
     "editor.defaultFormatter": "vscode.typescript-language-features"
   }
