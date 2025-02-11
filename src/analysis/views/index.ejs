@@ -43,7 +43,7 @@
 	
 	<div id="app">
 
-		<div id = "menu">
+		<div id="menu">
 			<div id="logo">
 				<img src="./img/logo.png" id="logo-img">
 				<div id="logo-text">SPOT</div>
@@ -51,10 +51,10 @@
 
 			<div id="sidebar">
 				<div id="button-container">
-					
 					<button id="match-view-switch">Simulate Match</button>
 					<button id="auto-pick-switch">Auto Pick List</button>
 					<button id="bubble-sheet-switch">Compare Team Scores</button>
+					<button id="switchEvent">Switch Event</button>
 				</div>
 				<div id="search-container">
 					<div id="search">
@@ -101,7 +101,7 @@
 					<div id="left-alliance-selects" class="alliance-selects">
 						<select class="select">
 							<option selected value="none">None</option>
-						</select class="select">
+						</select>
 						<select class="select">
 							<option selected value="none">None</option>
 						</select>
@@ -133,26 +133,36 @@
 					</div>
 				</div>
 			</div>
-			<div id = "auto-pick-view">
-				<div id = "team-list-container">
-					<div id = "pick-list-text">Auto Pick List</div>
-					<div id = "auto-pick-team-list"></div>
+			<div id="auto-pick-view">
+				<div id="team-list-container">
+					<div id="pick-list-text">Auto Pick List</div>
+					<div id="auto-pick-team-list"></div>
 				</div>
-				<div id = "auto-pick-main">
+				<div id="auto-pick-main">
 				</div>
-				<div id = "auto-pick-side">
-					<div id = "auto-pick-stats"></div>	
+				<div id="auto-pick-side">
+					<div id="auto-pick-stats"></div>
 				</div>
 			</div>
-			
-			<div id = "bubble-sheet-view">
-				<div id = "bubble-sheet-container">
-					<div id = "bubble-sheet-graph">
+			<div id="bubble-sheet-view">
+				<div id="bubble-sheet-container">
+					<div id="bubble-sheet-graph">
 
 					</div>
 				</div>
+			</div>
+		<div id="event-view" style="display:none;">
+		<div id="event-select-container">
+			<div id="event-select-label">Select Event</div>
+			<select id="event-select" class="select">
+			<option selected value="none">Select Event</option>
+			<option value="event1">Event 1</option>
+			<option value="event2">Event 2</option>
+			<option value="event3">Event 3</option>
+			</select>
 		</div>
-	</div>
+		</div>
+		</div>
 	<script src="https://unpkg.com/simple-statistics@7.8.0/dist/simple-statistics.min.js"></script>
 	<script src="./js/util.js"></script>
 	<script src="./js/autoPick.js"></script>
@@ -165,7 +175,6 @@
 	<script src="./js/analysisPipeline.js"></script>
 	<script src="./transformers.js"></script>
 	<script src="./js/script.js"></script>	
-
 </body>
 
 </html>
