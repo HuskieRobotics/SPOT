@@ -27,7 +27,7 @@ var previousTimer = [];
     }
   }
 
-  //intialize variables
+  //initialize variables
   let varNames = Object.keys(matchScoutingConfig.variables);
   for (let key of varNames) {
     variables[key] = {
@@ -67,41 +67,30 @@ var previousTimer = [];
   const layers = deepClone(matchScoutingConfig.layout.layers);
   const buttons = layers.flat();
 
-  const algaePickupButtons = ["autoGroundPickupAlgae", "autoReefPickupAlgae", "teleopGroundPickupAlgae", "teleopReefPickupAlgae"];
-  const algaeScoreActions = ["autoScoreProcessor", "teleopScoreProcessor", "autoScoreNet", "teleopScoreNet", "autoAlgaeDrop", "autoMissProcessor", "autoMissNet", "teleopAlgaeDrop", "teleopMissProcessor", "teleopMissNet"];
-  const algaeScoreButtons = ["autoScoreAlgae", "teleopScoreAlgae"];
-  const coralPickupButtons = ["autoGroundPickupCoral", "autoStationPickupCoral", "teleopGroundPickupCoral", "teleopStationPickupCoral", "preloadCoral"];
-  const coralScoreActions = ["teleopl1", "autol1", "teleopl2", "autol2", "teleopl3", "autol3", "teleopl4", "autol4", "autoCoralDrop", "autoMissCoral", "teleopCoralDrop", "teleopMissCoral", "preloadNone"];
-  const coralScoreButtons = ["autoScoreCoral", "teleopScoreCoral"];
+  /**
+   * @type {Record<string, boolean>} gamePieces
+   */
+  const gamePieces = {};
 
   function updateButtonStates() {
-    let hasAlgae = false,
-      hasCoral = false;
+    const conditionalButtons = [];
     for (const action of actionQueue) {
-      if (algaePickupButtons.includes(action.id)) {
-        hasAlgae = true;
-      } else if (algaeScoreActions.includes(action.id)) {
-        hasAlgae = false;
-      } else if (coralPickupButtons.includes(action.id)) {
-        hasCoral = true;
-      } else if (coralScoreActions.includes(action.id)) {
-        hasCoral = false;
-      }
+      const cond = action?.conditions;
+      if(!cond) continue;
+      if (cond.add)
+        gamePieces[cond.add] = true;
+      else if (cond.remove)
+        gamePieces[cond.remove] = false;
+      if (cond.if)
+        conditionalButtons.push(cond);
+      else if (cond.no)
+        conditionalButtons.push(cond);
     }
 
-    for (const button of buttons) {
-      if (algaeScoreActions.includes(button.id) || algaeScoreButtons.includes(button.id)) {
-        button.element.classList.toggle("disabled", !hasAlgae);
-      }
-      if (coralScoreActions.includes(button.id) || coralScoreButtons.includes(button.id)) {
-        button.element.classList.toggle("disabled", !hasCoral);
-      }
-      if (algaePickupButtons.includes(button.id)) {
-        button.element.classList.toggle("disabled", hasAlgae);
-      }
-      if (coralPickupButtons.includes(button.id)) {
-        button.element.classList.toggle("disabled", hasCoral);
-      }
+    for (const button of conditionalButtons) {
+      const piece = button.if || button.no;
+      const hasPiece = gamePieces[piece];
+      button.element.classList.toggle("disabled", button.if ? !hasPiece : hasPiece);
     }
 
     // Backup data to localStorage incase accidental refresh
@@ -137,7 +126,7 @@ var previousTimer = [];
           const undoneId = actionQueue.pop().id; //remove the last action from the action queue
           const undoneButton = buttons.find((x) => x.id === undoneId);
 
-          //special case for match-control buttons which have extra undo funcitonality without executables
+          //special case for match-control buttons which have extra undo functionality without executables
           if (undoneButton.type === "match-control") {
             time = matchScoutingConfig.timing.totalTime; //reset timer
             ScoutingSync.updateState({
@@ -359,7 +348,7 @@ var previousTimer = [];
         );
       } catch (e) {
         console.error(e);
-        throw new Error(`Error occured within ${executable.type} executable!`);
+        throw new Error(`Error occurred within ${executable.type} executable!`);
       }
     }
   }
