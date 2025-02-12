@@ -27,6 +27,7 @@ if (fs.existsSync("config/config.json")) {
   app.use("/qrscanner", require("./qrscanner/qrscanner.js"));
   app.use("/setup", require("./setup/setup.js"));
   app.use("/schedule", require("./schedule/schedule").router);
+  app.use("/editor", require("./editor/editor.js"));
 } else {
   console.log(
     chalk.cyan.bold.underline(
