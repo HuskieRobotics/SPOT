@@ -73,24 +73,21 @@ var previousTimer = [];
   const gamePieces = {};
 
   function updateButtonStates() {
-    const conditionalButtons = [];
     for (const action of actionQueue) {
-      const cond = action?.conditions;
-      if(!cond) continue;
+      const button = buttons.find(b => b && b?.id === action.id);
+      const cond = button?.conditions;
+      if (!cond) continue;
       if (cond.add)
         gamePieces[cond.add] = true;
       else if (cond.remove)
         gamePieces[cond.remove] = false;
-      if (cond.if)
-        conditionalButtons.push(cond);
-      else if (cond.no)
-        conditionalButtons.push(cond);
     }
 
-    for (const button of conditionalButtons) {
-      const piece = button.if || button.no;
+    for (const button of buttons) {
+      const piece = button?.conditions?.if || button?.conditions?.no;
+      if(!piece) continue;
       const hasPiece = gamePieces[piece];
-      button.element.classList.toggle("disabled", button.if ? !hasPiece : hasPiece);
+      button.element.classList.toggle("disabled", button?.conditions?.if ? !hasPiece : hasPiece);
     }
 
     // Backup data to localStorage incase accidental refresh
