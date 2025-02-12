@@ -18,7 +18,7 @@ router.get("/auth", (req, res) => {
   if (!DEMO) {
     if (config.secrets.ACCESS_CODE === "") {
       res.json({ status: 2 });
-    } else if (config.secrets.ACCESS_CODE == req.headers.authorization || req.cookies.auth == config.secrets.ACCESS_CODE) {
+    } else if (config.secrets.ACCESS_CODE == req.headers.authorization || req?.cookies?.auth == config.secrets.ACCESS_CODE) {
       res.cookie("auth", config.secrets.ACCESS_CODE);
       res.json({ status: 1 });
     } else {
@@ -31,7 +31,7 @@ router.get("/auth", (req, res) => {
 
 router.get("/scouters", (req, res) => {
   if (!DEMO) {
-    if (req.headers.authorization === config.secrets.ACCESS_CODE || req.cookies.auth == config.secrets.ACCESS_CODE) {
+    if (req.headers.authorization === config.secrets.ACCESS_CODE || req?.cookies?.auth == config.secrets.ACCESS_CODE) {
       res.json(ScoutingSync.getScouters());
     } else {
       res.json({ error: "Not Authorized" });
@@ -47,7 +47,7 @@ router.get("/data", async (req, res) => {
 
 router.get("/enterMatch", async (req, res) => {
   if (!DEMO) {
-    if (req.headers.authorization === config.secrets.ACCESS_CODE || req.cookies.auth == config.secrets.ACCESS_CODE) {
+    if (req.headers.authorization === config.secrets.ACCESS_CODE || req?.cookies?.auth == config.secrets.ACCESS_CODE) {
       for (let scouter of ScoutingSync.scouters) {
         if (scouter.state.status == ScoutingSync.SCOUTER_STATUS.WAITING)
           scouter.updateState({ status: ScoutingSync.SCOUTER_STATUS.SCOUTING });
@@ -71,7 +71,7 @@ router.get("/enterMatch", async (req, res) => {
   }
 });
 router.get("/disconnectScouter/:scouterId", async (req, res) => {
-  if (req.headers.authorization === config.secrets.ACCESS_CODE || req.cookies.auth == config.secrets.ACCESS_CODE) {
+  if (req.headers.authorization === config.secrets.ACCESS_CODE || req?.cookies?.auth == config.secrets.ACCESS_CODE) {
     for (let scout of ScoutingSync.scouters) {
       if (scout.state.scouterId === req.params.scouterId) {
         scout.socket.emit("adminDisconnect");
@@ -84,7 +84,7 @@ router.get("/disconnectScouter/:scouterId", async (req, res) => {
 });
 router.post("/setMatch", (req, res) => {
   if (!DEMO) {
-    if (req.headers.authorization === config.secrets.ACCESS_CODE || req.cookies.auth == config.secrets.ACCESS_CODE) {
+    if (req.headers.authorization === config.secrets.ACCESS_CODE || req?.cookies?.auth == config.secrets.ACCESS_CODE) {
       ScoutingSync.setMatch(req.body);
       ScoutingSync.assignScouters();
       res.json(true);
