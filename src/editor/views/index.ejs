@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en" class="sl-theme-dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="./icons/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="./icons/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="./icons/favicon-16x16.png"
+    />
+    <link rel="manifest" href="./icons/site.webmanifest" />
+    <link
+      rel="mask-icon"
+      href="./icons/safari-pinned-tab.svg"
+      color="#30a2ff"
+    />
+    <link rel="shortcut icon" href="./icons/favicon.ico" />
+    <meta name="msapplication-TileColor" content="#fefefe" />
+    <meta name="msapplication-config" content="./icons/browserconfig.xml" />
+    <meta name="theme-color" content="#fefefe" />
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="msapplication-TileColor" content="#ffffff" />
+    <meta
+      name="msapplication-TileImage"
+      content="./icons/ms-icon-144x144.png"
+    />
+    <meta name="theme-color" content="#ffffff" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+
+    <title>SPOT ICE</title>
+    <script
+      type="module"
+      src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace/cdn/shoelace-autoloader.js"
+      async
+      onload="window.loaded ??= 0; window.loaded++; if (window.loaded >= 3) { window.dispatchEvent(new Event('fullyLoaded')) }"
+    ></script>
+    <script
+      type="module"
+      src="https://cdn.jsdelivr.net/npm/gridstack/dist/gridstack-all.js"
+      async
+      onload="window.loaded ??= 0; window.loaded++; if (window.loaded >= 3) { window.dispatchEvent(new Event('fullyLoaded')) }"
+    ></script>
+    <script type="module" src="./js/script.js" async></script>
+    <link
+      rel="preload"
+      href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace/cdn/themes/dark.css"
+      onload="this.rel='stylesheet'"
+      as="style"
+    />
+    <link
+      rel="preload"
+      href="./css/global.css"
+      onload="this.rel='stylesheet'"
+      as="style"
+    />
+    <link
+      rel="preload"
+      href="./css/gridstack.css"
+      onload="this.rel='stylesheet'"
+      as="style"
+    />
+    <link
+      rel="preload"
+      href="/css/match-scouting.css"
+      onload="this.rel='stylesheet'"
+      as="style"
+    />
+    <style>
+      :not(:defined) {
+        visibility: hidden;
+      }
+      body {
+        font-family: "Open Sans", sans-serif;
+        margin: 0;
+        padding: 0;
+        display: grid;
+        height: 100vh;
+        background-color: #222;
+      }
+    </style>
+    <style id="grid-sizes"></style>
+  </head>
+  <body>
+    <div class="statbar">
+      <div id="save"><sl-icon name="floppy"></sl-icon></div>
+      <div><sl-icon name="clock-history"></sl-icon> <a id="timing"></a></div>
+      <div id="layer">Layer 1</div>
+      <div id="grid">9 x 6</div>
+    </div>
+    <div class="sidebar">
+      <sl-tab-group>
+        <sl-tab slot="nav" panel="button">Selected</sl-tab>
+        <sl-tab slot="nav" panel="script">Scripting</sl-tab>
+
+        <sl-tab-panel name="button">
+          <sl-input
+            placeholder="autoScoreAlgae"
+            size="small"
+            label="ID"
+            id="in_button_id"
+            required
+            readonly
+            ><sl-icon name="hash" slot="prefix"></sl-icon
+          ></sl-input>
+          <sl-input
+            placeholder="Pickup Ground"
+            size="small"
+            label="Display Text"
+            id="in_button_text"
+            required
+            ><sl-icon name="display" slot="prefix"></sl-icon
+          ></sl-input>
+          <sl-select
+            placeholder="lightCoral"
+            size="small"
+            label="CSS Class"
+            id="in_button_class"
+            multiple
+            ><sl-icon name="palette" slot="prefix"></sl-icon>
+            <% [ 'button-padding', 'silver', 'green', 'orange', 'sherbert',
+            'red', 'navy', 'pink', 'yellow', 'bluegreen', 'lightbluegreen',
+            'darkbluegreen', 'lightCoral', 'coral', 'darkCoral', 'deepBlue',
+            'shallowBlue', 'border', 'highlight', 'gray' ].forEach(e => { %>
+            <sl-option value="<%= e %>"><%= e %></sl-option>
+            <% }) %>
+          </sl-select>
+          Dynamic State (Game Piece)
+          <div style="display: grid; grid-template-columns: 50% 50%">
+            <sl-select placeholder="Action" size="small" id="in_cond_act_type">
+              <sl-option value="add">Add</sl-option>
+              <sl-option value="remove">Remove</sl-option>
+            </sl-select>
+            <sl-input
+              size="small"
+              placeholder="Piece ID"
+              id="in_cond_act_name"
+            ></sl-input>
+            <sl-select
+              placeholder="Condition"
+              size="small"
+              id="in_cond_dep_type"
+            >
+              <sl-option value="if">If has</sl-option>
+              <sl-option value="no">Unless</sl-option>
+            </sl-select>
+            <sl-input
+              size="small"
+              placeholder="Piece ID"
+              id="in_cond_dep_name"
+            ></sl-input>
+          </div>
+          Actions here...
+          <br />
+          <br />
+          <sl-button size="small" id="btn_button_delete" variant="danger"
+            >Delete</sl-button
+          >
+        </sl-tab-panel>
+        <sl-tab-panel name="script">
+          CSS & executables editing goes here.
+        </sl-tab-panel>
+      </sl-tab-group>
+    </div>
+    <div class="editor"><div class="grid-stack"></div></div>
+    <div class="manager">
+      <sl-input id="in_button_create" size="small" placeholder="ID of new button"></sl-input>
+      <sl-button id="btn_button_create" size="small">Create</sl-button>
+    </div>
+    <sl-dialog id="diag_layer" label="Layer Selection">
+      <sl-icon-button slot="close" name="x"></sl-icon-button>
+      <div id="dialog_content">
+        <sl-input
+          placeholder="0"
+          label="Layer"
+          type="number"
+          id="in_layer"
+          value="0"
+        ></sl-input>
+      </div>
+      <sl-button id="btn_layer" slot="footer">Load</sl-button>
+    </sl-dialog>
+    <sl-dialog id="diag_grid" label="Grid Size Configuration">
+      <sl-icon-button slot="close" name="x"></sl-icon-button>
+      <div id="dialog_content">
+        <sl-input
+          placeholder="9"
+          size="small"
+          label="Grid Columns"
+          type="number"
+          id="in_grid_col"
+        ></sl-input>
+        <sl-input
+          placeholder="6"
+          size="small"
+          label="Grid Rows"
+          type="number"
+          id="in_grid_row"
+        ></sl-input>
+      </div>
+      <sl-button id="btn_apply" slot="footer">Apply</sl-button>
+    </sl-dialog>
+    <sl-alert variant="success" duration="3000" closable id="diag_saved">
+      <sl-icon slot="icon" name="check2-circle"></sl-icon>
+      <strong>Your changes have been saved</strong><br />
+      You can safely exit the app now.
+    </sl-alert>
+
+    <sl-alert variant="warning" duration="3000" closable id="diag_failed">
+      <sl-icon slot="icon" name="exclamation-triangle"></sl-icon>
+      <strong>Changes cannot be saved</strong><br />
+      Please try again later.
+    </sl-alert>
+  </body>
+</html>
