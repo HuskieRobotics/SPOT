@@ -134,11 +134,11 @@
             id="in_button_class"
             multiple
             ><sl-icon name="palette" slot="prefix"></sl-icon>
-            <% [ 'button-padding', 'silver', 'green', 'orange', 'sherbert',
+            <% [ 'silver', 'green', 'orange', 'sherbert',
             'red', 'navy', 'pink', 'yellow', 'bluegreen', 'lightbluegreen',
             'darkbluegreen', 'lightCoral', 'coral', 'darkCoral', 'deepBlue',
             'shallowBlue', 'border', 'highlight', 'gray' ].forEach(e => { %>
-            <sl-option value="<%= e %>"><%= e %></sl-option>
+            <sl-option value="<%= e %>"><%= e %><sl-icon name="square" slot="prefix" class="<%= e %>"></sl-icon></sl-option>
             <% }) %>
           </sl-select>
           Dynamic State (Game Piece)
