@@ -162,7 +162,7 @@
             console.error("Failed to delete match performance");
           }
         };
-        listItem.appendChild(trashButton);
+
         listContainer.appendChild(listItem);
       });
     }

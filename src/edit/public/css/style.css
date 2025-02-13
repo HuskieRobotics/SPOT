@@ -2,14 +2,6 @@ body {
   background-color: var(--bg);
 }
 
-#title {
-  background-color: var(--bg);
-  font: 2em/1em "Cairo";
-  padding: 10px;
-  margin-left: 20px;
-  margin-bottom: 20px;
-}
-
 .filter-container {
   display: flex;
   gap: 10px;
@@ -35,6 +27,8 @@ body {
 .match-info {
   flex-grow: 1;
   padding-left: 4px;
+  display: flex;
+  align-items: center;
 }
 
 .trash-button {
@@ -44,6 +38,8 @@ body {
   font-size: 16px;
   color: red;
   margin-left: auto;
+  display: flex;
+  align-items: center;
 }
 
 .filter-input {
@@ -59,6 +55,7 @@ body {
   padding: 10px;
   gap: 0;
   width: 100%;
+  justify-content: flex-start;
 }
 
 .dropdown-button {
@@ -68,6 +65,8 @@ body {
   border: none;
   width: 24px;
   font-size: 12px;
+  display: flex;
+  align-items: center;
 }
 
 .dropdown-content {
@@ -85,4 +84,11 @@ body {
 
 .dropdown-content li {
   padding: 3px 0;
+}
+
+.header {
+  background-color: var(--bg);
+  font: 2em/1em "Cairo";
+  padding-left: 50px;
+  padding-top: 40px;
 }
