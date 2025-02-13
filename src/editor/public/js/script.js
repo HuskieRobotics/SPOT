@@ -92,7 +92,7 @@ window.addEventListener('fullyLoaded', async function () {
     if (currentButton) {
       const l = layers[currentLayer];
       const data = l.find(e => e.id == currentButton);
-      data.displayText = inButtonText.value;
+      data.class = inButtonClass.value;
       layer(currentLayer);
       markUnsaved();
     }
