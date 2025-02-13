@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/HuskieRobotics/spot#readme",
   "dependencies": {
+    "@shoelace-style/shoelace": "^2.20.0",
     "@types/express": "^5.0.0",
     "@types/node": "^22.13.0",
     "axios": "^1.6.5",
