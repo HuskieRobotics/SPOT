@@ -1,7 +1,7 @@
 body {
   display: grid;
   grid-template-columns: 1fr 4fr;
-  grid-template-rows: 1fr min-content 20px;
+  grid-template-rows: 1fr 30px 20px;
   grid-column-gap: 0px;
   grid-row-gap: 0px;
   overflow-y: hidden;
@@ -43,6 +43,9 @@ body > div {
 .sidebar {
   grid-area: 1 / 1 / 2 / 2;
   background: #151515;
+  height: calc(100vh - 52px);
+  overflow-y: auto;
+  scrollbar-width: thin;
 }
 .editor {
   grid-area: 1 / 2 / 3 / 3;
