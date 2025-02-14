@@ -1,5 +1,5 @@
 const { Router } = require("express");
-const { writeFileSync, readdirSync } = require("fs");
+const { writeFileSync, readdirSync, rmSync } = require("fs");
 const path = require("path");
 let router = Router();
 
@@ -42,6 +42,16 @@ router.get("/exe/:name", function (req, res) {
 router.post("/exe/:name", function (req, res) {
   try {
     writeFileSync(path.resolve(require.main.path, "scouting/executables", req.params.name), req.body.v);
+    res.send("Success").end();
+  } catch (e) {
+    console.error("Cannot apply configuration from editor", e);
+    res.status(500).send("Failed").end();
+  }
+});
+
+router.delete("/exe/:name", function (req, res) {
+  try {
+    rmSync(path.resolve(require.main.path, "scouting/executables", req.params.name));
     res.send("Success").end();
   } catch (e) {
     console.error("Cannot apply configuration from editor", e);
