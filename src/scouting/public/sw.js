@@ -99,7 +99,7 @@ self.addEventListener("fetch", (event) => {
           .catch((e) => (console.log(e), response));
 
         // Prioritize live API first
-        return event.request.url.pathname.includes("/api/")
+        return new URL(event.request.url).pathname.includes("/api/")
           ? fetchPromise || response
           : (response || fetchPromise);
       });
