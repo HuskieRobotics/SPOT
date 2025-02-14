@@ -206,10 +206,12 @@ window.addEventListener('fullyLoaded', async function () {
 
   async function initErrorHandler() {
     const errToast = document.querySelector("#diag_error");
-    window.addEventListener("error", function (ev) {
+    function errorHandler(ev) {
       errToast.toast();
-      document.querySelector("#diag_error_txt").textContent = `${ev?.error || "Unknown error"}`;
-    });
+      document.querySelector("#diag_error_txt").textContent = `${ev?.error || ev?.reason || "Unknown error"}`;
+    }
+    window.addEventListener("error", errorHandler);
+    window.addEventListener("unhandledrejection", errorHandler);
   }
   initErrorHandler();
 
