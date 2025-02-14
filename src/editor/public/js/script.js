@@ -79,6 +79,8 @@ window.addEventListener('fullyLoaded', async function () {
         failedToast.toast();
         console.error(e);
       });
+    files = { css: files?.css };
+    scanCss();
   });
 
   function markUnsaved() {
@@ -203,15 +205,17 @@ window.addEventListener('fullyLoaded', async function () {
   });
 
   // Editor
+  var isChanging = false;
   editor = ace.edit("ace");
   editor.on("input", function () {
+    if (isChanging) return;
     if (!currentFile) return;
     markUnsaved();
     files[currentFile] = editor.getValue();
   });
   editor.setTheme("ace/theme/chaos");
   editor.session.setMode("ace/mode/css");
-  fetch("./api/exe/css").then(e => e.text()).then(e => editor.setValue(e)).catch(() => { });
+  fetch("./api/exe/css").then(e => e.text()).then(e => {isChanging = true;editor.setValue(e); files.css = e; scanCss();isChanging = false;}).catch(() => { });
   document.querySelector("sl-tab-group").addEventListener("sl-tab-show", function (ev) {
     document.querySelector("#ace").hidden = ev?.detail?.name !== "script";
     document.querySelector(".grid-stack").hidden = ev?.detail?.name === "script";
@@ -228,7 +232,11 @@ window.addEventListener('fullyLoaded', async function () {
     }
     if (id === "css") editor.session.setMode("ace/mode/css");
     else editor.session.setMode("ace/mode/javascript");
-    fetch("./api/exe/" + id).then(e => e.text()).then(e => editor.setValue(e));
+    isChanging = true;
+    fetch("./api/exe/" + id).then(e => e.text()).then(e => {
+      editor.setValue(e);
+      setTimeout(() => isChanging = false, 100)
+    });
     currentFile = id;
   });
   const exeList = scriptTree.querySelector("#exe");
@@ -241,6 +249,20 @@ window.addEventListener('fullyLoaded', async function () {
       exeList.appendChild(item);
     }
   });
+
+  function scanCss() {
+    inButtonClass.childNodes.forEach(n => n.className == "tmp" && n.remove());
+    const list = `${files.css}`.matchAll(/^\.([a-zA-Z-._0-9]+) *\{ *$/gm);
+    for (const [m, cl] of list) {
+      console.log(m, cl);
+      const opt = document.createElement("sl-option");
+      opt.innerHTML = `${cl}<sl-icon name="square" slot="prefix" class="${cl}">`;
+      opt.value = cl;
+      opt.className = "tmp";
+      inButtonClass.appendChild(opt);
+    }
+    document.querySelector("#buttons-css").innerText = files.css;
+  }
 });
 
 /**

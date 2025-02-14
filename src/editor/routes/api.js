@@ -23,7 +23,6 @@ router.get("/exe/css", function (req, res) {
 
 router.post("/exe/css", function (req, res) {
   try {
-    console.log(req.body);
     writeFileSync(path.resolve(require.main.path, "scouting/public/css/buttons.css"), req.body.v);
     res.send("Success").end();
   } catch (e) {
