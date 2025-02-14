@@ -259,7 +259,7 @@ window.addEventListener('fullyLoaded', async function () {
       isChanging = true;
       fetch("./api/exe/" + id).then(e => e.text()).then(e => {
         editor.setValue(e);
-        setTimeout(() => isChanging = false, 100)
+        setTimeout(() => isChanging = false, 100);
       });
       currentFile = id;
     });
@@ -269,9 +269,9 @@ window.addEventListener('fullyLoaded', async function () {
       for (const file of list) createFile(file);
     });
     function createFile(file) {
-        const item = document.createElement("sl-tree-item");
-        item.innerText = file;
-        item.id = file;
+      const item = document.createElement("sl-tree-item");
+      item.innerText = file;
+      item.id = file;
       item.addEventListener("contextmenu", (ev) => {
         ev.preventDefault();
         if(!confirm(`Do you want to delete "exe/${file}"`)) return;
@@ -282,8 +282,8 @@ window.addEventListener('fullyLoaded', async function () {
           item.remove();
         })
       });
-        exeList.appendChild(item);
-      }
+      exeList.appendChild(item);
+    }
   }
   initEditor();
 
@@ -291,7 +291,6 @@ window.addEventListener('fullyLoaded', async function () {
     inButtonClass.childNodes.forEach(n => n.className == "tmp" && n.remove());
     const list = `${files.css}`.matchAll(/^\.([a-zA-Z-._0-9]+) *\{ *$/gm);
     for (const [m, cl] of list) {
-      console.log(m, cl);
       const opt = document.createElement("sl-option");
       opt.innerHTML = `${cl}<sl-icon name="square" slot="prefix" class="${cl}">`;
       opt.value = cl;
