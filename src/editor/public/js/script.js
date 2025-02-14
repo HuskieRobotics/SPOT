@@ -52,6 +52,8 @@ window.addEventListener('fullyLoaded', async function () {
   const btnSave = document.querySelector(".statbar > div#save");
   const successToast = document.querySelector("#diag_saved");
   const failedToast = document.querySelector("#diag_failed");
+  const scriptTree = document.querySelector("#tree_script");
+  const exeList = scriptTree.querySelector("#exe");
 
   btnSave.addEventListener("click", function () {
     config.layout.layers = layers;
@@ -234,12 +236,22 @@ window.addEventListener('fullyLoaded', async function () {
     });
 
     // Editor file handling
-    const scriptTree = document.querySelector("#tree_script");
     scriptTree.addEventListener("sl-selection-change", function (ev) {
       if (ev.detail.selection.length === 0) return;
       const { id } = ev.detail.selection[0];
       if (id === "create") {
         ev.detail.selection[0].selected = false;
+        let file = prompt("Name of the new executable?");
+        if (!file) return;
+        if (!file.match(/^[\w\-. ]+$/)) throw "Invalid executable name!";
+        if (!file.endsWith(".js")) file += ".js";
+        fetch(`./api/exe/${file}`, {
+          method: "POST",
+          body: JSON.stringify({ v: "" })
+        }).then(res => {
+          if (res.status !== 200) throw `Error creating "exe/${file}"`;
+          createFile(file);
+        });
         return;
       }
       if (id === "css") editor.session.setMode("ace/mode/css");
@@ -251,16 +263,27 @@ window.addEventListener('fullyLoaded', async function () {
       });
       currentFile = id;
     });
-    const exeList = scriptTree.querySelector("#exe");
+
     // This fetch is not important so it can be done after.
     fetch("./api/exe").then(e => e.json()).then(list => {
-      for (const file of list) {
+      for (const file of list) createFile(file);
+    });
+    function createFile(file) {
         const item = document.createElement("sl-tree-item");
         item.innerText = file;
         item.id = file;
+      item.addEventListener("contextmenu", (ev) => {
+        ev.preventDefault();
+        if(!confirm(`Do you want to delete "exe/${file}"`)) return;
+        fetch(`./api/exe/${file}`, {
+          method: "DELETE"
+        }).then(res => {
+          if (res.status !== 200) throw `Error deleting "exe/${file}"`;
+          item.remove();
+        })
+      });
         exeList.appendChild(item);
       }
-    });
   }
   initEditor();
 
