@@ -274,7 +274,7 @@ window.addEventListener('fullyLoaded', async function () {
       item.id = file;
       item.addEventListener("contextmenu", (ev) => {
         ev.preventDefault();
-        if(!confirm(`Do you want to delete "exe/${file}"`)) return;
+        if (!confirm(`Do you want to delete "exe/${file}"`)) return;
         fetch(`./api/exe/${file}`, {
           method: "DELETE"
         }).then(res => {
@@ -396,6 +396,3 @@ window.editButton = function (id) {
   }
   currentButton = id;
 }
-
-window.loaded ??= 0; window.loaded++;
-if (window.loaded >= 3) { window.dispatchEvent(new Event('fullyLoaded')) }

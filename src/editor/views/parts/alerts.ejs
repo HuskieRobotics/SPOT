@@ -1,0 +1,50 @@
+<sl-dialog id="diag_layer" label="Layer Selection">
+  <sl-icon-button slot="close" name="x"></sl-icon-button>
+  <div id="dialog_content">
+    <sl-input
+      placeholder="0"
+      label="Layer"
+      type="number"
+      id="in_layer"
+      value="0"
+    ></sl-input>
+  </div>
+  <sl-button id="btn_layer" slot="footer">Load</sl-button>
+</sl-dialog>
+<sl-dialog id="diag_grid" label="Grid Size Configuration">
+  <sl-icon-button slot="close" name="x"></sl-icon-button>
+  <div id="dialog_content">
+    <sl-input
+      placeholder="9"
+      size="small"
+      label="Grid Columns"
+      type="number"
+      id="in_grid_col"
+    ></sl-input>
+    <sl-input
+      placeholder="6"
+      size="small"
+      label="Grid Rows"
+      type="number"
+      id="in_grid_row"
+    ></sl-input>
+  </div>
+  <sl-button id="btn_apply" slot="footer">Apply</sl-button>
+</sl-dialog>
+<sl-alert variant="success" duration="3000" closable id="diag_saved">
+  <sl-icon slot="icon" name="check2-circle"></sl-icon>
+  <strong>Your changes have been saved</strong><br />
+  You can safely exit the app now.
+</sl-alert>
+
+<sl-alert variant="warning" duration="3000" closable id="diag_failed">
+  <sl-icon slot="icon" name="exclamation-triangle"></sl-icon>
+  <strong>Changes cannot be saved</strong><br />
+  Please try again later.
+</sl-alert>
+
+<sl-alert variant="danger" duration="3000" closable id="diag_error">
+  <sl-icon slot="icon" name="exclamation-octagon"></sl-icon>
+  <strong>Something went wrong</strong><br />
+  <code id="diag_error_txt"></code>
+</sl-alert>
