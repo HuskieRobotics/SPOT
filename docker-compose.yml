@@ -18,4 +18,6 @@ services:
       start_interval: 5s
     volumes:
       - ./config:/app/config
+      - ./src/scouting/public/css/:/app/src/scouting/public/css/
+      - ./src/scouting/executables/:/app/src/scouting/executables/
     stop_grace_period: 1s

@@ -96,9 +96,12 @@ self.addEventListener("fetch", (event) => {
             }
             return networkResponse;
           })
-          .catch((e) => console.log(e));
+          .catch((e) => (console.log(e), response));
 
-        return response || fetchPromise;
+        // Prioritize live API first
+        return event.request.url.pathname.includes("/api/")
+          ? fetchPromise || response
+          : (response || fetchPromise);
       });
     })
   );

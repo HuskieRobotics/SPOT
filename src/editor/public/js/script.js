@@ -1,5 +1,8 @@
-var grid, config, layers, columns, rows, currentLayer, currentButton;
+var grid, config, layers, columns, rows, currentLayer, currentButton, editor, files = {}, currentFile = "css";
+const configFetcher = fetch("./api/config").then(e => e.json());
+
 window.addEventListener('fullyLoaded', async function () {
+  if (grid) return;
   GridStack.renderCB = function (el, w) {
     el.innerHTML = w.content;
   };
@@ -8,7 +11,7 @@ window.addEventListener('fullyLoaded', async function () {
     column: 9,
     float: true
   });
-  fetch("/config/match-scouting.json").then(e => e.json()).then(async (res) => {
+  configFetcher.then(async (res) => {
     columns = res.layout.gridColumns;
     rows = res.layout.gridRows;
     config = res;
@@ -16,6 +19,8 @@ window.addEventListener('fullyLoaded', async function () {
     layer(1);
     document.querySelector("#in_grid_row").value = rows;
     document.querySelector("#in_grid_col").value = columns;
+
+    document.querySelector(".loader").remove();
   });
   var timeout;
   window.addEventListener('resize', () => (clearTimeout(timeout), timeout = setTimeout(refreshCellHeight, 100)));
@@ -50,14 +55,23 @@ window.addEventListener('fullyLoaded', async function () {
 
   btnSave.addEventListener("click", function () {
     config.layout.layers = layers;
-    fetch("./api/config", {
-      method: "POST",
-      body: JSON.stringify(config),
-      headers: {
-        "Content-Type": "application/json"
-      }
-    }).then(res => {
-      if (res.status !== 200) throw "Returned status isn't OK";
+    Promise.all([
+      fetch("./api/config", {
+        method: "POST",
+        body: JSON.stringify(config),
+        headers: {
+          "Content-Type": "application/json"
+        }
+      }),
+      ...Object.entries(files).map(([k, v]) => fetch("./api/exe/" + k, {
+        method: "POST",
+        body: JSON.stringify({ v }),
+        headers: {
+          "Content-Type": "application/json"
+        }
+      }))
+    ]).then(res => {
+      if (res.find(e => e.status !== 200)) throw "Returned status isn't OK";
       successToast.toast();
       btnSave.classList.remove("unsaved");
     })
@@ -92,7 +106,7 @@ window.addEventListener('fullyLoaded', async function () {
     if (currentButton) {
       const l = layers[currentLayer];
       const data = l.find(e => e.id == currentButton);
-      data.class = inButtonClass.value;
+      data.class = inButtonClass.value.join(" ");
       layer(currentLayer);
       markUnsaved();
     }
@@ -136,11 +150,13 @@ window.addEventListener('fullyLoaded', async function () {
   inCondDepName.addEventListener('sl-change', updateDependencies);
   inCondDepType.addEventListener('sl-change', updateDependencies);
   btnButtonDelete.addEventListener('click', function (e) {
+    if (!currentButton) return;
     const l = layers[currentLayer];
     const index = l.findIndex(e => e.id == currentButton);
     l.splice(index, 1);
     layer(currentLayer);
     markUnsaved();
+    currentButton = null;
   });
 
   // Position & size convert back from gridstack to database
@@ -178,6 +194,52 @@ window.addEventListener('fullyLoaded', async function () {
     layer(currentLayer);
     editButton(id);
     inButtonCreate.value = "";
+  });
+
+  const errToast = document.querySelector("#diag_error");
+  window.addEventListener("error", function (ev) {
+    errToast.toast();
+    document.querySelector("#diag_error_txt").textContent = `${ev?.error || "Unknown error"}`;
+  });
+
+  // Editor
+  editor = ace.edit("ace");
+  editor.on("input", function () {
+    if (!currentFile) return;
+    markUnsaved();
+    files[currentFile] = editor.getValue();
+  });
+  editor.setTheme("ace/theme/chaos");
+  editor.session.setMode("ace/mode/css");
+  fetch("./api/exe/css").then(e => e.text()).then(e => editor.setValue(e)).catch(() => { });
+  document.querySelector("sl-tab-group").addEventListener("sl-tab-show", function (ev) {
+    document.querySelector("#ace").hidden = ev?.detail?.name !== "script";
+    document.querySelector(".grid-stack").hidden = ev?.detail?.name === "script";
+  });
+
+  // Editor file handling
+  const scriptTree = document.querySelector("#tree_script");
+  scriptTree.addEventListener("sl-selection-change", function (ev) {
+    if (ev.detail.selection.length === 0) return;
+    const { id } = ev.detail.selection[0];
+    if (id === "create") {
+      ev.detail.selection[0].selected = false;
+      return;
+    }
+    if (id === "css") editor.session.setMode("ace/mode/css");
+    else editor.session.setMode("ace/mode/javascript");
+    fetch("./api/exe/" + id).then(e => e.text()).then(e => editor.setValue(e));
+    currentFile = id;
+  });
+  const exeList = scriptTree.querySelector("#exe");
+  // This fetch is not important so it can be done after.
+  fetch("./api/exe").then(e => e.json()).then(list => {
+    for (const file of list) {
+      const item = document.createElement("sl-tree-item");
+      item.innerText = file;
+      item.id = file;
+      exeList.appendChild(item);
+    }
   });
 });
 
@@ -249,12 +311,11 @@ function refreshCellHeight() {
 
 window.editButton = function (id) {
   currentButton = null;
-  console.log(id);
   const layer = layers[currentLayer];
   const data = layer.find(e => e.id == id);
   document.querySelector("#in_button_id").value = data.id;
   document.querySelector("#in_button_text").value = data.displayText;
-  document.querySelector("#in_button_class").value = data.class;
+  document.querySelector("#in_button_class").value = data.class.split(" ");
   if (data?.conditions?.add) {
     document.querySelector("#in_cond_act_type").value = "add";
     document.querySelector("#in_cond_act_name").value = data.conditions.add;

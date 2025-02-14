@@ -38,24 +38,39 @@
       content="./icons/ms-icon-144x144.png"
     />
     <meta name="theme-color" content="#ffffff" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
     <meta
       name="apple-mobile-web-app-status-bar-style"
       content="black-translucent"
     />
 
-    <title>SPOT ICE</title>
+    <title>SPOT - ICE</title>
+    <script>
+      function count() {
+        window.loaded ??= 0;
+        window.loaded++;
+        if (window.loaded >= 4) {
+          window.dispatchEvent(new Event("fullyLoaded"));
+        }
+      }
+    </script>
     <script
       type="module"
       src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace/cdn/shoelace-autoloader.js"
       async
-      onload="window.loaded ??= 0; window.loaded++; if (window.loaded >= 3) { window.dispatchEvent(new Event('fullyLoaded')) }"
+      onload="count()"
     ></script>
     <script
       type="module"
       src="https://cdn.jsdelivr.net/npm/gridstack/dist/gridstack-all.js"
       async
-      onload="window.loaded ??= 0; window.loaded++; if (window.loaded >= 3) { window.dispatchEvent(new Event('fullyLoaded')) }"
+      onload="count()"
+    ></script>
+    <script
+      type="module"
+      src="./ace-builds/src-noconflict/ace.js"
+      async
+      onload="count()"
     ></script>
     <script type="module" src="./js/script.js" async></script>
     <link
@@ -93,6 +108,29 @@
         display: grid;
         height: 100vh;
         background-color: #222;
+      }
+
+      .loader {
+        border: 8px solid #f3f3f3; /* Light grey */
+        border-top: 8px solid #3498db; /* Blue */
+        background-color: #0000;
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        animation: spin 0.3s linear infinite;
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        z-index: 10000;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
       }
     </style>
     <style id="grid-sizes"></style>
@@ -134,53 +172,80 @@
             id="in_button_class"
             multiple
             ><sl-icon name="palette" slot="prefix"></sl-icon>
-            <% [ 'silver', 'green', 'orange', 'sherbert',
-            'red', 'navy', 'pink', 'yellow', 'bluegreen', 'lightbluegreen',
-            'darkbluegreen', 'lightCoral', 'coral', 'darkCoral', 'deepBlue',
-            'shallowBlue', 'border', 'highlight', 'gray' ].forEach(e => { %>
-            <sl-option value="<%= e %>"><%= e %><sl-icon name="square" slot="prefix" class="<%= e %>"></sl-icon></sl-option>
+            <% [ 'silver', 'green', 'orange', 'sherbert', 'red', 'navy', 'pink',
+            'yellow', 'bluegreen', 'lightbluegreen', 'darkbluegreen',
+            'lightCoral', 'coral', 'darkCoral', 'deepBlue', 'shallowBlue',
+            'border', 'highlight', 'gray' ].forEach(e => { %>
+            <sl-option value="<%= e %>"
+              ><%= e %><sl-icon
+                name="square"
+                slot="prefix"
+                class="<%= e %>"
+              ></sl-icon
+            ></sl-option>
             <% }) %>
           </sl-select>
-          Dynamic State (Game Piece)
-          <div style="display: grid; grid-template-columns: 50% 50%">
-            <sl-select placeholder="Action" size="small" id="in_cond_act_type">
-              <sl-option value="add">Add</sl-option>
-              <sl-option value="remove">Remove</sl-option>
-            </sl-select>
-            <sl-input
-              size="small"
-              placeholder="Piece ID"
-              id="in_cond_act_name"
-            ></sl-input>
-            <sl-select
-              placeholder="Condition"
-              size="small"
-              id="in_cond_dep_type"
-            >
-              <sl-option value="if">If has</sl-option>
-              <sl-option value="no">Unless</sl-option>
-            </sl-select>
-            <sl-input
-              size="small"
-              placeholder="Piece ID"
-              id="in_cond_dep_name"
-            ></sl-input>
-          </div>
-          Actions here...
           <br />
+          <sl-details summary="Dynamic State (Game Piece)" class="details">
+            <div style="display: grid; grid-template-columns: 50% 50%">
+              <sl-select
+                placeholder="Action"
+                size="small"
+                id="in_cond_act_type"
+              >
+                <sl-option value="add">Add</sl-option>
+                <sl-option value="remove">Remove</sl-option>
+              </sl-select>
+              <sl-input
+                size="small"
+                placeholder="Piece ID"
+                id="in_cond_act_name"
+              ></sl-input>
+              <sl-select
+                placeholder="Condition"
+                size="small"
+                id="in_cond_dep_type"
+              >
+                <sl-option value="if">If has</sl-option>
+                <sl-option value="no">Unless</sl-option>
+              </sl-select>
+              <sl-input
+                size="small"
+                placeholder="Piece ID"
+                id="in_cond_dep_name"
+              ></sl-input>
+            </div>
+            <sl-icon name="database" slot="expand-icon"></sl-icon>
+          </sl-details>
+          <sl-details summary="Executable" class="details"
+            ><sl-icon name="terminal" slot="expand-icon"></sl-icon
+          ></sl-details>
           <br />
           <sl-button size="small" id="btn_button_delete" variant="danger"
-            >Delete</sl-button
+            ><sl-icon name="trash" slot="prefix"></sl-icon>Delete</sl-button
           >
         </sl-tab-panel>
         <sl-tab-panel name="script">
-          CSS & executables editing goes here.
+          <sl-tree selection="tree" id="tree_script">
+            <sl-tree-item selected id="css">CSS</sl-tree-item>
+            <sl-tree-item expanded id="exe">
+              Executables
+              <sl-tree-item id="create"><sl-icon name="file-earmark-plus"></sl-icon> Create new...</sl-tree-item>
+            </sl-tree-item>
+          </sl-tree>
         </sl-tab-panel>
       </sl-tab-group>
     </div>
-    <div class="editor"><div class="grid-stack"></div></div>
+    <div class="editor">
+      <div class="grid-stack"></div>
+      <div id="ace" hidden></div>
+    </div>
     <div class="manager">
-      <sl-input id="in_button_create" size="small" placeholder="ID of new button"></sl-input>
+      <sl-input
+        id="in_button_create"
+        size="small"
+        placeholder="ID of new button"
+      ></sl-input>
       <sl-button id="btn_button_create" size="small">Create</sl-button>
     </div>
     <sl-dialog id="diag_layer" label="Layer Selection">
@@ -227,5 +292,12 @@
       <strong>Changes cannot be saved</strong><br />
       Please try again later.
     </sl-alert>
+
+    <sl-alert variant="danger" duration="3000" closable id="diag_error">
+      <sl-icon slot="icon" name="exclamation-octagon"></sl-icon>
+      <strong>Something went wrong</strong><br />
+      <code id="diag_error_txt"></code>
+    </sl-alert>
+    <div class="loader"></div>
   </body>
 </html>

@@ -4,6 +4,7 @@ body {
   grid-template-rows: 1fr min-content 20px;
   grid-column-gap: 0px;
   grid-row-gap: 0px;
+  overflow-y: hidden;
 }
 
 body > div {
@@ -20,7 +21,7 @@ body > div {
 
 .statbar > div {
   font-size: 15px;
-  background: #1B1B1B;
+  background: #1b1b1b;
   border-left: 1px #333 solid;
   padding: 0 5px;
   cursor: pointer;
@@ -28,7 +29,7 @@ body > div {
 
 .statbar > div:hover {
   background: #333;
-  border-bottom: #18BC9C solid 2px;
+  border-bottom: #18bc9c solid 2px;
 }
 
 .statbar > div#save {
@@ -36,7 +37,7 @@ body > div {
 }
 
 .statbar > div#save.unsaved {
-  background: #e00
+  background: #e00;
 }
 
 .sidebar {
@@ -53,5 +54,26 @@ body > div {
   display: flex;
 }
 
-.grid-stack-item-content:hover { filter: brightness(1.1); }
-.grid-stack-item-content:active { filter: brightness(0.7); }
+.grid-stack-item-content:hover {
+  filter: brightness(1.1);
+}
+.grid-stack-item-content:active {
+  filter: brightness(0.7);
+}
+
+.details::part(header) {
+  padding: 2px;
+}
+
+.details::part(content) {
+  padding: 2px;
+}
+
+#in_button_create {
+  width: max-content;
+}
+
+#ace {
+  height: calc(100vh - 22px);
+  margin-bottom: 2px #333 solid;
+}
