@@ -84,171 +84,183 @@ window.addEventListener('fullyLoaded', async function () {
   });
 
   function markUnsaved() {
-    btnSave.classList.add("unsaved")
+    btnSave.classList.add("unsaved");
   }
-  inButtonId.addEventListener('sl-input', function () {
-    if (currentButton) {
-      const l = layers[currentLayer];
-      const data = l.find(e => e.id == currentButton);
-      data.id = inButtonId.value;
-      layer(currentLayer);
-      markUnsaved();
-    }
-  });
-  inButtonText.addEventListener('sl-input', function () {
-    if (currentButton) {
-      const l = layers[currentLayer];
-      const data = l.find(e => e.id == currentButton);
-      data.displayText = inButtonText.value;
-      layer(currentLayer);
-      markUnsaved();
-    }
-  });
-  inButtonClass.addEventListener('sl-change', function () {
-    if (currentButton) {
-      const l = layers[currentLayer];
-      const data = l.find(e => e.id == currentButton);
-      data.class = inButtonClass.value.join(" ");
-      layer(currentLayer);
-      markUnsaved();
-    }
-  });
-  function updateActions() {
-    if (currentButton) {
-      const layer = layers[currentLayer];
-      const data = layer.find(e => e.id == currentButton);
-      if (!data.conditions) data.conditions = {};
-      if (inCondActType.value == "add") {
-        data.conditions.add = inCondActName.value;
-      } else if (inCondActType.value == "remove") {
-        data.conditions.remove = inCondActName.value;
-      } else if (data.conditions) {
-        delete data.conditions.add;
-        delete data.conditions.remove;
+  async function initSidebar() {
+    inButtonId.addEventListener('sl-input', function () {
+      if (currentButton) {
+        const l = layers[currentLayer];
+        const data = l.find(e => e.id == currentButton);
+        data.id = inButtonId.value;
+        layer(currentLayer);
+        markUnsaved();
       }
-      if (Object.keys(data.conditions).length == 0) delete data.conditions;
-      markUnsaved();
-    }
-  }
-  inCondActName.addEventListener('sl-change', updateActions);
-  inCondActType.addEventListener('sl-change', updateActions);
-  function updateDependencies() {
-    if (currentButton) {
-      const layer = layers[currentLayer];
-      const data = layer.find(e => e.id == currentButton);
-      if (!data.conditions) data.conditions = {};
-      if (inCondDepType.value == "if") {
-        data.conditions.if = inCondDepName.value;
-      } else if (inCondDepType.value == "no") {
-        data.conditions.no = inCondDepName.value;
-      } else if (data.conditions) {
-        delete data.conditions.if;
-        delete data.conditions.no;
-      }
-      if (Object.keys(data.conditions).length == 0) delete data.conditions;
-      markUnsaved();
-    }
-  }
-  inCondDepName.addEventListener('sl-change', updateDependencies);
-  inCondDepType.addEventListener('sl-change', updateDependencies);
-  btnButtonDelete.addEventListener('click', function (e) {
-    if (!currentButton) return;
-    const l = layers[currentLayer];
-    const index = l.findIndex(e => e.id == currentButton);
-    l.splice(index, 1);
-    layer(currentLayer);
-    markUnsaved();
-    currentButton = null;
-  });
-
-  // Position & size convert back from gridstack to database
-  function gridHandler(event, el) {
-    const node = el.gridstackNode; // {x, y, width, height, id, ....}
-    const layer = layers[currentLayer];
-    const data = layer.find(e => e.id == node.id);
-    data.gridArea[0] = node.y + 1;
-    data.gridArea[1] = node.x + 1;
-    data.gridArea[2] = node.y + node.h + 1;
-    data.gridArea[3] = node.x + node.w + 1;
-    markUnsaved();
-  }
-  grid.on('dragstop', gridHandler);
-  grid.on('resizestop', gridHandler);
-
-  // "Create new button" button
-  const btnButtonCreate = document.querySelector("#btn_button_create");
-  const inButtonCreate = document.querySelector("#in_button_create");
-  btnButtonCreate.addEventListener("click", function () {
-    const id = inButtonCreate.value;
-    if (!id || !id.match(/^[a-zA-Z-_0-9]+$/) || layers[currentLayer].find(e => e.id == id)) return;
-    grid.addWidget({ content: "New Button", id });
-    const el = grid.save(false).find(e => e.id == id);
-    const l = layers[currentLayer];
-    l.push({
-      id,
-      gridArea: [],
-      displayText: "New Button",
-      type: "action",
-      class: "gray",
-      executables: []
     });
-    gridHandler(null, { gridstackNode: el });
-    layer(currentLayer);
-    editButton(id);
-    inButtonCreate.value = "";
-  });
+    inButtonText.addEventListener('sl-input', function () {
+      if (currentButton) {
+        const l = layers[currentLayer];
+        const data = l.find(e => e.id == currentButton);
+        data.displayText = inButtonText.value;
+        layer(currentLayer);
+        markUnsaved();
+      }
+    });
+    inButtonClass.addEventListener('sl-change', function () {
+      if (currentButton) {
+        const l = layers[currentLayer];
+        const data = l.find(e => e.id == currentButton);
+        data.class = inButtonClass.value.join(" ");
+        layer(currentLayer);
+        markUnsaved();
+      }
+    });
+    function updateActions() {
+      if (currentButton) {
+        const layer = layers[currentLayer];
+        const data = layer.find(e => e.id == currentButton);
+        if (!data.conditions) data.conditions = {};
+        if (inCondActType.value == "add") {
+          data.conditions.add = inCondActName.value;
+        } else if (inCondActType.value == "remove") {
+          data.conditions.remove = inCondActName.value;
+        } else if (data.conditions) {
+          delete data.conditions.add;
+          delete data.conditions.remove;
+        }
+        if (Object.keys(data.conditions).length == 0) delete data.conditions;
+        markUnsaved();
+      }
+    }
+    inCondActName.addEventListener('sl-change', updateActions);
+    inCondActType.addEventListener('sl-change', updateActions);
+    function updateDependencies() {
+      if (currentButton) {
+        const layer = layers[currentLayer];
+        const data = layer.find(e => e.id == currentButton);
+        if (!data.conditions) data.conditions = {};
+        if (inCondDepType.value == "if") {
+          data.conditions.if = inCondDepName.value;
+        } else if (inCondDepType.value == "no") {
+          data.conditions.no = inCondDepName.value;
+        } else if (data.conditions) {
+          delete data.conditions.if;
+          delete data.conditions.no;
+        }
+        if (Object.keys(data.conditions).length == 0) delete data.conditions;
+        markUnsaved();
+      }
+    }
+    inCondDepName.addEventListener('sl-change', updateDependencies);
+    inCondDepType.addEventListener('sl-change', updateDependencies);
+    btnButtonDelete.addEventListener('click', function (e) {
+      if (!currentButton) return;
+      const l = layers[currentLayer];
+      const index = l.findIndex(e => e.id == currentButton);
+      l.splice(index, 1);
+      layer(currentLayer);
+      markUnsaved();
+      currentButton = null;
+    });
+  }
+  initSidebar();
 
-  const errToast = document.querySelector("#diag_error");
-  window.addEventListener("error", function (ev) {
-    errToast.toast();
-    document.querySelector("#diag_error_txt").textContent = `${ev?.error || "Unknown error"}`;
-  });
+  async function initGridInterface() {
+    // Position & size convert back from gridstack to database
+    function gridHandler(event, el) {
+      const node = el.gridstackNode; // {x, y, width, height, id, ....}
+      const layer = layers[currentLayer];
+      const data = layer.find(e => e.id == node.id);
+      data.gridArea[0] = node.y + 1;
+      data.gridArea[1] = node.x + 1;
+      data.gridArea[2] = node.y + node.h + 1;
+      data.gridArea[3] = node.x + node.w + 1;
+      markUnsaved();
+    }
+    grid.on('dragstop', gridHandler);
+    grid.on('resizestop', gridHandler);
+
+    // "Create new button" button
+    const btnButtonCreate = document.querySelector("#btn_button_create");
+    const inButtonCreate = document.querySelector("#in_button_create");
+    btnButtonCreate.addEventListener("click", function () {
+      const id = inButtonCreate.value;
+      if (!id || !id.match(/^[a-zA-Z-_0-9]+$/) || layers[currentLayer].find(e => e.id == id)) return;
+      grid.addWidget({ content: "New Button", id });
+      const el = grid.save(false).find(e => e.id == id);
+      const l = layers[currentLayer];
+      l.push({
+        id,
+        gridArea: [],
+        displayText: "New Button",
+        type: "action",
+        class: "gray",
+        executables: []
+      });
+      gridHandler(null, { gridstackNode: el });
+      layer(currentLayer);
+      editButton(id);
+      inButtonCreate.value = "";
+    });
+  }
+  initGridInterface();
+
+  async function initErrorHandler() {
+    const errToast = document.querySelector("#diag_error");
+    window.addEventListener("error", function (ev) {
+      errToast.toast();
+      document.querySelector("#diag_error_txt").textContent = `${ev?.error || "Unknown error"}`;
+    });
+  }
+  initErrorHandler();
 
   // Editor
   var isChanging = false;
-  editor = ace.edit("ace");
-  editor.on("input", function () {
-    if (isChanging) return;
-    if (!currentFile) return;
-    markUnsaved();
-    files[currentFile] = editor.getValue();
-  });
-  editor.setTheme("ace/theme/chaos");
-  editor.session.setMode("ace/mode/css");
-  fetch("./api/exe/css").then(e => e.text()).then(e => {isChanging = true;editor.setValue(e); files.css = e; scanCss();isChanging = false;}).catch(() => { });
-  document.querySelector("sl-tab-group").addEventListener("sl-tab-show", function (ev) {
-    document.querySelector("#ace").hidden = ev?.detail?.name !== "script";
-    document.querySelector(".grid-stack").hidden = ev?.detail?.name === "script";
-  });
-
-  // Editor file handling
-  const scriptTree = document.querySelector("#tree_script");
-  scriptTree.addEventListener("sl-selection-change", function (ev) {
-    if (ev.detail.selection.length === 0) return;
-    const { id } = ev.detail.selection[0];
-    if (id === "create") {
-      ev.detail.selection[0].selected = false;
-      return;
-    }
-    if (id === "css") editor.session.setMode("ace/mode/css");
-    else editor.session.setMode("ace/mode/javascript");
-    isChanging = true;
-    fetch("./api/exe/" + id).then(e => e.text()).then(e => {
-      editor.setValue(e);
-      setTimeout(() => isChanging = false, 100)
+  async function initEditor() {
+    editor = ace.edit("ace");
+    editor.on("input", function () {
+      if (isChanging) return;
+      if (!currentFile) return;
+      markUnsaved();
+      files[currentFile] = editor.getValue();
     });
-    currentFile = id;
-  });
-  const exeList = scriptTree.querySelector("#exe");
-  // This fetch is not important so it can be done after.
-  fetch("./api/exe").then(e => e.json()).then(list => {
-    for (const file of list) {
-      const item = document.createElement("sl-tree-item");
-      item.innerText = file;
-      item.id = file;
-      exeList.appendChild(item);
-    }
-  });
+    editor.setTheme("ace/theme/chaos");
+    editor.session.setMode("ace/mode/css");
+    fetch("./api/exe/css").then(e => e.text()).then(e => { isChanging = true; editor.setValue(e); files.css = e; scanCss(); setTimeout(() => isChanging = false, 100); }).catch(() => { });
+    document.querySelector("sl-tab-group").addEventListener("sl-tab-show", function (ev) {
+      document.querySelector("#ace").hidden = ev?.detail?.name !== "script";
+      document.querySelector(".grid-stack").hidden = ev?.detail?.name === "script";
+    });
+
+    // Editor file handling
+    const scriptTree = document.querySelector("#tree_script");
+    scriptTree.addEventListener("sl-selection-change", function (ev) {
+      if (ev.detail.selection.length === 0) return;
+      const { id } = ev.detail.selection[0];
+      if (id === "create") {
+        ev.detail.selection[0].selected = false;
+        return;
+      }
+      if (id === "css") editor.session.setMode("ace/mode/css");
+      else editor.session.setMode("ace/mode/javascript");
+      isChanging = true;
+      fetch("./api/exe/" + id).then(e => e.text()).then(e => {
+        editor.setValue(e);
+        setTimeout(() => isChanging = false, 100)
+      });
+      currentFile = id;
+    });
+    const exeList = scriptTree.querySelector("#exe");
+    // This fetch is not important so it can be done after.
+    fetch("./api/exe").then(e => e.json()).then(list => {
+      for (const file of list) {
+        const item = document.createElement("sl-tree-item");
+        item.innerText = file;
+        item.id = file;
+        exeList.appendChild(item);
+      }
+    });
+  }
+  initEditor();
 
   function scanCss() {
     inButtonClass.childNodes.forEach(n => n.className == "tmp" && n.remove());
