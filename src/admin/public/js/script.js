@@ -18,7 +18,7 @@ const scouters = {};
 (async () => {
   const authRequest = await fetch("./api/auth").then((res) => res.json());
 
-  if (authRequest.status !== 2) {
+  if (!authRequest?.status) {
     const authModal = new Modal("small", false).header("Sign In");
     const accessCodeInput = createDOMElement("input", "access-input");
     accessCodeInput.placeholder = "Access Code";
