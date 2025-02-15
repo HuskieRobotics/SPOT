@@ -85,7 +85,7 @@ var previousTimer = [];
 
     for (const button of buttons) {
       const piece = button?.conditions?.if || button?.conditions?.no;
-      if(!piece) continue;
+      if (!piece) continue;
       const hasPiece = gamePieces[piece];
       button.element.classList.toggle("disabled", button?.conditions?.if ? !hasPiece : hasPiece);
     }

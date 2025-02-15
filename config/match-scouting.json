@@ -4,7 +4,11 @@
     "timeTransitions": {
       "135000": {
         "layer": 2,
-        "displayText": "Teleop",
+        "displayText": "Teleop"
+      },
+      "138000": {
+        "layer": 1,
+        "displayText": "Idle",
         "variables": {}
       },
       "152999": {
