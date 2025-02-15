@@ -313,12 +313,7 @@
           ],
           "class": "gray",
           "type": "action",
-          "executables": [
-            {
-              "type": "leave",
-              "args": []
-            }
-          ]
+          "executables": []
         }
       ],
       [
