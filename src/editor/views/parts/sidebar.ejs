@@ -36,10 +36,27 @@
       ></sl-option>
       <% }) %>
     </sl-select>
+    <sl-select
+      placeholder="action"
+      size="small"
+      label="Button Type"
+      id="in_button_type"
+      ><sl-icon name="code-slash" slot="prefix"></sl-icon>
+      <sl-option value="action">Normal</sl-option>
+      <sl-option value="undo">Undo Button</sl-option>
+      <sl-option value="none">Does nothing</sl-option>
+      <sl-option value="label">Label</sl-option>
+      <sl-option value="match-control">Match Control</sl-option>
+    </sl-select>
     <br />
-    <sl-details summary="Dynamic State (Game Piece)" class="details">
+    <sl-details summary="Dynamic State (Game Piece)" class="details" open>
       <div style="display: grid; grid-template-columns: 50% 50%">
-        <sl-select placeholder="Action" size="small" id="in_cond_act_type">
+        <sl-select
+          placeholder="Action"
+          size="small"
+          id="in_cond_act_type"
+          hoist
+        >
           <sl-option value="none">None</sl-option>
           <sl-option value="add">Add</sl-option>
           <sl-option value="remove">Remove</sl-option>
@@ -49,7 +66,12 @@
           placeholder="Piece ID"
           id="in_cond_act_name"
         ></sl-input>
-        <sl-select placeholder="Condition" size="small" id="in_cond_dep_type">
+        <sl-select
+          placeholder="Condition"
+          size="small"
+          id="in_cond_dep_type"
+          hoist
+        >
           <sl-option value="none">None</sl-option>
           <sl-option value="if">If has</sl-option>
           <sl-option value="no">Unless</sl-option>
@@ -62,9 +84,10 @@
       </div>
       <sl-icon name="database" slot="expand-icon"></sl-icon>
     </sl-details>
-    <sl-details summary="Executable" class="details"
-      ><sl-icon name="terminal" slot="expand-icon"></sl-icon
-    ><div id="ace_exe"></div></sl-details>
+    <sl-details summary="Executable" class="details" open
+      ><sl-icon name="terminal" slot="expand-icon"></sl-icon>
+      <div id="ace_exe"></div
+    ></sl-details>
     <br />
     <sl-button size="small" id="btn_button_delete" variant="danger"
       ><sl-icon name="trash" slot="prefix"></sl-icon>Delete</sl-button
