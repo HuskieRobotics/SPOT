@@ -1,4 +1,4 @@
-var grid, config, layers, columns, rows, currentLayer, currentButton, editor, files = {}, currentFile = "css";
+var grid, config, layers, columns, rows, currentLayer, currentButton, editor, files = {}, currentFile = "css", exeEditor, isExeChanging = false;
 const configFetcher = fetch("./api/config").then(e => e.json());
 
 window.addEventListener('fullyLoaded', async function () {
@@ -163,6 +163,22 @@ window.addEventListener('fullyLoaded', async function () {
       markUnsaved();
       currentButton = null;
     });
+
+    exeEditor = ace.edit("ace_exe");
+    exeEditor.setTheme("ace/theme/chaos");
+    exeEditor.session.setMode("ace/mode/json");
+    exeEditor.on("input", function () {
+      if (isExeChanging) return isExeChanging = false;
+      markUnsaved();
+      if (currentButton) {
+        const l = layers[currentLayer];
+        const data = l.find(e => e.id == currentButton);
+        try {
+          data.executables = JSON.parse(exeEditor.getValue());
+        } catch {}
+        markUnsaved();
+      }
+    });
   }
   initSidebar();
 
@@ -222,14 +238,14 @@ window.addEventListener('fullyLoaded', async function () {
   async function initEditor() {
     editor = ace.edit("ace");
     editor.on("input", function () {
-      if (isChanging) return;
+      if (isChanging) return isChanging = false;
       if (!currentFile) return;
       markUnsaved();
       files[currentFile] = editor.getValue();
     });
     editor.setTheme("ace/theme/chaos");
     editor.session.setMode("ace/mode/css");
-    fetch("./api/exe/css").then(e => e.text()).then(e => { isChanging = true; editor.setValue(e); files.css = e; scanCss(); setTimeout(() => isChanging = false, 100); }).catch(() => { });
+    fetch("./api/exe/css").then(e => e.text()).then(e => { isChanging = true; editor.setValue(e); files.css = e; scanCss(); }).catch(() => { });
     document.querySelector("sl-tab-group").addEventListener("sl-tab-show", function (ev) {
       document.querySelector("#ace").hidden = ev?.detail?.name !== "script";
       document.querySelector(".grid-stack").hidden = ev?.detail?.name === "script";
@@ -259,7 +275,6 @@ window.addEventListener('fullyLoaded', async function () {
       isChanging = true;
       fetch("./api/exe/" + id).then(e => e.text()).then(e => {
         editor.setValue(e);
-        setTimeout(() => isChanging = false, 100);
       });
       currentFile = id;
     });
@@ -394,5 +409,7 @@ window.editButton = function (id) {
     document.querySelector("#in_cond_dep_type").value = "";
     document.querySelector("#in_cond_dep_name").value = "";
   }
+  isExeChanging = true;
+  exeEditor.setValue(JSON.stringify(data.executables, null, 2));
   currentButton = id;
 }

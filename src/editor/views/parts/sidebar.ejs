@@ -1,5 +1,5 @@
 <sl-tab-group>
-  <sl-tab slot="nav" panel="button">Selected</sl-tab>
+  <sl-tab slot="nav" panel="button">Buttons</sl-tab>
   <sl-tab slot="nav" panel="script">Scripting</sl-tab>
 
   <sl-tab-panel name="button">
@@ -40,6 +40,7 @@
     <sl-details summary="Dynamic State (Game Piece)" class="details">
       <div style="display: grid; grid-template-columns: 50% 50%">
         <sl-select placeholder="Action" size="small" id="in_cond_act_type">
+          <sl-option value="none">None</sl-option>
           <sl-option value="add">Add</sl-option>
           <sl-option value="remove">Remove</sl-option>
         </sl-select>
@@ -49,6 +50,7 @@
           id="in_cond_act_name"
         ></sl-input>
         <sl-select placeholder="Condition" size="small" id="in_cond_dep_type">
+          <sl-option value="none">None</sl-option>
           <sl-option value="if">If has</sl-option>
           <sl-option value="no">Unless</sl-option>
         </sl-select>
@@ -62,7 +64,7 @@
     </sl-details>
     <sl-details summary="Executable" class="details"
       ><sl-icon name="terminal" slot="expand-icon"></sl-icon
-    ></sl-details>
+    ><div id="ace_exe"></div></sl-details>
     <br />
     <sl-button size="small" id="btn_button_delete" variant="danger"
       ><sl-icon name="trash" slot="prefix"></sl-icon>Delete</sl-button

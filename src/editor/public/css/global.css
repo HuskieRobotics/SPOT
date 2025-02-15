@@ -80,3 +80,8 @@ body > div {
   height: calc(100vh - 22px);
   margin-bottom: 2px #333 solid;
 }
+
+#ace_exe {
+  height: 300px;
+  width: 100%;
+}
