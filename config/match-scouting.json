@@ -4,7 +4,8 @@
     "timeTransitions": {
       "135000": {
         "layer": 2,
-        "displayText": "Teleop"
+        "displayText": "Teleop",
+        "variables": {}
       },
       "138000": {
         "layer": 1,
