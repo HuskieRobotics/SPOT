@@ -60,6 +60,8 @@ window.addEventListener("fullyLoaded", async function () {
     .addEventListener("click", function (e) {
       columns = document.querySelector("#in_grid_col").value;
       rows = document.querySelector("#in_grid_row").value;
+      config.layout.gridColumns = columns;
+      config.layout.gridRows = rows;
       resize(columns, rows);
       gridDialog.hide();
     });
@@ -284,7 +286,15 @@ window.addEventListener("fullyLoaded", async function () {
       if (isChanging) return (isChanging = false);
       if (!currentFile) return;
       markUnsaved();
-      files[currentFile] = editor.getValue();
+      if (currentFile === "config") {
+        try {
+          config = JSON.parse(editor.getValue());
+          layers = config.layout.layers;
+          columns = config.layout.gridColumns;
+          rows = config.layout.gridRows;
+        } catch {}
+        layer(currentLayer);
+      } else files[currentFile] = editor.getValue();
     });
     editor.setTheme("ace/theme/chaos");
     editor.session.setMode("ace/mode/css");
@@ -292,7 +302,7 @@ window.addEventListener("fullyLoaded", async function () {
       .then((e) => e.text())
       .then((e) => {
         isChanging = true;
-        editor.setValue(e);
+        editor.getSession().setValue(e);
         files.css = e;
         scanCss();
       })
@@ -303,6 +313,7 @@ window.addEventListener("fullyLoaded", async function () {
         document.querySelector("#ace").hidden = ev?.detail?.name !== "script";
         document.querySelector(".grid-stack").hidden =
           ev?.detail?.name === "script";
+        if(currentFile === "config" && ev?.detail?.name === "script") editor.getSession().setValue(JSON.stringify(config, null, 2));
       });
 
     // Editor file handling
@@ -325,12 +336,14 @@ window.addEventListener("fullyLoaded", async function () {
         return;
       }
       if (id === "css") editor.session.setMode("ace/mode/css");
+      else if (id === "config") editor.session.setMode("ace/mode/json");
       else editor.session.setMode("ace/mode/javascript");
       isChanging = true;
-      fetch("./api/exe/" + id)
+      if(id === "config") editor.getSession().setValue(JSON.stringify(config, null, 2));
+      else fetch("./api/exe/" + id)
         .then((e) => e.text())
         .then((e) => {
-          editor.setValue(e);
+          editor.getSession().setValue(e);
         });
       currentFile = id;
     });
@@ -402,7 +415,7 @@ window.addEventListener("fullyLoaded", async function () {
       inCondDepName.value = "";
     }
     isExeChanging = true;
-    exeEditor.setValue(JSON.stringify(data.executables, null, 2));
+    exeEditor.getSession().setValue(JSON.stringify(data.executables, null, 2));
     currentButton = id;
   };
 });
