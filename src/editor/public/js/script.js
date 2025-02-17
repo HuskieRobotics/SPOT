@@ -224,10 +224,10 @@ window.addEventListener("fullyLoaded", async function () {
       const node = el.gridstackNode; // {x, y, width, height, id, ....}
       const layer = layers[currentLayer];
       const data = layer.find((e) => e.id == node.id);
-      data.gridArea[0] = node.y + 1;
-      data.gridArea[1] = node.x + 1;
-      data.gridArea[2] = node.y + node.h + 1;
-      data.gridArea[3] = node.x + node.w + 1;
+      data.gridArea[0] = `${node.y + 1}`;
+      data.gridArea[1] = `${node.x + 1}`;
+      data.gridArea[2] = `${node.y + node.h + 1}`;
+      data.gridArea[3] = `${node.x + node.w + 1}`;
       markUnsaved();
     }
     grid.on("dragstop", gridHandler);
