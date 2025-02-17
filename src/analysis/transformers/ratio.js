@@ -24,7 +24,7 @@ new DataTransformer("ratio", (dataset,outputPath,options) => {
         }, 0)
 
         if (denominatorSum === 0) {
-            setPath(tmp, outputPath, options.divByZero)
+            setPath(tmp, outputPath, options.divByZero || "N/A")
         } else {
             setPath(tmp, outputPath, numeratorSum / denominatorSum)
         }
@@ -59,7 +59,7 @@ new DataTransformer("ratio", (dataset,outputPath,options) => {
         }, 0)
 
         if (denominatorSum === 0) {
-            setPath(team, outputPath, options.divByZero || Infinity)
+            setPath(team, outputPath, options.divByZero || "N/A")
         } else {
             setPath(team, outputPath, numeratorSum / denominatorSum)
         }
