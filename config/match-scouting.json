@@ -144,7 +144,6 @@
             }
           ],
           "conditions": {
-            "add": "coral",
             "no": "coral"
           }
         },
@@ -240,7 +239,6 @@
             }
           ],
           "conditions": {
-            "add": "algae",
             "no": "algae"
           }
         },
