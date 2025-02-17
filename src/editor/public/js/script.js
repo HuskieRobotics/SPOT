@@ -360,6 +360,9 @@ window.addEventListener("fullyLoaded", async function () {
     function createFile(file) {
       const item = document.createElement("sl-tree-item");
       item.innerText = file;
+      const icon = document.createElement("sl-icon");
+      icon.name = "filetype-js";
+      item.prepend(icon);
       item.id = file;
       item.addEventListener("contextmenu", (ev) => {
         ev.preventDefault();
