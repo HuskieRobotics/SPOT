@@ -313,7 +313,10 @@ window.addEventListener("fullyLoaded", async function () {
         document.querySelector("#ace").hidden = ev?.detail?.name !== "script";
         document.querySelector(".grid-stack").hidden =
           ev?.detail?.name === "script";
-        if(currentFile === "config" && ev?.detail?.name === "script") editor.getSession().setValue(JSON.stringify(config, null, 2));
+        if (currentFile === "config" && ev?.detail?.name === "script") {
+          isChanging = true;
+          editor.getSession().setValue(JSON.stringify(config, null, 2));
+        }
       });
 
     // Editor file handling
