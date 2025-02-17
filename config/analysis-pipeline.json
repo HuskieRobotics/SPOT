@@ -146,9 +146,19 @@
     "name": "cycle",
     "outputPath": "cycleAlgae",
     "options": {
-      "pickups": ["teleopGroundPickupAlgae", "teleopReefPickupAlgae"],
-      "scores": ["teleopScoreProcessor", "teleopScoreNet"],
-      "misses": ["algaeMissTeleop"]
+      "pickups": [
+        "teleopGroundPickupAlgae",
+        "teleopReefPickupAlgae",
+        "autoReefPickupAlgae",
+        "autoGroundPickupAlgae"
+      ],
+      "scores": [
+        "teleopScoreProcessor",
+        "teleopScoreNet",
+        "autoScoreNet",
+        "autoScoreProcessor"
+      ],
+      "misses": ["algaeMissTeleop", "algaeMissAuto"]
     }
   },
   {
