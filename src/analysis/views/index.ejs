@@ -40,8 +40,10 @@
 
 	<img id="spinner" src="./img/spinner.svg">
 
+	
 	<div id="app">
-		<div id="menu">
+
+		<div id = "menu">
 			<div id="logo">
 				<img src="./img/logo.png" id="logo-img">
 				<div id="logo-text">SPOT</div>
@@ -49,6 +51,7 @@
 
 			<div id="sidebar">
 				<div id="button-container">
+					
 					<button id="match-view-switch">Simulate Match</button>
 					<button id="auto-pick-switch">Auto Pick List</button>
 					<button id="bubble-sheet-switch">Compare Team Scores</button>
@@ -59,35 +62,110 @@
 						<i id="search-icon" class="fa fa-search"></i>
 					</div>
 				</div>
-				<div id="team-list"></div>
+
+				<div id="team-list">
+
+				</div>
 			</div>
 		</div>
 
-		<!-- Dashboard now displays a grid of 6 graphs arranged in 2 columns and 3 rows -->
+		<!-- black bar -->
+		<!-- <div id="header">
+
+		</div> -->
+
 		<div id="dashboard">
-			<div id="graph-grid">
-				<div class="graph-container" id="graph1"></div>
-				<div class="graph-container" id="graph2"></div>
-				<div class="graph-container" id="graph3"></div>
-				<div class="graph-container" id="graph4"></div>
-				<div class="graph-container" id="graph5"></div>
-				<div class="graph-container" id="graph6"></div>
+			<div id="welcome" class="visible">
+				<div id="welcome-text">SPOT Analysis</div>
+				<div id="welcome-subtext">Select a Team</div>
 			</div>
-		</div>
+			<div id="team-view">
+				<div id="main-list">
 
-		<script src="https://unpkg.com/simple-statistics@7.8.0/dist/simple-statistics.min.js"></script>
-		<script src="./js/util.js"></script>
-		<script src="./js/autoPick.js"></script>
-		<script src="./js/ui.js"></script>
-		<script src="./js/elements.js"></script>
-		<script src="https://rawgit.com/farzher/fuzzysort/master/fuzzysort.js"></script>
-		<script src="https://cdn.plot.ly/plotly-2.8.3.min.js"></script>
-		<script src="./js/DataTransformer.js"></script>
-		<script src="./modules.js"></script>
-		<script src="./js/analysisPipeline.js"></script>
-		<script src="./transformers.js"></script>
-		<script src="./js/script.js"></script>
+				</div>
+
+				<div id="side-list">
+
+				</div>
+			</div>
+
+			<div id="match-view">
+				<div id="select-teams-text">Select Teams</div>
+				<div id="match-select-container">
+					<div id="match-select-label">Match</div>
+					<select id="match-select" class="select">
+						<option selected value="none">None</option>
+					</select>
+				</div>
+				<div id="team-selects">
+					<div id="left-alliance-selects" class="alliance-selects">
+						<select class="select">
+							<option selected value="none">None</option>
+						</select class="select">
+						<select class="select">
+							<option selected value="none">None</option>
+						</select>
+						<select class="select">
+							<option selected value="none">None</option>
+						</select>
+					</div>
+					<div id="alliance-vs">vs</div>
+					<div id="right-alliance-selects" class="alliance-selects">
+						<select class="select">
+							<option selected value="none">None</option>
+						</select>
+						<select class="select">
+							<option selected value="none">None</option>
+						</select>
+						<select class="select">
+							<option selected value="none">None</option>
+						</select>
+					</div>
+				</div>
+
+				<div id="alliance-module-container">
+					<div id="left-alliance-modules" class="alliance-modules hidden">
+
+					</div>
+
+					<div id="right-alliance-modules" class="alliance-modules hidden">
+
+					</div>
+				</div>
+			</div>
+			<div id = "auto-pick-view">
+				<div id = "team-list-container">
+					<div id = "pick-list-text">Auto Pick List</div>
+					<div id = "auto-pick-team-list"></div>
+				</div>
+				<div id = "auto-pick-main">
+				</div>
+				<div id = "auto-pick-side">
+					<div id = "auto-pick-stats"></div>	
+				</div>
+			</div>
+			
+			<div id = "bubble-sheet-view">
+				<div id = "bubble-sheet-container">
+					<div id = "bubble-sheet-graph">
+
+					</div>
+				</div>
+		</div>
 	</div>
+	<script src="https://unpkg.com/simple-statistics@7.8.0/dist/simple-statistics.min.js"></script>
+	<script src="./js/util.js"></script>
+	<script src="./js/autoPick.js"></script>
+	<script src="./js/ui.js"></script>
+	<script src="./js/elements.js"></script>
+	<script src="https://rawgit.com/farzher/fuzzysort/master/fuzzysort.js"></script>
+	<script src="https://cdn.plot.ly/plotly-2.8.3.min.js"></script>
+	<script src="./js/DataTransformer.js"></script>
+	<script src="./modules.js"></script>
+	<script src="./js/analysisPipeline.js"></script>
+	<script src="./transformers.js"></script>
+	<script src="./js/script.js"></script>	
+
 </body>
 
 </html>
