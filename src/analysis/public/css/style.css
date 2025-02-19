@@ -1,3 +1,5 @@
+/* Existing content of src/analysis/public/css/style.css */
+
 body {
   background-color: var(--bg);
 }
@@ -305,11 +307,6 @@ body {
   display: grid;
   grid-template-columns: 1fr 3fr 1fr;
   overflow: auto;
-  /*
-  display: flex;
-  flex-direction:row;
-  gap: 10px;
-  */
 }
 
 #pick-list-text {
@@ -323,7 +320,6 @@ body {
 #team-list-container {
   display: flex;
   flex-direction: column;
-
   align-items: center;
   margin-left: 40px;
   gap: 10px;
@@ -396,102 +392,19 @@ body {
   border-color: var(--accent-alt);
 }
 
-#match-select-label {
-  font-size: 1.4em;
-  /* font-weight: 00; */
+/* Added styles to make the bubble sheet graph fill the whole screen */
+#bubble-sheet-view {
+  width: 100vw;
+  height: 100vh;
+  display: block;
 }
 
-#match-select-container {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-#match-select {
-  width: 100px;
-}
-
-#alliance-module-container {
-  display: flex;
-  flex-direction: row;
+#bubble-sheet-container {
   width: 100%;
-  overflow-y: scroll;
+  height: 100%;
 }
 
-.alliance-modules {
-  width: 50%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 16px;
-  overflow-y: scroll;
-  padding: 10px 0 20px 0;
-}
-
-.alliance-modules.hidden {
-  visibility: hidden;
-}
-
-.alliance-modules > div.hidden {
-  display: none;
-}
-
-#auto-pick-stats {
-  overflow: auto;
-  /*
-  margin-left:75px;
-  margin-top:50px;
-  color:red;
-  border-width:5px;
-  border-color:red;
-  */
-}
-
-@media screen and (max-width: 1100px) {
-  html {
-    font-size: 75%;
-  }
-
-  #app {
-    grid-template-columns: 200px auto;
-    grid-template-rows: 40px 20px auto;
-  }
-
-  #x > div.visible {
-    height: calc(100vh - 40px);
-  }
-
-  #main-list {
-    padding: 25px 0;
-  }
-
-  #side-list {
-    padding: 25px 0;
-  }
-
-  /* #menu {
-    width: 100px;
-    height:100%;
-  }
-  #logo{
-    width: 100px;
-    font-size:0px;
-  }
-  #logo-img {
-    height: 50px;
-  }
-  #logo-text{
-    font-size:0px;
-  }
-  #search-icon{
-    display:none;
-    width:0px;
-  }
-  #search-input{
-    width:100%;
-    padding: 0 10px;
-  }
-  #app{
-    grid-template-columns: 100px auto;
-  } */
+#bubble-sheet-graph {
+  width: 100%;
+  height: 100%;
 }
