@@ -24,7 +24,7 @@ new DataTransformer("ratio", (dataset,outputPath,options) => {
         }, 0)
 
         if (denominatorSum === 0) {
-            setPath(tmp, outputPath, options.divByZero || "N/A")
+            setPath(tmp, outputPath, options.divByZero)
         } else {
             setPath(tmp, outputPath, numeratorSum / denominatorSum)
         }
