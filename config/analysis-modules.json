@@ -2,16 +2,14 @@
   {
     "view": "team",
     "module": "PerformanceTimePlot",
-    "name": "Performance Over Time",
+    "name": "Performance By Each Match",
     "position": "main",
     "options": {
       "trackedStats": [
         "scores.auto",
         "scores.teleop",
         "scores.barge",
-        "scores.total",
-        "algaeAccuracy",
-        "coralAccuracy"
+        "scores.total"
       ]
     }
   },
