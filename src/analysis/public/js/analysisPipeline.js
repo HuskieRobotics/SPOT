@@ -23,7 +23,7 @@ async function executePipeline() {
 
   const manual = await fetch("./api/manual").then((res) => res.json());
   const pipelineConfig = await fetch(
-    "../../../../config/analysis-pipeline.json"
+    "../../../config/analysis-pipeline.json"
   ).then((res) => res.json());
 
   // This will show up as a method that doesn't exist since it is gotten from the server
