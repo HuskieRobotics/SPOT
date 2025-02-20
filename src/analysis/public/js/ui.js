@@ -46,3 +46,37 @@ function createDOMElement(tag, classes, id) {
   }
   return element;
 }
+
+function clearDiv(div) {
+  for (const child of Array.from(div.children)) {
+    if (!child.classList || !child.classList.contains("persist")) {
+      div.removeChild(child);
+    }
+  }
+}
+
+function getPath(obj, path, ifnone = ThrowError) {
+  if (typeof obj === "undefined") {
+    if (ifnone == ThrowError) {
+      throw new Error(`path ${path} not traversable!`);
+    } else {
+      return ifnone;
+    }
+  }
+  if (path === "") return obj;
+  path = path.split(".");
+  return getPath(obj[path.shift()], path.join("."), ifnone);
+}
+
+function setPath(obj, path, value) {
+  if (!path.includes(".")) return (obj[path] = value);
+  path = path.split(".");
+  if (!obj[path[0]]) obj[path[0]] = {};
+  return setPath(obj[path.shift()], path.join("."), value);
+}
+
+/* New function to toggle the sidebar */
+function toggleSidebar() {
+  const app = document.getElementById("app");
+  app.classList.toggle("sidebar-hidden");
+}

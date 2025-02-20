@@ -3,14 +3,12 @@ if ("serviceWorker" in navigator) {
   window.addEventListener("load", function () {
     navigator.serviceWorker.register("/sw.js").then(
       function (registration) {
-        // Registration was successful
         console.log(
           "ServiceWorker registration successful with scope: ",
           registration.scope
         );
       },
       function (err) {
-        // registration failed
         console.log("ServiceWorker registration failed: ", err);
       }
     );
@@ -18,7 +16,7 @@ if ("serviceWorker" in navigator) {
 }
 
 (async () => {
-  //modules object strucutre
+  //modules object structure
   const modules = {
     team: [],
     match: {
@@ -59,25 +57,18 @@ if ("serviceWorker" in navigator) {
 
   //team UI functions
   async function loadTeams(dataset, modulesConfig) {
-    //get blue alliance teams
     const allTeams = await fetchTeams();
-    //add to sidebar team list
     for (const [teamNumber, team] of Object.entries(dataset.teams)) {
-      // console.log(`team: ${Object.keys(team)}\n num: ${teamNumber}\n allTeams: ${allTeams[teamNumber]}`)
       if (allTeams[teamNumber]) {
         const teamContainer = constructTeam(teamNumber, team, allTeams);
         teamList.appendChild(teamContainer);
       }
     }
-
-    //enable sidebar if sidebar modules exist
     if (modulesConfig.map((m) => m.position).includes("side")) {
       teamView.classList.add("side-enabled");
     } else {
       teamView.classList.remove("side-enabled");
     }
-
-    //get all team modules, create and store module classes, then append their placeholder containers to lists
     for (const module of modulesConfig.filter((m) => m.view == "team")) {
       const moduleObject = new moduleClasses[module.module](module);
       if (module.position == "main") {
@@ -89,10 +80,7 @@ if ("serviceWorker" in navigator) {
     }
   }
 
-  // Creates individual team div for the sidebar - called in loadTeams
-  // 		creates event listener for the div that listens for click
   function constructTeam(teamNumber, team, allTeams) {
-    //create and populate sidebar element
     const teamContainer = createDOMElement("div", "team-container");
     const teamNumDisplay = createDOMElement("div", "team-number");
     teamNumDisplay.innerText = teamNumber;
@@ -103,71 +91,33 @@ if ("serviceWorker" in navigator) {
       teamNameDisplay.innerText = allTeams[teamNumber];
       teamContainer.appendChild(teamNameDisplay);
     }
-
-    // Create event listener that switches to team view on click
     teamContainer.addEventListener("click", async () => {
       await setTeamModules(teamNumber);
       displayTeam(teamContainer);
     });
-
     return teamContainer;
   }
 
-  //creates list of teams for auto pick list tab
   async function loadTeamsAutoPick(dataset, modulesConfig) {
-    // reset autoPickTeamList html
     autoPickTeamList.innerHTML = "";
-
-    //get blue alliance teams
     const allTeams = await fetchTeams();
-
-    // get an array (teams) of all teams that contain data
     var teams = [];
     for (var [teamNumber, team] of Object.entries(dataset.teams)) {
-      console.log("team: ");
-      console.log(team);
-      console.log("team number: ");
-      console.log(teamNumber);
       if (
-        dataset.tmps.filter((tmp) => tmp.robotNumber == teamNumber).length >
-          0 &&
+        dataset.tmps.filter((tmp) => tmp.robotNumber == teamNumber).length > 0 &&
         allTeams[teamNumber]
       ) {
-        //
-        //console.log("added team: ")
-        //console.log(team);
         setPath(team, "robotNumber", teamNumber);
-        console.log("data from path: " + getPath(team, "robotNumber"));
         teams.push(team);
-
-        console.log("TEAM ADDED " + teamNumber);
-
-        console.log("team number of first team: ");
-        console.log(teams[0].robotNumber);
-        console.log(teams);
       }
-      console.log("-----------------");
     }
-    console.log("teams before avgprob");
-    console.log(teams);
-    // console.log(
-    //   "teams type and size: " + typeof teams + teams.length + teams[0]
-    // );
-
     compareAllTeams(teams);
-
-    // console.log("teams after compareAllTeams");
-    // console.log(teams);
-
     let teamsProbability = teams.map((team) => {
       return {
         robotNumber: team.robotNumber,
         avgProbability: team.avgProbability,
       };
     });
-
-    console.log("teams w/ avg probability");
-    console.log(teamsProbability);
     for (let i = 0; i < teams.length; i++) {
       for (let j = 0; j < teamsProbability.length; j++) {
         if (teams[i].robotNumber == teamsProbability[j].robotNumber) {
@@ -179,8 +129,6 @@ if ("serviceWorker" in navigator) {
         }
       }
     }
-
-    // sort teams by avg win probability using bubble sort
     let sorted = false;
     while (!sorted) {
       sorted = true;
@@ -197,8 +145,6 @@ if ("serviceWorker" in navigator) {
         }
       }
     }
-
-    //add to team list on autopicktab
     const firstContainer = constructTeamAutoPick(
       teams[0].robotNumber,
       teams[0],
@@ -214,8 +160,6 @@ if ("serviceWorker" in navigator) {
       );
       autoPickTeamList.appendChild(autoPickTeamContainer);
     }
-
-    //get all team modules, create and store module classes, then append their placeholder containers to lists
     autoPickStats.innerHTML = "";
     autoPickMain.innerHTML = "";
     for (const module of modulesConfig.filter((m) => m.view == "team")) {
@@ -229,14 +173,10 @@ if ("serviceWorker" in navigator) {
     }
     setTimeout(() => {
       firstContainer.click();
-      console.log("clicked");
     }, 4);
   }
 
-  // Creates the div/display box for each team on the autoPickTeamList - called in loadTeamsAutoPick function
-  //    Creates an event listener for the div that listens for a click
   function constructTeamAutoPick(teamNumber, team, allTeams) {
-    //create and populate autoPickTeamList element
     const teamContainer = createDOMElement("div", "team-container");
     const teamNumDisplay = createDOMElement("div", "team-number");
     teamNumDisplay.innerText = teamNumber;
@@ -247,26 +187,19 @@ if ("serviceWorker" in navigator) {
       teamNameDisplay.innerText = allTeams[teamNumber];
       teamContainer.appendChild(teamNameDisplay);
     }
-
-    // Create event listener for the div that switches the stats displayed to its team on click
     teamContainer.addEventListener("click", async () => {
       await setTeamModules(teamNumber);
       displayStats(teamContainer);
     });
-
     return teamContainer;
   }
 
-  // Displays team view - resets the UI and switch to team view
-  // 		Called from event listener in each sidebar team div created in constructTeam function
   function displayTeam(teamContainer) {
     clearInterface();
     teamContainer.classList.add("selected");
     showFade(teamView);
   }
 
-  // Display autoPickList stats for the team that is clicked on -
-  // 		called from the event listener in constructTeamsAutoPick
   function displayStats(teamContainer) {
     Array.from(document.querySelector("#auto-pick-team-list").children).map(
       (t) => t.classList.remove("selected")
@@ -276,7 +209,6 @@ if ("serviceWorker" in navigator) {
     autoPickMain.style.display = "flex";
   }
 
-  //call setData on every module in teams
   async function setTeamModules(teamNumber) {
     for (const module of modules.team) {
       if (
@@ -285,14 +217,11 @@ if ("serviceWorker" in navigator) {
           (prop) => prop !== "manual"
         ).length == 0
       ) {
-        // console.log(`would add hidden: ${teamNumber}`)
-        // console.log(Object.keys(module.moduleConfig))
         if (module.moduleConfig.position == "side") {
           await module.setData(await module.formatData([teamNumber], dataset));
         }
         module.container.classList.add("hidden");
       } else {
-        // console.log(`not adding hidden: ${teamNumber}`)
         module.container.classList.remove("hidden");
         await module.setData(await module.formatData([teamNumber], dataset));
       }
@@ -301,9 +230,7 @@ if ("serviceWorker" in navigator) {
     autoPickMain.style.display = "none";
   }
 
-  //match UI functions
   async function loadMatchView(dataset, modulesConfig) {
-    //add event listener to "Simulate Match" button to set reset UI and switch to match view
     matchViewSwitch.addEventListener("click", () => {
       clearInterface();
       matchViewSwitch.classList.add("selected");
@@ -319,38 +246,27 @@ if ("serviceWorker" in navigator) {
       matchSelect.appendChild(option);
     }
 
-    //get all dropdowns
     const teamSelects = Array.from(
       document.querySelectorAll(".alliance-selects")
     )
       .map((g) => Array.from(g.children))
       .flat();
     const allTeams = await fetchTeams();
-    //populate dropdowns with team numbers
     for (const teamSelect of teamSelects) {
       for (const team of Object.keys(dataset.teams)) {
-        // console.log(team)
-        if (allTeams[team]) {
-          const option = createDOMElement("option");
-          option.innerText = team;
-          option.value = team;
-          teamSelect.appendChild(option);
-        }
+        const option = createDOMElement("option");
+        option.innerText = team;
+        option.value = team;
+        teamSelect.appendChild(option);
       }
-
-      //on dropdown change
       teamSelect.addEventListener("change", async () => {
         matchSelect.value = "none";
         matchSelect.classList.remove("filled");
-
-        //apply dropdown border style if selected
         if (teamSelect.value === "none") {
           teamSelect.classList.remove("filled");
         } else {
           teamSelect.classList.add("filled");
         }
-
-        //hide alliance module lists if no teams are selected for that alliance
         if (
           teamSelects
             .map((s) => s.value)
@@ -361,7 +277,6 @@ if ("serviceWorker" in navigator) {
         } else {
           leftAllianceModules.classList.remove("hidden");
         }
-
         if (
           teamSelects
             .map((s) => s.value)
@@ -372,8 +287,6 @@ if ("serviceWorker" in navigator) {
         } else {
           rightAllianceModules.classList.remove("hidden");
         }
-
-        //set data on match modules
         await setMatchModules([
           teamSelects
             .slice(0, 3)
@@ -404,7 +317,6 @@ if ("serviceWorker" in navigator) {
           } else {
             teamSelects[i].classList.add("filled");
           }
-
           teamSelects[i + 3].value = Object.keys(dataset.teams).includes(
             selectedMatch.robots.blue[i]
           )
@@ -416,8 +328,6 @@ if ("serviceWorker" in navigator) {
             teamSelects[i + 3].classList.add("filled");
           }
         }
-
-        //hide alliance module lists if no teams are selected for that alliance
         if (
           teamSelects
             .map((s) => s.value)
@@ -428,7 +338,6 @@ if ("serviceWorker" in navigator) {
         } else {
           leftAllianceModules.classList.remove("hidden");
         }
-
         if (
           teamSelects
             .map((s) => s.value)
@@ -439,8 +348,6 @@ if ("serviceWorker" in navigator) {
         } else {
           rightAllianceModules.classList.remove("hidden");
         }
-
-        //set data on match modules
         await setMatchModules([
           teamSelects
             .slice(0, 3)
@@ -456,7 +363,6 @@ if ("serviceWorker" in navigator) {
       }
     });
 
-    //create match module objects and append placeholders to module list  elements
     for (const module of modulesConfig.filter((m) => m.view == "match")) {
       const leftModuleObject = new moduleClasses[module.module](module);
       leftAllianceModules.appendChild(leftModuleObject.container);
@@ -468,9 +374,7 @@ if ("serviceWorker" in navigator) {
     }
   }
 
-  // Auto pick list UI functions
   async function loadAutoPickList(dataset, modulesConfig) {
-    //add event listener to "AutoPickList" button to set reset UI and switch to autopicklist tab
     autoPickSwitch.addEventListener("click", () => {
       clearInterface();
       autoPickSwitch.classList.add("selected");
@@ -480,9 +384,7 @@ if ("serviceWorker" in navigator) {
     });
   }
 
-  // Bubble Sheet UI functions
   async function loadBubbleGraph(dataset, modulesConfig) {
-    //add event listener to "AutoPickList" button to set reset UI and switch to autopicklist tab
     bubbleSheetSwitch.addEventListener("click", () => {
       clearInterface();
       bubbleSheetSwitch.classList.add("selected");
@@ -529,8 +431,8 @@ if ("serviceWorker" in navigator) {
       hovertext: hoverTexts,
       marker: { size: 12, color: "#FF6030" },
       hoverlabel: {
-        bgcolor: "white", // Set the background color of the hover menu to white
-        font: { color: "black" }, // Set the font color to black for better readability
+        bgcolor: "white",
+        font: { color: "black" },
       },
       hoverinfo: "text",
       textposition: "bottom center",
@@ -541,7 +443,6 @@ if ("serviceWorker" in navigator) {
       xaxis: { title: "Average Auto Score" },
       yaxis: { title: "Average Teleop Score" },
       shapes: [
-        // Horizontal line for average teleop score
         {
           type: "line",
           x0: Math.min(...autoScores),
@@ -554,7 +455,6 @@ if ("serviceWorker" in navigator) {
             dash: "dot",
           },
         },
-        // Vertical line for average auto score
         {
           type: "line",
           x0: avgAutoScore,
@@ -571,19 +471,11 @@ if ("serviceWorker" in navigator) {
     };
 
     Plotly.newPlot(bubbleSheetContainer, [trace], layout);
-
-    // Iterate through each team and extract the scores
-    //for (const [teamNumber, team] of Object.entries(dataset.teams)) {
-    //getPath(team, "avgAutoPoints", 0);
-    //getPath(team, "avgTeleopPoints", 0);
-    //}
   }
 
-  //call setData on every module in matches
   async function setMatchModules(alliances) {
     for (const module of modules.match.left) {
-      console.log(module.moduleConfig.name);
-      var displayedAlliances = alliances[0].filter((teamNumber) => {
+      let displayedAlliances = alliances[0].filter((teamNumber) => {
         if (teamNumber == "|") {
           return false;
         }
@@ -595,15 +487,12 @@ if ("serviceWorker" in navigator) {
         ) {
           return false;
         }
-
         return true;
       });
       if (module.moduleConfig.wholeMatch) {
         let allTeams = alliances[0];
-        console.log(`alliances script.js ${alliances}`);
         allTeams.push("|");
         allTeams = allTeams.concat(alliances[1]);
-        console.log(`all teams: ${allTeams}`);
         displayedAlliances = allTeams.filter((teamNumber) => {
           if (
             !module.moduleConfig.separate &&
@@ -616,7 +505,6 @@ if ("serviceWorker" in navigator) {
           }
           return true;
         });
-        console.log(`displayed alliances: ${displayedAlliances}`);
         if (displayedAlliances.length !== 0) {
           module.container.classList.remove("hidden");
           await module.setData(await module.formatData(allTeams, dataset));
@@ -635,8 +523,7 @@ if ("serviceWorker" in navigator) {
     }
 
     for (const module of modules.match.right) {
-      console.log(module.moduleConfig.name);
-      var displayedAlliances = alliances[1].filter((teamNumber) => {
+      let displayedAlliances = alliances[1].filter((teamNumber) => {
         if (teamNumber == "|") {
           return false;
         }
@@ -648,15 +535,13 @@ if ("serviceWorker" in navigator) {
         ) {
           return false;
         }
-
         return true;
       });
       if (module.moduleConfig.wholeMatch) {
         let allTeams = alliances[1];
         allTeams.push("|");
         allTeams = allTeams.concat(alliances[0]);
-        console.log(`all teams: ${allTeams}`);
-        var displayedAlliances = allTeams.filter((teamNumber) => {
+        displayedAlliances = allTeams.filter((teamNumber) => {
           if (
             !module.moduleConfig.separate &&
             teamNumber != "|" &&
@@ -666,10 +551,8 @@ if ("serviceWorker" in navigator) {
           ) {
             return false;
           }
-
           return true;
         });
-        console.log(`displayed alliances: ${displayedAlliances}`);
         if (displayedAlliances.length !== 0) {
           module.container.classList.remove("hidden");
           await module.setData(
@@ -690,69 +573,15 @@ if ("serviceWorker" in navigator) {
     }
   }
 
-  //dashboard initializer, loads teams, match view, and autopicklist
-  function initDashboard(dataset, modulesConfig) {
+  async function loadDashboard() {
+    initDashboard(dataset, modulesConfig);
     loadTeams(dataset, modulesConfig);
     loadMatchView(dataset, modulesConfig);
     loadAutoPickList(dataset, modulesConfig);
     loadBubbleGraph(dataset, modulesConfig);
-
-    searchInput.addEventListener("input", () => {
-      if (searchInput.value !== "") {
-        const sortedTeams = fuzzysort.go(
-          searchInput.value,
-          Object.keys(dataset.teams),
-          {
-            allowTypo: true,
-          }
-        );
-        console.log(sortedTeams);
-        for (const team of Array.from(teamList.children)) {
-          team.style.display = "none";
-        }
-        for (const sortResult of sortedTeams) {
-          const toAppend = Array.from(teamList.children).find(
-            (teamElement) =>
-              teamElement.getAttribute("num") == sortResult.target
-          );
-          teamList.appendChild(toAppend);
-          toAppend.style.display = "flex";
-        }
-      } else {
-        for (const team of Array.from(teamList.children).sort((a, b) => {
-          const aLength = a.getAttribute("num").length;
-          const bLength = b.getAttribute("num").length;
-          if (aLength == bLength) {
-            return a.getAttribute("num").localeCompare(b.getAttribute("num"));
-          } else {
-            return aLength - bLength;
-          }
-        })) {
-          teamList.appendChild(team);
-          team.style.display = "flex";
-        }
-      }
-    });
   }
 
-  //reset the UI to state of nothing shown, nothing selected
-  function clearInterface() {
-    Array.from(document.querySelector("#team-list").children).map((t) =>
-      t.classList.remove("selected")
-    );
+  // New: Add event listener for the sidebar toggle button.
+  document.getElementById("sidebar-toggle").addEventListener("click", toggleSidebar);
 
-    hideFade(welcomeView);
-    hideFade(matchView);
-    hideFade(teamView);
-    hideFade(autoPickView);
-    hideFade(bubbleSheetView);
-    // hideFade(autoPickStats)
-    // hideFade(autoPickMain)
-    autoPickStats.style.display = "none";
-    autoPickMain.style.display = "none";
-    bubbleGraphContainer.style.display = "none";
-    matchViewSwitch.classList.remove("selected");
-    autoPickSwitch.classList.remove("selected");
-    bubbleSheetSwitch.classList.remove("selected");
-  }
 })();
