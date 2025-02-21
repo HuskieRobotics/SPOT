@@ -1,0 +1,94 @@
+body {
+  background-color: var(--bg);
+}
+
+.filter-container {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+
+  padding: 10px;
+  /* Make sure padding aligns with other elements */
+}
+
+/* Update match-item to maintain consistent alignment */
+.match-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+  flex-direction: column;
+  margin: 5px 10px; /* Add horizontal margin to align with title */
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.match-info {
+  flex-grow: 1;
+  padding-left: 4px;
+  display: flex;
+  align-items: center;
+}
+
+.trash-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  color: red;
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+}
+
+.filter-input {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  flex: 1;
+}
+
+.match-item-top {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  gap: 0;
+  width: 100%;
+  justify-content: flex-start;
+}
+
+.dropdown-button {
+  padding: 2px;
+  cursor: pointer;
+  background: none;
+  border: none;
+  width: 24px;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+}
+
+.dropdown-content {
+  width: 100%;
+  padding: 10px;
+  background-color: var(--bg);
+  border-top: 1px solid #ddd;
+}
+
+.dropdown-content ul {
+  list-style-type: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+.dropdown-content li {
+  padding: 3px 0;
+}
+
+.header {
+  background-color: var(--bg);
+  font: 2em/1em "Cairo";
+  padding-left: 50px;
+  padding-top: 40px;
+}

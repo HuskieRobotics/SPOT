@@ -93,6 +93,7 @@ document.querySelector("#submit").addEventListener("click", async () => {
     "DATABASE_URL",
     "TBA_API_KEY",
     "GOOGLE_CLIENT_ID",
+
     "GOOGLE_CLIENT_SECRET",
     "FMS_API_KEY",
     "FMS_API_USERNAME",

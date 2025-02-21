@@ -11,6 +11,11 @@ router.get("/dataset", async (req, res) => {
   );
 });
 
+router.delete("/dataset/:id", async (req, res) => {
+  await TeamMatchPerformance.findByIdAndDelete(req.params.id);
+  res.send("Deleted");
+});
+
 if (!config.secrets.TBA_API_KEY) {
   console.error(
     chalk.whiteBright.bgRed.bold(

@@ -25,6 +25,7 @@ if (fs.existsSync("config/config.json")) {
   app.use("/analysis", require("./analysis/analysis.js"));
   app.use("/admin", require("./admin/admin.js"));
   app.use("/qrscanner", require("./qrscanner/qrscanner.js"));
+  app.use("/edit", require("./edit/edit.js"));
   app.use("/setup", require("./setup/setup.js"));
   app.use("/schedule", require("./schedule/schedule").router);
 } else {
