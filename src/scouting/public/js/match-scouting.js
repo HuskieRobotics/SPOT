@@ -74,7 +74,7 @@ var previousTimer = [];
 
   function updateButtonStates() {
     for (const action of actionQueue) {
-      const button = buttons.find(b => b && b?.id === action.id);
+      const button = buttons.find(b => b && b.id === action.id);
       const cond = button?.conditions;
       if (!cond) continue;
       if (cond.add)
@@ -86,8 +86,8 @@ var previousTimer = [];
     for (const button of buttons) {
       const piece = button?.conditions?.if || button?.conditions?.no;
       if (!piece) continue;
-      const hasPiece = gamePieces[piece];
-      button.element.classList.toggle("disabled", button?.conditions?.if ? !hasPiece : hasPiece);
+      const conditionMet = gamePieces[piece];
+      button.element.classList.toggle("disabled", button?.conditions?.if ? !conditionMet : conditionMet);
     }
 
     // Backup data to localStorage incase accidental refresh
@@ -110,6 +110,7 @@ var previousTimer = [];
         doExecutables(button);
         updateLastAction();
         updateButtonStates();
+        navigator.vibrate(100);
       });
     },
 
@@ -521,4 +522,6 @@ var previousTimer = [];
     updateButtonStates();
     updateLastAction();
   }
+
+  updateButtonStates();
 })();
