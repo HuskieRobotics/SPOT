@@ -72,7 +72,7 @@ var previousTimer = [];
    */
   const gamePieces = {};
 
-  function updateButtonStates() {
+  function updateButtonStates(chain = false) {
     for (const action of actionQueue) {
       const button = buttons.find(b => b && b.id === action.id);
       const cond = button?.conditions;
@@ -91,11 +91,12 @@ var previousTimer = [];
     }
 
     // Backup data to localStorage incase accidental refresh
-    setTimeout(() => {
+    if(!chain) setTimeout(() => {
       localStorage.setItem("actions", JSON.stringify(actionQueue));
       localStorage.setItem("start", start);
       localStorage.setItem("timerActive", JSON.stringify(timerActive));
-    }, 2000);
+      updateButtonStates(true);
+    }, 1500);
   }
 
   const buttonBuilders = {
