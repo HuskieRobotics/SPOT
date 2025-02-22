@@ -390,6 +390,47 @@ body {
   border-color: var(--accent-alt);
 }
 
+#match-select-label {
+  font-size: 1.4em;
+  /* font-weight: 00; */
+}
+
+#match-select-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+#match-select {
+  width: 100px;
+}
+
+#alliance-module-container {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  overflow-y: scroll;
+}
+
+.alliance-modules {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  overflow-y: scroll;
+  padding: 10px 0 20px 0;
+}
+
+.alliance-modules.hidden {
+  visibility: hidden;
+}
+
+.alliance-modules > div.hidden {
+  display: none;
+}
+
+
 /* Added styles to make the bubble sheet graph fill the whole screen */
 #bubble-sheet-view {
   width: 100vw;
