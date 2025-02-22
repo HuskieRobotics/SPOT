@@ -78,6 +78,6 @@ document
     updateForm();
     switchPage("form");
   });
-config.then(conf => document.querySelector("#configLength").textContent = JSON.stringify(conf).length.toString(36));
+matchScoutingConfig.then(conf => document.querySelector("#configLength").textContent = JSON.stringify(conf).length.toString(36));
 
 // signOutBtn.addEventListener("click", signOut)
