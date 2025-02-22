@@ -246,10 +246,10 @@
           "id": "autoReefPickupAlgae",
           "displayText": "Pickup Reef",
           "gridArea": [
-            "4",
-            "8",
-            "6",
-            "10"
+            4,
+            8,
+            6,
+            10
           ],
           "class": "bluegreen",
           "type": "action",
@@ -345,10 +345,10 @@
           "id": "teleopGroundPickupCoral",
           "displayText": "Pickup Ground",
           "gridArea": [
-            "2",
-            "1",
-            "4",
-            "3"
+            2,
+            1,
+            4,
+            3
           ],
           "class": "coral",
           "type": "action",
@@ -970,10 +970,10 @@
           "id": "autoAlgaeLeft",
           "displayText": "O",
           "gridArea": [
-            "3",
-            "1",
-            "6",
-            "4"
+            3,
+            1,
+            6,
+            4
           ],
           "class": "lightbluegreen",
           "type": "action",
@@ -985,7 +985,10 @@
                 1
               ]
             }
-          ]
+          ],
+          "conditions": {
+            "add": "algae"
+          }
         },
         {
           "id": "autoAlgaeCenter",
@@ -1006,7 +1009,10 @@
                 1
               ]
             }
-          ]
+          ],
+          "conditions": {
+            "add": "algae"
+          }
         },
         {
           "id": "autoAlgaeRight",
@@ -1027,7 +1033,10 @@
                 1
               ]
             }
-          ]
+          ],
+          "conditions": {
+            "add": "algae"
+          }
         },
         {
           "id": "Reef",
@@ -1040,7 +1049,18 @@
           ],
           "class": "gray",
           "type": "label",
-          "executables": []
+          "executables": [
+            {
+              "type": "layer",
+              "args": [
+                6,
+                1
+              ]
+            }
+          ],
+          "conditions": {
+            "add": "algae"
+          }
         }
       ],
       [
@@ -1102,7 +1122,10 @@
                 1
               ]
             }
-          ]
+          ],
+          "conditions": {
+            "add": "coral"
+          }
         },
         {
           "id": "autoCoralCenter",
@@ -1123,7 +1146,10 @@
                 1
               ]
             }
-          ]
+          ],
+          "conditions": {
+            "add": "coral"
+          }
         },
         {
           "id": "autoCoralRight",
@@ -1144,7 +1170,10 @@
                 1
               ]
             }
-          ]
+          ],
+          "conditions": {
+            "add": "coral"
+          }
         },
         {
           "id": "Reef",
@@ -1157,7 +1186,15 @@
           ],
           "class": "gray",
           "type": "label",
-          "executables": []
+          "executables": [
+            {
+              "type": "layer",
+              "args": [
+                7,
+                1
+              ]
+            }
+          ]
         }
       ],
       [
