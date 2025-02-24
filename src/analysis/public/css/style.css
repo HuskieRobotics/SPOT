@@ -434,6 +434,7 @@ body {
   display: none;
 }
 
+
 #auto-pick-stats {
   overflow: auto;
   /*
@@ -444,6 +445,10 @@ body {
   border-color:red;
   */
 }
+
+
+/* Added styles to make the bubble sheet graph fill the whole screen */
+
 #bubble-sheet-view {
   width: 100vw;
   height: 100vh;

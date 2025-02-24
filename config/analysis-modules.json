@@ -293,7 +293,7 @@
         },
         {
           "name": "Average Barge Points",
-          "path": "avgBargePoints",
+          "path": "avgEndgamePoints",
           "decimals": 2,
           "sort": 1
         },
@@ -429,7 +429,7 @@
     "name": "Barge Points",
     "position": "main",
     "options": {
-      "path": "avgBargePoints",
+      "path": "avgEndgamePoints",
       "sort": 1,
       "decimals": 2
     }
@@ -466,7 +466,7 @@
         },
         {
           "name": "Expected Barge Points",
-          "path": "avgBargePoints",
+          "path": "avgEndgamePoints",
           "decimals": 2,
           "aggrMethod": "sum"
         },
