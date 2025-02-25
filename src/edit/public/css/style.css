@@ -91,4 +91,9 @@ body {
   font: 2em/1em "Cairo";
   padding-left: 50px;
   padding-top: 40px;
+  visibility: hidden;
+}
+
+#match-list {
+  visibility: hidden;
 }

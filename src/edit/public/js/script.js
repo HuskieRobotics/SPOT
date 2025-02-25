@@ -43,6 +43,45 @@
     await new Promise((r) => setTimeout(r, 300));
   });
 
+  const authRequest = await fetch("/admin/api/auth").then((res) => res.json());
+
+  if (authRequest.status !== 2) {
+    const authModal = new Modal("small", false).header("Sign In");
+    const accessCodeInput = createDOMElement("input", "access-input");
+    accessCodeInput.placeholder = "Access Code";
+    accessCodeInput.type = "password";
+    accessCodeInput.addEventListener("keydown", (e) => {
+      if (e.keyCode == 13) {
+        validate(accessCodeInput.value, authModal);
+      }
+    });
+    authModal.element.appendChild(accessCodeInput);
+    authModal.action("Submit", async () => {
+      validate(accessCodeInput.value, authModal);
+    });
+  } else {
+    await constructApp("");
+  }
+
+  async function validate(accessCode, authModal) {
+    const auth = await fetch("/admin/api/auth", {
+      headers: {
+        Authorization: accessCode,
+      },
+    }).then((res) => res.json());
+
+    if (auth.status === 1) {
+      await constructApp(accessCode);
+      oldAccessCode = accessCode;
+      authModal.modalExit();
+    } else {
+      new Popup("error", "Wrong Access Code");
+    }
+  }
+  async function constructApp(accessCode) {
+    document.querySelector("#header").classList.add("visible");
+  }
+
   function showElements(dataset, moduleConfig) {
     const listContainer = document.getElementById("match-list");
     listContainer.innerHTML = ""; // Clear any existing content
