@@ -1,3 +1,4 @@
+let oldAccessCode;
 (async () => {
   let dataset;
   console.log("Loading data...");
@@ -29,19 +30,6 @@
 
     return tmps;
   }
-
-  async function loadAround(func) {
-    await func();
-  }
-
-  await loadAround(async () => {
-    const modulesConfig = await fetch(`/config/analysis-modules.json`).then(
-      (res) => res.json()
-    );
-    dataset = await executePipeline();
-    showElements(dataset, modulesConfig);
-    await new Promise((r) => setTimeout(r, 300));
-  });
 
   const authRequest = await fetch("/admin/api/auth").then((res) => res.json());
 
@@ -79,7 +67,15 @@
     }
   }
   async function constructApp(accessCode) {
-    document.querySelector("#header").classList.add("visible");
+    await loadAround(async () => {
+      const modulesConfig = await fetch(`/config/analysis-modules.json`).then(
+        (res) => res.json()
+      );
+      dataset = await executePipeline();
+      showElements(dataset, modulesConfig);
+      await new Promise((r) => setTimeout(r, 300));
+    });
+    document.getElementById("title").classList.add("visible");
   }
 
   function showElements(dataset, moduleConfig) {
@@ -213,5 +209,9 @@
 
     // Initial render
     updateList();
+  }
+
+  async function loadAround(func) {
+    await func();
   }
 })();
