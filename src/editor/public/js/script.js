@@ -10,7 +10,7 @@ var grid,
   currentFile = "css",
   exeEditor,
   isExeChanging = false;
-const configFetcher = fetch("./api/config").then((e) => e.json());
+let configFetcher = fetch("./api/config").then((e) => e.json());
 
 window.addEventListener("fullyLoaded", async function () {
   if (grid) return;
@@ -22,16 +22,41 @@ window.addEventListener("fullyLoaded", async function () {
     column: 9,
     float: true,
   });
-  configFetcher.then(async (res) => {
-    columns = res.layout.gridColumns;
-    rows = res.layout.gridRows;
-    config = res;
-    layers = res.layout.layers;
-    layer(1);
-    document.querySelector("#in_grid_row").value = rows;
-    document.querySelector("#in_grid_col").value = columns;
+  function auth(password) {
+    if (password !== null) configFetcher = fetch("./api/config", {
+      headers: {
+        Authorization: password,
+      },
+    }).then((e) => e.json())
+    configFetcher.then(async (res) => {
+      columns = res.layout.gridColumns;
+      rows = res.layout.gridRows;
+      config = res;
+      layers = res.layout.layers;
+      layer(1);
+      document.querySelector("#in_grid_row").value = rows;
+      document.querySelector("#in_grid_col").value = columns;
 
-    document.querySelector(".loader").remove();
+      document.querySelector(".loader").remove();
+      document.querySelector(".login").style.display = null;
+      // This was moved here to prevent unauthenticated executable fetching
+      initEditor();
+    }).catch(() => {
+      document.querySelector(".loader").style.display = "none";
+      document.querySelector(".login").style.display = "block";
+    });
+  }
+  auth();
+  const inLogin = document.querySelector(".login #in_login");
+  const btnLogin = document.querySelector(".login #btn_login");
+  inLogin.addEventListener("keypress", (event) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      btnLogin.click();
+    }
+  });
+  btnLogin.addEventListener("click", () => {
+    auth(inLogin.value);
   });
   var timeout;
   window.addEventListener(
@@ -377,7 +402,6 @@ window.addEventListener("fullyLoaded", async function () {
       exeList.appendChild(item);
     }
   }
-  initEditor();
 
   function scanCss() {
     inButtonClass.childNodes.forEach((n) => n.className == "tmp" && n.remove());

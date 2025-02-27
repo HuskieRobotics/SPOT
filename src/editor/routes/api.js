@@ -1,19 +1,30 @@
 const { Router } = require("express");
 const { writeFileSync, readdirSync, rmSync } = require("fs");
 const path = require("path");
+const config = require("../../../config/config.json");
 let router = Router();
 
-router.post("/config", function(req, res) {
+// Authentication middleware
+router.use((req, res, next) => {
+  if (`${req.headers.cookie}`.includes(`auth=${config.secrets.ACCESS_CODE}`)) {
+    next();
+  } else if (config.secrets.ACCESS_CODE == req.headers.authorization) {
+    res.cookie("auth", config.secrets.ACCESS_CODE);
+    next();
+  } else res.status(401).send("Unauthorized!").end();
+});
+
+router.post("/config", function (req, res) {
   try {
     writeFileSync("config/match-scouting.json", JSON.stringify(req.body, null, 2));
     res.send("Success").end();
-  } catch(e) {
+  } catch (e) {
     console.error("Cannot apply configuration from editor", e);
     res.status(500).send("Failed").end();
   }
 });
 
-router.get("/config", function(req, res) {
+router.get("/config", function (req, res) {
   res.sendFile(path.resolve(require.main.path, "..", "config/match-scouting.json"));
 });
 
@@ -31,7 +42,7 @@ router.post("/exe/css", function (req, res) {
   }
 });
 
-router.get("/exe", function(req, res) {
+router.get("/exe", function (req, res) {
   res.send(readdirSync(path.resolve(require.main.path, "scouting/executables")));
 });
 
@@ -57,6 +68,10 @@ router.delete("/exe/:name", function (req, res) {
     console.error("Cannot apply configuration from editor", e);
     res.status(500).send("Failed").end();
   }
+});
+
+router.get("/auth", function (req, res) {
+  res.status(200).send("OK").end();
 });
 
 module.exports = router;
