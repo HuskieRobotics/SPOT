@@ -12,8 +12,17 @@ router.get("/dataset", async (req, res) => {
 });
 
 router.delete("/dataset/:id", async (req, res) => {
-  await TeamMatchPerformance.findByIdAndDelete(req.params.id);
-  res.send("Deleted");
+  const DEMO = config.DEMO;
+
+  if (!DEMO) {
+    if (req.headers.authorization === config.secrets.ACCESS_CODE) {
+      await TeamMatchPerformance.findByIdAndDelete(req.params.id);
+      res.send("Deleted");
+    } else {
+      return res.send("Invalid Access Code");
+    }
+    return res.send("DEMO mode is enabled, cannot delete");
+  }
 });
 
 if (!config.secrets.TBA_API_KEY) {
