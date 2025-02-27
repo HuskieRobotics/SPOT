@@ -23,6 +23,7 @@ window.addEventListener("fullyLoaded", async function () {
     float: true,
   });
   function auth(password) {
+    document.querySelector(".loader").style.display = null;
     if (password !== null) configFetcher = fetch("./api/config", {
       headers: {
         Authorization: password,
