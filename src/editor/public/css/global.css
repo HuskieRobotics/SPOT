@@ -7,7 +7,7 @@ body {
   overflow-y: hidden;
 }
 
-body > div:not(.sl-toast-stack) {
+body > div:not(.sl-toast-stack):not(.loader) {
   border: 1px #333 solid;
   background: #222;
 }
@@ -97,7 +97,7 @@ sl-tree {
   height: 100vh;
   width: 100vw;
   border: none;
-  z-index: 10000;
+  z-index: 5000;
   background: #0000;
   backdrop-filter: blur(5px);
   display: none;
