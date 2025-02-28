@@ -372,7 +372,11 @@ window.addEventListener("fullyLoaded", async function () {
       if (id === "config") editor.getSession().setValue(JSON.stringify(config, null, 2));
       else {
         spinner();
-        fetch("./api/exe/" + id)
+        if(files[id]) {
+          editor.getSession().setValue(files[id]);
+          spinner(false);
+        }
+        else fetch("./api/exe/" + id)
           .then((e) => e.text())
           .then((e) => {
             editor.getSession().setValue(e);
