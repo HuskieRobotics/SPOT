@@ -1,3 +1,5 @@
+/* Existing content of src/analysis/public/css/style.css */
+
 body {
   background-color: var(--bg);
 }
@@ -303,11 +305,6 @@ body {
   display: grid;
   grid-template-columns: 1fr 3fr 1fr;
   overflow: auto;
-  /*
-  display: flex;
-  flex-direction:row;
-  gap: 10px;
-  */
 }
 
 #pick-list-text {
@@ -321,7 +318,6 @@ body {
 #team-list-container {
   display: flex;
   flex-direction: column;
-
   align-items: center;
   margin-left: 40px;
   gap: 10px;
@@ -511,4 +507,9 @@ body {
   #app{
     grid-template-columns: 100px auto;
   } */
+}
+
+#bubble-sheet-graph {
+  width: 100%;
+  height: 100%;
 }
