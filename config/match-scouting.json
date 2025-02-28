@@ -311,7 +311,11 @@
           ],
           "class": "gray",
           "type": "action",
-          "executables": []
+          "executables": [],
+          "conditions": {
+            "add": "leave",
+            "no": "leave"
+          }
         }
       ],
       [
