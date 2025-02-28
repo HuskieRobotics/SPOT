@@ -7,7 +7,7 @@ body {
   overflow-y: hidden;
 }
 
-body > div:not(.sl-toast-stack):not(.loader) {
+body > div:not(.sl-toast-stack,.loader,.login) {
   border: 1px #333 solid;
   background: #222;
 }
@@ -119,4 +119,8 @@ sl-tree {
       align-self: flex-end;
     }
   }
+}
+
+.sl-toast-stack {
+  z-index: 10001;
 }

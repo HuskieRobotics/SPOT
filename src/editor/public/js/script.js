@@ -24,6 +24,7 @@ window.addEventListener("fullyLoaded", async function () {
   });
   const inLogin = document.querySelector(".login #in_login");
   const btnLogin = document.querySelector(".login #btn_login");
+  const loginFailedToast = document.querySelector("#diag_login_failed");
   function auth(password) {
     spinner();
     if (password !== null) configFetcher = fetch("./api/config", {
@@ -46,12 +47,12 @@ window.addEventListener("fullyLoaded", async function () {
       initEditor();
     }).catch(() => {
       spinner(false);
-      if (password) document.querySelector("#diag_login_failed").toast();
+      if (password !== null) loginFailedToast.toast();
       document.querySelector(".login").style.display = "block";
       inLogin.focus();
     });
   }
-  auth();
+  auth(null);
   inLogin.addEventListener("keypress", (event) => {
     if (event.key === "Enter") {
       event.preventDefault();
