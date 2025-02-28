@@ -7,7 +7,7 @@ body {
   overflow-y: hidden;
 }
 
-body > div {
+body > div:not(.sl-toast-stack) {
   border: 1px #333 solid;
   background: #222;
 }
