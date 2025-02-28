@@ -539,7 +539,10 @@ if ("serviceWorker" in navigator) {
     const layout = {
       title: "Team Scores Scattergram",
       xaxis: { title: "Average Auto Score" },
-      yaxis: { title: "Average Teleop Score" },
+      yaxis: {
+        title: "Average Teleop Score",
+        range: [0, Math.max(...teleopScores) * 1.1],
+      },
       shapes: [
         // Horizontal line for average teleop score
         {
