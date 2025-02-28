@@ -23,7 +23,7 @@ window.addEventListener("fullyLoaded", async function () {
     float: true,
   });
   function auth(password) {
-    document.querySelector(".loader").style.display = null;
+    spinner();
     if (password !== null) configFetcher = fetch("./api/config", {
       headers: {
         Authorization: password,
@@ -38,12 +38,12 @@ window.addEventListener("fullyLoaded", async function () {
       document.querySelector("#in_grid_row").value = rows;
       document.querySelector("#in_grid_col").value = columns;
 
-      document.querySelector(".loader").remove();
+      spinner(false);
       document.querySelector(".login").style.display = null;
       // This was moved here to prevent unauthenticated executable fetching
       initEditor();
     }).catch(() => {
-      document.querySelector(".loader").style.display = "none";
+      spinner(false);
       document.querySelector(".login").style.display = "block";
     });
   }
@@ -109,6 +109,7 @@ window.addEventListener("fullyLoaded", async function () {
   const exeList = scriptTree.querySelector("#exe");
 
   btnSave.addEventListener("click", function () {
+    spinner();
     config.layout.layers = layers;
     Promise.all([
       fetch("./api/config", {
@@ -136,7 +137,7 @@ window.addEventListener("fullyLoaded", async function () {
       .catch((e) => {
         failedToast.toast();
         console.error(e);
-      });
+      }).finally(() => spinner(false));
     files = { css: files?.css };
     scanCss();
   });
@@ -239,7 +240,7 @@ window.addEventListener("fullyLoaded", async function () {
         const data = l.find((e) => e.id == currentButton);
         try {
           data.executables = JSON.parse(exeEditor.getValue());
-        } catch {}
+        } catch { }
         markUnsaved();
       }
     });
@@ -295,9 +296,8 @@ window.addEventListener("fullyLoaded", async function () {
     const errToast = document.querySelector("#diag_error");
     function errorHandler(ev) {
       errToast.toast();
-      document.querySelector("#diag_error_txt").textContent = `${
-        ev?.error || ev?.reason || "Unknown error"
-      }`;
+      document.querySelector("#diag_error_txt").textContent = `${ev?.error || ev?.reason || "Unknown error"
+        }`;
     }
     window.addEventListener("error", errorHandler);
     window.addEventListener("unhandledrejection", errorHandler);
@@ -318,7 +318,7 @@ window.addEventListener("fullyLoaded", async function () {
           layers = config.layout.layers;
           columns = config.layout.gridColumns;
           rows = config.layout.gridRows;
-        } catch {}
+        } catch { }
         layer(currentLayer);
       } else files[currentFile] = editor.getValue();
     });
@@ -332,7 +332,7 @@ window.addEventListener("fullyLoaded", async function () {
         files.css = e;
         scanCss();
       })
-      .catch(() => {});
+      .catch(() => { });
     document
       .querySelector("sl-tab-group")
       .addEventListener("sl-tab-show", function (ev) {
@@ -355,25 +355,29 @@ window.addEventListener("fullyLoaded", async function () {
         if (!file) return;
         if (!file.match(/^[\w\-. ]+$/)) throw "Invalid executable name!";
         if (!file.endsWith(".js")) file += ".js";
+        spinner();
         fetch(`./api/exe/${file}`, {
           method: "POST",
           body: JSON.stringify({ v: "" }),
         }).then((res) => {
           if (res.status !== 200) throw `Error creating "exe/${file}"`;
           createFile(file);
-        });
+        }).finally(() => spinner(false));
         return;
       }
       if (id === "css") editor.session.setMode("ace/mode/css");
       else if (id === "config") editor.session.setMode("ace/mode/json");
       else editor.session.setMode("ace/mode/javascript");
       isChanging = true;
-      if(id === "config") editor.getSession().setValue(JSON.stringify(config, null, 2));
-      else fetch("./api/exe/" + id)
-        .then((e) => e.text())
-        .then((e) => {
-          editor.getSession().setValue(e);
-        });
+      if (id === "config") editor.getSession().setValue(JSON.stringify(config, null, 2));
+      else {
+        spinner();
+        fetch("./api/exe/" + id)
+          .then((e) => e.text())
+          .then((e) => {
+            editor.getSession().setValue(e);
+          }).finally(() => spinner(false));
+      }
       currentFile = id;
     });
 
@@ -510,9 +514,8 @@ function layer(num) {
   resize(columns, rows);
   document.querySelector(".statbar > #layer").textContent = `Layer ${num}`;
   currentLayer = num;
-  document.querySelector(".statbar #timing").textContent = `${
-    Date.now() - ts
-  }ms`;
+  document.querySelector(".statbar #timing").textContent = `${Date.now() - ts
+    }ms`;
 }
 
 function refreshCellHeight() {
@@ -521,4 +524,10 @@ function refreshCellHeight() {
   );
   // 20 is the padding of the grid
   grid.cellHeight(height / rows);
+}
+
+function spinner(enable = true) {
+  document.querySelector(".loader").style.display = enable
+    ? null
+    : "none";
 }
