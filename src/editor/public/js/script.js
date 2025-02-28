@@ -22,6 +22,8 @@ window.addEventListener("fullyLoaded", async function () {
     column: 9,
     float: true,
   });
+  const inLogin = document.querySelector(".login #in_login");
+  const btnLogin = document.querySelector(".login #btn_login");
   function auth(password) {
     spinner();
     if (password !== null) configFetcher = fetch("./api/config", {
@@ -44,12 +46,12 @@ window.addEventListener("fullyLoaded", async function () {
       initEditor();
     }).catch(() => {
       spinner(false);
+      if (password) document.querySelector("#diag_login_failed").toast();
       document.querySelector(".login").style.display = "block";
+      inLogin.focus();
     });
   }
   auth();
-  const inLogin = document.querySelector(".login #in_login");
-  const btnLogin = document.querySelector(".login #btn_login");
   inLogin.addEventListener("keypress", (event) => {
     if (event.key === "Enter") {
       event.preventDefault();
