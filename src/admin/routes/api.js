@@ -40,8 +40,11 @@ router.get("/scouters", (req, res) => {
   }
 });
 
+// Modified /data route to support event filtering via query parameter "event"
 router.get("/data", async (req, res) => {
-  res.json(await TeamMatchPerformance.find());
+  const eventId = req.query.event || config.EVENT_NUMBER;
+  const data = await TeamMatchPerformance.find({ event: eventId });
+  res.json(data);
 });
 
 router.get("/enterMatch", async (req, res) => {

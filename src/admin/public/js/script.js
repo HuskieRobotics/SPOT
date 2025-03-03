@@ -304,7 +304,7 @@ class ScouterDisplay {
       !this.scouter.state.connected &&
       !(this.scouter.state.status == SCOUTER_STATUS.COMPLETE)
     ) {
-      //disconneted and not complete
+      //disconnected and not complete
       this.scouterElement.querySelector(".scouter-status").style.color =
         DISCONNECTED_COLOR;
       this.scouterElement.style.borderColor = DISCONNECTED_COLOR;
