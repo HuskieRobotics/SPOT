@@ -302,7 +302,7 @@
         },
         {
           "id": "leave",
-          "displayText": "Leave",
+          "displayText": "Leave Starting Point",
           "gridArea": [
             "6",
             "4",
@@ -316,6 +316,24 @@
             "add": "leave",
             "no": "leave"
           }
+        },
+        {
+          "id": "exitMatch",
+          "gridArea": [
+            "1",
+            "7",
+            "NaN",
+            "NaN"
+          ],
+          "displayText": "Exit Match",
+          "type": "action",
+          "class": "red",
+          "executables": [
+            {
+              "type": "exit",
+              "args": []
+            }
+          ]
         }
       ],
       [
