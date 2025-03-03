@@ -146,6 +146,27 @@
 			</div>
 			
 			<div id = "bubble-sheet-view">
+				<div id="bubble-sheet-controls">
+    <label for="x-axis-select">X-Axis:</label>
+    <select id="x-axis-select">
+        <option value="avgAutoPoints">Average Auto Points</option>
+        <option value="avgTeleopPoints">Average Teleop Points</option>
+        <option value="avgEndgamePoints">Average Endgame Points</option>
+        <option value="avgTotalPoints">Average Total Points</option>
+    </select>
+
+    <label for="y-axis-select">Y-Axis:</label>
+    <select id="y-axis-select">
+        <option value="avgAutoPoints">Average Auto Points</option>
+        <option value="avgTeleopPoints">Average Teleop Points</option>
+        <option value="avgEndgamePoints">Average Endgame Points</option>
+        <option value="avgTotalPoints">Average Total Points</option>
+    </select>
+</div>
+
+<div id="bubble-sheet-container">
+    <div class="graph" id="bubble-sheet-graph"></div>
+</div>
 				<div id = "bubble-sheet-container">
 					<div id = "bubble-sheet-graph">
 

@@ -482,40 +482,65 @@ if ("serviceWorker" in navigator) {
 
   // Bubble Sheet UI functions
   async function loadBubbleGraph(dataset, modulesConfig) {
-    //add event listener to "AutoPickList" button to set reset UI and switch to autopicklist tab
+    // Add event listener to "BubbleSheet" button to reset UI and switch to bubble sheet tab
     bubbleSheetSwitch.addEventListener("click", () => {
       clearInterface();
       bubbleSheetSwitch.classList.add("selected");
       bubbleGraphContainer.style.display = "block";
       showFade(bubbleSheetView);
+      updateBubbleGraph();
     });
+
     const bubbleSheetContainer = document.getElementById("bubble-sheet-graph");
+    const xAxisSelect = document.getElementById("x-axis-select");
+    const yAxisSelect = document.getElementById("y-axis-select");
 
-    const teams = Object.keys(dataset.teams);
-    const autoScores = teams.map((team) =>
-      getPath(dataset.teams[team], "avgAutoPoints", 0).toFixed(2)
-    );
+    xAxisSelect.addEventListener("change", updateBubbleGraph);
+    yAxisSelect.addEventListener("change", updateBubbleGraph);
 
-    const teleopScores = teams.map((team) =>
-      getPath(dataset.teams[team], "avgTeleopPoints", 0).toFixed(2)
-    );
+    function updateBubbleGraph() {
+      const xAxisField = xAxisSelect.value;
+      const yAxisField = yAxisSelect.value;
 
-    const endgameScores = teams.map((team) =>
-      getPath(dataset.teams[team], "avgEndgamePoints", 0).toFixed(2)
-    );
+      const teams = Object.keys(dataset.teams);
+      const xAxisData = teams.map((team) =>
+        getPath(dataset.teams[team], xAxisField, 0).toFixed(2)
+      );
+      const yAxisData = teams.map((team) =>
+        getPath(dataset.teams[team], yAxisField, 0).toFixed(2)
+      );
 
-    const totalScores = teams.map((team) =>
-      getPath(dataset.teams[team], "avgTotalPoints", 0).toFixed(2)
-    );
+      const hoverTexts = teams.map((team, index) => {
+        return `Team: ${team}<br>${xAxisField}: ${xAxisData[index]}<br>${yAxisField}: ${yAxisData[index]}`;
+      });
 
-    const avgAutoScore = (
-      autoScores.reduce((sum, score) => sum + parseFloat(score), 0) /
-      autoScores.length
-    ).toFixed(2);
-    const avgTeleopScore = (
-      teleopScores.reduce((sum, score) => sum + parseFloat(score), 0) /
-      teleopScores.length
-    ).toFixed(2);
+      const trace = {
+        x: xAxisData,
+        y: yAxisData,
+        mode: "markers+text",
+        type: "scatter",
+        text: teams,
+        hovertext: hoverTexts,
+        marker: { size: 12, color: "#FF6030" },
+        hoverlabel: {
+          bgcolor: "white", // Set the background color of the hover menu to white
+          font: { color: "black" }, // Set the font color to black for better readability
+        },
+        hoverinfo: "text",
+        textposition: "bottom center",
+      };
+
+      const layout = {
+        title: "Team Scores Scattergram",
+        xaxis: { title: xAxisField },
+        yaxis: {
+          title: yAxisField,
+          range: [0, Math.max(...yAxisData) * 1.1],
+        },
+      };
+
+      Plotly.newPlot(bubbleSheetContainer, [trace], layout);
+    }
 
     const hoverTexts = teams.map((team, index) => {
       return `Team: ${team}<br>Auto Score: ${autoScores[index]}<br>Teleop Score: ${teleopScores[index]}<br>Endgame Score: ${endgameScores[index]}<br>Total Score: ${totalScores[index]}`;
