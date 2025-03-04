@@ -527,6 +527,32 @@ body {
     height: calc(100vh - 75px); /* Adjust height to account for logo */
     transition: left 0.3s ease;
     z-index: 999;
+    display: flex;
+    flex-direction: column;
+  }
+
+  #sidebar > div:nth-child(2) {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    align-items: flex-start;
+  }
+
+  #button-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  #search-container {
+    flex: 1;
+    margin: 0;
+    padding: 0;
+    border: none;
+  }
+
+  #team-list {
+    margin-top: 0;
   }
 
   #sidebar.expanded {
@@ -539,6 +565,8 @@ body {
 
   .sidebar-toggle {
     display: block;
+    transition: opacity 0.15s ease;
+    opacity: 1;
   }
 
   #app {
