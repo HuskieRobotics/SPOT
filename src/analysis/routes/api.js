@@ -1,5 +1,6 @@
 const { Router } = require("express");
 const { TeamMatchPerformance } = require("../../lib/db.js");
+const { executePipeline } = require("../public/js/analysisPipeline.js");
 const axios = require("axios");
 const config = require("../../../config/config.json");
 
@@ -73,7 +74,7 @@ router.get("/manual", async (req, res) => {
 });
 
 router.get("/csv", async (req, res) => {
-  let dataset = await execute();
+  let dataset = await executePipeline(); // figure out why this does NOT work 
 
   //create rows
   let rows = [];
