@@ -494,13 +494,19 @@ if ("serviceWorker" in navigator) {
     const bubbleSheetContainer = document.getElementById("bubble-sheet-graph");
     const xAxisSelect = document.getElementById("x-axis-select");
     const yAxisSelect = document.getElementById("y-axis-select");
+    const zAxisSelect = document.getElementById("z-axis-select");
 
     xAxisSelect.addEventListener("change", updateBubbleGraph);
     yAxisSelect.addEventListener("change", updateBubbleGraph);
+    zAxisSelect.addEventListener("change", updateBubbleGraph);
+
+    // Initialize the graph with default values
+    updateBubbleGraph();
 
     function updateBubbleGraph() {
       const xAxisField = xAxisSelect.value;
       const yAxisField = yAxisSelect.value;
+      const zAxisField = zAxisSelect.value;
 
       const teams = Object.keys(dataset.teams);
       const xAxisData = teams.map((team) =>
@@ -509,9 +515,24 @@ if ("serviceWorker" in navigator) {
       const yAxisData = teams.map((team) =>
         getPath(dataset.teams[team], yAxisField, 0).toFixed(2)
       );
+      const zAxisData =
+        zAxisField === "constant"
+          ? teams.map(() => 1) // Default size if z-axis is set to constant
+          : teams.map((team) =>
+              getPath(dataset.teams[team], zAxisField, 0).toFixed(2)
+            );
 
       const hoverTexts = teams.map((team, index) => {
-        return `Team: ${team}<br>${xAxisField}: ${xAxisData[index]}<br>${yAxisField}: ${yAxisData[index]}`;
+        const teamData = dataset.teams[team];
+        return `Team: ${team}<br>
+                    ${xAxisField}: ${xAxisData[index]}<br>
+                    ${yAxisField}: ${yAxisData[index]}<br>
+                    ${
+                      zAxisField !== "constant"
+                        ? `${zAxisField}: ${zAxisData[index]}<br>`
+                        : ""
+                    }
+                   `;
       });
 
       const trace = {
@@ -521,7 +542,10 @@ if ("serviceWorker" in navigator) {
         type: "scatter",
         text: teams,
         hovertext: hoverTexts,
-        marker: { size: 12, color: "#FF6030" },
+        marker: {
+          size: zAxisData.map((value) => Math.sqrt(value) * 15), // Adjust the size of the bubbles
+          color: "#FF6030",
+        },
         hoverlabel: {
           bgcolor: "white", // Set the background color of the hover menu to white
           font: { color: "black" }, // Set the font color to black for better readability
