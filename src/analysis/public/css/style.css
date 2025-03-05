@@ -444,23 +444,25 @@ body {
 /* Added styles to make the bubble sheet graph fill the whole screen */
 
 #bubble-sheet-view {
-  width: 100vw;
-  height: 100vh;
-  display: block;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 #bubble-sheet-container {
   width: 100%;
-  overflow-y: scroll;
   height: 100%;
+  flex: 1;
+  position: relative;
+  overflow: hidden;
 }
 #bubble-sheet-graph {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
-}
-
-#bubble-sheet-graph {
-  width: 100%;
-  height: 100%;
+  object-fit: contain;
 }
 
 /* Add these new styles */
@@ -518,13 +520,12 @@ body {
     left: 0;
   }
 
-  /* Adjust sidebar to start below logo */
   #sidebar {
     position: fixed;
     left: -275px;
     width: 275px;
-    top: 75px; /* Start below logo */
-    height: calc(100vh - 75px); /* Adjust height to account for logo */
+    top: 75px;
+    height: calc(100vh - 75px);
     transition: left 0.3s ease;
     z-index: 999;
     display: flex;
@@ -570,10 +571,9 @@ body {
   }
 
   #app {
-    grid-template-columns: 0px auto; /* Remove sidebar from grid */
+    grid-template-columns: 0px auto;
   }
 
-  /* Add overlay when sidebar is expanded */
   .sidebar-overlay {
     display: none;
     position: fixed;
@@ -587,5 +587,38 @@ body {
 
   .sidebar-overlay.active {
     display: block;
+  }
+
+  #team-view.side-enabled {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+  }
+
+  #side-list {
+    grid-area: 1 /1 / 2 / 2;
+    max-height: 40vh;
+    border-bottom: 2px solid var(--accent-alt);
+    padding: 20px 0;
+  }
+
+  #main-list {
+    grid-area: 2 / 1 / 3 / 2;
+    padding: 20px 0;
+  }
+
+  .container-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    width: 100%;
+    padding: 10px;
+    grid-auto-flow: row; /* This makes elements flow across then down */
+  }
+
+  .container-stats > div {
+    width: 100%;
+    min-width: 0;
+    font-size: 0.9rem;
+    text-align: center;
   }
 }
