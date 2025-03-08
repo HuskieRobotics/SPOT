@@ -1,9 +1,9 @@
 async function executePipeline() {
   // Get tmps from database (or cache if offline)
-  let tmps = await fetch("./api/dataset").then((res) => res.json()); // THIS DOES NOT WORK
+  let tmps = await fetch("./api/dataset").then((res) => res.json());
 
   // Get all tmps stored in the local storage (from qr code)
-  const storage = localStorage.getItem("teamMatchPerformances"); // THIS DOES NOT WORK
+  const storage = localStorage.getItem("teamMatchPerformances");
   if (storage) {
     // Parse the QR code TMPs (for some reason the array is stored as a string, and each TMP is ALSO
     // stored as a string, so the array has to be parsed and each individual TMP has to be parsed)
@@ -21,10 +21,10 @@ async function executePipeline() {
 
   let dataset = { tmps, teams };
 
-  const manual = await fetch("./api/manual").then((res) => res.json()); // THIS DOES NOT WORK
+  const manual = await fetch("./api/manual").then((res) => res.json());
   const pipelineConfig = await fetch(
     "../../../config/analysis-pipeline.json"
-  ).then((res) => res.json()); // THIS DOES NOT WORK
+  ).then((res) => res.json());
 
   // This will show up as a method that doesn't exist since it is gotten from the server
   const transformers = await getTransformers();
@@ -56,3 +56,4 @@ async function executePipeline() {
 
   return dataset;
 }
+modules.export = {executePipeline};

@@ -1,6 +1,6 @@
 const { Router } = require("express");
 const { TeamMatchPerformance } = require("../../lib/db.js");
-const { executePipeline } = require("../public/js/analysisPipeline.js");
+//const { executePipeline } = require("../public/js/analysisPipeline.js");
 const axios = require("axios");
 const config = require("../../../config/config.json");
 
@@ -73,7 +73,64 @@ router.get("/manual", async (req, res) => {
   res.json(manual);
 });
 router.get("/csv", async (req, res) => {
-  let dataset = await executePipeline(); // figure out why this does NOT work
+  async function executePipeline() {
+    // Get tmps from database (or cache if offline)
+    let tmps = await axios.get("http://localhost:8080/analysis/api/dataset").then((res) => res.data);
+
+    // Get all tmps stored in the local storage (from qr code)
+    const storage = TeamMatchPerformance.find({ eventNumber: config.EVENT_NUMBER });
+    if (storage) {
+      // Parse the QR code TMPs (for some reason the array is stored as a string, and each TMP is ALSO
+      // stored as a string, so the array has to be parsed and each individual TMP has to be parsed)
+      const qrcodeTmps = JSON.parse(storage).map((tmp) => JSON.parse(tmp));
+
+      // Merge the TMPs into one
+      tmps = [...tmps, ...qrcodeTmps];
+    }
+
+    // Find all the teams across the TMPs
+    const teams = [];
+    for (const tmp of tmps) {
+      teams[tmp.robotNumber] = {};
+    }
+
+    let dataset = { tmps, teams };
+
+    const manual = await axios.get("http://localhost:8080/analysis/api/manual").then((res) => res.data);
+    const pipelineConfig = await axios.get("http://localhost:8080/config/analysis-pipeline.json").then((res) => res.data);
+
+    // This will show up as a method that doesn't exist since it is gotten from the server
+    const transformers = await getTransformers();
+
+    for (let tfConfig of pipelineConfig) {
+      dataset = transformers[tfConfig.type][tfConfig.name].execute(
+        dataset,
+        tfConfig.outputPath,
+        tfConfig.options
+      );
+    }
+
+    dataset.tmps = dataset.tmps.concat(
+      manual.tmps.map((tmp) => ({
+        ...tmp,
+        manual: true,
+      }))
+    );
+    for (const [path, teamData] of Object.entries(manual.teams)) {
+      for (const [team, value] of Object.entries(teamData)) {
+        if (team in dataset.teams) {
+          setPath(dataset.teams[team], "manual." + path, value);
+        } else {
+          dataset.teams[team] = {};
+          setPath(dataset.teams[team], "manual." + path, value);
+        }
+      }
+    }
+
+    return dataset;
+  }
+
+  let dataset2 = await executePipeline(); // figure out why this does NOT work
 
   //create rows
   let rows = [];
@@ -88,7 +145,7 @@ router.get("/csv", async (req, res) => {
   };
 
   // WHAT IS EVEN GOING ON DOWN HERE????
-  for (let [teamNumber, team] of Object.entries(dataset.teams).filter(
+  for (let [teamNumber, team] of Object.entries(dataset2.teams).filter(
     ([num, team]) => checkData(team)
   )) {
     if (headerRow) {
