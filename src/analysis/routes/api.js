@@ -1,8 +1,10 @@
 const { Router } = require("express");
 const { TeamMatchPerformance } = require("../../lib/db.js");
 //const { executePipeline } = require("../public/js/analysisPipeline.js");
+const { setPath } = require("../../lib/util.js");
 const axios = require("axios");
 const config = require("../../../config/config.json");
+const { got } = require("../get.js");
 
 let router = Router();
 
@@ -75,17 +77,21 @@ router.get("/manual", async (req, res) => {
 router.get("/csv", async (req, res) => {
   async function executePipeline() {
     // Get tmps from database (or cache if offline)
-    let tmps = await axios.get("http://localhost:8080/analysis/api/dataset").then((res) => res.data);
+    let tmps = await axios
+      .get("http://localhost:8080/analysis/api/dataset")
+      .then((res) => res.data);
 
     // Get all tmps stored in the local storage (from qr code)
-    const storage = TeamMatchPerformance.find({ eventNumber: config.EVENT_NUMBER });
+    const storage = await TeamMatchPerformance.find({
+      eventNumber: config.EVENT_NUMBER,
+    });
     if (storage) {
       // Parse the QR code TMPs (for some reason the array is stored as a string, and each TMP is ALSO
       // stored as a string, so the array has to be parsed and each individual TMP has to be parsed)
-      const qrcodeTmps = JSON.parse(storage).map((tmp) => JSON.parse(tmp));
+      //const qrcodeTmps = JSON.parse(storage).map((tmp) => JSON.parse(tmp));
 
       // Merge the TMPs into one
-      tmps = [...tmps, ...qrcodeTmps];
+      tmps = [...tmps, ...storage];
     }
 
     // Find all the teams across the TMPs
@@ -96,14 +102,26 @@ router.get("/csv", async (req, res) => {
 
     let dataset = { tmps, teams };
 
-    const manual = await axios.get("http://localhost:8080/analysis/api/manual").then((res) => res.data);
-    const pipelineConfig = await axios.get("http://localhost:8080/config/analysis-pipeline.json").then((res) => res.data);
+    const manual = await axios
+      .get("http://localhost:8080/analysis/api/manual")
+      .then((res) => res.data);
+    const pipelineConfig = await axios
+      .get("http://localhost:8080/config/analysis-pipeline.json")
+      .then((res) => res.data);
+    console.log("Pipeline Config : " + pipelineConfig);
+
+    async function getTransformers() {
+      const matchScoutingConfig = await got();
+    }
 
     // This will show up as a method that doesn't exist since it is gotten from the server
     const transformers = await getTransformers();
 
     for (let tfConfig of pipelineConfig) {
-      dataset = transformers[tfConfig.type][tfConfig.name].execute(
+      console.log("tfConfig Type : " + tfConfig.type);
+      console.log("tfConfig Name : " + tfConfig.name);
+
+      dataset = transformers[tfConfig.name][tfConfig.type].execute(
         dataset,
         tfConfig.outputPath,
         tfConfig.options
