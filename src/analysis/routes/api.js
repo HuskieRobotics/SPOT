@@ -87,7 +87,6 @@ router.get("/csv", async (req, res) => {
     return true;
   };
 
-
   // WHAT IS EVEN GOING ON DOWN HERE????
   for (let [teamNumber, team] of Object.entries(dataset.teams).filter(
     ([num, team]) => checkData(team)
