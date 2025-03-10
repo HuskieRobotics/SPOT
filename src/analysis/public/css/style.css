@@ -588,37 +588,4 @@ body {
   .sidebar-overlay.active {
     display: block;
   }
-
-  #team-view.side-enabled {
-    grid-template-columns: 1fr;
-    grid-template-rows: auto 1fr;
-  }
-
-  #side-list {
-    grid-area: 1 /1 / 2 / 2;
-    max-height: 40vh;
-    border-bottom: 2px solid var(--accent-alt);
-    padding: 20px 0;
-  }
-
-  #main-list {
-    grid-area: 2 / 1 / 3 / 2;
-    padding: 20px 0;
-  }
-
-  .container-stats {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
-    width: 100%;
-    padding: 10px;
-    grid-auto-flow: row; /* This makes elements flow across then down */
-  }
-
-  .container-stats > div {
-    width: 100%;
-    min-width: 0;
-    font-size: 0.9rem;
-    text-align: center;
-  }
 }
