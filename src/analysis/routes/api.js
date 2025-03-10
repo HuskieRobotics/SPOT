@@ -108,20 +108,19 @@ router.get("/csv", async (req, res) => {
     const pipelineConfig = await axios
       .get("http://localhost:8080/config/analysis-pipeline.json")
       .then((res) => res.data);
-    console.log("Pipeline Config : " + pipelineConfig);
-
-    async function getTransformers() {
-      const matchScoutingConfig = await got();
-    }
+    //console.log("Pipeline Config : " + pipelineConfig);
 
     // This will show up as a method that doesn't exist since it is gotten from the server
+    let getTransformers = await got();
+    getTransformers = getTransformers["getTransformers"];
+    console.log(getTransformers);
     const transformers = await getTransformers();
 
     for (let tfConfig of pipelineConfig) {
-      console.log("tfConfig Type : " + tfConfig.type);
-      console.log("tfConfig Name : " + tfConfig.name);
+      //console.log("tfConfig Type : " + tfConfig.type);
+      //console.log("tfConfig Name : " + tfConfig.name);
 
-      dataset = transformers[tfConfig.name][tfConfig.type].execute(
+      dataset = transformers[tfConfig.type][tfConfig.name].execute(
         dataset,
         tfConfig.outputPath,
         tfConfig.options
@@ -149,7 +148,7 @@ router.get("/csv", async (req, res) => {
   }
 
   let dataset2 = await executePipeline(); // figure out why this does NOT work
-
+  
   //create rows
   let rows = [];
   let headerRow = true;
@@ -170,10 +169,10 @@ router.get("/csv", async (req, res) => {
       headerRow = false;
       rows.push([
         "Team #",
-        ...Object.entries(team.averages)
+        ...Object.entries(team.avgTotalPoints)
           .filter(([key, value]) => !isNaN(value) && value)
           .map(([i, x]) => i + " Average"), //all averages
-        ...Object.entries(team.averageScores)
+        ...Object.entries(team.avgTotalPoints)
           .filter((item) => !isNaN(item))
           .map(([i, x]) => i + " Score Average"), //all averages
         "Average Cycle",
@@ -182,14 +181,14 @@ router.get("/csv", async (req, res) => {
     }
     rows.push([
       teamNumber,
-      ...Object.entries(team.averages)
+      ...Object.entries(team.avgTotalPoints)
         .filter(([key, value]) => !isNaN(value) && value)
         .map(([i, x]) => x), //all averages
-      ...Object.entries(team.averageScores)
+      ...Object.entries(team.avgTotalPoints)
         .filter((item) => !isNaN(item))
         .map(([i, x]) => x), //all averages
-      team.cycle.averageTime,
-      team.cycle.averageTimeComplete,
+      team.cycleAlgae.avgTime,
+      team.cycleAlgae.avgTimeComplete,
     ]);
   }
 

@@ -42,7 +42,8 @@ router.get("/transformers.js", async (req, res) => {
   // Set the output to the template file
   let output = fs
     .readFileSync(
-      `${__dirname}/transformers/${analysisTransformer.template.file}`
+      `${__dirname}/transformers/${analysisTransformer.template
+        .file}`
     )
     .toString();
 
@@ -117,45 +118,45 @@ router.get("/transformers.js", async (req, res) => {
 async function apiStuff() {
   // Get the analysis transformer, containing important information about
   // how to build the client-side transformers conjugate file
-  const analysisTransformer = require("../../config/analysis-transformers.json");
+  const analysisTransformer2 = require("../../config/analysis-transformers.json");
 
   // Set the output to the template file
-  let output = fs
+  let output2 = fs
     .readFileSync(
-      `${__dirname}/transformers/${analysisTransformer.template.file}`
+      `${__dirname}/transformers/${analysisTransformer2.template2.file}`
     )
     .toString();
 
   // Set each transformer's data to "name: {", leaving the object open to add
   // transformers to it
-  for (const transformerType of analysisTransformer.types) {
-    transformerType.data = `${transformerType.name}: {\n`;
+  for (const transformerType2 of analysisTransformer2.types) {
+    transformerType2.data = `${transformerType2.name}: {\n`;
   }
 
-  for (const file of fs.readdirSync(path.resolve(__dirname, "transformers"))) {
+  for (const file2 of fs.readdirSync(path.resolve(__dirname, "transformers"))) {
     // Make sure the file isn't a file that should be ignored
-    if (analysisTransformer.ignore.includes(file)) {
+    if (analysisTransformer2.ignore.includes(file2)) {
       continue;
     }
 
     // Get the contents of the JS file
-    const contents = fs
-      .readFileSync(`${__dirname}/transformers/${file}`)
+    const contents2 = fs
+      .readFileSync(`${__dirname}/transformers/${file2}`)
       .toString();
 
     // Check the file for each type of transformer (i.e. tmp, team, etc.)
-    for (const transformerType of analysisTransformer.types) {
-      const pattern = new RegExp(
-        `__${transformerType.identifier}__\\s*([\\s\\S]*?)\\s*__/${transformerType.identifier}__`,
+    for (const transformerType2 of analysisTransformer2.types) {
+      const pattern2 = new RegExp(
+        `__${transformerType2.identifier}__\\s*([\\s\\S]*?)\\s*__/${transformerType2.identifier}__`,
         "i"
       );
-      const match = pattern.exec(contents);
+      const match2 = pattern2.exec(contents2);
 
       // If it contains that type of transformer, add it to the list
-      if (match) {
+      if (match2) {
         // Add "identifier: new DataTransformer(...)" tp the transformer type's data,
         // plus a comma to allow for the next data transformer
-        transformerType.data += `${file.split(".")[0]}: ${match[1].trim()},\n`;
+        transformerType2.data += `${file2.split(".")[0]}: ${match2[1].trim()},\n`;
 
         // Would look something like:
         /*
@@ -169,11 +170,11 @@ async function apiStuff() {
   }
 
   // Add all of the files together to build the conjugate
-  let conjugate = "";
-  for (const transformerType of analysisTransformer.types) {
+  let conjugate2 = "";
+  for (const transformerType2 of analysisTransformer2.types) {
     // Add individual data to conjugate and add a } to the end to complete
     // the object's declaration, as well as a comma
-    conjugate += `\n${transformerType.data}},`;
+    conjugate2 += `\n${transformerType2.data}},`;
   }
 
   // Ends up looking like:
@@ -188,23 +189,23 @@ async function apiStuff() {
     */
 
   // Replace the placeholder with the conjugate to finish the output
-  output = output.replace(analysisTransformer.template.placeholder, conjugate);
+  output2 = output2.replace(analysisTransformer2.template2.placeholder, conjugate2);
   //console.log("Output : " + output);
-  let temp = output;
-  const tempFilePath = path.join(__dirname, "transformers.js");
+  let temp = output2;
+  const tempFilePath2 = path.join(__dirname, "transformers.js");
 
-  fs.writeFileSync(tempFilePath, temp);
+  fs.writeFileSync(tempFilePath2, temp);
 
-  const module = require(tempFilePath);
+  const module2 = require(tempFilePath2);
 
-  fs.unlinkSync(tempFilePath);
-  return module;
+  fs.unlinkSync(tempFilePath2);
+  return module2;
 }
 
 global.apiStuff = apiStuff;
 
 let modulesStyleOutput;
-router.get("/modules.css", (req, res) => {
+router.get("/modules.css", (req, res) => {s
   if (modulesStyleOutput) {
     res.send(modulesStyleOutput); //there might be a better way to do this
   } else {
