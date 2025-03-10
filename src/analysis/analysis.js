@@ -205,7 +205,7 @@ async function apiStuff() {
 global.apiStuff = apiStuff;
 
 let modulesStyleOutput;
-router.get("/modules.css", (req, res) => {s
+router.get("/modules.css", (req, res) => {
   if (modulesStyleOutput) {
     res.send(modulesStyleOutput); //there might be a better way to do this
   } else {

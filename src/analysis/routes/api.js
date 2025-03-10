@@ -148,7 +148,7 @@ router.get("/csv", async (req, res) => {
   }
 
   let dataset2 = await executePipeline(); // figure out why this does NOT work
-  
+
   //create rows
   let rows = [];
   let headerRow = true;
