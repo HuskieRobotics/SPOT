@@ -148,7 +148,7 @@ router.get("/csv", async (req, res) => {
   }
 
   let dataset2 = await executePipeline(); // figure out why this does NOT work
-
+  console.log(dataset2);
   //create rows
   let rows = [];
   let headerRow = true;
@@ -175,8 +175,8 @@ router.get("/csv", async (req, res) => {
         ...Object.entries(team.avgTotalPoints)
           .filter((item) => !isNaN(item))
           .map(([i, x]) => i + " Score Average"), //all averages
-        "Average Cycle",
-        "Average Completed Cycle",
+        "Average Coral Cycle Time",
+        "Average Algae Cycle Time",
       ]);
     }
     rows.push([
@@ -187,8 +187,8 @@ router.get("/csv", async (req, res) => {
       ...Object.entries(team.avgTotalPoints)
         .filter((item) => !isNaN(item))
         .map(([i, x]) => x), //all averages
-      team.cycleAlgae.avgTime,
-      team.cycleAlgae.avgTimeComplete,
+      team.cycleCoral.averageTime / 1000,
+      team.cycleAlgae.averageTime / 1000,
     ]);
   }
 
