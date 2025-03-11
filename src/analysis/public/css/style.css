@@ -430,7 +430,6 @@ body {
   display: none;
 }
 
-
 #auto-pick-stats {
   overflow: auto;
   /*
@@ -442,24 +441,48 @@ body {
   */
 }
 
-
 /* Added styles to make the bubble sheet graph fill the whole screen */
 
 #bubble-sheet-view {
-  width: 100vw;
-  height: 100vh;
-  display: block;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 #bubble-sheet-container {
   width: 100%;
-  overflow-y: scroll;
   height: 100%;
+  flex: 1;
+  position: relative;
+  overflow: hidden;
 }
 #bubble-sheet-graph {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
+  object-fit: contain;
 }
 
+/* Add these new styles */
+.sidebar-toggle {
+  display: none; /* Hidden by default on desktop */
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 1000;
+  background: var(--accent-alt);
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  color: white;
+  font-size: 1.2rem;
+}
+
+/* Modify the existing media query */
 @media screen and (max-width: 1100px) {
   html {
     font-size: 75%;
@@ -482,34 +505,87 @@ body {
     padding: 25px 0;
   }
 
-  /* #menu {
-    width: 100px;
-    height:100%;
+  #logo {
+    position: fixed; /* Make logo fixed at top */
+    top: 0;
+    left: -275px; /* Start hidden, same as sidebar */
+    width: 275px; /* Match sidebar width */
+    height: 75px; /* Set fixed height */
+    z-index: 999; /* Same z-index as sidebar */
+    transition: left 0.3s ease; /* Match sidebar transition */
   }
-  #logo{
-    width: 100px;
-    font-size:0px;
-  }
-  #logo-img {
-    height: 50px;
-  }
-  #logo-text{
-    font-size:0px;
-  }
-  #search-icon{
-    display:none;
-    width:0px;
-  }
-  #search-input{
-    width:100%;
-    padding: 0 10px;
-  }
-  #app{
-    grid-template-columns: 100px auto;
-  } */
-}
 
-#bubble-sheet-graph {
-  width: 100%;
-  height: 100%;
+  #sidebar.expanded + #logo,
+  #sidebar.expanded {
+    left: 0;
+  }
+
+  #sidebar {
+    position: fixed;
+    left: -275px;
+    width: 275px;
+    top: 75px;
+    height: calc(100vh - 75px);
+    transition: left 0.3s ease;
+    z-index: 999;
+    display: flex;
+    flex-direction: column;
+  }
+
+  #sidebar > div:nth-child(2) {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    align-items: flex-start;
+  }
+
+  #button-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  #search-container {
+    flex: 1;
+    margin: 0;
+    padding: 0;
+    border: none;
+  }
+
+  #team-list {
+    margin-top: 0;
+  }
+
+  #sidebar.expanded {
+    left: 0;
+  }
+
+  #logo.expanded {
+    left: 0;
+  }
+
+  .sidebar-toggle {
+    display: block;
+    transition: opacity 0.15s ease;
+    opacity: 1;
+  }
+
+  #app {
+    grid-template-columns: 0px auto;
+  }
+
+  .sidebar-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 998;
+  }
+
+  .sidebar-overlay.active {
+    display: block;
+  }
 }

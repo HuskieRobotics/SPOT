@@ -40,6 +40,7 @@ if ("serviceWorker" in navigator) {
       .allMatches;
 
     initDashboard(dataset, modulesConfig);
+    initSidebarToggle();
     await new Promise((r) => setTimeout(r, 300));
   });
   showFade(app);
@@ -580,6 +581,53 @@ if ("serviceWorker" in navigator) {
     //getPath(team, "avgAutoPoints", 0);
     //getPath(team, "avgTeleopPoints", 0);
     //}
+  }
+
+  function initSidebarToggle() {
+    const sidebarToggle = document.querySelector(".sidebar-toggle");
+    const sidebar = document.querySelector("#sidebar");
+    const logo = document.querySelector("#logo");
+    const buttons = document.querySelectorAll("#button-container button");
+
+    // Create overlay element
+    const overlay = document.createElement("div");
+    overlay.className = "sidebar-overlay";
+    document.body.appendChild(overlay);
+
+    function updateButtonText(isExpanded) {
+      buttons.forEach((button) => {
+        button.textContent =
+          button.dataset[isExpanded ? "mobileText" : "desktopText"];
+      });
+    }
+
+    sidebarToggle.addEventListener("click", () => {
+      const isExpanding = !sidebar.classList.contains("expanded");
+      sidebar.classList.toggle("expanded");
+      logo.classList.toggle("expanded");
+      overlay.classList.toggle("active");
+      sidebarToggle.classList.add("hidden");
+      updateButtonText(isExpanding);
+    });
+
+    // Add transition end event listener to sidebar
+    sidebar.addEventListener("transitionend", () => {
+      if (!sidebar.classList.contains("expanded")) {
+        setTimeout(() => {
+          sidebarToggle.classList.remove("hidden");
+          updateButtonText(false);
+        }, 150);
+      }
+    });
+
+    // Close sidebar when window is resized above mobile breakpoint
+    window.addEventListener("resize", () => {
+      if (window.innerWidth > 1100) {
+        sidebar.classList.remove("expanded");
+        logo.classList.remove("expanded");
+        overlay.classList.remove("active");
+      }
+    });
   }
 
   //call setData on every module in matches
