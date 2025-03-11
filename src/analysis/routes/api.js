@@ -161,7 +161,7 @@ router.get("/csv", async (req, res) => {
     return true;
   };
 
-  // WHAT IS EVEN GOING ON DOWN HERE????
+  // Adding the data which is required for the CSV
   for (let [teamNumber, team] of Object.entries(dataset2.teams).filter(
     ([num, team]) => checkData(team)
   )) {
@@ -177,6 +177,10 @@ router.get("/csv", async (req, res) => {
           .map(([i, x]) => i + " Score Average"), //all averages
         "Average Coral Cycle Time",
         "Average Algae Cycle Time",
+        "Average Auto Points",
+        "Average Teleop Points",
+        "Coral Accuracy",
+        "Algae Accuracy",
       ]);
     }
     rows.push([
@@ -189,6 +193,10 @@ router.get("/csv", async (req, res) => {
         .map(([i, x]) => x), //all averages
       team.cycleCoral.averageTime / 1000,
       team.cycleAlgae.averageTime / 1000,
+      team.avgAutoPoints.toFixed(2),
+      team.avgTeleopPoints.toFixed(2),
+      (team.coralAccuracy * 100).toFixed(2) + "%",
+      (team.algaeAccuracy * 100).toFixed(2) + "%",
     ]);
   }
 
