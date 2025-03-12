@@ -177,10 +177,16 @@ router.get("/csv", async (req, res) => {
           .map(([i, x]) => i + " Score Average"), //all averages
         "Average Coral Cycle Time",
         "Average Algae Cycle Time",
+        "Average Time to Climb",
         "Average Auto Points",
         "Average Teleop Points",
         "Coral Accuracy",
         "Algae Accuracy",
+        "Average Coral Points",
+        "Average Algae Points",
+        "Average Total Points",
+        "Average Coral Miss",
+        "Average Algae Miss",
       ]);
     }
     rows.push([
@@ -191,12 +197,18 @@ router.get("/csv", async (req, res) => {
       ...Object.entries(team.avgTotalPoints)
         .filter((item) => !isNaN(item))
         .map(([i, x]) => x), //all averages
-      team.cycleCoral.averageTime / 1000,
-      team.cycleAlgae.averageTime / 1000,
+      (team.cycleCoral.averageTime / 1000).toFixed(2) + "s",
+      (team.cycleAlgae.averageTime / 1000).toFixed(2) + "s",
+      (team.bargeCycle.averageTimeComplete / 1000).toFixed(2) + "s",
       team.avgAutoPoints.toFixed(2),
       team.avgTeleopPoints.toFixed(2),
       (team.coralAccuracy * 100).toFixed(2) + "%",
       (team.algaeAccuracy * 100).toFixed(2) + "%",
+      team.avgCoralPoints.toFixed(2),
+      team.avgAlgaePoints.toFixed(2),
+      team.avgTotalPoints.toFixed(2),
+      team.avgAlgaeMiss.toFixed(2),
+      team.avgTotalMiss.toFixed(2),
     ]);
   }
 
