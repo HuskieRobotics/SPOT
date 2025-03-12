@@ -33,7 +33,7 @@ SPOT is built with HTML, JS, CSS, and Node.js and operates with a MongoDB databa
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes, as well as deployed on a server (Glitch or Amazon Web Services). If you have any questions, feel free to contact us [spot@team3061.org](mailto:spot@team3061.org).
 
-### [Quickstart](https://docs.google.com/document/d/1dATXMC5U7aT0SfnYEOWFiafaeWbu8opabNglWSFCSPE/edit?usp=sharing)
+### [Quickstart](https://docs.google.com/document/d/1vtl2PVihMu5IuJtC42czj-sC8xgQx0sHrEsvGa7eb0o/edit?usp=sharing)
 
 ## Usage
 
