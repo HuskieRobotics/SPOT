@@ -187,6 +187,10 @@ router.get("/csv", async (req, res) => {
         "Average Total Points",
         "Average Coral Miss",
         "Average Algae Miss",
+        "Lv 1 Coral",
+        "Lv 2 Coral",
+        "Lv 3 Coral",
+        "Lv 4 Coral",
       ]);
     }
     rows.push([
@@ -209,6 +213,10 @@ router.get("/csv", async (req, res) => {
       team.avgTotalPoints.toFixed(2),
       team.avgAlgaeMiss.toFixed(2),
       team.avgTotalMiss.toFixed(2),
+      team.counts.teleopl1 + team.autol1 === 0 ? "No" : "Yes",
+      team.counts.teleopl2 + team.autol2 === 0 ? "No" : "Yes",
+      team.counts.teleopl3 + team.autol3 === 0 ? "No" : "Yes",
+      team.counts.teleopl4 + team.autol4 === 0 ? "No" : "Yes",
     ]);
   }
 
