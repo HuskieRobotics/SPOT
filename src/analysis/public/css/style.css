@@ -445,17 +445,26 @@ body {
 
 #bubble-sheet-view {
   width: 100%;
-  height: 100%;
+  height: 100vh;
   display: flex;
   flex-direction: column;
 }
+
+#bubble-sheet-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  background-color: var(--bg-alt);
+  z-index: 1;
+}
+
 #bubble-sheet-container {
-  width: 100%;
-  height: 100%;
   flex: 1;
   position: relative;
   overflow: hidden;
 }
+
 #bubble-sheet-graph {
   position: absolute;
   top: 0;
@@ -464,7 +473,6 @@ body {
   height: 100%;
   object-fit: contain;
 }
-
 /* Add these new styles */
 .sidebar-toggle {
   display: none; /* Hidden by default on desktop */
