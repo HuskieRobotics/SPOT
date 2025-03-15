@@ -43,7 +43,7 @@ These instructions will get you a copy of the project up and running on your loc
 
 This is a guide on how to use SPOT as well as its features, with a text and a video walkthrough.
 
-### [Usage Guide](https://docs.google.com/document/d/16n0msw98T-HM7h5cdLdA946QHSB-SX_6boAxm6i8aos/edit?usp=sharing)
+### [Usage Guide](https://docs.google.com/document/d/14QNhU3PEkdomg_Ij-yo5keQduSn6n9CpfKT3TQoxF50/edit?usp=sharing)
 
 ## Configuration
 
