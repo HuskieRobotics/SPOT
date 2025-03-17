@@ -169,12 +169,12 @@ router.get("/csv", async (req, res) => {
       headerRow = false;
       rows.push([
         "Team #",
-        ...Object.entries(team.avgTotalPoints)
+        ...Object.entries(team.avgTotalPoints ?? {})
           .filter(([key, value]) => !isNaN(value) && value)
-          .map(([i, x]) => i + " Average"), //all averages
-        ...Object.entries(team.avgTotalPoints)
-          .filter((item) => !isNaN(item))
-          .map(([i, x]) => i + " Score Average"), //all averages
+          .map(([i, x]) => i + " Average"),
+        ...Object.entries(team.avgTotalPoints ?? {})
+          .filter(([key, value]) => !isNaN(value))
+          .map(([i, x]) => i + " Score Average"),
         "Average Coral Cycle Time",
         "Average Algae Cycle Time",
         "Average Time to Climb",
@@ -191,32 +191,53 @@ router.get("/csv", async (req, res) => {
         "Lv 2 Coral",
         "Lv 3 Coral",
         "Lv 4 Coral",
+        "Ground Pickup Algae",
+        "Reef Pickup Algae",
+        "Ground Pickup Coral",
+        "Station Pickup Coral",
+        "Algae Score Net",
+        "Algae Score Processor",
       ]);
     }
+
+    const avgTotalPoints = Object.entries(team.avgTotalPoints ?? {})
+      .filter(([key, value]) => !isNaN(value) && value)
+      .map(([i, x]) => x);
+
     rows.push([
       teamNumber,
-      ...Object.entries(team.avgTotalPoints)
-        .filter(([key, value]) => !isNaN(value) && value)
-        .map(([i, x]) => x), //all averages
-      ...Object.entries(team.avgTotalPoints)
-        .filter((item) => !isNaN(item))
-        .map(([i, x]) => x), //all averages
-      (team.cycleCoral.averageTime / 1000).toFixed(2) + "s",
-      (team.cycleAlgae.averageTime / 1000).toFixed(2) + "s",
-      (team.bargeCycle.averageTimeComplete / 1000).toFixed(2) + "s",
-      team.avgAutoPoints.toFixed(2),
-      team.avgTeleopPoints.toFixed(2),
-      (team.coralAccuracy * 100).toFixed(2) + "%",
-      (team.algaeAccuracy * 100).toFixed(2) + "%",
-      team.avgCoralPoints.toFixed(2),
-      team.avgAlgaePoints.toFixed(2),
-      team.avgTotalPoints.toFixed(2),
-      team.avgAlgaeMiss.toFixed(2),
-      team.avgTotalMiss.toFixed(2),
-      team.counts.teleopl1 + team.autol1 === 0 ? "No" : "Yes",
-      team.counts.teleopl2 + team.autol2 === 0 ? "No" : "Yes",
-      team.counts.teleopl3 + team.autol3 === 0 ? "No" : "Yes",
-      team.counts.teleopl4 + team.autol4 === 0 ? "No" : "Yes",
+      ...avgTotalPoints,
+      ...avgTotalPoints,
+      (team.cycleCoral?.averageTime ?? 0 / 1000).toFixed(2) + "s",
+      (team.cycleAlgae?.averageTime ?? 0 / 1000).toFixed(2) + "s",
+      (team.bargeCycle?.averageTimeComplete ?? 0 / 1000).toFixed(2) + "s",
+      team.avgAutoPoints?.toFixed(2) ?? "0.00",
+      team.avgTeleopPoints?.toFixed(2) ?? "0.00",
+      (team.coralAccuracy * 100)?.toFixed(2) + "%" ?? "0.00%",
+      (team.algaeAccuracy * 100)?.toFixed(2) + "%" ?? "0.00%",
+      team.avgCoralPoints?.toFixed(2) ?? "0.00",
+      team.avgAlgaePoints?.toFixed(2) ?? "0.00",
+      team.avgTotalPoints?.toFixed(2) ?? "0.00",
+      team.avgAlgaeMiss?.toFixed(2) ?? "0.00",
+      team.avgTotalMiss?.toFixed(2) ?? "0.00",
+      team.counts?.teleopl1 + (team.autol1 || 0) === 0 ? "No" : "Yes",
+      team.counts?.teleopl2 + (team.autol2 || 0) === 0 ? "No" : "Yes",
+      team.counts?.teleopl3 + (team.autol3 || 0) === 0 ? "No" : "Yes",
+      team.counts?.teleopl4 + (team.autol4 || 0) === 0 ? "No" : "Yes",
+      team.counts?.groundPickupAlgae === 0 ? "No" : "Yes",
+      team.counts?.reefPickupAlgae === 0 ? "No" : "Yes",
+      team.counts?.groundPickupCoral === 0 ? "No" : "Yes",
+      team.counts?.stationPickupCoral === 0 ? "No" : "Yes",
+      team.counts?.groundPickupAlgae === 0 ? "No" : "Yes",
+      team.counts?.reefPickupAlgae === 0 ? "No" : "Yes",
+      team.counts?.groundPickupCoral === 0 ? "No" : "Yes",
+      team.counts?.stationPickupCoral === 0 ? "No" : "Yes",
+      team.counts?.teleopScoreNet + team.counts?.autoScoreNet === 0
+        ? "No"
+        : "Yes",
+      team.counts?.teleopScoreProcessor + team.counts?.autoScoreProcessor === 0
+        ? "No"
+        : "Yes",
     ]);
   }
 
