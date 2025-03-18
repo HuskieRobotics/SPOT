@@ -137,7 +137,7 @@ let oldAccessCode;
         topRow.classList.add("match-item-top");
 
         const dropdownButton = document.createElement("button");
-        dropdownButton.textContent = "▼";
+        dropdownButton.textContent = "►";
         dropdownButton.classList.add("dropdown-button");
         topRow.appendChild(dropdownButton);
 
@@ -178,7 +178,7 @@ let oldAccessCode;
         dropdownButton.onclick = () => {
           const isHidden = dropdownContent.style.display === "none";
           dropdownContent.style.display = isHidden ? "block" : "none";
-          dropdownButton.textContent = isHidden ? "▲" : "▼";
+          dropdownButton.textContent = isHidden ? "▼" : "►";
         };
 
         trashButton.onclick = async () => {
