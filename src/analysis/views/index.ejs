@@ -152,37 +152,37 @@
     <div id="bubble-sheet-controls">
         <label for="x-axis-select">X-Axis:</label>
         <select id="x-axis-select">
-            <option value="avgAutoPoints">Average Auto Points</option>
-            <option value="avgTeleopPoints" selected>Average Teleop Points</option>
-            <option value="avgEndgamePoints">Average Endgame Points</option>
-            <option value="avgTotalPoints">Average Total Points</option>
-            <option value="avgAlgaePoints">Average Algae Points</option>
+            <% config.AXIS_OPTIONS.forEach(option => { %>
+                <option value="<%= option.value %>"><%= option.label %></option>
+            <% }); %>
+            <option value="custom">Custom</option>
         </select>
+        <input type="text" id="x-axis-custom" placeholder="Enter custom path" style="display: none;">
 
         <label for="y-axis-select">Y-Axis:</label>
         <select id="y-axis-select">
-            <option value="avgAutoPoints" selected>Average Auto Points</option>
-            <option value="avgTeleopPoints">Average Teleop Points</option>
-            <option value="avgEndgamePoints">Average Endgame Points</option>
-            <option value="avgTotalPoints">Average Total Points</option>
-            <option value="avgAlgaePoints">Average Algae Points</option>
+            <% config.AXIS_OPTIONS.forEach(option => { %>
+                <option value="<%= option.value %>"><%= option.label %></option>
+            <% }); %>
+            <option value="custom">Custom</option>
         </select>
+        <input type="text" id="y-axis-custom" placeholder="Enter custom path" style="display: none;">
 
         <label for="z-axis-select">Z-Axis (Bubble Size):</label>
         <select id="z-axis-select">
             <option value="constant" selected>Constant</option>
-            <option value="avgAutoPoints">Average Auto Points</option>
-            <option value="avgTeleopPoints">Average Teleop Points</option>
-            <option value="avgEndgamePoints">Average Endgame Points</option>
-            <option value="avgTotalPoints">Average Total Points</option>
-            <option value="avgAlgaePoints">Average Algae Points</option>
+            <% config.AXIS_OPTIONS.forEach(option => { %>
+                <option value="<%= option.value %>"><%= option.label %></option>
+            <% }); %>
+            <option value="custom">Custom</option>
         </select>
+        <input type="text" id="z-axis-custom" placeholder="Enter custom path" style="display: none;">
     </div>
 
     <div id="bubble-sheet-container">
         <div class="graph" id="bubble-sheet-graph"></div>
     </div>
-</div>	
+</div>
 				<div id = "bubble-sheet-container">
 					<div id = "bubble-sheet-graph">
 
