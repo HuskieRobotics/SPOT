@@ -1,7 +1,7 @@
 require("./analysis");
 
 async function got() {
-  let api = await global.apiStuff();
+  let api = await global.processTransformers();
   console.log("Api : " + api);
   return api;
 }
