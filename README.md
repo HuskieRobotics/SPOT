@@ -1,3 +1,7 @@
+<div align="center">
+  <img src="src/scouting/public/img/logo-dark-mode.png" width=30% height=30%>
+</div>
+
 # SPOT - Scouting Platforms On Time
 
 SPOT is an open-source modular scouting app framework for FRC developed by Team 3061 Huskie Robotics. SPOT provides a simple platform upon which a team can build a scouting app with little to no prior experience.
@@ -33,13 +37,13 @@ SPOT is built with HTML, JS, CSS, and Node.js and operates with a MongoDB databa
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes, as well as deployed on a server (Glitch or Amazon Web Services). If you have any questions, feel free to contact us [spot@team3061.org](mailto:spot@team3061.org).
 
-### [Quickstart](https://docs.google.com/document/d/1dATXMC5U7aT0SfnYEOWFiafaeWbu8opabNglWSFCSPE/edit?usp=sharing)
+### [Quickstart](https://docs.google.com/document/d/1vtl2PVihMu5IuJtC42czj-sC8xgQx0sHrEsvGa7eb0o/edit?usp=sharing)
 
 ## Usage
 
 This is a guide on how to use SPOT as well as its features, with a text and a video walkthrough.
 
-### [Usage Guide](https://docs.google.com/document/d/16n0msw98T-HM7h5cdLdA946QHSB-SX_6boAxm6i8aos/edit?usp=sharing)
+### [Usage Guide](https://docs.google.com/document/d/14QNhU3PEkdomg_Ij-yo5keQduSn6n9CpfKT3TQoxF50/edit?usp=sharing)
 
 ## Configuration
 
