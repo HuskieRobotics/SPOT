@@ -316,7 +316,9 @@ function compareAllTeams(teams) {
 // let pAliiances = possibleAliiances(teams);
 // console.log(pAliiances);
 //console.log("test")
+/*
 
+Mock data for testing
 let teamB1 = {
   sd: 20,
   avg: 80,
@@ -352,6 +354,7 @@ let teamR3 = {
   avg: 30,
   team_number: 6,
 };
+*/
 
 // TESTS -
 /*
