@@ -228,10 +228,6 @@ router.get("/csv", async (req, res) => {
       team.counts?.reefPickupAlgae === 0 ? "No" : "Yes",
       team.counts?.groundPickupCoral === 0 ? "No" : "Yes",
       team.counts?.stationPickupCoral === 0 ? "No" : "Yes",
-      team.counts?.groundPickupAlgae === 0 ? "No" : "Yes",
-      team.counts?.reefPickupAlgae === 0 ? "No" : "Yes",
-      team.counts?.groundPickupCoral === 0 ? "No" : "Yes",
-      team.counts?.stationPickupCoral === 0 ? "No" : "Yes",
       team.counts?.teleopScoreNet + team.counts?.autoScoreNet === 0
         ? "No"
         : "Yes",
