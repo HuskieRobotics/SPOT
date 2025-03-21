@@ -153,20 +153,16 @@
         <label for="x-axis-select">X-Axis:</label>
         <select id="x-axis-select">
             <% config.AXIS_OPTIONS.forEach(option => { %>
-                <option value="<%= option.value %>"><%= option.label %></option>
+                <option value="<%= option.value %>" <%= option.value === "avgTeleopPoints" ? "selected" : "" %>><%= option.label %></option>
             <% }); %>
-            <option value="custom">Custom</option>
         </select>
-        <input type="text" id="x-axis-custom" placeholder="Enter custom path" style="display: none;">
 
         <label for="y-axis-select">Y-Axis:</label>
         <select id="y-axis-select">
             <% config.AXIS_OPTIONS.forEach(option => { %>
-                <option value="<%= option.value %>"><%= option.label %></option>
+                <option value="<%= option.value %>" <%= option.value === "avgAutoPoints" ? "selected" : "" %>><%= option.label %></option>
             <% }); %>
-            <option value="custom">Custom</option>
         </select>
-        <input type="text" id="y-axis-custom" placeholder="Enter custom path" style="display: none;">
 
         <label for="z-axis-select">Z-Axis (Bubble Size):</label>
         <select id="z-axis-select">
@@ -174,9 +170,7 @@
             <% config.AXIS_OPTIONS.forEach(option => { %>
                 <option value="<%= option.value %>"><%= option.label %></option>
             <% }); %>
-            <option value="custom">Custom</option>
         </select>
-        <input type="text" id="z-axis-custom" placeholder="Enter custom path" style="display: none;">
     </div>
 
     <div id="bubble-sheet-container">
