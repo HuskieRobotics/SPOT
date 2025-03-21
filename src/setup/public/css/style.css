@@ -139,3 +139,11 @@ video {
   padding: 8px 12px;
   font-size: 1.5em;
 }
+
+#EVENT_NUMBER {
+  width: 500px; /* Force the width to 500px */
+  max-width: 500px; /* Ensure it doesn't shrink below 500px */
+  padding: 12px 20px; /* Your existing padding */
+  height: auto;
+  width: 500px;
+}

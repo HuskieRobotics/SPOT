@@ -63,6 +63,7 @@ async function constructApp(accessCode) {
       config.secrets.ACCESS_CODE || "";
     document.querySelector("#DATABASE_URL").value =
       config.secrets.DATABASE_URL || "";
+    await populateEventNumbers();
     document.querySelector("#TBA_API_KEY").value =
       config.secrets.TBA_API_KEY || "";
     document.querySelector("#TBA_EVENT_KEY").value = config.TBA_EVENT_KEY || "";
@@ -85,6 +86,73 @@ async function constructApp(accessCode) {
   }
 
   document.querySelector("#setup-container").classList.add("visible");
+}
+
+// When the select element is focused, remove the placeholder option if it's still there.
+const eventSelect = document.getElementById("EVENT_NUMBER");
+if (eventSelect) {
+  eventSelect.addEventListener("focus", function () {
+    const defaultOption = eventSelect.querySelector("option[value='']");
+    if (defaultOption) {
+      defaultOption.remove();
+    }
+  });
+
+  // Optionally, if no selection was made, add the default option back on blur.
+  eventSelect.addEventListener("blur", function () {
+    if (
+      eventSelect.value === "" &&
+      !eventSelect.querySelector("option[value='']")
+    ) {
+      const placeholder = document.createElement("option");
+      placeholder.value = "";
+      placeholder.textContent = "Select Event Number";
+      eventSelect.insertBefore(placeholder, eventSelect.firstChild);
+    }
+  });
+}
+
+async function populateEventNumbers() {
+  const databaseUrl = document.getElementById("DATABASE_URL").value;
+  if (!databaseUrl) return;
+
+  try {
+    const response = await fetch("/setup/api/events", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ databaseUrl }),
+    });
+
+    const result = await response.json();
+
+    // Check if the response contains an error
+    if (result.error) {
+      console.error("API Error:", result.error);
+      return;
+    }
+
+    // Ensure the result is an array
+    if (!Array.isArray(result)) {
+      console.error("Unexpected API response format:", result);
+      return;
+    }
+
+    console.log("Event Numbers:", result);
+
+    const select = document.getElementById("EVENT_NUMBER");
+    select.innerHTML = '<option value="">Select Event Number</option>';
+
+    result.forEach((event) => {
+      const option = document.createElement("option");
+      option.value = event;
+      option.textContent = `${event}`;
+      select.appendChild(option);
+    });
+  } catch (error) {
+    console.error("Error fetching event numbers:", error);
+  }
 }
 
 document.querySelector("#submit").addEventListener("click", async () => {

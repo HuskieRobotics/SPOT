@@ -217,7 +217,8 @@
           </label>
         </div>
         <div>
-          <h1>Event Number</h1>
+          <h1>Event Setup</h1>
+          <!-- 
           <p>
             The Event Number to be associated with your data. An event number
             allows you to filter your dataset between events without overwriting
@@ -226,16 +227,17 @@
             this between events or else data from the previous event will appear
             in your analysis.
           </p>
+        -->
           <label class="label">
-            <input
-              type="number"
+            <select
               id="EVENT_NUMBER"
               name="EVENT_NUMBER"
-              value="0"
               class="input"
               required
-            />
-            <span>Event Number</span>
+            >
+              <option value="">Select Event Number</option>
+            </select>
+            <span>Event <Code></Code></span>
           </label>
         </div>
         <div>

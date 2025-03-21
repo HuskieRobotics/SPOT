@@ -58,7 +58,7 @@ const teamMatchPerformanceSchema = new mongoose.Schema(
     scouterId: String,
     robotNumber: Number,
     matchNumber: Number,
-    eventNumber: Number,
+    eventNumber: String,
     matchId: String,
     matchId_rand: String,
     actionQueue: [
