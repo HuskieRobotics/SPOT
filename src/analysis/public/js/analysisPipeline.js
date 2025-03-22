@@ -56,3 +56,4 @@ async function executePipeline() {
 
   return dataset;
 }
+modules.export = { executePipeline };
