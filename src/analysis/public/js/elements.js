@@ -22,4 +22,5 @@ const bubbleSheetSwitch = document.getElementById("bubble-sheet-switch");
 const leftAllianceModules = document.getElementById("left-alliance-modules");
 const rightAllianceModules = document.getElementById("right-alliance-modules");
 const bubbleGraphContainer = document.getElementById("bubble-sheet-graph");
+
 // const bothAllianceModules = document.getElementById("both-alliance-modules")
