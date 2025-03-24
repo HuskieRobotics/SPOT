@@ -111,6 +111,50 @@ if (eventSelect) {
     }
   });
 }
+async function checkEventNumber(candidate) {
+  const databaseUrl = document.getElementById("DATABASE_URL").value;
+  if (!databaseUrl) {
+    console.error("DATABASE_URL not set");
+    return false;
+  }
+  const res = await fetch(
+    `/setup/api/check-event-number?databaseUrl=${encodeURIComponent(
+      databaseUrl
+    )}&eventNumber=${encodeURIComponent(candidate)}`
+  );
+  const data = await res.json();
+  return data.exists; // Expected response: { exists: true/false }
+}
+
+// Add event listener for Generate Event Number button
+document
+  .getElementById("generateEventNumber")
+  .addEventListener("click", async () => {
+    const tbaEventKey = document.getElementById("TBA_EVENT_KEY").value.trim();
+    if (!tbaEventKey) {
+      alert("Please enter a TBA Event Key first.");
+      return;
+    }
+    let suffix = 1;
+    let candidate = `${tbaEventKey}_${suffix}`;
+    while (await checkEventNumber(candidate)) {
+      suffix++;
+      candidate = `${tbaEventKey}_${suffix}`;
+    }
+
+    // Add the candidate to the dropdown if not already present
+    const eventSelect = document.getElementById("EVENT_NUMBER");
+    const optionExists = Array.from(eventSelect.options).some(
+      (opt) => opt.value === candidate
+    );
+    if (!optionExists) {
+      const newOption = document.createElement("option");
+      newOption.value = candidate;
+      newOption.textContent = candidate;
+      eventSelect.appendChild(newOption);
+    }
+    eventSelect.value = candidate; // Automatically select the new candidate
+  });
 
 async function populateEventNumbers() {
   const databaseUrl = document.getElementById("DATABASE_URL").value;
