@@ -43,5 +43,3 @@ class Dataset {
     }
   }
 }
-
-module.exports = { DataTransformer };
