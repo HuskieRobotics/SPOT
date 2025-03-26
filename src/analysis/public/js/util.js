@@ -44,3 +44,5 @@ function setPath(obj, path, value) {
   if (!obj[path[0]]) obj[path[0]] = {}; // if the path doesn't exist, make an empty object there
   return setPath(obj[path.shift()], path.join("."), value);
 }
+
+module.exports = { getPath, setPath };
