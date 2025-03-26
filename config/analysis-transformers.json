@@ -15,23 +15,5 @@
       "data": ""
     }
   ],
-  "ignore": ["_template.template.js", "transformers.md"],
-  "template2" : {
-    "file": "_template2.template.js",
-    "placeholder": "__TRANSFORMERS__"
-  },
-  "types": [
-    {
-      "name": "tmp",
-      "identifier": "TMP",
-      "data": ""
-    },
-    {
-      "name": "team",
-      "identifier": "TEAM",
-      "data": ""
-    }
-  ],
-  "ignore": ["_template2.template.js", "transformers.md"]
-  
+  "ignore": ["_template.template.js", "transformers.md"]
 }
