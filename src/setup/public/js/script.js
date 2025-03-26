@@ -127,6 +127,7 @@ async function checkEventNumber(candidate) {
 }
 
 // Add event listener for Generate Event Number button
+document;
 document
   .getElementById("generateEventNumber")
   .addEventListener("click", async () => {
@@ -135,11 +136,18 @@ document
       alert("Please enter a TBA Event Key first.");
       return;
     }
-    let suffix = 1;
-    let candidate = `${tbaEventKey}_${suffix}`;
-    while (await checkEventNumber(candidate)) {
-      suffix++;
-      candidate = `${tbaEventKey}_${suffix}`;
+    // Display a prompt for the suffix
+    const suffixInput = window.prompt("Enter suffix to concatenate:", "");
+    if (suffixInput === null || suffixInput.trim() === "") {
+      // User cancelled or provided an empty string
+      return;
+    }
+    const candidate = `${tbaEventKey}_${suffixInput.trim()}`;
+
+    // Check if this candidate already exists via the API
+    if (await checkEventNumber(candidate)) {
+      alert(`Event number "${candidate}" already exists.`);
+      return;
     }
 
     // Add the candidate to the dropdown if not already present
