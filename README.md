@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="src/scouting/public/img/SPOT.jpg" width=30% height=30%>
+  <img src="src/scouting/public/img/SPOTBanner.jpg" width=30% height=30%>
 </div>
 
 # SPOT - Scouting Platforms On Time
