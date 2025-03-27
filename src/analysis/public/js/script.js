@@ -40,6 +40,7 @@ if ("serviceWorker" in navigator) {
       .allMatches;
 
     initDashboard(dataset, modulesConfig);
+    initSidebarToggle();
     await new Promise((r) => setTimeout(r, 300));
   });
   showFade(app);
@@ -482,104 +483,136 @@ if ("serviceWorker" in navigator) {
 
   // Bubble Sheet UI functions
   async function loadBubbleGraph(dataset, modulesConfig) {
-    //add event listener to "AutoPickList" button to set reset UI and switch to autopicklist tab
+    // Add event listener to "BubbleSheet" button to reset UI and switch to bubble sheet tab
     bubbleSheetSwitch.addEventListener("click", () => {
       clearInterface();
       bubbleSheetSwitch.classList.add("selected");
       bubbleGraphContainer.style.display = "block";
       showFade(bubbleSheetView);
+      updateBubbleGraph();
     });
+
     const bubbleSheetContainer = document.getElementById("bubble-sheet-graph");
+    const xAxisSelect = document.getElementById("x-axis-select");
+    const yAxisSelect = document.getElementById("y-axis-select");
+    const zAxisSelect = document.getElementById("z-axis-select");
 
-    const teams = Object.keys(dataset.teams);
-    const autoScores = teams.map((team) =>
-      getPath(dataset.teams[team], "avgAutoPoints", 0).toFixed(2)
-    );
+    xAxisSelect.addEventListener("change", updateBubbleGraph);
+    yAxisSelect.addEventListener("change", updateBubbleGraph);
+    zAxisSelect.addEventListener("change", updateBubbleGraph);
 
-    const teleopScores = teams.map((team) =>
-      getPath(dataset.teams[team], "avgTeleopPoints", 0).toFixed(2)
-    );
+    // Initialize the graph with default values
+    updateBubbleGraph();
 
-    const endgameScores = teams.map((team) =>
-      getPath(dataset.teams[team], "avgEndgamePoints", 0).toFixed(2)
-    );
+    function updateBubbleGraph() {
+      const xAxisField = xAxisSelect.value;
+      const yAxisField = yAxisSelect.value;
+      const zAxisField = zAxisSelect.value;
 
-    const totalScores = teams.map((team) =>
-      getPath(dataset.teams[team], "avgTotalPoints", 0).toFixed(2)
-    );
+      const teams = Object.keys(dataset.teams);
+      const xAxisData = teams.map((team) =>
+        getPath(dataset.teams[team], xAxisField, 0).toFixed(2)
+      );
+      const yAxisData = teams.map((team) =>
+        getPath(dataset.teams[team], yAxisField, 0).toFixed(2)
+      );
+      const zAxisData =
+        zAxisField === "constant"
+          ? teams.map(() => 1) // Default size if z-axis is set to constant
+          : teams.map((team) =>
+              getPath(dataset.teams[team], zAxisField, 0).toFixed(2)
+            );
 
-    const avgAutoScore = (
-      autoScores.reduce((sum, score) => sum + parseFloat(score), 0) /
-      autoScores.length
-    ).toFixed(2);
-    const avgTeleopScore = (
-      teleopScores.reduce((sum, score) => sum + parseFloat(score), 0) /
-      teleopScores.length
-    ).toFixed(2);
+      const hoverTexts = teams.map((team, index) => {
+        const teamData = dataset.teams[team];
+        return `Team: ${team}<br>
+                    ${xAxisField}: ${xAxisData[index]}<br>
+                    ${yAxisField}: ${yAxisData[index]}<br>
+                    ${
+                      zAxisField !== "constant"
+                        ? `${zAxisField}: ${zAxisData[index]}<br>`
+                        : ""
+                    }
+                   `;
+      });
 
-    const hoverTexts = teams.map((team, index) => {
-      return `Team: ${team}<br>Auto Score: ${autoScores[index]}<br>Teleop Score: ${teleopScores[index]}<br>Endgame Score: ${endgameScores[index]}<br>Total Score: ${totalScores[index]}`;
+      const trace = {
+        x: xAxisData,
+        y: yAxisData,
+        mode: "markers+text",
+        type: "scatter",
+        text: teams,
+        hovertext: hoverTexts,
+        marker: {
+          size: zAxisData.map((value) => Math.sqrt(value) * 15), // Adjust the size of the bubbles
+          color: "#FF6030",
+        },
+        hoverlabel: {
+          bgcolor: "white", // Set the background color of the hover menu to white
+          font: { color: "black" }, // Set the font color to black for better readability
+        },
+        hoverinfo: "text",
+        textposition: "bottom center",
+      };
+
+      const layout = {
+        title: "Team Scores Scattergram",
+        xaxis: { title: xAxisField },
+        yaxis: {
+          title: yAxisField,
+          range: [0, Math.max(...yAxisData) * 1.1],
+        },
+      };
+
+      Plotly.newPlot(bubbleSheetContainer, [trace], layout);
+    }
+  }
+
+  function initSidebarToggle() {
+    const sidebarToggle = document.querySelector(".sidebar-toggle");
+    const sidebar = document.querySelector("#sidebar");
+    const logo = document.querySelector("#logo");
+    const buttons = document.querySelectorAll("#button-container button");
+
+    // Create overlay element
+    const overlay = document.createElement("div");
+    overlay.className = "sidebar-overlay";
+    document.body.appendChild(overlay);
+
+    function updateButtonText(isExpanded) {
+      buttons.forEach((button) => {
+        button.textContent =
+          button.dataset[isExpanded ? "mobileText" : "desktopText"];
+      });
+    }
+
+    sidebarToggle.addEventListener("click", () => {
+      const isExpanding = !sidebar.classList.contains("expanded");
+      sidebar.classList.toggle("expanded");
+      logo.classList.toggle("expanded");
+      overlay.classList.toggle("active");
+      sidebarToggle.classList.add("hidden");
+      updateButtonText(isExpanding);
     });
-    const trace = {
-      x: autoScores,
-      y: teleopScores,
-      mode: "markers+text",
-      type: "scatter",
-      text: teams,
-      hovertext: hoverTexts,
-      marker: { size: 12, color: "#FF6030" },
-      hoverlabel: {
-        bgcolor: "white", // Set the background color of the hover menu to white
-        font: { color: "black" }, // Set the font color to black for better readability
-      },
-      hoverinfo: "text",
-      textposition: "bottom center",
-    };
 
-    const layout = {
-      title: "Team Scores Scattergram",
-      xaxis: { title: "Average Auto Score" },
-      yaxis: {
-        title: "Average Teleop Score",
-        range: [0, Math.max(...teleopScores) * 1.1],
-      },
-      shapes: [
-        // Horizontal line for average teleop score
-        {
-          type: "line",
-          x0: Math.min(...autoScores),
-          x1: Math.max(...autoScores),
-          y0: avgTeleopScore,
-          y1: avgTeleopScore,
-          line: {
-            color: "blue",
-            width: 2,
-            dash: "dot",
-          },
-        },
-        // Vertical line for average auto score
-        {
-          type: "line",
-          x0: avgAutoScore,
-          x1: avgAutoScore,
-          y0: Math.min(...teleopScores),
-          y1: Math.max(...teleopScores),
-          line: {
-            color: "blue",
-            width: 2,
-            dash: "dot",
-          },
-        },
-      ],
-    };
+    // Add transition end event listener to sidebar
+    sidebar.addEventListener("transitionend", () => {
+      if (!sidebar.classList.contains("expanded")) {
+        setTimeout(() => {
+          sidebarToggle.classList.remove("hidden");
+          updateButtonText(false);
+        }, 150);
+      }
+    });
 
-    Plotly.newPlot(bubbleSheetContainer, [trace], layout);
-
-    // Iterate through each team and extract the scores
-    //for (const [teamNumber, team] of Object.entries(dataset.teams)) {
-    //getPath(team, "avgAutoPoints", 0);
-    //getPath(team, "avgTeleopPoints", 0);
-    //}
+    // Close sidebar when window is resized above mobile breakpoint
+    window.addEventListener("resize", () => {
+      if (window.innerWidth > 1100) {
+        sidebar.classList.remove("expanded");
+        logo.classList.remove("expanded");
+        overlay.classList.remove("active");
+      }
+    });
   }
 
   //call setData on every module in matches
