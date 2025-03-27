@@ -56,4 +56,9 @@ async function executePipeline() {
 
   return dataset;
 }
-modules.export = { executePipeline };
+
+if (typeof module !== "undefined" && module.exports) {
+  module.exports = { executePipeline };
+} else {
+  window.executePipeline = executePipeline;
+}

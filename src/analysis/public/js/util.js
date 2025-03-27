@@ -45,4 +45,9 @@ function setPath(obj, path, value) {
   return setPath(obj[path.shift()], path.join("."), value);
 }
 
-module.exports = { getPath, setPath };
+if (typeof module !== "undefined" && module.exports) {
+  module.exports = { getPath, setPath };
+} else {
+  window.getPath = getPath;
+  window.setPath = setPath;
+}
