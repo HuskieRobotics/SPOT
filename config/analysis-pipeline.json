@@ -489,7 +489,7 @@
   {
     "type": "team",
     "name": "average",
-    "outputPath": "avgBargePoints",
+    "outputPath": "avgEndgamePoints",
     "options": {
       "path": "scores.barge"
     }
