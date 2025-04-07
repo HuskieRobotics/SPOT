@@ -137,7 +137,7 @@ document
       return;
     }
     // Display a prompt for the suffix
-    const suffixInput = window.prompt("Enter suffix to concatenate:", "");
+    const suffixInput = window.prompt("Enter new event name:", "");
     if (suffixInput === null || suffixInput.trim() === "") {
       // User cancelled or provided an empty string
       return;
