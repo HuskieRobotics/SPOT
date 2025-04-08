@@ -30,6 +30,18 @@
     transform: rotate(360deg);
   }
 }
+
+.demo-label {
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  background: red;
+  color: white;
+  padding: 5px 10px;
+  font-weight: bold;
+  z-index: 1000;
+}
+
 .spinner div {
   position: absolute;
   animation: spinner 0.35s linear infinite;
