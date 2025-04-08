@@ -32,14 +32,12 @@
 }
 
 .demo-label {
-  position: fixed;
-  top: 10px;
-  left: 10px;
-  background: red;
-  color: white;
-  padding: 5px 10px;
+  position: relative;
+  color: orange;
+  font-family: "Chivo", sans-serif;
+  font-size: 1.5em;
+  text-align: center;
   font-weight: bold;
-  z-index: 1000;
 }
 
 .spinner div {
@@ -169,7 +167,7 @@
 #landing .sign-in-text {
   font-size: 5em;
   line-height: 1em;
-  margin-bottom: 12px;
+  margin-bottom: 5px;
 }
 
 #landing .logo {
