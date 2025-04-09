@@ -1,22 +1,21 @@
 {
-    "version": "0.2.0",
-    "configurations": [
-      {
-        "type": "node",
-        "request": "launch",
-        "name": "SPOT Server",
-        "runtimeExecutable": "npm",
-        "runtimeArgs": ["start"],
-        "outputCapture": "std"
-      },
-      {
-        "type": "chrome",
-        "request": "launch",
-        "name": "SPOT Client",
-        "url": "http://localhost:8080",
-        "webRoot": "${workspaceFolder}",
-        "outputCapture": "std"
-      },
-    ]
-  }
-  
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "SPOT Server",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["start"],
+      "outputCapture": "std"
+    },
+    {
+      "type": "chrome",
+      "request": "launch",
+      "name": "SPOT Client",
+      "url": "http://localhost:8080",
+      "webRoot": "${workspaceFolder}",
+      "outputCapture": "std"
+    }
+  ]
+}
