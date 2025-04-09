@@ -38,7 +38,8 @@ if (fs.existsSync("config/config.json")) {
   app.use("/", require("./setup/setup.js"));
 }
 
-setTimeout(() =>
+function exampleMatches() {
+  setTimeout(() =>
   fetch(`http://localhost:${process.env.PORT || 8080}/schedule/api/matches`, {
     method: "POST",
     headers: {
@@ -54,3 +55,5 @@ setTimeout(() =>
     }))),
   }).then(() => console.log("Successfully applied example schedule"))
     .catch(e => console.error("Failed to apply example schedule", e)), 5000);
+}
+// exampleMatches();

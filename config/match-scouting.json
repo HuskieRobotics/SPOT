@@ -269,7 +269,7 @@
             "8"
           ],
           "class": "bluegreen",
-          "type": "action",
+          "type": "none",
           "executables": [
             {
               "type": "layer",
@@ -322,8 +322,8 @@
           "gridArea": [
             "1",
             "7",
-            "NaN",
-            "NaN"
+            "1",
+            "7"
           ],
           "displayText": "Exit Match",
           "type": "action",
@@ -424,7 +424,7 @@
             "5"
           ],
           "class": "coral",
-          "type": "action",
+          "type": "none",
           "executables": [
             {
               "type": "layer",
@@ -495,7 +495,7 @@
             "8"
           ],
           "class": "bluegreen",
-          "type": "action",
+          "type": "none",
           "executables": [
             {
               "type": "layer",
