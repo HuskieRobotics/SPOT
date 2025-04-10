@@ -50,11 +50,14 @@
 			</div>
 
 			<div id="sidebar">
+				<button id="sidebar-toggle" class="sidebar-toggle">
+  				<i class="fas fa-bars"></i>
+				</button>
 				<div id="button-container">
 					
-					<button id="match-view-switch">Simulate Match</button>
-					<button id="auto-pick-switch">Auto Pick List</button>
-					<button id="bubble-sheet-switch">Compare Team Scores</button>
+					<button id="match-view-switch" data-mobile-text="Simulate" data-desktop-text="Simulate Match">Simulate Match</button>
+    			<button id="auto-pick-switch" data-mobile-text="Auto" data-desktop-text="Auto Pick List">Auto Pick List</button>
+    			<button id="bubble-sheet-switch" data-mobile-text="Compare" data-desktop-text="Compare Team Scores">Compare Team Scores</button>
 				</div>
 				<div id="search-container">
 					<div id="search">
@@ -145,7 +148,41 @@
 				</div>
 			</div>
 			
-			<div id = "bubble-sheet-view">
+			<div id="bubble-sheet-view">
+    <div id="bubble-sheet-controls">
+        <label for="x-axis-select">X-Axis:</label>
+        <select id="x-axis-select">
+            <option value="avgAutoPoints">Average Auto Points</option>
+            <option value="avgTeleopPoints" selected>Average Teleop Points</option>
+            <option value="avgEndgamePoints">Average Endgame Points</option>
+            <option value="avgTotalPoints">Average Total Points</option>
+            <option value="avgAlgaePoints">Average Algae Points</option>
+        </select>
+
+        <label for="y-axis-select">Y-Axis:</label>
+        <select id="y-axis-select">
+            <option value="avgAutoPoints" selected>Average Auto Points</option>
+            <option value="avgTeleopPoints">Average Teleop Points</option>
+            <option value="avgEndgamePoints">Average Endgame Points</option>
+            <option value="avgTotalPoints">Average Total Points</option>
+            <option value="avgAlgaePoints">Average Algae Points</option>
+        </select>
+
+        <label for="z-axis-select">Z-Axis (Bubble Size):</label>
+        <select id="z-axis-select">
+            <option value="constant" selected>Constant</option>
+            <option value="avgAutoPoints">Average Auto Points</option>
+            <option value="avgTeleopPoints">Average Teleop Points</option>
+            <option value="avgEndgamePoints">Average Endgame Points</option>
+            <option value="avgTotalPoints">Average Total Points</option>
+            <option value="avgAlgaePoints">Average Algae Points</option>
+        </select>
+    </div>
+
+    <div id="bubble-sheet-container">
+        <div class="graph" id="bubble-sheet-graph"></div>
+    </div>
+</div>	
 				<div id = "bubble-sheet-container">
 					<div id = "bubble-sheet-graph">
 
