@@ -109,10 +109,103 @@ router.get("/transformers.js", async (req, res) => {
 
   // Replace the placeholder with the conjugate to finish the output
   output = output.replace(analysisTransformer.template.placeholder, conjugate);
-
+  //temp = output;
   // Send the output to the client
   res.send(output);
 });
+
+async function processTransformers() {
+  // Get the analysis transformer, containing important information about
+  // how to build the client-side transformers conjugate file
+  const analysisTransformer2 = require("../../config/analysis-transformers.json");
+
+  // Set the output to the template file
+  let output2 = fs
+    .readFileSync(
+      `${__dirname}/transformers/${analysisTransformer2.template2.file}`
+    )
+    .toString();
+
+  // Set each transformer's data to "name: {", leaving the object open to add
+  // transformers to it
+  for (const transformerType2 of analysisTransformer2.types) {
+    transformerType2.data = `${transformerType2.name}: {\n`;
+  }
+
+  for (const file2 of fs.readdirSync(path.resolve(__dirname, "transformers"))) {
+    // Make sure the file isn't a file that should be ignored
+    if (analysisTransformer2.ignore.includes(file2)) {
+      continue;
+    }
+
+    // Get the contents of the JS file
+    const contents2 = fs
+      .readFileSync(`${__dirname}/transformers/${file2}`)
+      .toString();
+
+    // Check the file for each type of transformer (i.e. tmp, team, etc.)
+    for (const transformerType2 of analysisTransformer2.types) {
+      const pattern2 = new RegExp(
+        `__${transformerType2.identifier}__\\s*([\\s\\S]*?)\\s*__/${transformerType2.identifier}__`,
+        "i"
+      );
+      const match2 = pattern2.exec(contents2);
+
+      // If it contains that type of transformer, add it to the list
+      if (match2) {
+        // Add "identifier: new DataTransformer(...)" tp the transformer type's data,
+        // plus a comma to allow for the next data transformer
+        transformerType2.data += `${file2.split(".")[0]
+          }: ${match2[1].trim()},\n`;
+
+        // Would look something like:
+        /*
+                    name: {
+                        identifier: new DataTransformer(...),
+                        identifier2: new DataTransformer(...),
+                        etc.
+                */
+      }
+    }
+  }
+
+  // Add all of the files together to build the conjugate
+  let conjugate2 = "";
+  for (const transformerType2 of analysisTransformer2.types) {
+    // Add individual data to conjugate and add a } to the end to complete
+    // the object's declaration, as well as a comma
+    conjugate2 += `\n${transformerType2.data}},`;
+  }
+
+  // Ends up looking like:
+  /*
+        tmp: {
+            actionTime: new DataTransformer(...),
+        },
+        team: {
+            aggregateArray: new DataTransformer(...),
+        }
+        etc.
+    */
+
+  // Replace the placeholder with the conjugate to finish the output
+  output2 = output2.replace(
+    analysisTransformer2.template2.placeholder,
+    conjugate2
+  );
+  //console.log("Output : " + output);
+  let temp = output2;
+  const tempFilePath2 = path.join(__dirname, "transformers.js");
+
+  fs.writeFileSync(tempFilePath2, temp);
+
+  const module2 = require(tempFilePath2);
+
+  fs.unlinkSync(tempFilePath2);
+  return module2;
+}
+
+global.processTransformers = processTransformers;
 
 let modulesStyleOutput;
 router.get("/modules.css", (req, res) => {
