@@ -77,6 +77,7 @@ router.get("/manual", async (req, res) => {
 router.get("/csv", async (req, res) => {
   async function executePipeline() {
     // Get tmps from database (or cache if offline)
+
     let tmps = await axios
       .get("http://localhost:8080/analysis/api/dataset")
       .then((res) => res.data);
@@ -113,7 +114,7 @@ router.get("/csv", async (req, res) => {
     // This will show up as a method that doesn't exist since it is gotten from the server
     let getTransformers = await got();
     getTransformers = getTransformers["getTransformers"];
-    console.log(getTransformers);
+    console.log("Here are the transfomrers" + getTransformers);
     const transformers = await getTransformers();
 
     for (let tfConfig of pipelineConfig) {
