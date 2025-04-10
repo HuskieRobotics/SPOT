@@ -62,5 +62,3 @@ function setPath(obj, path, value) {
 //         getPathList(objList,keyList.join("."),pathList);
 //     }
 // }
-
-module.exports = { getPath, setPath };

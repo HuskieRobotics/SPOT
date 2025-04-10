@@ -4,7 +4,6 @@ const { TeamMatchPerformance } = require("../../lib/db.js");
 const { setPath } = require("../../lib/util.js");
 const axios = require("axios");
 const config = require("../../../config/config.json");
-const { got } = require("../get.js");
 
 let router = Router();
 
@@ -78,9 +77,7 @@ router.get("/csv", async (req, res) => {
   async function executePipeline() {
     // Get tmps from database (or cache if offline)
 
-    let tmps = await axios
-      .get("http://localhost:8080/analysis/api/dataset")
-      .then((res) => res.data);
+    let tmps = await axios.get("analysis/api/dataset").then((res) => res.data);
 
     // Get all tmps stored in the local storage (from qr code)
     const storage = await TeamMatchPerformance.find({
@@ -104,22 +101,21 @@ router.get("/csv", async (req, res) => {
     let dataset = { tmps, teams };
 
     const manual = await axios
-      .get("http://localhost:8080/analysis/api/manual")
+      .get("/analysis/api/manual")
       .then((res) => res.data);
     const pipelineConfig = await axios
-      .get("http://localhost:8080/config/analysis-pipeline.json")
+      .get("/config/analysis-pipeline.json")
       .then((res) => res.data);
     //console.log("Pipeline Config : " + pipelineConfig);
 
     // This will show up as a method that doesn't exist since it is gotten from the server
-    let getTransformers = await got();
-    getTransformers = getTransformers["getTransformers"];
-    console.log("Here are the transfomrers" + getTransformers);
-    const transformers = await getTransformers();
+    let transformers = await axios
+      .get("/analysis/processTransformers.js")
+      .then((res) => res.data);
 
     for (let tfConfig of pipelineConfig) {
-      //console.log("tfConfig Type : " + tfConfig.type);
-      //console.log("tfConfig Name : " + tfConfig.name);
+      console.log("tfConfig Type : " + tfConfig.type);
+      console.log("tfConfig Name : " + tfConfig.name);
 
       dataset = transformers[tfConfig.type][tfConfig.name].execute(
         dataset,

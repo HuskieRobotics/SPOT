@@ -114,7 +114,7 @@ router.get("/transformers.js", async (req, res) => {
   res.send(output);
 });
 
-async function processTransformers() {
+router.get("/processTransformers.js", async (req, res) => {
   // Get the analysis transformer, containing important information about
   // how to build the client-side transformers conjugate file
   const analysisTransformer2 = require("../../config/analysis-transformers.json");
@@ -161,11 +161,11 @@ async function processTransformers() {
 
         // Would look something like:
         /*
-                    name: {
-                        identifier: new DataTransformer(...),
-                        identifier2: new DataTransformer(...),
-                        etc.
-                */
+                  name: {
+                      identifier: new DataTransformer(...),
+                      identifier2: new DataTransformer(...),
+                      etc.
+              */
       }
     }
   }
@@ -180,14 +180,14 @@ async function processTransformers() {
 
   // Ends up looking like:
   /*
-        tmp: {
-            actionTime: new DataTransformer(...),
-        },
-        team: {
-            aggregateArray: new DataTransformer(...),
-        }
-        etc.
-    */
+      tmp: {
+          actionTime: new DataTransformer(...),
+      },
+      team: {
+          aggregateArray: new DataTransformer(...),
+      }
+      etc.
+  */
 
   // Replace the placeholder with the conjugate to finish the output
   output2 = output2.replace(
@@ -202,11 +202,10 @@ async function processTransformers() {
 
   const module2 = require(tempFilePath2);
 
-  fs.unlinkSync(tempFilePath2);
-  return module2;
-}
+  const result = await module2.getTransformers();
 
-global.processTransformers = processTransformers;
+  res.send(result);
+});
 
 let modulesStyleOutput;
 router.get("/modules.css", (req, res) => {
