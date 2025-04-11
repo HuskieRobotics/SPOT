@@ -44,4 +44,4 @@ class Dataset {
   }
 }
 
-module.exports = { DataTransformer };
+if (typeof module !== "undefined") module.exports = { DataTransformer };
