@@ -13,15 +13,21 @@ router.get("/dataset", async (req, res) => {
 
 router.delete("/dataset/:id", async (req, res) => {
   const DEMO = config.DEMO;
+  console.log("Received DELETE request for id:", req.params.id);
 
-  if (!DEMO) {
-    if (req.headers.authorization === config.secrets.ACCESS_CODE) {
-      await TeamMatchPerformance.findByIdAndDelete(req.params.id);
-      res.send("Deleted");
-    } else {
-      return res.send("Invalid Access Code");
-    }
+  if (DEMO) {
+    console.log("DEMO mode is enabled; deletion not allowed.");
     return res.send("DEMO mode is enabled, cannot delete");
+  }
+
+  try {
+    console.log("Attempting deletion for id:", req.params.id);
+    await TeamMatchPerformance.findByIdAndDelete(req.params.id);
+    console.log("Deletion successful.");
+    return res.send("Deleted");
+  } catch (error) {
+    console.error("Error deleting record:", error);
+    return res.status(500).send("Deletion error");
   }
 });
 
