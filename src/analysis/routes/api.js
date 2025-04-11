@@ -109,18 +109,13 @@ router.get("/csv", async (req, res) => {
     const pipelineConfig = await axios
       .get("http://localhost:8080/config/analysis-pipeline.json")
       .then((res) => res.data);
-    //console.log("Pipeline Config : " + pipelineConfig);
 
     // This will show up as a method that doesn't exist since it is gotten from the server
     let getTransformers = await got();
     getTransformers = getTransformers["getTransformers"];
-    console.log("Here are the transfomrers" + getTransformers);
     const transformers = await getTransformers();
 
     for (let tfConfig of pipelineConfig) {
-      //console.log("tfConfig Type : " + tfConfig.type);
-      //console.log("tfConfig Name : " + tfConfig.name);
-
       dataset = transformers[tfConfig.type][tfConfig.name].execute(
         dataset,
         tfConfig.outputPath,
@@ -148,8 +143,8 @@ router.get("/csv", async (req, res) => {
     return dataset;
   }
 
-  let dataset2 = await executePipeline(); // figure out why this does NOT work
-  console.log(dataset2);
+  let dataset2 = await executePipeline();
+
   //create rows
   let rows = [];
   let headerRow = true;

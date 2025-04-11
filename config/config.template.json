@@ -1,14 +1,5 @@
 {
   "secrets": {
-<<<<<<< HEAD
-    "ACCESS_CODE": "",
-    "DATABASE_URL": "",
-    "TBA_API_KEY": ""
-  },
-  "VERSION": "",
-  "TBA_EVENT_KEY": "",
-  "EVENT_NUMBER": ""
-=======
     "DATABASE_URL": "",
     "TBA_API_KEY": "",
     "GOOGLE_AUTH": {
@@ -22,5 +13,4 @@
   "EVENT_NUMBER": 0,
   "VERSION": "0.0",
   "TBA_EVENT_KEY": ""
->>>>>>> parent of 599aa15 (Co-authored-by: Dhriti Kohli <DhritiKohli@users.noreply.github.com>)
 }

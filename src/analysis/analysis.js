@@ -194,7 +194,7 @@ async function processTransformers() {
     analysisTransformer2.template2.placeholder,
     conjugate2
   );
-  //console.log("Output : " + output);
+
   let temp = output2;
   const tempFilePath2 = path.join(__dirname, "transformers.js");
 
