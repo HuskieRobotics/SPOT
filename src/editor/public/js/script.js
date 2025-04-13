@@ -148,6 +148,15 @@ window.addEventListener("fullyLoaded", async function () {
   function markUnsaved() {
     btnSave.classList.add("unsaved");
   }
+
+  // Unsaved warning dialog
+  window.onbeforeunload = e => {
+    if (!btnSave.classList.contains("unsaved")) return;
+    e.preventDefault();
+    e.returnValue = true;
+    return true;
+  };
+  
   async function initSidebar() {
     inButtonId.addEventListener("sl-input", function () {
       if (currentButton) {
