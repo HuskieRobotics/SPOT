@@ -111,7 +111,11 @@ var previousTimer = [];
         doExecutables(button);
         updateLastAction();
         updateButtonStates();
-        navigator.vibrate(100);
+        try {
+          navigator.vibrate(100);
+        } catch {
+          // since navigator.vibrate is not supported on all devices, we can ignore the error
+        }
       });
     },
 
