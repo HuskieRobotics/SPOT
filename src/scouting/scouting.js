@@ -1,6 +1,7 @@
 const express = require("express");
 const fs = require("fs");
 const path = require("path");
+const config = require("../../../config/config.json");
 
 let router = express.Router();
 
@@ -8,8 +9,8 @@ router.use(express.static(__dirname + "/public"));
 
 router.get("/", (req, res) => {
   res.render(__dirname + "/views/index.ejs", {
-    pages: fs.readdirSync(__dirname + "/views/pages"), //include all of the pages in the pages folder
-    landingPage: "landing", //the landing page of your app, the first thing a user sees when they open it
+    pages: fs.readdirSync(__dirname + "/views/pages"), // Include all of the pages in the pages folder
+    landingPage: "landing", // The landing page of your app
   });
 });
 
