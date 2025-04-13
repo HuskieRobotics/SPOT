@@ -17,7 +17,7 @@ router.use((req, res, next) => {
 function jsonConfig(endpoint, name) {
   router.post(`/${endpoint}`, function (req, res) {
     try {
-      writeFileSync(`config/${endpoint}.json`, JSON.stringify(req.body, null, 2));
+      writeFileSync(`config/${name}.json`, JSON.stringify(req.body, null, 2));
       res.send("Success").end();
     } catch (e) {
       console.error("Cannot apply configuration from editor", e);
