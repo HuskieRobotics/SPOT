@@ -124,3 +124,7 @@ sl-tree {
 .sl-toast-stack {
   z-index: 10001;
 }
+
+sl-tab::part(base) {
+  padding: 5px;
+}
