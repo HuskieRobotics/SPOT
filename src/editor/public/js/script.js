@@ -109,7 +109,10 @@ window.addEventListener("fullyLoaded", async function () {
   const successToast = document.querySelector("#diag_saved");
   const failedToast = document.querySelector("#diag_failed");
   const scriptTree = document.querySelector("#tree_script");
-  const exeList = scriptTree.querySelector("#exe");
+  const list = {
+    exe: scriptTree.querySelector("#exe"),
+    tfm: scriptTree.querySelector("#analysis"),
+  }
 
   btnSave.addEventListener("click", function () {
     spinner();
@@ -123,7 +126,7 @@ window.addEventListener("fullyLoaded", async function () {
         },
       }),
       ...Object.entries(files).map(([k, v]) =>
-        fetch("./api/exe/" + k, {
+        fetch("./api/" + k, {
           method: "POST",
           body: JSON.stringify({ v }),
           headers: {
@@ -336,7 +339,7 @@ window.addEventListener("fullyLoaded", async function () {
     });
     editor.setTheme("ace/theme/chaos");
     editor.session.setMode("ace/mode/css");
-    fetch("./api/exe/css")
+    fetch("./api/css")
       .then((e) => e.text())
       .then((e) => {
         isChanging = true;
@@ -360,67 +363,75 @@ window.addEventListener("fullyLoaded", async function () {
     // Editor file handling
     scriptTree.addEventListener("sl-selection-change", function (ev) {
       if (ev.detail.selection.length === 0) return;
-      const { id } = ev.detail.selection[0];
+      const el = ev.detail.selection[0];
+      const { id } = el;
+      const type = el.type || el.getAttribute("type");
       if (id === "create") {
         ev.detail.selection[0].selected = false;
-        let file = prompt("Name of the new executable?");
+        let file = prompt(`Name of the new ${type === "exe" ? "executable" : "transformer"}?`);
         if (!file) return;
         if (!file.match(/^[\w\-. ]+$/)) throw "Invalid executable name!";
         if (!file.endsWith(".js")) file += ".js";
         spinner();
-        fetch(`./api/exe/${file}`, {
+        fetch(`./api/${type}/${file}`, {
           method: "POST",
           body: JSON.stringify({ v: "" }),
         }).then((res) => {
-          if (res.status !== 200) throw `Error creating "exe/${file}"`;
-          createFile(file);
+          if (res.status !== 200) throw `Error creating "${type}/${file}"`;
+          createFile(file, type, list[type]);
         }).finally(() => spinner(false));
         return;
       }
       if (id === "css") editor.session.setMode("ace/mode/css");
-      else if (id === "config") editor.session.setMode("ace/mode/json");
+      else if (["config", "pipeline", "modules"].includes(id)) editor.session.setMode("ace/mode/json");
       else editor.session.setMode("ace/mode/javascript");
       isChanging = true;
       if (id === "config") editor.getSession().setValue(JSON.stringify(config, null, 2));
       else {
         spinner();
-        if(files[id]) {
-          editor.getSession().setValue(files[id]);
+        if (files[`${type}/${id}`]) {
+          editor.getSession().setValue(files[`${type}/${id}`]);
           spinner(false);
         }
-        else fetch("./api/exe/" + id)
+        else fetch(`./api/${type}/${id}`)
           .then((e) => e.text())
           .then((e) => {
             editor.getSession().setValue(e);
           }).finally(() => spinner(false));
       }
-      currentFile = id;
+      currentFile = `${type}/${id}`;
     });
 
     // This fetch is not important so it can be done after.
     fetch("./api/exe")
       .then((e) => e.json())
-      .then((list) => {
-        for (const file of list) createFile(file);
+      .then(l => {
+        for (const file of l) createFile(file, "exe", list.exe);
       });
-    function createFile(file) {
+    fetch("./api/tfm")
+      .then((e) => e.json())
+      .then(l => {
+        for (const file of l) createFile(file, "tfm", list.tfm);
+      });
+    function createFile(file, type, folder) {
       const item = document.createElement("sl-tree-item");
       item.innerText = file;
       const icon = document.createElement("sl-icon");
       icon.name = "filetype-js";
       item.prepend(icon);
       item.id = file;
+      item.type = type;
       item.addEventListener("contextmenu", (ev) => {
         ev.preventDefault();
-        if (!confirm(`Do you want to delete "exe/${file}"`)) return;
-        fetch(`./api/exe/${file}`, {
+        if (!confirm(`Do you want to delete "${type}/${file}"`)) return;
+        fetch(`./api/${type}/${file}`, {
           method: "DELETE",
         }).then((res) => {
-          if (res.status !== 200) throw `Error deleting "exe/${file}"`;
+          if (res.status !== 200) throw `Error deleting "${type}/${file}"`;
           item.remove();
         });
       });
-      exeList.appendChild(item);
+      folder.appendChild(item);
     }
   }
 

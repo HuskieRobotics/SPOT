@@ -3,45 +3,22 @@
   <sl-tab slot="nav" panel="script">Scripting</sl-tab>
 
   <sl-tab-panel name="button">
-    <sl-input
-      placeholder="autoScoreAlgae"
-      size="small"
-      label="ID"
-      id="in_button_id"
-      required
-      readonly
-      ><sl-icon name="hash" slot="prefix"></sl-icon
-    ></sl-input>
-    <sl-input
-      placeholder="Pickup Ground"
-      size="small"
-      label="Display Text"
-      id="in_button_text"
-      required
-      ><sl-icon name="display" slot="prefix"></sl-icon
-    ></sl-input>
-    <sl-select
-      placeholder="lightCoral"
-      size="small"
-      label="CSS Class"
-      id="in_button_class"
-      multiple
-      ><sl-icon name="palette" slot="prefix"></sl-icon>
-      <% [ 'silver', 'green', 'orange', 'sherbert', 'red', 'navy', 'pink',
-      'yellow', 'bluegreen', 'lightbluegreen', 'darkbluegreen', 'lightCoral',
-      'coral', 'darkCoral', 'deepBlue', 'shallowBlue', 'border', 'highlight',
-      'gray' ].forEach(e => { %>
-      <sl-option value="<%= e %>"
-        ><%= e %><sl-icon name="square" slot="prefix" class="<%= e %>"></sl-icon
-      ></sl-option>
-      <% }) %>
+    <sl-input placeholder="autoScoreAlgae" size="small" label="ID" id="in_button_id" required readonly><sl-icon
+        name="hash" slot="prefix"></sl-icon></sl-input>
+    <sl-input placeholder="Pickup Ground" size="small" label="Display Text" id="in_button_text" required><sl-icon
+        name="display" slot="prefix"></sl-icon></sl-input>
+    <sl-select placeholder="lightCoral" size="small" label="CSS Class" id="in_button_class" multiple><sl-icon
+        name="palette" slot="prefix"></sl-icon>
+      <% [ 'silver' , 'green' , 'orange' , 'sherbert' , 'red' , 'navy' , 'pink' , 'yellow' , 'bluegreen'
+        , 'lightbluegreen' , 'darkbluegreen' , 'lightCoral' , 'coral' , 'darkCoral' , 'deepBlue' , 'shallowBlue'
+        , 'border' , 'highlight' , 'gray' ].forEach(e=> { %>
+        <sl-option value="<%= e %>">
+          <%= e %><sl-icon name="square" slot="prefix" class="<%= e %>"></sl-icon>
+        </sl-option>
+        <% }) %>
     </sl-select>
-    <sl-select
-      placeholder="action"
-      size="small"
-      label="Button Type"
-      id="in_button_type"
-      ><sl-icon name="code-slash" slot="prefix"></sl-icon>
+    <sl-select placeholder="action" size="small" label="Button Type" id="in_button_type"><sl-icon name="code-slash"
+        slot="prefix"></sl-icon>
       <sl-option value="action">Normal</sl-option>
       <sl-option value="undo">Undo Button</sl-option>
       <sl-option value="none">Does nothing</sl-option>
@@ -51,47 +28,27 @@
     <br />
     <sl-details summary="Dynamic State (Game Piece)" class="details" open>
       <div style="display: grid; grid-template-columns: 50% 50%">
-        <sl-select
-          placeholder="Action"
-          size="small"
-          id="in_cond_act_type"
-          hoist
-        >
+        <sl-select placeholder="Action" size="small" id="in_cond_act_type" hoist>
           <sl-option value="none">None</sl-option>
           <sl-option value="add">Add</sl-option>
           <sl-option value="remove">Remove</sl-option>
         </sl-select>
-        <sl-input
-          size="small"
-          placeholder="Piece ID"
-          id="in_cond_act_name"
-        ></sl-input>
-        <sl-select
-          placeholder="Condition"
-          size="small"
-          id="in_cond_dep_type"
-          hoist
-        >
+        <sl-input size="small" placeholder="Piece ID" id="in_cond_act_name"></sl-input>
+        <sl-select placeholder="Condition" size="small" id="in_cond_dep_type" hoist>
           <sl-option value="none">None</sl-option>
           <sl-option value="if">If has</sl-option>
           <sl-option value="no">Unless</sl-option>
         </sl-select>
-        <sl-input
-          size="small"
-          placeholder="Piece ID"
-          id="in_cond_dep_name"
-        ></sl-input>
+        <sl-input size="small" placeholder="Piece ID" id="in_cond_dep_name"></sl-input>
       </div>
       <sl-icon name="database" slot="expand-icon"></sl-icon>
     </sl-details>
-    <sl-details summary="Executable" class="details" open
-      ><sl-icon name="terminal" slot="expand-icon"></sl-icon>
-      <div id="ace_exe"></div
-    ></sl-details>
+    <sl-details summary="Executable" class="details" open><sl-icon name="terminal" slot="expand-icon"></sl-icon>
+      <div id="ace_exe"></div>
+    </sl-details>
     <br />
-    <sl-button size="small" id="btn_button_delete" variant="danger"
-      ><sl-icon name="trash" slot="prefix"></sl-icon>Delete</sl-button
-    >
+    <sl-button size="small" id="btn_button_delete" variant="danger"><sl-icon name="trash"
+        slot="prefix"></sl-icon>Delete</sl-button>
   </sl-tab-panel>
   <sl-tab-panel name="script">
     <sl-tree selection="tree" id="tree_script">
@@ -99,10 +56,15 @@
       <sl-tree-item expanded id="exe">
         <sl-icon name="folder2-open"></sl-icon>
         Executables
-        <sl-tree-item id="create"
-          ><sl-icon name="file-earmark-plus"></sl-icon> Create
-          new...</sl-tree-item
-        >
+        <sl-tree-item id="create" type="exe"><sl-icon name="file-earmark-plus"></sl-icon> Create
+          new...</sl-tree-item>
+      </sl-tree-item>
+      <sl-tree-item expanded id="analysis">
+        <sl-icon name="folder2-open"></sl-icon>
+        Analysis
+        <sl-tree-item id="pipeline" type="json"><sl-icon name="database-fill-gear"></sl-icon>pipeline.json</sl-tree-item>
+        <sl-tree-item id="modules" type="json"><sl-icon name="database-fill-gear"></sl-icon>modules.json</sl-tree-item>
+        <sl-tree-item id="create" type="tfm"><sl-icon name="file-earmark-plus"></sl-icon> Transformer...</sl-tree-item>
       </sl-tree-item>
       <sl-tree-item id="config"><sl-icon name="database-fill-gear"></sl-icon>match-scouting.json</sl-tree-item>
     </sl-tree>

@@ -14,25 +14,31 @@ router.use((req, res, next) => {
   } else res.status(401).send("Unauthorized!").end();
 });
 
-router.post("/config", function (req, res) {
-  try {
-    writeFileSync("config/match-scouting.json", JSON.stringify(req.body, null, 2));
-    res.send("Success").end();
-  } catch (e) {
-    console.error("Cannot apply configuration from editor", e);
-    res.status(500).send("Failed").end();
-  }
-});
+function jsonConfig(endpoint, name) {
+  router.post(`/${endpoint}`, function (req, res) {
+    try {
+      writeFileSync(`config/${endpoint}.json`, JSON.stringify(req.body, null, 2));
+      res.send("Success").end();
+    } catch (e) {
+      console.error("Cannot apply configuration from editor", e);
+      res.status(500).send("Failed").end();
+    }
+  });
 
-router.get("/config", function (req, res) {
-  res.sendFile(path.resolve(require.main.path, "..", "config/match-scouting.json"));
-});
+  router.get(`/${endpoint}`, function (req, res) {
+    res.sendFile(path.resolve(require.main.path, "..", `config/${name}.json`));
+  });
+}
 
-router.get("/exe/css", function (req, res) {
+jsonConfig("config", "match-scouting");
+jsonConfig("json/pipeline", "analysis-pipeline");
+jsonConfig("json/modules", "analysis-modules");
+
+router.get("/css", function (req, res) {
   res.sendFile(path.resolve(require.main.path, "scouting/public/css/buttons.css"));
 });
 
-router.post("/exe/css", function (req, res) {
+router.post("/css", function (req, res) {
   try {
     writeFileSync(path.resolve(require.main.path, "scouting/public/css/buttons.css"), req.body.v);
     res.send("Success").end();
@@ -63,6 +69,34 @@ router.post("/exe/:name", function (req, res) {
 router.delete("/exe/:name", function (req, res) {
   try {
     rmSync(path.resolve(require.main.path, "scouting/executables", req.params.name));
+    res.send("Success").end();
+  } catch (e) {
+    console.error("Cannot apply configuration from editor", e);
+    res.status(500).send("Failed").end();
+  }
+});
+
+router.get("/tfm", function (req, res) {
+  res.send(readdirSync(path.resolve(require.main.path, "analysis/transformers")).filter(n => !/^_template2?\.template\.js$/.test(n)));
+});
+
+router.get("/tfm/:name", function (req, res) {
+  res.sendFile(path.resolve(require.main.path, "analysis/transformers", req.params.name));
+});
+
+router.post("/tfm/:name", function (req, res) {
+  try {
+    writeFileSync(path.resolve(require.main.path, "analysis/transformers", req.params.name), req.body.v || '');
+    res.send("Success").end();
+  } catch (e) {
+    console.error("Cannot apply configuration from editor", e);
+    res.status(500).send("Failed").end();
+  }
+});
+
+router.delete("/tfm/:name", function (req, res) {
+  try {
+    rmSync(path.resolve(require.main.path, "analysis/transformers", req.params.name));
     res.send("Success").end();
   } catch (e) {
     console.error("Cannot apply configuration from editor", e);

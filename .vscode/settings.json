@@ -25,5 +25,11 @@
   },
   "html.customData": [
     "./node_modules/@shoelace-style/shoelace/dist/vscode.html-custom-data.json"
-  ]
+  ],
+  "[html]": {
+    "editor.defaultFormatter": "vscode.html-language-features"
+  },
+  "[css]": {
+    "editor.defaultFormatter": "vscode.css-language-features"
+  }
 }
