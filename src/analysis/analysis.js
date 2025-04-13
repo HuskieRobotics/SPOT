@@ -5,6 +5,9 @@ let router = express.Router();
 const { setPath } = require("../lib/util");
 const ss = require("simple-statistics");
 router.use(express.static(__dirname + "/public"));
+const axios = require("axios");
+const { TeamMatchPerformance } = require("../lib/db.js");
+const config = require("../../config/config.json");
 
 router.get("/", (req, res) => {
   res.render(__dirname + "/views/index.ejs");
@@ -31,6 +34,38 @@ router.get("/modules.js", (req, res) => {
 
     // modulesOutput = output;
     res.send(output);
+  }
+});
+
+router.post("/process-pipeline", async (req, res) => {
+  try {
+    // Get the raw data
+    const { dataset } = req.body;
+
+    // Load transformers directly (where functions are preserved)
+    const transformersPath = path.join(__dirname, "transformers.js");
+    delete require.cache[require.resolve(transformersPath)]; // Clear cache
+    const transformers = require(transformersPath).getTransformers();
+
+    // Get pipeline config
+    const pipelineConfig = await axios
+      .get("/config/analysis-pipeline.json")
+      .then((res) => res.data);
+
+    // Process the data using the transformers
+    let processedDataset = { ...dataset };
+    for (let tfConfig of pipelineConfig) {
+      processedDataset = transformers[tfConfig.type][tfConfig.name].execute(
+        processedDataset,
+        tfConfig.outputPath,
+        tfConfig.options
+      );
+    }
+
+    res.json(processedDataset);
+  } catch (error) {
+    console.error("Error processing pipeline:", error);
+    res.status(500).json({ error: error.message });
   }
 });
 
@@ -114,7 +149,25 @@ router.get("/transformers.js", async (req, res) => {
   res.send(output);
 });
 
-router.get("/processTransformers.js", async (req, res) => {
+async function getDataset() {
+  // Instead of HTTP request:
+  // let tmps = await axios.get("analysis/api/dataset").then((res) => res.data);
+
+  // Query the database directly:
+  let tmps = await TeamMatchPerformance.find({
+    eventNumber: config.EVENT_NUMBER,
+  });
+
+  // Build teams object
+  const teams = [];
+  for (const tmp of tmps) {
+    teams[tmp.robotNumber] = {};
+  }
+
+  return { tmps, teams };
+}
+
+router.get("/processTransformers", async (req, res) => {
   // Get the analysis transformer, containing important information about
   // how to build the client-side transformers conjugate file
   const analysisTransformer2 = require("../../config/analysis-transformers.json");
@@ -200,11 +253,46 @@ router.get("/processTransformers.js", async (req, res) => {
 
   fs.writeFileSync(tempFilePath2, temp);
 
+  delete require.cache[require.resolve(tempFilePath2)];
   const module2 = require(tempFilePath2);
-
   const result = await module2.getTransformers();
 
-  res.send(result);
+  let dataset = await getDataset();
+
+  const manual = {
+    teams: require("../manual/teams.json"),
+    tmps: require("../manual/tmps.json"),
+  };
+
+  const pipelineConfig = require("../../config/analysis-pipeline.json");
+
+  for (let tfConfig of pipelineConfig) {
+    dataset = result[tfConfig.type][tfConfig.name].execute(
+      dataset,
+      tfConfig.outputPath,
+      tfConfig.options
+    );
+  }
+
+  dataset.tmps = dataset.tmps.concat(
+    manual.tmps.map((tmp) => ({
+      ...tmp,
+      manual: true,
+    }))
+  );
+
+  for (const [path, teamData] of Object.entries(manual.teams)) {
+    for (const [team, value] of Object.entries(teamData)) {
+      if (team in dataset.teams) {
+        setPath(dataset.teams[team], "manual." + path, value);
+      } else {
+        dataset.teams[team] = {};
+        setPath(dataset.teams[team], "manual." + path, value);
+      }
+    }
+  }
+
+  res.send(dataset);
 });
 
 let modulesStyleOutput;

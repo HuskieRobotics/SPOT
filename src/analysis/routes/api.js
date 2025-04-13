@@ -73,79 +73,11 @@ router.get("/manual", async (req, res) => {
 
   res.json(manual);
 });
+
 router.get("/csv", async (req, res) => {
-  async function executePipeline() {
-    // Get tmps from database (or cache if offline)
-
-    let tmps = await axios.get("analysis/api/dataset").then((res) => res.data);
-
-    // Get all tmps stored in the local storage (from qr code)
-    const storage = await TeamMatchPerformance.find({
-      eventNumber: config.EVENT_NUMBER,
-    });
-    if (storage) {
-      // Parse the QR code TMPs (for some reason the array is stored as a string, and each TMP is ALSO
-      // stored as a string, so the array has to be parsed and each individual TMP has to be parsed)
-      //const qrcodeTmps = JSON.parse(storage).map((tmp) => JSON.parse(tmp));
-
-      // Merge the TMPs into one
-      tmps = [...tmps, ...storage];
-    }
-
-    // Find all the teams across the TMPs
-    const teams = [];
-    for (const tmp of tmps) {
-      teams[tmp.robotNumber] = {};
-    }
-
-    let dataset = { tmps, teams };
-
-    const manual = await axios
-      .get("/analysis/api/manual")
-      .then((res) => res.data);
-    const pipelineConfig = await axios
-      .get("/config/analysis-pipeline.json")
-      .then((res) => res.data);
-    //console.log("Pipeline Config : " + pipelineConfig);
-
-    // This will show up as a method that doesn't exist since it is gotten from the server
-    let transformers = await axios
-      .get("/analysis/processTransformers.js")
-      .then((res) => res.data);
-
-    for (let tfConfig of pipelineConfig) {
-      console.log("tfConfig Type : " + tfConfig.type);
-      console.log("tfConfig Name : " + tfConfig.name);
-
-      dataset = transformers[tfConfig.type][tfConfig.name].execute(
-        dataset,
-        tfConfig.outputPath,
-        tfConfig.options
-      );
-    }
-
-    dataset.tmps = dataset.tmps.concat(
-      manual.tmps.map((tmp) => ({
-        ...tmp,
-        manual: true,
-      }))
-    );
-    for (const [path, teamData] of Object.entries(manual.teams)) {
-      for (const [team, value] of Object.entries(teamData)) {
-        if (team in dataset.teams) {
-          setPath(dataset.teams[team], "manual." + path, value);
-        } else {
-          dataset.teams[team] = {};
-          setPath(dataset.teams[team], "manual." + path, value);
-        }
-      }
-    }
-
-    return dataset;
-  }
-
-  let dataset2 = await executePipeline(); // figure out why this does NOT work
-  console.log(dataset2);
+  let dataset2 = await axios
+    .get("/analysis/processTransformers")
+    .then((res) => res.data); // figure out why this does NOT work
   //create rows
   let rows = [];
   let headerRow = true;
