@@ -16,16 +16,7 @@ let bodyParser = require("body-parser");
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// Load config.json
-const config = require("../config/config.json");
-
-// Middleware to pass DEMO to all EJS templates
-app.use((req, res, next) => {
-  res.locals.DEMO = config.DEMO;
-  next();
-});
-
-// Routes with config validation
+//routes with config validation
 if (fs.existsSync("config/config.json")) {
   require("./scouting/scouting-sync.js")(server);
 

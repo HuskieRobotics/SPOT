@@ -30,6 +30,7 @@
     transform: rotate(360deg);
   }
 }
+<<<<<<< HEAD
 
 .demo-label {
   position: relative;
@@ -40,6 +41,8 @@
   font-weight: bold;
 }
 
+=======
+>>>>>>> parent of d124781 (added the rough button to SPOT Demo)
 .spinner div {
   position: absolute;
   animation: spinner 0.35s linear infinite;
