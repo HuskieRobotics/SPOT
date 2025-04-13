@@ -33,9 +33,9 @@
 
 .demo-label {
   position: relative;
-  color: #e84d4d;
+  color: orange;
   font-family: "Chivo", sans-serif;
-  font-size: 2em;
+  font-size: 1.5em;
   text-align: center;
   font-weight: bold;
 }
