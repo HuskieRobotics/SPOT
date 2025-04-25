@@ -226,6 +226,28 @@ router.get("/modules.css", (req, res) => {
     res.type("text/css");
     res.send(output);
   }
+  router.get("/api/event-data", async (req, res) => {
+    const eventKey = req.query.eventKey; // Get the event key from the query string
+    const eventNumber = req.query.eventNumber; // Get the event number from the query string
+
+    if (!eventKey || !eventNumber) {
+      return res
+        .status(400)
+        .json({ error: "Event key and event number are required" });
+    }
+
+    try {
+      // Fetch data for the specified event key and event number
+      const eventData = await TeamMatchPerformance.find({
+        eventKey,
+        eventNumber: parseInt(eventNumber, 10),
+      });
+      res.json(eventData);
+    } catch (error) {
+      console.error("Error fetching event data:", error);
+      res.status(500).json({ error: "Failed to fetch event data" });
+    }
+  });
 });
 
 router.use("/api", require("./routes/api.js"));

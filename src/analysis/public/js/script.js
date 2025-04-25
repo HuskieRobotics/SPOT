@@ -770,6 +770,60 @@ if ("serviceWorker" in navigator) {
       }
     });
   }
+  document.addEventListener("DOMContentLoaded", () => {
+    const eventDropdown = document.getElementById("event-dropdown");
+    const loadEventDataButton = document.getElementById("load-event-data");
+
+    // Add event listener to the "Load Event Data" button
+    loadEventDataButton.addEventListener("click", async () => {
+      const selectedOption = eventDropdown.options[eventDropdown.selectedIndex];
+      const selectedEventKey = selectedOption.value; // Get the event key
+      const selectedEventNumber =
+        selectedOption.getAttribute("data-event-number"); // Get the event number
+
+      console.log(
+        `Loading data for event: ${selectedEventKey}, Event Number: ${selectedEventNumber}`
+      );
+
+      try {
+        // Fetch data for the selected event
+        const response = await fetch(
+          `/analysis/api/event-data?eventKey=${selectedEventKey}&eventNumber=${selectedEventNumber}`
+        );
+        if (!response.ok) {
+          throw new Error("Failed to fetch event data");
+        }
+
+        const eventData = await response.json();
+        console.log("Event Data:", eventData);
+
+        // Update the UI with the fetched data
+        updateUIWithEventData(eventData);
+      } catch (error) {
+        console.error("Error loading event data:", error);
+      }
+    });
+  });
+
+  function updateUIWithEventData(eventData) {
+    // Update the UI with the fetched event data
+    console.log("Updating UI with event data:", eventData);
+
+    const table = document.getElementById("event-data-table");
+    table.innerHTML = ""; // Clear existing data
+
+    eventData.forEach((team) => {
+      const row = document.createElement("tr");
+      row.innerHTML = `
+            <td>${team.teamNumber}</td>
+            <td>${team.avgAutoPoints}</td>
+            <td>${team.avgTeleopPoints}</td>
+            <td>${team.avgEndgamePoints}</td>
+            <td>${team.avgTotalPoints}</td>
+        `;
+      table.appendChild(row);
+    });
+  }
 
   //reset the UI to state of nothing shown, nothing selected
   function clearInterface() {
