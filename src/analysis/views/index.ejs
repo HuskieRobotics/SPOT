@@ -81,6 +81,22 @@
 			<div id="welcome" class="visible">
 				<div id="welcome-text">SPOT Analysis</div>
 				<div id="welcome-subtext">Select a Team</div>
+				<div id="event-selector" style="margin-bottom:20px;">
+  <label for="event-dropdown">Select Event Number:</label>
+  <select id="event-dropdown">
+    <option value="1">Event 1</option>
+    <option value="2">Event 2</option>
+    <option value="3">Event 3</option>
+  </select>
+  <button id="change-event-button">Load Selected Event</button>
+</div>
+<script>
+  document.getElementById("change-event-button").addEventListener("click", () => {
+    const selectedEvent = document.getElementById("event-dropdown").value;
+    // Redirect to new URL with the event number as a route parameter
+    window.location.href = `/analysis/api/dataset/${selectedEvent}`;
+  });
+</script>
 			</div>
 			<div id="team-view">
 				<div id="main-list">
