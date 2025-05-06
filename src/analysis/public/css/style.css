@@ -481,7 +481,31 @@ body {
   color: white;
   font-size: 1.2rem;
 }
-
+#event-dropdown {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 1000;
+}
+#event-dropdown button {
+  padding: 8px 12px;
+  cursor: pointer;
+}
+#event-menu {
+  display: none;
+  position: absolute;
+  right: 0;
+  background: white;
+  border: 1px solid #ccc;
+  min-width: 120px;
+}
+#event-menu div {
+  padding: 8px 12px;
+  cursor: pointer;
+}
+#event-menu div:hover {
+  background-color: #f0f0f0;
+}
 /* Modify the existing media query */
 @media screen and (max-width: 1100px) {
   html {

@@ -11,6 +11,12 @@ router.get("/dataset", async (req, res) => {
   );
 });
 
+router.get("/dataset/:eventNumber", async (req, res) => {
+  res.json(
+    await TeamMatchPerformance.find({ eventNumber: req.params.eventNumber })
+  );
+});
+
 router.delete("/dataset/:id", async (req, res) => {
   const DEMO = config.DEMO;
 
@@ -123,6 +129,40 @@ router.get("/csv", async (req, res) => {
     .reduce((acc, row) => acc + `${row}\n`, "");
   res.set({ "Content-Disposition": `attachment; filename="teams.csv"` });
   res.send(csv);
+});
+
+router.get("/dataset/:eventNumber", async (req, res) => {
+  const eventNumber = req.params.eventNumber; // Grab the selected event number
+
+  if (!eventNumber) {
+    return res.status(400).send("Event number is required");
+  }
+
+  try {
+    // Use the eventNumber instead of the one in config to fetch event data.
+    const eventData = await TeamMatchPerformance.find({
+      eventNumber: parseInt(eventNumber, 10),
+    });
+
+    // Render the index page and pass eventData and eventNumber to the client
+    res.render(__dirname + "/views/index.ejs", {
+      eventNumber,
+      eventData: JSON.stringify(eventData),
+    });
+  } catch (error) {
+    console.error("Error fetching event data:", error);
+    res.status(500).send("Failed to fetch event data");
+  }
+});
+
+router.get("/allDataset", async (req, res) => {
+  try {
+    // Return all entries without filtering by eventNumber
+    const results = await TeamMatchPerformance.find({});
+    res.json(results);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
 module.exports = router;

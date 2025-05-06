@@ -28,16 +28,72 @@ if ("serviceWorker" in navigator) {
     },
   };
 
+  // Fetch team performances (assumes the dataset API returns items with an eventNumber field)
+  const res = await fetch("/analysis/api/dataset");
+  let data = await res.json();
+  // Extract unique event numbers
+  const events = [...new Set(data.map((item) => item.eventNumber))];
+
+  const menu = document.getElementById("event-menu");
+  events.forEach((eventNum) => {
+    const option = document.createElement("div");
+    option.innerText = eventNum;
+    option.addEventListener("click", () => {
+      console.log("Selected event", eventNum);
+      document.getElementById("event-button").innerText = eventNum;
+      menu.style.display = "none";
+      // You can add code here to update the analysis using the selected event.
+    });
+    menu.appendChild(option);
+  });
+
+  const eventButton = document.getElementById("event-button");
+  eventButton.addEventListener("click", (e) => {
+    // Toggle dropdown display
+    menu.style.display =
+      menu.style.display === "none" || menu.style.display === ""
+        ? "block"
+        : "none";
+    e.stopPropagation();
+  });
+
+  // Hide the dropdown if clicking outside
+  document.addEventListener("click", (e) => {
+    if (!document.getElementById("event-dropdown").contains(e.target)) {
+      menu.style.display = "none";
+    }
+  });
+
+  //start loading animation, fetch modules config, fetch dataset, then initialize UI elements
+  //start loading animation, fetch modules config, fetch dataset, then initialize UI elements
   //start loading animation, fetch modules config, fetch dataset, then initialize UI elements
   let dataset;
   let matches;
   await loadAround(async () => {
-    const modulesConfig = await fetch(`/config/analysis-modules.json`).then(
-      (res) => res.json()
-    );
+    // Fetch analysis modules config
+    const modulesConfigResponse = await fetch(`/config/analysis-modules.json`);
+    if (!modulesConfigResponse.ok) {
+      throw new Error("Failed to fetch analysis modules config");
+    }
+    const modulesConfig = await modulesConfigResponse.json();
+
+    // Execute the pipeline (ensure executePipeline returns valid JSON)
     dataset = await executePipeline();
-    matches = (await fetch("/admin/api/matches").then((res) => res.json()))
-      .allMatches;
+
+    // Fetch matches and verify response before parsing
+    const matchesResponse = await fetch("/admin/api/matches");
+    if (!matchesResponse.ok) {
+      throw new Error("Failed to fetch matches");
+    }
+    const matchesContentType = matchesResponse.headers.get("content-type");
+    if (
+      !matchesContentType ||
+      !matchesContentType.includes("application/json")
+    ) {
+      const text = await matchesResponse.text();
+      throw new Error(`Expected JSON but received: ${text.substring(0, 100)}`);
+    }
+    matches = (await matchesResponse.json()).allMatches;
 
     initDashboard(dataset, modulesConfig);
     initSidebarToggle();
@@ -45,10 +101,51 @@ if ("serviceWorker" in navigator) {
   });
   showFade(app);
 
-  //data fetchers
-  async function fetchDataset() {
-    return await fetch("./api/dataset").then((res) => res.json());
+  // New function to fetch the full dataset (all event numbers)
+  async function fetchAllDataset() {
+    const res = await fetch("/analysis/api/allDataset");
+    if (!res.ok) {
+      throw new Error(`Network error: ${res.status} ${res.statusText}`);
+    }
+    const contentType = res.headers.get("content-type");
+    if (!contentType || !contentType.includes("application/json")) {
+      const text = await res.text();
+      throw new Error(`Expected JSON but received: ${text.substring(0, 100)}`);
+    }
+    return res.json();
   }
+
+  // Function to populate event dropdown using the full dataset
+  async function populateEventDropdown() {
+    try {
+      // Fetch the full dataset from your new API endpoint
+      const allDataset = await fetchAllDataset();
+      // Extract unique event numbers
+      const eventNumbers = [
+        ...new Set(allDataset.map((item) => item.eventNumber)),
+      ];
+
+      const eventMenu = document.getElementById("event-menu");
+      eventMenu.innerHTML = "";
+
+      eventNumbers.forEach((eventNum) => {
+        const option = document.createElement("div");
+        option.innerText = eventNum;
+        option.addEventListener("click", () => {
+          // Update the URL query parameter and reload the page:
+          const url = new URL(window.location.href);
+          url.searchParams.set("event", eventNum);
+          window.location.href = url.toString();
+        });
+        eventMenu.appendChild(option);
+      });
+    } catch (error) {
+      console.error("Error populating event dropdown:", error);
+    }
+  }
+
+  // Call populateEventDropdown after the page has loaded
+  populateEventDropdown();
 
   async function fetchTeams() {
     const teams = await fetch(`/analysis/api/teams`).then((res) => res.json());
