@@ -77,13 +77,25 @@ class QREncoder {
       255,
       0,
       8
-    ); //event number (8 bits)
+    ); //event number (32 bits)
     console.log("4");
+    String.prototype.hashCode = function () {
+      var hash = 0,
+        i,
+        chr;
+      if (this.length === 0) return hash;
+      for (i = 0; i < this.length; i++) {
+        chr = this.charCodeAt(i);
+        hash = (hash << 5) - hash + chr;
+        hash |= 0; // Convert to 32bit integer
+      }
+      return hash;
+    };
     out += QREncoder.encodeValue(
-      parseInt(teamMatchPerformance.matchNumber),
-      255,
-      0,
-      8
+      teamMatchPerformance.matchNumber.hashCode(),
+      Number.MAX_SAFE_INTEGER,
+      Number.MIN_SAFE_INTEGER,
+      32
     ); // match number (8 bits)
     console.log("5");
     out += QREncoder.encodeValue(

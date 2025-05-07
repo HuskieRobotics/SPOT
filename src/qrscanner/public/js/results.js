@@ -286,10 +286,11 @@ async function decodeQRCodeUrl(image_url) {
       2
     )}`, //major.minor
     scouterId: "qrcode",
-    eventNumber: parseInt(bits.slice(16, 24), 2),
-    matchNumber: String(parseInt(bits.slice(24, 32), 2)),
-    robotNumber: String(parseInt(bits.slice(32, 48), 2)),
-    matchId_rand: parseInt(bits.slice(48, 112), 2).toString(32),
+    // in qrcode.js, chage
+    eventNumber: parseInt(bits.slice(16, 48), 2),
+    matchNumber: String(parseInt(bits.slice(48, 56), 2)),
+    robotNumber: String(parseInt(bits.slice(56, 72), 2)),
+    matchId_rand: parseInt(bits.slice(72, 136), 2).toString(32),
     actionQueue: [],
   };
 
