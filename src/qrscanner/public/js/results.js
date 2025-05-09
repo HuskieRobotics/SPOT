@@ -258,6 +258,21 @@ function generateIdEnum(buttons) {
   return idEnum;
 }
 
+if (!String.prototype.hashCode) {
+  String.prototype.hashCode = function () {
+    var hash = 0,
+      i,
+      chr;
+    if (this.length === 0) return hash;
+    for (i = 0; i < this.length; i++) {
+      chr = this.charCodeAt(i);
+      hash = (hash << 5) - hash + chr;
+      hash |= 0; // Convert to 32bit integer
+    }
+    return hash;
+  };
+}
+
 async function decodeQRCodeUrl(image_url) {
   const qrConfig = await fetch("/config/qr.json").then((res) => res.json());
   const scoutingConfig = await fetch("/config/match-scouting.json").then(
@@ -276,9 +291,47 @@ async function decodeQRCodeUrl(image_url) {
   // console.log("hex bytes", bytes.map(x=>x.toString(16)));
 
   //parse bits
-  let matchInfo = bits.slice(0, 112);
-  let actionQueueBits = bits.slice(112);
+  let matchInfo = bits.slice(0, 136);
+  let actionQueueBits = bits.slice(136);
 
+  const databaseUrl = config.DATABASE_URL;
+
+  if (!databaseUrl) return;
+
+  try {
+    const response = await fetch("/setup/api/events", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ databaseUrl }),
+    });
+
+    const result = await response.json();
+
+    // Check if the response contains an error
+    if (result.error) {
+      console.error("API Error:", result.error);
+      return;
+    }
+
+    // Ensure the result is an array
+    if (!Array.isArray(result)) {
+      console.error("Unexpected API response format:", result);
+      return;
+    }
+
+    console.log("Event Numbers:", result);
+
+    let originalEventNumber = hashEventNumber; // fallback: use the hash value
+
+  for (const event of result) {
+    // Make sure the event is used as a string
+    if (event.toString().hashCode() === hashEventNumber) {
+      originalEventNumber = event;
+      break;
+    }
+  }
   let teamMatchPerformance = {
     timestamp: Date.now(),
     clientVersion: `${parseInt(matchInfo.slice(0, 8), 2)}.${parseInt(
@@ -286,8 +339,8 @@ async function decodeQRCodeUrl(image_url) {
       2
     )}`, //major.minor
     scouterId: "qrcode",
-    // in qrcode.js, chage
-    eventNumber: parseInt(bits.slice(16, 48), 2),
+
+    eventNumber: originalEventNumber,
     matchNumber: String(parseInt(bits.slice(48, 56), 2)),
     robotNumber: String(parseInt(bits.slice(56, 72), 2)),
     matchId_rand: parseInt(bits.slice(72, 136), 2).toString(32),
