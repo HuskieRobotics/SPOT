@@ -14,6 +14,7 @@ SPOT is an open-source modular scouting app framework for FRC developed by Team 
 - Works on all platforms, from iOS to Android to the web.
 - An analysis page to display detailed statistics and charts about matches and teams.
 - Admin view for live scouter management at competition.
+- Admins can monitor and verify incoming scouting data to ensure accuracy and consistency throughout the event.
 - Preconfigured for the 2025 REEFSCAPE game with no additional game-specific customization required.
 - Easy deployment experience when teams run a server on Glitch.
 - Optimized for teams who have internet access while scouting but also completely functional for teams with no internet access. [(workflow found here)](https://docs.google.com/document/d/1rMG94uNJxASu9EMIhPnCHs1xF6rNNqMg3j4-tCzr2rI/edit?usp=sharing).
