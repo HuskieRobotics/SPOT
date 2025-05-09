@@ -7,7 +7,9 @@ let router = Router();
 
 router.get("/dataset", async (req, res) => {
   res.json(
-    await TeamMatchPerformance.find({ eventNumber: config.EVENT_NUMBER })
+    await TeamMatchPerformance.find({
+      eventNumber: config.EVENT_NUMBER,
+    })
   );
 });
 
