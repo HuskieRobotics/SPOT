@@ -43,3 +43,10 @@ class Dataset {
     }
   }
 }
+
+if (typeof module !== "undefined" && module.exports) {
+  module.exports = { DataTransformer, Dataset };
+} else {
+  window.DataTransformer = DataTransformer;
+  window.Dataset = Dataset;
+}

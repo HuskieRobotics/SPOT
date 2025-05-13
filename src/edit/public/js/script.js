@@ -137,7 +137,7 @@ let oldAccessCode;
         topRow.classList.add("match-item-top");
 
         const dropdownButton = document.createElement("button");
-        dropdownButton.textContent = "▼";
+        dropdownButton.textContent = "►";
         dropdownButton.classList.add("dropdown-button");
         topRow.appendChild(dropdownButton);
 
@@ -178,23 +178,38 @@ let oldAccessCode;
         dropdownButton.onclick = () => {
           const isHidden = dropdownContent.style.display === "none";
           dropdownContent.style.display = isHidden ? "block" : "none";
-          dropdownButton.textContent = isHidden ? "▲" : "▼";
+          dropdownButton.textContent = isHidden ? "▼" : "►";
         };
 
         trashButton.onclick = async () => {
+          console.log("Trash button clicked for match id:", match._id);
           if (
             !confirm("Are you sure you want to delete this match performance?")
           ) {
+            console.log("Deletion cancelled by user.");
             return;
           }
-          console.log("Deleting", match._id);
-          const response = await fetch(`/analysis/api/dataset/${match._id}`, {
-            method: "DELETE",
-          });
-          if (response.ok) {
-            listItem.remove();
-          } else {
-            console.error("Failed to delete match performance");
+          console.log("Attempting to delete match with id:", match._id);
+          try {
+            const response = await fetch(`/analysis/api/dataset/${match._id}`, {
+              method: "DELETE",
+              headers: {
+                Authorization: oldAccessCode || "",
+              },
+            });
+            console.log("Response status:", response.status);
+            if (response.ok) {
+              console.log("Deletion successful; removing list item.");
+              listItem.remove();
+            } else {
+              const errorText = await response.text();
+              console.error(
+                "Failed to delete match performance. Server response:",
+                errorText
+              );
+            }
+          } catch (error) {
+            console.error("Error encountered during deletion:", error);
           }
         };
 
