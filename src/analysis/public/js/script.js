@@ -18,58 +18,7 @@ if ("serviceWorker" in navigator) {
 }
 
 (async () => {
-  // Parse the query string to check for the 'event' parameter.
-  const queryString = window.location.search;
-  const urlParams = new URLSearchParams(queryString);
-  const eventNumber = urlParams.get("event");
-  console.log("Event selected:", eventNumber);
-
-  // Fetch analysis modules config as before.
-  const modulesConfigResponse = await fetch("/config/analysis-modules.json");
-  if (!modulesConfigResponse.ok) {
-    throw new Error("Failed to fetch analysis modules config");
-  }
-  const modulesConfig = await modulesConfigResponse.json();
-
-  let datasetResponse;
-  // If an event is specified, fetch using the new endpoint.
-  if (eventNumber) {
-    datasetResponse = await fetch(`/analysis/api/dataset/${eventNumber}`);
-  } else {
-    datasetResponse = await fetch("/analysis/api/dataset");
-  }
-
-  if (!datasetResponse.ok) {
-    throw new Error("Failed to fetch dataset");
-  }
-  const contentType = datasetResponse.headers.get("content-type");
-  if (!contentType || !contentType.includes("application/json")) {
-    const text = await datasetResponse.text();
-    throw new Error(`Expected JSON but received: ${text.substring(0, 100)}`);
-  }
-  const dataset = await datasetResponse.json();
-
-  // (Optional) Fetch matches if needed.
-  const matchesResponse = await fetch("/admin/api/matches");
-  if (!matchesResponse.ok) {
-    throw new Error("Failed to fetch matches");
-  }
-  const matchesContentType = matchesResponse.headers.get("content-type");
-  if (!matchesContentType || !matchesContentType.includes("application/json")) {
-    const text = await matchesResponse.text();
-    throw new Error(`Expected JSON but received: ${text.substring(0, 100)}`);
-  }
-  const matches = (await matchesResponse.json()).allMatches;
-
-  // Initialize the dashboard with the fetched dataset.
-  initDashboard(dataset, modulesConfig);
-  initSidebarToggle();
-  await new Promise((r) => setTimeout(r, 300));
-  showFade(app);
-})();
-
-(async () => {
-  //modules object strucutre
+  //modules object structure
   const modules = {
     team: [],
     match: {

@@ -1,6 +1,21 @@
 async function executePipeline() {
+  // Parse the query string to check for the 'event' parameter.
+  const queryString = window.location.search;
+  const urlParams = new URLSearchParams(queryString);
+  const eventNumber = urlParams.get("event");
+  console.log("Event selected:", eventNumber);
+
   // Get tmps from database (or cache if offline)
-  let tmps = await fetch("./api/dataset").then((res) => res.json());
+
+  let tmps;
+  // If an event is specified, fetch using the new endpoint.
+  if (eventNumber) {
+    tmps = await fetch(`/analysis/api/dataset/${eventNumber}`).then((res) =>
+      res.json()
+    );
+  } else {
+    tmps = await fetch("/analysis/api/dataset").then((res) => res.json());
+  }
 
   // Get all tmps stored in the local storage (from qr code)
   const storage = localStorage.getItem("teamMatchPerformances");
