@@ -258,19 +258,16 @@ function generateIdEnum(buttons) {
   return idEnum;
 }
 
-if (!String.prototype.hashCode) {
-  String.prototype.hashCode = function () {
-    var hash = 0,
-      i,
-      chr;
-    if (this.length === 0) return hash;
-    for (i = 0; i < this.length; i++) {
-      chr = this.charCodeAt(i);
-      hash = (hash << 5) - hash + chr;
-      hash |= 0; // Convert to 32bit integer
-    }
-    return hash;
-  };
+function hashEventCode(eventNumber) {
+  // convert string into 32 bit hash code
+  // this is a simple hash function, not cryptographically secure
+  // but should be sufficient for our needs
+  let hash = 0;
+  for (let i = 0; i < eventNumber.length; i++) {
+    hash = (hash << 5) - hash + eventNumber.charCodeAt(i);
+    hash |= 0; // Convert to 32bit integer
+  }
+  return hash;
 }
 
 async function decodeQRCodeUrl(image_url) {
@@ -294,40 +291,35 @@ async function decodeQRCodeUrl(image_url) {
   let matchInfo = bits.slice(0, 136);
   let actionQueueBits = bits.slice(136);
 
-  const databaseUrl = config.DATABASE_URL;
+  const response = await fetch("/setup/api/events", {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
 
-  if (!databaseUrl) return;
+  const result = await response.json();
 
-  try {
-    const response = await fetch("/setup/api/events", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ databaseUrl }),
-    });
+  // Check if the response contains an error
+  if (result.error) {
+    console.error("API Error:", result.error);
+    return;
+  }
 
-    const result = await response.json();
+  // Ensure the result is an array
+  if (!Array.isArray(result)) {
+    console.error("Unexpected API response format:", result);
+    return;
+  }
 
-    // Check if the response contains an error
-    if (result.error) {
-      console.error("API Error:", result.error);
-      return;
-    }
+  let hashEventNumber = parseInt(bits.slice(16, 48), 2);
+  console.log("Event Numbers:", result);
 
-    // Ensure the result is an array
-    if (!Array.isArray(result)) {
-      console.error("Unexpected API response format:", result);
-      return;
-    }
-
-    console.log("Event Numbers:", result);
-
-    let originalEventNumber = hashEventNumber; // fallback: use the hash value
+  let originalEventNumber = hashEventNumber; // fallback: use the hash value
 
   for (const event of result) {
     // Make sure the event is used as a string
-    if (event.toString().hashCode() === hashEventNumber) {
+    if (hashEventCode(event) === hashEventNumber) {
       originalEventNumber = event;
       break;
     }
@@ -346,14 +338,14 @@ async function decodeQRCodeUrl(image_url) {
     matchId_rand: parseInt(bits.slice(72, 136), 2).toString(32),
     actionQueue: [],
   };
-
+  console.log("teamMatchPerformance", teamMatchPerformance);
   teamMatchPerformance.matchId = `${teamMatchPerformance.matchNumber}-${teamMatchPerformance.robotNumber}-${teamMatchPerformance.scouterId}-${teamMatchPerformance.matchId_rand}`;
 
   let actionSize = ACTION_SCHEMA.reduce((acc, x) => acc + x.bits, 0);
 
   let nextAction = actionQueueBits.slice(0, actionSize);
   actionQueueBits = actionQueueBits.slice(actionSize);
-
+  console.log("actionQueueBits", actionQueueBits);
   // This code was like 3 years old when it was handed down to me with absolutely zero
   // documentation, I have no idea how it works but it does
   while (nextAction.slice(0, 8) != "11111111") {

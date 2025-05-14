@@ -170,7 +170,7 @@ async function populateEventNumbers() {
 
   try {
     const response = await fetch("/setup/api/events", {
-      method: "POST",
+      method: "GET",
       headers: {
         "Content-Type": "application/json",
       },

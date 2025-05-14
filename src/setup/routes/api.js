@@ -7,11 +7,13 @@ let router = Router();
 
 let REQUIRE_ACCESS_CODE;
 let ACCESS_CODE;
+let DATABASE_URL;
 
 if (fs.existsSync("config/config.json")) {
   let config = JSON.parse(fs.readFileSync("config/config.json"));
   REQUIRE_ACCESS_CODE = "ACCESS_CODE" in config.secrets;
   ACCESS_CODE = config.secrets["ACCESS_CODE"];
+  DATABASE_URL = config.secrets["DATABASE_URL"];
 }
 
 router.get("/auth", (req, res) => {
@@ -30,10 +32,10 @@ router.get("/auth", (req, res) => {
   }
 });
 
-router.post("/events", async (req, res) => {
+router.get("/events", async (req, res) => {
   const { databaseUrl } = req.body;
   if (!databaseUrl) {
-    return res.status(400).json({ error: "Database URL is required" });
+    databaseUrl = DATABASE_URL;
   }
   try {
     const connection = await mongoose

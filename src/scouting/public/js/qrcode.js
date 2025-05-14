@@ -73,29 +73,28 @@ class QREncoder {
     out += QREncoder.encodeValue(minorVersion, 255, 0, 8); // minor version (8 bits)
     console.log("3");
     out += QREncoder.encodeValue(
-      parseInt(teamMatchPerformance.eventNumber),
+      parseInt(hashEventCode(teamMatchPerformance.eventNumber)),
       255,
       0,
-      8
+      32
     ); //event number (32 bits)
     console.log("4");
-    String.prototype.hashCode = function () {
-      var hash = 0,
-        i,
-        chr;
-      if (this.length === 0) return hash;
-      for (i = 0; i < this.length; i++) {
-        chr = this.charCodeAt(i);
-        hash = (hash << 5) - hash + chr;
+    function hashEventCode(eventNumber) {
+      // convert string into 32 bit hash code
+      // this is a simple hash function, not cryptographically secure
+      // but should be sufficient for our needs
+      let hash = 0;
+      for (let i = 0; i < eventNumber.length; i++) {
+        hash = (hash << 5) - hash + eventNumber.charCodeAt(i);
         hash |= 0; // Convert to 32bit integer
       }
       return hash;
-    };
+    }
     out += QREncoder.encodeValue(
-      teamMatchPerformance.matchNumber.hashCode(),
+      parseInt(teamMatchPerformance.matchNumber),
       Number.MAX_SAFE_INTEGER,
       Number.MIN_SAFE_INTEGER,
-      32
+      8
     ); // match number (8 bits)
     console.log("5");
     out += QREncoder.encodeValue(
