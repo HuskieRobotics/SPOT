@@ -28,24 +28,9 @@ if ("serviceWorker" in navigator) {
     },
   };
 
-  // Fetch team performances (assumes the dataset API returns items with an eventNumber field)
-  const res = await fetch("/analysis/api/dataset");
-  let data = await res.json();
-  // Extract unique event numbers
-  const events = [...new Set(data.map((item) => item.eventNumber))];
+  populateEventDropdown();
 
   const menu = document.getElementById("event-menu");
-  events.forEach((eventNum) => {
-    const option = document.createElement("div");
-    option.innerText = eventNum;
-    option.addEventListener("click", () => {
-      console.log("Selected event", eventNum);
-      document.getElementById("event-button").innerText = eventNum;
-      menu.style.display = "none";
-      // You can add code here to update the analysis using the selected event.
-    });
-    menu.appendChild(option);
-  });
 
   const eventButton = document.getElementById("event-button");
   eventButton.addEventListener("click", (e) => {
@@ -144,18 +129,6 @@ if ("serviceWorker" in navigator) {
     }
   }
 
-  // Call populateEventDropdown after the page has loaded
-  populateEventDropdown();
-
-  // Corrected event listener: Redirect using template literal string syntax
-  document
-    .getElementById("change-event-button")
-    .addEventListener("click", () => {
-      // Retrieve the event value from an input/select element with id "event-dropdown"
-      const selectedEvent = document.getElementById("event-dropdown").value;
-      // Redirect to the analysis page with the event number specified in the query string
-      window.location.href = `/analysis?event=${selectedEvent}`;
-    });
   async function fetchTeams() {
     const teams = await fetch(`/analysis/api/teams`).then((res) => res.json());
     return teams.reduce((acc, t) => {
