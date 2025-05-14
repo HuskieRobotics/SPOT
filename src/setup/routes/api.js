@@ -30,6 +30,61 @@ router.get("/auth", (req, res) => {
   }
 });
 
+router.post("/events", async (req, res) => {
+  const { databaseUrl } = req.body;
+  if (!databaseUrl) {
+    return res.status(400).json({ error: "Database URL is required" });
+  }
+  try {
+    const connection = await mongoose
+      .createConnection(databaseUrl, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+      })
+      .asPromise();
+    console.log("Connected to the database");
+    // Assuming your event numbers are stored in the "matches" collection under the "eventNumber" field
+    const eventNumbers = await connection.db
+      .collection("teamMatchPerformances")
+      .distinct("eventNumber");
+
+    console.log("Fetched event numbers:", eventNumbers);
+    await connection.close();
+    res.json(eventNumbers);
+  } catch (error) {
+    console.error("Error fetching event numbers:", error);
+    res.status(500).json({ error: "Failed to fetch event numbers" });
+  }
+});
+
+router.get("/check-event-number", async (req, res) => {
+  const { databaseUrl, eventNumber } = req.query;
+  if (!databaseUrl || !eventNumber) {
+    return res
+      .status(400)
+      .json({ error: "Missing databaseUrl or eventNumber" });
+  }
+  try {
+    const connection = await mongoose
+      .createConnection(databaseUrl, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+      })
+      .asPromise();
+
+    // Lookup in the teamMatchPerformances collection for the candidate event number
+    const existing = await connection.db
+      .collection("teamMatchPerformances")
+      .findOne({ eventNumber: eventNumber });
+
+    await connection.close();
+    res.json({ exists: !!existing });
+  } catch (error) {
+    console.error("Error checking event number:", error);
+    res.status(500).json({ error: "Failed to check event number" });
+  }
+});
+
 router.get("/config", (req, res) => {
   if (REQUIRE_ACCESS_CODE) {
     let config = JSON.parse(fs.readFileSync("config/config.json"));

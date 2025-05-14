@@ -139,3 +139,33 @@ video {
   padding: 8px 12px;
   font-size: 1.5em;
 }
+
+.event-number-container {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+  max-width: 800px;
+  align-items: stretch;
+  min-height: 60px; /* Set a minimum height for both elements */
+}
+
+.event-number-container select,
+.event-number-container button {
+  flex: 1;
+  width: auto;
+  margin: 0; /* Remove any margins */
+  padding: 15px 30px; /* Match padding on both elements */
+  font-size: 1.4em; /* Match font sizes */
+  height: 100%; /* Force full height */
+  box-sizing: border-box; /* Include padding in height calculation */
+}
+
+#generateEventNumber {
+  color: var(--bg-alt);
+  background-color: var(--accent-alt);
+  font-size: 2em;
+  line-height: 1em;
+  border: none;
+  padding: 15px 30px;
+  border-radius: var(--border-radius);
+}

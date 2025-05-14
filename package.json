@@ -12,7 +12,7 @@
     "url": "git+https://github.com/HuskieRobotics/spot.git"
   },
   "engines": {
-    "node": "16.x"
+    "node": "22.x"
   },
   "author": "",
   "license": "ISC",
