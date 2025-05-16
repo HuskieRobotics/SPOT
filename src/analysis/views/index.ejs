@@ -149,39 +149,65 @@
 			</div>
 			
 			<div id="bubble-sheet-view">
+    <!-- Controls for the Bubble Sheet -->
     <div id="bubble-sheet-controls">
+        <!-- Dropdown for selecting the X-Axis -->
         <label for="x-axis-select">X-Axis:</label>
         <select id="x-axis-select">
-            <% config.AXIS_OPTIONS.forEach(option => { %>
-                <option value="<%= option.value %>" <%= option.value === "avgTeleopPoints" ? "selected" : "" %>><%= option.label %></option>
+            <% 
+            // Use config.AXIS_OPTIONS if available, otherwise fallback to default options
+            (config.AXIS_OPTIONS || [
+                { label: "Average Teleop Points", value: "avgTeleopPoints" }, // Default X-Axis
+                { label: "Average Auto Points", value: "avgAutoPoints" },     // Default Y-Axis
+                { label: "Constant", value: "constant" }                     // Default Z-Axis
+            ]).forEach(option => { %>
+                <!-- Dynamically populate the dropdown options -->
+                <option value="<%= option.value %>" 
+                    <%= option.value === "avgTeleopPoints" ? "selected" : "" %>><%= option.label %>
+                </option>
             <% }); %>
         </select>
 
+        <!-- Dropdown for selecting the Y-Axis -->
         <label for="y-axis-select">Y-Axis:</label>
         <select id="y-axis-select">
-            <% config.AXIS_OPTIONS.forEach(option => { %>
-                <option value="<%= option.value %>" <%= option.value === "avgAutoPoints" ? "selected" : "" %>><%= option.label %></option>
+            <% 
+            // Use config.AXIS_OPTIONS if available, otherwise fallback to default options
+            (config.AXIS_OPTIONS || [
+                { label: "Average Teleop Points", value: "avgTeleopPoints" }, // Default X-Axis
+                { label: "Average Auto Points", value: "avgAutoPoints" },     // Default Y-Axis
+                { label: "Constant", value: "constant" }                     // Default Z-Axis
+            ]).forEach(option => { %>
+                <!-- Dynamically populate the dropdown options -->
+                <option value="<%= option.value %>" 
+                    <%= option.value === "avgAutoPoints" ? "selected" : "" %>><%= option.label %>
+                </option>
             <% }); %>
         </select>
 
+        <!-- Dropdown for selecting the Z-Axis (Bubble Size) -->
         <label for="z-axis-select">Z-Axis (Bubble Size):</label>
         <select id="z-axis-select">
+            <!-- Default Z-Axis is set to "Constant" -->
             <option value="constant" selected>Constant</option>
-            <% config.AXIS_OPTIONS.forEach(option => { %>
+            <% 
+            // Use config.AXIS_OPTIONS if available, otherwise fallback to default options
+            (config.AXIS_OPTIONS || [
+                { label: "Average Teleop Points", value: "avgTeleopPoints" }, // Default X-Axis
+                { label: "Average Auto Points", value: "avgAutoPoints" },     // Default Y-Axis
+                { label: "Constant", value: "constant" }                     // Default Z-Axis
+            ]).forEach(option => { %>
+                <!-- Dynamically populate the dropdown options -->
                 <option value="<%= option.value %>"><%= option.label %></option>
             <% }); %>
         </select>
     </div>
 
+    <!-- Container for the Bubble Sheet Graph -->
     <div id="bubble-sheet-container">
         <div class="graph" id="bubble-sheet-graph"></div>
     </div>
 </div>
-				<div id = "bubble-sheet-container">
-					<div id = "bubble-sheet-graph">
-
-					</div>
-				</div>
 		</div>
 	</div>
 	<script src="https://unpkg.com/simple-statistics@7.8.0/dist/simple-statistics.min.js"></script>
