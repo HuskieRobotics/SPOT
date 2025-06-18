@@ -1,9 +1,8 @@
 const mongoose = require("mongoose");
 
-const MONGO_URI =
-  "mongodb+srv://admin:bpTkvY6bw7aH4K@cluster0.fqykfv1.mongodb.net/2025ReefscapeDev?retryWrites=true&w=majority";
+const config = require("../../../../config/config.json");
 
-mongoose.connect(MONGO_URI, {
+mongoose.connect(config.secrets.DATABASE_URL, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
