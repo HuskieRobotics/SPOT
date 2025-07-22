@@ -102,9 +102,30 @@ router.post("/createEventCode", async (req, res) => {
   }
 });
 
-router.get("/config", (req, res) => {
+router.get("/config", async (req, res) => {
   if (REQUIRE_ACCESS_CODE) {
     let config = JSON.parse(fs.readFileSync("config/config.json"));
+
+    // convert EVENT_NUMBER from ObjectId to corresponding event code string
+    if (config.EVENT_NUMBER && config.secrets.DATABASE_URL) {
+      try {
+        const connection = await mongoose
+          .createConnection(config.secrets.DATABASE_URL, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+          })
+          .asPromise();
+        const event = await connection.db
+          .collection("events")
+          .findOne({ _id: new mongoose.Types.ObjectId(config.EVENT_NUMBER) });
+        if (event) {
+          config.EVENT_NUMBER = event.code; // set EVENT_NUMBER to the event code string
+        }
+        connection.close();
+      } catch (error) {
+        console.error("Error fetching event number:", error);
+      }
+    }
 
     if (
       config.secrets.ACCESS_CODE === "" ||
@@ -155,6 +176,30 @@ router.post("/config", async (req, res) => {
       res.json({ success: false, reason: "Invalid TBA_API_KEY!" });
       return;
     }
+
+    // convert EVENT_NUMBER to corresponding ObjectId
+    if (config.EVENT_NUMBER) {
+      try {
+        const connection = await mongoose
+          .createConnection(config.secrets.DATABASE_URL, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+          })
+          .asPromise();
+        const event = await connection.db
+          .collection("events")
+          .findOne({ code: config.EVENT_NUMBER });
+        if (event) {
+          config.EVENT_NUMBER = event._id; // set EVENT_NUMBER to the ObjectId of the event
+        }
+        await connection.close();
+      } catch (error) {
+        console.error("Error fetching event number:", error);
+        res.json({ success: false, reason: "Failed to fetch event number" });
+        return;
+      }
+    }
+
     if (!("DEMO" in config)) {
       config.DEMO = false;
     }

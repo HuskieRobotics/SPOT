@@ -47,8 +47,42 @@ async function mapTMPEventNumbersToCodes() {
   }
 }
 
+async function changeTypeOfEventCodes() {
+  try {
+    const eventNumbers = await mongoose.connection.db
+      .collection("events")
+      .find()
+      .toArray();
+    console.log("Event Numbers:", eventNumbers);
+
+    // Get the collection (make sure the collection name is correct)
+    const collection = mongoose.connection.db.collection(
+      "teamMatchPerformances"
+    );
+
+    for (const event of eventNumbers) {
+      console.log(
+        "Updating event code:",
+        event.code,
+        "to ObjectId:",
+        event._id
+      );
+      const res = await collection.updateMany(
+        { eventNumber: event.code },
+        [{ $set: { eventNumber: { $toObjectId: event._id } } }] // Aggregation pipeline update operator
+      );
+      console.log("Modified Count:", res.modifiedCount);
+    }
+  } catch (err) {
+    console.error("Error occurred:", err);
+  } finally {
+    mongoose.disconnect();
+  }
+}
+
 // Run the update once the connection is established
 mongoose.connection.once("open", () => {
   // updateTeamMatchPerformanceEventNumbers();
-  mapTMPEventNumbersToCodes();
+  // mapTMPEventNumbersToCodes();
+  changeTypeOfEventCodes();
 });
