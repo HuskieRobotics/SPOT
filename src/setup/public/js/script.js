@@ -111,24 +111,23 @@ if (eventSelect) {
     }
   });
 }
-async function checkEventNumber(candidate) {
+async function createNewEventCode(candidate) {
   const databaseURL = document.getElementById("DATABASE_URL").value;
   if (!databaseURL) {
     console.error("DATABASE_URL not set");
     return false;
   }
-  const res = await fetch(
-    `/setup/api/check-event-number?eventName=${encodeURIComponent(candidate)}`,
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        "database-url": JSON.stringify({ databaseURL }),
-      },
-    }
-  );
-  const data = await res.json();
-  return data.exists; // Expected response: { exists: true/false }
+  const res = await fetch("/setup/api/createEventCode", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      databaseURL: databaseURL,
+      eventCode: candidate,
+    }),
+  });
+  return res;
 }
 
 // Add event listener for Generate Event Number button
@@ -150,8 +149,10 @@ document
     const candidate = `${tbaEventKey}_${suffixInput.trim()}`;
 
     // Check if this candidate already exists via the API
-    if (await checkEventNumber(candidate)) {
-      alert(`Event number "${candidate}" already exists.`);
+    const res = await createNewEventCode(candidate);
+    if (!res.ok) {
+      const { error } = await res.json();
+      alert(`Error creating event "${candidate}": ${error}`);
       return;
     }
 

@@ -45,11 +45,11 @@ router.get("/events", async (req, res) => {
       .asPromise();
     console.log("Connected to the database");
 
-    // fetch the event names from the events collection into an array of just the name property
+    // fetch the event codes from the events collection into an array of just the code property
     const eventNumbers = await connection.db
       .collection("events")
       .find()
-      .map((event) => event.name)
+      .map((event) => event.code)
       .toArray();
 
     console.log("Fetched event numbers:", eventNumbers);
@@ -61,16 +61,13 @@ router.get("/events", async (req, res) => {
   }
 });
 
-router.get("/check-event-number", async (req, res) => {
-  const { databaseURL } = req.headers["database-url"]
-    ? JSON.parse(req.headers["database-url"])
-    : { DATABASE_URL };
-
-  const { eventName } = req.query;
-  if (!databaseURL || !eventName) {
-    return res.status(400).json({ error: "Missing databaseURL or eventName" });
+router.post("/createEventCode", async (req, res) => {
+  const { databaseURL, eventCode } = req.body;
+  if (!databaseURL || !eventCode) {
+    return res.status(400).json({ error: "Missing databaseURL or eventCode" });
   }
   try {
+    let created = false;
     const connection = await mongoose
       .createConnection(databaseURL, {
         useNewUrlParser: true,
@@ -81,10 +78,23 @@ router.get("/check-event-number", async (req, res) => {
     // Lookup in the teamMatchPerformances collection for the candidate event number
     const existing = await connection.db
       .collection("events")
-      .findOne({ name: eventName });
+      .findOne({ code: eventCode });
+
+    if (!existing) {
+      // create a new event code if it doesn't already exists
+      await connection.db.collection("events").insertOne({ code: eventCode });
+      created = true;
+    }
 
     await connection.close();
-    res.json({ exists: !!existing });
+
+    if (created) {
+      res.status(201).end();
+    } else if (existing) {
+      res.status(409).json({ error: "Event code already exists" });
+    } else {
+      res.status(500).json({ error: "Failed to create event code" });
+    }
   } catch (error) {
     console.error("Error checking event number:", error);
     res.status(500).json({ error: "Failed to check event number" });
