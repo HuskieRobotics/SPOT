@@ -112,15 +112,20 @@ if (eventSelect) {
   });
 }
 async function checkEventNumber(candidate) {
-  const databaseUrl = document.getElementById("DATABASE_URL").value;
-  if (!databaseUrl) {
+  const databaseURL = document.getElementById("DATABASE_URL").value;
+  if (!databaseURL) {
     console.error("DATABASE_URL not set");
     return false;
   }
   const res = await fetch(
-    `/setup/api/check-event-number?databaseUrl=${encodeURIComponent(
-      databaseUrl
-    )}&eventNumber=${encodeURIComponent(candidate)}`
+    `/setup/api/check-event-number?eventName=${encodeURIComponent(candidate)}`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "database-url": JSON.stringify({ databaseURL }),
+      },
+    }
   );
   const data = await res.json();
   return data.exists; // Expected response: { exists: true/false }
@@ -165,16 +170,16 @@ document
   });
 
 async function populateEventNumbers() {
-  const databaseUrl = document.getElementById("DATABASE_URL").value;
-  if (!databaseUrl) return;
+  const databaseURL = document.getElementById("DATABASE_URL").value;
+  if (!databaseURL) return;
 
   try {
     const response = await fetch("/setup/api/events", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
+        "database-url": JSON.stringify({ databaseURL }),
       },
-      body: JSON.stringify({ databaseUrl }),
     });
 
     const result = await response.json();
@@ -213,7 +218,6 @@ document.querySelector("#submit").addEventListener("click", async () => {
     "DATABASE_URL",
     "TBA_API_KEY",
     "GOOGLE_CLIENT_ID",
-
     "GOOGLE_CLIENT_SECRET",
     "FMS_API_KEY",
     "FMS_API_USERNAME",

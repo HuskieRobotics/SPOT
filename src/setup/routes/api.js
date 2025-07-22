@@ -33,22 +33,24 @@ router.get("/auth", (req, res) => {
 });
 
 router.get("/events", async (req, res) => {
-  const { databaseUrl } = req.body;
-  if (!databaseUrl) {
-    databaseUrl = DATABASE_URL;
-  }
+  const { databaseURL } = req.headers["database-url"]
+    ? JSON.parse(req.headers["database-url"])
+    : { DATABASE_URL };
   try {
     const connection = await mongoose
-      .createConnection(databaseUrl, {
+      .createConnection(databaseURL, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
       })
       .asPromise();
     console.log("Connected to the database");
-    // Assuming your event numbers are stored in the "matches" collection under the "eventNumber" field
+
+    // fetch the event names from the events collection into an array of just the name property
     const eventNumbers = await connection.db
-      .collection("teamMatchPerformances")
-      .distinct("eventNumber");
+      .collection("events")
+      .find()
+      .map((event) => event.name)
+      .toArray();
 
     console.log("Fetched event numbers:", eventNumbers);
     await connection.close();
@@ -60,15 +62,17 @@ router.get("/events", async (req, res) => {
 });
 
 router.get("/check-event-number", async (req, res) => {
-  const { databaseUrl, eventNumber } = req.query;
-  if (!databaseUrl || !eventNumber) {
-    return res
-      .status(400)
-      .json({ error: "Missing databaseUrl or eventNumber" });
+  const { databaseURL } = req.headers["database-url"]
+    ? JSON.parse(req.headers["database-url"])
+    : { DATABASE_URL };
+
+  const { eventName } = req.query;
+  if (!databaseURL || !eventName) {
+    return res.status(400).json({ error: "Missing databaseURL or eventName" });
   }
   try {
     const connection = await mongoose
-      .createConnection(databaseUrl, {
+      .createConnection(databaseURL, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
       })
@@ -76,8 +80,8 @@ router.get("/check-event-number", async (req, res) => {
 
     // Lookup in the teamMatchPerformances collection for the candidate event number
     const existing = await connection.db
-      .collection("teamMatchPerformances")
-      .findOne({ eventNumber: eventNumber });
+      .collection("events")
+      .findOne({ name: eventName });
 
     await connection.close();
     res.json({ exists: !!existing });
