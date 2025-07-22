@@ -288,42 +288,9 @@ async function decodeQRCodeUrl(image_url) {
   // console.log("hex bytes", bytes.map(x=>x.toString(16)));
 
   //parse bits
-  let matchInfo = bits.slice(0, 136);
-  let actionQueueBits = bits.slice(136);
+  let matchInfo = bits.slice(0, 200);
+  let actionQueueBits = bits.slice(200);
 
-  const response = await fetch("/setup/api/events", {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-
-  const result = await response.json();
-
-  // Check if the response contains an error
-  if (result.error) {
-    console.error("API Error:", result.error);
-    return;
-  }
-
-  // Ensure the result is an array
-  if (!Array.isArray(result)) {
-    console.error("Unexpected API response format:", result);
-    return;
-  }
-
-  let hashEventNumber = parseInt(bits.slice(16, 48), 2);
-  console.log("Event Numbers:", result);
-
-  let originalEventNumber = hashEventNumber; // fallback: use the hash value
-
-  for (const event of result) {
-    // Make sure the event is used as a string
-    if (hashEventCode(event) === hashEventNumber) {
-      originalEventNumber = event;
-      break;
-    }
-  }
   let teamMatchPerformance = {
     timestamp: Date.now(),
     clientVersion: `${parseInt(matchInfo.slice(0, 8), 2)}.${parseInt(
@@ -332,10 +299,13 @@ async function decodeQRCodeUrl(image_url) {
     )}`, //major.minor
     scouterId: "qrcode",
 
-    eventNumber: originalEventNumber,
-    matchNumber: String(parseInt(bits.slice(48, 56), 2)),
-    robotNumber: String(parseInt(bits.slice(56, 72), 2)),
-    matchId_rand: parseInt(bits.slice(72, 136), 2).toString(32),
+    eventNumber:
+      parseInt(bits.slice(16, 48), 2).toString(16) +
+      parseInt(bits.slice(48, 80), 2).toString(16) +
+      parseInt(bits.slice(80, 112), 2).toString(16),
+    matchNumber: String(parseInt(bits.slice(112, 120), 2)),
+    robotNumber: String(parseInt(bits.slice(120, 136), 2)),
+    matchId_rand: parseInt(bits.slice(136, 200), 2).toString(32),
     actionQueue: [],
   };
   console.log("teamMatchPerformance", teamMatchPerformance);

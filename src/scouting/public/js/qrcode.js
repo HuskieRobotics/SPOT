@@ -60,9 +60,9 @@ class QREncoder {
 
     await this.init();
 
-    let out = ""; //store everything in strings. This is inefficient, but I haven't found a better way to do this in browser js and it probably doesnt matter.
+    let out = ""; //store everything in strings. This is inefficient, but I haven't found a better way to do this in browser js and it probably doesn't matter.
 
-    /****** Match Info (80 bits) ******/
+    /****** Match Info (200 bits) ******/
     let [majorVersion, minorVersion] = teamMatchPerformance.clientVersion
       .split(".")
       .map((x) => parseInt(x));
@@ -72,28 +72,25 @@ class QREncoder {
     console.log("2");
     out += QREncoder.encodeValue(minorVersion, 255, 0, 8); // minor version (8 bits)
     console.log("3");
-    out += QREncoder.encodeValue(
-      parseInt(hashEventCode(teamMatchPerformance.eventNumber)),
-      255,
-      0,
-      32
-    ); //event number (32 bits)
-    console.log("4");
-    function hashEventCode(eventNumber) {
-      // convert string into 32 bit hash code
-      // this is a simple hash function, not cryptographically secure
-      // but should be sufficient for our needs
-      let hash = 0;
-      for (let i = 0; i < eventNumber.length; i++) {
-        hash = (hash << 5) - hash + eventNumber.charCodeAt(i);
-        hash |= 0; // Convert to 32bit integer
-      }
-      return hash;
+    console.log(teamMatchPerformance.eventNumber.toString());
+    const eventNumberParts = teamMatchPerformance.eventNumber
+      .toString()
+      .match(/.{1,8}/g); //split the event number into 8 digit parts
+    console.log("eventNumberParts", eventNumberParts);
+    for (const eventNumberPart of eventNumberParts) {
+      console.log("event number part", eventNumberPart);
+      out += QREncoder.encodeValue(
+        parseInt(eventNumberPart, 16),
+        2 ** 32 - 1,
+        0,
+        32
+      ); //event number part (32 bits)
     }
+    console.log("4");
     out += QREncoder.encodeValue(
       parseInt(teamMatchPerformance.matchNumber),
-      Number.MAX_SAFE_INTEGER,
-      Number.MIN_SAFE_INTEGER,
+      255,
+      0,
       8
     ); // match number (8 bits)
     console.log("5");
@@ -142,7 +139,10 @@ class QREncoder {
 
     out += "11111111"; //filled byte to signify the end of the action queue
 
-    // console.log("hex bytes", out.match(/.{1,8}/g).map(x=>parseInt(x,2).toString(16)));
+    console.log(
+      "hex bytes",
+      out.match(/.{1,8}/g).map((x) => parseInt(x, 2).toString(16))
+    );
 
     const data = new Uint8ClampedArray(
       out.match(/.{1,8}/g).map((x) => parseInt(x, 2))
