@@ -27,7 +27,28 @@ async function updateTeamMatchPerformanceEventNumbers() {
   }
 }
 
+async function mapTMPEventNumbersToCodes() {
+  try {
+    // Get the collection (make sure the collection name is correct)
+    const collection = mongoose.connection.db.collection(
+      "teamMatchPerformances"
+    );
+
+    // Update all documents where eventNumber is an integer
+    const res = await collection.updateMany(
+      { eventNumber: "98" },
+      [{ $set: { eventNumber: "2025week0_training" } }] // Aggregation pipeline update operator
+    );
+    console.log("Modified Count:", res.modifiedCount);
+  } catch (err) {
+    console.error("Error occurred:", err);
+  } finally {
+    mongoose.disconnect();
+  }
+}
+
 // Run the update once the connection is established
 mongoose.connection.once("open", () => {
-  updateTeamMatchPerformanceEventNumbers();
+  // updateTeamMatchPerformanceEventNumbers();
+  mapTMPEventNumbersToCodes();
 });
