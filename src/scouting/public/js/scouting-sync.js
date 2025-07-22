@@ -114,7 +114,8 @@ class ScoutingSync {
 
         switchPage("match-scouting");
         document.querySelector(".scouting-info").style.display = "block";
-        new "small".header("Match Information")
+        new Modal("small")
+          .header("Match Information")
           .text(
             `
                 You have been assigned team ${ScoutingSync.state.robotNumber} in match ${ScoutingSync.state.matchNumber}.
