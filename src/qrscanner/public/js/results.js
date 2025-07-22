@@ -87,7 +87,7 @@ submitButton.addEventListener("click", async () => {
   let response;
   try {
     // Route for submitting a TMP on the qr code page
-    response = await await fetch("./api/teamMatchPerformance", {
+    response = await fetch("./api/teamMatchPerformance", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
