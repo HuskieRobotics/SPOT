@@ -1,7 +1,10 @@
 const { Router } = require("express");
 const { TeamMatchPerformance } = require("../../lib/db.js");
+//const { executePipeline } = require("../public/js/analysisPipeline.js");
+const { setPath } = require("../../lib/util.js");
 const axios = require("axios");
 const config = require("../../../config/config.json");
+const { got } = require("../get.js");
 
 let router = Router();
 
@@ -68,9 +71,76 @@ router.get("/manual", async (req, res) => {
 
   res.json(manual);
 });
-
 router.get("/csv", async (req, res) => {
-  let dataset = await execute();
+  async function executePipeline() {
+    // Get tmps from database (or cache if offline)
+
+    let tmps = await axios
+      .get("http://localhost:8080/analysis/api/dataset")
+      .then((res) => res.data);
+
+    // Get all tmps stored in the local storage (from qr code)
+    const storage = await TeamMatchPerformance.find({
+      eventNumber: config.EVENT_NUMBER,
+    });
+    if (storage) {
+      // Parse the QR code TMPs (for some reason the array is stored as a string, and each TMP is ALSO
+      // stored as a string, so the array has to be parsed and each individual TMP has to be parsed)
+      //const qrcodeTmps = JSON.parse(storage).map((tmp) => JSON.parse(tmp));
+
+      // Merge the TMPs into one
+      tmps = [...tmps, ...storage];
+    }
+
+    // Find all the teams across the TMPs
+    const teams = [];
+    for (const tmp of tmps) {
+      teams[tmp.robotNumber] = {};
+    }
+
+    let dataset = { tmps, teams };
+
+    const manual = await axios
+      .get("http://localhost:8080/analysis/api/manual")
+      .then((res) => res.data);
+    const pipelineConfig = await axios
+      .get("http://localhost:8080/config/analysis-pipeline.json")
+      .then((res) => res.data);
+
+    // This will show up as a method that doesn't exist since it is gotten from the server
+    let getTransformers = await got();
+    getTransformers = getTransformers["getTransformers"];
+    const transformers = await getTransformers();
+
+    for (let tfConfig of pipelineConfig) {
+      dataset = transformers[tfConfig.type][tfConfig.name].execute(
+        dataset,
+        tfConfig.outputPath,
+        tfConfig.options
+      );
+    }
+
+    dataset.tmps = dataset.tmps.concat(
+      manual.tmps.map((tmp) => ({
+        ...tmp,
+        manual: true,
+      }))
+    );
+    for (const [path, teamData] of Object.entries(manual.teams)) {
+      for (const [team, value] of Object.entries(teamData)) {
+        if (team in dataset.teams) {
+          setPath(dataset.teams[team], "manual." + path, value);
+        } else {
+          dataset.teams[team] = {};
+          setPath(dataset.teams[team], "manual." + path, value);
+        }
+      }
+    }
+
+    return dataset;
+  }
+
+  let dataset2 = await executePipeline();
 
   //create rows
   let rows = [];
@@ -84,33 +154,79 @@ router.get("/csv", async (req, res) => {
     return true;
   };
 
-  for (let [teamNumber, team] of Object.entries(dataset.teams).filter(
+  // Adding the data which is required for the CSV
+  for (let [teamNumber, team] of Object.entries(dataset2.teams).filter(
     ([num, team]) => checkData(team)
   )) {
     if (headerRow) {
       headerRow = false;
       rows.push([
         "Team #",
-        ...Object.entries(team.averages)
+        ...Object.entries(team.avgTotalPoints ?? {})
           .filter(([key, value]) => !isNaN(value) && value)
-          .map(([i, x]) => i + " Average"), //all averages
-        ...Object.entries(team.averageScores)
-          .filter((item) => !isNaN(item))
-          .map(([i, x]) => i + " Score Average"), //all averages
-        "Average Cycle",
-        "Average Completed Cycle",
+          .map(([i, x]) => i + " Average"),
+        ...Object.entries(team.avgTotalPoints ?? {})
+          .filter(([key, value]) => !isNaN(value))
+          .map(([i, x]) => i + " Score Average"),
+        "Average Coral Cycle Time",
+        "Average Algae Cycle Time",
+        "Average Time to Climb",
+        "Average Auto Points",
+        "Average Teleop Points",
+        "Coral Accuracy",
+        "Algae Accuracy",
+        "Average Coral Points",
+        "Average Algae Points",
+        "Average Total Points",
+        "Average Coral Miss",
+        "Average Algae Miss",
+        "Lv 1 Coral",
+        "Lv 2 Coral",
+        "Lv 3 Coral",
+        "Lv 4 Coral",
+        "Ground Pickup Algae",
+        "Reef Pickup Algae",
+        "Ground Pickup Coral",
+        "Station Pickup Coral",
+        "Algae Score Net",
+        "Algae Score Processor",
       ]);
     }
+
+    const avgTotalPoints = Object.entries(team.avgTotalPoints ?? {})
+      .filter(([key, value]) => !isNaN(value) && value)
+      .map(([i, x]) => x);
+
     rows.push([
       teamNumber,
-      ...Object.entries(team.averages)
-        .filter(([key, value]) => !isNaN(value) && value)
-        .map(([i, x]) => x), //all averages
-      ...Object.entries(team.averageScores)
-        .filter((item) => !isNaN(item))
-        .map(([i, x]) => x), //all averages
-      team.cycle.averageTime,
-      team.cycle.averageTimeComplete,
+      ...avgTotalPoints,
+      ...avgTotalPoints,
+      (team.cycleCoral?.averageTime ?? 0 / 1000).toFixed(2) + "s",
+      (team.cycleAlgae?.averageTime ?? 0 / 1000).toFixed(2) + "s",
+      (team.bargeCycle?.averageTimeComplete ?? 0 / 1000).toFixed(2) + "s",
+      team.avgAutoPoints?.toFixed(2) ?? "0.00",
+      team.avgTeleopPoints?.toFixed(2) ?? "0.00",
+      (team.coralAccuracy * 100)?.toFixed(2) + "%" ?? "0.00%",
+      (team.algaeAccuracy * 100)?.toFixed(2) + "%" ?? "0.00%",
+      team.avgCoralPoints?.toFixed(2) ?? "0.00",
+      team.avgAlgaePoints?.toFixed(2) ?? "0.00",
+      team.avgTotalPoints?.toFixed(2) ?? "0.00",
+      team.avgAlgaeMiss?.toFixed(2) ?? "0.00",
+      team.avgTotalMiss?.toFixed(2) ?? "0.00",
+      team.counts?.teleopl1 + (team.autol1 || 0) === 0 ? "No" : "Yes",
+      team.counts?.teleopl2 + (team.autol2 || 0) === 0 ? "No" : "Yes",
+      team.counts?.teleopl3 + (team.autol3 || 0) === 0 ? "No" : "Yes",
+      team.counts?.teleopl4 + (team.autol4 || 0) === 0 ? "No" : "Yes",
+      team.counts?.groundPickupAlgae === 0 ? "No" : "Yes",
+      team.counts?.reefPickupAlgae === 0 ? "No" : "Yes",
+      team.counts?.groundPickupCoral === 0 ? "No" : "Yes",
+      team.counts?.stationPickupCoral === 0 ? "No" : "Yes",
+      team.counts?.teleopScoreNet + team.counts?.autoScoreNet === 0
+        ? "No"
+        : "Yes",
+      team.counts?.teleopScoreProcessor + team.counts?.autoScoreProcessor === 0
+        ? "No"
+        : "Yes",
     ]);
   }
 
