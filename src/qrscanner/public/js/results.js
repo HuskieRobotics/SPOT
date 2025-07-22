@@ -258,18 +258,6 @@ function generateIdEnum(buttons) {
   return idEnum;
 }
 
-function hashEventCode(eventNumber) {
-  // convert string into 32 bit hash code
-  // this is a simple hash function, not cryptographically secure
-  // but should be sufficient for our needs
-  let hash = 0;
-  for (let i = 0; i < eventNumber.length; i++) {
-    hash = (hash << 5) - hash + eventNumber.charCodeAt(i);
-    hash |= 0; // Convert to 32bit integer
-  }
-  return hash;
-}
-
 async function decodeQRCodeUrl(image_url) {
   const qrConfig = await fetch("/config/qr.json").then((res) => res.json());
   const scoutingConfig = await fetch("/config/match-scouting.json").then(
