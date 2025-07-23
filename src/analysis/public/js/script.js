@@ -56,9 +56,7 @@ if ("serviceWorker" in navigator) {
     const modulesConfig = await fetch(`/config/analysis-modules.json`).then(
       (res) => res.json()
     );
-
     dataset = await executePipeline();
-
     matches = (await fetch("/admin/api/matches").then((res) => res.json()))
       .allMatches;
 

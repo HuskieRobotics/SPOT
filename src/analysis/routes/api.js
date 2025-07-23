@@ -246,30 +246,6 @@ router.get("/csv", async (req, res) => {
   res.send(csv);
 });
 
-router.get("/dataset/:eventNumber", async (req, res) => {
-  const eventNumber = req.params.eventNumber; // Grab the selected event number
-
-  if (!eventNumber) {
-    return res.status(400).send("Event number is required");
-  }
-
-  try {
-    // Use the eventNumber instead of the one in config to fetch event data.
-    const eventData = await TeamMatchPerformance.find({
-      eventNumber: parseInt(eventNumber, 10),
-    });
-
-    // Render the index page and pass eventData and eventNumber to the client
-    res.render(__dirname + "/views/index.ejs", {
-      eventNumber,
-      eventData: JSON.stringify(eventData),
-    });
-  } catch (error) {
-    console.error("Error fetching event data:", error);
-    res.status(500).send("Failed to fetch event data");
-  }
-});
-
 router.get("/allDataset", async (req, res) => {
   try {
     // Return all entries without filtering by eventNumber
