@@ -1,5 +1,5 @@
 const { Router } = require("express");
-const { TeamMatchPerformance } = require("../../lib/db.js");
+const { TeamMatchPerformance, Event } = require("../../lib/db.js");
 //const { executePipeline } = require("../public/js/analysisPipeline.js");
 const { setPath } = require("../../lib/util.js");
 const axios = require("axios");
@@ -246,14 +246,8 @@ router.get("/csv", async (req, res) => {
   res.send(csv);
 });
 
-router.get("/allDataset", async (req, res) => {
-  try {
-    // Return all entries without filtering by eventNumber
-    const results = await TeamMatchPerformance.find({});
-    res.json(results);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
+router.get("/events", async (req, res) => {
+  res.json(await Event.find({}));
 });
 
 module.exports = router;

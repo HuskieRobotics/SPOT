@@ -66,40 +66,22 @@ if ("serviceWorker" in navigator) {
   });
   showFade(app);
 
-  // New function to fetch the full dataset (all event numbers)
-  async function fetchAllDataset() {
-    const res = await fetch("/analysis/api/allDataset");
-    if (!res.ok) {
-      throw new Error(`Network error: ${res.status} ${res.statusText}`);
-    }
-    const contentType = res.headers.get("content-type");
-    if (!contentType || !contentType.includes("application/json")) {
-      const text = await res.text();
-      throw new Error(`Expected JSON but received: ${text.substring(0, 100)}`);
-    }
-    return res.json();
-  }
-
   // Function to populate event dropdown using the full dataset
   async function populateEventDropdown() {
     try {
-      // Fetch the full dataset from your new API endpoint
-      const allDataset = await fetchAllDataset();
-      // Extract unique event numbers
-      const eventNumbers = [
-        ...new Set(allDataset.map((item) => item.eventNumber)),
-      ];
-
+      const events = await fetch(`/analysis/api/events`).then((res) =>
+        res.json()
+      );
       const eventMenu = document.getElementById("event-menu");
       eventMenu.innerHTML = "";
 
-      eventNumbers.forEach((eventNum) => {
+      events.forEach((event) => {
         const option = document.createElement("div");
-        option.innerText = eventNum;
+        option.innerText = event.code;
         option.addEventListener("click", () => {
           // Update the URL query parameter and reload the page:
           const url = new URL(window.location.href);
-          url.searchParams.set("event", eventNum);
+          url.searchParams.set("event", event._id);
           window.location.href = url.toString();
         });
         eventMenu.appendChild(option);
