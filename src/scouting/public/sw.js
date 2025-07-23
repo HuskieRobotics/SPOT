@@ -33,6 +33,7 @@ const filesToCache = [
   "/js/local-data.js",
   "/js/match-scouting.js",
   "/js/scouting-sync.js",
+  "/js/settingsmenu.js",
   "/js/waiting.js",
   "/manifest.json",
   "/executables.js",
@@ -64,8 +65,15 @@ const filesToCache = [
   "/config/qr.json",
   // Icons
   "/icons/site.webmanifest",
+  "/icons/android-chrome-192x192.png",
+  "/icons/android-chrome-512x512.png",
+  "/icons/apple-touch-icon.png",
   "/icons/favicon-16x16.png",
   "/icons/favicon-32x32.png",
+  "/icons/menu-button-dark.png",
+  "/icons/menu-button.png",
+  "/icons/mstile-150x150.png",
+  "/icons/safari-pinned-tab.svg",
   // Offline QRCode Page
   "/qrscanner/",
   "/qrscanner/css/global.css",
