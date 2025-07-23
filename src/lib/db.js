@@ -58,7 +58,7 @@ const teamMatchPerformanceSchema = new mongoose.Schema(
     scouterId: String,
     robotNumber: Number,
     matchNumber: Number,
-    eventNumber: String,
+    eventNumber: mongoose.Schema.ObjectId,
     matchId: String,
     matchId_rand: String,
     actionQueue: [
@@ -77,7 +77,17 @@ const TeamMatchPerformance = new mongoose.model(
   teamMatchPerformanceSchema
 );
 
+const eventSchema = new mongoose.Schema(
+  {
+    code: String,
+  },
+  { collection: "events" }
+);
+
+const Event = new mongoose.model("Event", eventSchema);
+
 module.exports = {
   db,
   TeamMatchPerformance,
+  Event,
 };
