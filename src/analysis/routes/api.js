@@ -71,6 +71,33 @@ router.get("/teams", async (req, res) => {
   res.json(teams);
 });
 
+router.get("/teams/:eventID", async (req, res) => {
+  if (!config.secrets.TBA_API_KEY) {
+    return res.json([]); //no key, no teams
+  }
+  const event = await Event.findOne({ _id: req.params.eventID });
+  let eventKey = null;
+  if (event) {
+    eventKey = event.code.split("_")[0];
+  }
+  let teams = (
+    await axios
+      .get(`https://www.thebluealliance.com/api/v3/event/${eventKey}/teams`, {
+        headers: {
+          "X-TBA-Auth-Key": config.secrets.TBA_API_KEY,
+        },
+      })
+      .catch((e) =>
+        console.error(
+          e,
+          chalk.bold.red("\nError fetching teams from Blue Alliance API!")
+        )
+      )
+  ).data;
+
+  res.json(teams);
+});
+
 router.get("/manual", async (req, res) => {
   const manual = {
     teams: require("../manual/teams.json"),

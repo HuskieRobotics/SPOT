@@ -80,7 +80,11 @@ class ScoutingSync {
   /**
    * get a regional's matches from thebluealliance api
    */
-  static async getMatches() {
+  static async getMatches(eventKey) {
+    if (!eventKey) {
+      eventKey = config.TBA_EVENT_KEY;
+    }
+
     if (!config.secrets.TBA_API_KEY) {
       return []; //no key, no matches
     }
@@ -88,14 +92,11 @@ class ScoutingSync {
     let formattedMatches = [];
 
     let tbaMatches = await axios
-      .get(
-        `https://www.thebluealliance.com/api/v3/event/${config.TBA_EVENT_KEY}/matches`,
-        {
-          headers: {
-            "X-TBA-Auth-Key": config.secrets.TBA_API_KEY,
-          },
-        }
-      )
+      .get(`https://www.thebluealliance.com/api/v3/event/${eventKey}/matches`, {
+        headers: {
+          "X-TBA-Auth-Key": config.secrets.TBA_API_KEY,
+        },
+      })
       .catch((e) =>
         console.log(
           e,
@@ -105,12 +106,12 @@ class ScoutingSync {
 
     if (tbaMatches === undefined) {
       if (config.secrets.FMS_API_KEY) {
-        let uri = `https://frc-api.firstinspires.org/v3.0/${config.TBA_EVENT_KEY.substring(
+        let uri = `https://frc-api.firstinspires.org/v3.0/${eventKey.substring(
           0,
           4
-        )}/schedule/${config.TBA_EVENT_KEY.substring(
+        )}/schedule/${eventKey.substring(
           4,
-          config.TBA_EVENT_KEY.length
+          eventKey.length
         )}?tournamentLevel=practice`;
 
         let frcPracticeMatches = await axios

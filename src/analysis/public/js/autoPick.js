@@ -59,12 +59,29 @@ function sortTeams(teams) {
 //-------------------------------------------------------------------------------------------------------------------------------------//
 
 async function fetchDataset() {
-  return await fetch("./api/dataset").then((res) => res.json());
+  const eventID = getSelectedEvent();
+  let dataset;
+  // If an event is specified, fetch using the new endpoint.
+  if (eventID) {
+    dataset = await fetch(`./api/dataset/${eventID}`).then((res) => res.json());
+  } else {
+    dataset = await fetch("./api/dataset").then((res) => res.json());
+  }
+  return dataset;
 }
 let dataset = fetchDataset();
 
 async function fetchTeams() {
-  const teams = await fetch(`/analysis/api/teams`).then((res) => res.json());
+  const eventID = getSelectedEvent();
+  let teams;
+  // If an event is specified, fetch using the new endpoint.
+  if (eventID) {
+    teams = await fetch(`/analysis/api/teams/${eventID}`).then((res) =>
+      res.json()
+    );
+  } else {
+    teams = await fetch("/analysis/api/teams").then((res) => res.json());
+  }
   return teams.reduce((acc, t) => {
     acc[t.team_number] = t.nickname;
     return acc;

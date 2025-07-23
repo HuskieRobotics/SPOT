@@ -17,6 +17,15 @@ if ("serviceWorker" in navigator) {
   });
 }
 
+function getSelectedEvent() {
+  // Parse the query string to check for the 'event' parameter.
+  const queryString = window.location.search;
+  const urlParams = new URLSearchParams(queryString);
+  const eventID = urlParams.get("event");
+  console.log("Event selected:", eventID);
+  return eventID;
+}
+
 (async () => {
   //modules object structure
   const modules = {
@@ -57,8 +66,16 @@ if ("serviceWorker" in navigator) {
       (res) => res.json()
     );
     dataset = await executePipeline();
-    matches = (await fetch("/admin/api/matches").then((res) => res.json()))
-      .allMatches;
+
+    const eventID = getSelectedEvent();
+    if (eventID) {
+      matches = (
+        await fetch(`/admin/api/matches/${eventID}`).then((res) => res.json())
+      ).allMatches;
+    } else {
+      matches = (await fetch("/admin/api/matches").then((res) => res.json()))
+        .allMatches;
+    }
 
     initDashboard(dataset, modulesConfig);
     initSidebarToggle();
@@ -92,7 +109,15 @@ if ("serviceWorker" in navigator) {
   }
 
   async function fetchTeams() {
-    const teams = await fetch(`/analysis/api/teams`).then((res) => res.json());
+    let teams = [];
+    const eventID = getSelectedEvent();
+    if (eventID) {
+      teams = await fetch(`/analysis/api/teams/${eventID}`).then((res) =>
+        res.json()
+      );
+    } else {
+      teams = await fetch(`/analysis/api/teams`).then((res) => res.json());
+    }
     return teams.reduce((acc, t) => {
       acc[t.team_number] = t.nickname;
       return acc;

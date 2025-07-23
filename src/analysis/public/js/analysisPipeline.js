@@ -1,9 +1,5 @@
 async function executePipeline() {
-  // Parse the query string to check for the 'event' parameter.
-  const queryString = window.location.search;
-  const urlParams = new URLSearchParams(queryString);
-  const eventID = urlParams.get("event");
-  console.log("Event selected:", eventID);
+  const eventID = getSelectedEvent();
 
   // Get tmps from database (or cache if offline)
 
@@ -36,6 +32,7 @@ async function executePipeline() {
 
   let dataset = { tmps, teams };
 
+  // FIXME: figure out what the manual endpoint is for (and its associated json files)
   const manual = await fetch("./api/manual").then((res) => res.json());
   const pipelineConfig = await fetch(
     "../../../config/analysis-pipeline.json"
