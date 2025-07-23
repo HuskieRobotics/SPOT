@@ -1,5 +1,5 @@
 const { Router } = require("express");
-const { TeamMatchPerformance } = require("../../lib/db.js");
+const { TeamMatchPerformance, Event } = require("../../lib/db.js");
 //const { executePipeline } = require("../public/js/analysisPipeline.js");
 const { setPath } = require("../../lib/util.js");
 const axios = require("axios");
@@ -10,7 +10,15 @@ let router = Router();
 
 router.get("/dataset", async (req, res) => {
   res.json(
-    await TeamMatchPerformance.find({ eventNumber: config.EVENT_NUMBER })
+    await TeamMatchPerformance.find({
+      eventNumber: config.EVENT_NUMBER,
+    })
+  );
+});
+
+router.get("/dataset/:eventID", async (req, res) => {
+  res.json(
+    await TeamMatchPerformance.find({ eventNumber: req.params.eventID })
   );
 });
 
@@ -60,6 +68,33 @@ router.get("/teams", async (req, res) => {
         )
     ).data;
   }
+  res.json(teams);
+});
+
+router.get("/teams/:eventID", async (req, res) => {
+  if (!config.secrets.TBA_API_KEY) {
+    return res.json([]); //no key, no teams
+  }
+  const event = await Event.findOne({ _id: req.params.eventID });
+  let eventKey = null;
+  if (event) {
+    eventKey = event.code.split("_")[0];
+  }
+  let teams = (
+    await axios
+      .get(`https://www.thebluealliance.com/api/v3/event/${eventKey}/teams`, {
+        headers: {
+          "X-TBA-Auth-Key": config.secrets.TBA_API_KEY,
+        },
+      })
+      .catch((e) =>
+        console.error(
+          e,
+          chalk.bold.red("\nError fetching teams from Blue Alliance API!")
+        )
+      )
+  ).data;
+
   res.json(teams);
 });
 
@@ -236,6 +271,10 @@ router.get("/csv", async (req, res) => {
     .reduce((acc, row) => acc + `${row}\n`, "");
   res.set({ "Content-Disposition": `attachment; filename="teams.csv"` });
   res.send(csv);
+});
+
+router.get("/events", async (req, res) => {
+  res.json(await Event.find({}));
 });
 
 module.exports = router;

@@ -17,8 +17,17 @@ if ("serviceWorker" in navigator) {
   });
 }
 
+function getSelectedEvent() {
+  // Parse the query string to check for the 'event' parameter.
+  const queryString = window.location.search;
+  const urlParams = new URLSearchParams(queryString);
+  const eventID = urlParams.get("event");
+  console.log("Event selected:", eventID);
+  return eventID;
+}
+
 (async () => {
-  //modules object strucutre
+  //modules object structure
   const modules = {
     team: [],
     match: {
@@ -28,6 +37,27 @@ if ("serviceWorker" in navigator) {
     },
   };
 
+  populateEventDropdown();
+
+  const menu = document.getElementById("event-menu");
+
+  const eventButton = document.getElementById("event-button");
+  eventButton.addEventListener("click", (e) => {
+    // Toggle dropdown display
+    menu.style.display =
+      menu.style.display === "none" || menu.style.display === ""
+        ? "block"
+        : "none";
+    e.stopPropagation();
+  });
+
+  // Hide the dropdown if clicking outside
+  document.addEventListener("click", (e) => {
+    if (!document.getElementById("event-dropdown").contains(e.target)) {
+      menu.style.display = "none";
+    }
+  });
+
   //start loading animation, fetch modules config, fetch dataset, then initialize UI elements
   let dataset;
   let matches;
@@ -36,8 +66,16 @@ if ("serviceWorker" in navigator) {
       (res) => res.json()
     );
     dataset = await executePipeline();
-    matches = (await fetch("/admin/api/matches").then((res) => res.json()))
-      .allMatches;
+
+    const eventID = getSelectedEvent();
+    if (eventID) {
+      matches = (
+        await fetch(`/admin/api/matches/${eventID}`).then((res) => res.json())
+      ).allMatches;
+    } else {
+      matches = (await fetch("/admin/api/matches").then((res) => res.json()))
+        .allMatches;
+    }
 
     initDashboard(dataset, modulesConfig);
     initSidebarToggle();
@@ -45,13 +83,41 @@ if ("serviceWorker" in navigator) {
   });
   showFade(app);
 
-  //data fetchers
-  async function fetchDataset() {
-    return await fetch("./api/dataset").then((res) => res.json());
+  // Function to populate event dropdown using the full dataset
+  async function populateEventDropdown() {
+    try {
+      const events = await fetch(`/analysis/api/events`).then((res) =>
+        res.json()
+      );
+      const eventMenu = document.getElementById("event-menu");
+      eventMenu.innerHTML = "";
+
+      events.forEach((event) => {
+        const option = document.createElement("div");
+        option.innerText = event.code;
+        option.addEventListener("click", () => {
+          // Update the URL query parameter and reload the page:
+          const url = new URL(window.location.href);
+          url.searchParams.set("event", event._id);
+          window.location.href = url.toString();
+        });
+        eventMenu.appendChild(option);
+      });
+    } catch (error) {
+      console.error("Error populating event dropdown:", error);
+    }
   }
 
   async function fetchTeams() {
-    const teams = await fetch(`/analysis/api/teams`).then((res) => res.json());
+    let teams = [];
+    const eventID = getSelectedEvent();
+    if (eventID) {
+      teams = await fetch(`/analysis/api/teams/${eventID}`).then((res) =>
+        res.json()
+      );
+    } else {
+      teams = await fetch(`/analysis/api/teams`).then((res) => res.json());
+    }
     return teams.reduce((acc, t) => {
       acc[t.team_number] = t.nickname;
       return acc;
