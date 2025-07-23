@@ -12,10 +12,6 @@ router.get("/", (req, res) => {
   res.render(__dirname + "/views/index.ejs", { config }); // Pass the config object to the EJS template
 });
 
-router.get("/", (req, res) => {
-  res.render(__dirname + "/views/index.ejs");
-});
-
 let modulesOutput;
 router.get("/modules.js", (req, res) => {
   if (modulesOutput) {
