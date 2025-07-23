@@ -296,14 +296,12 @@ async function decodeQRCodeUrl(image_url) {
     matchId_rand: parseInt(bits.slice(136, 200), 2).toString(32),
     actionQueue: [],
   };
-  console.log("teamMatchPerformance", teamMatchPerformance);
   teamMatchPerformance.matchId = `${teamMatchPerformance.matchNumber}-${teamMatchPerformance.robotNumber}-${teamMatchPerformance.scouterId}-${teamMatchPerformance.matchId_rand}`;
 
   let actionSize = ACTION_SCHEMA.reduce((acc, x) => acc + x.bits, 0);
 
   let nextAction = actionQueueBits.slice(0, actionSize);
   actionQueueBits = actionQueueBits.slice(actionSize);
-  console.log("actionQueueBits", actionQueueBits);
   // This code was like 3 years old when it was handed down to me with absolutely zero
   // documentation, I have no idea how it works but it does
   while (nextAction.slice(0, 8) != "11111111") {

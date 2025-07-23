@@ -67,18 +67,12 @@ class QREncoder {
       .split(".")
       .map((x) => parseInt(x));
 
-    console.log("1");
     out += QREncoder.encodeValue(majorVersion, 255, 0, 8); // major version (8 bits)
-    console.log("2");
     out += QREncoder.encodeValue(minorVersion, 255, 0, 8); // minor version (8 bits)
-    console.log("3");
-    console.log(teamMatchPerformance.eventNumber.toString());
     const eventNumberParts = teamMatchPerformance.eventNumber
       .toString()
       .match(/.{1,8}/g); //split the event number into 8 digit parts
-    console.log("eventNumberParts", eventNumberParts);
     for (const eventNumberPart of eventNumberParts) {
-      console.log("event number part", eventNumberPart);
       out += QREncoder.encodeValue(
         parseInt(eventNumberPart, 16),
         2 ** 32 - 1,
@@ -86,21 +80,18 @@ class QREncoder {
         32
       ); //event number part (32 bits)
     }
-    console.log("4");
     out += QREncoder.encodeValue(
       parseInt(teamMatchPerformance.matchNumber),
       255,
       0,
       8
     ); // match number (8 bits)
-    console.log("5");
     out += QREncoder.encodeValue(
       parseInt(teamMatchPerformance.robotNumber),
       65535,
       0,
       16
     ); // team number (16 bits)
-    console.log("6");
     out += QREncoder.encodeValue(
       parseInt(teamMatchPerformance.matchId_rand, "32"),
       2 ** 64 - 1,
@@ -108,15 +99,14 @@ class QREncoder {
       64
     ); // matchId_rand (64 bits)
 
-    console.log("7");
-    console.log(this.ID_ENUM);
+    // console.log(this.ID_ENUM);
     /****** Action Queue ******/
     for (let action of teamMatchPerformance.actionQueue) {
       //action's values are defined by the ACTION_SCHEMA in qr.json
       for (let { key, bits } of this.ACTION_SCHEMA) {
         if (key == "id") {
-          console.log("ID:");
-          console.log(this.ID_ENUM[getVal(action, key)]);
+          // console.log("ID:");
+          // console.log(this.ID_ENUM[getVal(action, key)]);
           out += QREncoder.encodeValue(
             this.ID_ENUM[getVal(action, key)],
             2 ** bits - 2,
@@ -124,8 +114,8 @@ class QREncoder {
             bits
           ); //254 max unique ids, probably enough for 99.9% of scouting apps
         } else {
-          console.log("ts:");
-          console.log(parseInt(getVal(action, key)));
+          // console.log("ts:");
+          // console.log(parseInt(getVal(action, key)));
           out += QREncoder.encodeValue(
             parseInt(getVal(action, key)),
             2 ** bits - 1,
@@ -139,10 +129,10 @@ class QREncoder {
 
     out += "11111111"; //filled byte to signify the end of the action queue
 
-    console.log(
-      "hex bytes",
-      out.match(/.{1,8}/g).map((x) => parseInt(x, 2).toString(16))
-    );
+    // console.log(
+    //   "hex bytes",
+    //   out.match(/.{1,8}/g).map((x) => parseInt(x, 2).toString(16))
+    // );
 
     const data = new Uint8ClampedArray(
       out.match(/.{1,8}/g).map((x) => parseInt(x, 2))
