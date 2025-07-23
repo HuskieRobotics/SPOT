@@ -16,9 +16,9 @@ router.get("/dataset", async (req, res) => {
   );
 });
 
-router.get("/dataset/:eventNumber", async (req, res) => {
+router.get("/dataset/:eventID", async (req, res) => {
   res.json(
-    await TeamMatchPerformance.find({ eventNumber: req.params.eventNumber })
+    await TeamMatchPerformance.find({ eventNumber: req.params.eventID })
   );
 });
 

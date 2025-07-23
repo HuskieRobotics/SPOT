@@ -2,15 +2,15 @@ async function executePipeline() {
   // Parse the query string to check for the 'event' parameter.
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
-  const eventNumber = urlParams.get("event");
-  console.log("Event selected:", eventNumber);
+  const eventID = urlParams.get("event");
+  console.log("Event selected:", eventID);
 
   // Get tmps from database (or cache if offline)
 
   let tmps;
   // If an event is specified, fetch using the new endpoint.
-  if (eventNumber) {
-    tmps = await fetch(`/analysis/api/dataset/${eventNumber}`).then((res) =>
+  if (eventID) {
+    tmps = await fetch(`/analysis/api/dataset/${eventID}`).then((res) =>
       res.json()
     );
   } else {
