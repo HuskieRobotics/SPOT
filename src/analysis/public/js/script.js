@@ -50,35 +50,17 @@ if ("serviceWorker" in navigator) {
   });
 
   //start loading animation, fetch modules config, fetch dataset, then initialize UI elements
-  //start loading animation, fetch modules config, fetch dataset, then initialize UI elements
-  //start loading animation, fetch modules config, fetch dataset, then initialize UI elements
   let dataset;
   let matches;
   await loadAround(async () => {
-    // Fetch analysis modules config
-    const modulesConfigResponse = await fetch(`/config/analysis-modules.json`);
-    if (!modulesConfigResponse.ok) {
-      throw new Error("Failed to fetch analysis modules config");
-    }
-    const modulesConfig = await modulesConfigResponse.json();
+    const modulesConfig = await fetch(`/config/analysis-modules.json`).then(
+      (res) => res.json()
+    );
 
-    // Execute the pipeline (ensure executePipeline returns valid JSON)
     dataset = await executePipeline();
 
-    // Fetch matches and verify response before parsing
-    const matchesResponse = await fetch("/admin/api/matches");
-    if (!matchesResponse.ok) {
-      throw new Error("Failed to fetch matches");
-    }
-    const matchesContentType = matchesResponse.headers.get("content-type");
-    if (
-      !matchesContentType ||
-      !matchesContentType.includes("application/json")
-    ) {
-      const text = await matchesResponse.text();
-      throw new Error(`Expected JSON but received: ${text.substring(0, 100)}`);
-    }
-    matches = (await matchesResponse.json()).allMatches;
+    matches = (await fetch("/admin/api/matches").then((res) => res.json()))
+      .allMatches;
 
     initDashboard(dataset, modulesConfig);
     initSidebarToggle();
