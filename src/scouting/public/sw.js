@@ -13,25 +13,32 @@ const cacheVersion = "scouting-cache-v1";
 
 const filesToCache = [
   "/",
+  "/css/form-dark.css",
   "/css/form.css",
   "/css/global.css",
+  "/css/internal-dark.css",
   "/css/internal.css",
+  "/css/landing-dark.css",
   "/css/landing.css",
+  "/css/match-scouting-dark.css",
   "/css/match-scouting.css",
+  "/css/waiting-dark.css",
   "/css/waiting.css",
   "/icons/favicon.ico",
   "/img/field.svg",
   "/img/gear.svg",
+  "/img/logo-dark-mode.png",
   "/img/logo.png",
   "/img/spinner.svg",
+  "/js/lib/jsqr.js",
   "/js/lib/qrcode.js",
-  "/js/qrcode.js",
   "/js/form.js",
   "/js/global.js",
   "/js/internal.js",
   "/js/landing.js",
   "/js/local-data.js",
   "/js/match-scouting.js",
+  "/js/qrcode.js",
   "/js/scouting-sync.js",
   "/js/settingsmenu.js",
   "/js/waiting.js",
@@ -41,18 +48,19 @@ const filesToCache = [
   "/analysis/",
   "/analysis/modules.js",
   "/analysis/transformers.js",
+  "/analysis/css/global.css",
   "/analysis/css/style.css",
   "/analysis/css/internal.css",
-  "/analysis/css/global.css",
   "/analysis/img/field.svg",
   "/analysis/img/logo.png",
   "/analysis/img/spinner.svg",
+  "/analysis/js/analysisPipeline.js",
+  "/analysis/js/autoPick.js",
+  "/analysis/js/DataTransformer.js",
   "/analysis/js/elements.js",
   "/analysis/js/script.js",
   "/analysis/js/ui.js",
   "/analysis/js/util.js",
-  "/analysis/js/analysisPipeline.js",
-  "/analysis/js/DataTransformer.js",
   "/analysis/api/dataset",
   "/analysis/api/teams",
   "/analysis/api/manual",
@@ -79,6 +87,7 @@ const filesToCache = [
   "/qrscanner/css/global.css",
   "/qrscanner/css/scanner.css",
   "/qrscanner/js/html5-qrcode.min.js",
+  "/qrscanner/js/qr-sync.js",
   "/qrscanner/js/results.js",
 ];
 
@@ -92,6 +101,7 @@ self.addEventListener("install", function (event) {
 });
 
 self.addEventListener("fetch", (event) => {
+  console.log("Fetch event for ", event.request.url);
   event.respondWith(
     caches.open(cacheVersion).then((cache) => {
       return cache.match(event.request).then((response) => {
@@ -104,7 +114,7 @@ self.addEventListener("fetch", (event) => {
             }
             return networkResponse;
           })
-          .catch((e) => console.log(e));
+          .catch((e) => console.log(e, "Error fetching:", event.request.url));
 
         return response || fetchPromise;
       });
