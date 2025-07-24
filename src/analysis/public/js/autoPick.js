@@ -59,7 +59,10 @@ function sortTeams(teams) {
 //-------------------------------------------------------------------------------------------------------------------------------------//
 
 async function fetchDataset() {
-  const eventID = getSelectedEvent();
+  // Parse the query string to check for the 'event' parameter.
+  const queryString = window.location.search;
+  const urlParams = new URLSearchParams(queryString);
+  const eventID = urlParams.get("event");
   let dataset;
   // If an event is specified, fetch using the new endpoint.
   if (eventID) {
@@ -72,7 +75,10 @@ async function fetchDataset() {
 let dataset = fetchDataset();
 
 async function fetchTeams() {
-  const eventID = getSelectedEvent();
+  // Parse the query string to check for the 'event' parameter.
+  const queryString = window.location.search;
+  const urlParams = new URLSearchParams(queryString);
+  const eventID = urlParams.get("event");
   let teams;
   // If an event is specified, fetch using the new endpoint.
   if (eventID) {
