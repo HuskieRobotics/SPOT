@@ -12,7 +12,9 @@ const cacheVersion = "scouting-cache-v1";
  */
 
 const filesToCache = [
+  // scouting page
   "/",
+  "/executables.js",
   "/css/form-dark.css",
   "/css/form.css",
   "/css/global.css",
@@ -24,7 +26,17 @@ const filesToCache = [
   "/css/match-scouting.css",
   "/css/waiting-dark.css",
   "/css/waiting.css",
+  "/icons/android-chrome-192x192.png",
+  "/icons/android-chrome-512x512.png",
+  "/icons/apple-touch-icon.png",
+  "/icons/favicon-16x16.png",
+  "/icons/favicon-32x32.png",
   "/icons/favicon.ico",
+  "/icons/menu-button-dark.png",
+  "/icons/menu-button.png",
+  "/icons/mstile-150x150.png",
+  "/icons/safari-pinned-tab.svg",
+  "/icons/site.webmanifest",
   "/img/field.svg",
   "/img/gear.svg",
   "/img/logo-dark-mode.png",
@@ -43,14 +55,24 @@ const filesToCache = [
   "/js/settingsmenu.js",
   "/js/waiting.js",
   "/manifest.json",
-  "/executables.js",
-  // Offline Analysis Page
+
+  // analysis page
   "/analysis/",
+  "/analysis/modules.css",
   "/analysis/modules.js",
   "/analysis/transformers.js",
   "/analysis/css/global.css",
-  "/analysis/css/style.css",
   "/analysis/css/internal.css",
+  "/analysis/css/style.css",
+  "/analysis/icons/android-chrome-192x192.png",
+  "/analysis/icons/android-chrome-512x512.png",
+  "/analysis/icons/apple-touch-icon.png",
+  "/analysis/icons/favicon-16x16.png",
+  "/analysis/icons/favicon-32x32.png",
+  "/analysis/icons/favicon.ico",
+  "/analysis/icons/mstile-150x150.png",
+  "/analysis/icons/safari-pinned-tab.svg",
+  "/analysis/icons/site.webmanifest",
   "/analysis/img/field.svg",
   "/analysis/img/logo.png",
   "/analysis/img/spinner.svg",
@@ -64,31 +86,45 @@ const filesToCache = [
   "/analysis/api/dataset",
   "/analysis/api/teams",
   "/analysis/api/manual",
-  // Config
-  "/config/analysis-pipeline.json",
-  "/config/analysis-modules.json",
+  "/analysis/api/events",
+
+  // config
   "/admin/api/matches",
+  "/config/analysis-modules.json",
+  "/config/analysis-pipeline.json",
   "/config/config.json",
   "/config/match-scouting.json",
   "/config/qr.json",
-  // Icons
-  "/icons/site.webmanifest",
-  "/icons/android-chrome-192x192.png",
-  "/icons/android-chrome-512x512.png",
-  "/icons/apple-touch-icon.png",
-  "/icons/favicon-16x16.png",
-  "/icons/favicon-32x32.png",
-  "/icons/menu-button-dark.png",
-  "/icons/menu-button.png",
-  "/icons/mstile-150x150.png",
-  "/icons/safari-pinned-tab.svg",
-  // Offline QRCode Page
+
+  // QR code page
   "/qrscanner/",
   "/qrscanner/css/global.css",
   "/qrscanner/css/scanner.css",
+  "/qrscanner/icons/android-chrome-192x192.png",
+  "/qrscanner/icons/android-chrome-512x512.png",
+  "/qrscanner/icons/apple-touch-icon.png",
+  "/qrscanner/icons/favicon-16x16.png",
+  "/qrscanner/icons/favicon-32x32.png",
+  "/qrscanner/icons/favicon.ico",
+  "/qrscanner/icons/mstile-150x150.png",
+  "/qrscanner/icons/safari-pinned-tab.svg",
+  "/qrscanner/icons/site.webmanifest",
   "/qrscanner/js/html5-qrcode.min.js",
   "/qrscanner/js/qr-sync.js",
   "/qrscanner/js/results.js",
+
+  // external files
+  "https://cdn.plot.ly/plotly-2.8.3.min.js",
+  "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css",
+  "https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;700&family=Saira:wght@300;400;700&family=Tajawal:wght@300;400;700&display=swap",
+  "https://fonts.googleapis.com/css2?family=Zilla+Slab:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap",
+  "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/webfonts/fa-brands-400.ttf",
+  "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/webfonts/fa-solid-900.ttf",
+  "https://fonts.gstatic.com/s/cairo/v30/SLXVc1nY6HkvangtZmpQdkhzfH5lkSscRiyS8p4_RA.woff2",
+  "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/webfonts/fa-solid-900.woff2",
+  "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/webfonts/fa-brands-400.woff2",
+  "https://unpkg.com/simple-statistics@7.8.0/dist/simple-statistics.min.js",
+  "https://cdn.jsdelivr.net/npm/fuzzysort@1.2.1/fuzzysort.js",
 ];
 
 self.addEventListener("install", function (event) {
@@ -101,7 +137,6 @@ self.addEventListener("install", function (event) {
 });
 
 self.addEventListener("fetch", (event) => {
-  console.log("Fetch event for ", event.request.url);
   event.respondWith(
     caches.open(cacheVersion).then((cache) => {
       return cache.match(event.request).then((response) => {
