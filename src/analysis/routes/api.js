@@ -110,9 +110,7 @@ router.get("/csv", async (req, res) => {
   async function executePipeline() {
     // Get tmps from database (or cache if offline)
 
-    let tmps = await axios
-      .get("http://localhost:8080/analysis/api/dataset")
-      .then((res) => res.data);
+    let tmps = await axios.get("/analysis/api/dataset").then((res) => res.data);
 
     // Get all tmps stored in the local storage (from qr code)
     const storage = await TeamMatchPerformance.find({
@@ -136,10 +134,10 @@ router.get("/csv", async (req, res) => {
     let dataset = { tmps, teams };
 
     const manual = await axios
-      .get("http://localhost:8080/analysis/api/manual")
+      .get("/analysis/api/manual")
       .then((res) => res.data);
     const pipelineConfig = await axios
-      .get("http://localhost:8080/config/analysis-pipeline.json")
+      .get("/config/analysis-pipeline.json")
       .then((res) => res.data);
 
     // This will show up as a method that doesn't exist since it is gotten from the server
