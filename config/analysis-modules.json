@@ -254,7 +254,7 @@
         },
         {
           "name": "Algae Time to Score",
-          "path": "cycleAlgae.averageTime",
+          "path": "cycles.algae.averageTime",
           "multiplier": 0.001,
           "decimals": 2,
           "hideIfValue": 0,
@@ -263,7 +263,7 @@
         },
         {
           "name": "Coral Time to Score",
-          "path": "cycleCoral.averageTime",
+          "path": "cycles.coral.averageTime",
           "multiplier": 0.001,
           "decimals": 2,
           "hideIfValue": 0,
@@ -272,7 +272,7 @@
         },
         {
           "name": "Average Time to Climb",
-          "path": "bargeCycle.averageTimeComplete",
+          "path": "cycles.barge.averageTimeComplete",
           "multiplier": 0.001,
           "decimals": 2,
           "hideIfValue": 0,

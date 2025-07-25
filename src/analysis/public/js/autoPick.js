@@ -180,12 +180,13 @@ function matchAverage(alliance1, alliance2) {
   //console.log("alliance1")
   //console.log(alliance1);
   for (let a = 0; a < alliance1.length; a++) {
-    data = getPath(alliance1[a], "avgTotalPoints", 0);
+    // FIXME: we need to document that certain paths are required to be in the analysis-pipeline.json file; this is one of them
+    data = getPath(alliance1[a], "averageScores.total", 0);
     alliance1Avg += data;
   }
   let alliance2Avg = 0;
   for (let a = 0; a < alliance2.length; a++) {
-    data = getPath(alliance2[a], "avgTotalPoints", 0);
+    data = getPath(alliance2[a], "averageScores.total", 0);
     alliance2Avg += data;
   }
   return alliance1Avg - alliance2Avg;
@@ -199,6 +200,7 @@ function matchAverage(alliance1, alliance2) {
 function matchStandardDeviation(alliance1, alliance2) {
   let alliance1SD = 0;
   for (let a = 0; a < alliance1.length; a++) {
+    // FIXME: we need to document that certain paths are required to be in the analysis-pipeline.json file; this is one of them
     data = getPath(alliance1[a], "standardDeviation", 0);
     alliance1SD += Math.pow(data, 2);
   }

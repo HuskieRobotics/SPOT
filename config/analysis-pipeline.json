@@ -144,7 +144,7 @@
   {
     "type": "tmp",
     "name": "cycle",
-    "outputPath": "cycleAlgae",
+    "outputPath": "cycles.algae",
     "options": {
       "pickups": [
         "teleopGroundPickupAlgae",
@@ -169,7 +169,7 @@
   {
     "type": "tmp",
     "name": "cycle",
-    "outputPath": "cycleCoral",
+    "outputPath": "cycles.coral",
     "options": {
       "pickups": [
         "autoGroundPickupCoral",
@@ -227,7 +227,7 @@
   {
     "type": "tmp",
     "name": "cycle",
-    "outputPath": "bargeCycle",
+    "outputPath": "cycles.barge",
     "options": {
       "pickups": ["barge"],
       "scores": ["shallow", "deep"],
@@ -432,6 +432,14 @@
   },
   {
     "type": "team",
+    "name": "standardDeviation",
+    "outputPath": "standardDeviation",
+    "options": {
+      "path": "scores.total"
+    }
+  },
+  {
+    "type": "team",
     "name": "average",
     "outputPath": "avgLeave",
     "options": {
@@ -533,68 +541,102 @@
   {
     "type": "team",
     "name": "aggregateArray",
-    "outputPath": "bargeCycle.all",
+    "outputPath": "cycles.barge.all",
     "options": {
-      "path": "bargeCycle.all"
+      "path": "cycles.barge.all"
     }
   },
   {
     "type": "team",
     "name": "aggregateArray",
-    "outputPath": "bargeCycle.allComplete",
+    "outputPath": "cycles.barge.allComplete",
     "options": {
-      "path": "bargeCycle.allComplete"
+      "path": "cycles.barge.allComplete"
     }
   },
   {
     "type": "team",
     "name": "averageArray",
-    "outputPath": "bargeCycle.averageTime",
+    "outputPath": "cycles.barge.averageTime",
     "options": {
-      "arrayPath": "bargeCycle.all",
+      "arrayPath": "cycles.barge.all",
       "valuePath": "timeDifferential"
     }
   },
   {
     "type": "team",
     "name": "averageArray",
-    "outputPath": "bargeCycle.averageTimeComplete",
+    "outputPath": "cycles.barge.averageTimeComplete",
     "options": {
-      "arrayPath": "bargeCycle.allComplete",
+      "arrayPath": "cycles.barge.allComplete",
       "valuePath": "timeDifferential"
     }
   },
   {
     "type": "team",
     "name": "aggregateArray",
-    "outputPath": "cycleAlgae.all",
+    "outputPath": "cycles.algae.all",
     "options": {
-      "path": "cycleAlgae.all"
+      "path": "cycles.algae.all"
+    }
+  },
+  {
+    "type": "team",
+    "name": "aggregateArray",
+    "outputPath": "cycles.algae.allComplete",
+    "options": {
+      "path": "cycles.algae.allComplete"
     }
   },
   {
     "type": "team",
     "name": "averageArray",
-    "outputPath": "cycleAlgae.averageTime",
+    "outputPath": "cycles.algae.averageTime",
     "options": {
-      "arrayPath": "cycleAlgae.all",
+      "arrayPath": "cycles.algae.all",
+      "valuePath": "timeDifferential"
+    }
+  },
+  {
+    "type": "team",
+    "name": "averageArray",
+    "outputPath": "cycles.algae.averageTimeComplete",
+    "options": {
+      "arrayPath": "cycles.algae.allComplete",
       "valuePath": "timeDifferential"
     }
   },
   {
     "type": "team",
     "name": "aggregateArray",
-    "outputPath": "cycleCoral.all",
+    "outputPath": "cycles.coral.all",
     "options": {
-      "path": "cycleCoral.all"
+      "path": "cycles.coral.all"
+    }
+  },
+  {
+    "type": "team",
+    "name": "aggregateArray",
+    "outputPath": "cycles.coral.allComplete",
+    "options": {
+      "path": "cycles.coral.allComplete"
     }
   },
   {
     "type": "team",
     "name": "averageArray",
-    "outputPath": "cycleCoral.averageTime",
+    "outputPath": "cycles.coral.averageTime",
     "options": {
-      "arrayPath": "cycleCoral.all",
+      "arrayPath": "cycles.coral.all",
+      "valuePath": "timeDifferential"
+    }
+  },
+  {
+    "type": "team",
+    "name": "averageArray",
+    "outputPath": "cycles.coral.averageTimeComplete",
+    "options": {
+      "arrayPath": "cycles.coral.allComplete",
       "valuePath": "timeDifferential"
     }
   },
@@ -607,5 +649,21 @@
       "denominator": ["totalAlgaeScored", "totalCoralScored"]
     },
     "divByZero": 150000
+  },
+  {
+    "type": "team",
+    "name": "average",
+    "outputPath": "averages",
+    "options": {
+      "path": "counts"
+    }
+  },
+  {
+    "type": "team",
+    "name": "average",
+    "outputPath": "averageScores",
+    "options": {
+      "path": "scores"
+    }
   }
 ]
