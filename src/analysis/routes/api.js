@@ -188,78 +188,62 @@ router.get("/csv", async (req, res) => {
   };
 
   // Adding the data which is required for the CSV
+
+  // FIXME: different teams may have different values under averages and averageScores, we need to
+  // capture the superset of these values and then use that to create the header row.
+  const averageKeys = new Set();
+  const averageScoreKeys = new Set();
+  const cycleKeys = new Set();
   for (let [teamNumber, team] of Object.entries(dataset2.teams).filter(
     ([num, team]) => checkData(team)
   )) {
+    Object.keys(team.averages).forEach((key) => averageKeys.add(key));
+    Object.keys(team.averageScores).forEach((key) => averageScoreKeys.add(key));
+    Object.keys(team.cycles).forEach((key) => cycleKeys.add(key));
+  }
+
+  for (let [teamNumber, team] of Object.entries(dataset2.teams).filter(
+    ([num, team]) => checkData(team)
+  )) {
+    // FIXME: we need to document that certain paths are required to be in the analysis-pipeline.json file;
+    // several are required for the older and more maintainable version of this method;
+    // check the GitHub issue for details.
     if (headerRow) {
       headerRow = false;
       rows.push([
         "Team #",
-        ...Object.entries(team.avgTotalPoints ?? {})
-          .filter(([key, value]) => !isNaN(value) && value)
-          .map(([i, x]) => i + " Average"),
-        ...Object.entries(team.avgTotalPoints ?? {})
-          .filter(([key, value]) => !isNaN(value))
-          .map(([i, x]) => i + " Score Average"),
-        "Average Coral Cycle Time",
-        "Average Algae Cycle Time",
-        "Average Time to Climb",
-        "Average Auto Points",
-        "Average Teleop Points",
-        "Coral Accuracy",
-        "Algae Accuracy",
-        "Average Coral Points",
-        "Average Algae Points",
-        "Average Total Points",
-        "Average Coral Miss",
-        "Average Algae Miss",
-        "Lv 1 Coral",
-        "Lv 2 Coral",
-        "Lv 3 Coral",
-        "Lv 4 Coral",
-        "Ground Pickup Algae",
-        "Reef Pickup Algae",
-        "Ground Pickup Coral",
-        "Station Pickup Coral",
-        "Algae Score Net",
-        "Algae Score Processor",
+        ...Array.from(averageKeys).map((key) => key + " Average"), // all averages
+        ...Array.from(averageScoreKeys).map((key) => key + " Score Average"), // all average scores
+        ...Array.from(cycleKeys).map((key) => key + " Cycle Average Time"), // all cycles (average time
+        ...Array.from(cycleKeys).map(
+          (key) => key + " Cycle Average Time Complete"
+        ), // all cycles (average time complete)
       ]);
     }
-
-    const avgTotalPoints = Object.entries(team.avgTotalPoints ?? {})
-      .filter(([key, value]) => !isNaN(value) && value)
-      .map(([i, x]) => x);
-
     rows.push([
       teamNumber,
-      ...avgTotalPoints,
-      ...avgTotalPoints,
-      (team.cycleCoral?.averageTime ?? 0 / 1000).toFixed(2) + "s",
-      (team.cycleAlgae?.averageTime ?? 0 / 1000).toFixed(2) + "s",
-      (team.bargeCycle?.averageTimeComplete ?? 0 / 1000).toFixed(2) + "s",
-      team.avgAutoPoints?.toFixed(2) ?? "0.00",
-      team.avgTeleopPoints?.toFixed(2) ?? "0.00",
-      (team.coralAccuracy * 100)?.toFixed(2) + "%" ?? "0.00%",
-      (team.algaeAccuracy * 100)?.toFixed(2) + "%" ?? "0.00%",
-      team.avgCoralPoints?.toFixed(2) ?? "0.00",
-      team.avgAlgaePoints?.toFixed(2) ?? "0.00",
-      team.avgTotalPoints?.toFixed(2) ?? "0.00",
-      team.avgAlgaeMiss?.toFixed(2) ?? "0.00",
-      team.avgTotalMiss?.toFixed(2) ?? "0.00",
-      team.counts?.teleopl1 + (team.autol1 || 0) === 0 ? "No" : "Yes",
-      team.counts?.teleopl2 + (team.autol2 || 0) === 0 ? "No" : "Yes",
-      team.counts?.teleopl3 + (team.autol3 || 0) === 0 ? "No" : "Yes",
-      team.counts?.teleopl4 + (team.autol4 || 0) === 0 ? "No" : "Yes",
-      team.counts?.groundPickupAlgae === 0 ? "No" : "Yes",
-      team.counts?.reefPickupAlgae === 0 ? "No" : "Yes",
-      team.counts?.groundPickupCoral === 0 ? "No" : "Yes",
-      team.counts?.stationPickupCoral === 0 ? "No" : "Yes",
-      team.counts?.teleopScoreNet + team.counts?.autoScoreNet === 0
-        ? "No"
-        : "Yes",
-      team.counts?.teleopScoreProcessor + team.counts?.autoScoreProcessor === 0
-        ? "No"
-        : "Yes",
+      ...Array.from(averageKeys).map((key) =>
+        team.averages[key] !== undefined && !isNaN(team.averages[key])
+          ? team.averages[key]
+          : "0"
+      ), // all averages
+      ...Array.from(averageScoreKeys).map((key) =>
+        team.averageScores[key] !== undefined && !isNaN(team.averageScores[key])
+          ? team.averageScores[key]
+          : "0"
+      ), // all average scores
+      ...Array.from(cycleKeys).map((key) =>
+        team.cycles[key].averageTime !== undefined &&
+        !isNaN(team.cycles[key].averageTime)
+          ? team.cycles[key].averageTime
+          : "0"
+      ), // all cycles (average time)
+      ...Array.from(cycleKeys).map((key) =>
+        team.cycles[key].averageTimeComplete !== undefined &&
+        !isNaN(team.cycles[key].averageTimeComplete)
+          ? team.cycles[key].averageTimeComplete
+          : "0"
+      ), // all cycles (average time complete)
     ]);
   }
 
