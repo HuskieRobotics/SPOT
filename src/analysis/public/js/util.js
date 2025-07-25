@@ -27,7 +27,12 @@ function getPath(obj, path, ifnone = ThrowError) {
   }
   if (path === "") return obj;
   path = path.split(".");
-  return getPath(obj[path.shift()], path.join("."), ifnone);
+  try {
+    return getPath(obj[path.shift()], path.join("."), ifnone);
+  } catch (e) {
+    console.log(`Error traversing path ${path.join(".")}`);
+    throw new Error(`path ${path.join(".")} not traversable!`);
+  }
 }
 
 /**
