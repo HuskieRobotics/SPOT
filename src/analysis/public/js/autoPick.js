@@ -58,41 +58,6 @@ function sortTeams(teams) {
 }
 //-------------------------------------------------------------------------------------------------------------------------------------//
 
-async function fetchDataset() {
-  // Parse the query string to check for the 'event' parameter.
-  const queryString = window.location.search;
-  const urlParams = new URLSearchParams(queryString);
-  const eventID = urlParams.get("event");
-  let dataset;
-  // If an event is specified, fetch using the new endpoint.
-  if (eventID) {
-    dataset = await fetch(`./api/dataset/${eventID}`).then((res) => res.json());
-  } else {
-    dataset = await fetch("./api/dataset").then((res) => res.json());
-  }
-  return dataset;
-}
-let dataset = fetchDataset();
-
-async function fetchTeams() {
-  // Parse the query string to check for the 'event' parameter.
-  const queryString = window.location.search;
-  const urlParams = new URLSearchParams(queryString);
-  const eventID = urlParams.get("event");
-  let teams;
-  // If an event is specified, fetch using the new endpoint.
-  if (eventID) {
-    teams = await fetch(`/analysis/api/teams/${eventID}`).then((res) =>
-      res.json()
-    );
-  } else {
-    teams = await fetch("/analysis/api/teams").then((res) => res.json());
-  }
-  return teams.reduce((acc, t) => {
-    acc[t.team_number] = t.nickname;
-    return acc;
-  }, {});
-}
 /**
  *
  * @param {A list of all teams} teams
@@ -105,43 +70,24 @@ function possibleAlliances(teams) {
 	console.log("Possible alliances teams: ")
 	console.log(teams)
 	*/
+
   for (let x = 0; x < teams.length; x++) {
     if (!alliances.includes(teams[x])) {
       alliances.push([teams[x]]);
     }
   }
 
-  // for(let x = 0; x < teams.length; x++) {
-  // 	for(let y = 0; y < teams.length; y++) {
-  // 		for(let z = 0; z < teams.length; z++) { // makes sure there aren't alliances with duplicate teams
-  // 			if(teams[x].robotNumber!=teams[y].robotNumber && teams[y].robotNumber!=teams[z].robotNumber && teams[z].robotNumber!=teams[x].robotNumber){
-  // 				/*
-  // 				console.log("adding alliance: ")
-  // 				console.log(teams[x].robotNumber)
-  // 				console.log(teams[y].robotNumber)
-  // 				console.log(teams[z].robotNumber)
-  // 				*/
-  // 				let validAlliance = true;
-  // 				alliances.forEach(alliance=> // make sure we don't add the same alliance twice
-  // 					{
-  // 						let teams_matching = 0;
-  // 						alliance.forEach(team => {if (team.robotNumber == teams[x].robotNumber ||
-  // 							team.robotNumber == teams[y].robotNumber ||
-  // 							team.robotNumber == teams[z].robotNumber)
-  // 								{teams_matching++}
-  // 						})
-  // 						if(teams_matching == 3){
-  // 							validAlliance = false;
-  // 						}
-  // 					})
-
-  // 				if(validAlliance){alliances.push([teams[x], teams[y], teams[z]])
-  // 				}
-  // 			}
-
-  // 		}
-  // 	}
+  // Analyzing all possible alliances takes way too long
+  // for (const firstTeam of teams) {
+  //   for (const secondTeam of teams) {
+  //     if (firstTeam === secondTeam) continue; // skip if the same team
+  //     for (const thirdTeam of teams) {
+  //       if (firstTeam === thirdTeam || secondTeam === thirdTeam) continue; // skip if the same team
+  //       alliances.push([firstTeam, secondTeam, thirdTeam]);
+  //     }
+  //   }
   // }
+
   return alliances;
 }
 /**
@@ -331,84 +277,3 @@ function compareAllTeams(teams) {
       teams[teamNum].avgProbability / teams[teamNum].alliancesComparedWith;
   }
 }
-
-//----------------------------------------------------------------------------------------------------------------------------------//
-// let dataset = fetchDataset();
-// let teams = fetchTeams();
-// console.log(teams);
-// let pAliiances = possibleAliiances(teams);
-// console.log(pAliiances);
-//console.log("test")
-
-let teamB1 = {
-  sd: 20,
-  avg: 80,
-  team_number: 1,
-};
-
-let teamB2 = {
-  sd: 20,
-  avg: 70,
-  team_number: 2,
-};
-
-let teamB3 = {
-  sd: 20,
-  avg: 20,
-  team_number: 3,
-};
-
-let teamR1 = {
-  sd: 20,
-  avg: 60,
-  team_number: 4,
-};
-
-let teamR2 = {
-  sd: 20,
-  avg: 70,
-  team_number: 5,
-};
-
-let teamR3 = {
-  sd: 20,
-  avg: 30,
-  team_number: 6,
-};
-
-// TESTS -
-/*
-console.log("Blue 1" + teamB1)
-console.log("Blue 2" + teamB2)
-console.log("Blue 3" + teamB3)
-
-console.log("Red 1" + teamR1)
-console.log("Red 2" + teamR2)
-console.log("Red 3" + teamR3)
-
-
-let allianceBlue = [teamB1, teamB2, teamB3]
-let allianceRed =[teamR1, teamR2, teamR3]
-
-console.log(allianceBlue)
-console.log(allianceRed)
-
-
-
-console.log(allianceAverage(allianceBlue))
-console.log(allianceAverage(allianceRed))
-console.log(allianceStandardDeviation(allianceBlue))
-console.log(allianceStandardDeviation(allianceRed))
-
-console.log(compareAlliances(allianceBlue, allianceRed));
-
-let teams = [teamB1, teamB2, teamB3, teamR1, teamR2, teamR3]
-compareAllTeams(teams)
-console.log(teamB1.avgProbability) // 0.66152  (avg: 80, sd: 20)
-console.log(teamB2.avgProbability) // 0.59114  (avg: 70, sd: 20)
-console.log(teamB3.avgProbability) // 0.2696   (avg: 20, sd: 20)
-console.log(teamR1.avgProbability) // 0.52532  (avg: 60, sd: 20)
-console.log(teamR2.avgProbability) // 0.59114  (avg: 70, sd: 20)
-console.log(teamR3.avgProbability) // 0.36126  (avg: 30, sd: 20)
-
-*/
