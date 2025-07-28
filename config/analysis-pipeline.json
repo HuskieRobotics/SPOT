@@ -61,7 +61,7 @@
   {
     "type": "tmp",
     "name": "weightedSum",
-    "outputPath": "scores.scoreTotalCoral",
+    "outputPath": "scores.coral",
     "options": {
       "weightedPaths": {
         "counts.teleopl1": 2,
@@ -78,7 +78,7 @@
   {
     "type": "tmp",
     "name": "weightedSum",
-    "outputPath": "scores.scoreTotalAlgae",
+    "outputPath": "scores.algae",
     "options": {
       "weightedPaths": {
         "counts.autoScoreNet": 6,

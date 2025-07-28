@@ -299,13 +299,13 @@
         },
         {
           "name": "Average Algae Points",
-          "path": "averageScores.scoreTotalAlgae",
+          "path": "averageScores.algae",
           "decimals": 2,
           "sort": 1
         },
         {
           "name": "Average Coral Points",
-          "path": "averageScores.scoreTotalCoral",
+          "path": "averageScores.coral",
           "decimals": 2,
           "sort": 1
         },

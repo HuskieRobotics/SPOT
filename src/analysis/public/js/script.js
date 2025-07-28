@@ -26,6 +26,9 @@ function getSelectedEvent() {
   return eventID;
 }
 
+let dataset;
+let matches;
+
 (async () => {
   //modules object structure
   const modules = {
@@ -59,8 +62,6 @@ function getSelectedEvent() {
   });
 
   //start loading animation, fetch modules config, fetch dataset, then initialize UI elements
-  let dataset;
-  let matches;
   await loadAround(async () => {
     const modulesConfig = await fetch(`/config/analysis-modules.json`).then(
       (res) => res.json()
@@ -562,6 +563,39 @@ function getSelectedEvent() {
     const xAxisSelect = document.getElementById("x-axis-select");
     const yAxisSelect = document.getElementById("y-axis-select");
     const zAxisSelect = document.getElementById("z-axis-select");
+
+    for (const axisSelect of [xAxisSelect, yAxisSelect, zAxisSelect]) {
+      axisSelect.innerHTML = ""; // Clear existing options
+      for (
+        let i = 0;
+        i <
+        Object.keys(dataset.teams[Object.keys(dataset.teams)[0]].averageScores)
+          .length;
+        i++
+      ) {
+        const key = Object.keys(
+          dataset.teams[Object.keys(dataset.teams)[0]].averageScores
+        )[i];
+        const option = document.createElement("option");
+        option.value = `averageScores.${key}`;
+        option.label = "Average " + key.charAt(0).toUpperCase() + key.slice(1);
+        if (axisSelect === xAxisSelect && i === 0) {
+          option.selected = true;
+        } // Set as selected for X-axis
+        if (axisSelect === yAxisSelect && i === 1) {
+          option.selected = true;
+        } // Set as selected for Y-axis
+        if (axisSelect === zAxisSelect && i === 2) {
+          option.selected = true;
+        } // Set as selected for Z-axis
+        axisSelect.appendChild(option);
+      }
+
+      const option = document.createElement("option");
+      option.value = "constant";
+      option.label = "Constant";
+      axisSelect.appendChild(option);
+    }
 
     xAxisSelect.addEventListener("change", updateBubbleGraph);
     yAxisSelect.addEventListener("change", updateBubbleGraph);

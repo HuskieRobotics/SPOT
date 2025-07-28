@@ -163,53 +163,16 @@
         <!-- Dropdown for selecting the X-Axis -->
         <label for="x-axis-select">X-Axis:</label>
         <select id="x-axis-select">
-					<!-- FIXME: use the standard paths for average points -->
-            <% 
-            // Use config.AXIS_OPTIONS if available, otherwise fallback to default options
-            (config.AXIS_OPTIONS || [
-                { label: "Average Teleop Points", value: "averageScores.teleop" }, // Default X-Axis
-                { label: "Average Auto Points", value: "averageScores.auto" },     // Default Y-Axis
-                { label: "Constant", value: "constant" }                     // Default Z-Axis
-            ]).forEach(option => { %>
-                <!-- Dynamically populate the dropdown options -->
-                <option value="<%= option.value %>" 
-                    <%= option.value === "averageScores.teleop" ? "selected" : "" %>><%= option.label %>
-                </option>
-            <% }); %>
         </select>
 
         <!-- Dropdown for selecting the Y-Axis -->
         <label for="y-axis-select">Y-Axis:</label>
         <select id="y-axis-select">
-            <% 
-            // Use config.AXIS_OPTIONS if available, otherwise fallback to default options
-            (config.AXIS_OPTIONS || [
-                { label: "Average Teleop Points", value: "averageScores.teleop" }, // Default X-Axis
-                { label: "Average Auto Points", value: "averageScores.auto" },     // Default Y-Axis
-                { label: "Constant", value: "constant" }                     // Default Z-Axis
-            ]).forEach(option => { %>
-                <!-- Dynamically populate the dropdown options -->
-                <option value="<%= option.value %>" 
-                    <%= option.value === "averageScores.auto" ? "selected" : "" %>><%= option.label %>
-                </option>
-            <% }); %>
         </select>
 
         <!-- Dropdown for selecting the Z-Axis (Bubble Size) -->
         <label for="z-axis-select">Z-Axis (Bubble Size):</label>
-        <select id="z-axis-select">
-            <!-- Default Z-Axis is set to "Constant" -->
-            <option value="constant" selected>Constant</option>
-            <% 
-            // Use config.AXIS_OPTIONS if available, otherwise fallback to default options
-            (config.AXIS_OPTIONS || [
-                { label: "Average Teleop Points", value: "averageScores.teleop" }, // Default X-Axis
-                { label: "Average Auto Points", value: "averageScores.auto" },     // Default Y-Axis
-                { label: "Constant", value: "constant" }                     // Default Z-Axis
-            ]).forEach(option => { %>
-                <!-- Dynamically populate the dropdown options -->
-                <option value="<%= option.value %>"><%= option.label %></option>
-            <% }); %>
+        <select id="z-axis-select"> 
         </select>
     </div>
 
