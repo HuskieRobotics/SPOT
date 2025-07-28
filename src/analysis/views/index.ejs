@@ -163,16 +163,17 @@
         <!-- Dropdown for selecting the X-Axis -->
         <label for="x-axis-select">X-Axis:</label>
         <select id="x-axis-select">
+					<!-- FIXME: use the standard paths for average points -->
             <% 
             // Use config.AXIS_OPTIONS if available, otherwise fallback to default options
             (config.AXIS_OPTIONS || [
-                { label: "Average Teleop Points", value: "avgTeleopPoints" }, // Default X-Axis
-                { label: "Average Auto Points", value: "avgAutoPoints" },     // Default Y-Axis
+                { label: "Average Teleop Points", value: "averageScores.teleop" }, // Default X-Axis
+                { label: "Average Auto Points", value: "averageScores.auto" },     // Default Y-Axis
                 { label: "Constant", value: "constant" }                     // Default Z-Axis
             ]).forEach(option => { %>
                 <!-- Dynamically populate the dropdown options -->
                 <option value="<%= option.value %>" 
-                    <%= option.value === "avgTeleopPoints" ? "selected" : "" %>><%= option.label %>
+                    <%= option.value === "averageScores.teleop" ? "selected" : "" %>><%= option.label %>
                 </option>
             <% }); %>
         </select>
@@ -183,13 +184,13 @@
             <% 
             // Use config.AXIS_OPTIONS if available, otherwise fallback to default options
             (config.AXIS_OPTIONS || [
-                { label: "Average Teleop Points", value: "avgTeleopPoints" }, // Default X-Axis
-                { label: "Average Auto Points", value: "avgAutoPoints" },     // Default Y-Axis
+                { label: "Average Teleop Points", value: "averageScores.teleop" }, // Default X-Axis
+                { label: "Average Auto Points", value: "averageScores.auto" },     // Default Y-Axis
                 { label: "Constant", value: "constant" }                     // Default Z-Axis
             ]).forEach(option => { %>
                 <!-- Dynamically populate the dropdown options -->
                 <option value="<%= option.value %>" 
-                    <%= option.value === "avgAutoPoints" ? "selected" : "" %>><%= option.label %>
+                    <%= option.value === "averageScores.auto" ? "selected" : "" %>><%= option.label %>
                 </option>
             <% }); %>
         </select>
@@ -202,8 +203,8 @@
             <% 
             // Use config.AXIS_OPTIONS if available, otherwise fallback to default options
             (config.AXIS_OPTIONS || [
-                { label: "Average Teleop Points", value: "avgTeleopPoints" }, // Default X-Axis
-                { label: "Average Auto Points", value: "avgAutoPoints" },     // Default Y-Axis
+                { label: "Average Teleop Points", value: "averageScores.teleop" }, // Default X-Axis
+                { label: "Average Auto Points", value: "averageScores.auto" },     // Default Y-Axis
                 { label: "Constant", value: "constant" }                     // Default Z-Axis
             ]).forEach(option => { %>
                 <!-- Dynamically populate the dropdown options -->

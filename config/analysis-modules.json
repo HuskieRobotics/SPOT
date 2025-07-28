@@ -8,7 +8,7 @@
       "trackedStats": [
         "scores.auto",
         "scores.teleop",
-        "scores.barge",
+        "scores.endgame",
         "scores.total"
       ]
     }
@@ -91,7 +91,7 @@
       "bars": [
         {
           "name": "Miss",
-          "path": "coralMiss"
+          "path": "counts.missCoral"
         },
         {
           "name": "Level 1",
@@ -272,7 +272,7 @@
         },
         {
           "name": "Average Time to Climb",
-          "path": "cycles.barge.averageTimeComplete",
+          "path": "cycles.endgame.averageTimeComplete",
           "multiplier": 0.001,
           "decimals": 2,
           "hideIfValue": 0,
@@ -281,79 +281,67 @@
         },
         {
           "name": "Average Auto Points",
-          "path": "avgAutoPoints",
+          "path": "averageScores.auto",
           "decimals": 2,
           "sort": 1
         },
         {
           "name": "Average Teleop Points",
-          "path": "avgTeleopPoints",
+          "path": "averageScores.teleop",
           "decimals": 2,
           "sort": 1
         },
         {
           "name": "Average Barge Points",
-          "path": "avgEndgamePoints",
+          "path": "averageScores.endgame",
           "decimals": 2,
           "sort": 1
         },
         {
           "name": "Average Algae Points",
-          "path": "avgAlgaePoints",
+          "path": "averageScores.scoreTotalAlgae",
           "decimals": 2,
           "sort": 1
         },
         {
           "name": "Average Coral Points",
-          "path": "avgCoralPoints",
+          "path": "averageScores.scoreTotalCoral",
           "decimals": 2,
           "sort": 1
         },
         {
           "name": "Average Points",
-          "path": "avgTotalPoints",
+          "path": "averageScores.total",
           "decimals": 2,
           "sort": 1
         },
         {
-          "name": "Average Misses",
-          "path": "avgTotalMiss",
+          "name": "Average Coral Misses",
+          "path": "averages.missCoral",
           "decimals": 2,
           "sort": -1
         },
         {
           "name": "Average Algae Misses",
-          "path": "avgAlgaeMiss",
-          "decimals": 2,
-          "sort": -1
-        },
-        {
-          "name": "Average Coral Misses",
-          "path": "avgCoralMiss",
-          "decimals": 2,
-          "sort": -1
-        },
-        {
-          "name": "Average Total Drops",
-          "path": "avgTotalDrops",
-          "decimals": 2,
-          "sort": -1
-        },
-        {
-          "name": "Average Algae Drops",
-          "path": "avgAlgaeDrops",
+          "path": "averages.missAlgae",
           "decimals": 2,
           "sort": -1
         },
         {
           "name": "Average Coral Drops",
-          "path": "avgCoralDrops",
+          "path": "averages.dropCoral",
+          "decimals": 2,
+          "sort": -1
+        },
+        {
+          "name": "Average Algae Drops",
+          "path": "averages.dropAlgae",
           "decimals": 2,
           "sort": -1
         },
         {
           "name": "Leave",
-          "path": "avgLeave",
+          "path": "averages.leave",
           "multiplier": 100,
           "decimals": 2,
           "sort": 1,
@@ -381,7 +369,7 @@
     "name": "Alliance Score",
     "position": "main",
     "options": {
-      "path": "avgTotalPoints",
+      "path": "averageScores.total",
       "aggrMethod": "sum",
       "decimals": 2
     }
@@ -407,7 +395,7 @@
     "name": "Auto Points",
     "position": "main",
     "options": {
-      "path": "avgAutoPoints",
+      "path": "averageScores.auto",
       "sort": 1,
       "decimals": 2
     }
@@ -418,7 +406,7 @@
     "name": "Teleop Points",
     "position": "main",
     "options": {
-      "path": "avgTeleopPoints",
+      "path": "averageScores.teleop",
       "sort": 1,
       "decimals": 2
     }
@@ -440,7 +428,7 @@
     "name": "Total Points",
     "position": "main",
     "options": {
-      "path": "avgTotalPoints",
+      "path": "averageScores.total",
       "sort": 1,
       "decimals": 2
     }
@@ -454,13 +442,13 @@
       "list": [
         {
           "name": "Expected Auto Points",
-          "path": "avgAutoPoints",
+          "path": "averageScores.auto",
           "decimals": 2,
           "aggrMethod": "sum"
         },
         {
           "name": "Expected Teleop Points",
-          "path": "avgTeleopPoints",
+          "path": "averageScores.teleop",
           "decimals": 2,
           "aggrMethod": "sum"
         },
@@ -472,7 +460,7 @@
         },
         {
           "name": "Expected Score",
-          "path": "avgTotalPoints",
+          "path": "averageScores.total",
           "decimals": 2,
           "aggrMethod": "sum"
         }

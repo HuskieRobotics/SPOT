@@ -189,8 +189,6 @@ router.get("/csv", async (req, res) => {
 
   // Adding the data which is required for the CSV
 
-  // FIXME: different teams may have different values under averages and averageScores, we need to
-  // capture the superset of these values and then use that to create the header row.
   const averageKeys = new Set();
   const averageScoreKeys = new Set();
   const cycleKeys = new Set();
@@ -205,9 +203,6 @@ router.get("/csv", async (req, res) => {
   for (let [teamNumber, team] of Object.entries(dataset2.teams).filter(
     ([num, team]) => checkData(team)
   )) {
-    // FIXME: we need to document that certain paths are required to be in the analysis-pipeline.json file;
-    // several are required for the older and more maintainable version of this method;
-    // check the GitHub issue for details.
     if (headerRow) {
       headerRow = false;
       rows.push([

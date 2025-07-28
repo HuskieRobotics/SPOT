@@ -107,7 +107,6 @@ class SingleDisplay {
   matchAverage(alliance1, alliance2, dataset) {
     let alliance1Avg = 0;
     for (const a of alliance1) {
-      // FIXME: we need to document that certain paths are required to be in the analysis-pipeline.json file; this is one of them
       alliance1Avg += getPath(dataset.teams[a], "averageScores.total", 0);
     }
     let alliance2Avg = 0;
@@ -127,7 +126,6 @@ class SingleDisplay {
   matchStandardDeviation(alliance1, alliance2, dataset) {
     let alliance1SD = 0;
     for (const a of alliance1) {
-      // FIXME: we need to document that certain paths are required to be in the analysis-pipeline.json file; this is one of them
       let data = getPath(dataset.teams[a], "standardDeviation", 0);
       alliance1SD += Math.pow(data, 2);
     }
