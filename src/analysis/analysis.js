@@ -9,7 +9,7 @@ router.use(express.static(__dirname + "/public"));
 
 // Route to render the bubble sheet with the config object
 router.get("/", (req, res) => {
-  res.render(__dirname + "/views/index.ejs", { config }); // Pass the config object to the EJS template
+  res.render(__dirname + "/views/index.ejs"); // Pass the config object to the EJS template
 });
 
 let modulesOutput;
