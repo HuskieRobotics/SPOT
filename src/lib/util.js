@@ -15,12 +15,13 @@ function getPath(obj, path, ifnone = ThrowError) {
     }
   }
   if (path === "") return obj;
+  let originalPath = path; // save the original path for error messages
   path = path.split(".");
   try {
     return getPath(obj[path.shift()], path.join("."), ifnone);
   } catch (e) {
-    console.log(`Error traversing path ${path.join(".")}`);
-    throw new Error(`path ${path.join(".")} not traversable!`);
+    console.log(`Error traversing path ${originalPath}`);
+    throw new Error(`path ${originalPath} not traversable!`);
   }
 }
 
