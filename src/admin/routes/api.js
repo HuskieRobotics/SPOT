@@ -123,4 +123,15 @@ router.get("/matches/:eventID", async (req, res) => {
     currentMatch: ScoutingSync.match,
   });
 });
+
+router.get("/checkMigration", async (req, res) => {
+  tmp = await TeamMatchPerformance.findOne();
+  // if the eventNumber key is undefined, we need to migrate
+  if (tmp && typeof tmp.eventNumber === "undefined") {
+    res.json({ needsMigration: true });
+  } else {
+    res.json({ needsMigration: false });
+  }
+});
+
 module.exports = router;

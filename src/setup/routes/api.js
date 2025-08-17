@@ -53,7 +53,6 @@ router.get("/events", async (req, res) => {
       .toArray();
 
     eventNumbers.sort((a, b) => b.localeCompare(a)); // Sort the event numbers
-    console.log("Fetched event numbers:", eventNumbers);
     await connection.close();
     res.json(eventNumbers);
   } catch (error) {

@@ -5,6 +5,7 @@ const { setPath } = require("../../lib/util.js");
 const axios = require("axios");
 const config = require("../../../config/config.json");
 const { got } = require("../get.js");
+const chalk = require("chalk");
 
 let router = Router();
 

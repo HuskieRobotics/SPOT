@@ -53,6 +53,8 @@ const scouters = {};
 })();
 
 async function constructApp(accessCode) {
+  await checkMigration();
+
   await updateScouters(accessCode);
   setInterval(() => updateScouters(accessCode), 2500);
 
@@ -81,6 +83,23 @@ async function constructApp(accessCode) {
     }
     menuExpanded = !menuExpanded;
   });
+}
+
+async function checkMigration() {
+  let checkMigration = await fetch("./api/checkMigration").then((res) =>
+    res.json()
+  );
+  if (checkMigration.needsMigration) {
+    let migrationModal = new Modal("small", false).header(
+      "The database appears to be from SPOT v4 or earlier and needs to be migrated. " +
+        "For more information, please refer to the " +
+        '<a href="https://docs.google.com/document/d/1QYxaoAnmHTYg1HQBiVI71QHKks05prGEybyP5avYMUI/edit?usp=sharing" target="_blank" rel="noopener noreferrer">migration guide</a>.'
+    );
+    migrationModal.scale(0.75);
+    migrationModal.action("OK", () => {
+      migrationModal.modalExit();
+    });
+  }
 }
 
 async function updateScouters(accessCode) {
