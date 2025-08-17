@@ -22,6 +22,7 @@ The database schema for SPOT v5 and later is incompatible with SPOT v4 and earli
 - Optimized for teams who have internet access while scouting but also completely functional for teams with no internet access. [(workflow found here)](https://docs.google.com/document/d/1rMG94uNJxASu9EMIhPnCHs1xF6rNNqMg3j4-tCzr2rI/edit?usp=sharing).
 - Quick setup with a built-in first-run wizard to walk teams through configuring their scouting app, connecting to The Blue Alliance or FRC API, and setting up their database.
 - Completely configurable analysis and scouting view without the need for a single line of code.
+- Easy data deletion
 
 SPOT is built with HTML, JS, CSS, and Node.js and operates with a MongoDB database.
 
