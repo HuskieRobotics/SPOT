@@ -8,26 +8,16 @@ mongoose.connect(config.secrets.DATABASE_URL, {
 });
 
 async function changeTypeOfEventCodes() {
+  // '1' -> 2025mndu2_official, '2' -> 2025ilch_official, '21' -> 2025ilch_testing
+
   // FIXME: update the eventNumbers array with the event numbers in your database
-  const eventNumbers = [1, 14, 15, 16, 19, 2, 21, 8, 98, 99, 3, 4, 7, 18, 85];
+  const eventNumbers = [1, 2, 21];
 
   // FIXME: update the eventCodes array with the corresponding event codes
   const eventCodes = [
     "2025mndu2_official",
-    "2024ksla_training",
-    "2024ilch_training",
-    "2024joh_training",
-    "2024witw_training",
     "2025ilch_official",
     "2025ilch_testing",
-    "2023rr_testing",
-    "2025week0_training",
-    "2025week0_training",
-    "2025cur_official",
-    "2023ilch_training",
-    "2023arc_training",
-    "2024rr_testing",
-    "2025mndu2_testing",
   ];
 
   try {
