@@ -87,7 +87,7 @@ submitButton.addEventListener("click", async () => {
   let response;
   try {
     // Route for submitting a TMP on the qr code page
-    response = await await fetch("./api/teamMatchPerformance", {
+    response = await fetch("./api/teamMatchPerformance", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -276,8 +276,8 @@ async function decodeQRCodeUrl(image_url) {
   // console.log("hex bytes", bytes.map(x=>x.toString(16)));
 
   //parse bits
-  let matchInfo = bits.slice(0, 112);
-  let actionQueueBits = bits.slice(112);
+  let matchInfo = bits.slice(0, 200);
+  let actionQueueBits = bits.slice(200);
 
   let teamMatchPerformance = {
     timestamp: Date.now(),
@@ -286,20 +286,22 @@ async function decodeQRCodeUrl(image_url) {
       2
     )}`, //major.minor
     scouterId: "qrcode",
-    eventNumber: parseInt(bits.slice(16, 24), 2),
-    matchNumber: String(parseInt(bits.slice(24, 32), 2)),
-    robotNumber: String(parseInt(bits.slice(32, 48), 2)),
-    matchId_rand: parseInt(bits.slice(48, 112), 2).toString(32),
+
+    eventNumber:
+      parseInt(bits.slice(16, 48), 2).toString(16) +
+      parseInt(bits.slice(48, 80), 2).toString(16) +
+      parseInt(bits.slice(80, 112), 2).toString(16),
+    matchNumber: String(parseInt(bits.slice(112, 120), 2)),
+    robotNumber: String(parseInt(bits.slice(120, 136), 2)),
+    matchId_rand: parseInt(bits.slice(136, 200), 2).toString(32),
     actionQueue: [],
   };
-
   teamMatchPerformance.matchId = `${teamMatchPerformance.matchNumber}-${teamMatchPerformance.robotNumber}-${teamMatchPerformance.scouterId}-${teamMatchPerformance.matchId_rand}`;
 
   let actionSize = ACTION_SCHEMA.reduce((acc, x) => acc + x.bits, 0);
 
   let nextAction = actionQueueBits.slice(0, actionSize);
   actionQueueBits = actionQueueBits.slice(actionSize);
-
   // This code was like 3 years old when it was handed down to me with absolutely zero
   // documentation, I have no idea how it works but it does
   while (nextAction.slice(0, 8) != "11111111") {

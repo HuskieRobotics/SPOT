@@ -1,12 +1,14 @@
 <div align="center">
-  <img src="src/scouting/public/img/SPOTBanner.jpg" width=50% height=50%>
+  <img src="src/scouting/public/img/logo-dark-mode.png" width=30% height=30%>
 </div>
-
-<br>
 
 # SPOT - Scouting Platforms On Time
 
 SPOT is an open-source modular scouting app framework for FRC developed by Team 3061 Huskie Robotics. SPOT provides a simple platform upon which a team can build a scouting app with little to no prior experience.
+
+## Database Migration (SPOT v4 -> v5)
+
+The database schema for SPOT v5 and later is incompatible with SPOT v4 and earlier. If you don't have data from SPOT v4 or earlier, no migration is required. If you are creating a new database to use with SPOT v5 or later, which is recommended for a new FRC season, no migration is required. If you have data from SPOT v4 or earlier and you want to access it with SPOT v5 or later, migration is required. Refer to the [migration guide](https://docs.google.com/document/d/1QYxaoAnmHTYg1HQBiVI71QHKks05prGEybyP5avYMUI/preview) for more information.
 
 ## Features
 
@@ -14,6 +16,7 @@ SPOT is an open-source modular scouting app framework for FRC developed by Team 
 - Works on all platforms, from iOS to Android to the web.
 - An analysis page to display detailed statistics and charts about matches and teams.
 - Admin view for live scouter management at competition.
+- Admins can monitor and verify incoming scouting data to ensure accuracy and consistency throughout the event.
 - Preconfigured for the 2025 REEFSCAPE game with no additional game-specific customization required.
 - Easy deployment experience when teams run a server on Glitch.
 - Optimized for teams who have internet access while scouting but also completely functional for teams with no internet access. [(workflow found here)](https://docs.google.com/document/d/1rMG94uNJxASu9EMIhPnCHs1xF6rNNqMg3j4-tCzr2rI/edit?usp=sharing).

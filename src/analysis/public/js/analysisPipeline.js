@@ -1,6 +1,17 @@
 async function executePipeline() {
+  const eventID = getSelectedEvent();
+
   // Get tmps from database (or cache if offline)
-  let tmps = await fetch("./api/dataset").then((res) => res.json());
+
+  let tmps;
+  // If an event is specified, fetch using the new endpoint.
+  if (eventID) {
+    tmps = await fetch(`/analysis/api/dataset/${eventID}`).then((res) =>
+      res.json()
+    );
+  } else {
+    tmps = await fetch("/analysis/api/dataset").then((res) => res.json());
+  }
 
   // Get all tmps stored in the local storage (from qr code)
   const storage = localStorage.getItem("teamMatchPerformances");
@@ -21,6 +32,7 @@ async function executePipeline() {
 
   let dataset = { tmps, teams };
 
+  // FIXME: figure out what the manual endpoint is for (and its associated json files)
   const manual = await fetch("./api/manual").then((res) => res.json());
   const pipelineConfig = await fetch(
     "../../../config/analysis-pipeline.json"

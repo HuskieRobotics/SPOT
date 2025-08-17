@@ -16,13 +16,13 @@ let bodyParser = require("body-parser");
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-//routes with config validation
+// Routes with config validation
 if (fs.existsSync("config/config.json")) {
   require("./scouting/scouting-sync.js")(server);
 
   app.use("/config", require("./configRouter.js"));
   app.use("/", require("./scouting/scouting.js"));
-  app.use("/analysis", require("./analysis/analysis.js"));
+  app.use("/analysis", require("./analysis/analysis.js")); // Mount the analysis routes
   app.use("/admin", require("./admin/admin.js"));
   app.use("/qrscanner", require("./qrscanner/qrscanner.js"));
   app.use("/edit", require("./edit/edit.js"));

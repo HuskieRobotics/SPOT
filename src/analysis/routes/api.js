@@ -1,16 +1,25 @@
 const { Router } = require("express");
-const { TeamMatchPerformance } = require("../../lib/db.js");
+const { TeamMatchPerformance, Event } = require("../../lib/db.js");
 //const { executePipeline } = require("../public/js/analysisPipeline.js");
 const { setPath } = require("../../lib/util.js");
 const axios = require("axios");
 const config = require("../../../config/config.json");
 const { got } = require("../get.js");
+const chalk = require("chalk");
 
 let router = Router();
 
 router.get("/dataset", async (req, res) => {
   res.json(
-    await TeamMatchPerformance.find({ eventNumber: config.EVENT_NUMBER })
+    await TeamMatchPerformance.find({
+      eventNumber: config.EVENT_NUMBER,
+    })
+  );
+});
+
+router.get("/dataset/:eventID", async (req, res) => {
+  res.json(
+    await TeamMatchPerformance.find({ eventNumber: req.params.eventID })
   );
 });
 
@@ -63,6 +72,33 @@ router.get("/teams", async (req, res) => {
   res.json(teams);
 });
 
+router.get("/teams/:eventID", async (req, res) => {
+  if (!config.secrets.TBA_API_KEY) {
+    return res.json([]); //no key, no teams
+  }
+  const event = await Event.findOne({ _id: req.params.eventID });
+  let eventKey = null;
+  if (event) {
+    eventKey = event.code.split("_")[0];
+  }
+  let teams = (
+    await axios
+      .get(`https://www.thebluealliance.com/api/v3/event/${eventKey}/teams`, {
+        headers: {
+          "X-TBA-Auth-Key": config.secrets.TBA_API_KEY,
+        },
+      })
+      .catch((e) =>
+        console.error(
+          e,
+          chalk.bold.red("\nError fetching teams from Blue Alliance API!")
+        )
+      )
+  ).data;
+
+  res.json(teams);
+});
+
 router.get("/manual", async (req, res) => {
   const manual = {
     teams: require("../manual/teams.json"),
@@ -75,9 +111,7 @@ router.get("/csv", async (req, res) => {
   async function executePipeline() {
     // Get tmps from database (or cache if offline)
 
-    let tmps = await axios
-      .get("http://localhost:8080/analysis/api/dataset")
-      .then((res) => res.data);
+    let tmps = await axios.get("/analysis/api/dataset").then((res) => res.data);
 
     // Get all tmps stored in the local storage (from qr code)
     const storage = await TeamMatchPerformance.find({
@@ -101,10 +135,10 @@ router.get("/csv", async (req, res) => {
     let dataset = { tmps, teams };
 
     const manual = await axios
-      .get("http://localhost:8080/analysis/api/manual")
+      .get("/analysis/api/manual")
       .then((res) => res.data);
     const pipelineConfig = await axios
-      .get("http://localhost:8080/config/analysis-pipeline.json")
+      .get("/config/analysis-pipeline.json")
       .then((res) => res.data);
 
     // This will show up as a method that doesn't exist since it is gotten from the server
@@ -155,6 +189,18 @@ router.get("/csv", async (req, res) => {
   };
 
   // Adding the data which is required for the CSV
+
+  const averageKeys = new Set();
+  const averageScoreKeys = new Set();
+  const cycleKeys = new Set();
+  for (let [teamNumber, team] of Object.entries(dataset2.teams).filter(
+    ([num, team]) => checkData(team)
+  )) {
+    Object.keys(team.averages).forEach((key) => averageKeys.add(key));
+    Object.keys(team.averageScores).forEach((key) => averageScoreKeys.add(key));
+    Object.keys(team.cycles).forEach((key) => cycleKeys.add(key));
+  }
+
   for (let [teamNumber, team] of Object.entries(dataset2.teams).filter(
     ([num, team]) => checkData(team)
   )) {
@@ -162,71 +208,38 @@ router.get("/csv", async (req, res) => {
       headerRow = false;
       rows.push([
         "Team #",
-        ...Object.entries(team.avgTotalPoints ?? {})
-          .filter(([key, value]) => !isNaN(value) && value)
-          .map(([i, x]) => i + " Average"),
-        ...Object.entries(team.avgTotalPoints ?? {})
-          .filter(([key, value]) => !isNaN(value))
-          .map(([i, x]) => i + " Score Average"),
-        "Average Coral Cycle Time",
-        "Average Algae Cycle Time",
-        "Average Time to Climb",
-        "Average Auto Points",
-        "Average Teleop Points",
-        "Coral Accuracy",
-        "Algae Accuracy",
-        "Average Coral Points",
-        "Average Algae Points",
-        "Average Total Points",
-        "Average Coral Miss",
-        "Average Algae Miss",
-        "Lv 1 Coral",
-        "Lv 2 Coral",
-        "Lv 3 Coral",
-        "Lv 4 Coral",
-        "Ground Pickup Algae",
-        "Reef Pickup Algae",
-        "Ground Pickup Coral",
-        "Station Pickup Coral",
-        "Algae Score Net",
-        "Algae Score Processor",
+        ...Array.from(averageKeys).map((key) => key + " Average"), // all averages
+        ...Array.from(averageScoreKeys).map((key) => key + " Score Average"), // all average scores
+        ...Array.from(cycleKeys).map((key) => key + " Cycle Average Time"), // all cycles (average time
+        ...Array.from(cycleKeys).map(
+          (key) => key + " Cycle Average Time Complete"
+        ), // all cycles (average time complete)
       ]);
     }
-
-    const avgTotalPoints = Object.entries(team.avgTotalPoints ?? {})
-      .filter(([key, value]) => !isNaN(value) && value)
-      .map(([i, x]) => x);
-
     rows.push([
       teamNumber,
-      ...avgTotalPoints,
-      ...avgTotalPoints,
-      (team.cycleCoral?.averageTime ?? 0 / 1000).toFixed(2) + "s",
-      (team.cycleAlgae?.averageTime ?? 0 / 1000).toFixed(2) + "s",
-      (team.bargeCycle?.averageTimeComplete ?? 0 / 1000).toFixed(2) + "s",
-      team.avgAutoPoints?.toFixed(2) ?? "0.00",
-      team.avgTeleopPoints?.toFixed(2) ?? "0.00",
-      (team.coralAccuracy * 100)?.toFixed(2) + "%" ?? "0.00%",
-      (team.algaeAccuracy * 100)?.toFixed(2) + "%" ?? "0.00%",
-      team.avgCoralPoints?.toFixed(2) ?? "0.00",
-      team.avgAlgaePoints?.toFixed(2) ?? "0.00",
-      team.avgTotalPoints?.toFixed(2) ?? "0.00",
-      team.avgAlgaeMiss?.toFixed(2) ?? "0.00",
-      team.avgTotalMiss?.toFixed(2) ?? "0.00",
-      team.counts?.teleopl1 + (team.autol1 || 0) === 0 ? "No" : "Yes",
-      team.counts?.teleopl2 + (team.autol2 || 0) === 0 ? "No" : "Yes",
-      team.counts?.teleopl3 + (team.autol3 || 0) === 0 ? "No" : "Yes",
-      team.counts?.teleopl4 + (team.autol4 || 0) === 0 ? "No" : "Yes",
-      team.counts?.groundPickupAlgae === 0 ? "No" : "Yes",
-      team.counts?.reefPickupAlgae === 0 ? "No" : "Yes",
-      team.counts?.groundPickupCoral === 0 ? "No" : "Yes",
-      team.counts?.stationPickupCoral === 0 ? "No" : "Yes",
-      team.counts?.teleopScoreNet + team.counts?.autoScoreNet === 0
-        ? "No"
-        : "Yes",
-      team.counts?.teleopScoreProcessor + team.counts?.autoScoreProcessor === 0
-        ? "No"
-        : "Yes",
+      ...Array.from(averageKeys).map((key) =>
+        team.averages[key] !== undefined && !isNaN(team.averages[key])
+          ? team.averages[key]
+          : "0"
+      ), // all averages
+      ...Array.from(averageScoreKeys).map((key) =>
+        team.averageScores[key] !== undefined && !isNaN(team.averageScores[key])
+          ? team.averageScores[key]
+          : "0"
+      ), // all average scores
+      ...Array.from(cycleKeys).map((key) =>
+        team.cycles[key].averageTime !== undefined &&
+        !isNaN(team.cycles[key].averageTime)
+          ? team.cycles[key].averageTime
+          : "0"
+      ), // all cycles (average time)
+      ...Array.from(cycleKeys).map((key) =>
+        team.cycles[key].averageTimeComplete !== undefined &&
+        !isNaN(team.cycles[key].averageTimeComplete)
+          ? team.cycles[key].averageTimeComplete
+          : "0"
+      ), // all cycles (average time complete)
     ]);
   }
 
@@ -236,6 +249,10 @@ router.get("/csv", async (req, res) => {
     .reduce((acc, row) => acc + `${row}\n`, "");
   res.set({ "Content-Disposition": `attachment; filename="teams.csv"` });
   res.send(csv);
+});
+
+router.get("/events", async (req, res) => {
+  res.json(await Event.find({}));
 });
 
 module.exports = router;
