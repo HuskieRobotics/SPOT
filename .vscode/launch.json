@@ -14,7 +14,7 @@
       "request": "launch",
       "name": "SPOT Client",
       "url": "http://localhost:8080",
-      "webRoot": "${workspaceFolder}",
+      "webRoot": "${workspaceFolder}/src/analysis/public",
       "outputCapture": "std"
     }
   ]

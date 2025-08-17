@@ -2,7 +2,7 @@ const { Router } = require("express");
 const ScoutingSync = require("../../scouting/scouting-sync")();
 let router = Router();
 const config = require("../../../config/config.json");
-const { TeamMatchPerformance } = require("../../lib/db");
+const { TeamMatchPerformance, Event } = require("../../lib/db");
 let axios = require("axios");
 const DEMO = config.DEMO;
 
@@ -111,4 +111,27 @@ router.get("/matches", async (req, res) => {
     });
   }
 });
+
+router.get("/matches/:eventID", async (req, res) => {
+  const event = await Event.findOne({ _id: req.params.eventID });
+  let eventKey = null;
+  if (event) {
+    eventKey = event.code.split("_")[0];
+  }
+  res.json({
+    allMatches: await ScoutingSync.getMatches(eventKey),
+    currentMatch: ScoutingSync.match,
+  });
+});
+
+router.get("/checkMigration", async (req, res) => {
+  tmp = await TeamMatchPerformance.findOne();
+  // if the eventNumber key is undefined, we need to migrate
+  if (tmp && typeof tmp.eventNumber === "undefined") {
+    res.json({ needsMigration: true });
+  } else {
+    res.json({ needsMigration: false });
+  }
+});
+
 module.exports = router;

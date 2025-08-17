@@ -18,7 +18,7 @@ class PerformanceTimePlot {
     for (let stat of trackedStats) {
       trackedStatTraces[stat] = {
         name: stat,
-        x: [...Array(teamTmps.length).keys()],
+        x: teamTmps.map((tmp) => "Match " + tmp.matchNumber),
         y: [],
         mode: "lines+markers",
       };
@@ -48,6 +48,9 @@ class PerformanceTimePlot {
           // color: "#ff6030"
         },
         yanchor: "middle",
+      },
+      xaxis: {
+        showticklabels: false,
       },
       legend: {
         font: {
