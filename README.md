@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="src/scouting/public/img/logo-dark-mode.png" width=30% height=30%>
+  <img src="src/scouting/public/img/SPOTBanner.jpg" width=50% height=50%>
 </div>
 
 # SPOT - Scouting Platforms On Time
@@ -8,7 +8,7 @@ SPOT is an open-source modular scouting app framework for FRC developed by Team 
 
 ## Database Migration (SPOT v4 -> v5)
 
-The database schema for SPOT v5 and later is incompatible with SPOT v4 and earlier. If you don't have data from SPOT v4 or earlier, no migration is required. If you are creating a new database to use with SPOT v5 or later, which is recommended for a new FRC season, no migration is required. If you have data from SPOT v4 or earlier and you want to access it with SPOT v5 or later, migration is required. Refer to the [migration guide](https://docs.google.com/document/d/1QYxaoAnmHTYg1HQBiVI71QHKks05prGEybyP5avYMUI/preview) for more information.
+The database schema for SPOT v5 and later is incompatible with SPOT v4 and earlier. If you don't have data from SPOT v4 or earlier, no migration is required. If you are creating a new database to use with SPOT v5 or later, which is recommended for a new FRC season, no migration is required. If you have data from SPOT v4 or earlier and you want to access it with SPOT v5 or later, migration is required. Refer to the [migration guide](https://docs.google.com/document/d/e/2PACX-1vT-4zxXgeCIOai_fIJwoPhzDs3wWO5fdo-dLJVkPmhtUIvn2NyJjXRBU67fSyDcoUWjL9kp-1UMtNiB/pub) for more information.
 
 ## Features
 
@@ -19,7 +19,7 @@ The database schema for SPOT v5 and later is incompatible with SPOT v4 and earli
 - Admins can monitor and verify incoming scouting data to ensure accuracy and consistency throughout the event.
 - Preconfigured for the 2025 REEFSCAPE game with no additional game-specific customization required.
 - Easy deployment experience when teams run a server on Glitch.
-- Optimized for teams who have internet access while scouting but also completely functional for teams with no internet access. [(workflow found here)](https://docs.google.com/document/d/1rMG94uNJxASu9EMIhPnCHs1xF6rNNqMg3j4-tCzr2rI/edit?usp=sharing).
+- Optimized for teams who have internet access while scouting but also completely functional for teams with no internet access. [(workflow found here)](https://docs.google.com/document/d/e/2PACX-1vRVXPGirIs_T6EMiAWL_YhG9LXGgbZCH3n0iP5phAYMcYILqNsBTYlxgWW7vkJHRQtXqWpTP7Uwcyo8/pub).
 - Quick setup with a built-in first-run wizard to walk teams through configuring their scouting app, connecting to The Blue Alliance or FRC API, and setting up their database.
 - Completely configurable analysis and scouting view without the need for a single line of code.
 - Easy data deletion
@@ -43,19 +43,19 @@ SPOT is built with HTML, JS, CSS, and Node.js and operates with a MongoDB databa
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes, as well as deployed on a server (Glitch or Amazon Web Services). If you have any questions, feel free to contact us [spot@team3061.org](mailto:spot@team3061.org).
 
-### [Quickstart](https://docs.google.com/document/d/1vtl2PVihMu5IuJtC42czj-sC8xgQx0sHrEsvGa7eb0o/edit?usp=sharing)
+### [Quickstart](https://docs.google.com/document/d/e/2PACX-1vQyMGqxn7CdAM1srgcaQKJGnJawiVCH-nxSbhq_hm0jYA9e2-axnV-mmqxOveJp5lX3TMohQieNe1Ft/pub)
 
 ## Usage
 
 This is a guide on how to use SPOT as well as its features, with a text and a video walkthrough.
 
-### [Usage Guide](https://docs.google.com/document/d/14QNhU3PEkdomg_Ij-yo5keQduSn6n9CpfKT3TQoxF50/edit?usp=sharing)
+### [Usage Guide](https://docs.google.com/document/d/e/2PACX-1vTwLwWJwcn1WdrNSZLGY33f04TjXjwypreY7mTkSBck8K20i9injrl6MUOrHQLrpy9u8UvQu99XHLge/pub)
 
 ## Configuration
 
 This is a guide to configuring SPOT. You can configure the buttons displayed in the scouting view as well as how data is transformed and displayed.
 
-### [Configuration Guide](https://docs.google.com/document/d/1_FHr61p2eROtALV-fx0giBmp7oqVfTxc7K5_kCuS-8Q/edit?usp=sharing)
+### [Configuration Guide](https://docs.google.com/document/d/e/2PACX-1vRL0EauWWVXWEu9jQJ37-8SI6dSUrGMm6z2wrqwH6HYOA8FarEFugxXrZluRrI_Tpy92qqM9rypbhgr/pub)
 
 ## Contributing
 
