@@ -116,7 +116,7 @@ router.get("/transformers.js", async (req, res) => {
   res.send(output);
 });
 
-async function processTransformers() {
+function processTransformers() {
   // Get the analysis transformer, containing important information about
   // how to build the client-side transformers conjugate file
   const analysisTransformer2 = require("../../config/analysis-transformers.json");
@@ -207,7 +207,10 @@ async function processTransformers() {
   return module2;
 }
 
-global.processTransformers = processTransformers;
+router.get("/processTransformers", (req, res) => {
+  let result = processTransformers();
+  res.send(result);
+});
 
 let modulesStyleOutput;
 router.get("/modules.css", (req, res) => {
