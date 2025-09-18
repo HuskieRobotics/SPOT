@@ -116,8 +116,8 @@ router.get("/transformers.js", async (req, res) => {
   res.send(output);
 });
 
-function processTransformers() {
-  // Get the analysis transformer, containing important information about
+router.get("/processTransformers.js", async (req, res) => {
+    // Get the analysis transformer, containing important information about
   // how to build the client-side transformers conjugate file
   const analysisTransformer2 = require("../../config/analysis-transformers.json");
 
@@ -196,20 +196,7 @@ function processTransformers() {
     analysisTransformer2.template2.placeholder,
     conjugate2
   );
-  let temp = output2;
-  const tempFilePath2 = path.join(__dirname, "transformers.js");
-
-  fs.writeFileSync(tempFilePath2, temp);
-
-  const module2 = require(tempFilePath2);
-
-  fs.unlinkSync(tempFilePath2);
-  return module2;
-}
-
-router.get("/processTransformers", (req, res) => {
-  let result = processTransformers();
-  res.send(result);
+  res.send(output2);
 });
 
 let modulesStyleOutput;

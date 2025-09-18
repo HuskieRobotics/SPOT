@@ -141,11 +141,12 @@ router.get("/csv", async (req, res) => {
       .then((res) => res.data);
 
     // This will show up as a method that doesn't exist since it is gotten from the server
-    let getTransformers = await axios
-      .get("/analysis/processTransformers")
+    let tempTransformer = await axios
+      .get("/analysis/processTransformers.js")
       .then((res) => res.data);
-    getTransformers = getTransformers["getTransformers"];
-    const transformers = await getTransformers();
+    tempTransformer = eval(tempTransformer);
+    tempTransformer = tempTransformer["getTransformers"];
+    const transformers = await tempTransformer();
 
     for (let tfConfig of pipelineConfig) {
       dataset = transformers[tfConfig.type][tfConfig.name].execute(
