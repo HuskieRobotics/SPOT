@@ -18,6 +18,14 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // Routes with config validation
 if (fs.existsSync("config/config.json")) {
+  const config = require("../config/config.json");
+  isConfigV4 = config.EVENT_NUMBER && Number(config.EVENT_NUMBER);
+  if (isConfigV4) {
+    console.log("Old config detected, removing EVENT_NUMBER");
+    delete config.EVENT_NUMBER;
+    fs.writeFileSync("config/config.json", JSON.stringify(config));
+  }
+
   require("./scouting/scouting-sync.js")(server);
 
   app.use("/config", require("./configRouter.js"));
