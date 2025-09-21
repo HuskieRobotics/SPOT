@@ -4,7 +4,7 @@
 
 # SPOT - Scouting Platforms On Time
 
-SPOT is an open-source modular scouting app framework for FRC developed by Team 3061 Huskie Robotics. SPOT provides a simple platform upon which a team can build a scouting app with little to no prior experience.
+SPOT is an open-source modular scouting app framework for FRC developed by Team 3061, Huskie Robotics. SPOT provides a simple platform upon which a team can build a scouting app with little to no prior experience.
 
 ## Database Migration (SPOT v4 -> v5)
 
