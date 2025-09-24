@@ -142,7 +142,7 @@ router.get("/csv", async (req, res) => {
 
     // This will show up as a method that doesn't exist since it is gotten from the server
     let tempTransformer = await axios
-      .get("/analysis/processTransformers.js")
+      .get("/analysis/transformers2.js")
       .then((res) => res.data);
     tempTransformer = eval(tempTransformer);
     tempTransformer = tempTransformer["getTransformers"];
