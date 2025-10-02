@@ -96,6 +96,12 @@ if (eventSelect) {
     if (defaultOption) {
       defaultOption.remove();
     }
+
+    let compare = eventSelect.value;
+    let index = compare.indexOf("_");
+    compare = compare.subString(0, index);
+
+    //if (eventSelect.value)
   });
 
   // Optionally, if no selection was made, add the default option back on blur.
