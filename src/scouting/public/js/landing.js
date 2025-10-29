@@ -48,6 +48,23 @@ async function signOut() {
   spinner.classList.remove("visible");
 }
 
+async function isDemo() {
+  config2 = await config;
+  console.log(config2.DEMO);
+  if (config2.DEMO == "true") {
+    document.querySelector(".demo-label").textContent = "DEMO";
+    document.querySelector(".demo-label").style.fontSize = "3em";
+    document.querySelector(".demo-label").style.lineHeight = "1em";
+    document.querySelector(".demo-label").style.marginBottom = "12px";
+  } else {
+    document.querySelector(".demo-label").textContent = "";
+    document.querySelector(".demo-label").style.fontSize = "0em";
+    document.querySelector(".demo-label").style.lineHeight = "0em";
+    document.querySelector(".demo-label").style.marginBottom = "0px";
+  }
+}
+isDemo();
+
 async function userChanged(user) {
   if (auth2.isSignedIn.get()) {
     const verification = await verify(user);

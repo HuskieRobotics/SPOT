@@ -53,6 +53,8 @@
 		<div class="last-actions" id="last-actions"></div>
 	</div>
 
+
+
     <% for (let filename of pages) { %>
         <div id=<%=filename.replace(".ejs","")%> class="page <%= filename === landingPage + ".ejs" ? "visible" : ""%>"><%- include(`pages/${filename}`) %></div>
     <% } %>
