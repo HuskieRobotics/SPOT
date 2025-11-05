@@ -207,6 +207,22 @@ body {
   transform: translateY(-50%);
 }
 
+.demo-label {
+  position: absolute;
+  background-color: var(--bg);
+  border-radius: 10px;
+  top: 0px;
+  left: 165px;
+  font: 2em/1em "Cairo";
+  padding: 0 6px;
+  transform: translateY(-50%);
+  color: crimson;
+}
+
+#small-demo-label {
+  color: crimson;
+}
+
 #match-list {
   height: 100%;
   width: 100%;
