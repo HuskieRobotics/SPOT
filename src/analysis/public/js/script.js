@@ -17,6 +17,33 @@ if ("serviceWorker" in navigator) {
   });
 }
 
+/**
+ * The function of the isDemo method is so that whenever SPOT is in demo mode, 
+ *  it updates some text so that SPOT makes it very clear that it is in demo mode.
+ * 
+ * For future reference, it points to the span in analysis/views/index.ejs
+ *  that has the id of 'demo-label'. As of November 4th 2025, it is on line 92 of that code.
+ */
+async function isDemo() {
+
+  config2 = await config; // Get config to check if in demo mode.
+
+  if (config2.DEMO == true) {
+    // Basically makes the demo text appear. 
+    document.querySelector("#demo-label").textContent = "DEMO"; 
+    document.querySelector("#demo-label").style.fontSize = "3em";
+    document.querySelector("#demo-label").style.lineHeight = "1em";
+    document.querySelector("#demo-label").style.marginBottom = "12px";
+  } else {
+    // Basically makes the demo text disappear.
+    document.querySelector("#demo-label").textContent = "";
+    document.querySelector("#demo-label").style.fontSize = "0em";
+    document.querySelector("#demo-label").style.lineHeight = "0em";
+    document.querySelector("#demo-label").style.marginBottom = "0px";
+  }
+}
+isDemo(); // Probably somewhere better to put this, but it works so I do not care to find it. 
+
 function getSelectedEvent() {
   // Parse the query string to check for the 'event' parameter.
   const queryString = window.location.search;

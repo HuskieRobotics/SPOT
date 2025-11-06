@@ -48,22 +48,32 @@ async function signOut() {
   spinner.classList.remove("visible");
 }
 
+/**
+ * The function of the isDemo method is so that whenever SPOT is in demo mode, 
+ *  it updates some text so that SPOT makes it very clear that it is in demo mode.
+ * 
+ * For future reference, it points to the span in scouting/views/pages/landing.ejs
+ *  that has the class of 'demo-label'. As of November 4th 2025, it is on line 24 of that code.
+ */
 async function isDemo() {
-  config2 = await config;
-  console.log(config2.DEMO);
-  if (config2.DEMO == "true") {
-    document.querySelector(".demo-label").textContent = "DEMO";
+
+  config2 = await config; // Get config to check if in demo mode.
+
+  if (config2.DEMO == true) {
+    // Basically makes the demo text appear. 
+    document.querySelector(".demo-label").textContent = "DEMO"; 
     document.querySelector(".demo-label").style.fontSize = "3em";
     document.querySelector(".demo-label").style.lineHeight = "1em";
     document.querySelector(".demo-label").style.marginBottom = "12px";
   } else {
+    // Basically makes the demo text disappear.
     document.querySelector(".demo-label").textContent = "";
     document.querySelector(".demo-label").style.fontSize = "0em";
     document.querySelector(".demo-label").style.lineHeight = "0em";
     document.querySelector(".demo-label").style.marginBottom = "0px";
   }
 }
-isDemo();
+isDemo(); // Probably somewhere better to put this, but it works so I do not care to find it. 
 
 async function userChanged(user) {
   if (auth2.isSignedIn.get()) {
