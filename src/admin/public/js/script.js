@@ -58,14 +58,13 @@ async function isDemo() {
   let demoItem = document.querySelector(".demo-label");
   let demoItemSmol = document.querySelector("#small-demo-label");
 
-  if (isDemo == "true") {
+  if (isDemo == true) {
     demoItem.textContent = "DEMO";
-
     demoItemSmol.textContent = "DEMO";
   } else {
     demoItem.textContent = "";
     demoItemSmol.textContent = "";
-    demoItemSmol.;
+    demoItemSmol.style.margin = "0";
   }
 }
 isDemo();
