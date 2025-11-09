@@ -52,6 +52,24 @@ const scouters = {};
   }
 })();
 
+async function isDemo() {
+  const isDemo = await fetch("./api/isDemo").then((res) => res.json());
+
+  let demoItem = document.querySelector(".demo-label");
+  let demoItemSmol = document.querySelector("#small-demo-label");
+
+  if (isDemo == "true") {
+    demoItem.textContent = "DEMO";
+
+    demoItemSmol.textContent = "DEMO";
+  } else {
+    demoItem.textContent = "";
+    demoItemSmol.textContent = "";
+    demoItemSmol.;
+  }
+}
+isDemo();
+
 async function constructApp(accessCode) {
   await checkMigration();
 

@@ -105,6 +105,10 @@
   margin-top: 20px;
 }
 
+#demo-label {
+  color: crimson;
+}
+
 .popup {
   position: fixed;
   top: 0px;

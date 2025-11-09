@@ -28,6 +28,10 @@ router.get("/auth", (req, res) => {
   }
 });
 
+router.get("/isDemo", (req, res) => {
+  res.json(DEMO);
+});
+
 router.get("/scouters", (req, res) => {
   if (!DEMO) {
     if (req.headers.authorization === config.secrets.ACCESS_CODE) {
