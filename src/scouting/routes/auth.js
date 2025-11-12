@@ -14,6 +14,10 @@ router.get("/verify", async (req, res) => {
   }
 });
 
+router.get("/isDemo", (req, res) => {
+  res.json(config.DEMO);
+});
+
 async function verifyUser(token) {
   const ticket = await oAuth2Client
     .verifyIdToken({

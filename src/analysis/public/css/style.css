@@ -235,6 +235,14 @@ body {
   text-align: center;
 }
 
+#demo-label {
+  font-size: 3em;
+  line-height: 1em;
+  margin-bottom: 12px;
+  color: crimson;
+}
+
+
 #welcome-subtext {
   font-size: 2.5rem;
   line-height: 1em;
