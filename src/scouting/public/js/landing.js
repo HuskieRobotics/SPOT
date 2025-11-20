@@ -48,6 +48,31 @@ async function signOut() {
   spinner.classList.remove("visible");
 }
 
+/**
+ * The function of the isDemo method is so that whenever SPOT is in demo mode,
+ *  it updates some text so that SPOT makes it very clear that it is in demo mode.
+ */
+async function isDemo() {
+  const isDemo = await fetch("./auth/isDemo").then((res) => res.json()); // Check if in demo mode
+
+  demoLabel = document.querySelector(".demo-label");
+
+  if (isDemo == true) {
+    // Basically makes the demo text appear.
+    demoLabel.textContent = "DEMO";
+    demoLabel.style.fontSize = "3em";
+    demoLabel.style.lineHeight = "1em";
+    demoLabel.style.marginBottom = "12px";
+  } else {
+    // Basically makes the demo text disappear.
+    demoLabel.textContent = "";
+    demoLabel.style.fontSize = "0em";
+    demoLabel.style.lineHeight = "0em";
+    demoLabel.style.marginBottom = "0px";
+  }
+}
+isDemo(); // Probably somewhere better to put this, but it works so I do not care to find it.
+
 async function userChanged(user) {
   if (auth2.isSignedIn.get()) {
     const verification = await verify(user);

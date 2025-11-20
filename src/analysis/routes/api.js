@@ -17,6 +17,10 @@ router.get("/dataset", async (req, res) => {
   );
 });
 
+router.get("/isDemo", (req, res) => {
+  res.json(config.DEMO);
+});
+
 router.get("/dataset/:eventID", async (req, res) => {
   res.json(
     await TeamMatchPerformance.find({ eventNumber: req.params.eventID })

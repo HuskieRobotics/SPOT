@@ -160,6 +160,13 @@
   margin-bottom: 12px;
 }
 
+#landing .demo-label {
+  font-size: 3em;
+  line-height: 1em;
+  margin-bottom: 12px;
+  color: crimson;
+}
+
 #landing .logo {
   height: 90vmin;
   position: absolute;
