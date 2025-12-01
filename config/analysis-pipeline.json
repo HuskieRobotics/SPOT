@@ -148,6 +148,27 @@
     }
   },
   {
+    "type": "tmp",
+    "name": "sum",
+    "outputPath": "counts.missAlgae",
+    "options": {
+      "addends": [
+        "counts.autoMissProcessor",
+        "counts.autoMissNet",
+        "counts.teleopMissProcessor",
+        "counts.teleopMissNet"
+      ]
+    }
+  },
+  {
+    "type": "tmp",
+    "name": "sum",
+    "outputPath": "counts.missCoral",
+    "options": {
+      "addends": ["counts.autoMissCoral", "counts.teleopMissCoral"]
+    }
+  },
+  {
     "type": "team",
     "name": "countActions",
     "outputPath": "counts",
