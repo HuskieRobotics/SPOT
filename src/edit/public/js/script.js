@@ -87,7 +87,7 @@ let oldAccessCode;
     filterContainer.classList.add("filter-container");
 
     const scouterFilter = document.createElement("input");
-    scouterFilter.placeholder = "Filter by Scouter ID";
+    scouterFilter.placeholder = "Filter by Scouter Name";
     scouterFilter.classList.add("filter-input");
 
     const matchFilter = document.createElement("input");
@@ -137,17 +137,32 @@ let oldAccessCode;
         topRow.classList.add("match-item-top");
 
         const dropdownButton = document.createElement("button");
-        dropdownButton.textContent = "►";
+        dropdownButton.textContent = "▶";
         dropdownButton.classList.add("dropdown-button");
         topRow.appendChild(dropdownButton);
 
-        const matchInfo = document.createElement("span");
-        matchInfo.textContent = `Match: ${match.matchNumber}, Robot: ${match.robotNumber}, Scouter: ${match.scouterId}`;
-        matchInfo.classList.add("match-info");
-        topRow.appendChild(matchInfo);
+        // const matchInfo = document.createElement("span");
+        // matchInfo.textContent = `Match: ${match.matchNumber}, Robot: ${match.robotNumber}, Scouter: ${match.scouterId}`;
+        // matchInfo.classList.add("match-info");
+        // topRow.appendChild(matchInfo);
+
+        const matchNum = document.createElement("span");
+        matchNum.textContent = `Match: ${match.matchNumber}`;
+        matchNum.classList.add("match-info");
+        topRow.appendChild(matchNum);
+
+        const matchRobot = document.createElement("span");
+        matchRobot.textContent = `Robot: ${match.robotNumber}`;
+        matchRobot.classList.add("match-info");
+        topRow.appendChild(matchRobot);
+
+        const matchScouter = document.createElement("span");
+        matchScouter.textContent = `Scouter: ${match.scouterId}`;
+        matchScouter.classList.add("match-info");
+        topRow.appendChild(matchScouter);
 
         const trashButton = document.createElement("button");
-        trashButton.textContent = "🗑️";
+        trashButton.textContent = "X";
         trashButton.classList.add("trash-button");
         topRow.appendChild(trashButton);
 
@@ -156,7 +171,7 @@ let oldAccessCode;
         // Add dropdown content after the top row
         const dropdownContent = document.createElement("div");
         dropdownContent.classList.add("dropdown-content");
-        dropdownContent.style.display = "none";
+        dropdownContent.style.visibility = "collapse";
         listItem.appendChild(dropdownContent);
 
         // Format and display actionQueue data
@@ -176,9 +191,9 @@ let oldAccessCode;
 
         // Toggle dropdown on button click
         dropdownButton.onclick = () => {
-          const isHidden = dropdownContent.style.display === "none";
-          dropdownContent.style.display = isHidden ? "block" : "none";
-          dropdownButton.textContent = isHidden ? "▼" : "►";
+          const isHidden = dropdownContent.style.visibility == "collapse";
+          dropdownContent.style.visibility = isHidden ? "visible" : "collapse";
+          dropdownButton.textContent = isHidden ? "▼" : "▶";
         };
 
         trashButton.onclick = async () => {

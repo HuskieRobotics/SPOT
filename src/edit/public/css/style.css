@@ -6,7 +6,6 @@ body {
   display: flex;
   gap: 10px;
   margin-bottom: 20px;
-
   padding: 10px;
   /* Make sure padding aligns with other elements */
 }
@@ -16,36 +15,48 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px;
   border-bottom: 1px solid #ccc;
   flex-direction: column;
   margin: 5px 10px; /* Add horizontal margin to align with title */
-  border: 1px solid #ddd;
-  border-radius: 4px;
+  border: 2px solid var(--accent);
+  background-color: var(--bg-alt);
+  border-radius: 10px;
 }
 
 .match-info {
   flex-grow: 1;
+  font-size: 1.5em;
   padding-left: 4px;
   display: flex;
   align-items: center;
+  justify-content: space-evenly;
 }
 
 .trash-button {
   background: none;
   border: none;
   cursor: pointer;
-  font-size: 16px;
-  color: red;
+  font-size: 1.7em;
+  color: var(--bg-alt);
+  background-color: #ff6666;
   margin-left: auto;
   display: flex;
   align-items: center;
+  height: 1.3em;
+  border-radius: 3em;
+  padding: 10px;
+}
+
+.trash-button:hover {
+  background-color: #cf5353;
+  color: #e7e7e7;
 }
 
 .filter-input {
   padding: 8px;
-  border: 1px solid #ccc;
+  border: 2px solid var(--accent-alt);
   border-radius: 4px;
+  background-color: var(--bg-alt);
   flex: 1;
 }
 
@@ -72,8 +83,14 @@ body {
 .dropdown-content {
   width: 100%;
   padding: 10px;
-  background-color: var(--bg);
-  border-top: 1px solid #ddd;
+  background-color: var(--bg-alt);
+  border-top: 2px solid var(--accent);
+  margin-bottom: 6px;
+  transition: visibility 0.5s;
+}
+
+.dropdown-content:state(collapse) {
+  transition: visibility 0.5s;
 }
 
 .dropdown-content ul {
@@ -89,6 +106,7 @@ body {
 .header {
   font: 2em/1em "Cairo";
 }
+
 #title {
   background-color: var(--bg);
   font: 2em/1em "Cairo";
