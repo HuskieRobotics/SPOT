@@ -1,7 +1,7 @@
 const axios = require("axios");
-const { DataTransformer } = require("./public/js/DataTransformer.js");
-const { getPath } = require("./public/js/util.js");
-const { setPath } = require("./public/js/util.js");
+const { DataTransformer } = require("../public/js/DataTransformer.js");
+const { getPath } = require("../public/js/util.js");
+const { setPath } = require("../public/js/util.js");
 
 async function getTransformers() {
     const matchScoutingConfig = await axios.get("/config/match-scouting.json").then((res) => res.data);
