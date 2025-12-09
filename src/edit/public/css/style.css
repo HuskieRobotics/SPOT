@@ -24,45 +24,41 @@ body {
 }
 
 .match-num {
-  flex-grow: 1;
-  font-size: 1.5em;
-  padding-left: 4px;
-  display: flex;
-  align-items: center;
-  justify-content: space-evenly;
-}
-
-.match-robot {
-  flex-grow: 1;
-  font-size: 1.5em;
-  padding-left: 4px;
-  display: flex;
-  align-items: center;
-  justify-content: space-evenly;
+  margin-left: 5em;
 }
 
 .match-scouter {
-  flex-grow: 1;
-  font-size: 1.5em;
-  padding-left: 4px;
+  margin-right: 5em;
+}
+
+.match-robot {
+  margin-left: 10em;
+  margin-right: 10em;
+}
+
+.match-item-top {
   display: flex;
   align-items: center;
-  justify-content: space-evenly;
+  padding: 10px;
+  gap: 0;
+  width: 100%;
+  font-size: 1.5em;
 }
 
 .trash-button {
   background: none;
   border: none;
   cursor: pointer;
-  font-size: 1.7em;
+  font-size: 1.2em;
   color: var(--bg-alt);
   background-color: #ff6666;
-  margin-left: auto;
   display: flex;
   align-items: center;
   height: 1.3em;
   border-radius: 3em;
   padding: 10px;
+  margin-right: none;
+  padding-right: none;
 }
 
 .trash-button:hover {
@@ -76,15 +72,6 @@ body {
   border-radius: 4px;
   background-color: var(--bg-alt);
   flex: 1;
-}
-
-.match-item-top {
-  display: flex;
-  align-items: center;
-  padding: 10px;
-  gap: 0;
-  width: 100%;
-  justify-content: flex-start;
 }
 
 .dropdown-button {
