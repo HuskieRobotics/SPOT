@@ -87,7 +87,7 @@ let oldAccessCode;
     filterContainer.classList.add("filter-container");
 
     const scouterFilter = document.createElement("input");
-    scouterFilter.placeholder = "Filter by Scouter ID";
+    scouterFilter.placeholder = "Filter by Scouter Name";
     scouterFilter.classList.add("filter-input");
 
     const matchFilter = document.createElement("input");
@@ -141,13 +141,28 @@ let oldAccessCode;
         dropdownButton.classList.add("dropdown-button");
         topRow.appendChild(dropdownButton);
 
-        const matchInfo = document.createElement("span");
-        matchInfo.textContent = `Match: ${match.matchNumber}, Robot: ${match.robotNumber}, Scouter: ${match.scouterId}`;
-        matchInfo.classList.add("match-info");
-        topRow.appendChild(matchInfo);
+        // const matchInfo = document.createElement("span");
+        // matchInfo.textContent = `Match: ${match.matchNumber}, Robot: ${match.robotNumber}, Scouter: ${match.scouterId}`;
+        // matchInfo.classList.add("match-info");
+        // topRow.appendChild(matchInfo);
+
+        const matchNum = document.createElement("span");
+        matchNum.textContent = `Match: ${match.matchNumber}`;
+        matchNum.classList.add("match-num");
+        topRow.appendChild(matchNum);
+
+        const matchRobot = document.createElement("span");
+        matchRobot.textContent = `Robot: ${match.robotNumber}`;
+        matchRobot.classList.add("match-robot");
+        topRow.appendChild(matchRobot);
+
+        const matchScouter = document.createElement("span");
+        matchScouter.textContent = `Scouter: ${match.scouterId}`;
+        matchScouter.classList.add("match-scouter");
+        topRow.appendChild(matchScouter);
 
         const trashButton = document.createElement("button");
-        trashButton.textContent = "🗑️";
+        trashButton.textContent = "X";
         trashButton.classList.add("trash-button");
         topRow.appendChild(trashButton);
 
