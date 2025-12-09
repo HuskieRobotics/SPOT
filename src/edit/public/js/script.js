@@ -137,7 +137,7 @@ let oldAccessCode;
         topRow.classList.add("match-item-top");
 
         const dropdownButton = document.createElement("button");
-        dropdownButton.textContent = "▶";
+        dropdownButton.textContent = "►";
         dropdownButton.classList.add("dropdown-button");
         topRow.appendChild(dropdownButton);
 
@@ -148,17 +148,17 @@ let oldAccessCode;
 
         const matchNum = document.createElement("span");
         matchNum.textContent = `Match: ${match.matchNumber}`;
-        matchNum.classList.add("match-info");
+        matchNum.classList.add("match-num");
         topRow.appendChild(matchNum);
 
         const matchRobot = document.createElement("span");
         matchRobot.textContent = `Robot: ${match.robotNumber}`;
-        matchRobot.classList.add("match-info");
+        matchRobot.classList.add("match-robot");
         topRow.appendChild(matchRobot);
 
         const matchScouter = document.createElement("span");
         matchScouter.textContent = `Scouter: ${match.scouterId}`;
-        matchScouter.classList.add("match-info");
+        matchScouter.classList.add("match-scouter");
         topRow.appendChild(matchScouter);
 
         const trashButton = document.createElement("button");
@@ -171,7 +171,7 @@ let oldAccessCode;
         // Add dropdown content after the top row
         const dropdownContent = document.createElement("div");
         dropdownContent.classList.add("dropdown-content");
-        dropdownContent.style.visibility = "collapse";
+        dropdownContent.style.display = "none";
         listItem.appendChild(dropdownContent);
 
         // Format and display actionQueue data
@@ -191,9 +191,9 @@ let oldAccessCode;
 
         // Toggle dropdown on button click
         dropdownButton.onclick = () => {
-          const isHidden = dropdownContent.style.visibility == "collapse";
-          dropdownContent.style.visibility = isHidden ? "visible" : "collapse";
-          dropdownButton.textContent = isHidden ? "▼" : "▶";
+          const isHidden = dropdownContent.style.display === "none";
+          dropdownContent.style.display = isHidden ? "block" : "none";
+          dropdownButton.textContent = isHidden ? "▼" : "►";
         };
 
         trashButton.onclick = async () => {

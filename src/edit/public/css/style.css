@@ -23,7 +23,25 @@ body {
   border-radius: 10px;
 }
 
-.match-info {
+.match-num {
+  flex-grow: 1;
+  font-size: 1.5em;
+  padding-left: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.match-robot {
+  flex-grow: 1;
+  font-size: 1.5em;
+  padding-left: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.match-scouter {
   flex-grow: 1;
   font-size: 1.5em;
   padding-left: 4px;
@@ -86,11 +104,6 @@ body {
   background-color: var(--bg-alt);
   border-top: 2px solid var(--accent);
   margin-bottom: 6px;
-  transition: visibility 0.5s;
-}
-
-.dropdown-content:state(collapse) {
-  transition: visibility 0.5s;
 }
 
 .dropdown-content ul {
