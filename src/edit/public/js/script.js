@@ -26,8 +26,6 @@ let oldAccessCode;
       tmps = [...tmps, ...qrcodeTmps];
     }
 
-    console.log(tmps);
-
     return tmps;
   }
 
@@ -179,8 +177,6 @@ let oldAccessCode;
           const actionList = document.createElement("ul");
           match.actionQueue.forEach((action, index) => {
             const actionItem = document.createElement("li");
-            actionItem.textContent = `${index + 1}. ${action.id}`;
-            actionList.appendChild(actionItem);
           });
           dropdownContent.appendChild(actionList);
         } else {
