@@ -1,6 +1,7 @@
 let oldAccessCode;
 (async () => {
   let dataset;
+  let transformers;
   console.log("Loading data...");
 
   function showFade(element) {
@@ -173,6 +174,7 @@ let oldAccessCode;
         listItem.appendChild(dropdownContent);
 
         // Format and display actionQueue data
+
         if (match.actionQueue && match.actionQueue.length > 0) {
           const actionList = document.createElement("ul");
           match.actionQueue.forEach((action, index) => {
