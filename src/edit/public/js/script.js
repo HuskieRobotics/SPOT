@@ -148,17 +148,17 @@ let oldAccessCode;
 
         const matchNum = document.createElement("span");
         matchNum.textContent = `Match: ${match.matchNumber}`;
-        matchNum.classList.add("match-num");
+        matchNum.classList.add("match-info");
         topRow.appendChild(matchNum);
 
         const matchRobot = document.createElement("span");
         matchRobot.textContent = `Robot: ${match.robotNumber}`;
-        matchRobot.classList.add("match-robot");
+        matchRobot.classList.add("match-info");
         topRow.appendChild(matchRobot);
 
         const matchScouter = document.createElement("span");
         matchScouter.textContent = `Scouter: ${match.scouterId}`;
-        matchScouter.classList.add("match-scouter");
+        matchScouter.classList.add("match-info");
         topRow.appendChild(matchScouter);
 
         const trashButton = document.createElement("button");

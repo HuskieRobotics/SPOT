@@ -23,17 +23,9 @@ body {
   border-radius: 10px;
 }
 
-.match-num {
-  margin-left: 5em;
-}
-
-.match-scouter {
-  margin-right: 5em;
-}
-
-.match-robot {
-  margin-left: 10em;
-  margin-right: 10em;
+.match-info {
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .match-item-top {
@@ -49,6 +41,7 @@ body {
   background: none;
   border: none;
   cursor: pointer;
+  margin-left: auto;
   font-size: 1.2em;
   color: var(--bg-alt);
   background-color: #ff6666;
