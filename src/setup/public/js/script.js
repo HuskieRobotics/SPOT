@@ -109,6 +109,20 @@ if (eventSelect) {
       placeholder.textContent = "Select Event Number";
       eventSelect.insertBefore(placeholder, eventSelect.firstChild);
     }
+
+    /**
+     * So what does this code do? Well, it makes sure that if the event key is different from the event code (as in, 2023rr != 2024joh_official)
+     *  it updates the event key to be the text before the underscore. (2023rr != 2024joh_official, so we take 2024joh from 2024joh_offical and set event key to that)
+     */
+
+    let compare = eventSelect.value; // Get the event code
+    let index = compare.indexOf("_"); // Get the index to seperate the event code
+    compare = compare.substring(0, index); // Seperate the event code
+
+    // Compare event code to event key and see if different
+    if (compare != document.querySelector("#TBA_EVENT_KEY").value) {
+      document.querySelector("#TBA_EVENT_KEY").value = compare; // Set event key to seperated event code
+    }
   });
 }
 async function createNewEventCode(candidate) {

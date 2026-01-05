@@ -4,7 +4,6 @@ const { TeamMatchPerformance, Event } = require("../../lib/db.js");
 const { setPath } = require("../../lib/util.js");
 const axios = require("axios");
 const config = require("../../../config/config.json");
-const { got } = require("../get.js");
 const chalk = require("chalk");
 
 let router = Router();
@@ -146,9 +145,12 @@ router.get("/csv", async (req, res) => {
       .then((res) => res.data);
 
     // This will show up as a method that doesn't exist since it is gotten from the server
-    let getTransformers = await got();
-    getTransformers = getTransformers["getTransformers"];
-    const transformers = await getTransformers();
+    let tempTransformer = await axios
+      .get("/analysis/transformers2.js")
+      .then((res) => res.data);
+    tempTransformer = eval(tempTransformer);
+    tempTransformer = tempTransformer["getTransformers"];
+    const transformers = await tempTransformer();
 
     for (let tfConfig of pipelineConfig) {
       dataset = transformers[tfConfig.type][tfConfig.name].execute(
