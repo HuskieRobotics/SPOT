@@ -1,13 +1,13 @@
 {
   "timing": {
-    "totalTime": 153000,
+    "totalTime": 50000, 
     "timeTransitions": {
-      "152999": {
+      "49999": {
         "layer": 1,
         "displayText": "Auto",
         "variables": {}
       },
-      "135000": {
+      "5000": {
         "layer": 2,
         "displayText": "Teleop",
         "variables": {}
@@ -18,14 +18,14 @@
     "minOfQueueLength": 2
   },
   "layout": {
-    "gridRows": 6,
+    "gridRows": 9,
     "gridColumns": 9,
     "layers": [
       [
         {
           "id": "startGame",
           "displayText": "Start",
-          "gridArea": ["2", "1", "4", "10"],
+          "gridArea": ["2", "1", "4", "8"],
           "class": "silver timer",
           "type": "match-control",
           "executables": [
@@ -47,7 +47,7 @@
           "id": "preloadNone",
           "displayText": "Preload None",
           "gridArea": ["4", "6", "6", "10"],
-          "class": "gray",
+          "class": "red",
           "type": "action",
           "executables": []
         }
@@ -60,123 +60,8 @@
           "class": "silver timer",
           "type": "match-control",
           "executables": []
-        },
-        {
-          "id": "broken",
-          "displayText": "Disabled",
-          "gridArea": ["1", "1", "2", "3"],
-          "class": "red",
-          "type": "action",
-          "executables": []
-        },
-        {
-          "id": "aStop",
-          "displayText": "A-Stop",
-          "gridArea": ["1", "3", "2", "4"],
-          "class": "red",
-          "type": "action",
-          "executables": []
-        },
-        {
-          "id": "autoGroundPickupCoral",
-          "displayText": "Pickup Ground",
-          "gridArea": ["2", "1", "4", "3"],
-          "class": "lightCoral",
-          "type": "action",
-          "executables": [
-            {
-              "type": "layer",
-              "args": [1, 7]
-            }
-          ]
-        },
-        {
-          "id": "autoStationPickupCoral",
-          "displayText": "Pickup Station",
-          "gridArea": ["4", "1", "6", "3"],
-          "class": "lightCoral",
-          "type": "action",
-          "executables": []
-        },
-        {
-          "id": "autoCoralDrop",
-          "displayText": "Drop",
-          "gridArea": ["6", "1", "7", "3"],
-          "class": "darkCoral",
-          "type": "action",
-          "executables": []
-        },
-        {
-          "id": "autoScoreCoral",
-          "displayText": "Coral",
-          "gridArea": ["3", "3", "5", "5"],
-          "class": "coral",
-          "type": "none",
-          "executables": [
-            {
-              "type": "layer",
-              "args": [1, 5]
-            }
-          ]
-        },
-        {
-          "id": "undo",
-          "displayText": "Undo",
-          "gridArea": ["1", "8", "2", "10"],
-          "class": "sherbert",
-          "type": "undo",
-          "executables": []
-        },
-        {
-          "id": "autoGroundPickupAlgae",
-          "displayText": "Pickup Ground",
-          "gridArea": ["2", "8", "4", "10"],
-          "class": "lightbluegreen",
-          "type": "action",
-          "executables": [
-            {
-              "type": "layer",
-              "args": [1, 6]
-            }
-          ]
-        },
-        {
-          "id": "autoReefPickupAlgae",
-          "displayText": "Pickup Reef",
-          "gridArea": ["4", "8", "6", "10"],
-          "class": "lightbluegreen",
-          "type": "action",
-          "executables": []
-        },
-        {
-          "id": "autoScoreAlgae",
-          "displayText": "Algae",
-          "gridArea": ["3", "6", "5", "8"],
-          "class": "bluegreen",
-          "type": "action",
-          "executables": [
-            {
-              "type": "layer",
-              "args": [1, 4]
-            }
-          ]
-        },
-        {
-          "id": "autoAlgaeDrop",
-          "displayText": "Drop",
-          "gridArea": ["6", "8", "7", "10"],
-          "class": "darkbluegreen",
-          "type": "action",
-          "executables": []
-        },
-        {
-          "id": "leave",
-          "displayText": "Leave",
-          "gridArea": ["6", "4", "7", "7"],
-          "class": "gray",
-          "type": "action",
-          "executables": []
         }
+
       ],
       [
         {
