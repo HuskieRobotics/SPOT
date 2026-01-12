@@ -71,6 +71,7 @@ let oldAccessCode;
         (res) => res.json()
       );
       dataset = await executePipeline();
+
       showElements(dataset, modulesConfig);
       await new Promise((r) => setTimeout(r, 300));
     });
@@ -177,9 +178,28 @@ let oldAccessCode;
 
         if (match.actionQueue && match.actionQueue.length > 0) {
           const actionList = document.createElement("ul");
+          let actions = [];
+
           match.actionQueue.forEach((action, index) => {
-            const actionItem = document.createElement("li");
+            actions.push(action.id);
           });
+
+          actions = [...new Set(actions)];
+
+          const actionItem = document.createElement("li");
+          for (let i = 0; i < actions.length; i++) {
+            let amount = 0;
+            match.actionQueue.forEach((action) => {
+              if (actions.at(i) === action.id) {
+                amount++;
+              }
+            });
+
+            match.actionQueue.forEach((action) => {
+              actionItem.textContent = `Amount of ${actions.at(i)}: ${amount}`;
+              actionList.appendChild(actionItem);
+            });
+          }
           dropdownContent.appendChild(actionList);
         } else {
           dropdownContent.textContent = "No actions recorded";
