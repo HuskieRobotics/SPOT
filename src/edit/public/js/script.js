@@ -186,7 +186,6 @@ let oldAccessCode;
 
           actions = [...new Set(actions)];
 
-          const actionItem = document.createElement("li");
           for (let i = 0; i < actions.length; i++) {
             let amount = 0;
             match.actionQueue.forEach((action) => {
@@ -194,11 +193,9 @@ let oldAccessCode;
                 amount++;
               }
             });
-
-            match.actionQueue.forEach((action) => {
-              actionItem.textContent = `Amount of ${actions.at(i)}: ${amount}`;
-              actionList.appendChild(actionItem);
-            });
+            const actionItem = document.createElement("li");
+            actionItem.textContent = `Actions of ${actions.at(i)}: ${amount}`;
+            actionList.appendChild(actionItem);
           }
           dropdownContent.appendChild(actionList);
         } else {
