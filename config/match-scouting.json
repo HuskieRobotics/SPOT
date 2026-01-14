@@ -293,8 +293,8 @@
       ],
       [
         {
-          "id": "startGame",
-          "displayText": "Start",
+          "id": "matchTimer",
+          "displayText": "Match Timer",
           "gridArea": ["1", "4", "2", "7"],
           "class": "silver timer",
           "type": "match-control",
@@ -317,31 +317,31 @@
           "executables": []
         },
         {
-          "id": "park",
-          "displayText": "Park",
+          "id": "l3",
+          "displayText": "L3",
           "gridArea": ["3", "4", "4", "7"],
           "class": "gray",
           "type": "action",
           "executables": []
         },
         {
-          "id": "shallow",
-          "displayText": "Shallow Cage",
+          "id": "l2",
+          "displayText": "L2",
           "gridArea": ["4", "4", "5", "7"],
           "class": "shallowBlue",
           "type": "action",
           "executables": []
         },
         {
-          "id": "deep",
-          "displayText": "Deep Cage",
+          "id": "teleopL1",
+          "displayText": "L1",
           "gridArea": ["5", "4", "6", "7"],
           "class": "deepBlue",
           "type": "action",
           "executables": []
         },
         {
-          "id": "bargeFall",
+          "id": "fall",
           "displayText": "Fall",
           "gridArea": ["6", "4", "7", "7"],
           "class": "red",
@@ -766,19 +766,6 @@
           "class": "sherbert",
           "type": "undo",
           "executables": []
-        },
-        {
-          "id": "teleopl4",
-          "displayText": "L4",
-          "gridArea": ["3", "4", "4", "7"],
-          "class": "lightCoral",
-          "type": "action",
-          "executables": [
-            {
-              "type": "layer",
-              "args": [9, 2]
-            }
-          ]
         },
         {
           "id": "teleopl3",
