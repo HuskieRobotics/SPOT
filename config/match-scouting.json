@@ -8,7 +8,7 @@
         "variables": {}
       },
       "135000": {
-        "layer": 2,
+        "layer": 3,
         "displayText": "Teleop",
         "variables": {}
       }
@@ -317,34 +317,26 @@
           "executables": []
         },
         {
-          "id": "park",
-          "displayText": "Park",
-          "gridArea": ["3", "4", "4", "7"],
+          "id": "climb",
+          "displayText": "Climb",
+          "gridArea": ["6", "4", "7", "7"],
           "class": "gray",
           "type": "action",
           "executables": []
         },
         {
-          "id": "shallow",
-          "displayText": "Shallow Cage",
-          "gridArea": ["4", "4", "5", "7"],
+          "id": "defense",
+          "displayText": "Defense",
+          "gridArea": ["3", "2", "5", "5"],
           "class": "shallowBlue",
           "type": "action",
           "executables": []
         },
         {
-          "id": "deep",
-          "displayText": "Deep Cage",
-          "gridArea": ["5", "4", "6", "7"],
+          "id": "passing",
+          "displayText": "Passing",
+          "gridArea": ["3", "6", "5", "9"],
           "class": "deepBlue",
-          "type": "action",
-          "executables": []
-        },
-        {
-          "id": "bargeFall",
-          "displayText": "Fall",
-          "gridArea": ["6", "4", "7", "7"],
-          "class": "red",
           "type": "action",
           "executables": []
         }
