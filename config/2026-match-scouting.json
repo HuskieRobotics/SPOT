@@ -1,0 +1,162 @@
+{
+  "timing": {
+    "totalTime": 153000,
+    "timeTransitions": {
+      "152999": {
+        "layer": 1,
+        "displayText": "Auto",
+        "variables": {}
+      },
+      "135000": {
+        "layer": 2,
+        "displayText": "Teleop",
+        "variables": {}
+      }
+    }
+  },
+  "layout": {
+    "gridRows": 6,
+    "gridColumns": 9,
+    "layers": [
+      [
+        {
+          "id": "startGame",
+          "displayText": "Start",
+          "gridArea": ["2", "1", "4", "10"],
+          "class": "silver timer",
+          "type": "match-control",
+          "executables": [
+            {
+              "type": "layer",
+              "args": [0, 1]
+            }
+          ]
+        },
+        {
+          "id": "preloadFuel",
+          "displayText": "Preload Fuel",
+          "gridArea": ["4", "1", "6", "5"],
+          "class": "lightCoral",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "preloadNone",
+          "displayText": "Preload None",
+          "gridArea": ["4", "6", "6", "10"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        }
+      ],
+      [
+        {
+          "id": "matchTimer",
+          "displayText": "Match Timer",
+          "gridArea": ["1", "4", "2", "7"],
+          "class": "silver timer",
+          "type": "match-control",
+          "executables": []
+        },
+        {
+          "id": "broken",
+          "displayText": "Disabled",
+          "gridArea": ["1", "1", "2", "3"],
+          "class": "red",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "undo",
+          "displayText": "Undo",
+          "gridArea": ["1", "8", "2", "10"],
+          "class": "sherbert",
+          "type": "undo",
+          "executables": []
+        },
+        {
+          "id": "l3",
+          "displayText": "L3",
+          "gridArea": ["3", "4", "4", "7"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "l2",
+          "displayText": "L2",
+          "gridArea": ["4", "4", "5", "7"],
+          "class": "shallowBlue",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "teleopL1",
+          "displayText": "L1",
+          "gridArea": ["5", "4", "6", "7"],
+          "class": "deepBlue",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "fall",
+          "displayText": "Fall",
+          "gridArea": ["6", "4", "7", "7"],
+          "class": "red",
+          "type": "action",
+          "executables": []
+        }
+      ],
+      [
+        {
+          "id": "startGame",
+          "displayText": "Start",
+          "gridArea": ["1", "4", "2", "7"],
+          "class": "silver timer",
+          "type": "match-control",
+          "executables": []
+        },
+        {
+          "id": "broken",
+          "displayText": "Disabled",
+          "gridArea": ["1", "1", "2", "3"],
+          "class": "red",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "undo",
+          "displayText": "Undo",
+          "gridArea": ["1", "8", "2", "10"],
+          "class": "sherbert",
+          "type": "undo",
+          "executables": []
+        },
+        {
+          "id": "climb",
+          "displayText": "Climb",
+          "gridArea": ["6", "4", "7", "7"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "defense",
+          "displayText": "Defense",
+          "gridArea": ["3", "2", "5", "5"],
+          "class": "shallowBlue",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "passing",
+          "displayText": "Passing",
+          "gridArea": ["3", "6", "5", "9"],
+          "class": "deepBlue",
+          "type": "action",
+          "executables": []
+        }
+      ]
+    ]
+  }
+}
