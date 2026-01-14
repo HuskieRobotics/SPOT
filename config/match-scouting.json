@@ -78,9 +78,17 @@
           "executables": []
         },
         {
-          "id": "autoGroundPickupCoral",
-          "displayText": "Pickup Ground",
-          "gridArea": ["2", "1", "4", "3"],
+          "id": "undo",
+          "displayText": "Undo",
+          "gridArea": ["1", "8", "2", "10"],
+          "class": "sherbert",
+          "type": "undo",
+          "executables": []
+        },
+        {
+          "id": "autoClimbL1",
+          "displayText": "Climb L1",
+          "gridArea": ["3", "1", "5", "3"],
           "class": "lightCoral",
           "type": "action",
           "executables": [
@@ -91,89 +99,55 @@
           ]
         },
         {
-          "id": "autoStationPickupCoral",
-          "displayText": "Pickup Station",
-          "gridArea": ["4", "1", "6", "3"],
+          "id": "autoFallL1",
+          "displayText": "Fall",
+          "gridArea": ["5", "1", "6", "3"],
           "class": "lightCoral",
           "type": "action",
           "executables": []
         },
         {
-          "id": "autoCoralDrop",
-          "displayText": "Drop",
-          "gridArea": ["6", "1", "7", "3"],
-          "class": "darkCoral",
-          "type": "action",
-          "executables": []
-        },
-        {
-          "id": "autoScoreCoral",
-          "displayText": "Coral",
-          "gridArea": ["3", "3", "5", "5"],
+          "id": "autoStartShooting",
+          "displayText": "Start Shooting",
+          "gridArea": ["4", "3", "6", "5"],
           "class": "coral",
           "type": "none",
           "executables": [
             {
               "type": "layer",
-              "args": [1, 5]
+              "args": [1,7]
             }
           ]
         },
         {
-          "id": "undo",
-          "displayText": "Undo",
-          "gridArea": ["1", "8", "2", "10"],
-          "class": "sherbert",
-          "type": "undo",
-          "executables": []
-        },
-        {
-          "id": "autoGroundPickupAlgae",
-          "displayText": "Pickup Ground",
-          "gridArea": ["2", "8", "4", "10"],
-          "class": "lightbluegreen",
-          "type": "action",
-          "executables": [
-            {
-              "type": "layer",
-              "args": [1, 6]
-            }
-          ]
-        },
-        {
-          "id": "autoReefPickupAlgae",
-          "displayText": "Pickup Reef",
-          "gridArea": ["4", "8", "6", "10"],
+          "id": "autoStopShooting",
+          "displayText": "Stop Shooting",
+          "gridArea": ["4", "5", "6", "7"],
           "class": "lightbluegreen",
           "type": "action",
           "executables": []
         },
         {
-          "id": "autoScoreAlgae",
-          "displayText": "Algae",
-          "gridArea": ["3", "6", "5", "8"],
+          "id": "autoCollectOutpost",
+          "displayText": "Collect Outpost",
+          "gridArea": ["3", "7", "4", "10"],
           "class": "bluegreen",
           "type": "action",
-          "executables": [
-            {
-              "type": "layer",
-              "args": [1, 4]
-            }
-          ]
+          "executables": []
         },
         {
-          "id": "autoAlgaeDrop",
-          "displayText": "Drop",
-          "gridArea": ["6", "8", "7", "10"],
+          "id": "autoCollectDepo",
+          "displayText": "Collect Depo",
+          "gridArea": ["4", "7", "5", "10"],
           "class": "darkbluegreen",
           "type": "action",
           "executables": []
         },
         {
-          "id": "leave",
-          "displayText": "Leave",
-          "gridArea": ["6", "4", "7", "7"],
-          "class": "gray",
+          "id": "autoCollectNeutral",
+          "displayText": "Collect Neutral",
+          "gridArea": ["5", "7", "6", "10"],
+          "class": "darkbluegreen",
           "type": "action",
           "executables": []
         }
