@@ -36,8 +36,8 @@
           ]
         },
         {
-          "id": "preloadCoral",
-          "displayText": "Preload Coral",
+          "id": "preloadFuel",
+          "displayText": "Preload Fuel",
           "gridArea": ["4", "1", "6", "5"],
           "class": "lightCoral",
           "type": "action",
@@ -56,7 +56,7 @@
         {
           "id": "startGame",
           "displayText": "Start",
-          "gridArea": ["1", "4", "2", "7"],
+          "gridArea": ["1", "4", "2", "10"],
           "class": "silver timer",
           "type": "match-control",
           "executables": []
