@@ -9,9 +9,36 @@ class HeatmapScatterPlot {
   }
 
   async formatData(teams, dataset) {
-    let actionGroups = this.moduleConfig.options.actionGroups;
-    let actions = actionGroups.reduce((acc, action) => {
-      acc.push(...action.actions);
+    let options = this.moduleConfig.options || {};
+    let actionGroups = options.actionGroups;
+    let actionLabels = options.actionLabels;
+
+    // fallback to match-scouting config if needed
+    if ((!actionGroups || !actionLabels) && typeof fetch === "function") {
+      try {
+        const ms = await fetch("/config/match-scouting.json").then((r) =>
+          r.json()
+        );
+        const flattened = (ms.layout || { layers: [] }).layers
+          .flat()
+          .filter(Boolean);
+        const allActionItems = flattened.filter((i) => i.type === "action");
+        const allActionIds = allActionItems.map((i) => i.id).filter(Boolean);
+        const labels = {};
+        for (const item of allActionItems) {
+          if (item.id) labels[item.id] = item.displayText || item.id;
+        }
+
+        if (!actionGroups)
+          actionGroups = [{ name: "All", actions: allActionIds }];
+        if (!actionLabels) actionLabels = labels;
+      } catch (e) {
+        // ignore and rely on provided options
+      }
+    }
+
+    let actions = (actionGroups || []).reduce((acc, action) => {
+      acc.push(...(action.actions || []));
       return acc;
     }, []);
 
@@ -25,13 +52,13 @@ class HeatmapScatterPlot {
         )
         .flat()
         .filter((a) => a.id == actionId);
-      // console.log(this.moduleConfig.options.actionLabels[actionId])
+      // console.log(actionLabels && actionLabels[actionId])
       if (filteredActionQueue.length) {
         acc.push({
           mode: "markers",
           type: "scatter",
           showlegend: true,
-          name: this.moduleConfig.options.actionLabels[actionId],
+          name: (actionLabels || {})[actionId] || actionId,
           x: filteredActionQueue.map(
             (a) => getPath(a, this.moduleConfig.options.coordinatePath).x
           ),

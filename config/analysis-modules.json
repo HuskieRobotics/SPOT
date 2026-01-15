@@ -14,34 +14,48 @@
     }
   },
   {
-            "view": "team",
-            "module": "FieldPlot",
-            "name": "Action Heatmap",
-            "position": "main",
-            "options": {
-            "coordinatePath": "other.pos",
-            "aggregatedActionsPath": "aggregatedActions",
-            "actionGroups": [
-                {
-                    "name": "Shots",
-                    "actions": ["upperHub", "lowerHub", "miss"]
-                },
-                {
-                    "name": "Pickups",
-                    "actions": ["groundPickup", "terminalPickup"]
-                }
-            ],
-            "actionLabels": {
-                "upperHub": "UpperH",
-                "lowerHub": "LowerH",
-                "miss": "Miss",
-                "groundPickup": "GroundP",
-                "terminalPickup": "TerminalP"
-            },
-            "imgPath": "img/field.jpeg"
+    "view": "team",
+    "module": "FieldPlot",
+    "name": "Action Heatmap",
+    "position": "main",
+    "options": {
+      "coordinatePath": "other.pos",
+      "aggregatedActionsPath": "aggregatedActions",
+      "actionGroups": [
+        {
+          "name": "Shots",
+          "actions": [
+            "teleopl1",
+            "autol1",
+            "teleopl2",
+            "autol2",
+            "teleopl3",
+            "autol3",
+            "teleopl4",
+            "autol4"
+          ]
+        },
+        {
+          "name": "Pickups",
+          "actions": ["autoGroundPickupCoral", "teleopGroundPickupCoral"]
         }
-    },
-    {
+      ],
+      "actionLabels": {
+        "teleopl1": "TeleopL1",
+        "autol1": "AutoL1",
+        "teleopl2": "TeleopL2",
+        "autol2": "AutoL2",
+        "teleopl3": "TeleopL3",
+        "autol3": "AutoL3",
+        "teleopl4": "TeleopL4",
+        "autol4": "AutoL4",
+        "autoGroundPickupCoral": "AutoGroundCoral",
+        "teleopGroundPickupCoral": "TeleopGroundCoral"
+      },
+      "imgPath": "img/field.svg"
+    }
+  },
+  {
     "view": "team",
     "module": "Pie",
     "name": "Coral Pickup Distribution",
