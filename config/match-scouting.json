@@ -318,7 +318,7 @@
         },
         {
           "id": "l3",
-          "displayText": "L3",
+          "displayText": "Attempted L3 Hang",
           "gridArea": ["3", "4", "4", "7"],
           "class": "gray",
           "type": "action",
@@ -326,15 +326,15 @@
         },
         {
           "id": "l2",
-          "displayText": "L2",
+          "displayText": "Attempted L2 Hang",
           "gridArea": ["4", "4", "5", "7"],
           "class": "shallowBlue",
           "type": "action",
           "executables": []
         },
         {
-          "id": "teleopL1",
-          "displayText": "L1",
+          "id": "teleopl1",
+          "displayText": "Attempted L1 Hang",
           "gridArea": ["5", "4", "6", "7"],
           "class": "deepBlue",
           "type": "action",
