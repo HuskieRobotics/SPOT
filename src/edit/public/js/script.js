@@ -12,7 +12,7 @@ let oldAccessCode;
     element.classList.remove("visible");
   }
 
-  async function executePipeline() {
+  async function getTMPS() {
     // Get tmps from database (or cache if offline)
     let tmps = await fetch("/analysis/api/dataset").then((res) => res.json());
 
@@ -24,7 +24,7 @@ let oldAccessCode;
       const qrcodeTmps = JSON.parse(storage).map((tmp) => JSON.parse(tmp));
 
       // Merge the TMPs into one
-      tmps = [...tmps, ...qrcodeTmps];
+      //tmps = [...tmps];
     }
 
     return tmps;
@@ -65,12 +65,13 @@ let oldAccessCode;
       new Popup("error", "Wrong Access Code");
     }
   }
+
   async function constructApp(accessCode) {
     await loadAround(async () => {
       const modulesConfig = await fetch(`/config/analysis-modules.json`).then(
         (res) => res.json()
       );
-      dataset = await executePipeline();
+      dataset = await getTMPS();
 
       showElements(dataset, modulesConfig);
       await new Promise((r) => setTimeout(r, 300));
@@ -105,8 +106,7 @@ let oldAccessCode;
     filterContainer.appendChild(robotFilter);
     listContainer.appendChild(filterContainer);
 
-    // Filter function
-    function updateList() {
+    async function updateList() {
       const filteredData = dataset.filter((match) => {
         const matchScouterId = String(match.scouterId).toLowerCase();
         const scouterValue = scouterFilter.value.toLowerCase();
@@ -120,6 +120,8 @@ let oldAccessCode;
         );
       });
 
+      console.log(filteredData);
+
       // Sort by timestamp
       filteredData.sort((a, b) => b.timestamp - a.timestamp);
 
@@ -127,10 +129,27 @@ let oldAccessCode;
       const items = listContainer.querySelectorAll(".match-item");
       items.forEach((item) => item.remove());
 
+      let tbaData = await fetch("/edit/blueApiData").then((res) => res.json());
+
       // Create items for filtered data
       filteredData.forEach((match) => {
         const listItem = document.createElement("div");
-        listItem.classList.add("match-item");
+        listItem.classList.add(`match-item`);
+        let allianceColor = "blue";
+
+        tbaData.forEach((item) => {
+          if (item.match_number == match.matchNumber) {
+            for (let team of item.alliances.red.team_keys) {
+              if (team.substring(3) == match.robotNumber) {
+                allianceColor = "red";
+              }
+            }
+          }
+        });
+
+        if (allianceColor == "red") {
+          listItem.style.borderColor = "#ff6666";
+        }
 
         // Create a container for the top row (arrow, info, and trash)
         const topRow = document.createElement("div");
@@ -170,22 +189,36 @@ let oldAccessCode;
 
         // Add dropdown content after the top row
         const dropdownContent = document.createElement("div");
-        dropdownContent.classList.add("dropdown-content");
+        dropdownContent.classList.add(`dropdown-content`);
         dropdownContent.style.display = "none";
         listItem.appendChild(dropdownContent);
 
         // Format and display actionQueue data
-
         if (match.actionQueue && match.actionQueue.length > 0) {
           const actionList = document.createElement("ul");
           let actions = [];
 
+          /**
+           * Go through the actionQueue and add each action performed to the action list.
+           *  Also, add the action ids to the actions array for later.
+           */
           match.actionQueue.forEach((action, index) => {
+            const actionItem = document.createElement("li");
+            actionItem.textContent = `${index + 1}. ${action.id}`;
+
             actions.push(action.id);
+            actionList.appendChild(actionItem);
           });
 
+          /**
+           * Convert the array of actions into a non-repeating array.
+           *  The reason this is done is to not have to hard-code the actionQueue names in the for loop below.
+           */
           actions = [...new Set(actions)];
 
+          /**
+           * Go through the array of actions and then count how many times a action appears.
+           */
           for (let i = 0; i < actions.length; i++) {
             let amount = 0;
             match.actionQueue.forEach((action) => {
@@ -198,6 +231,7 @@ let oldAccessCode;
             actionList.appendChild(actionItem);
           }
           dropdownContent.appendChild(actionList);
+          actions = [];
         } else {
           dropdownContent.textContent = "No actions recorded";
         }
