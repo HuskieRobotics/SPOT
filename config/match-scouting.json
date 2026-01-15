@@ -87,7 +87,7 @@
         },
         {
           "id": "autoClimbL1",
-          "displayText": "Climb L1",
+          "displayText": "Attempted Climb",
           "gridArea": ["3", "1", "5", "3"],
           "class": "lightCoral",
           "type": "action",
