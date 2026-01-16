@@ -135,7 +135,7 @@ let oldAccessCode;
       filteredData.forEach((match) => {
         const listItem = document.createElement("div");
         listItem.classList.add(`match-item`);
-        let allianceColor = "blue";
+        let allianceColor;
 
         tbaData.forEach((item) => {
           if (item.match_number == match.matchNumber) {
@@ -144,12 +144,14 @@ let oldAccessCode;
                 allianceColor = "red";
               }
             }
+
+            for (let team of item.alliances.blue.team_keys) {
+              if (team.substring(3) == match.robotNumber) {
+                allianceColor = "blue";
+              }
+            }
           }
         });
-
-        if (allianceColor == "red") {
-          listItem.style.borderColor = "#ff6666";
-        }
 
         // Create a container for the top row (arrow, info, and trash)
         const topRow = document.createElement("div");
@@ -192,6 +194,14 @@ let oldAccessCode;
         dropdownContent.classList.add(`dropdown-content`);
         dropdownContent.style.display = "none";
         listItem.appendChild(dropdownContent);
+
+        if (allianceColor == "red") {
+          listItem.style.borderColor = "#ff6666";
+          dropdownContent.style.borderTopColor = "#ff6666";
+        } else {
+          listItem.style.borderColor = "--bg-alt";
+          dropdownContent.style.borderTopColor = "--bg-alt";
+        }
 
         // Format and display actionQueue data
         if (match.actionQueue && match.actionQueue.length > 0) {
