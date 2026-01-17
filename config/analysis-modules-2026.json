@@ -145,25 +145,26 @@
   {
     "view": "team",
     "module": "Bar",
-    "name": "Barge",
+    "name": "Attemped Climb Level",
     "position": "main",
     "options": {
       "bars": [
         {
-          "name": "Park",
-          "path": "counts.park"
+          "name":"Fall",
+          "path":"counts.totalFall"
         },
         {
-          "name": "Fall",
-          "path": "counts.bargeFall"
+          "name": "L1",
+          "path": "counts.totalL1"
+        },
+        
+        {
+          "name": "L2",
+          "path": "counts.totalL2"
         },
         {
-          "name": "Deep Cage",
-          "path": "counts.deep"
-        },
-        {
-          "name": "Shallow Cage",
-          "path": "counts.shallow"
+          "name":"L3",
+          "path": "counts.totalL3"
         }
       ]
     }
