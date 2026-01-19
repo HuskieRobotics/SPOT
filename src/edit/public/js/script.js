@@ -69,7 +69,7 @@ let oldAccessCode;
   async function constructApp(accessCode) {
     await loadAround(async () => {
       const modulesConfig = await fetch(`/config/analysis-modules.json`).then(
-        (res) => res.json()
+        (res) => res.json(),
       );
       dataset = await getTMPS();
 
@@ -120,8 +120,6 @@ let oldAccessCode;
         );
       });
 
-      console.log(filteredData);
-
       // Sort by timestamp
       filteredData.sort((a, b) => b.timestamp - a.timestamp);
 
@@ -131,6 +129,46 @@ let oldAccessCode;
 
       let tbaData = await fetch("/edit/blueApiData").then((res) => res.json());
 
+      // Build robots by match from qualification matches (keep first occurrence)
+      const robotsByMatch = tbaData.reduce((acc, match) => {
+        if (match.comp_level !== "qm") return acc;
+        if (acc[match.match_number]) return acc;
+
+        acc[match.match_number] = [
+          ...match.alliances.red.team_keys.map((key) => ({
+            robotNumber: Number(key.substring(3)),
+            allianceColor: "red",
+          })),
+          ...match.alliances.blue.team_keys.map((key) => ({
+            robotNumber: Number(key.substring(3)),
+            allianceColor: "blue",
+          })),
+        ];
+        return acc;
+      }, {});
+
+      // Build scouted set per match from filtered data
+      const scoutedByMatch = filteredData.reduce((acc, match) => {
+        if (!acc[match.matchNumber]) acc[match.matchNumber] = new Set();
+        acc[match.matchNumber].add(match.robotNumber);
+        return acc;
+      }, {});
+
+      // Build unscouted placeholders for matches present in the filtered list
+      const unscoutedItems = Array.from(
+        new Set(filteredData.map((m) => m.matchNumber)),
+      ).flatMap((matchNum) => {
+        const teams = robotsByMatch[matchNum] || [];
+        const scoutedSet = scoutedByMatch[matchNum] || new Set();
+        return teams
+          .filter((team) => !scoutedSet.has(team.robotNumber))
+          .map((team) => ({
+            matchNumber: matchNum,
+            robotNumber: team.robotNumber,
+            allianceColor: team.allianceColor,
+          }));
+      });
+
       // Create items for filtered data
       filteredData.forEach((match) => {
         const listItem = document.createElement("div");
@@ -138,16 +176,18 @@ let oldAccessCode;
         let allianceColor;
 
         tbaData.forEach((item) => {
-          if (item.match_number == match.matchNumber) {
-            for (let team of item.alliances.red.team_keys) {
-              if (team.substring(3) == match.robotNumber) {
-                allianceColor = "red";
+          if (item.comp_level == "qm") {
+            if (item.match_number == match.matchNumber) {
+              for (let team of item.alliances.red.team_keys) {
+                if (team.substring(3) == match.robotNumber) {
+                  allianceColor = "red";
+                }
               }
-            }
 
-            for (let team of item.alliances.blue.team_keys) {
-              if (team.substring(3) == match.robotNumber) {
-                allianceColor = "blue";
+              for (let team of item.alliances.blue.team_keys) {
+                if (team.substring(3) == match.robotNumber) {
+                  allianceColor = "blue";
+                }
               }
             }
           }
@@ -279,7 +319,7 @@ let oldAccessCode;
               const errorText = await response.text();
               console.error(
                 "Failed to delete match performance. Server response:",
-                errorText
+                errorText,
               );
             }
           } catch (error) {
@@ -289,9 +329,56 @@ let oldAccessCode;
 
         listContainer.appendChild(listItem);
       });
+
+      // Render unscouted placeholders (respect filters)
+      unscoutedItems.forEach((item) => {
+        const matchValue = matchFilter.value;
+        const robotValue = robotFilter.value;
+
+        if (
+          (matchValue && item.matchNumber !== Number(matchValue)) ||
+          (robotValue && item.robotNumber !== Number(robotValue))
+        ) {
+          return;
+        }
+
+        const listItem = document.createElement("div");
+        listItem.classList.add("match-item", "unscouted");
+
+        const topRow = document.createElement("div");
+        topRow.classList.add("match-item-top");
+
+        const warningIcon = document.createElement("span");
+        warningIcon.textContent = "⚠️";
+        warningIcon.style.marginRight = "10px";
+        topRow.appendChild(warningIcon);
+
+        const matchNum = document.createElement("span");
+        matchNum.textContent = `Match: ${item.matchNumber}`;
+        matchNum.classList.add("match-info");
+        topRow.appendChild(matchNum);
+
+        const robotNum = document.createElement("span");
+        robotNum.textContent = `Robot: ${item.robotNumber}`;
+        robotNum.classList.add("match-info");
+        topRow.appendChild(robotNum);
+
+        const unscoutedLabel = document.createElement("span");
+        unscoutedLabel.textContent = "NOT SCOUTED";
+        unscoutedLabel.classList.add("match-info");
+        unscoutedLabel.style.marginLeft = "auto";
+        topRow.appendChild(unscoutedLabel);
+
+        listItem.appendChild(topRow);
+
+        listItem.style.borderColor =
+          item.allianceColor === "red" ? "#ff6666" : "--bg-alt";
+
+        listContainer.appendChild(listItem);
+      });
     }
 
-    // Add event listeners to filters
+    // Add event listenerss to filters
     scouterFilter.addEventListener("input", updateList);
     matchFilter.addEventListener("input", updateList);
     robotFilter.addEventListener("input", updateList);
