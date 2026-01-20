@@ -11,6 +11,11 @@
         "layer": 2,
         "displayText": "Teleop",
         "variables": {}
+      },
+      "120000": {
+        "layer": 10,
+        "displayText": "Shift Change",
+        "variables": {}
       }
     }
   },
@@ -829,6 +834,58 @@
             {
               "type": "layer",
               "args": [9, 2]
+            }
+          ]
+        }
+      ],
+      [
+        {
+          "id": "startGame",
+          "displayText": "Start",
+          "gridArea": ["1", "4", "2", "7"],
+          "class": "silver timer",
+          "type": "match-control",
+          "executables": []
+        },
+        {
+          "id": "broken",
+          "displayText": "Disabled",
+          "gridArea": ["1", "1", "2", "3"],
+          "class": "red",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "undo",
+          "displayText": "Undo",
+          "gridArea": ["1", "8", "2", "10"],
+          "class": "sherbert",
+          "type": "undo",
+          "executables": []
+        },
+        {
+          "id": "active",
+          "displayText": "Active",
+          "gridArea": ["3", "4", "6", "7"],
+          "class": "green",
+          "type": "action",
+          "executables": [
+            {
+              "type": "layer",
+              "args": [10, 2]
+            }
+          ]
+        },
+        {
+          "id": "inactive",
+          "displayText": "Inactive",
+          "gridArea": ["6", "4", "7", "7"],
+          "class": "gray",
+          "type": "action",
+          "executables": [
+            {
+              "type": "layer",
+              "args": [10, 2]
             }
           ]
         }
