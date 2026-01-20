@@ -10,7 +10,9 @@ body {
   display: grid;
   grid-template-columns: 275px auto;
   grid-template-rows: 75px 30px auto;
-  transition: 0.3s visibility, opacity;
+  transition:
+    0.3s visibility,
+    opacity;
   opacity: 0;
   visibility: hidden;
   background-color: var(--bg);
@@ -20,7 +22,9 @@ body {
 #app.visible {
   visibility: unset;
   opacity: 1;
-  transition: visibility 0s 0s, opacity 0.3s 0s;
+  transition:
+    visibility 0s 0s,
+    opacity 0.3s 0s;
 }
 
 #menu {
@@ -182,7 +186,9 @@ body {
   flex-direction: column;
   gap: 8px;
   cursor: pointer;
-  transition: 0.3s border, 0.3s background-color;
+  transition:
+    0.3s border,
+    0.3s background-color;
 }
 
 .team-container > .team-number {
@@ -242,7 +248,6 @@ body {
   color: crimson;
 }
 
-
 #welcome-subtext {
   font-size: 2.5rem;
   line-height: 1em;
@@ -251,7 +256,9 @@ body {
 
 #dashboard > div {
   width: 100%;
-  transition: 0.3s visibility, opacity;
+  transition:
+    0.3s visibility,
+    opacity;
   opacity: 0;
   position: absolute;
   top: 0;
@@ -263,7 +270,9 @@ body {
   visibility: unset;
   height: calc(100vh);
   opacity: 1;
-  transition: visibility 0s 0s, opacity 0.3s 0s;
+  transition:
+    visibility 0s 0s,
+    opacity 0.3s 0s;
 }
 
 #match-view-switch,
@@ -276,7 +285,9 @@ body {
   width: 100%;
   color: var(--text);
   cursor: pointer;
-  transition: 0.3s color, 0.3s background-color;
+  transition:
+    0.3s color,
+    0.3s background-color;
   margin-bottom: 10px;
 }
 
@@ -502,6 +513,8 @@ body {
   top: 10px;
   right: 10px;
   z-index: 1000;
+  background-color: #ff6030;
+  color: #ff6030;
 }
 #event-dropdown button {
   padding: 8px 12px;
