@@ -13,7 +13,7 @@
         "variables": {}
       },
       "120000": {
-        "layer": 10,
+        "layer": 9,
         "displayText": "Shift Change",
         "variables": {}
       }
@@ -872,7 +872,7 @@
           "executables": [
             {
               "type": "layer",
-              "args": [10, 2]
+              "args": [9, 2]
             }
           ]
         },
@@ -885,7 +885,7 @@
           "executables": [
             {
               "type": "layer",
-              "args": [10, 2]
+              "args": [9, 2]
             }
           ]
         }
