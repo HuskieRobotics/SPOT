@@ -115,29 +115,17 @@
   {
     "view": "team",
     "module": "Bar",
-    "name": "Auto Coral Reef Placement",
+    "name": "Auto Climb",
     "position": "main",
     "options": {
       "bars": [
         {
-          "name": "Miss",
-          "path": "counts.autoMissCoral"
+          "name": "Fall",
+          "path": "counts.autofall"
         },
         {
-          "name": "Level 1",
-          "path": "counts.autol1"
-        },
-        {
-          "name": "Level 2",
-          "path": "counts.autol2"
-        },
-        {
-          "name": "Level 3",
-          "path": "counts.autol3"
-        },
-        {
-          "name": "Level 4",
-          "path": "counts.autol4"
+          "name": "Climb Level 1",
+          "path": "counts.autoclimblevel1"
         }
       ]
     }
