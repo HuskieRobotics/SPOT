@@ -15,6 +15,17 @@
   },
   {
     "view": "team",
+    "module": "RadarChart",
+    "name": "Statistics By Time Intervals",
+    "position": "main",
+    "options": {
+      "slices": [
+        { }
+      ]
+    }
+  },
+  {
+    "view": "team",
     "module": "Pie",
     "name": "Coral Pickup Distribution",
     "position": "main",
