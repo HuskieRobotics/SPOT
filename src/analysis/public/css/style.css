@@ -514,12 +514,18 @@ body {
   right: 10px;
   z-index: 1000;
   background-color: #ff6030;
-  color: #ff6030;
+  /* color: #ff6030; */
 }
+
 #event-dropdown button {
   padding: 8px 12px;
   cursor: pointer;
 }
+
+#event-dropdown button:hover {
+  background-color: #e6551c;
+}
+
 #event-menu {
   display: none;
   position: absolute;
