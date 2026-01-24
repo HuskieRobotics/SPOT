@@ -9,11 +9,18 @@ const chalk = require("chalk");
 let router = Router();
 
 router.get("/blueApiData/:eventID", async (req, res) => {
+  const TBA_EVENT_KEY = req.params.eventID;
   const TBA_API_KEY = config.secrets.TBA_API_KEY;
+
+  const event = await Event.findOne({ _id: TBA_EVENT_KEY });
+  let eventKey = null;
+  if (event) {
+    eventKey = event.code.split("_")[0];
+  }
 
   const tbaResults = (
     await axios.get(
-      `https://www.thebluealliance.com/api/v3/event/${req.params.eventID}/matches`,
+      `https://www.thebluealliance.com/api/v3/event/${eventKey}/matches`,
       {
         headers: {
           "X-TBA-Auth-Key": TBA_API_KEY,

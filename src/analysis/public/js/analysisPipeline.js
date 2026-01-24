@@ -20,24 +20,27 @@ async function executePipeline() {
     );
   }
 
-  for (let tmp of tmps) {
-    let teamAndMatch = getBlueDataTeamAndMatch(
+  tmps.forEach((tmp) => {
+    let teamAndMatch = getBlueDataAllianceAndMatch(
       tmp.robotNumber,
       tmp.matchNumber,
     );
-  }
+
+    let isParked = getBlueDataParked(teamAndMatch[0], teamAndMatch[1]);
+
+    tmp.tbaData = {};
+    setPath(tmp.tbaData, "parked", isParked);
+  });
 
   /**
    * The purpose of this function is to get the alliance color and the level for which a robot is in tba data for a inputted team and match.
-   * @param {*} team The team that you wish to get
-   * @param {*} match The match number that you wish to get
+   * @param {*} team The team that you wish to input
+   * @param {*} match The match number that you wish to input
    * @returns [alliance, robotNum]
    */
-  function getBlueDataTeamAndMatch(team, match) {
+  function getBlueDataAllianceAndMatch(team, match) {
     let alliance;
     let robotNum;
-
-    console.log(team, match);
 
     blueAllianceData.forEach((item) => {
       if (item.comp_level == "qm" && item.match_number == match) {
@@ -72,15 +75,15 @@ async function executePipeline() {
    */
   function getBlueDataParked(robotNum, alliance) {
     let isParked = false;
-
     blueAllianceData.forEach((item) => {
-      const breakdown = item.score_breakdown?.[alliance];
+      let breakdown = item.score_breakdown?.[alliance];
       if (!breakdown) return;
       let robotParked;
 
-      for (const data of breakdown) {
-        let robot = `endGameRobot${robotNum}`;
-        robotParked = data?.[robot];
+      for (const [key, value] of Object.entries(breakdown)) {
+        if (key == `endGameRobot${robotNum}`) {
+          robotParked = value;
+        }
       }
 
       if (robotParked == "Parked") {
@@ -101,8 +104,6 @@ async function executePipeline() {
     // Merge the TMPs into one
     tmps = [...tmps, ...qrcodeTmps];
   }
-
-  //console.log(blueAllianceData);
 
   // Find all the teams across the TMPs
   const teams = [];
