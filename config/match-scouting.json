@@ -120,28 +120,43 @@
           ]
         },
         {
-          "id": "autoCollectOutpost",
-          "displayText": "Collect Outpost",
+          "id": "autoPassing",
+          "displayText": "Passing",
           "gridArea": ["3", "7", "4", "10"],
           "class": "bluegreen",
           "type": "action",
-          "executables": []
+          "executables": [
+            {
+              "type": "layer",
+              "args": [1, 6]
+            }
+          ]
         },
         {
-          "id": "autoCollectDepo",
-          "displayText": "Collect Depo",
+          "id": "autoShooting",
+          "displayText": "Shooting",
           "gridArea": ["4", "7", "5", "10"],
           "class": "darkbluegreen",
           "type": "action",
-          "executables": []
+          "executables": [
+            {
+              "type": "layer",
+              "args": [1, 7]
+            }
+          ]
         },
         {
-          "id": "autoCollectNeutral",
-          "displayText": "Collect Neutral",
+          "id": "autoCollect",
+          "displayText": "Collect",
           "gridArea": ["5", "7", "6", "10"],
           "class": "darkbluegreen",
           "type": "action",
-          "executables": []
+          "executables": [
+            {
+              "type": "layer",
+              "args": [1, 5]
+            }
+          ]
         },
         {
           "id": "autoClimbL1",
@@ -358,6 +373,227 @@
           "class": "red",
           "type": "action",
           "executables": []
+        }
+      ],
+      [
+        {
+          "id": "matchTimer",
+          "displayText": "Match Timer",
+          "gridArea": ["1", "4", "2", "7"],
+          "class": "silver timer",
+          "type": "match-control",
+          "executables": []
+        },
+        {
+          "id": "broken",
+          "displayText": "Disabled",
+          "gridArea": ["1", "1", "2", "3"],
+          "class": "red",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "undo",
+          "displayText": "Undo",
+          "gridArea": ["1", "8", "2", "10"],
+          "class": "sherbert",
+          "type": "undo",
+          "executables": []
+        },
+        {
+          "id": "autoCollectOutpost",
+          "displayText": "Collect Outpost",
+          "gridArea": ["3", "1", "5", "4"],
+          "class": "gray",
+          "type": "action",
+          "executables": [
+            {
+              "type": "layer",
+              "args": [5, 1]
+            }
+          ]
+        },
+        {
+          "id": "autoCollectDepot",
+          "displayText": "Collect Depot",
+          "gridArea": ["3", "4", "5", "7"],
+          "class": "shallowBlue",
+          "type": "action",
+          "executables": [
+            {
+              "type": "layer",
+              "args": [5, 1]
+            }
+          ]
+        },
+        {
+          "id": "autoCollectNeutral",
+          "displayText": "Collect Neutral",
+          "gridArea": ["3", "7", "5", "10"],
+          "class": "deepBlue",
+          "type": "action",
+          "executables": [
+            {
+              "type": "layer",
+              "args": [5, 1]
+            }
+          ]
+        }
+      ],
+      [
+        {
+          "id": "startGame",
+          "displayText": "Start",
+          "gridArea": ["1", "4", "2", "7"],
+          "class": "silver timer",
+          "type": "match-control",
+          "executables": []
+        },
+        {
+          "id": "disabled",
+          "displayText": "Disabled",
+          "gridArea": ["1", "1", "2", "3"],
+          "class": "red",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "undo",
+          "displayText": "Undo",
+          "gridArea": ["1", "8", "2", "10"],
+          "class": "sherbert",
+          "type": "undo",
+          "executables": []
+        },
+        {
+          "id": "autoRating_1_passing",
+          "displayText": "Rating 1",
+          "gridArea": ["2", "1", "4", "5"],
+          "class": "gray",
+          "type": "action",
+          "executables": [
+            {
+              "type": "layer",
+              "args": [6, 1]
+            }
+          ]
+        },
+        {
+          "id": "autoRating_2_passing",
+          "displayText": "Rating 2",
+          "gridArea": ["2", "6", "4", "10"],
+          "class": "gray",
+          "type": "action",
+          "executables": [
+            {
+              "type": "layer",
+              "args": [6, 1]
+            }
+          ]
+        },
+        {
+          "id": "autoRating_3_passing",
+          "displayText": "Rating 3",
+          "gridArea": ["4", "1", "6", "5"],
+          "class": "gray",
+          "type": "action",
+          "executables": [
+            {
+              "type": "layer",
+              "args": [6, 1]
+            }
+          ]
+        },
+        {
+          "id": "autoRating_4_passing",
+          "displayText": "Rating 4",
+          "gridArea": ["4", "6", "6", "10"],
+          "class": "gray",
+          "type": "action",
+          "executables": [
+            {
+              "type": "layer",
+              "args": [6, 1]
+            }
+          ]
+        }
+      ],
+      [
+        {
+          "id": "startGame",
+          "displayText": "Start",
+          "gridArea": ["1", "4", "2", "7"],
+          "class": "silver timer",
+          "type": "match-control",
+          "executables": []
+        },
+        {
+          "id": "disabled",
+          "displayText": "Disabled",
+          "gridArea": ["1", "1", "2", "3"],
+          "class": "red",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "undo",
+          "displayText": "Undo",
+          "gridArea": ["1", "8", "2", "10"],
+          "class": "sherbert",
+          "type": "undo",
+          "executables": []
+        },
+        {
+          "id": "autoRating_1_shooting",
+          "displayText": "Rating 1",
+          "gridArea": ["2", "1", "4", "5"],
+          "class": "gray",
+          "type": "action",
+          "executables": [
+            {
+              "type": "layer",
+              "args": [7, 1]
+            }
+          ]
+        },
+        {
+          "id": "autoRating_2_shooting",
+          "displayText": "Rating 2",
+          "gridArea": ["2", "6", "4", "10"],
+          "class": "gray",
+          "type": "action",
+          "executables": [
+            {
+              "type": "layer",
+              "args": [7, 1]
+            }
+          ]
+        },
+        {
+          "id": "autoRating_3_shooting",
+          "displayText": "Rating 3",
+          "gridArea": ["4", "1", "6", "5"],
+          "class": "gray",
+          "type": "action",
+          "executables": [
+            {
+              "type": "layer",
+              "args": [7, 1]
+            }
+          ]
+        },
+        {
+          "id": "autoRating_4_shooting",
+          "displayText": "Rating 4",
+          "gridArea": ["4", "6", "6", "10"],
+          "class": "gray",
+          "type": "action",
+          "executables": [
+            {
+              "type": "layer",
+              "args": [7, 1]
+            }
+          ]
         }
       ]
     ]

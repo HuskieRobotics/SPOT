@@ -317,7 +317,12 @@
           "gridArea": ["4", "7", "6", "11"],
           "class": "gray",
           "type": "action",
-          "executables": []
+          "executables": [
+            {
+              "type": "layer",
+              "args": [2, 0]
+            }
+          ]
         }
       ],
       [
