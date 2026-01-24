@@ -361,7 +361,7 @@
         {
           "id": "teleopL1",
           "displayText": "L1",
-          "gridArea": ["4", "4", "5", "6"],
+          "gridArea": ["5", "4", "6", "7"],
           "class": "deepBlue",
           "type": "action",
           "executables": []
@@ -369,7 +369,7 @@
         {
           "id": "fall",
           "displayText": "Fall",
-          "gridArea": ["4", "4", "5", "6"],
+          "gridArea": ["6", "4", "7", "7"],
           "class": "red",
           "type": "action",
           "executables": []

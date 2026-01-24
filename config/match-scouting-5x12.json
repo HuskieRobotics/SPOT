@@ -135,7 +135,12 @@
           "gridArea": ["5", "5", "6", "9"],
           "class": "deepBlue",
           "type": "action",
-          "executables": []
+          "executables": [
+            {
+              "type": "loadConfig",
+              "args": ["match-scouting.json", 4]
+            }
+          ]
         },
         {
           "id": "startshoot",
