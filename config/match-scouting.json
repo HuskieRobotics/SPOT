@@ -9,7 +9,7 @@
         "loadConfig": "match-scouting.json"
       },
       "140000": {
-        "layer": 3,
+        "layer": 2,
         "displayText": "Teleop Transition",
         "variables": {}
       },
@@ -101,8 +101,8 @@
           "type": "none",
           "executables": [
             {
-              "type": "layer",
-              "args": [1, 7]
+              "type": "position",
+              "args": []
             }
           ]
         },
@@ -112,7 +112,12 @@
           "gridArea": ["4", "5", "6", "7"],
           "class": "lightbluegreen",
           "type": "action",
-          "executables": []
+          "executables": [
+            {
+              "type": "position",
+              "args": []
+            }
+          ]
         },
         {
           "id": "autoCollectOutpost",
@@ -144,12 +149,7 @@
           "gridArea": ["3", "1", "5", "3"],
           "class": "lightCoral",
           "type": "action",
-          "executables": [
-            {
-              "type": "layer",
-              "args": [1, 7]
-            }
-          ]
+          "executables": []
         },
         {
           "id": "autoFallL1",
@@ -194,15 +194,15 @@
           "executables": []
         },
         {
-          "id": "autoStartShooting",
+          "id": "transitionStartShooting",
           "displayText": "Start Shooting",
           "gridArea": ["4", "3", "6", "5"],
           "class": "coral",
           "type": "none",
           "executables": [
             {
-              "type": "layer",
-              "args": [1, 7]
+              "type": "position",
+              "args": []
             }
           ]
         },
@@ -228,7 +228,7 @@
           "executables": []
         },
         {
-          "id": "autoStopShooting",
+          "id": "transitionStopShooting",
           "displayText": "Stop Shooting",
           "gridArea": ["4", "5", "6", "7"],
           "class": "lightbluegreen",
@@ -236,7 +236,7 @@
           "executables": []
         },
         {
-          "id": "autoCollectOutpost",
+          "id": "transitionCollectOutpost",
           "displayText": "Collect Outpost",
           "gridArea": ["3", "7", "4", "10"],
           "class": "bluegreen",
@@ -244,7 +244,7 @@
           "executables": []
         },
         {
-          "id": "autoCollectDepo",
+          "id": "transitionCollectDepo",
           "displayText": "Collect Depo",
           "gridArea": ["4", "7", "5", "10"],
           "class": "darkbluegreen",
@@ -252,7 +252,7 @@
           "executables": []
         },
         {
-          "id": "autoCollectNeutral",
+          "id": "transitionCollectNeutral",
           "displayText": "Collect Neutral",
           "gridArea": ["5", "7", "6", "10"],
           "class": "darkbluegreen",

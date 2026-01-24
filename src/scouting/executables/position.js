@@ -80,6 +80,21 @@ executables["position"] = {
       x = Math.round(Math.max(Math.min(x, 100), 0));
       y = Math.round(Math.max(Math.min(y, 100), 0));
 
+      /* Show blue dot indicator */
+      const clickIndicator = document.createElement("div");
+      clickIndicator.style.cssText = `
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background-color: blue;
+        left: ${e.clientX - 10}px;
+        top: ${e.clientY - 10}px;
+        pointer-events: none;
+        z-index: 1000;
+      `;
+      positionContainer.appendChild(clickIndicator);
+
       //add the pos to the last action of the action queue (SHOULD be the action from the button that triggered this)
       if (!actionQueue[actionQueue.length - 1].other)
         actionQueue[actionQueue.length - 1].other = {};
@@ -100,8 +115,10 @@ executables["position"] = {
         }, positionConfig.POSITION_LOCK_DELAY_MS);
       }
 
-      //remove the position image + container from DOM.
-      document.body.removeChild(positionContainer);
+      //remove the position image + container from DOM after 400ms delay
+      setTimeout(() => {
+        document.body.removeChild(positionContainer);
+      }, 400);
     });
   },
   reverse(button, layers) {

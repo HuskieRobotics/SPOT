@@ -25,7 +25,7 @@
     }
   },
   "layout": {
-    "gridRows": 6,
+    "gridRows": 5,
     "gridColumns": 11,
     "layers": [
       [
@@ -48,7 +48,7 @@
         {
           "id": "undo",
           "displayText": "Undo",
-          "gridArea": ["1", "9", "2", "12"],
+          "gridArea": ["1", "10", "2", "14"],
           "class": "sherbert",
           "type": "undo",
           "executables": []
@@ -64,7 +64,7 @@
         {
           "id": "neutualzone",
           "displayText": "Neutual Zone",
-          "gridArea": ["2", "5", "3", "8"],
+          "gridArea": ["2", "5", "3", "9"],
           "class": "shallowBlue",
           "type": "action",
           "executables": []
@@ -72,7 +72,7 @@
         {
           "id": "bluezone",
           "displayText": "Blue Zone",
-          "gridArea": ["2", "9", "3", "12"],
+          "gridArea": ["2", "9", "3", "14"],
           "class": "deepBlue",
           "type": "action",
           "executables": []
@@ -106,7 +106,7 @@
         {
           "id": "shooting",
           "displayText": "Shooting",
-          "gridArea": ["3", "7", "4", "9"],
+          "gridArea": ["3", "7", "4", "10"],
           "class": "deepBlue",
           "type": "action",
           "executables": [
@@ -117,9 +117,22 @@
           ]
         },
         {
+          "id": "defense",
+          "displayText": "Defense",
+          "gridArea": ["3", "10", "4", "14"],
+          "class": "deepBlue",
+          "type": "action",
+          "executables": [
+            {
+              "type": "layer",
+              "args": [0, 1]
+            }
+          ]
+        },
+        {
           "id": "attemptclimb",
           "displayText": "Attempt Climb",
-          "gridArea": ["4", "4", "5", "8"],
+          "gridArea": ["5", "5", "6", "9"],
           "class": "deepBlue",
           "type": "action",
           "executables": []
@@ -127,7 +140,7 @@
         {
           "id": "startshoot",
           "displayText": "Start Shoot",
-          "gridArea": ["3", "2", "4", "5"],
+          "gridArea": ["4", "2", "5", "6"],
           "class": "deepBlue",
           "type": "action",
           "executables": [
@@ -140,23 +153,10 @@
         {
           "id": "stopshoot",
           "displayText": "Stop Shoot",
-          "gridArea": ["3", "9", "4", "10"],
+          "gridArea": ["4", "8", "5", "12"],
           "class": "deepBlue",
           "type": "action",
           "executables": []
-        },
-        {
-          "id": "defense",
-          "displayText": "Defense",
-          "gridArea": ["3", "10", "4", "12"],
-          "class": "deepBlue",
-          "type": "action",
-          "executables": [
-            {
-              "type": "layer",
-              "args": [0, 1]
-            }
-          ]
         }
       ],
       [
