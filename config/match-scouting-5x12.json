@@ -190,7 +190,12 @@
           "gridArea": ["2", "2", "4", "6"],
           "class": "gray",
           "type": "action",
-          "executables": []
+          "executables": [
+            {
+              "type": "layer",
+              "args": [1, 0]
+            }
+          ]
         },
         {
           "id": "rating_2_defense",
@@ -198,7 +203,12 @@
           "gridArea": ["2", "7", "4", "11"],
           "class": "gray",
           "type": "action",
-          "executables": []
+          "executables": [
+            {
+              "type": "layer",
+              "args": [1, 0]
+            }
+          ]
         },
         {
           "id": "rating_3_defense",
@@ -206,7 +216,12 @@
           "gridArea": ["4", "2", "6", "6"],
           "class": "gray",
           "type": "action",
-          "executables": []
+          "executables": [
+            {
+              "type": "layer",
+              "args": [1, 0]
+            }
+          ]
         },
         {
           "id": "rating_4_defense",
@@ -214,7 +229,12 @@
           "gridArea": ["4", "7", "6", "11"],
           "class": "gray",
           "type": "action",
-          "executables": []
+          "executables": [
+            {
+              "type": "layer",
+              "args": [1, 0]
+            }
+          ]
         }
       ],
       [
@@ -232,7 +252,12 @@
           "gridArea": ["1", "1", "2", "3"],
           "class": "red",
           "type": "action",
-          "executables": []
+          "executables": [
+            {
+              "type": "layer",
+              "args": [2, 0]
+            }
+          ]
         },
         {
           "id": "undo",
@@ -240,7 +265,12 @@
           "gridArea": ["1", "9", "2", "12"],
           "class": "sherbert",
           "type": "undo",
-          "executables": []
+          "executables": [
+            {
+              "type": "layer",
+              "args": [2, 0]
+            }
+          ]
         },
         {
           "id": "rating_1_passing",
@@ -248,7 +278,12 @@
           "gridArea": ["2", "2", "4", "6"],
           "class": "gray",
           "type": "action",
-          "executables": []
+          "executables": [
+            {
+              "type": "layer",
+              "args": [2, 0]
+            }
+          ]
         },
         {
           "id": "rating_2_passing",
@@ -256,7 +291,12 @@
           "gridArea": ["2", "7", "4", "11"],
           "class": "gray",
           "type": "action",
-          "executables": []
+          "executables": [
+            {
+              "type": "layer",
+              "args": [2, 0]
+            }
+          ]
         },
         {
           "id": "rating_3_passing",
@@ -264,7 +304,12 @@
           "gridArea": ["4", "2", "6", "6"],
           "class": "gray",
           "type": "action",
-          "executables": []
+          "executables": [
+            {
+              "type": "layer",
+              "args": [2, 0]
+            }
+          ]
         },
         {
           "id": "rating_4_passing",
@@ -306,7 +351,12 @@
           "gridArea": ["2", "2", "4", "6"],
           "class": "gray",
           "type": "action",
-          "executables": []
+          "executables": [
+            {
+              "type": "layer",
+              "args": [3, 0]
+            }
+          ]
         },
         {
           "id": "rating_2_shooting",
@@ -314,7 +364,12 @@
           "gridArea": ["2", "7", "4", "11"],
           "class": "gray",
           "type": "action",
-          "executables": []
+          "executables": [
+            {
+              "type": "layer",
+              "args": [3, 0]
+            }
+          ]
         },
         {
           "id": "rating_3_shooting",
@@ -322,7 +377,12 @@
           "gridArea": ["4", "2", "6", "6"],
           "class": "gray",
           "type": "action",
-          "executables": []
+          "executables": [
+            {
+              "type": "layer",
+              "args": [3, 0]
+            }
+          ]
         },
         {
           "id": "rating_4_shooting",
@@ -330,7 +390,12 @@
           "gridArea": ["4", "7", "6", "11"],
           "class": "gray",
           "type": "action",
-          "executables": []
+          "executables": [
+            {
+              "type": "layer",
+              "args": [3, 0]
+            }
+          ]
         }
       ],
       [
@@ -364,7 +429,12 @@
           "gridArea": ["2", "2", "4", "6"],
           "class": "gray",
           "type": "action",
-          "executables": []
+          "executables": [
+            {
+              "type": "layer",
+              "args": [4, 0]
+            }
+          ]
         },
         {
           "id": "rating_2_collecting",
@@ -372,7 +442,12 @@
           "gridArea": ["2", "7", "4", "11"],
           "class": "gray",
           "type": "action",
-          "executables": []
+          "executables": [
+            {
+              "type": "layer",
+              "args": [4, 0]
+            }
+          ]
         },
         {
           "id": "rating_3_collecting",
@@ -380,7 +455,12 @@
           "gridArea": ["4", "2", "6", "6"],
           "class": "gray",
           "type": "action",
-          "executables": []
+          "executables": [
+            {
+              "type": "layer",
+              "args": [4, 0]
+            }
+          ]
         },
         {
           "id": "rating_4_collecting",
@@ -388,7 +468,12 @@
           "gridArea": ["4", "7", "6", "11"],
           "class": "gray",
           "type": "action",
-          "executables": []
+          "executables": [
+            {
+              "type": "layer",
+              "args": [4, 0]
+            }
+          ]
         }
       ]
     ]
