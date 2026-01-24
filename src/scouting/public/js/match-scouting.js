@@ -11,6 +11,9 @@ var previousTimer = [];
   var time = matchScoutingConfig.timing.totalTime;
   var teleopTime = 135000;
   var timerActive = false;
+  // Expose time globally for loadConfig
+  window.currentTime = time;
+  window.currentConfigPath = "match-scouting.json"; // Track which config is loaded
 
   //intialize variables
   let varNames = Object.keys(matchScoutingConfig.variables);
@@ -107,7 +110,7 @@ var previousTimer = [];
             executables[executable.type].reverse(
               undoneButton,
               layers,
-              ...executable.args
+              ...executable.args,
             ); //reverse any executables associated with the undone button
           }
         }
@@ -154,9 +157,8 @@ var previousTimer = [];
           } else {
             // display QR code
             const encoder = new QREncoder(); // Updated
-            const dataUrl = await encoder.encodeTeamMatchPerformance(
-              teamMatchPerformance
-            );
+            const dataUrl =
+              await encoder.encodeTeamMatchPerformance(teamMatchPerformance);
 
             let qrContainer = document.createElement("div");
             let qrText = document.createElement("button");
@@ -200,12 +202,12 @@ var previousTimer = [];
           start = Date.now() - (matchScoutingConfig.timing.totalTime - 1);
         };
         const transitions = Object.keys(
-          matchScoutingConfig.timing.timeTransitions
+          matchScoutingConfig.timing.timeTransitions,
         )
           .map((x) => Number(x))
           .sort((a, b) => b - a);
         timerActive = true;
-        button.timerInterval = setInterval(() => {
+        button.timerInterval = setInterval(async () => {
           if (time <= transitions[0]) {
             //move to the next transition if it is time
             displayText =
@@ -213,7 +215,7 @@ var previousTimer = [];
                 .displayText;
             for (let key of Object.keys(
               matchScoutingConfig.timing.timeTransitions[transitions[0]]
-                .variables
+                .variables,
             )) {
               variables[key].previous.push(variables[key].current);
               variables[key].current =
@@ -222,12 +224,30 @@ var previousTimer = [];
                 ].variables[key];
               console.log(`set ${key} to ${variables[key]}`);
             }
-            showLayer(
-              matchScoutingConfig.timing.timeTransitions[transitions[0]].layer,
-              matchScoutingConfig.timing.timeTransitions[transitions[0]]
-                .conditional,
-              matchScoutingConfig.timing.timeTransitions[transitions[0]].always
-            );
+
+            // Check if this transition should load a different config
+            const transition =
+              matchScoutingConfig.timing.timeTransitions[transitions[0]];
+            if (
+              transition.loadConfig &&
+              transition.loadConfig !== window.currentConfigPath
+            ) {
+              // Load the new config file
+              if (executables["loadConfig"]) {
+                await executables["loadConfig"].execute(
+                  button,
+                  layers,
+                  transition.loadConfig,
+                );
+              }
+            } else {
+              // Normal layer transition
+              showLayer(
+                transition.layer,
+                transition.conditional,
+                transition.always,
+              );
+            }
             transitions.shift();
           }
           if (time <= 0) {
@@ -245,12 +265,13 @@ var previousTimer = [];
             return;
           }
           time = matchScoutingConfig.timing.totalTime - (Date.now() - start);
+          window.currentTime = time; // Keep window.currentTime in sync
           buttons
             .filter((x) => x.type === "match-control")
             .forEach((b) => {
               //update all match-control buttons (even those in different layers)
               b.element.innerText = `${(time / 1000).toFixed(
-                2
+                2,
               )} | ${displayText}`;
             });
         }, 10);
@@ -277,6 +298,22 @@ var previousTimer = [];
     }
   }
 
+  // Expose rebuild function for loadConfig executable
+  window.rebuildButtons = function (newButtons, newLayers) {
+    // Replace the global buttons and layers references
+    buttons.length = 0;
+    layers.length = 0;
+    buttons.push(...newButtons);
+    layers.push(...newLayers);
+
+    // Apply button builders to all new buttons
+    for (const layer of newLayers) {
+      for (const button of layer) {
+        buttonBuilders[button.type](button);
+      }
+    }
+  };
+
   showLayer(0); //initially show layer 0
 
   function doExecutables(button) {
@@ -285,7 +322,7 @@ var previousTimer = [];
         executables[executable.type].execute(
           button,
           layers,
-          ...executable.args
+          ...executable.args,
         );
       } catch (e) {
         console.error(e);
@@ -295,6 +332,12 @@ var previousTimer = [];
   }
 
   function showLayer(layer, conditional = {}, always = []) {
+    // Validate layer exists
+    if (!layers[layer] || layer < 0 || layer >= layers.length) {
+      console.warn(`Layer ${layer} does not exist. Defaulting to layer 0.`);
+      layer = 0;
+    }
+
     for (const b of buttons) {
       b.element.style.display = "none";
     }
@@ -338,6 +381,10 @@ var previousTimer = [];
       previousLayers.push(rendered);
     }
   }
+
+  // Expose showLayer for loadConfig executable
+  window.showLayer = showLayer;
+
   function conditionalLayer() {
     var renderedButtons = [];
     for (let button of layers[toLayer]) {

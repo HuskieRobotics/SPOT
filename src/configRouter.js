@@ -13,6 +13,10 @@ router.get("/match-scouting.json", (req, res) => {
   res.sendFile(path.resolve(__dirname, "../config/match-scouting.json"));
 });
 
+router.get("/match-scouting-5x12.json", (req, res) => {
+  res.sendFile(path.resolve(__dirname, "../config/match-scouting-5x12.json"));
+});
+
 router.get("/qr.json", (req, res) => {
   res.sendFile(path.resolve(__dirname, "../config/qr.json"));
 });
