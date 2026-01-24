@@ -11,6 +11,10 @@ function goToAnalysis() {
   window.open("/analysis").focus();
 }
 
+function goToAdmin() {
+  window.open("/admin").focus();
+}
+
 window.onclick = function (event) {
   var overlay = document.getElementById("settingsOverlay");
   if (event.target === overlay) {
