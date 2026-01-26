@@ -14,10 +14,8 @@
         "variables": {}
       },
       "130000": {
-        "layer": 0,
-        "displayText": "Teleop Shift 1",
-        "variables": {},
-        "loadConfig": "match-scouting-5x12.json"
+        "layer": 3,
+        "variables": {}
       }
     }
   },
@@ -53,7 +51,7 @@
         {
           "id": "preloadNone",
           "displayText": "Preload None",
-          "gridArea": ["4", "6", "6", "10"],
+          "gridArea": ["4", "6", "6", "9"],
           "class": "gray",
           "type": "action",
           "executables": []
@@ -306,7 +304,12 @@
           "gridArea": ["2", "2", "5", "5"],
           "class": "gray",
           "type": "action",
-          "executables": []
+          "executables": [
+            {
+              "type": "loadConfig",
+              "args": ["match-scouting-5x12.json", 0]
+            }
+          ]
         },
         {
           "id": "teleopInactive",
@@ -314,7 +317,12 @@
           "gridArea": ["2", "5", "5", "9"],
           "class": "gray",
           "type": "action",
-          "executables": []
+          "executables": [
+            {
+              "type": "loadConfig",
+              "args": ["match-scouting-5x12.json", 0]
+            }
+          ]
         }
       ],
       [

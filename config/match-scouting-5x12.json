@@ -9,20 +9,18 @@
         "loadConfig": "match-scouting.json"
       },
       "140000": {
-        "layer": 3,
+        "layer": 2,
         "displayText": "Teleop Transition",
         "variables": {}
       },
       "130000": {
-        "layer": 0,
-        "displayText": "Teleop Shift 1",
-        "variables": {},
-        "loadConfig": "match-scouting-5x12.json"
+        "layer": 3,
+        "variables": {}
       }
-    },
-    "variables": {
-      "minOfQueueLength": 2
     }
+  },
+  "variables": {
+    "minOfQueueLength": 2
   },
   "layout": {
     "gridRows": 5,
