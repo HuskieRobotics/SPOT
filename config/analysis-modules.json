@@ -400,6 +400,14 @@
           "path": "counts.aStop",
           "decimals": 0,
           "sort": -1
+        },
+        {
+          "name": "Average Climb Timestamp",
+          "path": "averages.attemptClimbTime",
+          "multiplier": 0.001,
+          "decimals": 2,
+          "sort": -1,
+          "unit": "s"
         }
       ]
     }

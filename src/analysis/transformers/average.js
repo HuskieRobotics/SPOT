@@ -4,28 +4,44 @@
  */
 __TEAM__
 new DataTransformer("average", (dataset, outputPath, options) => {
+    if (outputPath === "averages.climbTime") {
+        console.log(`AVERAGE TRANSFORMER CALLED for ${outputPath}, path: ${options.path}`);
+    }
     for (const [teamNumber, team] of Object.entries(dataset.teams)) {
         const teamTmps = dataset.tmps.filter(x=>x.robotNumber == teamNumber); //only the tmps that are this team's
-        const pathResult = getPath(teamTmps[0], options.path)
+        const pathResult = getPath(teamTmps[0], options.path, null)
 
-        if (typeof pathResult == "object" && pathResult !== null) { //average all properties in object
+            if (typeof pathResult == "object" && pathResult !== null) { //average all properties in object
             let out = {};
             for (let subpath in getPath(teamTmps[0], options.path)) {
-                
-                const filteredTeamTmps = teamTmps.filter((tmp) => getPath(tmp, `${options.path}.${subpath}`,null) !== null)
-                let average = filteredTeamTmps.reduce((acc, tmp) => {
-                    return acc + getPath(tmp, `${options.path}.${subpath}`) //if this is causing an error, your tmps may not have the same schema (eg. some keys (which you are trying to average) are not defined in some tmps)
-                }, 0) / filteredTeamTmps.length;
-                out[subpath] = average;
+                    const filteredTeamTmps = teamTmps.filter((tmp) => getPath(tmp, `${options.path}.${subpath}`, null) !== null)
+                    if (filteredTeamTmps.length == 0) {
+                        out[subpath] = null;
+                    } else {
+                        let average = filteredTeamTmps.reduce((acc, tmp) => {
+                            return acc + getPath(tmp, `${options.path}.${subpath}`)
+                        }, 0) / filteredTeamTmps.length;
+                        out[subpath] = average;
+                    }
             }
             setPath(team, outputPath, out)
         } else { //normal numeric / null average
-            const filteredTeamTmps = teamTmps.filter((tmp) => getPath(tmp, options.path) !== null)
-            let average = filteredTeamTmps.reduce((acc, tmp) => {
-                return acc + getPath(tmp, options.path)
-            }, 0) / filteredTeamTmps.length
-
-            setPath(team, outputPath, average)
+                const filteredTeamTmps = teamTmps.filter((tmp) => getPath(tmp, options.path, null) !== null)
+                if (outputPath === "averages.climbTime") {
+                    console.log(`Team ${teamNumber}: filtering ${teamTmps.length} tmps for path ${options.path}`);
+                    console.log(`Filtered to ${filteredTeamTmps.length} tmps with values:`, filteredTeamTmps.map(tmp => getPath(tmp, options.path)));
+                }
+                if (filteredTeamTmps.length == 0) {
+                    setPath(team, outputPath, null)
+                } else {
+                    let average = filteredTeamTmps.reduce((acc, tmp) => {
+                        return acc + getPath(tmp, options.path)
+                    }, 0) / filteredTeamTmps.length
+                    if (outputPath === "averages.climbTime") {
+                        console.log(`Team ${teamNumber}: average climb time = ${average}`);
+                    }
+                    setPath(team, outputPath, average)
+                }
         }
     }
 

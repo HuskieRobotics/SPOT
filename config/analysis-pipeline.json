@@ -6,5 +6,21 @@
     "options": {
       "path": "actionQueue"
     }
+  },
+  {
+    "type": "tmp",
+    "name": "actionTime",
+    "outputPath": "actionTimes.attemptClimb",
+    "options": {
+      "actionId": "attemptClimb"
+    }
+  },
+  {
+    "type": "team",
+    "name": "average",
+    "outputPath": "averages.attemptClimbTime",
+    "options": {
+      "path": "actionTimes.attemptClimb"
+    }
   }
 ]
