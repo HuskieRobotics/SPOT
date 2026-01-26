@@ -47,50 +47,46 @@
   {
     "type": "tmp",
     "name": "weightedSum",
-    "outputPath": "scores.auto",
+    "outputPath": "scores.autopassingranting",
     "options": {
       "weightedPaths": {
-        "counts.leave": 2,
-        "counts.autol1": 3,
-        "counts.autol2": 4,
-        "counts.autol3": 6,
-        "counts.autol4": 7,
-        "counts.autoScoreProcessor": 6,
-        "counts.autoScoreNet": 4
+        "counts.autoRating_1_passing": 1,
+        "counts.autoRating_2_passing": 2,
+        "counts.autoRating_3_passingg": 3,
+        "counts.autoRating_4_passing": 4
       }
     }
   },
   {
     "type": "tmp",
     "name": "weightedSum",
-    "outputPath": "scores.teleop",
+    "outputPath": "scores.defenserating",
     "options": {
       "weightedPaths": {
-        "counts.teleopl1": 2,
-        "counts.teleopl2": 3,
-        "counts.teleopl3": 4,
-        "counts.teleopl4": 5,
-        "counts.teleopScoreNet": 4,
-        "counts.teleopScoreProcessor": 6
+        "counts.rating_1_defense": 1,
+        "counts.rating_2_defense": 2,
+        "counts.rating_3_defense": 3,
+        "counts.rating_4_defense": 4
       }
     }
   },
   {
     "type": "tmp",
     "name": "weightedSum",
-    "outputPath": "scores.endgame",
+    "outputPath": "scores.autoshooting",
     "options": {
       "weightedPaths": {
-        "counts.park": 2,
-        "counts.shallow": 6,
-        "counts.deep": 12
+        "counts.autoRating_1_shooting": 1,
+        "counts.autoRating_2_shooting": 2,
+        "counts.autoRating_3_shooting": 3,
+        "counts.autoRating_4_shootingg": 4
       }
     }
   },
   {
     "type": "tmp",
     "name": "sum",
-    "outputPath": "scores.total",
+    "outputPath": "scores.auto",
     "options": {
       "addends": ["scores.auto", "scores.teleop", "scores.endgame"]
     }
@@ -98,30 +94,39 @@
   {
     "type": "tmp",
     "name": "weightedSum",
-    "outputPath": "scores.coral",
+    "outputPath": "scores.passingrating",
     "options": {
       "weightedPaths": {
-        "counts.teleopl1": 2,
-        "counts.teleopl2": 3,
-        "counts.teleopl3": 4,
-        "counts.teleopl4": 5,
-        "counts.autol1": 3,
-        "counts.autol2": 4,
-        "counts.autol3": 6,
-        "counts.autol4": 7
+        "counts.rating_1_passing": 1,
+        "counts.rating_2_passing": 2,
+        "counts.rating_3_passing": 3,
+        "counts.rating_4_passing": 4
       }
     }
   },
   {
     "type": "tmp",
     "name": "weightedSum",
-    "outputPath": "scores.algae",
+    "outputPath": "scores.collectingrating",
     "options": {
       "weightedPaths": {
-        "counts.autoScoreNet": 6,
-        "counts.teleopScoreNet": 6,
-        "counts.autoScoreProcessor": 4,
-        "counts.teleopScoreProcessor": 4
+        "counts.rating_1_collecting": 1,
+        "counts.rating_2_collecting": 2,
+        "counts.rating_3_collecting": 3,
+        "counts.rating_4_collecting": 4
+      }
+    }
+  },
+  {
+    "type": "tmp",
+    "name": "weightedSum",
+    "outputPath": "scores.shootingrating",
+    "options": {
+      "weightedPaths": {
+        "counts.rating_1_shooting": 1,
+        "counts.rating_2_shooting": 2,
+        "counts.rating_3_shooting": 3,
+        "counts.rating_4_shooting": 4
       }
     }
   },

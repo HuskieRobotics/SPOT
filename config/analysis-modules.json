@@ -286,40 +286,40 @@
           "sort": 1
         },
         {
-          "name": "Average Teleop Points",
-          "path": "averageScores.teleop",
+          "name": "Average Auto Passing",
+          "path": "averageScores.autopassingranting",
           "decimals": 2,
           "sort": 1
         },
         {
-          "name": "Average Barge Points",
-          "path": "averageScores.endgame",
+          "name": "Average Auto Shooting",
+          "path": "averageScores.autoshooting",
           "decimals": 2,
           "sort": 1
         },
         {
-          "name": "Average Algae Points",
-          "path": "averageScores.algae",
+          "name": "Average Teleop Defense",
+          "path": "averageScores.defenserating",
           "decimals": 2,
           "sort": 1
         },
         {
-          "name": "Average Coral Points",
-          "path": "averageScores.coral",
+          "name": "Average Teleop Passing",
+          "path": "averageScores.passingrating",
           "decimals": 2,
           "sort": 1
         },
         {
-          "name": "Average Points",
-          "path": "averageScores.total",
+          "name": "Average Teleop Collecting",
+          "path": "averageScores.collectingrating",
           "decimals": 2,
           "sort": 1
         },
         {
-          "name": "Average Coral Misses",
-          "path": "averages.missCoral",
+          "name": "Average Teleop Shooting",
+          "path": "averages.shootingrating",
           "decimals": 2,
-          "sort": -1
+          "sort": 1
         },
         {
           "name": "Average Algae Misses",
