@@ -7,13 +7,18 @@
 __TMP__
 new DataTransformer("actionTime", (dataset, outputPath, options) => {
     for (let tmp of dataset.tmps) {
+        let found = false;
         for (let action of tmp.actionQueue) {
             if (action.id == options.actionId) {
+                console.log(`Found ${options.actionId} for team ${tmp.robotNumber}, match ${tmp.matchNumber}, timestamp: ${action.ts}`);
                 setPath(tmp, outputPath, action.ts);
+                found = true;
+                break; // Only capture the first occurrence
             }
         }
-        if (!getPath(tmp,outputPath,false)) //no action of options.actionId found
-            setPath(tmp,outputPath,options.default || null);
+        if (!found) {
+            setPath(tmp, outputPath, options.default || null);
+        }
     }
     return dataset;
 })

@@ -9,6 +9,14 @@
   },
   {
     "type": "tmp",
+    "name": "actionTime",
+    "outputPath": "actionTimes.attemptClimb",
+    "options": {
+      "actionId": "attemptClimb"
+    }
+  },
+  {
+    "type": "tmp",
     "name": "weightedSum",
     "outputPath": "scores.autoPassingRating",
     "options": {
@@ -91,6 +99,22 @@
     "outputPath": "counts",
     "options": {
       "all": true
+    }
+  },
+  {
+    "type": "team",
+    "name": "aggregateArray",
+    "outputPath": "aggregatedActions",
+    "options": {
+      "path": "actionQueue"
+    }
+  },
+  {
+    "type": "team",
+    "name": "average",
+    "outputPath": "averages.attemptClimbTime",
+    "options": {
+      "path": "actionTimes.attemptClimb"
     }
   },
   {
