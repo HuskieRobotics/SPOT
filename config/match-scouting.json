@@ -46,7 +46,7 @@
           "id": "preloadFuel",
           "displayText": "Preload Fuel",
           "gridArea": ["4", "1", "6", "5"],
-          "class": "lightCoral",
+          "class": "red",
           "type": "action",
           "executables": []
         },
@@ -98,7 +98,7 @@
           "displayText": "Start Shooting",
           "gridArea": ["4", "3", "6", "5"],
           "class": "coral",
-          "type": "none",
+          "type": "action",
           "executables": [
             {
               "type": "position",
@@ -209,11 +209,11 @@
           "executables": []
         },
         {
-          "id": "transitionStartShooting",
+          "id": "startShooting",
           "displayText": "Start Shooting",
           "gridArea": ["4", "3", "6", "5"],
           "class": "coral",
-          "type": "none",
+          "type": "action",
           "executables": [
             {
               "type": "position",

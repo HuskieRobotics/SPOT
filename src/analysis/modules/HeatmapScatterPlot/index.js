@@ -20,7 +20,8 @@ class HeatmapScatterPlot {
         .map((team) =>
           getPath(
             dataset.teams[team],
-            this.moduleConfig.options.aggregatedActionsPath
+            this.moduleConfig.options.aggregatedActionsPath,
+            []
           )
         )
         .flat()
@@ -33,10 +34,10 @@ class HeatmapScatterPlot {
           showlegend: true,
           name: this.moduleConfig.options.actionLabels[actionId],
           x: filteredActionQueue.map(
-            (a) => getPath(a, this.moduleConfig.options.coordinatePath).x
+            (a) => getPath(a, this.moduleConfig.options.coordinatePath, {x: 0}).x
           ),
           y: filteredActionQueue.map(
-            (a) => getPath(a, this.moduleConfig.options.coordinatePath).y
+            (a) => getPath(a, this.moduleConfig.options.coordinatePath, {y: 0}).y
           ),
           marker: {
             size: 16,
@@ -58,7 +59,8 @@ class HeatmapScatterPlot {
       .map((team) =>
         getPath(
           dataset.teams[team],
-          this.moduleConfig.options.aggregatedActionsPath
+          this.moduleConfig.options.aggregatedActionsPath,
+          []
         )
       )
       .flat()
@@ -69,10 +71,10 @@ class HeatmapScatterPlot {
       name: "Heatmap",
       showlegend: true,
       x: filteredAllActionQueue.map(
-        (a) => getPath(a, this.moduleConfig.options.coordinatePath).x
+        (a) => getPath(a, this.moduleConfig.options.coordinatePath, {x: 0}).x
       ),
       y: filteredAllActionQueue.map(
-        (a) => getPath(a, this.moduleConfig.options.coordinatePath).y
+        (a) => getPath(a, this.moduleConfig.options.coordinatePath, {y: 0}).y
       ),
       xaxis: "x",
       yaxis: "y",

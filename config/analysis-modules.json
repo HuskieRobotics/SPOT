@@ -15,6 +15,48 @@
   },
   {
     "view": "team",
+    "module": "HeatmapScatterPlot",
+    "name": "Auto Start and Stop Shooting Heatmap",
+    "position": "main",
+    "options": {
+      "coordinatePath": "other.pos",
+      "aggregatedActionsPath": "aggregatedActions",
+      "actionGroups": [
+        {
+          "name": "Auto Start Shooting",
+          "actions": ["autoStartShooting"]
+        },
+        {
+          "name": "Auto End Shooting",
+          "actions": ["autoStopShooting"]
+        }
+      ],
+      "actionLabels": {
+        "autoStartShooting": "Auto Start Shooting Position",
+        "autoStopShooting": "Auto End Shooting Position"
+      },
+      "imgPath": "img/field.svg"
+    }
+  },
+
+  {
+    "view": "team",
+    "module": "HeatmapScatterPlot",
+    "name": "Teleop Shooting Heatmap",
+    "position": "main",
+    "options": {
+      "coordinatePath": "other.pos",
+      "aggregatedActionsPath": "aggregatedActions",
+      "actionGroups": [
+        { "name": "Teleop Start Shooting", "actions": ["startShooting"] }
+      ],
+      "actionLabels": { "startShooting": "Teleop Start Shooting Position" },
+      "imgPath": "img/field.svg"
+    }
+  },
+
+  {
+    "view": "team",
     "module": "Pie",
     "name": "Coral Pickup Distribution",
     "position": "main",

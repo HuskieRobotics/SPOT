@@ -143,8 +143,8 @@
           ]
         },
         {
-          "id": "startshoot",
-          "displayText": "Start Shoot",
+          "id": "startShooting",
+          "displayText": "Start Shooting",
           "gridArea": ["4", "2", "5", "6"],
           "class": "deepBlue",
           "type": "action",
@@ -156,8 +156,8 @@
           ]
         },
         {
-          "id": "stopshoot",
-          "displayText": "Stop Shoot",
+          "id": "stopShooting",
+          "displayText": "Stop Shooting",
           "gridArea": ["4", "8", "5", "12"],
           "class": "deepBlue",
           "type": "action",

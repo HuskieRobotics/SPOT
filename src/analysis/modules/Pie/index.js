@@ -14,7 +14,7 @@ class Pie {
     const values = this.moduleConfig.options.slices.map((slice) => {
       const summed = filteredTeams
         .map((team) => {
-          let data = getPath(dataset.teams[team], slice.path);
+          let data = getPath(dataset.teams[team], slice.path, 0);
           console.log(`${slice.path}: ${data}`);
           return data;
         })
