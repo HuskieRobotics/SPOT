@@ -33,7 +33,7 @@ router.get("/blueApiData/:eventID", async (req, res) => {
 });
 
 router.get("/blueApiData", async (req, res) => {
-  const KEY = config.secrets.TBA_EVENT_KEY;
+  const KEY = config.TBA_EVENT_KEY;
   const TBA_API_KEY = config.secrets.TBA_API_KEY;
 
   const tbaResults = (

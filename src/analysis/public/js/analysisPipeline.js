@@ -2,58 +2,60 @@ const e = require("express");
 
 async function executePipeline() {
   const eventID = getSelectedEvent();
-
   // Get tmps from database (or cache if offline)
 
   let tmps;
-  let blueAllianceData;
+  let tbaData;
   // If an event is specified, fetch using the new endpoint.
   if (eventID) {
     tmps = await fetch(`/analysis/api/dataset/${eventID}`).then((res) =>
       res.json(),
     );
-    blueAllianceData = await fetch(`/analysis/api/blueApiData/${eventID}`).then(
-      (res) => res.json(),
+    tbaData = await fetch(`/analysis/api/blueApiData/${eventID}`).then((res) =>
+      res.json(),
     );
   } else {
     tmps = await fetch("/analysis/api/dataset").then((res) => res.json());
-    blueAllianceData = await fetch("/analysis/api/blueApiData").then((res) =>
+    tbaData = await fetch("/analysis/api/blueApiData").then((res) =>
       res.json(),
     );
   }
 
   tmps.forEach((tmp) => {
-    const teamAndAlliance = getBlueDataAllianceAndMatch(
+    const teamAndAlliance = getTBADataAllianceAndMatch(
       tmp.robotNumber,
       tmp.matchNumber,
     );
 
-    const isParked = getBlueDataParkAndClimb(
-      teamAndAlliance[0],
-      teamAndAlliance[1],
+    const autoData = getTBADataAuto(
+      teamAndAlliance.robotNum,
+      teamAndAlliance.alliance,
     );
-    const autoLeave = getBlueDataAutoLeave(
-      teamAndAlliance[0],
-      teamAndAlliance[1],
+    const endGameData = getTBADataEndGame(
+      teamAndAlliance.robotNum,
+      teamAndAlliance.alliance,
     );
 
     tmp.tbaData = {};
-    setPath(tmp.tbaData, "parked", isParked[0]);
-    setPath(tmp.tbaData, "deepCage", isParked[1]);
-    setPath(tmp.tbaData, "autoLeave", autoLeave);
+    setPath(tmp.tbaData, `${autoData.autoActionName}`, autoData.autoAction);
+    setPath(
+      tmp.tbaData,
+      `${endGameData.endGameActionName}`,
+      endGameData.endGameAction,
+    );
   });
 
   /**
    * The purpose of this function is to get the alliance color and the level for which a robot is in tba data for a inputted team and match.
    * @param {*} team The team that you wish to input
    * @param {*} match The match number that you wish to input
-   * @returns [robotNum, alliance]
+   * @returns robotNum, alliance
    */
-  function getBlueDataAllianceAndMatch(team, match) {
-    let alliance;
-    let robotNum;
+  function getTBADataAllianceAndMatch(team, match) {
+    let robotNum = "";
+    let alliance = "";
 
-    blueAllianceData.forEach((item) => {
+    tbaData.forEach((item) => {
       if (item.comp_level == "qm" && item.match_number == match) {
         let i = 0;
         // Get what alliance the robot was on and what level in the array it is.
@@ -75,64 +77,57 @@ async function executePipeline() {
       }
     });
 
-    return [robotNum, alliance];
+    return { robotNum, alliance };
   }
 
   /**
-   * The purpose of this function is to get whether a robot parked in the end game or not and whether a robot is parked in the end game or not.
+   * The purpose of this function is to get what action the specified robot performed in auto.
    * @param {*} robotNum The level of which the robot is in the blue alliance array (Get from getBlueDataTeamAndMatch function)
    * @param {*} alliance The color of alliance the robot was on. (Get from getBlueDataTeamAndMatch function)
-   * @returns isParkedAndClimbed
+   * @returns autoActionName, autoAction
    */
-  function getBlueDataParkAndClimb(robotNum, alliance) {
-    let isParkedAndClimbed = false;
-    blueAllianceData.forEach((item) => {
+  function getTBADataAuto(robotNum, alliance) {
+    let autoActionName = "";
+    let autoAction = "";
+
+    tbaData.forEach((item) => {
       let breakdown = item.score_breakdown?.[alliance];
       if (!breakdown) return;
 
       for (const [key, value] of Object.entries(breakdown)) {
-        if (key == `endGameRobot${robotNum}`) {
-          if (value == "Parked") {
-            isParkedAndClimbed = [true, false];
-            break;
-          } else if (value == "DeepCage") {
-            isParkedAndClimbed = [true, true];
-            break;
-          } else {
-            isParkedAndClimbed = [false, false];
-            break;
-          }
+        if (key == `auto${key.substring(4, key.length - 1)}${robotNum}`) {
+          autoActionName = key.substring(0, key.length - 1);
+          autoAction = value;
         }
       }
     });
 
-    // For reference, isParkedAndClimbed[0] is the value for if it is parked, and isParkedAndClimbed[1] is the value for if it has climbed.
-    return isParkedAndClimbed;
+    return { autoActionName, autoAction };
   }
 
   /**
-   * The purpose of this function is to get whether a robot performed an auto leave or not.
-   * @param {*} robotNum
-   * @param {*} alliance
-   * @returns autoLeave
+   * The purpose of this function is to get the action that was performed by the specified robot in the endgame of the match.
+   * @param {*} robotNum The level of which the robot is in the blue alliance array (Get from getBlueDataTeamAndMatch function)
+   * @param {*} alliance The color of alliance the robot was on. (Get from getBlueDataTeamAndMatch function)
+   * @returns endGameActionName, endGameAction
    */
-  function getBlueDataAutoLeave(robotNum, alliance) {
-    let autoLeave = false;
-    blueAllianceData.forEach((item) => {
+  function getTBADataEndGame(robotNum, alliance) {
+    let endGameActionName = "";
+    let endGameAction = "";
+
+    tbaData.forEach((item) => {
       let breakdown = item.score_breakdown?.[alliance];
       if (!breakdown) return;
 
       for (const [key, value] of Object.entries(breakdown)) {
-        if (key == `autoLineRobot${robotNum}`) {
-          if (value == "Yes") {
-            autoLeave = true;
-            break;
-          }
+        if (key == `endGame${key.substring(7, key.length - 1)}${robotNum}`) {
+          endGameActionName = key.substring(0, key.length - 1);
+          endGameAction = value;
         }
       }
     });
 
-    return autoLeave;
+    return { endGameActionName, endGameAction };
   }
 
   // Get all tmps stored in the local storage (from qr code)
