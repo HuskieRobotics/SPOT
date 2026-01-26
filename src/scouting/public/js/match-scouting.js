@@ -292,26 +292,25 @@ var previousTimer = [];
               lastShiftSwitchTime = time; // Update the switch time
             }
 
-          // Build display text with shift information
-          let displayTextWithShift = displayText;
-          if (time > teleopTime) {
-            displayTextWithShift = `${displayText}`;
-          } else if (time < teleopTime && time > endgameTime) {
-            const shiftDisplay =
-              currentShift === "active" ? "Active Shift" : "Inactive Shift";
-            displayTextWithShift = `${shiftDisplay}`;
-          } else if (time <= endgameTime) {
-            displayTextWithShift = `Endgame - Active Shift`;
-          }
+            // Build display text with shift information
+            let displayTextWithShift = displayText;
+            if (time > teleopTime) {
+              displayTextWithShift = `${displayText}`;
+            } else if (time < teleopTime && time > endgameTime) {
+              const shiftDisplay =
+                currentShift === "active" ? "Active Shift" : "Inactive Shift";
+              displayTextWithShift = `${shiftDisplay}`;
+            } else if (time <= endgameTime) {
+              displayTextWithShift = `Endgame - Active Shift`;
+            }
 
-          buttons
-            .filter((x) => x.type === "match-control")
-            .forEach((b) => {
-              //update all match-control buttons (even those in different layers)
-              b.element.innerText = `${(time / 1000).toFixed(
-                2,
-              )} | ${displayTextWithShift}`;
-            });
+            buttons
+              .filter((x) => x.type === "match-control")
+              .forEach((b) => {
+                //update all match-control buttons (even those in different layers)
+                b.element.innerText = `${(time / 1000).toFixed(2)} | ${displayTextWithShift}`;
+              });
+          }
         }, 10);
         doExecutables(button);
         updateLastAction();
