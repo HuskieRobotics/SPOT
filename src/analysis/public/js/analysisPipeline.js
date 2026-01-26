@@ -1,3 +1,5 @@
+const e = require("express");
+
 async function executePipeline() {
   const eventID = getSelectedEvent();
 
@@ -21,22 +23,31 @@ async function executePipeline() {
   }
 
   tmps.forEach((tmp) => {
-    let teamAndMatch = getBlueDataAllianceAndMatch(
+    const teamAndAlliance = getBlueDataAllianceAndMatch(
       tmp.robotNumber,
       tmp.matchNumber,
     );
 
-    let isParked = getBlueDataParked(teamAndMatch[0], teamAndMatch[1]);
+    const isParked = getBlueDataParkAndClimb(
+      teamAndAlliance[0],
+      teamAndAlliance[1],
+    );
+    const autoLeave = getBlueDataAutoLeave(
+      teamAndAlliance[0],
+      teamAndAlliance[1],
+    );
 
     tmp.tbaData = {};
-    setPath(tmp.tbaData, "parked", isParked);
+    setPath(tmp.tbaData, "parked", isParked[0]);
+    setPath(tmp.tbaData, "deepCage", isParked[1]);
+    setPath(tmp.tbaData, "autoLeave", autoLeave);
   });
 
   /**
    * The purpose of this function is to get the alliance color and the level for which a robot is in tba data for a inputted team and match.
    * @param {*} team The team that you wish to input
    * @param {*} match The match number that you wish to input
-   * @returns [alliance, robotNum]
+   * @returns [robotNum, alliance]
    */
   function getBlueDataAllianceAndMatch(team, match) {
     let alliance;
@@ -68,30 +79,60 @@ async function executePipeline() {
   }
 
   /**
-   * The purpose of this function is to get whether a robot parked in the end game or not.
+   * The purpose of this function is to get whether a robot parked in the end game or not and whether a robot is parked in the end game or not.
    * @param {*} robotNum The level of which the robot is in the blue alliance array (Get from getBlueDataTeamAndMatch function)
    * @param {*} alliance The color of alliance the robot was on. (Get from getBlueDataTeamAndMatch function)
-   * @returns isParked
+   * @returns isParkedAndClimbed
    */
-  function getBlueDataParked(robotNum, alliance) {
-    let isParked = false;
+  function getBlueDataParkAndClimb(robotNum, alliance) {
+    let isParkedAndClimbed = false;
     blueAllianceData.forEach((item) => {
       let breakdown = item.score_breakdown?.[alliance];
       if (!breakdown) return;
-      let robotParked;
 
       for (const [key, value] of Object.entries(breakdown)) {
         if (key == `endGameRobot${robotNum}`) {
-          robotParked = value;
+          if (value == "Parked") {
+            isParkedAndClimbed = [true, false];
+            break;
+          } else if (value == "DeepCage") {
+            isParkedAndClimbed = [true, true];
+            break;
+          } else {
+            isParkedAndClimbed = [false, false];
+            break;
+          }
         }
-      }
-
-      if (robotParked == "Parked") {
-        isParked = true;
       }
     });
 
-    return isParked;
+    // For reference, isParkedAndClimbed[0] is the value for if it is parked, and isParkedAndClimbed[1] is the value for if it has climbed.
+    return isParkedAndClimbed;
+  }
+
+  /**
+   * The purpose of this function is to get whether a robot performed an auto leave or not.
+   * @param {*} robotNum
+   * @param {*} alliance
+   * @returns autoLeave
+   */
+  function getBlueDataAutoLeave(robotNum, alliance) {
+    let autoLeave = false;
+    blueAllianceData.forEach((item) => {
+      let breakdown = item.score_breakdown?.[alliance];
+      if (!breakdown) return;
+
+      for (const [key, value] of Object.entries(breakdown)) {
+        if (key == `autoLineRobot${robotNum}`) {
+          if (value == "Yes") {
+            autoLeave = true;
+            break;
+          }
+        }
+      }
+    });
+
+    return autoLeave;
   }
 
   // Get all tmps stored in the local storage (from qr code)
