@@ -9,88 +9,47 @@
   },
   {
     "type": "tmp",
-    "name": "sum",
-    "outputPath": "counts.missAlgae",
+    "name": "weightedSum",
+    "outputPath": "scores.autopassingranting",
     "options": {
-      "addends": [
-        "counts.autoMissProcessor",
-        "counts.autoMissNet",
-        "counts.teleopMissProcessor",
-        "counts.teleopMissNet"
-      ]
-    }
-  },
-  {
-    "type": "tmp",
-    "name": "sum",
-    "outputPath": "counts.missCoral",
-    "options": {
-      "addends": ["counts.autoMissCoral", "counts.teleopMissCoral"]
-    }
-  },
-  {
-    "type": "tmp",
-    "name": "sum",
-    "outputPath": "counts.dropAlgae",
-    "options": {
-      "addends": ["counts.autoAlgaeDrop", "counts.teleopAlgaeDrop"]
-    }
-  },
-  {
-    "type": "tmp",
-    "name": "sum",
-    "outputPath": "counts.dropCoral",
-    "options": {
-      "addends": ["counts.autoCoralDrop", "counts.teleopCoralDrop"]
+      "weightedPaths": {
+        "counts.autoRating_1_passing": 1,
+        "counts.autoRating_2_passing": 2,
+        "counts.autoRating_3_passingg": 3,
+        "counts.autoRating_4_passing": 4
+      }
     }
   },
   {
     "type": "tmp",
     "name": "weightedSum",
+    "outputPath": "scores.defenserating",
+    "options": {
+      "weightedPaths": {
+        "counts.rating_1_defense": 1,
+        "counts.rating_2_defense": 2,
+        "counts.rating_3_defense": 3,
+        "counts.rating_4_defense": 4
+      }
+    }
+  },
+  {
+    "type": "tmp",
+    "name": "weightedSum",
+    "outputPath": "scores.autoshooting",
+    "options": {
+      "weightedPaths": {
+        "counts.autoRating_1_shooting": 1,
+        "counts.autoRating_2_shooting": 2,
+        "counts.autoRating_3_shooting": 3,
+        "counts.autoRating_4_shootingg": 4
+      }
+    }
+  },
+  {
+    "type": "tmp",
+    "name": "sum",
     "outputPath": "scores.auto",
-    "options": {
-      "weightedPaths": {
-        "counts.leave": 2,
-        "counts.autol1": 3,
-        "counts.autol2": 4,
-        "counts.autol3": 6,
-        "counts.autol4": 7,
-        "counts.autoScoreProcessor": 6,
-        "counts.autoScoreNet": 4
-      }
-    }
-  },
-  {
-    "type": "tmp",
-    "name": "weightedSum",
-    "outputPath": "scores.teleop",
-    "options": {
-      "weightedPaths": {
-        "counts.teleopl1": 2,
-        "counts.teleopl2": 3,
-        "counts.teleopl3": 4,
-        "counts.teleopl4": 5,
-        "counts.teleopScoreNet": 4,
-        "counts.teleopScoreProcessor": 6
-      }
-    }
-  },
-  {
-    "type": "tmp",
-    "name": "weightedSum",
-    "outputPath": "scores.endgame",
-    "options": {
-      "weightedPaths": {
-        "counts.park": 2,
-        "counts.shallow": 6,
-        "counts.deep": 12
-      }
-    }
-  },
-  {
-    "type": "tmp",
-    "name": "sum",
-    "outputPath": "scores.total",
     "options": {
       "addends": ["scores.auto", "scores.teleop", "scores.endgame"]
     }
@@ -98,90 +57,40 @@
   {
     "type": "tmp",
     "name": "weightedSum",
-    "outputPath": "scores.coral",
+    "outputPath": "scores.passingrating",
     "options": {
       "weightedPaths": {
-        "counts.teleopl1": 2,
-        "counts.teleopl2": 3,
-        "counts.teleopl3": 4,
-        "counts.teleopl4": 5,
-        "counts.autol1": 3,
-        "counts.autol2": 4,
-        "counts.autol3": 6,
-        "counts.autol4": 7
+        "counts.rating_1_passing": 1,
+        "counts.rating_2_passing": 2,
+        "counts.rating_3_passing": 3,
+        "counts.rating_4_passing": 4
       }
     }
   },
   {
     "type": "tmp",
     "name": "weightedSum",
-    "outputPath": "scores.algae",
+    "outputPath": "scores.collectingrating",
     "options": {
       "weightedPaths": {
-        "counts.autoScoreNet": 6,
-        "counts.teleopScoreNet": 6,
-        "counts.autoScoreProcessor": 4,
-        "counts.teleopScoreProcessor": 4
+        "counts.rating_1_collecting": 1,
+        "counts.rating_2_collecting": 2,
+        "counts.rating_3_collecting": 3,
+        "counts.rating_4_collecting": 4
       }
     }
   },
   {
     "type": "tmp",
-    "name": "cycle",
-    "outputPath": "cycles.algae",
+    "name": "weightedSum",
+    "outputPath": "scores.shootingrating",
     "options": {
-      "pickups": [
-        "teleopGroundPickupAlgae",
-        "teleopReefPickupAlgae",
-        "autoReefPickupAlgae",
-        "autoGroundPickupAlgae"
-      ],
-      "scores": [
-        "teleopScoreProcessor",
-        "teleopScoreNet",
-        "autoScoreNet",
-        "autoScoreProcessor"
-      ],
-      "misses": [
-        "teleopMissProcessor",
-        "teleopMissNet",
-        "autoMissProcessor",
-        "autoMissNet"
-      ]
-    }
-  },
-  {
-    "type": "tmp",
-    "name": "cycle",
-    "outputPath": "cycles.coral",
-    "options": {
-      "pickups": [
-        "autoGroundPickupCoral",
-        "teleopGroundPickupCoral",
-        "autoStationPickupCoral",
-        "teleopStationPickupCoral"
-      ],
-      "scores": [
-        "teleopl1",
-        "teleopl2",
-        "teleopl3",
-        "teleopl4",
-        "autol1",
-        "autol2",
-        "autol3",
-        "autol4"
-      ],
-      "misses": ["teleopMissCoral", "autoMissCoral"]
-    }
-  },
-  {
-    "type": "tmp",
-    "name": "cycle",
-    "outputPath": "cycles.endgame",
-    "options": {
-      "pickups": ["barge"],
-      "scores": ["shallow", "deep"],
-      "misses": ["bargeFall"]
+      "weightedPaths": {
+        "counts.rating_1_shooting": 1,
+        "counts.rating_2_shooting": 2,
+        "counts.rating_3_shooting": 3,
+        "counts.rating_4_shooting": 4
+      }
     }
   },
   {
@@ -190,309 +99,6 @@
     "outputPath": "counts",
     "options": {
       "all": true
-    }
-  },
-  {
-    "type": "team",
-    "name": "sum",
-    "outputPath": "counts.scoreL1",
-    "options": {
-      "addends": ["counts.teleopl1", "counts.autol1"]
-    }
-  },
-  {
-    "type": "team",
-    "name": "sum",
-    "outputPath": "counts.scoreL2",
-    "options": {
-      "addends": ["counts.teleopl2", "counts.autol2"]
-    }
-  },
-  {
-    "type": "team",
-    "name": "sum",
-    "outputPath": "counts.scoreL3",
-    "options": {
-      "addends": ["counts.teleopl3", "counts.autol3"]
-    }
-  },
-  {
-    "type": "team",
-    "name": "sum",
-    "outputPath": "counts.scoreL4",
-    "options": {
-      "addends": ["counts.teleopl4", "counts.autol4"]
-    }
-  },
-  {
-    "type": "team",
-    "name": "sum",
-    "outputPath": "counts.totalCoralScored",
-    "options": {
-      "addends": [
-        "counts.scoreL1",
-        "counts.scoreL2",
-        "counts.scoreL3",
-        "counts.scoreL4"
-      ]
-    }
-  },
-  {
-    "type": "team",
-    "name": "sum",
-    "outputPath": "counts.scoreProcessor",
-    "options": {
-      "addends": ["counts.teleopScoreProcessor", "counts.autoScoreProcessor"]
-    }
-  },
-  {
-    "type": "team",
-    "name": "sum",
-    "outputPath": "counts.scoreNet",
-    "options": {
-      "addends": ["counts.teleopScoreNet", "counts.autoScoreNet"]
-    }
-  },
-  {
-    "type": "team",
-    "name": "sum",
-    "outputPath": "counts.totalAlgaeScored",
-    "options": {
-      "addends": ["counts.scoreProcessor", "counts.scoreNet"]
-    }
-  },
-  {
-    "type": "team",
-    "name": "sum",
-    "outputPath": "counts.reefPickupAlgae",
-    "options": {
-      "addends": ["counts.autoReefPickupAlgae", "counts.teleopReefPickupAlgae"]
-    }
-  },
-  {
-    "type": "team",
-    "name": "sum",
-    "outputPath": "counts.groundPickupAlgae",
-    "options": {
-      "addends": [
-        "counts.autoGroundPickupAlgae",
-        "counts.teleopGroundPickupAlgae"
-      ]
-    }
-  },
-  {
-    "type": "team",
-    "name": "sum",
-    "outputPath": "counts.missAlgae",
-    "options": {
-      "addends": [
-        "counts.autoMissProcessor",
-        "counts.autoMissNet",
-        "counts.teleopMissProcessor",
-        "counts.teleopMissNet"
-      ]
-    }
-  },
-  {
-    "type": "team",
-    "name": "sum",
-    "outputPath": "counts.missCoral",
-    "options": {
-      "addends": ["counts.autoMissCoral", "counts.teleopMissCoral"]
-    }
-  },
-  {
-    "type": "team",
-    "name": "sum",
-    "outputPath": "counts.groundPickupCoral",
-    "options": {
-      "addends": [
-        "counts.autoGroundPickupCoral",
-        "counts.teleopGroundPickupCoral"
-      ]
-    }
-  },
-  {
-    "type": "team",
-    "name": "sum",
-    "outputPath": "counts.stationPickupCoral",
-    "options": {
-      "addends": [
-        "counts.autoStationPickupCoral",
-        "counts.teleopStationPickupCoral"
-      ]
-    }
-  },
-  {
-    "type": "team",
-    "name": "sum",
-    "outputPath": "counts.dropAlgae",
-    "options": {
-      "addends": ["counts.autoAlgaeDrop", "counts.teleopAlgaeDrop"]
-    }
-  },
-  {
-    "type": "team",
-    "name": "sum",
-    "outputPath": "counts.dropCoral",
-    "options": {
-      "addends": ["counts.autoCoralDrop", "counts.teleopCoralDrop"]
-    }
-  },
-  {
-    "type": "team",
-    "name": "ratio",
-    "outputPath": "algaeAccuracy",
-    "options": {
-      "numerator": ["counts.totalAlgaeScored"],
-      "denominator": ["counts.totalAlgaeScored", "counts.missAlgae"],
-      "divByZero": 0
-    }
-  },
-  {
-    "type": "team",
-    "name": "ratio",
-    "outputPath": "coralAccuracy",
-    "options": {
-      "numerator": ["counts.totalCoralScored"],
-      "denominator": ["counts.totalCoralScored", "counts.missCoral"],
-      "divByZero": 0
-    }
-  },
-  {
-    "type": "team",
-    "name": "aggregateArray",
-    "outputPath": "cycles.endgame.all",
-    "options": {
-      "path": "cycles.endgame.all"
-    }
-  },
-  {
-    "type": "team",
-    "name": "aggregateArray",
-    "outputPath": "cycles.endgame.allComplete",
-    "options": {
-      "path": "cycles.endgame.allComplete"
-    }
-  },
-  {
-    "type": "team",
-    "name": "averageArray",
-    "outputPath": "cycles.endgame.averageTime",
-    "options": {
-      "arrayPath": "cycles.endgame.all",
-      "valuePath": "timeDifferential"
-    }
-  },
-  {
-    "type": "team",
-    "name": "averageArray",
-    "outputPath": "cycles.endgame.averageTimeComplete",
-    "options": {
-      "arrayPath": "cycles.endgame.allComplete",
-      "valuePath": "timeDifferential"
-    }
-  },
-  {
-    "type": "team",
-    "name": "aggregateArray",
-    "outputPath": "cycles.algae.all",
-    "options": {
-      "path": "cycles.algae.all"
-    }
-  },
-  {
-    "type": "team",
-    "name": "aggregateArray",
-    "outputPath": "cycles.algae.allComplete",
-    "options": {
-      "path": "cycles.algae.allComplete"
-    }
-  },
-  {
-    "type": "team",
-    "name": "averageArray",
-    "outputPath": "cycles.algae.averageTime",
-    "options": {
-      "arrayPath": "cycles.algae.all",
-      "valuePath": "timeDifferential"
-    }
-  },
-  {
-    "type": "team",
-    "name": "averageArray",
-    "outputPath": "cycles.algae.averageTimeComplete",
-    "options": {
-      "arrayPath": "cycles.algae.allComplete",
-      "valuePath": "timeDifferential"
-    }
-  },
-  {
-    "type": "team",
-    "name": "aggregateArray",
-    "outputPath": "cycles.coral.all",
-    "options": {
-      "path": "cycles.coral.all"
-    }
-  },
-  {
-    "type": "team",
-    "name": "aggregateArray",
-    "outputPath": "cycles.coral.allComplete",
-    "options": {
-      "path": "cycles.coral.allComplete"
-    }
-  },
-  {
-    "type": "team",
-    "name": "averageArray",
-    "outputPath": "cycles.coral.averageTime",
-    "options": {
-      "arrayPath": "cycles.coral.all",
-      "valuePath": "timeDifferential"
-    }
-  },
-  {
-    "type": "team",
-    "name": "averageArray",
-    "outputPath": "cycles.coral.averageTimeComplete",
-    "options": {
-      "arrayPath": "cycles.coral.allComplete",
-      "valuePath": "timeDifferential"
-    }
-  },
-  {
-    "type": "team",
-    "name": "countMatches",
-    "outputPath": "temp.totalTimeMs",
-    "options": {
-      "weight": 150000
-    }
-  },
-  {
-    "type": "team",
-    "name": "ratio",
-    "outputPath": "timePerGamePiece",
-    "options": {
-      "numerator": ["temp.totalTimeMs"],
-      "denominator": ["counts.totalAlgaeScored", "counts.totalCoralScored"]
-    },
-    "divByZero": 150000
-  },
-  {
-    "type": "team",
-    "name": "standardDeviation",
-    "outputPath": "standardDeviation",
-    "options": {
-      "path": "scores.total"
-    }
-  },
-  {
-    "type": "team",
-    "name": "average",
-    "outputPath": "averages",
-    "options": {
-      "path": "counts"
     }
   },
   {

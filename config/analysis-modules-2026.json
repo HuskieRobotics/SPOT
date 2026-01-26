@@ -64,7 +64,32 @@
     "position": "side",
     "name": "Team Stats",
     "options": {
-      "list": []
+      "list": [
+        {
+          "name": "Average Teleop Defense",
+          "path": "averageScores.defenserating",
+          "decimals": 2,
+          "sort": 1
+        },
+        {
+          "name": "Average Teleop Passing",
+          "path": "averageScores.passingrating",
+          "decimals": 2,
+          "sort": 1
+        },
+        {
+          "name": "Average Teleop Collecting",
+          "path": "averageScores.collectingrating",
+          "decimals": 2,
+          "sort": 1
+        },
+        {
+          "name": "Average Teleop Shooting",
+          "path": "averages.shootingrating",
+          "decimals": 2,
+          "sort": 1
+        }
+      ]
     }
   },
 
