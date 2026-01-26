@@ -5,7 +5,7 @@ const config = require("../config/config.json");
 
 router.get("/config.json", (req, res) => {
   const configClone = { ...config };
-  delete configClone.secrets; //Don't send secrets to client
+  delete configClone.secrets; //dont send secrets to client
   res.json(configClone);
 });
 
