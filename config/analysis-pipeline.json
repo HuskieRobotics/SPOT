@@ -10,12 +10,12 @@
   {
     "type": "tmp",
     "name": "weightedSum",
-    "outputPath": "scores.autopassingranting",
+    "outputPath": "scores.autoPassingRating",
     "options": {
       "weightedPaths": {
         "counts.autoRating_1_passing": 1,
         "counts.autoRating_2_passing": 2,
-        "counts.autoRating_3_passingg": 3,
+        "counts.autoRating_3_passing": 3,
         "counts.autoRating_4_passing": 4
       }
     }
@@ -23,7 +23,7 @@
   {
     "type": "tmp",
     "name": "weightedSum",
-    "outputPath": "scores.defenserating",
+    "outputPath": "scores.defenseRating",
     "options": {
       "weightedPaths": {
         "counts.rating_1_defense": 1,
@@ -42,16 +42,8 @@
         "counts.autoRating_1_shooting": 1,
         "counts.autoRating_2_shooting": 2,
         "counts.autoRating_3_shooting": 3,
-        "counts.autoRating_4_shootingg": 4
+        "counts.autoRating_4_shooting": 4
       }
-    }
-  },
-  {
-    "type": "tmp",
-    "name": "sum",
-    "outputPath": "scores.auto",
-    "options": {
-      "addends": ["scores.auto", "scores.teleop", "scores.endgame"]
     }
   },
   {
@@ -104,9 +96,41 @@
   {
     "type": "team",
     "name": "average",
+    "outputPath": "averageDefenseRating",
+    "options": {
+      "path": "scores.defenseRating"
+    }
+  },
+  {
+    "type": "team",
+    "name": "average",
+    "outputPath": "averagePassingRating",
+    "options": {
+      "path": "scores.passingrating"
+    }
+  },
+  {
+    "type": "team",
+    "name": "average",
+    "outputPath": "averageAutoShootingRating",
+    "options": {
+      "path": "scores.autoshooting"
+    }
+  },
+  {
+    "type": "team",
+    "name": "average",
     "outputPath": "averageScores",
     "options": {
       "path": "scores"
+    }
+  },
+  {
+    "type": "team",
+    "name": "average",
+    "outputPath": "averageCollectingRating",
+    "options": {
+      "path": "scores.collectingrating"
     }
   }
 ]
