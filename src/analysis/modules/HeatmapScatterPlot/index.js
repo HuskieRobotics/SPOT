@@ -21,8 +21,8 @@ class HeatmapScatterPlot {
           getPath(
             dataset.teams[team],
             this.moduleConfig.options.aggregatedActionsPath,
-            []
-          )
+            [],
+          ),
         )
         .flat()
         .filter((a) => a.id == actionId);
@@ -34,10 +34,12 @@ class HeatmapScatterPlot {
           showlegend: true,
           name: this.moduleConfig.options.actionLabels[actionId],
           x: filteredActionQueue.map(
-            (a) => getPath(a, this.moduleConfig.options.coordinatePath, {x: 0}).x
+            (a) =>
+              getPath(a, this.moduleConfig.options.coordinatePath, { x: 0 }).x,
           ),
           y: filteredActionQueue.map(
-            (a) => getPath(a, this.moduleConfig.options.coordinatePath, {y: 0}).y
+            (a) =>
+              getPath(a, this.moduleConfig.options.coordinatePath, { y: 0 }).y,
           ),
           marker: {
             size: 16,
@@ -60,8 +62,8 @@ class HeatmapScatterPlot {
         getPath(
           dataset.teams[team],
           this.moduleConfig.options.aggregatedActionsPath,
-          []
-        )
+          [],
+        ),
       )
       .flat()
       .filter((a) => actionGroups[0].actions.includes(a.id));
@@ -71,10 +73,10 @@ class HeatmapScatterPlot {
       name: "Heatmap",
       showlegend: true,
       x: filteredAllActionQueue.map(
-        (a) => getPath(a, this.moduleConfig.options.coordinatePath, {x: 0}).x
+        (a) => getPath(a, this.moduleConfig.options.coordinatePath, { x: 0 }).x,
       ),
       y: filteredAllActionQueue.map(
-        (a) => getPath(a, this.moduleConfig.options.coordinatePath, {y: 0}).y
+        (a) => getPath(a, this.moduleConfig.options.coordinatePath, { y: 0 }).y,
       ),
       xaxis: "x",
       yaxis: "y",
@@ -105,7 +107,7 @@ class HeatmapScatterPlot {
 
   async setData(data) {
     const fieldImg = await getSvgDataPng(
-      window.location.href + this.moduleConfig.options.imgPath
+      window.location.href + this.moduleConfig.options.imgPath,
     );
 
     const layout = {
