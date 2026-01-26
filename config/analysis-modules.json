@@ -6,10 +6,10 @@
     "position": "main",
     "options": {
       "trackedStats": [
-        "scores.auto",
-        "scores.teleop",
-        "scores.endgame",
-        "scores.total"
+        "averageScores.defenserating",
+        "averageScores.passingrating",
+        "averageScores.collectingrating",
+        "averageScores.shootingrating"
       ]
     }
   },
@@ -85,7 +85,7 @@
         },
         {
           "name": "Average Teleop Shooting",
-          "path": "averages.shootingrating",
+          "path": "averageScores.shootingrating",
           "decimals": 2,
           "sort": 1
         }
