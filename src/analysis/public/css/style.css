@@ -513,17 +513,23 @@ body {
   top: 10px;
   right: 10px;
   z-index: 1000;
-  background-color: #ff6030;
-  /* color: #ff6030; */
 }
 
 #event-dropdown button {
-  padding: 8px 12px;
+  padding: 8px 8px;
   cursor: pointer;
+  margin: 6px 6px;
+  border: #ff6030 solid 2px;
+  border-radius: 15px 15px;
+  font-size: medium;
 }
 
 #event-dropdown button:hover {
-  background-color: #e6551c;
+  border: #30a2ff solid 2px;
+  margin: 8px 8px;
+  border-radius: 15px 15px;
+  padding: 8px 8px;
+  cursor: pointer;
 }
 
 #event-menu {
