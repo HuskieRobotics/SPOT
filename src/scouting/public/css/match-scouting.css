@@ -34,11 +34,18 @@
   overflow: hidden;
   padding: 5px;
   box-shadow: 0 0 8px 0px #838383;
-  transition: 0.2s border, 0.2s box-shadow;
+  transition:
+    0.2s border,
+    0.2s box-shadow;
 }
 #match-scouting .grid-button:active {
   box-shadow: 0 0 12px 0px #222222;
   font-size: 3.3vw;
+  border: solid ridge;
+  border-radius: 16px;
+  border-width: 75px;
+  border-color: black;
+  color: black;
 }
 
 #match-scouting .grid-button.gray {
