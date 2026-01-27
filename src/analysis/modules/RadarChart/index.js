@@ -5,7 +5,7 @@ class RadarChart {
   constructor(moduleConfig) {
     this.moduleConfig = moduleConfig;
     this.container = createDOMElement("div", "container radar");
-    //this.container.innerHTML = '<div style = "font-size: 2em; text-align:center;">No Team Selected</div>'
+    //this.container.innerHTML ='<div style = "font-size: 2em; text-align:center;">No Team Selected</div>';
   }
 
   formatData(teams, dataset) {
@@ -31,7 +31,7 @@ class RadarChart {
 
     const data = [
       // {
-      //   labels: this.moduleConfig.options.slices.map((slice) => slice.name),
+      //   labels: this.moduleConfig.options.sections.map((slice) => slice.name),
       //   values: values.map((value) => Math.max(0, value)),
       //   type: "pie",
       //   hole: 0.4,
@@ -41,6 +41,15 @@ class RadarChart {
       //   textinfo: "value",
       //   textposition: "inside",
       // },
+
+      {
+        type: "scatterpolar",
+        r: ,
+        theta: ,
+        fill: "toself",
+        name: ,
+
+      }
 
       // EXAMPLE DATA
       {
