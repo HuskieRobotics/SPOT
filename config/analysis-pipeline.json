@@ -185,6 +185,32 @@
     }
   },
   {
+    "type": "tmp",
+    "name": "map",
+    "outputPath": "scores.tbaDataAuto.leave",
+    "options": {
+      "path": "tbaAuto.id",
+      "map": {
+        "No": 0,
+        "Yes": 1
+      }
+    }
+  },
+  {
+    "type": "tmp",
+    "name": "map",
+    "outputPath": "scores.tbaDataEndGame.cage.deep",
+    "options": {
+      "path": "tbaEndGame.id",
+      "map": {
+        "DeepCage": 1,
+        "None": 0,
+        "Parked": 0,
+        "ShallowCage": 0
+      }
+    }
+  },
+  {
     "type": "team",
     "name": "countActions",
     "outputPath": "counts",
