@@ -46,7 +46,7 @@
           "id": "preloadFuel",
           "displayText": "Preload Fuel",
           "gridArea": ["4", "1", "6", "5"],
-          "class": "lightCoral",
+          "class": "fuel2026",
           "type": "action",
           "executables": []
         },
@@ -97,7 +97,7 @@
           "id": "autoStartShooting",
           "displayText": "Start Shooting",
           "gridArea": ["4", "3", "6", "5"],
-          "class": "coral",
+          "class": "fuel2026",
           "type": "none",
           "executables": [
             {
@@ -110,7 +110,7 @@
           "id": "autoStopShooting",
           "displayText": "Stop Shooting",
           "gridArea": ["4", "5", "6", "7"],
-          "class": "lightbluegreen",
+          "class": "fuel2026",
           "type": "action",
           "executables": [
             {
@@ -123,7 +123,7 @@
           "id": "autoPassing",
           "displayText": "Passing",
           "gridArea": ["3", "7", "4", "10"],
-          "class": "bluegreen",
+          "class": "blue2026",
           "type": "action",
           "executables": [
             {
@@ -136,7 +136,7 @@
           "id": "autoShooting",
           "displayText": "Shooting",
           "gridArea": ["4", "7", "5", "10"],
-          "class": "darkbluegreen",
+          "class": "blue2026",
           "type": "action",
           "executables": [
             {
@@ -149,7 +149,7 @@
           "id": "autoCollect",
           "displayText": "Collect",
           "gridArea": ["5", "7", "6", "10"],
-          "class": "darkbluegreen",
+          "class": "blue2026",
           "type": "action",
           "executables": [
             {
@@ -162,7 +162,7 @@
           "id": "autoClimbL1",
           "displayText": "Attempted Climb",
           "gridArea": ["3", "1", "5", "3"],
-          "class": "lightCoral",
+          "class": "blue2026",
           "type": "action",
           "executables": []
         },
@@ -170,7 +170,7 @@
           "id": "autoFallL1",
           "displayText": "Fall",
           "gridArea": ["5", "1", "6", "3"],
-          "class": "lightCoral",
+          "class": "red",
           "type": "action",
           "executables": []
         }
@@ -212,7 +212,7 @@
           "id": "transitionStartShooting",
           "displayText": "Start Shooting",
           "gridArea": ["4", "3", "6", "5"],
-          "class": "coral",
+          "class": "fuel2026",
           "type": "none",
           "executables": [
             {
@@ -225,7 +225,7 @@
           "id": "transitionDefense",
           "displayText": "Defense",
           "gridArea": ["3", "1", "5", "3"],
-          "class": "lightCoral",
+          "class": "blue2026",
           "type": "action",
           "executables": [
             {
@@ -238,7 +238,7 @@
           "id": "transitionPassing",
           "displayText": "passing",
           "gridArea": ["5", "1", "6", "3"],
-          "class": "lightCoral",
+          "class": "blue2026",
           "type": "action",
           "executables": []
         },
@@ -246,7 +246,7 @@
           "id": "transitionStopShooting",
           "displayText": "Stop Shooting",
           "gridArea": ["4", "5", "6", "7"],
-          "class": "lightbluegreen",
+          "class": "fuel2026",
           "type": "action",
           "executables": []
         },
@@ -254,7 +254,7 @@
           "id": "transitionCollectOutpost",
           "displayText": "Collect Outpost",
           "gridArea": ["3", "7", "4", "10"],
-          "class": "bluegreen",
+          "class": "blue2026",
           "type": "action",
           "executables": []
         },
