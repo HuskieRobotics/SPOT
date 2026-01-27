@@ -5,6 +5,8 @@ const { setPath } = require("../../lib/util.js");
 const axios = require("axios");
 const config = require("../../../config/config.json");
 const chalk = require("chalk");
+let tbaResults;
+let tbaResultsFetchTime = 0;
 
 let router = Router();
 
@@ -18,16 +20,20 @@ router.get("/blueApiData/:eventID", async (req, res) => {
     eventKey = event.code.split("_")[0];
   }
 
-  const tbaResults = (
-    await axios.get(
-      `https://www.thebluealliance.com/api/v3/event/${eventKey}/matches`,
-      {
-        headers: {
-          "X-TBA-Auth-Key": TBA_API_KEY,
+  // Gets tba data every 5 minutes (300000 ms)
+  if (new Date().getTime() > tbaResultsFetchTime + 300000) {
+    tbaResults = (
+      await axios.get(
+        `https://www.thebluealliance.com/api/v3/event/${eventKey}/matches`,
+        {
+          headers: {
+            "X-TBA-Auth-Key": TBA_API_KEY,
+          },
         },
-      },
-    )
-  ).data;
+      )
+    ).data;
+    tbaResultsFetchTime = new Date().getTime();
+  }
 
   res.send(tbaResults);
 });
