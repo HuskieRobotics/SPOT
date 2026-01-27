@@ -5,7 +5,7 @@ DO NOT REMOVE OR MODIFY ANYTHING UNLESS YOU KNOW WHAT YOU'RE DOING
 *****************************************************************/
 let config = fetch("/config/config.json").then((res) => res.json());
 let matchScoutingConfig = fetch("/config/match-scouting.json").then((res) =>
-  res.json()
+  res.json(),
 );
 let qrConfig = fetch("/config/qr.json").then((res) => res.json());
 
@@ -16,13 +16,13 @@ if ("serviceWorker" in navigator) {
         // Registration was successful
         console.log(
           "ServiceWorker registration successful with scope: ",
-          registration.scope
+          registration.scope,
         );
       },
       function (err) {
         // registration failed
         console.log("ServiceWorker registration failed: ", err);
-      }
+      },
     );
   });
 }
@@ -97,8 +97,12 @@ class Modal {
       hideFade(this.blind);
       hideFade(this.element);
       setTimeout(() => {
-        document.body.removeChild(this.blind);
-        document.body.removeChild(this.element);
+        if (this.blind && this.blind.parentNode) {
+          document.body.removeChild(this.blind);
+        }
+        if (this.element && this.element.parentNode) {
+          document.body.removeChild(this.element);
+        }
       }, 300);
     };
     this.blind.addEventListener("click", this.modalExit);

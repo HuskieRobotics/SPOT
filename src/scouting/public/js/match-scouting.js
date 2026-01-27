@@ -221,6 +221,12 @@ var previousTimer = [];
         )
           .map((x) => Number(x))
           .sort((a, b) => b - a);
+        // Initialize displayText with the first applicable transition
+        if (transitions.length > 0) {
+          displayText =
+            matchScoutingConfig.timing.timeTransitions[transitions[0]]
+              .displayText || "";
+        }
         timerActive = true;
         button.timerInterval = setInterval(async () => {
           if (time <= transitions[0]) {
@@ -291,26 +297,28 @@ var previousTimer = [];
               currentShift = currentShift === "active" ? "inactive" : "active";
               lastShiftSwitchTime = time; // Update the switch time
             }
+          }
 
-            // Build display text with shift information
-            let displayTextWithShift = displayText;
-            if (time > teleopTime) {
-              displayTextWithShift = `${displayText}`;
-            } else if (time < teleopTime && time > endgameTime) {
+          // Build display text with shift information
+          let displayTextWithShift = displayText;
+          if (time > teleopTime) {
+            displayTextWithShift = `${displayText}`;
+          } else if (time < teleopTime && time > endgameTime) {
+            if (shiftButtonPressed) {
               const shiftDisplay =
                 currentShift === "active" ? "Active Shift" : "Inactive Shift";
               displayTextWithShift = `${shiftDisplay}`;
-            } else if (time <= endgameTime) {
-              displayTextWithShift = `Endgame - Active Shift`;
             }
-
-            buttons
-              .filter((x) => x.type === "match-control")
-              .forEach((b) => {
-                //update all match-control buttons (even those in different layers)
-                b.element.innerText = `${(time / 1000).toFixed(2)} | ${displayTextWithShift}`;
-              });
+          } else if (time <= endgameTime) {
+            displayTextWithShift = `Endgame - Active Shift`;
           }
+
+          buttons
+            .filter((x) => x.type === "match-control")
+            .forEach((b) => {
+              //update all match-control buttons (even those in different layers)
+              b.element.innerText = `${(time / 1000).toFixed(2)} | ${displayTextWithShift}`;
+            });
         }, 10);
         doExecutables(button);
         updateLastAction();

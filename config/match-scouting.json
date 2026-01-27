@@ -15,6 +15,7 @@
       },
       "130000": {
         "layer": 3,
+        "displayText": "Teleop",
         "variables": {}
       }
     }
@@ -51,7 +52,7 @@
         {
           "id": "preloadNone",
           "displayText": "Preload None",
-          "gridArea": ["4", "6", "6", "9"],
+          "gridArea": ["4", "6", "6", "10"],
           "class": "gray",
           "type": "action",
           "executables": []
