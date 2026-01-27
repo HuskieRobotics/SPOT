@@ -1,20 +1,6 @@
 [
   {
     "view": "team",
-    "module": "PerformanceTimePlot",
-    "name": "Performance By Each Match",
-    "position": "main",
-    "options": {
-      "trackedStats": [
-        "averageScores.defenserating",
-        "averageScores.passingrating",
-        "averageScores.collectingrating",
-        "averageScores.shootingrating"
-      ]
-    }
-  },
-  {
-    "view": "team",
     "module": "HeatmapScatterPlot",
     "name": "Auto Start and Stop Shooting Heatmap",
     "position": "main",
@@ -62,20 +48,20 @@
       "bars": [
         {
           "name": "Fall",
-          "path": "counts.totalFall"
+          "path": "counts.fall"
         },
         {
           "name": "L1",
-          "path": "counts.totalL1"
+          "path": "counts.teleopL1"
         },
 
         {
           "name": "L2",
-          "path": "counts.totalL2"
+          "path": "counts.l2"
         },
         {
           "name": "L3",
-          "path": "counts.totalL3"
+          "path": "counts.l3"
         }
       ]
     }
@@ -106,28 +92,66 @@
     "options": {
       "list": [
         {
-          "name": "Average Teleop Defense",
-          "path": "averageScores.defenserating",
+          "name": "Average Passing Rating",
+          "path": "averageScores.passingRating",
           "decimals": 2,
           "sort": 1
         },
         {
-          "name": "Average Teleop Passing",
-          "path": "averageScores.passingrating",
+          "name": "Average Defense Rating",
+          "path": "averageScores.defenseRating",
           "decimals": 2,
           "sort": 1
         },
         {
-          "name": "Average Teleop Collecting",
-          "path": "averageScores.collectingrating",
+          "name": "Average Shooting Rating",
+          "path": "averageScores.shootingRating",
           "decimals": 2,
           "sort": 1
         },
         {
-          "name": "Average Teleop Shooting",
-          "path": "averageScores.shootingrating",
+          "name": "Average Collection Rating",
+          "path": "averageScores.collectionRating",
           "decimals": 2,
           "sort": 1
+        },
+        {
+          "name": "Average Auto Shooting Rating",
+          "path": "averages.autoShootingRating",
+          "decimals": 2,
+          "sort": 1
+        },
+        {
+          "name": "Average Auto Passing Rating",
+          "path": "scores.autoPassingRating",
+          "decimals": 2,
+          "sort": 1
+        },
+        {
+          "name": "Average Auto Shooting Time",
+          "path": "cycles.autoShootingTime.averageTime",
+          "multiplier": 0.001,
+          "decimals": 2,
+          "hideIfValue": 0,
+          "sort": -1,
+          "unit": "s"
+        },
+        {
+          "name": "Average Teleop Shooting Time",
+          "path": "cycles.shootingTime.averageTime",
+          "multiplier": 0.001,
+          "decimals": 2,
+          "hideIfValue": 0,
+          "sort": -1,
+          "unit": "s"
+        },
+        {
+          "name": "Average Climb Timestamp",
+          "path": "averages.attemptClimbTime",
+          "multiplier": 0.001,
+          "decimals": 2,
+          "sort": -1,
+          "unit": "s"
         }
       ]
     }
@@ -147,61 +171,28 @@
   {
     "view": "match",
     "module": "ColumnDisplay",
-    "name": "Average Cycle Time",
+    "name": "Average Shooting Time",
     "position": "main",
-    "options": {
-      "path": "timePerGamePiece",
-      "multiplier": 0.001,
-      "decimals": 2,
-      "hideIfValue": 0,
-      "sort": -1,
-      "unit": "s"
-    }
-  },
-
-  {
-    "view": "match",
-    "module": "ColumnDisplay",
-    "name": "Auto Points",
-    "position": "main",
-    "options": {
-      "path": "averageScores.auto",
-      "sort": 1,
-      "decimals": 2
-    }
-  },
-  {
-    "view": "match",
-    "module": "ColumnDisplay",
-    "name": "Teleop Points",
-    "position": "main",
-    "options": {
-      "path": "averageScores.teleop",
-      "sort": 1,
-      "decimals": 2
-    }
-  },
-  {
-    "view": "match",
-    "module": "ColumnDisplay",
-    "name": "Barge Points",
-    "position": "main",
-    "options": {
-      "path": "avgEndgamePoints",
-      "sort": 1,
-      "decimals": 2
-    }
-  },
-  {
-    "view": "match",
-    "module": "ColumnDisplay",
-    "name": "Total Points",
-    "position": "main",
-    "options": {
-      "path": "averageScores.total",
-      "sort": 1,
-      "decimals": 2
-    }
+    "options": [
+      {
+        "name": "Average Auto Shooting Time",
+        "path": "cycles.autoShootingTime.averageTime",
+        "multiplier": 0.001,
+        "decimals": 2,
+        "hideIfValue": 0,
+        "sort": -1,
+        "unit": "s"
+      },
+      {
+        "name": "Average Teleop Shooting Time ",
+        "path": "cycles.shootingTime.averageTime",
+        "multiplier": 0.001,
+        "decimals": 2,
+        "hideIfValue": 0,
+        "sort": -1,
+        "unit": "s"
+      }
+    ]
   },
   {
     "view": "match",

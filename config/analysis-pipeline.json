@@ -17,6 +17,24 @@
   },
   {
     "type": "tmp",
+    "name": "cycle",
+    "outputPath": "cycle.autoShootingTime",
+    "options": {
+      "pickups": ["autoStartShooting"],
+      "scores": ["autoStopShooting"]
+    }
+  },
+  {
+    "type": "tmp",
+    "name": "cycle",
+    "outputPath": "cycle.shootingTime",
+    "options": {
+      "pickups": ["startShooting"],
+      "scores": ["stopShooting"]
+    }
+  },
+  {
+    "type": "tmp",
     "name": "weightedSum",
     "outputPath": "scores.autoPassingRating",
     "options": {
@@ -120,7 +138,15 @@
   {
     "type": "team",
     "name": "average",
-    "outputPath": "averageDefenseRating",
+    "outputPath": "averages.shootingRating",
+    "options": {
+      "path": "scores.shootingrating"
+    }
+  },
+  {
+    "type": "team",
+    "name": "average",
+    "outputPath": "averages.defenseRating",
     "options": {
       "path": "scores.defenseRating"
     }
@@ -128,7 +154,7 @@
   {
     "type": "team",
     "name": "average",
-    "outputPath": "averagePassingRating",
+    "outputPath": "averages.passingRating",
     "options": {
       "path": "scores.passingrating"
     }
@@ -136,7 +162,7 @@
   {
     "type": "team",
     "name": "average",
-    "outputPath": "averageAutoShootingRating",
+    "outputPath": "averages.autoShootingRating",
     "options": {
       "path": "scores.autoshooting"
     }
@@ -144,7 +170,7 @@
   {
     "type": "team",
     "name": "average",
-    "outputPath": "averageScores",
+    "outputPath": "averages.scores",
     "options": {
       "path": "scores"
     }
@@ -152,9 +178,109 @@
   {
     "type": "team",
     "name": "average",
-    "outputPath": "averageCollectingRating",
+    "outputPath": "averages.collectionRating",
+    "options": {
+      "path": "scores.collectionRating"
+    }
+  },
+  {
+    "type": "team",
+    "name": "average",
+    "outputPath": "averageScores.passingRating",
+    "options": {
+      "path": "scores.passingrating"
+    }
+  },
+  {
+    "type": "team",
+    "name": "average",
+    "outputPath": "averageScores.defenseRating",
+    "options": {
+      "path": "scores.defenseRating"
+    }
+  },
+  {
+    "type": "team",
+    "name": "average",
+    "outputPath": "averageScores.shootingRating",
+    "options": {
+      "path": "scores.shootingrating"
+    }
+  },
+  {
+    "type": "team",
+    "name": "average",
+    "outputPath": "averageScores.collectionRating",
     "options": {
       "path": "scores.collectingrating"
+    }
+  },
+  {
+    "type": "team",
+    "name": "aggregateArray",
+    "outputPath": "cycles.autoShootingTime.all",
+    "options": {
+      "path": "cycle.autoShootingTime.all"
+    }
+  },
+  {
+    "type": "team",
+    "name": "aggregateArray",
+    "outputPath": "cycles.autoShootingTime.allComplete",
+    "options": {
+      "path": "cycle.autoShootingTime.allComplete"
+    }
+  },
+  {
+    "type": "team",
+    "name": "averageArray",
+    "outputPath": "cycles.autoShootingTime.averageTime",
+    "options": {
+      "arrayPath": "cycles.autoShootingTime.all",
+      "valuePath": "timeDifferential"
+    }
+  },
+  {
+    "type": "team",
+    "name": "averageArray",
+    "outputPath": "cycles.autoShootingTime.averageTimeComplete",
+    "options": {
+      "arrayPath": "cycles.autoShootingTime.allComplete",
+      "valuePath": "timeDifferential"
+    }
+  },
+  {
+    "type": "team",
+    "name": "aggregateArray",
+    "outputPath": "cycles.shootingTime.all",
+    "options": {
+      "path": "cycle.shootingTime.all"
+    }
+  },
+  {
+    "type": "team",
+    "name": "aggregateArray",
+    "outputPath": "cycles.shootingTime.allComplete",
+    "options": {
+      "path": "cycle.shootingTime.allComplete"
+    }
+  },
+  {
+    "type": "team",
+    "name": "averageArray",
+    "outputPath": "cycles.shootingTime.averageTime",
+    "options": {
+      "arrayPath": "cycles.shootingTime.all",
+      "valuePath": "timeDifferential"
+    }
+  },
+  {
+    "type": "team",
+    "name": "averageArray",
+    "outputPath": "cycles.shootingTime.averageTimeComplete",
+    "options": {
+      "arrayPath": "cycles.shootingTime.allComplete",
+      "valuePath": "timeDifferential"
     }
   }
 ]
