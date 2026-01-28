@@ -21,67 +21,23 @@
     "options": {
       "sections": [
         {
-          "name": "Auto",
-          "paths": {
-            "autoFuelScored": "counts.autoFuelScored",
-            "autoDefense": "counts.autoDefense",
-            "autoFuelPassed": "counts.autoFuelPassed",
-            "autoFuelCollected": "counts.autoFuelCollected"
-          }
+          "name": "Auto"
         },
         {
-          "name": "Transition",
-          "paths": {
-            "transitionFuelScored": "counts.transitionFuelScored",
-            "transitionDefense": "counts.transitionDefense",
-            "transitionFuelPassed": "counts.transitionFuelPassed",
-            "transitionFuelCollected": "counts.transitionFuelCollected"
-          }
+          "name": "Teleop"
         },
         {
-          "name": "Active 1",
-          "paths": {
-            "active1FuelScored": "counts.active1FuelScored",
-            "active1Defense": "counts.active1Defense",
-            "active1FuelPassed": "counts.active1FuelPassed",
-            "active1FuelCollected": "counts.active1FuelCollected"
-          }
-        },
+          "name": "Endgame"
+        }
+      ],
+      "lines": [
         {
-          "name": "Inactive 1",
-          "paths": {
-            "inactive1FuelScored": "counts.inactive1FuelScored",
-            "inactive1Defense": "counts.inactive1Defense",
-            "inactive1FuelPassed": "counts.inactive1FuelPassed",
-            "inactive1FuelCollected": "counts.inactive1FuelCollected"
-          }
-        },
-        {
-          "name": "Active 2",
-          "paths": {
-            "active2FuelScored": "counts.active2FuelScored",
-            "active2Defense": "counts.active2Defense",
-            "active2FuelPassed": "counts.active2FuelPassed",
-            "active2FuelCollected": "counts.active2FuelCollected"
-          }
-        },
-        {
-          "name": "Inactive 2",
-          "paths": {
-            "inactive2FuelScored": "counts.inactive2FuelScored",
-            "inactive2Defense": "counts.inactive2Defense",
-            "inactive2FuelPassed": "counts.inactive2FuelPassed",
-            "inactive2FuelCollected": "counts.inactive2FuelCollected"
-          }
-        },
-        {
-          "name": "Endgame",
-          "paths": {
-            "endgameFuelScored": "counts.endgameFuelScored",
-            "endgameDefense": "counts.endgameDefense",
-            "endgameFuelPassed": "counts.endgameFuelPassed",
-            "endgameFuelCollected": "counts.endgameFuelCollected"
-          }
+          "name": "Scoring",
+          "times": [
+            { "name": "Auto", "path": "counts.autol4" },
+            { "name": "Teleop", "path": "counts.telel4" },
+            { "name": "Endgame", "path": "counts.endel4" }
+          ]
         }
       ]
     }

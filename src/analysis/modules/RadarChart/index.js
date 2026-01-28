@@ -30,45 +30,31 @@ class RadarChart {
       }
     });
     //previous code end
-    
-    const data = [
-      // {
-      //   labels: this.moduleConfig.options.sections.map((slice) => slice.name),
-      //   values: values.map((value) => Math.max(0, value)),
-      //   type: "pie",
-      //   hole: 0.4,
-      //   textfont: {
-      //     size: 20,
-      //   },
-      //   textinfo: "value",
-      //   textposition: "inside",
-      // },
 
-      {
-        type: "scatterpolar",
-        r: ,
-        theta: this.moduleConfig.options.sections.map((section) => section.name),
-        fill: "toself",
-        name: ,
+    const data = [];
 
+    for (let i = 0; i < this.moduleConfig.options.sections.length; i++) {
+      let values = [];
+      for (
+        let j = 0;
+        j < this.moduleConfig.options.lines[i].times.length;
+        j++
+      ) {
+        let point = getPath(
+          dataset.teams[team],
+          this.moduleConfig.options.lines[i].times[j].path,
+        );
+        values.push(point);
       }
-
-      // EXAMPLE DATA
-      {
+      const line = {
         type: "scatterpolar",
-        r: [39, 28, 8, 7, 28, 39],
-        theta: ["A", "B", "C", "D", "E", "A"],
+        r: values,
+        theta: this.moduleConfig.options.sections[i].name,
         fill: "toself",
-        name: "Group A",
-      },
-      {
-        type: "scatterpolar",
-        r: [1.5, 10, 39, 31, 15, 1.5],
-        theta: ["A", "B", "C", "D", "E", "A"],
-        fill: "toself",
-        name: "Group B",
-      },
-    ];
+        name: this.moduleConfig.options.lines[i].name,
+      };
+      data.push(line);
+    }
 
     return data;
   }
@@ -118,6 +104,7 @@ class RadarChart {
       },
     };
 
+    Plotly.purge(this.container);
     Plotly.newPlot(this.container, data, layout);
   }
 }
