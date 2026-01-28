@@ -6,7 +6,6 @@ body {
   display: flex;
   gap: 10px;
   margin-bottom: 20px;
-
   padding: 10px;
   /* Make sure padding aligns with other elements */
 }
@@ -16,37 +15,17 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px;
   border-bottom: 1px solid #ccc;
   flex-direction: column;
   margin: 5px 10px; /* Add horizontal margin to align with title */
-  border: 1px solid #ddd;
-  border-radius: 4px;
+  border: 2px solid var(--accent);
+  background-color: var(--bg-alt);
+  border-radius: 10px;
 }
 
 .match-info {
-  flex-grow: 1;
-  padding-left: 4px;
-  display: flex;
-  align-items: center;
-}
-
-.trash-button {
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 16px;
-  color: red;
   margin-left: auto;
-  display: flex;
-  align-items: center;
-}
-
-.filter-input {
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  flex: 1;
+  margin-right: auto;
 }
 
 .match-item-top {
@@ -55,7 +34,37 @@ body {
   padding: 10px;
   gap: 0;
   width: 100%;
-  justify-content: flex-start;
+  font-size: 1.5em;
+}
+
+.trash-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-left: auto;
+  font-size: 1.2em;
+  color: var(--bg-alt);
+  background-color: #ff6666;
+  display: flex;
+  align-items: center;
+  height: 1.3em;
+  border-radius: 3em;
+  padding: 10px;
+  margin-right: none;
+  padding-right: none;
+}
+
+.trash-button:hover {
+  background-color: #cf5353;
+  color: #e7e7e7;
+}
+
+.filter-input {
+  padding: 8px;
+  border: 2px solid var(--accent-alt);
+  border-radius: 4px;
+  background-color: var(--bg-alt);
+  flex: 1;
 }
 
 .dropdown-button {
@@ -72,8 +81,9 @@ body {
 .dropdown-content {
   width: 100%;
   padding: 10px;
-  background-color: var(--bg);
-  border-top: 1px solid #ddd;
+  background-color: var(--bg-alt);
+  border-top: 2px solid var(--accent);
+  margin-bottom: 6px;
 }
 
 .dropdown-content ul {
@@ -89,6 +99,7 @@ body {
 .header {
   font: 2em/1em "Cairo";
 }
+
 #title {
   background-color: var(--bg);
   font: 2em/1em "Cairo";
