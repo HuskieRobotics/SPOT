@@ -45,6 +45,8 @@ async function executePipeline() {
     );
   });
 
+  console.log(tmps);
+
   /**
    * The purpose of this function is to get the alliance color and the level for which a robot is in tba data for a inputted team and match.
    * @param {*} team The team that you wish to input

@@ -186,8 +186,16 @@
   },
   {
     "type": "tmp",
+    "name": "sum",
+    "outputPath": "counts.tbaParked",
+    "options": {
+      "addends": ["scores.tbaEndGame.barge.parked"]
+    }
+  },
+  {
+    "type": "tmp",
     "name": "map",
-    "outputPath": "scores.tbaDataAuto.leave",
+    "outputPath": "scores.tbaAuto.leave",
     "options": {
       "path": "tbaAuto.id",
       "map": {
@@ -199,7 +207,7 @@
   {
     "type": "tmp",
     "name": "map",
-    "outputPath": "scores.tbaDataEndGame.cage.deep",
+    "outputPath": "scores.tbaEndGame.cage.deep",
     "options": {
       "path": "tbaEndGame.id",
       "map": {
@@ -207,6 +215,48 @@
         "None": 0,
         "Parked": 0,
         "ShallowCage": 0
+      }
+    }
+  },
+  {
+    "type": "tmp",
+    "name": "map",
+    "outputPath": "scores.tbaEndGame.barge.notParked",
+    "options": {
+      "path": "tbaEndGame.id",
+      "map": {
+        "DeepCage": 0,
+        "None": 1,
+        "Parked": 0,
+        "ShallowCage": 0
+      }
+    }
+  },
+  {
+    "type": "tmp",
+    "name": "map",
+    "outputPath": "scores.tbaEndGame.barge.parked",
+    "options": {
+      "path": "tbaData.endGameRobot",
+      "map": {
+        "DeepCage": 0,
+        "None": 0,
+        "Parked": 1,
+        "ShallowCage": 0
+      }
+    }
+  },
+  {
+    "type": "tmp",
+    "name": "map",
+    "outputPath": "scores.tbaEndGame.cage.shallow",
+    "options": {
+      "path": "tbaEndGame.id",
+      "map": {
+        "DeepCage": 0,
+        "None": 0,
+        "Parked": 0,
+        "ShallowCage": 1
       }
     }
   },
@@ -527,6 +577,14 @@
     "outputPath": "averageScores",
     "options": {
       "path": "scores"
+    }
+  },
+  {
+    "type": "team",
+    "name": "sum",
+    "outputPath": "counts.tbaParked",
+    "options": {
+      "addends": ["scores.tbaEndGame.barge.parked"]
     }
   }
 ]
