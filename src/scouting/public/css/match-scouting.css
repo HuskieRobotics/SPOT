@@ -39,13 +39,19 @@
     0.2s box-shadow;
 }
 #match-scouting .grid-button:active {
-  box-shadow: 0 0 12px 0px #222222;
+  /* box-shadow: 0 0 12px 0px #lawngreen; */
   font-size: 3.3vw;
+  font-display: solid bold;
   border: solid ridge;
   border-radius: 16px;
   border-width: 75px;
   border-color: black;
-  color: black;
+  /* background-color: #4798b6;*/
+  box-shadow: 10px 10px 10px 5px #838383; /*#666*/
+  transform: translateY(5px);
+  /* background-image: linear-gradient(rgb(0 0 0/40%) 0 0); */
+  /* filter: brightness(0.8);  */
+  background-color: #757575;
 }
 
 #match-scouting .grid-button.gray {
