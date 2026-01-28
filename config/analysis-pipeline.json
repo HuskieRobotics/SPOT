@@ -112,6 +112,54 @@
     }
   },
   {
+    "type": "tmp",
+    "name": "average",
+    "outputPath": "averages.autoPassingRating",
+    "options": {
+      "path": "actionTimes.autoPassingRating"
+    }
+  },
+  {
+    "type": "tmp",
+    "name": "average",
+    "outputPath": "averages.defenseRating",
+    "options": {
+      "path": "actionTimes.defenseRating"
+    }
+  },
+  {
+    "type": "tmp",
+    "name": "average",
+    "outputPath": "averages.shootingRating",
+    "options": {
+      "path": "actionTimes.shootingRating"
+    }
+  },
+  {
+    "type": "tmp",
+    "name": "average",
+    "outputPath": "averages.autoShootingRating",
+    "options": {
+      "path": "actionTimes.autoShootingRating"
+    }
+  },
+  {
+    "type": "tmp",
+    "name": "average",
+    "outputPath": "averages.collectingRating",
+    "options": {
+      "path": "actionTimes.collectingRating"
+    }
+  },
+  {
+    "type": "tmp",
+    "name": "average",
+    "outputPath": "averages.passingRating",
+    "options": {
+      "path": "actionTimes.passingRating"
+    }
+  },
+  {
     "type": "team",
     "name": "countActions",
     "outputPath": "counts",
@@ -130,23 +178,15 @@
   {
     "type": "team",
     "name": "average",
-    "outputPath": "averages.attemptClimbTime",
+    "outputPath": "averages.autopassingrating",
     "options": {
-      "path": "actionTimes.attemptClimb"
+      "path": "actionTimes.autopassingrating"
     }
   },
   {
     "type": "team",
     "name": "average",
-    "outputPath": "averages.shootingRating",
-    "options": {
-      "path": "scores.shootingrating"
-    }
-  },
-  {
-    "type": "team",
-    "name": "average",
-    "outputPath": "averages.defenseRating",
+    "outputPath": "averages.defenserating",
     "options": {
       "path": "scores.defenseRating"
     }
@@ -154,7 +194,15 @@
   {
     "type": "team",
     "name": "average",
-    "outputPath": "averages.passingRating",
+    "outputPath": "averages.autoshooting",
+    "options": {
+      "path": "scores.autoshooting"
+    }
+  },
+  {
+    "type": "team",
+    "name": "average",
+    "outputPath": "averages.passingrating",
     "options": {
       "path": "scores.passingrating"
     }
@@ -162,7 +210,7 @@
   {
     "type": "team",
     "name": "average",
-    "outputPath": "averages.autoShootingRating",
+    "outputPath": "averages.shootingRating",
     "options": {
       "path": "scores.autoshooting"
     }
