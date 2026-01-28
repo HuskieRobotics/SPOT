@@ -9,14 +9,16 @@
         "loadConfig": "match-scouting.json"
       },
       "140000": {
-        "layer": 2,
+        "layer": 0,
         "displayText": "Teleop Transition",
-        "variables": {}
+        "variables": {},
+        "loadConfig": "match-scouting-5x12.json"
       },
       "130000": {
-        "layer": 3,
+        "layer": 2,
         "displayText": "Teleop",
-        "variables": {}
+        "variables": {},
+        "loadConfig": "match-scouting.json"
       }
     }
   },
@@ -45,7 +47,7 @@
           "id": "preloadFuel",
           "displayText": "Preload Fuel",
           "gridArea": ["4", "1", "6", "5"],
-          "class": "lightCoral",
+          "class": "fuel2026",
           "type": "action",
           "executables": []
         },
@@ -96,7 +98,7 @@
           "id": "autoStartShooting",
           "displayText": "Start Shooting",
           "gridArea": ["4", "3", "6", "5"],
-          "class": "coral",
+          "class": "fuel2026",
           "type": "none",
           "executables": [
             {
@@ -109,7 +111,7 @@
           "id": "autoStopShooting",
           "displayText": "Stop Shooting",
           "gridArea": ["4", "5", "6", "7"],
-          "class": "lightbluegreen",
+          "class": "fuel2026",
           "type": "action",
           "executables": [
             {
@@ -122,33 +124,7 @@
           "id": "autoPassing",
           "displayText": "Passing",
           "gridArea": ["3", "7", "4", "10"],
-          "class": "bluegreen",
-          "type": "action",
-          "executables": [
-            {
-              "type": "layer",
-              "args": [1, 6]
-            }
-          ]
-        },
-        {
-          "id": "autoShooting",
-          "displayText": "Shooting",
-          "gridArea": ["4", "7", "5", "10"],
-          "class": "darkbluegreen",
-          "type": "action",
-          "executables": [
-            {
-              "type": "layer",
-              "args": [1, 7]
-            }
-          ]
-        },
-        {
-          "id": "autoCollect",
-          "displayText": "Collect",
-          "gridArea": ["5", "7", "6", "10"],
-          "class": "darkbluegreen",
+          "class": "blue2026",
           "type": "action",
           "executables": [
             {
@@ -158,10 +134,36 @@
           ]
         },
         {
+          "id": "autoShooting",
+          "displayText": "Shooting",
+          "gridArea": ["4", "7", "5", "10"],
+          "class": "blue2026",
+          "type": "action",
+          "executables": [
+            {
+              "type": "layer",
+              "args": [1, 6]
+            }
+          ]
+        },
+        {
+          "id": "autoCollect",
+          "displayText": "Collect",
+          "gridArea": ["5", "7", "6", "10"],
+          "class": "blue2026",
+          "type": "action",
+          "executables": [
+            {
+              "type": "layer",
+              "args": [1, 4]
+            }
+          ]
+        },
+        {
           "id": "autoClimbL1",
           "displayText": "Attempted Climb",
           "gridArea": ["3", "1", "5", "3"],
-          "class": "lightCoral",
+          "class": "blue2026",
           "type": "action",
           "executables": []
         },
@@ -169,107 +171,7 @@
           "id": "autoFallL1",
           "displayText": "Fall",
           "gridArea": ["5", "1", "6", "3"],
-          "class": "lightCoral",
-          "type": "action",
-          "executables": []
-        }
-      ],
-      [
-        {
-          "id": "startGame",
-          "displayText": "Start",
-          "gridArea": ["1", "4", "2", "7"],
-          "class": "silver timer",
-          "type": "match-control",
-          "executables": []
-        },
-        {
-          "id": "broken",
-          "displayText": "Disabled",
-          "gridArea": ["1", "1", "2", "3"],
           "class": "red",
-          "type": "action",
-          "executables": []
-        },
-        {
-          "id": "aStop",
-          "displayText": "A-Stop",
-          "gridArea": ["1", "3", "2", "4"],
-          "class": "red",
-          "type": "action",
-          "executables": []
-        },
-        {
-          "id": "undo",
-          "displayText": "Undo",
-          "gridArea": ["1", "8", "2", "10"],
-          "class": "sherbert",
-          "type": "undo",
-          "executables": []
-        },
-        {
-          "id": "transitionStartShooting",
-          "displayText": "Start Shooting",
-          "gridArea": ["4", "3", "6", "5"],
-          "class": "coral",
-          "type": "none",
-          "executables": [
-            {
-              "type": "position",
-              "args": []
-            }
-          ]
-        },
-        {
-          "id": "transitionDefense",
-          "displayText": "Defense",
-          "gridArea": ["3", "1", "5", "3"],
-          "class": "lightCoral",
-          "type": "action",
-          "executables": [
-            {
-              "type": "layer",
-              "args": [1, 7]
-            }
-          ]
-        },
-        {
-          "id": "transitionPassing",
-          "displayText": "passing",
-          "gridArea": ["5", "1", "6", "3"],
-          "class": "lightCoral",
-          "type": "action",
-          "executables": []
-        },
-        {
-          "id": "transitionStopShooting",
-          "displayText": "Stop Shooting",
-          "gridArea": ["4", "5", "6", "7"],
-          "class": "lightbluegreen",
-          "type": "action",
-          "executables": []
-        },
-        {
-          "id": "transitionCollectOutpost",
-          "displayText": "Collect Outpost",
-          "gridArea": ["3", "7", "4", "10"],
-          "class": "bluegreen",
-          "type": "action",
-          "executables": []
-        },
-        {
-          "id": "transitionCollectDepo",
-          "displayText": "Collect Depo",
-          "gridArea": ["4", "7", "5", "10"],
-          "class": "darkbluegreen",
-          "type": "action",
-          "executables": []
-        },
-        {
-          "id": "transitionCollectNeutral",
-          "displayText": "Collect Neutral",
-          "gridArea": ["5", "7", "6", "10"],
-          "class": "darkbluegreen",
           "type": "action",
           "executables": []
         }
@@ -363,7 +265,7 @@
           "id": "l2",
           "displayText": "L2",
           "gridArea": ["4", "4", "5", "7"],
-          "class": "shallowBlue",
+          "class": "gray",
           "type": "action",
           "executables": []
         },
@@ -371,7 +273,7 @@
           "id": "teleopL1",
           "displayText": "L1",
           "gridArea": ["5", "4", "6", "7"],
-          "class": "deepBlue",
+          "class": "gray",
           "type": "action",
           "executables": []
         },
@@ -418,7 +320,7 @@
           "executables": [
             {
               "type": "layer",
-              "args": [5, 1]
+              "args": [4, 1]
             }
           ]
         },
@@ -431,7 +333,7 @@
           "executables": [
             {
               "type": "layer",
-              "args": [5, 1]
+              "args": [4, 1]
             }
           ]
         },
@@ -444,7 +346,7 @@
           "executables": [
             {
               "type": "layer",
-              "args": [5, 1]
+              "args": [4, 1]
             }
           ]
         }
@@ -483,7 +385,7 @@
           "executables": [
             {
               "type": "layer",
-              "args": [6, 1]
+              "args": [5, 1]
             }
           ]
         },
@@ -496,7 +398,7 @@
           "executables": [
             {
               "type": "layer",
-              "args": [6, 1]
+              "args": [5, 1]
             }
           ]
         },
@@ -509,7 +411,7 @@
           "executables": [
             {
               "type": "layer",
-              "args": [6, 1]
+              "args": [5, 1]
             }
           ]
         },
@@ -522,7 +424,7 @@
           "executables": [
             {
               "type": "layer",
-              "args": [6, 1]
+              "args": [5, 1]
             }
           ]
         }
@@ -561,7 +463,7 @@
           "executables": [
             {
               "type": "layer",
-              "args": [7, 1]
+              "args": [6, 1]
             }
           ]
         },
@@ -574,7 +476,7 @@
           "executables": [
             {
               "type": "layer",
-              "args": [7, 1]
+              "args": [6, 1]
             }
           ]
         },
@@ -587,7 +489,7 @@
           "executables": [
             {
               "type": "layer",
-              "args": [7, 1]
+              "args": [6, 1]
             }
           ]
         },
@@ -600,7 +502,7 @@
           "executables": [
             {
               "type": "layer",
-              "args": [7, 1]
+              "args": [6, 1]
             }
           ]
         }
