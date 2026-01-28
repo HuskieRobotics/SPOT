@@ -11,24 +11,26 @@ class RadarChart {
   formatData(teams, dataset) {
     console.log(`radar teams recieved: ${teams}`);
     let filteredTeams = teams.filter((team) => team != "|");
-    // const values = this.moduleConfig.options.slices.map((slice) => {
-    //   const summed = filteredTeams
-    //     .map((team) => {
-    //       let data = getPath(dataset.teams[team], slice.path);
-    //       console.log(`${slice.path}: ${data}`);
-    //       return data;
-    //     })
-    //     .flat()
-    //     .reduce((acc, i) => acc + i, 0);
-    //   if (slice.aggrMethod == "sum") {
-    //     //optionally summed
-    //     return summed;
-    //   } else {
-    //     //default is average
-    //     return (summed / teams.length).toFixed(2);
-    //   }
-    // });
-
+    // previous code start
+    const values = this.moduleConfig.options.sections.map((section) => {
+      const summed = filteredTeams
+        .map((team) => {
+          let data = getPath(dataset.teams[team], slice.path);
+          console.log(`${slice.path}: ${data}`);
+          return data;
+        })
+        .flat()
+        .reduce((acc, i) => acc + i, 0);
+      if (slice.aggrMethod == "sum") {
+        //optionally summed
+        return summed;
+      } else {
+        //default is average
+        return (summed / teams.length).toFixed(2);
+      }
+    });
+    //previous code end
+    
     const data = [
       // {
       //   labels: this.moduleConfig.options.sections.map((slice) => slice.name),
@@ -45,7 +47,7 @@ class RadarChart {
       {
         type: "scatterpolar",
         r: ,
-        theta: ,
+        theta: this.moduleConfig.options.sections.map((section) => section.name),
         fill: "toself",
         name: ,
 
