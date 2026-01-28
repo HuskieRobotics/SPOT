@@ -354,7 +354,7 @@
           "id": "l2",
           "displayText": "L2",
           "gridArea": ["4", "4", "5", "7"],
-          "class": "shallowBlue",
+          "class": "gray",
           "type": "action",
           "executables": []
         },
@@ -362,7 +362,7 @@
           "id": "teleopL1",
           "displayText": "L1",
           "gridArea": ["5", "4", "6", "7"],
-          "class": "deepBlue",
+          "class": "gray",
           "type": "action",
           "executables": []
         },
