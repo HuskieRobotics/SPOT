@@ -9,8 +9,13 @@ var previousTimer = [];
   matchScoutingConfig = await matchScoutingConfig;
   //initiate timing
   var time = matchScoutingConfig.timing.totalTime;
-  var teleopTime = 135000;
+  var teleopTime = 130000;
+  var endgameTime = 30000;
+  var shiftSwitchInterval = 25000;
   var timerActive = false;
+  var currentShift = "active"; // Track current shift (active/inactive)
+  var lastShiftSwitchTime = teleopTime; // Track when the last shift switch occurred
+  var shiftButtonPressed = false; // Flag to track if a shift button has been pressed
   // Expose time globally for loadConfig
   window.currentTime = time;
   window.currentConfigPath = "match-scouting.json"; // Track which config is loaded
@@ -64,6 +69,16 @@ var previousTimer = [];
           id: button.id,
           ts: time,
         });
+        // Update shift based on button press
+        if (button.id === "teleopActive") {
+          currentShift = "active";
+          lastShiftSwitchTime = time;
+          shiftButtonPressed = true;
+        } else if (button.id === "teleopInactive") {
+          currentShift = "inactive";
+          lastShiftSwitchTime = time;
+          shiftButtonPressed = true;
+        }
         doExecutables(button);
         updateLastAction();
       });
@@ -206,6 +221,12 @@ var previousTimer = [];
         )
           .map((x) => Number(x))
           .sort((a, b) => b - a);
+        // Initialize displayText with the first applicable transition
+        if (transitions.length > 0) {
+          displayText =
+            matchScoutingConfig.timing.timeTransitions[transitions[0]]
+              .displayText || "";
+        }
         timerActive = true;
         button.timerInterval = setInterval(async () => {
           if (time <= transitions[0]) {
@@ -266,13 +287,37 @@ var previousTimer = [];
           }
           time = matchScoutingConfig.timing.totalTime - (Date.now() - start);
           window.currentTime = time; // Keep window.currentTime in sync
+
+          // Handle shift switching during teleop (between teleopTime and endgameTime)
+          // Only switch if a shift button has been pressed
+          if (shiftButtonPressed && time < teleopTime && time > endgameTime) {
+            const elapsedSinceSwitch = lastShiftSwitchTime - time;
+            if (elapsedSinceSwitch >= shiftSwitchInterval) {
+              // Switch shift
+              currentShift = currentShift === "active" ? "inactive" : "active";
+              lastShiftSwitchTime = time; // Update the switch time
+            }
+          }
+
+          // Build display text with shift information
+          let displayTextWithShift = displayText;
+          if (time > teleopTime) {
+            displayTextWithShift = `${displayText}`;
+          } else if (time < teleopTime && time > endgameTime) {
+            if (shiftButtonPressed) {
+              const shiftDisplay =
+                currentShift === "active" ? "Active Shift" : "Inactive Shift";
+              displayTextWithShift = `${shiftDisplay}`;
+            }
+          } else if (time <= endgameTime) {
+            displayTextWithShift = `Endgame - Active Shift`;
+          }
+
           buttons
             .filter((x) => x.type === "match-control")
             .forEach((b) => {
               //update all match-control buttons (even those in different layers)
-              b.element.innerText = `${(time / 1000).toFixed(
-                2,
-              )} | ${displayText}`;
+              b.element.innerText = `${(time / 1000).toFixed(2)} | ${displayTextWithShift}`;
             });
         }, 10);
         doExecutables(button);
