@@ -12,12 +12,20 @@ class Modal {
     this.element = document.createElement("div");
     this.element.classList = `modal ${size}`;
 
+    // Prevent double removal of elements and repeated exits
+    this._exited = false;
     this.modalExit = () => {
+      if (this._exited) return;
+      this._exited = true;
       hideFade(this.blind);
       hideFade(this.element);
       setTimeout(() => {
-        document.body.removeChild(this.blind);
-        document.body.removeChild(this.element);
+        if (this.blind.parentElement === document.body) {
+          document.body.removeChild(this.blind);
+        }
+        if (this.element.parentElement === document.body) {
+          document.body.removeChild(this.element);
+        }
       }, 300);
     };
 
@@ -145,7 +153,9 @@ class Popup {
     setTimeout(() => {
       this.popupElement.style.top = "0";
       setTimeout(() => {
-        document.body.removeChild(this.popupElement);
+        if (this.popupElement.parentElement === document.body) {
+          document.body.removeChild(this.popupElement);
+        }
       }, 600);
     }, duration);
   }

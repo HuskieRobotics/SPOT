@@ -117,7 +117,9 @@ executables["position"] = {
 
       //remove the position image + container from DOM after 400ms delay
       setTimeout(() => {
-        document.body.removeChild(positionContainer);
+        if (positionContainer.parentElement === document.body) {
+          document.body.removeChild(positionContainer);
+        }
       }, 400);
     });
   },

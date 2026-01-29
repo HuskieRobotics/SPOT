@@ -207,7 +207,9 @@ var previousTimer = [];
             document.body.appendChild(qrContainer);
 
             qrContainer.addEventListener("click", () => {
-              document.body.removeChild(qrContainer);
+              if (qrContainer.parentElement === document.body) {
+                document.body.removeChild(qrContainer);
+              }
               window.location.reload();
             });
           }

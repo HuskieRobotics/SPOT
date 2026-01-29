@@ -125,7 +125,9 @@ submitButton.addEventListener("click", async () => {
 
     // Set a timeout to remove the notification after 3 seconds
     setTimeout(() => {
-      document.body.removeChild(notification);
+      if (notification.parentElement === document.body) {
+        document.body.removeChild(notification);
+      }
     }, 3000);
     // If saving to the database fails for whatever reason, store it in local storage for later usage
   } else {
@@ -141,7 +143,9 @@ submitButton.addEventListener("click", async () => {
 
     // Set a timeout to remove the notification after 3 seconds
     setTimeout(() => {
-      document.body.removeChild(notification);
+      if (notification.parentElement === document.body) {
+        document.body.removeChild(notification);
+      }
     }, 3000);
     let teamMatchPerformances = localStorage.getItem("teamMatchPerformances");
     if (teamMatchPerformances) {
@@ -155,7 +159,7 @@ submitButton.addEventListener("click", async () => {
       teamMatchPerformances.push(newPerformance);
       localStorage.setItem(
         "teamMatchPerformances",
-        JSON.stringify(teamMatchPerformances)
+        JSON.stringify(teamMatchPerformances),
       );
 
       // Create a new div element for the notification
@@ -170,7 +174,9 @@ submitButton.addEventListener("click", async () => {
 
       // Set a timeout to remove the notification after 3 seconds
       setTimeout(() => {
-        document.body.removeChild(notification);
+        if (notification.parentElement === document.body) {
+          document.body.removeChild(notification);
+        }
       }, 7000);
 
       console.log(localStorage.getItem("teamMatchPerformances"));
@@ -186,7 +192,7 @@ submitButton.addEventListener("click", async () => {
         // Store the modified array back in the cache
         localStorage.setItem(
           "teamMatchPerformances",
-          JSON.stringify(teamMatchPerformances)
+          JSON.stringify(teamMatchPerformances),
         );
         console.log(localStorage.getItem("teamMatchPerformances"));
         // Create a new div element for the notification
@@ -200,7 +206,9 @@ submitButton.addEventListener("click", async () => {
 
         // Set a timeout to remove the notification after 3 seconds
         setTimeout(() => {
-          document.body.removeChild(notification);
+          if (notification.parentElement === document.body) {
+            document.body.removeChild(notification);
+          }
         }, 3000);
       } else {
         console.log("No entries to delete.");
@@ -238,7 +246,7 @@ function decodeData(encodedData) {
   const decodedData = new Uint8ClampedArray(
     Array.from(atob(encodedData), (char) => {
       return char.charCodeAt(0);
-    })
+    }),
   );
 
   return decodedData;
@@ -261,14 +269,14 @@ function generateIdEnum(buttons) {
 async function decodeQRCodeUrl(image_url) {
   const qrConfig = await fetch("/config/qr.json").then((res) => res.json());
   const scoutingConfig = await fetch("/config/match-scouting.json").then(
-    (res) => res.json()
+    (res) => res.json(),
   );
   const ACTION_SCHEMA = qrConfig.ACTION_SCHEMA;
 
   this.ID_ENUM = generateIdEnum(scoutingConfig.layout.layers.flat());
   const ID_ENUM_REVERSE = Object.assign(
     {},
-    ...Object.entries(this.ID_ENUM).map(([key, index]) => ({ [index]: key }))
+    ...Object.entries(this.ID_ENUM).map(([key, index]) => ({ [index]: key })),
   );
 
   let bytes = decodeData(image_url);
@@ -283,7 +291,7 @@ async function decodeQRCodeUrl(image_url) {
     timestamp: Date.now(),
     clientVersion: `${parseInt(matchInfo.slice(0, 8), 2)}.${parseInt(
       matchInfo.slice(8, 16),
-      2
+      2,
     )}`, //major.minor
     scouterId: "qrcode",
 
