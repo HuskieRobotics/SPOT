@@ -218,6 +218,28 @@
   },
   {
     "type": "team",
+    "name": "average",
+    "outputPath": "averageScores.autoPassingRating",
+    "options": {
+      "path": "scores.autoPassingRating"
+    }
+  },
+  {
+    "type": "team",
+    "name": "sum",
+    "outputPath": "averageScores.total",
+    "options": {
+      "addends": [
+        "averageScores.passingRating",
+        "averageScores.defenseRating",
+        "averageScores.shootingRating",
+        "averageScores.collectionRating",
+        "averageScores.autoPassingRating"
+      ]
+    }
+  },
+  {
+    "type": "team",
     "name": "aggregateArray",
     "outputPath": "cycles.autoShootingTime.all",
     "options": {

@@ -123,7 +123,7 @@
         },
         {
           "name": "Average Auto Passing Rating",
-          "path": "scores.autoPassingRating",
+          "path": "averages.scores.autoPassingRating",
           "decimals": 2,
           "sort": 1
         },
