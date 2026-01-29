@@ -33,9 +33,9 @@
       "coordinatePath": "other.pos",
       "aggregatedActionsPath": "aggregatedActions",
       "actionGroups": [
-        { "name": "Teleop Start Shooting", "actions": ["startShooting"] }
+        { "name": "Teleop Start Shooting", "actions": ["startshoot"] }
       ],
-      "actionLabels": { "startShooting": "Teleop Start Shooting Position" },
+      "actionLabels": { "startshoot": "Teleop Start Shooting Position" },
       "imgPath": "img/field.svg"
     }
   },
@@ -93,31 +93,31 @@
       "list": [
         {
           "name": "Average Passing Rating",
-          "path": "averageScores.passingRating",
+          "path": "averages.scores.passingrating",
           "decimals": 2,
           "sort": 1
         },
         {
           "name": "Average Defense Rating",
-          "path": "averageScores.defenseRating",
+          "path": "averages.scores.defenseRating",
           "decimals": 2,
           "sort": 1
         },
         {
           "name": "Average Shooting Rating",
-          "path": "averageScores.shootingRating",
+          "path": "averages.scores.shootingrating",
           "decimals": 2,
           "sort": 1
         },
         {
           "name": "Average Collection Rating",
-          "path": "averageScores.collectionRating",
+          "path": "averages.scores.collectingrating",
           "decimals": 2,
           "sort": 1
         },
         {
           "name": "Average Auto Shooting Rating",
-          "path": "averages.autoShootingRating",
+          "path": "averages.scores.autoShootingRating",
           "decimals": 2,
           "sort": 1
         },
