@@ -12,23 +12,23 @@ class RadarChart {
     console.log(`radar teams recieved: ${teams}`);
     let filteredTeams = teams.filter((team) => team != "|");
     // previous code start
-    const values = this.moduleConfig.options.sections.map((section) => {
-      const summed = filteredTeams
-        .map((team) => {
-          let data = getPath(dataset.teams[team], slice.path);
-          console.log(`${slice.path}: ${data}`);
-          return data;
-        })
-        .flat()
-        .reduce((acc, i) => acc + i, 0);
-      if (slice.aggrMethod == "sum") {
-        //optionally summed
-        return summed;
-      } else {
-        //default is average
-        return (summed / teams.length).toFixed(2);
-      }
-    });
+    // const values = this.moduleConfig.options.sections.map((section) => {
+    //   const summed = filteredTeams
+    //     .map((team) => {
+    //       let data = getPath(dataset.teams[team], slice.path);
+    //       console.log(`${slice.path}: ${data}`);
+    //       return data;
+    //     })
+    //     .flat()
+    //     .reduce((acc, i) => acc + i, 0);
+    //   if (slice.aggrMethod == "sum") {
+    //     //optionally summed
+    //     return summed;
+    //   } else {
+    //     //default is average
+    //     return (summed / teams.length).toFixed(2);
+    //   }
+    // });
     //previous code end
 
     const data = [];

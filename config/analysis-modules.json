@@ -35,8 +35,8 @@
           "name": "Scoring",
           "times": [
             { "name": "Auto", "path": "counts.autol4" },
-            { "name": "Teleop", "path": "counts.telel4" },
-            { "name": "Endgame", "path": "counts.endel4" }
+            { "name": "Teleop", "path": "counts.scoreL4" },
+            { "name": "Endgame", "path": "counts.deep" }
           ]
         }
       ]
