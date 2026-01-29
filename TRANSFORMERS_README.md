@@ -127,7 +127,7 @@ If the template file looks like the following:
 ```js
 async function getTransformers() {
   const matchScoutingConfig = await fetch(
-    "../../../config/match-scouting-5x12.json",
+    "../../../config/match-scouting.json",
   ).then((res) => res.json());
   const actionIds = matchScoutingConfig.layout.layers
     .flat()
@@ -147,7 +147,7 @@ Then the compiled file may look something like:
 ```js
 async function getTransformers() {
   const matchScoutingConfig = await fetch(
-    "../../../config/match-scouting-5x12.json",
+    "../../../config/match-scouting.json",
   ).then((res) => res.json());
   const actionIds = matchScoutingConfig.layout.layers
     .flat()
