@@ -99,7 +99,7 @@
           "displayText": "Start Shooting",
           "gridArea": ["4", "3", "6", "5"],
           "class": "fuel2026",
-          "type": "none",
+          "type": "action",
           "executables": [
             {
               "type": "position",

@@ -33,9 +33,9 @@
       "coordinatePath": "other.pos",
       "aggregatedActionsPath": "aggregatedActions",
       "actionGroups": [
-        { "name": "Teleop Start Shooting", "actions": ["startShooting"] }
+        { "name": "Teleop Start Shooting", "actions": ["startshoot"] }
       ],
-      "actionLabels": { "startShooting": "Teleop Start Shooting Position" },
+      "actionLabels": { "startshoot": "Teleop Start Shooting Position" },
       "imgPath": "img/field.svg"
     }
   },
