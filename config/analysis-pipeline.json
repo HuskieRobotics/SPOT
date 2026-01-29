@@ -305,13 +305,5 @@
       "arrayPath": "cycles.shootingTime.allComplete",
       "valuePath": "timeDifferential"
     }
-  },
-  {
-    "type": "team",
-    "name": "aggregateArray",
-    "outputPath": "aggregatedActions",
-    "options": {
-      "path": "actionQueue"
-    }
   }
 ]
