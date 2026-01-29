@@ -12,7 +12,7 @@
     "name": "actionTime",
     "outputPath": "actionTimes.attemptClimb",
     "options": {
-      "actionId": "attemptClimb"
+      "actionId": ["attemptclimb", "autoClimbL1"]
     }
   },
   {
@@ -29,8 +29,8 @@
     "name": "cycle",
     "outputPath": "cycle.shootingTime",
     "options": {
-      "pickups": ["startShooting"],
-      "scores": ["stopShooting"]
+      "pickups": ["startshoot", "startShooting"],
+      "scores": ["stopshoot", "stopShooting"]
     }
   },
   {
@@ -111,46 +111,7 @@
       }
     }
   },
-  {
-    "type": "tmp",
-    "name": "average",
-    "outputPath": "averages.defenseRating",
-    "options": {
-      "path": "scores.defenseRating"
-    }
-  },
-  {
-    "type": "tmp",
-    "name": "average",
-    "outputPath": "averages.shootingRating",
-    "options": {
-      "path": "scores.shootingrating"
-    }
-  },
-  {
-    "type": "tmp",
-    "name": "average",
-    "outputPath": "averages.autoShootingRating",
-    "options": {
-      "path": "scores.autoshooting"
-    }
-  },
-  {
-    "type": "tmp",
-    "name": "average",
-    "outputPath": "averages.collectingRating",
-    "options": {
-      "path": "scores.collectingrating"
-    }
-  },
-  {
-    "type": "tmp",
-    "name": "average",
-    "outputPath": "averages.passingRating",
-    "options": {
-      "path": "scores.passingrating"
-    }
-  },
+
   {
     "type": "team",
     "name": "countActions",
@@ -180,7 +141,7 @@
     "name": "average",
     "outputPath": "averages.shootingRating",
     "options": {
-      "path": "averages.shootingrating"
+      "path": "scores.shootingrating"
     }
   },
   {
@@ -188,7 +149,7 @@
     "name": "average",
     "outputPath": "averages.defenseRating",
     "options": {
-      "path": "averages.defenseRating"
+      "path": "scores.defenseRating"
     }
   },
   {
@@ -196,7 +157,7 @@
     "name": "average",
     "outputPath": "averages.passingRating",
     "options": {
-      "path": "averages.passingrating"
+      "path": "scores.passingrating"
     }
   },
   {
@@ -204,7 +165,7 @@
     "name": "average",
     "outputPath": "averages.autoShootingRating",
     "options": {
-      "path": "averages.autoshooting"
+      "path": "scores.autoshooting"
     }
   },
   {
@@ -220,7 +181,7 @@
     "name": "average",
     "outputPath": "averages.collectionRating",
     "options": {
-      "path": "scores.collectionRating"
+      "path": "scores.collectingrating"
     }
   },
   {

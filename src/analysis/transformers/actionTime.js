@@ -8,13 +8,19 @@ __TMP__
 new DataTransformer("actionTime", (dataset, outputPath, options) => {
     for (let tmp of dataset.tmps) {
         let found = false;
+        // support options.actionId as string or array
+        const actionIds = Array.isArray(options.actionId) ? options.actionId : [options.actionId];
         for (let action of tmp.actionQueue) {
-            if (action.id == options.actionId) {
-                console.log(`Found ${options.actionId} for team ${tmp.robotNumber}, match ${tmp.matchNumber}, timestamp: ${action.ts}`);
-                setPath(tmp, outputPath, action.ts);
-                found = true;
-                break; // Only capture the first occurrence
+            for (const aid of actionIds) {
+                if (!aid) continue;
+                if (action.id === aid || action.id.toLowerCase() === String(aid).toLowerCase()) {
+                    console.log(`Found ${aid} for team ${tmp.robotNumber}, match ${tmp.matchNumber}, timestamp: ${action.ts}`);
+                    setPath(tmp, outputPath, action.ts);
+                    found = true;
+                    break;
+                }
             }
+            if (found) break; // Only capture the first matching occurrence
         }
         if (!found) {
             setPath(tmp, outputPath, options.default || null);

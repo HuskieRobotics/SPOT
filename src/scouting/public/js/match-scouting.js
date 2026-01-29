@@ -106,9 +106,9 @@ var previousTimer = [];
             showLayer(0);
           }
 
-          var totalNumberOfButtonsTeleopLayer = 12;
-          var totalNumberOfButtonsAutoLayer = 13;
-          var teleopLayerNumber = 2;
+          var totalNumberOfButtonsTeleopLayer = 13;
+          var totalNumberOfButtonsAutoLayer = 11;
+          var teleopLayerNumber = 0;
 
           if (time < teleopTime) {
             for (let i = 0; i < previousLayers.length; i++) {
@@ -172,8 +172,23 @@ var previousTimer = [];
           } else {
             // display QR code
             const encoder = new QREncoder(); // Updated
-            const dataUrl =
-              await encoder.encodeTeamMatchPerformance(teamMatchPerformance);
+            let dataUrl;
+            try {
+              dataUrl =
+                await encoder.encodeTeamMatchPerformance(teamMatchPerformance);
+            } catch (err) {
+              console.error("Error encoding QR:", err);
+              new Popup(
+                "error",
+                `Failed to generate QR code: ${err.message}`,
+                5000,
+              );
+              // re-enable UI and abort QR display
+              for (const button of buttons) {
+                button.element.classList.remove("disabled");
+              }
+              return;
+            }
 
             let qrContainer = document.createElement("div");
             let qrText = document.createElement("button");
