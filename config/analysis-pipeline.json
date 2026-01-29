@@ -62,7 +62,7 @@
   {
     "type": "tmp",
     "name": "weightedSum",
-    "outputPath": "scores.autoshooting",
+    "outputPath": "scores.autoShootingRating",
     "options": {
       "weightedPaths": {
         "counts.autoRating_1_shooting": 1,
@@ -139,103 +139,9 @@
   {
     "type": "team",
     "name": "average",
-    "outputPath": "averages.shootingRating",
-    "options": {
-      "path": "scores.shootingrating"
-    }
-  },
-  {
-    "type": "team",
-    "name": "average",
-    "outputPath": "averages.defenseRating",
-    "options": {
-      "path": "scores.defenseRating"
-    }
-  },
-  {
-    "type": "team",
-    "name": "average",
-    "outputPath": "averages.passingRating",
-    "options": {
-      "path": "scores.passingrating"
-    }
-  },
-  {
-    "type": "team",
-    "name": "average",
-    "outputPath": "averages.autoShootingRating",
-    "options": {
-      "path": "scores.autoshooting"
-    }
-  },
-  {
-    "type": "team",
-    "name": "average",
     "outputPath": "averages.scores",
     "options": {
       "path": "scores"
-    }
-  },
-  {
-    "type": "team",
-    "name": "average",
-    "outputPath": "averages.collectionRating",
-    "options": {
-      "path": "scores.collectingrating"
-    }
-  },
-  {
-    "type": "team",
-    "name": "average",
-    "outputPath": "averageScores.passingRating",
-    "options": {
-      "path": "scores.passingrating"
-    }
-  },
-  {
-    "type": "team",
-    "name": "average",
-    "outputPath": "averageScores.defenseRating",
-    "options": {
-      "path": "scores.defenseRating"
-    }
-  },
-  {
-    "type": "team",
-    "name": "average",
-    "outputPath": "averageScores.shootingRating",
-    "options": {
-      "path": "scores.shootingrating"
-    }
-  },
-  {
-    "type": "team",
-    "name": "average",
-    "outputPath": "averageScores.collectionRating",
-    "options": {
-      "path": "scores.collectingrating"
-    }
-  },
-  {
-    "type": "team",
-    "name": "average",
-    "outputPath": "averageScores.autoPassingRating",
-    "options": {
-      "path": "scores.autoPassingRating"
-    }
-  },
-  {
-    "type": "team",
-    "name": "sum",
-    "outputPath": "averageScores.total",
-    "options": {
-      "addends": [
-        "averageScores.passingRating",
-        "averageScores.defenseRating",
-        "averageScores.shootingRating",
-        "averageScores.collectionRating",
-        "averageScores.autoPassingRating"
-      ]
     }
   },
   {
