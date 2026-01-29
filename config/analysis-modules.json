@@ -93,7 +93,7 @@
       "list": [
         {
           "name": "Average Passing Rating",
-          "path": "averages.scores.passingrating",
+          "path": "averages.scores.passingRating",
           "decimals": 2,
           "sort": 1
         },
@@ -105,13 +105,13 @@
         },
         {
           "name": "Average Shooting Rating",
-          "path": "averages.scores.shootingrating",
+          "path": "averages.scores.shootingRating",
           "decimals": 2,
           "sort": 1
         },
         {
           "name": "Average Collection Rating",
-          "path": "averages.scores.collectingrating",
+          "path": "averages.scores.collectingRating",
           "decimals": 2,
           "sort": 1
         },

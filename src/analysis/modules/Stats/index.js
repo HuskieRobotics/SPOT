@@ -33,6 +33,24 @@ class Stats {
         summed = getPath(dataset.teams[teams[0]], stat.path, 0);
       }
 
+      // Log the individual values used to compute this stat (match the values used in summation)
+      try {
+        let rawValues = [];
+        if (teams.length > 1) {
+          rawValues = teams
+            .map((team) => getPath(dataset.teams[team], stat.path, 0))
+            .flat();
+        } else {
+          const v = getPath(dataset.teams[teams[0]], stat.path, 0);
+          rawValues = Array.isArray(v) ? v : [v];
+        }
+        console.log(`Stat raw values for "${stat.name}":`, rawValues);
+        const modifiedValues = rawValues.map((rv) => this.applyModifiers(stat, rv));
+        console.log(`Stat modified values for "${stat.name}":`, modifiedValues);
+      } catch (e) {
+        console.error("Error logging stat raw/modified values", e);
+      }
+
       if (stat.aggrMethod == "sum") {
         //optionally summed
         formattedStat = summed;

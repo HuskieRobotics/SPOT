@@ -35,7 +35,7 @@
   },
   {
     "type": "tmp",
-    "name": "weightedSum",
+    "name": "weightedSumAverage",
     "outputPath": "scores.autoPassingRating",
     "options": {
       "weightedPaths": {
@@ -48,7 +48,7 @@
   },
   {
     "type": "tmp",
-    "name": "weightedSum",
+    "name": "weightedSumAverage",
     "outputPath": "scores.defenseRating",
     "options": {
       "weightedPaths": {
@@ -61,7 +61,7 @@
   },
   {
     "type": "tmp",
-    "name": "weightedSum",
+    "name": "weightedSumAverage",
     "outputPath": "scores.autoShootingRating",
     "options": {
       "weightedPaths": {
@@ -74,8 +74,8 @@
   },
   {
     "type": "tmp",
-    "name": "weightedSum",
-    "outputPath": "scores.passingrating",
+    "name": "weightedSumAverage",
+    "outputPath": "scores.passingRating",
     "options": {
       "weightedPaths": {
         "counts.rating_1_passing": 1,
@@ -87,8 +87,8 @@
   },
   {
     "type": "tmp",
-    "name": "weightedSum",
-    "outputPath": "scores.collectingrating",
+    "name": "weightedSumAverage",
+    "outputPath": "scores.collectingRating",
     "options": {
       "weightedPaths": {
         "counts.rating_1_collecting": 1,
@@ -100,8 +100,8 @@
   },
   {
     "type": "tmp",
-    "name": "weightedSum",
-    "outputPath": "scores.shootingrating",
+    "name": "weightedSumAverage",
+    "outputPath": "scores.shootingRating",
     "options": {
       "weightedPaths": {
         "counts.rating_1_shooting": 1,

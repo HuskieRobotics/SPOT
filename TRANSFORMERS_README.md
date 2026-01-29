@@ -5,13 +5,13 @@ To make full use of the client-side pipeline, all new transformers should be str
 ```js
 async function getTransformers() {
   const matchScoutingConfig = await fetch(
-    "../../../config/match-scouting.json"
+    "../../../config/match-scouting.json",
   ).then((res) => res.json());
   const actionIds = matchScoutingConfig.layout.layers
     .flat()
     .reduce(
       (acc, button) => (acc.includes(button.id) ? acc : acc.concat(button.id)),
-      []
+      [],
     );
 
   return {
@@ -127,13 +127,13 @@ If the template file looks like the following:
 ```js
 async function getTransformers() {
   const matchScoutingConfig = await fetch(
-    "../../../config/match-scouting.json"
+    "../../../config/match-scouting-5x12.json",
   ).then((res) => res.json());
   const actionIds = matchScoutingConfig.layout.layers
     .flat()
     .reduce(
       (acc, button) => (acc.includes(button.id) ? acc : acc.concat(button.id)),
-      []
+      [],
     );
 
   return {
@@ -147,13 +147,13 @@ Then the compiled file may look something like:
 ```js
 async function getTransformers() {
   const matchScoutingConfig = await fetch(
-    "../../../config/match-scouting.json"
+    "../../../config/match-scouting-5x12.json",
   ).then((res) => res.json());
   const actionIds = matchScoutingConfig.layout.layers
     .flat()
     .reduce(
       (acc, button) => (acc.includes(button.id) ? acc : acc.concat(button.id)),
-      []
+      [],
     );
 
   return {
@@ -162,7 +162,7 @@ async function getTransformers() {
         "transformerA",
         (dataset, outputPath, options) => {
           // ... transformer code here ...
-        }
+        },
       ),
     },
     typeNameB: {
@@ -170,7 +170,7 @@ async function getTransformers() {
         "TransformerB",
         (dataset, outputPath, options) => {
           // ... transformer code here ...
-        }
+        },
       ),
     },
   };
