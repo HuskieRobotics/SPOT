@@ -86,18 +86,16 @@ executables["loadConfig"] = {
       if (targetLayer !== undefined) {
         layerToShow = targetLayer;
       } else if (window.currentTime !== undefined) {
-        // Find which transition the current time falls into
+        // Find which transition the current time falls into.
+        // Use ascending thresholds and pick the first threshold >= currentTime
         const transitions = Object.keys(newConfig.timing.timeTransitions || {})
           .map(Number)
-          .sort((a, b) => a - b);
+          .sort((a, b) => a - b); // ascending
 
-        if (transitions.length > 0) {
-          layerToShow = newConfig.timing.timeTransitions[transitions[0]].layer;
-        }
-
-        for (const transition of transitions) {
-          if (window.currentTime >= transition) {
-            layerToShow = newConfig.timing.timeTransitions[transition].layer;
+        for (const t of transitions) {
+          if (window.currentTime <= t) {
+            layerToShow = newConfig.timing.timeTransitions[t].layer;
+            break;
           }
         }
       }
