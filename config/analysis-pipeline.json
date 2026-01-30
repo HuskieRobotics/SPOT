@@ -147,40 +147,6 @@
   {
     "type": "team",
     "name": "aggregateArray",
-    "outputPath": "cycles.autoShootingTime.all",
-    "options": {
-      "path": "cycle.autoShootingTime.all"
-    }
-  },
-  {
-    "type": "team",
-    "name": "aggregateArray",
-    "outputPath": "cycles.autoShootingTime.allComplete",
-    "options": {
-      "path": "cycle.autoShootingTime.allComplete"
-    }
-  },
-  {
-    "type": "team",
-    "name": "averageArray",
-    "outputPath": "cycles.autoShootingTime.averageTime",
-    "options": {
-      "arrayPath": "cycles.autoShootingTime.all",
-      "valuePath": "timeDifferential"
-    }
-  },
-  {
-    "type": "team",
-    "name": "averageArray",
-    "outputPath": "cycles.autoShootingTime.averageTimeComplete",
-    "options": {
-      "arrayPath": "cycles.autoShootingTime.allComplete",
-      "valuePath": "timeDifferential"
-    }
-  },
-  {
-    "type": "team",
-    "name": "aggregateArray",
     "outputPath": "cycles.shootingTime.all",
     "options": {
       "path": "cycle.shootingTime.all"
@@ -209,6 +175,41 @@
     "outputPath": "cycles.shootingTime.averageTimeComplete",
     "options": {
       "arrayPath": "cycles.shootingTime.allComplete",
+      "valuePath": "timeDifferential"
+    }
+  },
+
+  {
+    "type": "team",
+    "name": "aggregateArray",
+    "outputPath": "cycles.autoShootingTime.all",
+    "options": {
+      "path": "cycle.autoShootingTime.all"
+    }
+  },
+  {
+    "type": "team",
+    "name": "aggregateArray",
+    "outputPath": "cycles.autoShootingTime.allComplete",
+    "options": {
+      "path": "cycle.autoShootingTime.allComplete"
+    }
+  },
+  {
+    "type": "team",
+    "name": "averageArray",
+    "outputPath": "cycles.autoShootingTime.averageTime",
+    "options": {
+      "arrayPath": "cycles.autoShootingTime.all",
+      "valuePath": "timeDifferential"
+    }
+  },
+  {
+    "type": "team",
+    "name": "averageArray",
+    "outputPath": "cycles.autoShootingTime.averageTimeComplete",
+    "options": {
+      "arrayPath": "cycles.autoShootingTime.allComplete",
       "valuePath": "timeDifferential"
     }
   }
