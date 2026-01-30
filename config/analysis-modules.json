@@ -362,7 +362,6 @@
       ]
     }
   },
-
   {
     "view": "match",
     "module": "SingleDisplay",
@@ -388,7 +387,6 @@
       "unit": "s"
     }
   },
-
   {
     "view": "match",
     "module": "ColumnDisplay",

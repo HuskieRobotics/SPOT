@@ -185,18 +185,6 @@
     }
   },
   {
-    "type": "tmp",
-    "name": "map",
-    "outputPath": "scores.tbaAuto.leave",
-    "options": {
-      "path": "tbaAuto.id",
-      "map": {
-        "No": 0,
-        "Yes": 1
-      }
-    }
-  },
-  {
     "type": "team",
     "name": "sum",
     "outputPath": "counts.scoreL1",
