@@ -12,7 +12,7 @@
     "name": "actionTime",
     "outputPath": "actionTimes.attemptClimb",
     "options": {
-      "actionId": ["attemptclimb", "autoClimbL1"]
+      "actionId": ["attemptClimb", "autoClimbL1"]
     }
   },
   {
@@ -29,8 +29,8 @@
     "name": "cycle",
     "outputPath": "cycle.shootingTime",
     "options": {
-      "pickups": ["startshoot", "startShooting"],
-      "scores": ["stopshoot", "stopShooting"]
+      "pickups": ["startShoot"],
+      "scores": ["stopShoot"]
     }
   },
   {
@@ -39,10 +39,10 @@
     "outputPath": "scores.autoPassingRating",
     "options": {
       "weightedPaths": {
-        "counts.autoRating_1_passing": 1,
-        "counts.autoRating_2_passing": 2,
-        "counts.autoRating_3_passing": 3,
-        "counts.autoRating_4_passing": 4
+        "counts.autoRatingPassing1": 1,
+        "counts.autoRatingPassing2": 2,
+        "counts.autoRatingPassing3": 3,
+        "counts.autoRatingPassing4": 4
       }
     }
   },
@@ -52,10 +52,10 @@
     "outputPath": "scores.defenseRating",
     "options": {
       "weightedPaths": {
-        "counts.rating_1_defense": 1,
-        "counts.rating_2_defense": 2,
-        "counts.rating_3_defense": 3,
-        "counts.rating_4_defense": 4
+        "counts.ratingDefense1": 1,
+        "counts.ratingDefense2": 2,
+        "counts.ratingDefense3": 3,
+        "counts.ratingDefense4": 4
       }
     }
   },
@@ -65,10 +65,10 @@
     "outputPath": "scores.autoShootingRating",
     "options": {
       "weightedPaths": {
-        "counts.autoRating_1_shooting": 1,
-        "counts.autoRating_2_shooting": 2,
-        "counts.autoRating_3_shooting": 3,
-        "counts.autoRating_4_shooting": 4
+        "counts.autoRatingShooting1": 1,
+        "counts.autoRatingShooting2": 2,
+        "counts.autoRatingShooting3": 3,
+        "counts.autoRatingShooting4": 4
       }
     }
   },
@@ -78,10 +78,10 @@
     "outputPath": "scores.passingRating",
     "options": {
       "weightedPaths": {
-        "counts.rating_1_passing": 1,
-        "counts.rating_2_passing": 2,
-        "counts.rating_3_passing": 3,
-        "counts.rating_4_passing": 4
+        "counts.ratingPassing1": 1,
+        "counts.ratingPassing2": 2,
+        "counts.ratingPassing3": 3,
+        "counts.ratingPassing4": 4
       }
     }
   },
@@ -91,10 +91,10 @@
     "outputPath": "scores.collectingRating",
     "options": {
       "weightedPaths": {
-        "counts.rating_1_collecting": 1,
-        "counts.rating_2_collecting": 2,
-        "counts.rating_3_collecting": 3,
-        "counts.rating_4_collecting": 4
+        "counts.ratingCollecting1": 1,
+        "counts.ratingCollecting2": 2,
+        "counts.ratingCollecting3": 3,
+        "counts.ratingCollecting4": 4
       }
     }
   },
@@ -104,10 +104,10 @@
     "outputPath": "scores.shootingRating",
     "options": {
       "weightedPaths": {
-        "counts.rating_1_shooting": 1,
-        "counts.rating_2_shooting": 2,
-        "counts.rating_3_shooting": 3,
-        "counts.rating_4_shooting": 4
+        "counts.ratingShooting1": 1,
+        "counts.ratingShooting2": 2,
+        "counts.ratingShooting3": 3,
+        "counts.ratingShooting4": 4
       }
     }
   },
