@@ -138,14 +138,6 @@
   },
   {
     "type": "team",
-    "name": "average",
-    "outputPath": "averages.scores",
-    "options": {
-      "path": "scores"
-    }
-  },
-  {
-    "type": "team",
     "name": "aggregateArray",
     "outputPath": "cycles.shootingTime.all",
     "options": {
@@ -211,6 +203,30 @@
     "options": {
       "arrayPath": "cycles.autoShootingTime.allComplete",
       "valuePath": "timeDifferential"
+    }
+  },
+  {
+    "type": "team",
+    "name": "standardDeviation",
+    "outputPath": "standardDeviation",
+    "options": {
+      "path": "scores.total"
+    }
+  },
+  {
+    "type": "team",
+    "name": "average",
+    "outputPath": "averages",
+    "options": {
+      "path": "counts"
+    }
+  },
+  {
+    "type": "team",
+    "name": "average",
+    "outputPath": "averageScores",
+    "options": {
+      "path": "scores"
     }
   }
 ]
