@@ -66,16 +66,16 @@
         },
         {
           "name": "L1",
-          "path": "counts.teleopL1"
+          "path": "counts.teleopAttemptL1"
         },
 
         {
           "name": "L2",
-          "path": "counts.l2"
+          "path": "counts.attemptL2"
         },
         {
           "name": "L3",
-          "path": "counts.l3"
+          "path": "counts.attemptL3"
         }
       ]
     }

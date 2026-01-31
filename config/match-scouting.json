@@ -91,7 +91,7 @@
           "executables": []
         },
         {
-          "id": "autoClimbL1",
+          "id": "autoAttemptL1",
           "displayText": "Attempted Climb",
           "gridArea": ["3", "1", "5", "4"],
           "class": "blue2026",
@@ -250,7 +250,7 @@
           "executables": []
         },
         {
-          "id": "l3",
+          "id": "attemptL3",
           "displayText": "L3",
           "gridArea": ["3", "4", "4", "10"],
           "class": "gray",
@@ -258,7 +258,7 @@
           "executables": []
         },
         {
-          "id": "l2",
+          "id": "attemptL2",
           "displayText": "L2",
           "gridArea": ["4", "4", "5", "10"],
           "class": "gray",
@@ -266,7 +266,7 @@
           "executables": []
         },
         {
-          "id": "teleopL1",
+          "id": "teleopAttemptL1",
           "displayText": "L1",
           "gridArea": ["5", "4", "6", "10"],
           "class": "gray",
