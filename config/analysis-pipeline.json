@@ -31,6 +31,16 @@
   },
   {
     "type": "tmp",
+    "name": "weightedSum",
+    "outputPath": "scores.teleop",
+    "options": {
+      "weightedPaths": {
+        "counts.teleopFuelScored": 1
+      }
+    }
+  },
+  {
+    "type": "tmp",
     "name": "sum",
     "outputPath": "scores.total",
     "options": {

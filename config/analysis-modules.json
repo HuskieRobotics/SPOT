@@ -107,37 +107,37 @@
       "list": [
         {
           "name": "Average Passing Rating",
-          "path": "averages.scores.passingRating",
+          "path": "averagesScores.passingRating",
           "decimals": 2,
           "sort": 1
         },
         {
           "name": "Average Defense Rating",
-          "path": "averages.scores.defenseRating",
+          "path": "averageScores.defenseRating",
           "decimals": 2,
           "sort": 1
         },
         {
           "name": "Average Shooting Rating",
-          "path": "averages.scores.shootingRating",
+          "path": "averageScores.shootingRating",
           "decimals": 2,
           "sort": 1
         },
         {
           "name": "Average Collection Rating",
-          "path": "averages.scores.collectingRating",
+          "path": "averageScores.collectingRating",
           "decimals": 2,
           "sort": 1
         },
         {
           "name": "Average Auto Shooting Rating",
-          "path": "averages.scores.autoShootingRating",
+          "path": "averageScores.autoShootingRating",
           "decimals": 2,
           "sort": 1
         },
         {
           "name": "Average Auto Passing Rating",
-          "path": "averages.scores.autoPassingRating",
+          "path": "averageScores.autoPassingRating",
           "decimals": 2,
           "sort": 1
         },

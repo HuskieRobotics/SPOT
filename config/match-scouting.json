@@ -984,6 +984,48 @@
             }
           ]
         }
+      ],
+      [
+        {
+          "id": "counts.autoClimbL1",
+          "displayText": "Auto Climb L1",
+          "gridArea": ["1", "1", "2", "4"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "counts.teleopL1",
+          "displayText": "Teleop Climb L1",
+          "gridArea": ["1", "4", "2", "7"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "counts.l2",
+          "displayText": "Teleop Climb L2",
+          "gridArea": ["1", "7", "2", "10"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "counts.l3",
+          "displayText": "Teleop Climb L3",
+          "gridArea": ["1", "10", "2", "13"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "counts.teleopFuelScored",
+          "displayText": "Teleop Fuel Scored",
+          "gridArea": ["2", "1", "3", "7"],
+          "class": "fuel2026",
+          "type": "action",
+          "executables": []
+        }
       ]
     ]
   }
