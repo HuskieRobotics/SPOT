@@ -16,9 +16,6 @@ var previousTimer = [];
   var currentShift = "active"; // Track current shift (active/inactive)
   var lastShiftSwitchTime = teleopTime; // Track when the last shift switch occurred
   var shiftButtonPressed = false; // Flag to track if a shift button has been pressed
-  // Expose time globally for loadConfig
-  window.currentTime = time;
-  window.currentConfigPath = "match-scouting.json"; // Track which config is loaded
 
   //intialize variables
   let varNames = Object.keys(matchScoutingConfig.variables);
@@ -172,24 +169,8 @@ var previousTimer = [];
           } else {
             // display QR code
             const encoder = new QREncoder(); // Updated
-            let dataUrl;
-            try {
-              dataUrl =
-                await encoder.encodeTeamMatchPerformance(teamMatchPerformance);
-            } catch (err) {
-              console.error("Error encoding QR:", err);
-              new Popup(
-                "error",
-                `Failed to generate QR code: ${err.message}`,
-                5000,
-              );
-              // re-enable UI and abort QR display
-              for (const button of buttons) {
-                button.element.classList.remove("disabled");
-              }
-              return;
-            }
-
+            const dataUrl =
+              await encoder.encodeTeamMatchPerformance(teamMatchPerformance);
             let qrContainer = document.createElement("div");
             let qrText = document.createElement("button");
             let qrImg = document.createElement("img");
@@ -243,7 +224,7 @@ var previousTimer = [];
               .displayText || "";
         }
         timerActive = true;
-        button.timerInterval = setInterval(async () => {
+        button.timerInterval = setInterval(() => {
           if (time <= transitions[0]) {
             //move to the next transition if it is time
             displayText =
@@ -260,30 +241,13 @@ var previousTimer = [];
                 ].variables[key];
               console.log(`set ${key} to ${variables[key]}`);
             }
+            showLayer(
+              matchScoutingConfig.timing.timeTransitions[transitions[0]].layer,
+              matchScoutingConfig.timing.timeTransitions[transitions[0]]
+                .conditional,
+              matchScoutingConfig.timing.timeTransitions[transitions[0]].always,
+            );
 
-            // Check if this transition should load a different config
-            const transition =
-              matchScoutingConfig.timing.timeTransitions[transitions[0]];
-            if (
-              transition.loadConfig &&
-              transition.loadConfig !== window.currentConfigPath
-            ) {
-              // Load the new config file
-              if (executables["loadConfig"]) {
-                await executables["loadConfig"].execute(
-                  button,
-                  layers,
-                  transition.loadConfig,
-                );
-              }
-            } else {
-              // Normal layer transition
-              showLayer(
-                transition.layer,
-                transition.conditional,
-                transition.always,
-              );
-            }
             transitions.shift();
           }
           if (time <= 0) {
@@ -359,20 +323,6 @@ var previousTimer = [];
   }
 
   // Expose rebuild function for loadConfig executable
-  window.rebuildButtons = function (newButtons, newLayers) {
-    // Replace the global buttons and layers references
-    buttons.length = 0;
-    layers.length = 0;
-    buttons.push(...newButtons);
-    layers.push(...newLayers);
-
-    // Apply button builders to all new buttons
-    for (const layer of newLayers) {
-      for (const button of layer) {
-        buttonBuilders[button.type](button);
-      }
-    }
-  };
 
   showLayer(0); //initially show layer 0
 
@@ -441,9 +391,6 @@ var previousTimer = [];
       previousLayers.push(rendered);
     }
   }
-
-  // Expose showLayer for loadConfig executable
-  window.showLayer = showLayer;
 
   function conditionalLayer() {
     var renderedButtons = [];
