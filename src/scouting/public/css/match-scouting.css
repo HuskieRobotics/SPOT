@@ -147,3 +147,23 @@
   opacity: 0.6;
   pointer-events: none;
 }
+
+.click-indicator {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: blue;
+  pointer-events: none;
+  z-index: 1000;
+  animation: fadeOut 0.5s ease-out forwards;
+}
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
