@@ -9,6 +9,69 @@
   },
   {
     "type": "tmp",
+    "name": "weightedSumAverage",
+    "outputPath": "scores.auto",
+    "options": {
+      "weightedPaths": {
+        "counts.autoClimbL1": 15,
+        "counts.autoRatingPassing1": 1,
+        "counts.autoRatingPassing2": 2,
+        "counts.autoRatingPassing3": 3,
+        "counts.autoRatingPassing4": 4,
+        "counts.autoRatingShooting1": 1,
+        "counts.autoRatingShooting2": 2,
+        "counts.autoRatingShooting3": 3,
+        "counts.autoRatingShooting4": 4
+      }
+    }
+  },
+  {
+    "type": "tmp",
+    "name": "weightedSumAverage",
+    "outputPath": "scores.teleop",
+    "options": {
+      "weightedPaths": {
+        "counts.ratingDefense1": 1,
+        "counts.ratingDefense2": 2,
+        "counts.ratingDefense3": 3,
+        "counts.ratingDefense4": 4,
+        "counts.ratingPassing1": 1,
+        "counts.ratingPassing2": 2,
+        "counts.ratingPassing3": 3,
+        "counts.ratingPassing4": 4,
+        "counts.ratingCollecting1": 1,
+        "counts.ratingCollecting2": 2,
+        "counts.ratingCollecting3": 3,
+        "counts.ratingCollecting4": 4,
+        "counts.ratingShooting1": 1,
+        "counts.ratingShooting2": 2,
+        "counts.ratingShooting3": 3,
+        "counts.ratingShooting4": 4
+      }
+    }
+  },
+  {
+    "type": "tmp",
+    "name": "weightedSum",
+    "outputPath": "scores.endgame",
+    "options": {
+      "weightedPaths": {
+        "counts.teleopL1": 20,
+        "counts.l2": 30,
+        "counts.l3": 50
+      }
+    }
+  },
+  {
+    "type": "tmp",
+    "name": "sum",
+    "outputPath": "scores.total",
+    "options": {
+      "addends": ["scores.auto", "scores.teleop", "scores.endgame"]
+    }
+  },
+  {
+    "type": "tmp",
     "name": "actionTime",
     "outputPath": "actionTimes.attemptClimb",
     "options": {
