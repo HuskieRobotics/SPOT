@@ -16,8 +16,8 @@ class Modal {
       hideFade(this.blind);
       hideFade(this.element);
       setTimeout(() => {
-        document.body.removeChild(this.blind);
-        document.body.removeChild(this.element);
+        this.blind.remove();
+        this.element.remove();
       }, 300);
     };
 
