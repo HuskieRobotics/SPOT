@@ -85,6 +85,20 @@ executables["position"] = {
         actionQueue[actionQueue.length - 1].other = {};
       let pos = (actionQueue[actionQueue.length - 1].other.pos = { x, y });
 
+      /* Show blue dot indicator */
+      const clickIndicator = document.createElement("div");
+      clickIndicator.classList.add("click-indicator");
+      clickIndicator.style.left = `${e.clientX - 10}px`;
+      clickIndicator.style.top = `${e.clientY - 10}px`;
+      document.body.appendChild(clickIndicator);
+      
+      // Remove indicator after animation completes
+      setTimeout(() => {
+        if (clickIndicator.parentNode) {
+          document.body.removeChild(clickIndicator);
+        }
+      }, 500);
+
       /* position lock */
       if (positionConfig.POSITION_LOCK_DELAY_MS != 0) {
         //position lock is enabled,
