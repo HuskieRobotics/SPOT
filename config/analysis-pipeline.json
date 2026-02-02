@@ -46,11 +46,23 @@
   },
   {
     "type": "tmp",
+    "name": "map",
+    "outputPath": "counts.tbaAutoLeave",
+    "options": {
+      "path": "tbaData.autoLineRobot",
+      "map": {
+        "No": 0,
+        "Yes": 1
+      }
+    }
+  },
+  {
+    "type": "tmp",
     "name": "weightedSum",
     "outputPath": "scores.auto",
     "options": {
       "weightedPaths": {
-        "counts.leave": 2,
+        "counts.tbaAutoleave": 2,
         "counts.autol1": 3,
         "counts.autol2": 4,
         "counts.autol3": 6,
@@ -187,18 +199,6 @@
   {
     "type": "tmp",
     "name": "map",
-    "outputPath": "scores.tbaAutoLeave",
-    "options": {
-      "path": "tbaData.autoLineRobot",
-      "map": {
-        "No": 0,
-        "Yes": 1
-      }
-    }
-  },
-  {
-    "type": "tmp",
-    "name": "map",
     "outputPath": "scores.tbaDeep",
     "options": {
       "path": "tbaData.endGameRobot",
@@ -248,10 +248,26 @@
   },
   {
     "type": "team",
-    "name": "sumTmps",
+    "name": "sumByTeam",
     "outputPath": "counts.tbaPark",
     "options": {
       "path": "scores.tbaPark"
+    }
+  },
+  {
+    "type": "team",
+    "name": "sumByTeam",
+    "outputPath": "counts.tbaDeep",
+    "options": {
+      "path": "scores.tbaDeep"
+    }
+  },
+  {
+    "type": "team",
+    "name": "sumByTeam",
+    "outputPath": "counts.tbaShallow",
+    "options": {
+      "path": "scores.tbaShallow"
     }
   },
   {

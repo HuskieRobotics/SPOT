@@ -90,7 +90,7 @@ async function executePipeline() {
     let autoActionName = "";
     let autoAction = "";
 
-    tbaData.forEach((item) => {
+    for (let item of tbaData) {
       let breakdown = item.score_breakdown?.[alliance];
       if (!breakdown) return;
 
@@ -98,11 +98,10 @@ async function executePipeline() {
         if (key == `auto${key.substring(4, key.length - 1)}${robotNum}`) {
           autoActionName = key.substring(0, key.length - 1);
           autoAction = value;
+          return { autoActionName, autoAction };
         }
       }
-    });
-
-    return { autoActionName, autoAction };
+    }
   }
 
   /**
@@ -115,7 +114,7 @@ async function executePipeline() {
     let endGameActionName = "";
     let endGameAction = "";
 
-    tbaData.forEach((item) => {
+    for (let item of tbaData) {
       let breakdown = item.score_breakdown?.[alliance];
       if (!breakdown) return;
 
@@ -123,11 +122,10 @@ async function executePipeline() {
         if (key == `endGame${key.substring(7, key.length - 1)}${robotNum}`) {
           endGameActionName = key.substring(0, key.length - 1);
           endGameAction = value;
+          return { endGameActionName, endGameAction };
         }
       }
-    });
-
-    return { endGameActionName, endGameAction };
+    }
   }
 
   // Get all tmps stored in the local storage (from qr code)

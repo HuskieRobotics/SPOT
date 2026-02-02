@@ -159,11 +159,11 @@
         },
         {
           "name": "Deep Cage",
-          "path": "counts.deep"
+          "path": "counts.tbaDeep"
         },
         {
           "name": "Shallow Cage",
-          "path": "counts.shallow"
+          "path": "counts.tbaShallow"
         }
       ]
     }
