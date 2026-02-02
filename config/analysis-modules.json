@@ -160,8 +160,8 @@
           "unit": "s"
         },
         {
-          "name": "Average Climb Timestamp",
-          "path": "averages.attemptClimbTime",
+          "name": "Average Climb Time",
+          "path": "averageTimes.attemptClimbTime",
           "multiplier": 0.001,
           "decimals": 2,
           "sort": -1,

@@ -52,7 +52,7 @@
     "name": "actionTime",
     "outputPath": "actionTimes.attemptClimb",
     "options": {
-      "actionId": ["attemptClimb", "autoAttemptL1"]
+      "actionId": ["attemptClimb"]
     }
   },
   {
@@ -170,8 +170,8 @@
   },
   {
     "type": "team",
-    "name": "average",
-    "outputPath": "averages.attemptClimbTime",
+    "name": "averageTime",
+    "outputPath": "averageTimes.attemptClimbTime",
     "options": {
       "path": "actionTimes.attemptClimb"
     }
