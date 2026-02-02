@@ -134,7 +134,7 @@
         },
         {
           "id": "autoPassing",
-          "displayText": "Passing",
+          "displayText": "Pass",
           "gridArea": ["3", "8", "4", "12"],
           "class": "blue2026",
           "type": "action",
@@ -147,7 +147,7 @@
         },
         {
           "id": "autoShooting",
-          "displayText": "Shooting",
+          "displayText": "Shoot",
           "gridArea": ["4", "8", "5", "12"],
           "class": "blue2026",
           "type": "action",
@@ -591,7 +591,7 @@
         },
         {
           "id": "passing",
-          "displayText": "Passing",
+          "displayText": "Pass",
           "gridArea": ["3", "1", "4", "4"],
           "class": "blue2026",
           "type": "action",
@@ -604,7 +604,7 @@
         },
         {
           "id": "shooting",
-          "displayText": "Shooting",
+          "displayText": "Shoot",
           "gridArea": ["3", "7", "4", "10"],
           "class": "blue2026",
           "type": "action",
