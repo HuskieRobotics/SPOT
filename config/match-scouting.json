@@ -578,7 +578,7 @@
         },
         {
           "id": "collecting",
-          "displayText": "Collecting",
+          "displayText": "Collect",
           "gridArea": ["3", "4", "4", "7"],
           "class": "blue2026",
           "type": "action",
