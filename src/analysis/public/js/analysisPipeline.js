@@ -21,6 +21,8 @@ async function executePipeline() {
     );
   }
 
+  console.log(tbaData);
+
   tmps.forEach((tmp) => {
     const teamAndAlliance = getTBADataAllianceAndMatch(
       tmp.robotNumber,
@@ -30,19 +32,25 @@ async function executePipeline() {
     const autoData = getTBADataAuto(
       teamAndAlliance.robotNum,
       teamAndAlliance.alliance,
+      tmp.matchNumber,
     );
     const endGameData = getTBADataEndGame(
       teamAndAlliance.robotNum,
       teamAndAlliance.alliance,
+      tmp.matchNumber,
     );
 
     tmp.tbaData = {};
-    setPath(tmp.tbaData, `${autoData.autoActionName}`, autoData.autoAction);
-    setPath(
-      tmp.tbaData,
-      `${endGameData.endGameActionName}`,
-      endGameData.endGameAction,
-    );
+    if (autoData) {
+      setPath(tmp.tbaData, `${autoData.autoActionName}`, autoData.autoAction);
+    }
+    if (endGameData) {
+      setPath(
+        tmp.tbaData,
+        `${endGameData.endGameActionName}`,
+        endGameData.endGameAction,
+      );
+    }
   });
 
   /**
@@ -84,21 +92,24 @@ async function executePipeline() {
    * The purpose of this function is to get what action the specified robot performed in auto.
    * @param {*} robotNum The level of which the robot is in the blue alliance array (Get from getBlueDataTeamAndMatch function)
    * @param {*} alliance The color of alliance the robot was on. (Get from getBlueDataTeamAndMatch function)
+   * @param {*} match The match number that the tmp has
    * @returns autoActionName, autoAction
    */
-  function getTBADataAuto(robotNum, alliance) {
+  function getTBADataAuto(robotNum, alliance, match) {
     let autoActionName = "";
     let autoAction = "";
 
     for (let item of tbaData) {
-      let breakdown = item.score_breakdown?.[alliance];
-      if (!breakdown) return;
+      if (item.comp_level == "qm" && item.match_number == match) {
+        let breakdown = item.score_breakdown?.[alliance];
+        if (!breakdown) return;
 
-      for (const [key, value] of Object.entries(breakdown)) {
-        if (key == `auto${key.substring(4, key.length - 1)}${robotNum}`) {
-          autoActionName = key.substring(0, key.length - 1);
-          autoAction = value;
-          return { autoActionName, autoAction };
+        for (const [key, value] of Object.entries(breakdown)) {
+          if (key.startsWith("auto") && key.endsWith(`${robotNum}`)) {
+            autoActionName = key.substring(0, key.length - 1);
+            autoAction = value;
+            return { autoActionName, autoAction };
+          }
         }
       }
     }
@@ -108,21 +119,24 @@ async function executePipeline() {
    * The purpose of this function is to get the action that was performed by the specified robot in the endgame of the match.
    * @param {*} robotNum The level of which the robot is in the blue alliance array (Get from getBlueDataTeamAndMatch function)
    * @param {*} alliance The color of alliance the robot was on. (Get from getBlueDataTeamAndMatch function)
+   * @param {*} match The match number that the tmp has
    * @returns endGameActionName, endGameAction
    */
-  function getTBADataEndGame(robotNum, alliance) {
+  function getTBADataEndGame(robotNum, alliance, match) {
     let endGameActionName = "";
     let endGameAction = "";
 
     for (let item of tbaData) {
-      let breakdown = item.score_breakdown?.[alliance];
-      if (!breakdown) return;
+      if (item.comp_level == "qm" && item.match_number == match) {
+        let breakdown = item.score_breakdown?.[alliance];
+        if (!breakdown) return;
 
-      for (const [key, value] of Object.entries(breakdown)) {
-        if (key == `endGame${key.substring(7, key.length - 1)}${robotNum}`) {
-          endGameActionName = key.substring(0, key.length - 1);
-          endGameAction = value;
-          return { endGameActionName, endGameAction };
+        for (const [key, value] of Object.entries(breakdown)) {
+          if (key.startsWith("endGame") && key.endsWith(`${robotNum}`)) {
+            endGameActionName = key.substring(0, key.length - 1);
+            endGameAction = value;
+            return { endGameActionName, endGameAction };
+          }
         }
       }
     }
