@@ -16,7 +16,7 @@
   {
     "view": "team",
     "module": "RadarChart",
-    "name": "Statistics By Time Intervals",
+    "name": "Ratings By Time Intervals",
     "position": "main",
     "options": {
       "sections": [
@@ -24,7 +24,19 @@
           "name": "Auto"
         },
         {
-          "name": "Teleop"
+          "name": "Transition"
+        },
+        {
+          "name": "Active 1"
+        },
+        {
+          "name": "Inactive 1"
+        },
+        {
+          "name": "Active 2"
+        },
+        {
+          "name": "Inactive 2"
         },
         {
           "name": "Endgame"
@@ -32,16 +44,120 @@
       ],
       "lines": [
         {
-          "name": "Scoring",
+          "name": "Shooting",
           "times": [
-            { "name": "Auto", "path": "counts.autol4" },
-            { "name": "Teleop", "path": "counts.scoreL4" },
-            { "name": "Endgame", "path": "counts.deep" }
+            { "name": "Auto", "path": "averages.scores.autoShootingRating" },
+            {
+              "name": "Transition",
+              "path": "averages.scores.transitionShootingRating"
+            },
+            {
+              "name": "Active 1",
+              "path": "averages.scores.active1ShootingRating"
+            },
+            { "name": "Inactive 1", "path": "0" },
+            {
+              "name": "Active 2",
+              "path": "averages.scores.active2ShootingRating"
+            },
+            { "name": "Inactive 2", "path": "0" },
+            {
+              "name": "Endgame",
+              "path": "averages.scores.endgameShootingRating"
+            }
+          ]
+        },
+        {
+          "name": "Collecting",
+          "times": [
+            { "name": "Auto", "path": "averages.scores.autoCollectingRating" },
+            {
+              "name": "Transition",
+              "path": "averages.scores.transitionCollectingRating"
+            },
+            {
+              "name": "Active 1",
+              "path": "averages.scores.active1CollectingRating"
+            },
+            {
+              "name": "Inactive 1",
+              "path": "averages.scores.inactive1CollectingRating"
+            },
+            {
+              "name": "Active 2",
+              "path": "averages.scores.active2CollectingRating"
+            },
+            {
+              "name": "Inactive 2",
+              "path": "averages.scores.inactive2CollectingRating"
+            },
+            {
+              "name": "Endgame",
+              "path": "averages.scores.endgameCollectingRating"
+            }
+          ]
+        },
+        {
+          "name": "Passing",
+          "times": [
+            { "name": "Auto", "path": "averages.scores.autoPassingRating" },
+            {
+              "name": "Transition",
+              "path": "averages.scores.transitionPassingRating"
+            },
+            {
+              "name": "Active 1",
+              "path": "averages.scores.active1PassingRating"
+            },
+            {
+              "name": "Inactive 1",
+              "path": "averages.scores.inactive1PassingRating"
+            },
+            {
+              "name": "Active 2",
+              "path": "averages.scores.active2PassingRating"
+            },
+            {
+              "name": "Inactive 2",
+              "path": "averages.scores.inactive2PassingRating"
+            },
+            {
+              "name": "Endgame",
+              "path": "averages.scores.endgamePassingRating"
+            }
+          ]
+        },
+        {
+          "name": "Defense",
+          "times": [
+            { "name": "Auto", "path": "averages.scores.autoDefenseScore" },
+            {
+              "name": "Transition",
+              "path": "averages.scores.transitionDefenseScore"
+            },
+            {
+              "name": "Active 1",
+              "path": "averages.scores.active1DefenseScore"
+            },
+            {
+              "name": "Inactive 1",
+              "path": "averages.scores.inactive1DefenseScore"
+            },
+            {
+              "name": "Active 2",
+              "path": "averages.scores.active2DefenseScore"
+            },
+            {
+              "name": "Inactive 2",
+              "path": "averages.scores.inactive2DefenseScore"
+            },
+            { "name": "Endgame", "path": "averages.scores.endgameDefenseScore" }
           ]
         }
       ]
     }
   },
+
   {
     "view": "team",
     "module": "Pie",

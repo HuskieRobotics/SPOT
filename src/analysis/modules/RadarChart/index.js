@@ -32,24 +32,25 @@ class RadarChart {
     //previous code end
 
     const data = [];
-
+    const sectionNames = [];
     for (let i = 0; i < this.moduleConfig.options.sections.length; i++) {
+      sectionNames.push(this.moduleConfig.options.sections[i].name);
+    }
+
+    for (let i = 0; i < this.moduleConfig.options.lines.length; i++) {
       let values = [];
       for (
         let j = 0;
         j < this.moduleConfig.options.lines[i].times.length;
         j++
       ) {
-        let point = getPath(
-          dataset.teams[team],
-          this.moduleConfig.options.lines[i].times[j].path,
-        );
+        let point = this.moduleConfig.options.lines[i].times[j].path;
         values.push(point);
       }
       const line = {
         type: "scatterpolar",
         r: values,
-        theta: this.moduleConfig.options.sections[i].name,
+        theta: sectionNames,
         fill: "toself",
         name: this.moduleConfig.options.lines[i].name,
       };
@@ -91,19 +92,38 @@ class RadarChart {
     //   modeBarButtonsToRemove: ["zoom2d", "pan2d", ""],
     // };
 
-    // Plotly.purge(this.container);
-    // Plotly.newPlot(this.container, data, layout, config);
-
     //EXAMPLE CODE
     const layout = {
       polar: {
         radialaxis: {
           visible: true,
-          range: [0, 50],
+          range: [0, 40],
         },
       },
+      margin: {
+        pad: 12,
+        b: 30,
+      },
+      title: {
+        text: this.moduleConfig.name,
+        font: {
+          size: 32,
+          // color: "#ff6030"
+        },
+        yanchor: "middle",
+      },
+      legend: {
+        font: {
+          size: 20,
+        },
+        x: 0.85,
+      },
+      font: {
+        family: "Cairo, sans-serif",
+      },
+      paper_bgcolor: "#FEFEFE",
+      plot_bgfcolor: "#FEFEFE",
     };
-
     Plotly.purge(this.container);
     Plotly.newPlot(this.container, data, layout);
   }
