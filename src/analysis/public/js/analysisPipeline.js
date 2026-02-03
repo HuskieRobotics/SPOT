@@ -9,33 +9,33 @@ async function executePipeline() {
   // If an event is specified, fetch using the new endpoint.
   if (eventID) {
     tmps = await fetch(`/analysis/api/dataset/${eventID}`).then((res) =>
-      res.json(),
+      res.json()
     );
     tbaData = await fetch(`/analysis/api/blueApiData/${eventID}`).then((res) =>
-      res.json(),
+      res.json()
     );
   } else {
     tmps = await fetch("/analysis/api/dataset").then((res) => res.json());
     tbaData = await fetch("/analysis/api/blueApiData").then((res) =>
-      res.json(),
+      res.json()
     );
   }
 
   tmps.forEach((tmp) => {
     const teamAndAlliance = getTBADataAllianceAndMatch(
       tmp.robotNumber,
-      tmp.matchNumber,
+      tmp.matchNumber
     );
 
     const autoData = getTBADataAuto(
       teamAndAlliance.robotNum,
       teamAndAlliance.alliance,
-      tmp.matchNumber,
+      tmp.matchNumber
     );
     const endGameData = getTBADataEndGame(
       teamAndAlliance.robotNum,
       teamAndAlliance.alliance,
-      tmp.matchNumber,
+      tmp.matchNumber
     );
 
     tmp.tbaData = {};
@@ -46,7 +46,7 @@ async function executePipeline() {
       setPath(
         tmp.tbaData,
         `${endGameData.endGameActionName}`,
-        endGameData.endGameAction,
+        endGameData.endGameAction
       );
     }
   });
@@ -160,16 +160,21 @@ async function executePipeline() {
   }
 
   function countNumberActionsForTeam(team, tmps) {
-    let amountOfTBAData = {};
+    let autoName = "";
+    let autoActionsCounts = {};
 
-    for (const key of Object.keys(tmps[0].tbaData)) {
-      amountOfTBAData[key] = ;
-    }
-
-    console.log(amountOfTBAData);
+    let endGameName = "";
+    let endGameActionsCounts = {};
 
     for (const tmp of tmps) {
-      if (tmp.robotNumber == team) {
+      for (const [key, value] of Object.entries(tmp.tbaData)) {
+        if (key.startsWith("auto")) {
+          autoName = key;
+          autoActionsCounts += { [value]: 0 };
+        } else if (key.startsWith("endGame")) {
+          endGameName = key;
+          endGameActionsCounts += { [value]: 0 };
+        }
       }
     }
   }
@@ -182,7 +187,7 @@ async function executePipeline() {
   // FIXME: figure out what the manual endpoint is for (and its associated json files)
   const manual = await fetch("./api/manual").then((res) => res.json());
   const pipelineConfig = await fetch(
-    "../../../config/analysis-pipeline.json",
+    "../../../config/analysis-pipeline.json"
   ).then((res) => res.json());
 
   // This will show up as a method that doesn't exist since it is gotten from the server
@@ -192,7 +197,7 @@ async function executePipeline() {
     dataset = transformers[tfConfig.type][tfConfig.name].execute(
       dataset,
       tfConfig.outputPath,
-      tfConfig.options,
+      tfConfig.options
     );
   }
 
@@ -200,7 +205,7 @@ async function executePipeline() {
     manual.tmps.map((tmp) => ({
       ...tmp,
       manual: true,
-    })),
+    }))
   );
   for (const [path, teamData] of Object.entries(manual.teams)) {
     for (const [team, value] of Object.entries(teamData)) {
