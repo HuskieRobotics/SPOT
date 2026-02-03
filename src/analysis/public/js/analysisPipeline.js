@@ -21,8 +21,6 @@ async function executePipeline() {
     );
   }
 
-  console.log(tbaData);
-
   tmps.forEach((tmp) => {
     const teamAndAlliance = getTBADataAllianceAndMatch(
       tmp.robotNumber,
@@ -157,6 +155,23 @@ async function executePipeline() {
   const teams = [];
   for (const tmp of tmps) {
     teams[tmp.robotNumber] = {};
+
+    countNumberActionsForTeam(tmp.robotNumber, tmps);
+  }
+
+  function countNumberActionsForTeam(team, tmps) {
+    let amountOfTBAData = {};
+
+    for (const key of Object.keys(tmps[0].tbaData)) {
+      amountOfTBAData[key] = ;
+    }
+
+    console.log(amountOfTBAData);
+
+    for (const tmp of tmps) {
+      if (tmp.robotNumber == team) {
+      }
+    }
   }
 
   console.log(tmps);
