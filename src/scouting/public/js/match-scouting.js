@@ -9,8 +9,13 @@ var previousTimer = [];
   matchScoutingConfig = await matchScoutingConfig;
   //initiate timing
   var time = matchScoutingConfig.timing.totalTime;
-  var teleopTime = 135000;
+  var teleopTime = 130000;
+  var endgameTime = 30000;
+  var shiftSwitchInterval = 25000;
   var timerActive = false;
+  var currentShift = "active"; // Track current shift (active/inactive)
+  var lastShiftSwitchTime = teleopTime; // Track when the last shift switch occurred
+  var shiftButtonPressed = false; // Flag to track if a shift button has been pressed
 
   //intialize variables
   let varNames = Object.keys(matchScoutingConfig.variables);
@@ -61,6 +66,16 @@ var previousTimer = [];
           id: button.id,
           ts: time,
         });
+        // Update shift based on button press
+        if (button.id === "teleopActive") {
+          currentShift = "active";
+          lastShiftSwitchTime = time;
+          shiftButtonPressed = true;
+        } else if (button.id === "teleopInactive") {
+          currentShift = "inactive";
+          lastShiftSwitchTime = time;
+          shiftButtonPressed = true;
+        }
         doExecutables(button);
         updateLastAction();
       });
@@ -88,9 +103,9 @@ var previousTimer = [];
             showLayer(0);
           }
 
-          var totalNumberOfButtonsTeleopLayer = 12;
-          var totalNumberOfButtonsAutoLayer = 13;
-          var teleopLayerNumber = 2;
+          var totalNumberOfButtonsTeleopLayer = 13;
+          var totalNumberOfButtonsAutoLayer = 11;
+          var teleopLayerNumber = 7;
 
           if (time < teleopTime) {
             for (let i = 0; i < previousLayers.length; i++) {
@@ -107,7 +122,7 @@ var previousTimer = [];
             executables[executable.type].reverse(
               undoneButton,
               layers,
-              ...executable.args
+              ...executable.args,
             ); //reverse any executables associated with the undone button
           }
         }
@@ -154,10 +169,8 @@ var previousTimer = [];
           } else {
             // display QR code
             const encoder = new QREncoder(); // Updated
-            const dataUrl = await encoder.encodeTeamMatchPerformance(
-              teamMatchPerformance
-            );
-
+            const dataUrl =
+              await encoder.encodeTeamMatchPerformance(teamMatchPerformance);
             let qrContainer = document.createElement("div");
             let qrText = document.createElement("button");
             let qrImg = document.createElement("img");
@@ -200,10 +213,16 @@ var previousTimer = [];
           start = Date.now() - (matchScoutingConfig.timing.totalTime - 1);
         };
         const transitions = Object.keys(
-          matchScoutingConfig.timing.timeTransitions
+          matchScoutingConfig.timing.timeTransitions,
         )
           .map((x) => Number(x))
           .sort((a, b) => b - a);
+        // Initialize displayText with the first applicable transition
+        if (transitions.length > 0) {
+          displayText =
+            matchScoutingConfig.timing.timeTransitions[transitions[0]]
+              .displayText || "";
+        }
         timerActive = true;
         button.timerInterval = setInterval(() => {
           if (time <= transitions[0]) {
@@ -213,7 +232,7 @@ var previousTimer = [];
                 .displayText;
             for (let key of Object.keys(
               matchScoutingConfig.timing.timeTransitions[transitions[0]]
-                .variables
+                .variables,
             )) {
               variables[key].previous.push(variables[key].current);
               variables[key].current =
@@ -226,8 +245,9 @@ var previousTimer = [];
               matchScoutingConfig.timing.timeTransitions[transitions[0]].layer,
               matchScoutingConfig.timing.timeTransitions[transitions[0]]
                 .conditional,
-              matchScoutingConfig.timing.timeTransitions[transitions[0]].always
+              matchScoutingConfig.timing.timeTransitions[transitions[0]].always,
             );
+
             transitions.shift();
           }
           if (time <= 0) {
@@ -245,13 +265,38 @@ var previousTimer = [];
             return;
           }
           time = matchScoutingConfig.timing.totalTime - (Date.now() - start);
+          window.currentTime = time; // Keep window.currentTime in sync
+
+          // Handle shift switching during teleop (between teleopTime and endgameTime)
+          // Only switch if a shift button has been pressed
+          if (shiftButtonPressed && time < teleopTime && time > endgameTime) {
+            const elapsedSinceSwitch = lastShiftSwitchTime - time;
+            if (elapsedSinceSwitch >= shiftSwitchInterval) {
+              // Switch shift
+              currentShift = currentShift === "active" ? "inactive" : "active";
+              lastShiftSwitchTime = time; // Update the switch time
+            }
+          }
+
+          // Build display text with shift information
+          let displayTextWithShift = displayText;
+          if (time > teleopTime) {
+            displayTextWithShift = `${displayText}`;
+          } else if (time < teleopTime && time > endgameTime) {
+            if (shiftButtonPressed) {
+              const shiftDisplay =
+                currentShift === "active" ? "Active Shift" : "Inactive Shift";
+              displayTextWithShift = `${shiftDisplay}`;
+            }
+          } else if (time <= endgameTime) {
+            displayTextWithShift = `Endgame - Active Shift`;
+          }
+
           buttons
             .filter((x) => x.type === "match-control")
             .forEach((b) => {
               //update all match-control buttons (even those in different layers)
-              b.element.innerText = `${(time / 1000).toFixed(
-                2
-              )} | ${displayText}`;
+              b.element.innerText = `${(time / 1000).toFixed(2)} | ${displayTextWithShift}`;
             });
         }, 10);
         doExecutables(button);
@@ -277,6 +322,8 @@ var previousTimer = [];
     }
   }
 
+  // Expose rebuild function for loadConfig executable
+
   showLayer(0); //initially show layer 0
 
   function doExecutables(button) {
@@ -285,7 +332,7 @@ var previousTimer = [];
         executables[executable.type].execute(
           button,
           layers,
-          ...executable.args
+          ...executable.args,
         );
       } catch (e) {
         console.error(e);
@@ -295,6 +342,12 @@ var previousTimer = [];
   }
 
   function showLayer(layer, conditional = {}, always = []) {
+    // Validate layer exists
+    if (!layers[layer] || layer < 0 || layer >= layers.length) {
+      console.warn(`Layer ${layer} does not exist. Defaulting to layer 0.`);
+      layer = 0;
+    }
+
     for (const b of buttons) {
       b.element.style.display = "none";
     }
@@ -338,6 +391,7 @@ var previousTimer = [];
       previousLayers.push(rendered);
     }
   }
+
   function conditionalLayer() {
     var renderedButtons = [];
     for (let button of layers[toLayer]) {

@@ -1,13 +1,18 @@
 {
   "timing": {
-    "totalTime": 153000,
+    "totalTime": 160000,
     "timeTransitions": {
-      "152999": {
+      "159999": {
         "layer": 1,
         "displayText": "Auto",
         "variables": {}
       },
-      "135000": {
+      "140000": {
+        "layer": 7,
+        "displayText": "Teleop Transition",
+        "variables": {}
+      },
+      "130000": {
         "layer": 2,
         "displayText": "Teleop",
         "variables": {}
@@ -19,13 +24,13 @@
   },
   "layout": {
     "gridRows": 6,
-    "gridColumns": 9,
+    "gridColumns": 11,
     "layers": [
       [
         {
           "id": "startGame",
-          "displayText": "Start",
-          "gridArea": ["2", "1", "4", "10"],
+          "displayText": "Start Match",
+          "gridArea": ["2", "1", "4", "12"],
           "class": "silver timer",
           "type": "match-control",
           "executables": [
@@ -36,17 +41,17 @@
           ]
         },
         {
-          "id": "preloadCoral",
-          "displayText": "Preload Coral",
-          "gridArea": ["4", "1", "6", "5"],
-          "class": "lightCoral",
+          "id": "preloadFuel",
+          "displayText": "Preload Fuel",
+          "gridArea": ["4", "1", "6", "6"],
+          "class": "fuel2026",
           "type": "action",
           "executables": []
         },
         {
           "id": "preloadNone",
           "displayText": "Preload None",
-          "gridArea": ["4", "6", "6", "10"],
+          "gridArea": ["4", "7", "6", "12"],
           "class": "gray",
           "type": "action",
           "executables": []
@@ -56,7 +61,7 @@
         {
           "id": "startGame",
           "displayText": "Start",
-          "gridArea": ["1", "4", "2", "7"],
+          "gridArea": ["1", "4", "2", "9"],
           "class": "silver timer",
           "type": "match-control",
           "executables": []
@@ -78,40 +83,61 @@
           "executables": []
         },
         {
-          "id": "autoGroundPickupCoral",
-          "displayText": "Pickup Ground",
-          "gridArea": ["2", "1", "4", "3"],
-          "class": "lightCoral",
+          "id": "undo",
+          "displayText": "Undo",
+          "gridArea": ["1", "10", "2", "12"],
+          "class": "sherbert",
+          "type": "undo",
+          "executables": []
+        },
+        {
+          "id": "autoAttemptL1",
+          "displayText": "Attempted Climb",
+          "gridArea": ["3", "1", "5", "4"],
+          "class": "blue2026",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "autoFallL1",
+          "displayText": "Fall",
+          "gridArea": ["5", "1", "6", "4"],
+          "class": "red",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "autoStartShooting",
+          "displayText": "Start Shooting",
+          "gridArea": ["4", "4", "6", "6"],
+          "class": "fuel2026",
           "type": "action",
           "executables": [
             {
-              "type": "layer",
-              "args": [1, 7]
+              "type": "position",
+              "args": []
             }
           ]
         },
         {
-          "id": "autoStationPickupCoral",
-          "displayText": "Pickup Station",
-          "gridArea": ["4", "1", "6", "3"],
-          "class": "lightCoral",
+          "id": "autoStopShooting",
+          "displayText": "Stop Shooting",
+          "gridArea": ["4", "6", "6", "8"],
+          "class": "fuel2026",
           "type": "action",
-          "executables": []
+          "executables": [
+            {
+              "type": "position",
+              "args": []
+            }
+          ]
         },
         {
-          "id": "autoCoralDrop",
-          "displayText": "Drop",
-          "gridArea": ["6", "1", "7", "3"],
-          "class": "darkCoral",
+          "id": "autoPassing",
+          "displayText": "Pass",
+          "gridArea": ["3", "8", "4", "12"],
+          "class": "blue2026",
           "type": "action",
-          "executables": []
-        },
-        {
-          "id": "autoScoreCoral",
-          "displayText": "Coral",
-          "gridArea": ["3", "3", "5", "5"],
-          "class": "coral",
-          "type": "none",
           "executables": [
             {
               "type": "layer",
@@ -120,18 +146,10 @@
           ]
         },
         {
-          "id": "undo",
-          "displayText": "Undo",
-          "gridArea": ["1", "8", "2", "10"],
-          "class": "sherbert",
-          "type": "undo",
-          "executables": []
-        },
-        {
-          "id": "autoGroundPickupAlgae",
-          "displayText": "Pickup Ground",
-          "gridArea": ["2", "8", "4", "10"],
-          "class": "lightbluegreen",
+          "id": "autoShooting",
+          "displayText": "Shoot",
+          "gridArea": ["4", "8", "5", "12"],
+          "class": "blue2026",
           "type": "action",
           "executables": [
             {
@@ -141,18 +159,10 @@
           ]
         },
         {
-          "id": "autoReefPickupAlgae",
-          "displayText": "Pickup Reef",
-          "gridArea": ["4", "8", "6", "10"],
-          "class": "lightbluegreen",
-          "type": "action",
-          "executables": []
-        },
-        {
-          "id": "autoScoreAlgae",
-          "displayText": "Algae",
-          "gridArea": ["3", "6", "5", "8"],
-          "class": "bluegreen",
+          "id": "autoCollect",
+          "displayText": "Collect",
+          "gridArea": ["5", "8", "6", "12"],
+          "class": "blue2026",
           "type": "action",
           "executables": [
             {
@@ -160,142 +170,13 @@
               "args": [1, 4]
             }
           ]
-        },
-        {
-          "id": "autoAlgaeDrop",
-          "displayText": "Drop",
-          "gridArea": ["6", "8", "7", "10"],
-          "class": "darkbluegreen",
-          "type": "action",
-          "executables": []
-        },
-        {
-          "id": "leave",
-          "displayText": "Leave",
-          "gridArea": ["6", "4", "7", "7"],
-          "class": "gray",
-          "type": "action",
-          "executables": []
         }
       ],
       [
         {
           "id": "startGame",
           "displayText": "Start",
-          "gridArea": ["1", "4", "2", "7"],
-          "class": "silver timer",
-          "type": "match-control",
-          "executables": []
-        },
-        {
-          "id": "broken",
-          "displayText": "Disabled",
-          "gridArea": ["1", "1", "2", "3"],
-          "class": "red",
-          "type": "action",
-          "executables": []
-        },
-        {
-          "id": "teleopGroundPickupCoral",
-          "displayText": "Pickup Ground",
-          "gridArea": ["2", "1", "4", "3"],
-          "class": "lightCoral",
-          "type": "action",
-          "executables": []
-        },
-        {
-          "id": "teleopStationPickupCoral",
-          "displayText": "Pickup Station",
-          "gridArea": ["4", "1", "6", "3"],
-          "class": "lightCoral",
-          "type": "action",
-          "executables": []
-        },
-        {
-          "id": "teleopCoralDrop",
-          "displayText": "Drop",
-          "gridArea": ["6", "1", "7", "3"],
-          "class": "darkCoral",
-          "type": "action",
-          "executables": []
-        },
-        {
-          "id": "teleopScoreCoral",
-          "displayText": "Coral",
-          "gridArea": ["3", "3", "5", "5"],
-          "class": "coral",
-          "type": "action",
-          "executables": [
-            {
-              "type": "layer",
-              "args": [2, 9]
-            }
-          ]
-        },
-        {
-          "id": "undo",
-          "displayText": "Undo",
-          "gridArea": ["1", "8", "2", "10"],
-          "class": "sherbert",
-          "type": "undo",
-          "executables": []
-        },
-        {
-          "id": "teleopGroundPickupAlgae",
-          "displayText": "Pickup Ground",
-          "gridArea": ["2", "8", "4", "10"],
-          "class": "lightbluegreen",
-          "type": "action",
-          "executables": []
-        },
-        {
-          "id": "teleopReefPickupAlgae",
-          "displayText": "Pickup Reef",
-          "gridArea": ["4", "8", "6", "10"],
-          "class": "lightbluegreen",
-          "type": "action",
-          "executables": []
-        },
-        {
-          "id": "teleopScoreAlgae",
-          "displayText": "Algae",
-          "gridArea": ["3", "6", "5", "8"],
-          "class": "bluegreen",
-          "type": "action",
-          "executables": [
-            {
-              "type": "layer",
-              "args": [2, 8]
-            }
-          ]
-        },
-        {
-          "id": "teleopAlgaeDrop",
-          "displayText": "Drop",
-          "gridArea": ["6", "8", "7", "10"],
-          "class": "darkbluegreen",
-          "type": "action",
-          "executables": []
-        },
-        {
-          "id": "barge",
-          "displayText": "Barge",
-          "gridArea": ["6", "4", "7", "7"],
-          "class": "gray",
-          "type": "action",
-          "executables": [
-            {
-              "type": "layer",
-              "args": [2, 3]
-            }
-          ]
-        }
-      ],
-      [
-        {
-          "id": "startGame",
-          "displayText": "Start",
-          "gridArea": ["1", "4", "2", "7"],
+          "gridArea": ["1", "5", "2", "9"],
           "class": "silver timer",
           "type": "match-control",
           "executables": []
@@ -311,283 +192,474 @@
         {
           "id": "undo",
           "displayText": "Undo",
-          "gridArea": ["1", "8", "2", "10"],
+          "gridArea": ["1", "10", "2", "12"],
           "class": "sherbert",
           "type": "undo",
           "executables": []
         },
         {
-          "id": "park",
-          "displayText": "Park",
-          "gridArea": ["3", "4", "4", "7"],
+          "id": "teleopActive",
+          "displayText": "Active",
+          "gridArea": ["3", "1", "6", "6"],
+          "class": "gray",
+          "type": "action",
+          "executables": [
+            {
+              "type": "layer",
+              "args": [2, 7]
+            }
+          ]
+        },
+        {
+          "id": "teleopInactive",
+          "displayText": "Inactive",
+          "gridArea": ["3", "7", "6", "12"],
+          "class": "gray",
+          "type": "action",
+          "executables": [
+            {
+              "type": "layer",
+              "args": [2, 7]
+            }
+          ]
+        }
+      ],
+      [
+        {
+          "id": "startGame",
+          "displayText": "Start",
+          "gridArea": ["1", "5", "2", "9"],
+          "class": "silver timer",
+          "type": "match-control",
+          "executables": []
+        },
+        {
+          "id": "broken",
+          "displayText": "Disabled",
+          "gridArea": ["1", "1", "2", "3"],
+          "class": "red",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "undo",
+          "displayText": "Undo",
+          "gridArea": ["1", "10", "2", "14"],
+          "class": "sherbert",
+          "type": "undo",
+          "executables": []
+        },
+        {
+          "id": "attemptL3",
+          "displayText": "L3",
+          "gridArea": ["3", "4", "4", "10"],
           "class": "gray",
           "type": "action",
           "executables": []
         },
         {
-          "id": "shallow",
-          "displayText": "Shallow Cage",
-          "gridArea": ["4", "4", "5", "7"],
+          "id": "attemptL2",
+          "displayText": "L2",
+          "gridArea": ["4", "4", "5", "10"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "teleopAttemptL1",
+          "displayText": "L1",
+          "gridArea": ["5", "4", "6", "10"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "fall",
+          "displayText": "Fall",
+          "gridArea": ["6", "4", "7", "10"],
+          "class": "red",
+          "type": "action",
+          "executables": []
+        }
+      ],
+      [
+        {
+          "id": "startGame",
+          "displayText": "Start",
+          "gridArea": ["1", "5", "2", "9"],
+          "class": "silver timer",
+          "type": "match-control",
+          "executables": []
+        },
+        {
+          "id": "broken",
+          "displayText": "Disabled",
+          "gridArea": ["1", "1", "2", "3"],
+          "class": "red",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "aStop",
+          "displayText": "A-Stop",
+          "gridArea": ["1", "3", "2", "4"],
+          "class": "red",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "undo",
+          "displayText": "Undo",
+          "gridArea": ["1", "10", "2", "12"],
+          "class": "sherbert",
+          "type": "undo",
+          "executables": []
+        },
+        {
+          "id": "autoCollectOutpost",
+          "displayText": "Collect Outpost",
+          "gridArea": ["3", "1", "5", "4"],
+          "class": "gray",
+          "type": "action",
+          "executables": [
+            {
+              "type": "layer",
+              "args": [4, 1]
+            }
+          ]
+        },
+        {
+          "id": "autoCollectDepot",
+          "displayText": "Collect Depot",
+          "gridArea": ["3", "5", "5", "8"],
+          "class": "shallowBlue",
+          "type": "action",
+          "executables": [
+            {
+              "type": "layer",
+              "args": [4, 1]
+            }
+          ]
+        },
+        {
+          "id": "autoCollectNeutral",
+          "displayText": "Collect Neutral",
+          "gridArea": ["3", "9", "5", "12"],
+          "class": "deepBlue",
+          "type": "action",
+          "executables": [
+            {
+              "type": "layer",
+              "args": [4, 1]
+            }
+          ]
+        }
+      ],
+      [
+        {
+          "id": "startGame",
+          "displayText": "Start",
+          "gridArea": ["1", "5", "2", "9"],
+          "class": "silver timer",
+          "type": "match-control",
+          "executables": []
+        },
+        {
+          "id": "broken",
+          "displayText": "Disabled",
+          "gridArea": ["1", "1", "2", "3"],
+          "class": "red",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "aStop",
+          "displayText": "A-Stop",
+          "gridArea": ["1", "3", "2", "4"],
+          "class": "red",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "undo",
+          "displayText": "Undo",
+          "gridArea": ["1", "10", "2", "12"],
+          "class": "sherbert",
+          "type": "undo",
+          "executables": []
+        },
+        {
+          "id": "autoRatingPassing1",
+          "displayText": "Rating 1",
+          "gridArea": ["2", "2", "4", "6"],
+          "class": "gray",
+          "type": "action",
+          "executables": [
+            {
+              "type": "layer",
+              "args": [5, 1]
+            }
+          ]
+        },
+        {
+          "id": "autoRatingPassing2",
+          "displayText": "Rating 2",
+          "gridArea": ["2", "7", "4", "11"],
+          "class": "gray",
+          "type": "action",
+          "executables": [
+            {
+              "type": "layer",
+              "args": [5, 1]
+            }
+          ]
+        },
+        {
+          "id": "autoRatingPassing3",
+          "displayText": "Rating 3",
+          "gridArea": ["4", "2", "6", "6"],
+          "class": "gray",
+          "type": "action",
+          "executables": [
+            {
+              "type": "layer",
+              "args": [5, 1]
+            }
+          ]
+        },
+        {
+          "id": "autoRatingPassing4",
+          "displayText": "Rating 4",
+          "gridArea": ["4", "7", "6", "11"],
+          "class": "gray",
+          "type": "action",
+          "executables": [
+            {
+              "type": "layer",
+              "args": [5, 1]
+            }
+          ]
+        }
+      ],
+      [
+        {
+          "id": "startGame",
+          "displayText": "Start",
+          "gridArea": ["1", "5", "2", "9"],
+          "class": "silver timer",
+          "type": "match-control",
+          "executables": []
+        },
+        {
+          "id": "broken",
+          "displayText": "Disabled",
+          "gridArea": ["1", "1", "2", "3"],
+          "class": "red",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "aStop",
+          "displayText": "A-Stop",
+          "gridArea": ["1", "3", "2", "4"],
+          "class": "red",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "undo",
+          "displayText": "Undo",
+          "gridArea": ["1", "10", "2", "12"],
+          "class": "sherbert",
+          "type": "undo",
+          "executables": []
+        },
+        {
+          "id": "autoRatingShooting1",
+          "displayText": "Rating 1",
+          "gridArea": ["2", "2", "4", "6"],
+          "class": "gray",
+          "type": "action",
+          "executables": [
+            {
+              "type": "layer",
+              "args": [6, 1]
+            }
+          ]
+        },
+        {
+          "id": "autoRatingShooting2",
+          "displayText": "Rating 2",
+          "gridArea": ["2", "7", "4", "11"],
+          "class": "gray",
+          "type": "action",
+          "executables": [
+            {
+              "type": "layer",
+              "args": [6, 1]
+            }
+          ]
+        },
+        {
+          "id": "autoRatingShooting3",
+          "displayText": "Rating 3",
+          "gridArea": ["4", "2", "6", "6"],
+          "class": "gray",
+          "type": "action",
+          "executables": [
+            {
+              "type": "layer",
+              "args": [6, 1]
+            }
+          ]
+        },
+        {
+          "id": "autoRatingShooting4",
+          "displayText": "Rating 4",
+          "gridArea": ["4", "7", "6", "11"],
+          "class": "gray",
+          "type": "action",
+          "executables": [
+            {
+              "type": "layer",
+              "args": [6, 1]
+            }
+          ]
+        }
+      ],
+      [
+        {
+          "id": "startGame",
+          "displayText": "Start",
+          "gridArea": ["1", "5", "2", "9"],
+          "class": "silver timer",
+          "type": "match-control",
+          "executables": []
+        },
+        {
+          "id": "broken",
+          "displayText": "Disabled",
+          "gridArea": ["1", "1", "2", "3"],
+          "class": "red",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "undo",
+          "displayText": "Undo",
+          "gridArea": ["1", "10", "2", "14"],
+          "class": "sherbert",
+          "type": "undo",
+          "executables": []
+        },
+        {
+          "id": "redZone",
+          "displayText": "Red Zone",
+          "gridArea": ["2", "1", "3", "5"],
+          "class": "red",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "neutralZone",
+          "displayText": "Neutral Zone",
+          "gridArea": ["2", "5", "3", "9"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "blueZone",
+          "displayText": "Blue Zone",
+          "gridArea": ["2", "9", "3", "14"],
           "class": "shallowBlue",
           "type": "action",
           "executables": []
         },
         {
-          "id": "deep",
-          "displayText": "Deep Cage",
-          "gridArea": ["5", "4", "6", "7"],
-          "class": "deepBlue",
-          "type": "action",
-          "executables": []
-        },
-        {
-          "id": "bargeFall",
-          "displayText": "Fall",
-          "gridArea": ["6", "4", "7", "7"],
-          "class": "red",
-          "type": "action",
-          "executables": []
-        }
-      ],
-      [
-        {
-          "id": "startGame",
-          "displayText": "Start",
-          "gridArea": ["1", "4", "2", "7"],
-          "class": "silver timer",
-          "type": "match-control",
-          "executables": []
-        },
-        {
-          "id": "broken",
-          "displayText": "Disabled",
-          "gridArea": ["1", "1", "2", "3"],
-          "class": "red",
-          "type": "action",
-          "executables": []
-        },
-        {
-          "id": "undo",
-          "displayText": "Undo",
-          "gridArea": ["1", "8", "2", "10"],
-          "class": "sherbert",
-          "type": "undo",
-          "executables": []
-        },
-        {
-          "id": "autoMissProcessor",
-          "displayText": "Miss Processor",
-          "gridArea": ["5", "2", "5", "5"],
-          "class": "darkbluegreen",
-          "type": "action",
-          "executables": [
-            {
-              "type": "layer",
-              "args": [4, 1]
-            }
-          ]
-        },
-        {
-          "id": "autoMissNet",
-          "displayText": "Miss Net",
-          "gridArea": ["5", "6", "6", "9"],
-          "class": "darkbluegreen",
-          "type": "action",
-          "executables": [
-            {
-              "type": "layer",
-              "args": [4, 1]
-            }
-          ]
-        },
-        {
-          "id": "autoScoreProcessor",
-          "displayText": "Score Processor",
-          "gridArea": ["3", "2", "5", "5"],
-          "class": "bluegreen",
-          "type": "action",
-          "executables": [
-            {
-              "type": "layer",
-              "args": [4, 1]
-            }
-          ]
-        },
-        {
-          "id": "autoScoreNet",
-          "displayText": "Score Net",
-          "gridArea": ["3", "6", "5", "9"],
-          "class": "bluegreen",
-          "type": "action",
-          "executables": [
-            {
-              "type": "layer",
-              "args": [4, 1]
-            }
-          ]
-        }
-      ],
-      [
-        {
-          "id": "startGame",
-          "displayText": "Start",
-          "gridArea": ["1", "4", "2", "7"],
-          "class": "silver timer",
-          "type": "match-control",
-          "executables": []
-        },
-        {
-          "id": "broken",
-          "displayText": "Disabled",
-          "gridArea": ["1", "1", "2", "3"],
-          "class": "red",
-          "type": "action",
-          "executables": []
-        },
-        {
-          "id": "undo",
-          "displayText": "Undo",
-          "gridArea": ["1", "8", "2", "10"],
-          "class": "sherbert",
-          "type": "undo",
-          "executables": []
-        },
-        {
-          "id": "autol4",
-          "displayText": "L4",
+          "id": "collecting",
+          "displayText": "Collect",
           "gridArea": ["3", "4", "4", "7"],
-          "class": "lightCoral",
+          "class": "blue2026",
           "type": "action",
           "executables": [
             {
               "type": "layer",
-              "args": [5, 1]
+              "args": [7, 11]
             }
           ]
         },
         {
-          "id": "autol3",
-          "displayText": "L3",
-          "gridArea": ["4", "4", "5", "7"],
-          "class": "coral",
+          "id": "passing",
+          "displayText": "Pass",
+          "gridArea": ["3", "1", "4", "4"],
+          "class": "blue2026",
           "type": "action",
           "executables": [
             {
               "type": "layer",
-              "args": [5, 1]
+              "args": [7, 9]
             }
           ]
         },
         {
-          "id": "autol2",
-          "displayText": "L2",
-          "gridArea": ["5", "4", "6", "7"],
-          "class": "darkCoral",
+          "id": "shooting",
+          "displayText": "Shoot",
+          "gridArea": ["3", "7", "4", "10"],
+          "class": "blue2026",
           "type": "action",
           "executables": [
             {
               "type": "layer",
-              "args": [5, 1]
+              "args": [7, 10]
             }
           ]
         },
         {
-          "id": "autol1",
-          "displayText": "L1",
-          "gridArea": ["6", "4", "7", "7"],
+          "id": "defense",
+          "displayText": "Defense",
+          "gridArea": ["3", "10", "4", "14"],
+          "class": "blue2026",
+          "type": "action",
+          "executables": [
+            {
+              "type": "layer",
+              "args": [7, 8]
+            }
+          ]
+        },
+        {
+          "id": "attemptClimb",
+          "displayText": "Attempt Climb",
+          "gridArea": ["5", "5", "6", "9"],
           "class": "gray",
           "type": "action",
           "executables": [
             {
               "type": "layer",
-              "args": [5, 1]
+              "args": [7, 3]
             }
           ]
         },
         {
-          "id": "autoMissCoral",
-          "displayText": "Miss",
-          "gridArea": ["6", "1", "7", "3"],
-          "class": "red",
+          "id": "startShoot",
+          "displayText": "Start Shoot",
+          "gridArea": ["4", "2", "5", "6"],
+          "class": "fuel2026",
           "type": "action",
           "executables": [
             {
-              "type": "layer",
-              "args": [5, 1]
-            }
-          ]
-        }
-      ],
-      [
-        {
-          "id": "startGame",
-          "displayText": "Start",
-          "gridArea": ["1", "4", "2", "7"],
-          "class": "silver timer",
-          "type": "match-control",
-          "executables": []
-        },
-        {
-          "id": "undo",
-          "displayText": "Undo",
-          "gridArea": ["1", "8", "2", "10"],
-          "class": "sherbert",
-          "type": "undo",
-          "executables": []
-        },
-        {
-          "id": "broken",
-          "displayText": "Disabled",
-          "gridArea": ["1", "1", "2", "3"],
-          "class": "red",
-          "type": "action",
-          "executables": []
-        },
-        {
-          "id": "autoAlgaeLeft",
-          "displayText": "O",
-          "gridArea": ["3", "1", "6", "4"],
-          "class": "lightbluegreen",
-          "type": "action",
-          "executables": [
-            {
-              "type": "layer",
-              "args": [6, 1]
+              "type": "position",
+              "args": []
             }
           ]
         },
         {
-          "id": "autoAlgaeCenter",
-          "displayText": "O",
-          "gridArea": ["3", "4", "6", "7"],
-          "class": "lightbluegreen",
+          "id": "stopShoot",
+          "displayText": "Stop Shoot",
+          "gridArea": ["4", "8", "5", "12"],
+          "class": "fuel2026",
           "type": "action",
-          "executables": [
-            {
-              "type": "layer",
-              "args": [6, 1]
-            }
-          ]
-        },
-        {
-          "id": "autoAlgaeRight",
-          "displayText": "O",
-          "gridArea": ["3", "7", "6", "10"],
-          "class": "lightbluegreen",
-          "type": "action",
-          "executables": [
-            {
-              "type": "layer",
-              "args": [6, 1]
-            }
-          ]
-        },
-        {
-          "id": "Reef",
-          "displayText": "Reef",
-          "gridArea": ["6", "4", "7", "7"],
-          "class": "gray",
-          "type": "label",
           "executables": []
         }
       ],
@@ -595,86 +667,13 @@
         {
           "id": "startGame",
           "displayText": "Start",
-          "gridArea": ["1", "4", "2", "7"],
+          "gridArea": ["1", "5", "2", "9"],
           "class": "silver timer",
           "type": "match-control",
           "executables": []
         },
         {
-          "id": "undo",
-          "displayText": "Undo",
-          "gridArea": ["1", "8", "2", "10"],
-          "class": "sherbert",
-          "type": "undo",
-          "executables": []
-        },
-        {
-          "id": "broken",
-          "displayText": "Disabled",
-          "gridArea": ["1", "1", "2", "3"],
-          "class": "red",
-          "type": "action",
-          "executables": []
-        },
-        {
-          "id": "autoCoralLeft",
-          "displayText": "I",
-          "gridArea": ["3", "1", "6", "4"],
-          "class": "lightCoral",
-          "type": "action",
-          "executables": [
-            {
-              "type": "layer",
-              "args": [7, 1]
-            }
-          ]
-        },
-        {
-          "id": "autoCoralCenter",
-          "displayText": "I",
-          "gridArea": ["3", "4", "6", "7"],
-          "class": "lightCoral",
-          "type": "action",
-          "executables": [
-            {
-              "type": "layer",
-              "args": [7, 1]
-            }
-          ]
-        },
-        {
-          "id": "autoCoralRight",
-          "displayText": "I",
-          "gridArea": ["3", "7", "6", "10"],
-          "class": "lightCoral",
-          "type": "action",
-          "executables": [
-            {
-              "type": "layer",
-              "args": [7, 1]
-            }
-          ]
-        },
-        {
-          "id": "Reef",
-          "displayText": "Reef",
-          "gridArea": ["6", "4", "7", "7"],
-          "class": "gray",
-          "type": "label",
-          "executables": []
-        }
-      ],
-      [
-        {
-          "id": "startGame",
-          "displayText": "Start",
-          "gridArea": ["1", "4", "2", "7"],
-          "class": "silver timer",
-          "type": "match-control",
-          "executables": []
-        },
-        {
-          "id": "broken",
+          "id": "disabled",
           "displayText": "Disabled",
           "gridArea": ["1", "1", "2", "3"],
           "class": "red",
@@ -684,60 +683,60 @@
         {
           "id": "undo",
           "displayText": "Undo",
-          "gridArea": ["1", "8", "2", "10"],
+          "gridArea": ["1", "9", "2", "12"],
           "class": "sherbert",
           "type": "undo",
           "executables": []
         },
         {
-          "id": "teleopMissProcessor",
-          "displayText": "Miss Processor",
-          "gridArea": ["5", "2", "5", "5"],
-          "class": "darkbluegreen",
+          "id": "ratingDefense1",
+          "displayText": "Rating 1",
+          "gridArea": ["2", "2", "4", "6"],
+          "class": "gray",
           "type": "action",
           "executables": [
             {
               "type": "layer",
-              "args": [8, 2]
+              "args": [8, 7]
             }
           ]
         },
         {
-          "id": "teleopMissNet",
-          "displayText": "Miss Net",
-          "gridArea": ["5", "6", "6", "9"],
-          "class": "darkbluegreen",
+          "id": "ratingDefense2",
+          "displayText": "Rating 2",
+          "gridArea": ["2", "7", "4", "11"],
+          "class": "gray",
           "type": "action",
           "executables": [
             {
               "type": "layer",
-              "args": [8, 2]
+              "args": [8, 7]
             }
           ]
         },
         {
-          "id": "teleopScoreProcessor",
-          "displayText": "Score Processor",
-          "gridArea": ["3", "2", "5", "5"],
-          "class": "bluegreen",
+          "id": "ratingDefense3",
+          "displayText": "Rating 3",
+          "gridArea": ["4", "2", "6", "6"],
+          "class": "gray",
           "type": "action",
           "executables": [
             {
               "type": "layer",
-              "args": [8, 2]
+              "args": [8, 7]
             }
           ]
         },
         {
-          "id": "teleopScoreNet",
-          "displayText": "Score Net",
-          "gridArea": ["3", "6", "5", "9"],
-          "class": "bluegreen",
+          "id": "ratingDefense4",
+          "displayText": "Rating 4",
+          "gridArea": ["4", "7", "6", "11"],
+          "class": "gray",
           "type": "action",
           "executables": [
             {
               "type": "layer",
-              "args": [8, 2]
+              "args": [8, 7]
             }
           ]
         }
@@ -746,13 +745,101 @@
         {
           "id": "startGame",
           "displayText": "Start",
-          "gridArea": ["1", "4", "2", "7"],
+          "gridArea": ["1", "5", "2", "9"],
           "class": "silver timer",
           "type": "match-control",
           "executables": []
         },
         {
-          "id": "broken",
+          "id": "disabled",
+          "displayText": "Disabled",
+          "gridArea": ["1", "1", "2", "3"],
+          "class": "red",
+          "type": "action",
+          "executables": [
+            {
+              "type": "layer",
+              "args": [9, 7]
+            }
+          ]
+        },
+        {
+          "id": "undo",
+          "displayText": "Undo",
+          "gridArea": ["1", "9", "2", "12"],
+          "class": "sherbert",
+          "type": "undo",
+          "executables": [
+            {
+              "type": "layer",
+              "args": [9, 7]
+            }
+          ]
+        },
+        {
+          "id": "ratingPassing1",
+          "displayText": "Rating 1",
+          "gridArea": ["2", "2", "4", "6"],
+          "class": "gray",
+          "type": "action",
+          "executables": [
+            {
+              "type": "layer",
+              "args": [9, 7]
+            }
+          ]
+        },
+        {
+          "id": "ratingPassing2",
+          "displayText": "Rating 2",
+          "gridArea": ["2", "7", "4", "11"],
+          "class": "gray",
+          "type": "action",
+          "executables": [
+            {
+              "type": "layer",
+              "args": [9, 7]
+            }
+          ]
+        },
+        {
+          "id": "ratingPassing3",
+          "displayText": "Rating 3",
+          "gridArea": ["4", "2", "6", "6"],
+          "class": "gray",
+          "type": "action",
+          "executables": [
+            {
+              "type": "layer",
+              "args": [9, 7]
+            }
+          ]
+        },
+        {
+          "id": "ratingPassing4",
+          "displayText": "Rating 4",
+          "gridArea": ["4", "7", "6", "11"],
+          "class": "gray",
+          "type": "action",
+          "executables": [
+            {
+              "type": "layer",
+              "args": [9, 7]
+            }
+          ]
+        }
+      ],
+      [
+        {
+          "id": "startGame",
+          "displayText": "Start",
+          "gridArea": ["1", "5", "2", "9"],
+          "class": "silver timer",
+          "type": "match-control",
+          "executables": []
+        },
+        {
+          "id": "disabled",
           "displayText": "Disabled",
           "gridArea": ["1", "1", "2", "3"],
           "class": "red",
@@ -762,75 +849,182 @@
         {
           "id": "undo",
           "displayText": "Undo",
-          "gridArea": ["1", "8", "2", "10"],
+          "gridArea": ["1", "9", "2", "12"],
           "class": "sherbert",
           "type": "undo",
           "executables": []
         },
         {
-          "id": "teleopl4",
-          "displayText": "L4",
-          "gridArea": ["3", "4", "4", "7"],
-          "class": "lightCoral",
-          "type": "action",
-          "executables": [
-            {
-              "type": "layer",
-              "args": [9, 2]
-            }
-          ]
-        },
-        {
-          "id": "teleopl3",
-          "displayText": "L3",
-          "gridArea": ["4", "4", "5", "7"],
-          "class": "coral",
-          "type": "action",
-          "executables": [
-            {
-              "type": "layer",
-              "args": [9, 2]
-            }
-          ]
-        },
-        {
-          "id": "teleopl2",
-          "displayText": "L2",
-          "gridArea": ["5", "4", "6", "7"],
-          "class": "darkCoral",
-          "type": "action",
-          "executables": [
-            {
-              "type": "layer",
-              "args": [9, 2]
-            }
-          ]
-        },
-        {
-          "id": "teleopl1",
-          "displayText": "L1",
-          "gridArea": ["6", "4", "7", "7"],
+          "id": "ratingShooting1",
+          "displayText": "Rating 1",
+          "gridArea": ["2", "2", "4", "6"],
           "class": "gray",
           "type": "action",
           "executables": [
             {
               "type": "layer",
-              "args": [9, 2]
+              "args": [10, 7]
             }
           ]
         },
         {
-          "id": "teleopMissCoral",
-          "displayText": "Miss",
-          "gridArea": ["6", "1", "7", "3"],
-          "class": "red",
+          "id": "ratingShooting2",
+          "displayText": "Rating 2",
+          "gridArea": ["2", "7", "4", "11"],
+          "class": "gray",
           "type": "action",
           "executables": [
             {
               "type": "layer",
-              "args": [9, 2]
+              "args": [10, 7]
             }
           ]
+        },
+        {
+          "id": "ratingShooting3",
+          "displayText": "Rating 3",
+          "gridArea": ["4", "2", "6", "6"],
+          "class": "gray",
+          "type": "action",
+          "executables": [
+            {
+              "type": "layer",
+              "args": [10, 7]
+            }
+          ]
+        },
+        {
+          "id": "ratingShooting4",
+          "displayText": "Rating 4",
+          "gridArea": ["4", "7", "6", "11"],
+          "class": "gray",
+          "type": "action",
+          "executables": [
+            {
+              "type": "layer",
+              "args": [10, 7]
+            }
+          ]
+        }
+      ],
+      [
+        {
+          "id": "startGame",
+          "displayText": "Start",
+          "gridArea": ["1", "5", "2", "9"],
+          "class": "silver timer",
+          "type": "match-control",
+          "executables": []
+        },
+        {
+          "id": "disabled",
+          "displayText": "Disabled",
+          "gridArea": ["1", "1", "2", "3"],
+          "class": "red",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "undo",
+          "displayText": "Undo",
+          "gridArea": ["1", "9", "2", "12"],
+          "class": "sherbert",
+          "type": "undo",
+          "executables": []
+        },
+        {
+          "id": "ratingCollecting1",
+          "displayText": "Rating 1",
+          "gridArea": ["2", "2", "4", "6"],
+          "class": "gray",
+          "type": "action",
+          "executables": [
+            {
+              "type": "layer",
+              "args": [11, 7]
+            }
+          ]
+        },
+        {
+          "id": "ratingCollecting2",
+          "displayText": "Rating 2",
+          "gridArea": ["2", "7", "4", "11"],
+          "class": "gray",
+          "type": "action",
+          "executables": [
+            {
+              "type": "layer",
+              "args": [11, 7]
+            }
+          ]
+        },
+        {
+          "id": "ratingCollecting3",
+          "displayText": "Rating 3",
+          "gridArea": ["4", "2", "6", "6"],
+          "class": "gray",
+          "type": "action",
+          "executables": [
+            {
+              "type": "layer",
+              "args": [11, 7]
+            }
+          ]
+        },
+        {
+          "id": "ratingCollecting4",
+          "displayText": "Rating 4",
+          "gridArea": ["4", "7", "6", "11"],
+          "class": "gray",
+          "type": "action",
+          "executables": [
+            {
+              "type": "layer",
+              "args": [11, 7]
+            }
+          ]
+        }
+      ],
+      [
+        {
+          "id": "counts.autoClimbL1",
+          "displayText": "Auto Climb L1",
+          "gridArea": ["1", "1", "2", "4"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "counts.teleopL1",
+          "displayText": "Teleop Climb L1",
+          "gridArea": ["1", "4", "2", "7"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "counts.l2",
+          "displayText": "Teleop Climb L2",
+          "gridArea": ["1", "7", "2", "10"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "counts.l3",
+          "displayText": "Teleop Climb L3",
+          "gridArea": ["1", "10", "2", "13"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "counts.teleopFuelScored",
+          "displayText": "Teleop Fuel Scored",
+          "gridArea": ["2", "1", "3", "7"],
+          "class": "fuel2026",
+          "type": "action",
+          "executables": []
         }
       ]
     ]
