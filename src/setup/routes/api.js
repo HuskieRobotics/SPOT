@@ -144,7 +144,7 @@ router.post("/config", async (req, res) => {
   if (!REQUIRE_ACCESS_CODE || req.body.ACCESS_CODE == ACCESS_CODE) {
     //verify mongodb url
     try {
-      await mongoose.connect(config.secrets.DATABASE_URL, {
+      await mongoose.createConnection(config.secrets.DATABASE_URL, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
       }); //try connecting to mongodb server
