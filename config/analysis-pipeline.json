@@ -151,13 +151,98 @@
       }
     }
   },
-
+  {
+    "type": "tmp",
+    "name": "map",
+    "outputPath": "scores.autoLeave",
+    "options": {
+      "path": "tbaData.autoLineRobot",
+      "map": {
+        "No": 0,
+        "Yes": 1
+      }
+    }
+  },
+  {
+    "type": "tmp",
+    "name": "map",
+    "outputPath": "scores.endGame.deep",
+    "options": {
+      "path": "tbaData.endGameRobot",
+      "map": {
+        "DeepCage": 1,
+        "None": 0,
+        "Parked": 0,
+        "Shallow": 0
+      }
+    }
+  },
+  {
+    "type": "tmp",
+    "name": "map",
+    "outputPath": "scores.endGame.parked",
+    "options": {
+      "path": "tbaData.endGameRobot",
+      "map": {
+        "DeepCage": 1,
+        "None": 0,
+        "Parked": 1,
+        "Shallow": 1
+      }
+    }
+  },
+  {
+    "type": "tmp",
+    "name": "map",
+    "outputPath": "scores.endGame.shallow",
+    "options": {
+      "path": "tbaData.endGameRobot",
+      "map": {
+        "DeepCage": 0,
+        "None": 0,
+        "Parked": 0,
+        "Shallow": 0
+      }
+    }
+  },
   {
     "type": "team",
     "name": "countActions",
     "outputPath": "counts",
     "options": {
       "all": true
+    }
+  },
+  {
+    "type": "team",
+    "name": "sumByTeam",
+    "outputPath": "counts.tbaAutoLeave",
+    "options": {
+      "path": "scores.autoLeave"
+    }
+  },
+  {
+    "type": "team",
+    "name": "sumByTeam",
+    "outputPath": "counts.tbaEndGameDeep",
+    "options": {
+      "path": "scores.endGame.deep"
+    }
+  },
+  {
+    "type": "team",
+    "name": "sumByTeam",
+    "outputPath": "counts.tbaEndGameParked",
+    "options": {
+      "path": "scores.endGame.parked"
+    }
+  },
+  {
+    "type": "team",
+    "name": "sumByTeam",
+    "outputPath": "counts.tbaEndGameShallow",
+    "options": {
+      "path": "scores.endGame.shallow"
     }
   },
   {
