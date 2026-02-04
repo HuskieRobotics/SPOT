@@ -66,16 +66,16 @@
         },
         {
           "name": "L1",
-          "path": "counts.teleopAttemptL1"
+          "path": "counts.tbaEndGame.l1"
         },
 
         {
           "name": "L2",
-          "path": "counts.attemptL2"
+          "path": "counts.tbaEndGame.l2"
         },
         {
           "name": "L3",
-          "path": "counts.attemptL3"
+          "path": "counts.tbaEndGame.l3"
         }
       ]
     }

@@ -1,5 +1,3 @@
-const e = require("express");
-
 async function executePipeline() {
   const eventID = getSelectedEvent();
   // Get tmps from database (or cache if offline)
@@ -27,45 +25,53 @@ async function executePipeline() {
       tmp.matchNumber,
     );
 
-    const autoData = getTBADataAuto(
+    const autoData = getTBADataAutoOrEnd(
       teamAndAlliance.robotNum,
       teamAndAlliance.alliance,
       tmp.matchNumber,
+      1,
     );
-    const endGameData = getTBADataEndGame(
+    const endGameData = getTBADataAutoOrEnd(
       teamAndAlliance.robotNum,
       teamAndAlliance.alliance,
       tmp.matchNumber,
+      2,
     );
 
     tmp.tbaData = {};
     if (autoData) {
-      setPath(tmp.tbaData, `${autoData.autoActionName}`, autoData.autoAction);
+      setPath(tmp.tbaData, `${autoData.actionName}`, autoData.action);
     }
     if (endGameData) {
-      setPath(
-        tmp.tbaData,
-        `${endGameData.endGameActionName}`,
-        endGameData.endGameAction,
-      );
+      setPath(tmp.tbaData, `${endGameData.actionName}`, endGameData.action);
     }
   });
 
   /**
    * The purpose of this function is to get the alliance color and the level for which a robot is in tba data for a inputted team and match.
-   * @param {*} team The team that you wish to input
-   * @param {*} match The match number that you wish to input
+   * @param {String} team The team that you wish to input
+   * @param {Number} match The match number that you wish to input
    * @returns robotNum, alliance
    */
   function getTBADataAllianceAndMatch(team, match) {
     let robotNum = "";
     let alliance = "";
 
+    /**
+     * Explanation of how this robotNum is gotten: Basically, the way that TBA data is formatted is so that
+     *  we have teams like 3061, 111, 112 and then something like autoRobot1, autoRobot2, autoRobot3.
+     * 3061 is the same as autoRobot1
+     * 111 is the same as autoRobot2
+     * 112 is the same as autoRobot3
+     *
+     * The code just gets what level the team is (e.x., 3061 : 1, 111: 2, 112: 3) by way of simple iteration.
+     */
+
     tbaData.forEach((item) => {
       if (item.comp_level == "qm" && item.match_number == match) {
         let i = 0;
         // Get what alliance the robot was on and what level in the array it is.
-        for (let blueTeam of item.alliances.blue.team_keys) {
+        for (const blueTeam of item.alliances.blue.team_keys) {
           i++;
           if (blueTeam.substring(3) == team) {
             alliance = "blue";
@@ -73,7 +79,7 @@ async function executePipeline() {
           }
         }
         i = 0;
-        for (let redTeam of item.alliances.red.team_keys) {
+        for (const redTeam of item.alliances.red.team_keys) {
           i++;
           if (redTeam.substring(3) == team) {
             alliance = "red";
@@ -87,53 +93,40 @@ async function executePipeline() {
   }
 
   /**
-   * The purpose of this function is to get what action the specified robot performed in auto.
-   * @param {*} robotNum The level of which the robot is in the blue alliance array (Get from getBlueDataTeamAndMatch function)
-   * @param {*} alliance The color of alliance the robot was on. (Get from getBlueDataTeamAndMatch function)
-   * @param {*} match The match number that the tmp has
-   * @returns autoActionName, autoAction
+   * The purpose of this function is to get what action the specified robot performed in auto or endgame (depending on specified parameter).
+   * @param {Number} robotNum The level of which the robot is in the blue alliance array (Get from getBlueDataTeamAndMatch function)
+   * @param {String} alliance The color of alliance the robot was on. (Get from getBlueDataTeamAndMatch function)
+   * @param {Number} match The match number that the tmp has
+   * @param {Number} typeNum If you want to get either auto or endgame data (1 = auto, 2 = endGame)
+   * @returns actionName, action
    */
-  function getTBADataAuto(robotNum, alliance, match) {
-    let autoActionName = "";
-    let autoAction = "";
+  function getTBADataAutoOrEnd(robotNum, alliance, match, typeNum) {
+    let type = "";
+    let actionName = "";
+    let action = "";
 
-    for (let item of tbaData) {
-      if (item.comp_level == "qm" && item.match_number == match) {
-        let breakdown = item.score_breakdown?.[alliance];
-        if (!breakdown) return;
-
-        for (const [key, value] of Object.entries(breakdown)) {
-          if (key.startsWith("auto") && key.endsWith(`${robotNum}`)) {
-            autoActionName = key.substring(0, key.length - 1);
-            autoAction = value;
-            return { autoActionName, autoAction };
-          }
-        }
-      }
+    // Set if it is getting auto data or endgame data
+    if (typeNum == 1) {
+      type = "auto";
+    } else {
+      type = "endGame";
     }
-  }
 
-  /**
-   * The purpose of this function is to get the action that was performed by the specified robot in the endgame of the match.
-   * @param {*} robotNum The level of which the robot is in the blue alliance array (Get from getBlueDataTeamAndMatch function)
-   * @param {*} alliance The color of alliance the robot was on. (Get from getBlueDataTeamAndMatch function)
-   * @param {*} match The match number that the tmp has
-   * @returns endGameActionName, endGameAction
-   */
-  function getTBADataEndGame(robotNum, alliance, match) {
-    let endGameActionName = "";
-    let endGameAction = "";
-
-    for (let item of tbaData) {
+    // Go through each match in TBA data
+    for (const item of tbaData) {
+      // Check if the competition level is a qualification match and if the match number aligns
       if (item.comp_level == "qm" && item.match_number == match) {
-        let breakdown = item.score_breakdown?.[alliance];
+        // Get the alliance scores for the inputted color
+        const breakdown = item.score_breakdown?.[alliance];
         if (!breakdown) return;
 
+        // Go through each item in the breakdown
         for (const [key, value] of Object.entries(breakdown)) {
-          if (key.startsWith("endGame") && key.endsWith(`${robotNum}`)) {
-            endGameActionName = key.substring(0, key.length - 1);
-            endGameAction = value;
-            return { endGameActionName, endGameAction };
+          // Check if it is the desired type and the desired robot
+          if (key.startsWith(`${type}`) && key.endsWith(`${robotNum}`)) {
+            actionName = key.substring(0, key.length - 1);
+            action = value;
+            return { actionName, action };
           }
         }
       }

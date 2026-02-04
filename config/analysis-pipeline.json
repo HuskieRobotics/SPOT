@@ -13,7 +13,7 @@
     "outputPath": "scores.auto",
     "options": {
       "weightedPaths": {
-        "counts.autoClimbL1": 15
+        "counts.tbaAutoClimb": 15
       }
     }
   },
@@ -23,9 +23,9 @@
     "outputPath": "scores.endgame",
     "options": {
       "weightedPaths": {
-        "counts.teleopL1": 10,
-        "counts.l2": 20,
-        "counts.l3": 30
+        "counts.tbaEndGame.l1": 10,
+        "counts.tbaEndGame.l2": 20,
+        "counts.tbaEndGame.l3": 30
       }
     }
   },
@@ -154,54 +154,54 @@
   {
     "type": "tmp",
     "name": "map",
-    "outputPath": "scores.autoLeave",
+    "outputPath": "counts.tbaAutoClimb",
     "options": {
-      "path": "tbaData.autoLineRobot",
+      "path": "tbaData.autoTowerRobot",
       "map": {
-        "No": 0,
-        "Yes": 1
+        "Level1": 1,
+        "None": 0
       }
     }
   },
   {
     "type": "tmp",
     "name": "map",
-    "outputPath": "scores.endGame.deep",
+    "outputPath": "counts.tbaEndGame.l1",
     "options": {
       "path": "tbaData.endGameRobot",
       "map": {
-        "DeepCage": 1,
-        "None": 0,
-        "Parked": 0,
-        "Shallow": 0
+        "Level1": 1,
+        "Level2": 0,
+        "Level3": 0,
+        "None": 0
       }
     }
   },
   {
     "type": "tmp",
     "name": "map",
-    "outputPath": "scores.endGame.parked",
+    "outputPath": "counts.tbaEndGame.l2",
     "options": {
       "path": "tbaData.endGameRobot",
       "map": {
-        "DeepCage": 1,
-        "None": 0,
-        "Parked": 1,
-        "Shallow": 1
+        "Level1": 0,
+        "Level2": 1,
+        "Level3": 0,
+        "None": 0
       }
     }
   },
   {
     "type": "tmp",
     "name": "map",
-    "outputPath": "scores.endGame.shallow",
+    "outputPath": "counts.tbaEndGame.l3",
     "options": {
       "path": "tbaData.endGameRobot",
       "map": {
-        "DeepCage": 0,
-        "None": 0,
-        "Parked": 0,
-        "Shallow": 0
+        "Level1": 0,
+        "Level2": 0,
+        "Level3": 1,
+        "None": 0
       }
     }
   },
@@ -216,33 +216,33 @@
   {
     "type": "team",
     "name": "sumByTeam",
-    "outputPath": "counts.tbaAutoLeave",
+    "outputPath": "counts.tbaAutoClimb",
     "options": {
-      "path": "scores.autoLeave"
+      "path": "counts.tbaAutoClimb"
     }
   },
   {
     "type": "team",
     "name": "sumByTeam",
-    "outputPath": "counts.tbaEndGameDeep",
+    "outputPath": "counts.tbaEndGame.l1",
     "options": {
-      "path": "scores.endGame.deep"
+      "path": "counts.tbaEndGame.l1"
     }
   },
   {
     "type": "team",
     "name": "sumByTeam",
-    "outputPath": "counts.tbaEndGameParked",
+    "outputPath": "counts.tbaEndGame.l2",
     "options": {
-      "path": "scores.endGame.parked"
+      "path": "counts.tbaEndGame.l2"
     }
   },
   {
     "type": "team",
     "name": "sumByTeam",
-    "outputPath": "counts.tbaEndGameShallow",
+    "outputPath": "counts.tbaEndGame.l3",
     "options": {
-      "path": "scores.endGame.shallow"
+      "path": "counts.tbaEndGame.l3"
     }
   },
   {
