@@ -13,7 +13,7 @@
     "outputPath": "scores.auto",
     "options": {
       "weightedPaths": {
-        "counts.tbaAutoClimb": 15
+        "counts.autoLineRobot_Yes": 15
       }
     }
   },
@@ -23,9 +23,10 @@
     "outputPath": "scores.endgame",
     "options": {
       "weightedPaths": {
-        "counts.tbaEndGame.l1": 10,
-        "counts.tbaEndGame.l2": 20,
-        "counts.tbaEndGame.l3": 30
+        "counts.endGameRobot_None": 10,
+        "counts.endGameRobot_Parked": 20,
+        "counts.endGameRobot_Deep": 30,
+        "counts.endGameRobot_Shallow": 40
       }
     }
   },
@@ -152,97 +153,11 @@
     }
   },
   {
-    "type": "tmp",
-    "name": "map",
-    "outputPath": "counts.tbaAutoClimb",
-    "options": {
-      "path": "tbaData.autoTowerRobot",
-      "map": {
-        "Level1": 1,
-        "None": 0
-      }
-    }
-  },
-  {
-    "type": "tmp",
-    "name": "map",
-    "outputPath": "counts.tbaEndGame.l1",
-    "options": {
-      "path": "tbaData.endGameRobot",
-      "map": {
-        "Level1": 1,
-        "Level2": 0,
-        "Level3": 0,
-        "None": 0
-      }
-    }
-  },
-  {
-    "type": "tmp",
-    "name": "map",
-    "outputPath": "counts.tbaEndGame.l2",
-    "options": {
-      "path": "tbaData.endGameRobot",
-      "map": {
-        "Level1": 0,
-        "Level2": 1,
-        "Level3": 0,
-        "None": 0
-      }
-    }
-  },
-  {
-    "type": "tmp",
-    "name": "map",
-    "outputPath": "counts.tbaEndGame.l3",
-    "options": {
-      "path": "tbaData.endGameRobot",
-      "map": {
-        "Level1": 0,
-        "Level2": 0,
-        "Level3": 1,
-        "None": 0
-      }
-    }
-  },
-  {
     "type": "team",
     "name": "countActions",
     "outputPath": "counts",
     "options": {
       "all": true
-    }
-  },
-  {
-    "type": "team",
-    "name": "sumByTeam",
-    "outputPath": "counts.tbaAutoClimb",
-    "options": {
-      "path": "counts.tbaAutoClimb"
-    }
-  },
-  {
-    "type": "team",
-    "name": "sumByTeam",
-    "outputPath": "counts.tbaEndGame.l1",
-    "options": {
-      "path": "counts.tbaEndGame.l1"
-    }
-  },
-  {
-    "type": "team",
-    "name": "sumByTeam",
-    "outputPath": "counts.tbaEndGame.l2",
-    "options": {
-      "path": "counts.tbaEndGame.l2"
-    }
-  },
-  {
-    "type": "team",
-    "name": "sumByTeam",
-    "outputPath": "counts.tbaEndGame.l3",
-    "options": {
-      "path": "counts.tbaEndGame.l3"
     }
   },
   {

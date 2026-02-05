@@ -29,22 +29,27 @@ async function executePipeline() {
       teamAndAlliance.robotNum,
       teamAndAlliance.alliance,
       tmp.matchNumber,
-      1,
+      "auto",
     );
     const endGameData = getTBADataAutoOrEnd(
       teamAndAlliance.robotNum,
       teamAndAlliance.alliance,
       tmp.matchNumber,
-      2,
+      "endGame",
     );
 
     tmp.tbaData = {};
-    if (autoData) {
-      setPath(tmp.tbaData, `${autoData.actionName}`, autoData.action);
-    }
-    if (endGameData) {
-      setPath(tmp.tbaData, `${endGameData.actionName}`, endGameData.action);
-    }
+
+    tmp.actionQueue.push({
+      id: `${autoData.actionName}` + "_" + `${autoData.action}`,
+      ts: 0,
+    });
+    tmp.actionQueue.push({
+      id: `${endGameData.actionName}` + "_" + `${autoData.action}`,
+      ts: 0,
+    });
+    //setPath(tmp.tbaData, `${autoData.actionName}`, autoData.action);
+    //setPath(tmp.tbaData, `${endGameData.actionName}`, endGameData.action);
   });
 
   /**
@@ -97,20 +102,12 @@ async function executePipeline() {
    * @param {Number} robotNum The level of which the robot is in the blue alliance array (Get from getBlueDataTeamAndMatch function)
    * @param {String} alliance The color of alliance the robot was on. (Get from getBlueDataTeamAndMatch function)
    * @param {Number} match The match number that the tmp has
-   * @param {Number} typeNum If you want to get either auto or endgame data (1 = auto, 2 = endGame)
+   * @param {String} typeString The string with the type of data you wish to get
    * @returns actionName, action
    */
-  function getTBADataAutoOrEnd(robotNum, alliance, match, typeNum) {
-    let type = "";
+  function getTBADataAutoOrEnd(robotNum, alliance, match, typeString) {
     let actionName = "";
     let action = "";
-
-    // Set if it is getting auto data or endgame data
-    if (typeNum == 1) {
-      type = "auto";
-    } else {
-      type = "endGame";
-    }
 
     // Go through each match in TBA data
     for (const item of tbaData) {
@@ -123,7 +120,7 @@ async function executePipeline() {
         // Go through each item in the breakdown
         for (const [key, value] of Object.entries(breakdown)) {
           // Check if it is the desired type and the desired robot
-          if (key.startsWith(`${type}`) && key.endsWith(`${robotNum}`)) {
+          if (key.startsWith(`${typeString}`) && key.endsWith(`${robotNum}`)) {
             actionName = key.substring(0, key.length - 1);
             action = value;
             return { actionName, action };
