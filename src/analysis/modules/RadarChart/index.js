@@ -11,34 +11,39 @@ class RadarChart {
   formatData(teams, dataset) {
     console.log(`radar teams recieved: ${teams}`);
     let filteredTeams = teams.filter((team) => team != "|");
-
-    const data = [];
-    const sectionNames = [];
-    for (let i = 0; i < this.moduleConfig.options.sections.length; i++) {
-      sectionNames.push(this.moduleConfig.options.sections[i].name);
-    }
-
-    for (let i = 0; i < this.moduleConfig.options.lines.length; i++) {
-      let values = [];
-      for (
-        let j = 0;
-        j < this.moduleConfig.options.lines[i].times.length;
-        j++
-      ) {
-        let point = this.moduleConfig.options.lines[i].times[j].path;
-        values.push(point);
+    const values = filteredTeams.map((team) => {
+      const data = [];
+      const sectionNames = [];
+      for (let i = 0; i < this.moduleConfig.options.sections.length; i++) {
+        sectionNames.push(this.moduleConfig.options.sections[i].name);
       }
-      const line = {
-        type: "scatterpolar",
-        r: values,
-        theta: sectionNames,
-        fill: "tonext",
-        name: this.moduleConfig.options.lines[i].name,
-      };
-      data.push(line);
-    }
 
-    return data;
+      for (let i = 0; i < this.moduleConfig.options.lines.length; i++) {
+        let values = [];
+        for (
+          let j = 0;
+          j < this.moduleConfig.options.lines[i].times.length;
+          j++
+        ) {
+          let point = getPath(
+            dataset.teams[team],
+            this.moduleConfig.options.lines[i].times[j].path,
+          );
+          values.push(point);
+        }
+        const line = {
+          type: "scatterpolar",
+          r: values,
+          theta: sectionNames,
+          fill: "tonext",
+          name: this.moduleConfig.options.lines[i].name,
+        };
+        data.push(line);
+      }
+      return data;
+    });
+
+    return values;
   }
 
   setData(data) {
@@ -51,7 +56,7 @@ class RadarChart {
             family: "Cairo, sans-serif",
             size: 16,
           },
-          angle:90
+          angle: 90,
         },
         angularaxis: {
           tickfont: {
@@ -85,11 +90,11 @@ class RadarChart {
       paper_bgcolor: "#FEFEFE",
       plot_bgfcolor: "#FEFEFE",
     };
-    
+
     const config = {
-      responsive: true
+      responsive: true,
     };
-    
+
     Plotly.purge(this.container);
     Plotly.newPlot(this.container, data, layout, config);
   }
