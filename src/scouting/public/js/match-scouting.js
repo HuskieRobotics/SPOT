@@ -13,9 +13,11 @@ var previousTimer = [];
   var endgameTime = 30000;
   var shiftSwitchInterval = 25000;
   var timerActive = false;
-  var currentShift = "active"; // Track current shift (active/inactive)
+  var currentShift = ""; // Track current shift (active/inactive)
   var lastShiftSwitchTime = teleopTime; // Track when the last shift switch occurred
   var shiftButtonPressed = false; // Flag to track if a shift button has been pressed
+  let displayText = "";
+  let displayTextWithShift = displayText;
 
   //intialize variables
   let varNames = Object.keys(matchScoutingConfig.variables);
@@ -60,27 +62,17 @@ var previousTimer = [];
   const buttonBuilders = {
     //an object to give buttons type specific things, button type: function (button)
     action: (button) => {
-      //add an action to the actionQueue
       button.element.addEventListener("click", () => {
+        let shift = camelCase(displayTextWithShift);
         actionQueue.push({
-          id: button.id,
+          id: `${shift.replace(" ", "")}${button.id}`,
           ts: time,
         });
-        // Update shift based on button press
-        if (button.id === "teleopActive") {
-          currentShift = "active";
-          lastShiftSwitchTime = time;
-          shiftButtonPressed = true;
-        } else if (button.id === "teleopInactive") {
-          currentShift = "inactive";
-          lastShiftSwitchTime = time;
-          shiftButtonPressed = true;
-        }
+
         doExecutables(button);
         updateLastAction();
       });
     },
-
     undo: (button) => {
       button.element.addEventListener("click", () => {
         if (
@@ -139,6 +131,15 @@ var previousTimer = [];
           ts: time,
           temp: true,
         });
+        if (button.id === "teleopActive") {
+          currentShift = "active";
+          lastShiftSwitchTime = time;
+          shiftButtonPressed = true;
+        } else if (button.id === "teleopInactive") {
+          currentShift = "inactive";
+          lastShiftSwitchTime = time;
+          shiftButtonPressed = true;
+        }
         doExecutables(button, time);
         updateLastAction();
       });
@@ -207,7 +208,6 @@ var previousTimer = [];
           status: ScoutingSync.SCOUTER_STATUS.SCOUTING,
         }); //tell the server that you started scouting
 
-        let displayText = "";
         let start = Date.now();
         devEnd = () => {
           start = Date.now() - (matchScoutingConfig.timing.totalTime - 1);
@@ -279,7 +279,7 @@ var previousTimer = [];
           }
 
           // Build display text with shift information
-          let displayTextWithShift = displayText;
+
           if (time > teleopTime) {
             displayTextWithShift = `${displayText}`;
           } else if (time < teleopTime && time > endgameTime) {
@@ -289,7 +289,7 @@ var previousTimer = [];
               displayTextWithShift = `${shiftDisplay}`;
             }
           } else if (time <= endgameTime) {
-            displayTextWithShift = `Endgame - Active Shift`;
+            displayTextWithShift = `Endgame`;
           }
 
           buttons
@@ -425,6 +425,11 @@ var previousTimer = [];
       }
     }
     previousLayers.push(renderedButtons);
+  }
+  function camelCase(str) {
+    return str
+      .replace(/[^a-zA-Z0-9]+(.)/g, (_, chr) => chr.toUpperCase())
+      .replace(/^[A-Z]/, (c) => c.toLowerCase());
   }
 
   // DATA
