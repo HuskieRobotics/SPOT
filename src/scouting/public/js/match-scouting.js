@@ -13,9 +13,14 @@ var previousTimer = [];
   var endgameTime = 30000;
   var shiftSwitchInterval = 25000;
   var timerActive = false;
-  var currentShift = ""; // Track current shift (active/inactive)
-  var lastShiftSwitchTime = teleopTime; // Track when the last shift switch occurred
-  var shiftButtonPressed = false; // Flag to track if a shift button has been pressed
+  var currentShift = ""; // "active" | "inactive"
+  var lastShiftSwitchTime = teleopTime;
+  var shiftButtonPressed = false;
+
+  // NEW: shift counters
+  var activeShiftCount = 0;
+  var inactiveShiftCount = 0;
+  var currentShiftNumber;
   let displayText = "";
   let displayTextWithShift = displayText;
 
@@ -64,6 +69,7 @@ var previousTimer = [];
     action: (button) => {
       button.element.addEventListener("click", () => {
         let shift = camelCase(displayTextWithShift);
+
         actionQueue.push({
           id: `${shift.replace(" ", "")}${button.id}`,
           ts: time,
@@ -133,10 +139,15 @@ var previousTimer = [];
         });
         if (button.id === "teleopActive") {
           currentShift = "active";
+
+          currentShiftNumber = activeShiftCount;
           lastShiftSwitchTime = time;
+          activeShiftCount++;
           shiftButtonPressed = true;
         } else if (button.id === "teleopInactive") {
           currentShift = "inactive";
+          inactiveShiftCount++;
+          currentShiftNumber = inactiveShiftCount;
           lastShiftSwitchTime = time;
           shiftButtonPressed = true;
         }
@@ -266,16 +277,22 @@ var previousTimer = [];
           }
           time = matchScoutingConfig.timing.totalTime - (Date.now() - start);
           window.currentTime = time; // Keep window.currentTime in sync
-
+          let elapsedSinceSwitch = Math.abs(time - lastShiftSwitchTime);
           // Handle shift switching during teleop (between teleopTime and endgameTime)
           // Only switch if a shift button has been pressed
-          if (shiftButtonPressed && time < teleopTime && time > endgameTime) {
-            const elapsedSinceSwitch = lastShiftSwitchTime - time;
-            if (elapsedSinceSwitch >= shiftSwitchInterval) {
-              // Switch shift
-              currentShift = currentShift === "active" ? "inactive" : "active";
-              lastShiftSwitchTime = time; // Update the switch time
+          if (elapsedSinceSwitch >= shiftSwitchInterval) {
+            if (currentShift === "active") {
+              currentShift = "inactive";
+
+              currentShiftNumber = inactiveShiftCount;
+              inactiveShiftCount++;
+            } else {
+              currentShift = "active";
+              currentShiftNumber = activeShiftCount;
+              activeShiftCount++;
             }
+
+            lastShiftSwitchTime = time;
           }
 
           // Build display text with shift information
@@ -285,8 +302,11 @@ var previousTimer = [];
           } else if (time < teleopTime && time > endgameTime) {
             if (shiftButtonPressed) {
               const shiftDisplay =
-                currentShift === "active" ? "Active Shift" : "Inactive Shift";
-              displayTextWithShift = `${shiftDisplay}`;
+                currentShift === "active"
+                  ? `Active Shift ${currentShiftNumber}`
+                  : `Inactive Shift ${currentShiftNumber}`;
+
+              displayTextWithShift = shiftDisplay;
             }
           } else if (time <= endgameTime) {
             displayTextWithShift = `Endgame`;
@@ -315,7 +335,7 @@ var previousTimer = [];
       button.element.classList.add("grid-button", ...button.class.split(" "));
       button.element.style.gridArea = button.gridArea.join(" / ");
 
-      //apply type to button
+      //apply type to button+
       buttonBuilders[button.type](button);
       //add the button to the grid
       grid.appendChild(button.element);
