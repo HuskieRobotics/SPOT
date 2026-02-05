@@ -250,7 +250,7 @@
           "executables": []
         },
         {
-          "id": "attemptL3",
+          "id": "AttemptL3",
           "displayText": "L3",
           "gridArea": ["3", "4", "4", "10"],
           "class": "gray",
@@ -258,7 +258,7 @@
           "executables": []
         },
         {
-          "id": "attemptL2",
+          "id": "AttemptL2",
           "displayText": "L2",
           "gridArea": ["4", "4", "5", "10"],
           "class": "gray",
