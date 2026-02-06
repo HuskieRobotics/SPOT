@@ -62,20 +62,20 @@
       "bars": [
         {
           "name": "Fall",
-          "path": "counts.fall"
+          "path": "counts.endgameFall"
         },
         {
           "name": "L1",
-          "path": "counts.teleopAttemptL1"
+          "path": "counts.endgameAttemptL1"
         },
 
         {
           "name": "L2",
-          "path": "counts.attemptL2"
+          "path": "counts.endgameAttemptL2"
         },
         {
           "name": "L3",
-          "path": "counts.attemptL3"
+          "path": "counts.endgameAttemptL3"
         }
       ]
     }

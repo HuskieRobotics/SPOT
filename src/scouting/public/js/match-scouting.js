@@ -54,6 +54,7 @@ var previousTimer = [];
         lastActions[lastActions.length - 1].num++;
       }
     }
+    console.log(actionQueueIds);
     document.querySelector(".status .last-actions").innerText = lastActions
       .reverse()
       .map((a) => a.id + (a.num > 1 ? ` (${a.num})` : ""))

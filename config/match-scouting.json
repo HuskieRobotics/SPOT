@@ -255,7 +255,12 @@
           "gridArea": ["3", "4", "4", "10"],
           "class": "gray",
           "type": "action",
-          "executables": []
+          "executables": [
+            {
+              "type": "climbHighlight",
+              "args": ["AttemptL3", "AttemptL2", "AttemptL1", "Fall"]
+            }
+          ]
         },
         {
           "id": "AttemptL2",
@@ -263,7 +268,12 @@
           "gridArea": ["4", "4", "5", "10"],
           "class": "gray",
           "type": "action",
-          "executables": []
+          "executables": [
+            {
+              "type": "climbHighlight",
+              "args": ["AttemptL3", "AttemptL2", "AttemptL1", "Fall"]
+            }
+          ]
         },
         {
           "id": "AttemptL1",
@@ -271,15 +281,25 @@
           "gridArea": ["5", "4", "6", "10"],
           "class": "gray",
           "type": "action",
-          "executables": []
+          "executables": [
+            {
+              "type": "climbHighlight",
+              "args": ["AttemptL3", "AttemptL2", "AttemptL1", "Fall"]
+            }
+          ]
         },
         {
-          "id": "fall",
+          "id": "Fall",
           "displayText": "Fall",
           "gridArea": ["6", "4", "7", "10"],
           "class": "red",
           "type": "action",
-          "executables": []
+          "executables": [
+            {
+              "type": "climbHighlight",
+              "args": ["AttemptL3", "AttemptL2", "AttemptL1", "Fall"]
+            }
+          ]
         }
       ],
       [

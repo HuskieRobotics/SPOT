@@ -52,7 +52,11 @@
     "name": "actionTime",
     "outputPath": "actionTimes.attemptClimb",
     "options": {
-      "actionId": ["attemptClimb"]
+      "actionId": [
+        "activeShift2AttemptClimb",
+        "inactiveShift2AttemptClimb",
+        "endgameAttemptClimb"
+      ]
     }
   },
   {
@@ -69,8 +73,16 @@
     "name": "cycle",
     "outputPath": "cycle.shootingTime",
     "options": {
-      "pickups": ["startShoot"],
-      "scores": ["stopShoot"]
+      "pickups": [
+        "activeShift1startShoot",
+        "activeShift2startShoot",
+        "teleopTransitionStartShoot"
+      ],
+      "scores": [
+        "activeShift1StopShoot",
+        "activeShift2StopShoot",
+        "teleopTransitionStopShoot"
+      ]
     }
   },
   {
@@ -99,6 +111,7 @@
       }
     }
   },
+
   {
     "type": "tmp",
     "name": "weightedSumAverage",
@@ -138,7 +151,33 @@
       }
     }
   },
-
+  {
+    "type": "tmp",
+    "name": "weightedSumAverage",
+    "outputPath": "scores.endgameDefenseRating",
+    "options": {
+      "weightedPaths": {
+        "counts.endgameDefense1": 1,
+        "counts.endgameDefense2": 2,
+        "counts.endgameDefense3": 3,
+        "counts.endgameDefense4": 4
+      }
+    }
+  },
+  {
+    "type": "tmp",
+    "name": "sum",
+    "outputPath": "scores.defenseRating",
+    "options": {
+      "addends": [
+        "scores.autoDefense",
+        "scores.teleopTransitionDefense",
+        "scores.activeShift1Defense",
+        "scores.activeShift2Defense",
+        "scores.endgameDefense"
+      ]
+    }
+  },
   {
     "type": "tmp",
     "name": "weightedSumAverage",
@@ -176,6 +215,33 @@
         "counts.activeShift2Passing3": 3,
         "counts.activeShift2Passing4": 4
       }
+    }
+  },
+  {
+    "type": "tmp",
+    "name": "weightedSumAverage",
+    "outputPath": "scores.endgamePassingRating",
+    "options": {
+      "weightedPaths": {
+        "counts.endgamePassing1": 1,
+        "counts.endgamePassing2": 2,
+        "counts.endgamePassing3": 3,
+        "counts.endgamePassing4": 4
+      }
+    }
+  },
+  {
+    "type": "tmp",
+    "name": "sum",
+    "outputPath": "scores.passingRating",
+    "options": {
+      "addends": [
+        "scores.autoPassing",
+        "scores.teleopTransitionPassing",
+        "scores.activeShift1Passing",
+        "scores.activeShift2Passing",
+        "scores.endgamePassing"
+      ]
     }
   },
   {
@@ -220,6 +286,32 @@
   {
     "type": "tmp",
     "name": "weightedSumAverage",
+    "outputPath": "scores.endgameCollectingRating",
+    "options": {
+      "weightedPaths": {
+        "counts.endgameCollecting1": 1,
+        "counts.endgameCollecting2": 2,
+        "counts.endgameCollecting3": 3,
+        "counts.endgameCollecting4": 4
+      }
+    }
+  },
+  {
+    "type": "tmp",
+    "name": "sum",
+    "outputPath": "scores.collectingRating",
+    "options": {
+      "addends": [
+        "scores.teleopTransitionCollecting",
+        "scores.activeShift1Collecting",
+        "scores.activeShift2Collecting",
+        "scores.endgameCollecting"
+      ]
+    }
+  },
+  {
+    "type": "tmp",
+    "name": "weightedSumAverage",
     "outputPath": "scores.teleopTransitionShootingRating",
     "options": {
       "weightedPaths": {
@@ -256,7 +348,32 @@
       }
     }
   },
-
+  {
+    "type": "tmp",
+    "name": "weightedSumAverage",
+    "outputPath": "scores.endgameShootingRating",
+    "options": {
+      "weightedPaths": {
+        "counts.endgameShooting1": 1,
+        "counts.endgameShooting2": 2,
+        "counts.endgameShooting3": 3,
+        "counts.endgameShooting4": 4
+      }
+    }
+  },
+  {
+    "type": "tmp",
+    "name": "sum",
+    "outputPath": "scores.shootingRating",
+    "options": {
+      "addends": [
+        "scores.teleopTransitionShooting",
+        "scores.activeShift1Shooting",
+        "scores.activeShift2Shooting",
+        "scores.endgameShooting"
+      ]
+    }
+  },
   {
     "type": "team",
     "name": "countActions",
