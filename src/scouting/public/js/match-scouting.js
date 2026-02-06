@@ -9,8 +9,20 @@ var previousTimer = [];
   matchScoutingConfig = await matchScoutingConfig;
   //initiate timing
   var time = matchScoutingConfig.timing.totalTime;
-  var teleopTime = 135000;
+  var teleopTime = 130000;
+  var endgameTime = 30000;
+  var shiftSwitchInterval = 25000;
   var timerActive = false;
+  var currentShift = ""; // "active" | "inactive"
+  var lastShiftSwitchTime = teleopTime;
+  var shiftButtonPressed = false;
+
+  // NEW: shift counters
+  var activeShiftCount = 0;
+  var inactiveShiftCount = 0;
+  var currentShiftNumber;
+  let displayText = "";
+  let displayTextWithShift = displayText;
 
   //intialize variables
   let varNames = Object.keys(matchScoutingConfig.variables);
@@ -55,17 +67,18 @@ var previousTimer = [];
   const buttonBuilders = {
     //an object to give buttons type specific things, button type: function (button)
     action: (button) => {
-      //add an action to the actionQueue
       button.element.addEventListener("click", () => {
+        let shift = camelCase(displayTextWithShift);
+
         actionQueue.push({
-          id: button.id,
+          id: `${shift.replace(" ", "")}${button.id}`,
           ts: time,
         });
+
         doExecutables(button);
         updateLastAction();
       });
     },
-
     undo: (button) => {
       button.element.addEventListener("click", () => {
         if (
@@ -88,9 +101,9 @@ var previousTimer = [];
             showLayer(0);
           }
 
-          var totalNumberOfButtonsTeleopLayer = 12;
-          var totalNumberOfButtonsAutoLayer = 13;
-          var teleopLayerNumber = 2;
+          var totalNumberOfButtonsTeleopLayer = 13;
+          var totalNumberOfButtonsAutoLayer = 11;
+          var teleopLayerNumber = 7;
 
           if (time < teleopTime) {
             for (let i = 0; i < previousLayers.length; i++) {
@@ -107,7 +120,7 @@ var previousTimer = [];
             executables[executable.type].reverse(
               undoneButton,
               layers,
-              ...executable.args
+              ...executable.args,
             ); //reverse any executables associated with the undone button
           }
         }
@@ -124,6 +137,20 @@ var previousTimer = [];
           ts: time,
           temp: true,
         });
+        if (button.id === "teleopActive") {
+          currentShift = "active";
+
+          currentShiftNumber = activeShiftCount;
+          lastShiftSwitchTime = time;
+          activeShiftCount++;
+          shiftButtonPressed = true;
+        } else if (button.id === "teleopInactive") {
+          currentShift = "inactive";
+          inactiveShiftCount++;
+          currentShiftNumber = inactiveShiftCount;
+          lastShiftSwitchTime = time;
+          shiftButtonPressed = true;
+        }
         doExecutables(button, time);
         updateLastAction();
       });
@@ -154,10 +181,8 @@ var previousTimer = [];
           } else {
             // display QR code
             const encoder = new QREncoder(); // Updated
-            const dataUrl = await encoder.encodeTeamMatchPerformance(
-              teamMatchPerformance
-            );
-
+            const dataUrl =
+              await encoder.encodeTeamMatchPerformance(teamMatchPerformance);
             let qrContainer = document.createElement("div");
             let qrText = document.createElement("button");
             let qrImg = document.createElement("img");
@@ -194,16 +219,21 @@ var previousTimer = [];
           status: ScoutingSync.SCOUTER_STATUS.SCOUTING,
         }); //tell the server that you started scouting
 
-        let displayText = "";
         let start = Date.now();
         devEnd = () => {
           start = Date.now() - (matchScoutingConfig.timing.totalTime - 1);
         };
         const transitions = Object.keys(
-          matchScoutingConfig.timing.timeTransitions
+          matchScoutingConfig.timing.timeTransitions,
         )
           .map((x) => Number(x))
           .sort((a, b) => b - a);
+        // Initialize displayText with the first applicable transition
+        if (transitions.length > 0) {
+          displayText =
+            matchScoutingConfig.timing.timeTransitions[transitions[0]]
+              .displayText || "";
+        }
         timerActive = true;
         button.timerInterval = setInterval(() => {
           if (time <= transitions[0]) {
@@ -213,7 +243,7 @@ var previousTimer = [];
                 .displayText;
             for (let key of Object.keys(
               matchScoutingConfig.timing.timeTransitions[transitions[0]]
-                .variables
+                .variables,
             )) {
               variables[key].previous.push(variables[key].current);
               variables[key].current =
@@ -226,8 +256,9 @@ var previousTimer = [];
               matchScoutingConfig.timing.timeTransitions[transitions[0]].layer,
               matchScoutingConfig.timing.timeTransitions[transitions[0]]
                 .conditional,
-              matchScoutingConfig.timing.timeTransitions[transitions[0]].always
+              matchScoutingConfig.timing.timeTransitions[transitions[0]].always,
             );
+
             transitions.shift();
           }
           if (time <= 0) {
@@ -245,13 +276,47 @@ var previousTimer = [];
             return;
           }
           time = matchScoutingConfig.timing.totalTime - (Date.now() - start);
+          window.currentTime = time; // Keep window.currentTime in sync
+          let elapsedSinceSwitch = Math.abs(time - lastShiftSwitchTime);
+          // Handle shift switching during teleop (between teleopTime and endgameTime)
+          // Only switch if a shift button has been pressed
+          if (elapsedSinceSwitch >= shiftSwitchInterval) {
+            if (currentShift === "active") {
+              currentShift = "inactive";
+
+              currentShiftNumber = inactiveShiftCount;
+              inactiveShiftCount++;
+            } else {
+              currentShift = "active";
+              currentShiftNumber = activeShiftCount;
+              activeShiftCount++;
+            }
+
+            lastShiftSwitchTime = time;
+          }
+
+          // Build display text with shift information
+
+          if (time > teleopTime) {
+            displayTextWithShift = `${displayText}`;
+          } else if (time < teleopTime && time > endgameTime) {
+            if (shiftButtonPressed) {
+              const shiftDisplay =
+                currentShift === "active"
+                  ? `Active Shift ${currentShiftNumber}`
+                  : `Inactive Shift ${currentShiftNumber}`;
+
+              displayTextWithShift = shiftDisplay;
+            }
+          } else if (time <= endgameTime) {
+            displayTextWithShift = `Endgame`;
+          }
+
           buttons
             .filter((x) => x.type === "match-control")
             .forEach((b) => {
               //update all match-control buttons (even those in different layers)
-              b.element.innerText = `${(time / 1000).toFixed(
-                2
-              )} | ${displayText}`;
+              b.element.innerText = `${(time / 1000).toFixed(2)} | ${displayTextWithShift}`;
             });
         }, 10);
         doExecutables(button);
@@ -270,12 +335,14 @@ var previousTimer = [];
       button.element.classList.add("grid-button", ...button.class.split(" "));
       button.element.style.gridArea = button.gridArea.join(" / ");
 
-      //apply type to button
+      //apply type to button+
       buttonBuilders[button.type](button);
       //add the button to the grid
       grid.appendChild(button.element);
     }
   }
+
+  // Expose rebuild function for loadConfig executable
 
   showLayer(0); //initially show layer 0
 
@@ -285,7 +352,7 @@ var previousTimer = [];
         executables[executable.type].execute(
           button,
           layers,
-          ...executable.args
+          ...executable.args,
         );
       } catch (e) {
         console.error(e);
@@ -295,6 +362,12 @@ var previousTimer = [];
   }
 
   function showLayer(layer, conditional = {}, always = []) {
+    // Validate layer exists
+    if (!layers[layer] || layer < 0 || layer >= layers.length) {
+      console.warn(`Layer ${layer} does not exist. Defaulting to layer 0.`);
+      layer = 0;
+    }
+
     for (const b of buttons) {
       b.element.style.display = "none";
     }
@@ -338,6 +411,7 @@ var previousTimer = [];
       previousLayers.push(rendered);
     }
   }
+
   function conditionalLayer() {
     var renderedButtons = [];
     for (let button of layers[toLayer]) {
@@ -371,6 +445,11 @@ var previousTimer = [];
       }
     }
     previousLayers.push(renderedButtons);
+  }
+  function camelCase(str) {
+    return str
+      .replace(/[^a-zA-Z0-9]+(.)/g, (_, chr) => chr.toUpperCase())
+      .replace(/^[A-Z]/, (c) => c.toLowerCase());
   }
 
   // DATA
