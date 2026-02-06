@@ -25,10 +25,13 @@ class RadarChart {
           j < this.moduleConfig.options.lines[i].times.length;
           j++
         ) {
-          let point = getPath(
-            dataset.teams[team],
-            this.moduleConfig.options.lines[i].times[j].path,
-          );
+          let point = 0;
+          if ( !this.moduleConfig.options.lines[i].times[j].path == "none" ) {
+            point = getPath(
+              dataset.teams[team],
+              this.moduleConfig.options.lines[i].times[j].path,
+            );
+          }
           values.push(point);
         }
         const line = {

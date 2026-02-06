@@ -46,112 +46,124 @@
         {
           "name": "Shooting",
           "times": [
-            { "name": "Auto", "path": "averages.scores.autoShootingRating" },
+            {
+              "name": "Auto",
+              "path": "averageScores.autoShootingRating"
+            },
             {
               "name": "Transition",
-              "path": "averages.scores.transitionShootingRating"
+              "path": "averageScores.teleopTransitionShootingRating"
             },
             {
               "name": "Active 1",
-              "path": "averages.scores.active1ShootingRating"
+              "path": "averageScores.activeShift1ShootingRating"
             },
-            { "name": "Inactive 1", "path": "0" },
+            { "name": "Inactive 1", "path": "none" },
             {
               "name": "Active 2",
-              "path": "averages.scores.active2ShootingRating"
+              "path": "averageScores.activeShift2ShootingRating"
             },
-            { "name": "Inactive 2", "path": "0" },
+            { "name": "Inactive 2", "path": "none" },
             {
               "name": "Endgame",
-              "path": "averages.scores.endgameShootingRating"
+              "path": "averageScores.endgameShootingRating"
             }
           ]
         },
         {
           "name": "Collecting",
           "times": [
-            { "name": "Auto", "path": "averages.scores.autoCollectingRating" },
+            {
+              "name": "Auto",
+              "path": "averageScores.autoCollectingRating"
+            },
             {
               "name": "Transition",
-              "path": "averages.scores.transitionCollectingRating"
+              "path": "averageScores.teleopTransitionCollectingRating"
             },
             {
               "name": "Active 1",
-              "path": "averages.scores.active1CollectingRating"
+              "path": "averageScores.activeShift1CollectingRating"
             },
             {
               "name": "Inactive 1",
-              "path": "averages.scores.inactive1CollectingRating"
+              "path": "averageScores.inactive1CollectingRating"
             },
             {
               "name": "Active 2",
-              "path": "averages.scores.active2CollectingRating"
+              "path": "averageScores.activeShift2CollectingRating"
             },
             {
               "name": "Inactive 2",
-              "path": "averages.scores.inactive2CollectingRating"
+              "path": "averageScores.inactive2CollectingRating"
             },
             {
               "name": "Endgame",
-              "path": "averages.scores.endgameCollectingRating"
+              "path": "averageScores.endgameCollectingRating"
             }
           ]
         },
         {
           "name": "Passing",
           "times": [
-            { "name": "Auto", "path": "averages.scores.autoPassingRating" },
+            {
+              "name": "Auto",
+              "path": "averageScores.autoPassingRating"
+            },
             {
               "name": "Transition",
-              "path": "averages.scores.transitionPassingRating"
+              "path": "averageScores.teleopTransitionPassingRating"
             },
             {
               "name": "Active 1",
-              "path": "averages.scores.active1PassingRating"
+              "path": "averageScores.activeShift1PassingRating"
             },
             {
               "name": "Inactive 1",
-              "path": "averages.scores.inactive1PassingRating"
+              "path": "averageScores.inactive1PassingRating"
             },
             {
               "name": "Active 2",
-              "path": "averages.scores.active2PassingRating"
+              "path": "averageScores.activeShift2PassingRating"
             },
             {
               "name": "Inactive 2",
-              "path": "averages.scores.inactive2PassingRating"
+              "path": "averageScores.inactive2PassingRating"
             },
             {
               "name": "Endgame",
-              "path": "averages.scores.endgamePassingRating"
+              "path": "averageScores.endgamePassingRating"
             }
           ]
         },
         {
           "name": "Defense",
           "times": [
-            { "name": "Auto", "path": "averages.scores.autoDefenseScore" },
+            { "name": "Auto", "path": "averageScores.autoDefenseScore" },
             {
               "name": "Transition",
-              "path": "averages.scores.transitionDefenseScore"
+              "path": "averageScores.teleopTransitionDefenseScore"
             },
             {
               "name": "Active 1",
-              "path": "averages.scores.active1DefenseScore"
+              "path": "averageScores.activeShift1DefenseScore"
             },
             {
               "name": "Inactive 1",
-              "path": "averages.scores.inactive1DefenseScore"
+              "path": "averageScores.inactive1DefenseScore"
             },
             {
               "name": "Active 2",
-              "path": "averages.scores.active2DefenseScore"
+              "path": "averageScores.activeShift2DefenseScore"
             },
             {
               "name": "Inactive 2",
-              "path": "averages.scores.inactive2DefenseScore"
+              "path": "averageScores.inactive2DefenseScore"
             },
-            { "name": "Endgame", "path": "averages.scores.endgameDefenseScore" }
+            {
+              "name": "Endgame",
+              "path": "averageScores.endgameDefenseScore"
+            }
           ]
         }
       ]
@@ -201,7 +213,7 @@
   {
     "view": "team",
     "module": "Bar",
-    "name": "Attemped Climb Level",
+    "name": "Attempted Climb Level",
     "position": "main",
     "options": {
       "bars": [
@@ -211,7 +223,7 @@
         },
         {
           "name": "L1",
-          "path": "counts.teleopAttemptL1"
+          "path": "counts.attemptL1"
         },
 
         {
