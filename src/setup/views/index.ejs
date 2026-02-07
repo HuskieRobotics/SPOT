@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta
@@ -11,7 +11,7 @@
       name="apple-mobile-web-app-status-bar-style"
       content="black-translucent"
     />
-    <title>SPOT - Configuration</title>
+    <title>SPOT - Configuration Guide</title>
     <link
       rel="apple-touch-icon"
       sizes="180x180"
@@ -30,17 +30,765 @@
       href="./icons/favicon-16x16.png"
     />
     <link rel="manifest" href="./icons/site.webmanifest" />
-    <link
-      rel="mask-icon"
-      href="./icons/safari-pinned-tab.svg"
-      color="#30a2ff"
-    />
     <link rel="shortcut icon" href="./icons/favicon.ico" />
     <meta name="msapplication-TileColor" content="#fefefe" />
-    <meta name="msapplication-config" content="./icons/browserconfig.xml" />
     <meta name="theme-color" content="#fefefe" />
-    
+    <link href="./css/global.css" rel="stylesheet" type="text/css" />
+    <link href="./css/internal.css" rel="stylesheet" type="text/css" />
     <style>
+      body {
+        background-color: var(--bg);
+        padding: 20px;
+        margin: 0;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .header {
+        text-align: center;
+        margin: 40px 0;
+      }
+
+      .header h1 {
+        font-size: 4rem;
+        color: var(--text);
+        margin: 0 0 10px 0;
+      }
+
+      .header p {
+        font-size: 1.3em;
+        color: var(--gray);
+      }
+
+      .status-card {
+        background: var(--bg-alt);
+        border: 3px solid var(--accent-alt);
+        border-radius: var(--border-radius);
+        padding: 30px;
+        margin: 30px 0;
+      }
+
+      .status-badge {
+        display: inline-block;
+        padding: 10px 20px;
+        border-radius: 25px;
+        font-weight: bold;
+        font-size: 1.1em;
+        margin-bottom: 15px;
+      }
+
+      .status-badge.loading {
+        background: var(--light-gray);
+        color: var(--text);
+      }
+
+      .status-badge.success {
+        background: var(--green);
+        color: white;
+      }
+
+      .status-badge.error {
+        background: var(--error);
+        color: white;
+      }
+
+      .status-message {
+        font-size: 1.2em;
+        color: var(--text);
+        line-height: 1.6;
+      }
+
+      .missing-vars {
+        margin-top: 20px;
+        padding: 20px;
+        background: #fff3e0;
+        border-left: 5px solid var(--accent-alt);
+        border-radius: 8px;
+        display: none;
+      }
+
+      .missing-vars.show {
+        display: block;
+      }
+
+      .missing-vars strong {
+        color: var(--accent-alt);
+        display: block;
+        margin-bottom: 10px;
+        font-size: 1.1em;
+      }
+
+      .missing-vars ul {
+        margin: 10px 0 0 20px;
+      }
+
+      .missing-vars li {
+        margin: 6px 0;
+        font-family: 'Courier New', monospace;
+        font-size: 1.1em;
+      }
+
+      .tabs {
+        display: flex;
+        gap: 10px;
+        margin: 40px 0 30px 0;
+        border-bottom: 3px solid var(--light-gray);
+        flex-wrap: wrap;
+      }
+
+      .tab {
+        padding: 15px 25px;
+        background: none;
+        border: none;
+        border-bottom: 4px solid transparent;
+        cursor: pointer;
+        font-size: 1.3em;
+        font-weight: 600;
+        color: var(--gray);
+        transition: all 0.3s;
+      }
+
+      .tab:hover {
+        color: var(--accent-alt);
+        border-bottom-color: var(--accent-alt);
+      }
+
+      .tab.active {
+        color: var(--accent-alt);
+        border-bottom-color: var(--accent-alt);
+      }
+
+      .tab-content {
+        display: none;
+      }
+
+      .tab-content.active {
+        display: block;
+      }
+
+      .section {
+        background: var(--bg-alt);
+        border: 3px solid var(--accent-alt);
+        border-radius: var(--border-radius);
+        padding: 40px;
+        margin: 25px 0;
+      }
+
+      .section h2 {
+        color: var(--accent-alt);
+        font-size: 2em;
+        margin: 0 0 20px 0;
+        border-bottom: 2px solid var(--accent-alt);
+        padding-bottom: 10px;
+      }
+
+      .section h3 {
+        color: var(--text);
+        font-size: 1.5em;
+        margin: 25px 0 15px 0;
+      }
+
+      .section p {
+        font-size: 1.15em;
+        line-height: 1.7;
+        color: var(--text);
+        margin: 12px 0;
+      }
+
+      .section ul {
+        margin: 15px 0 15px 25px;
+      }
+
+      .section li {
+        font-size: 1.15em;
+        margin: 10px 0;
+        color: var(--text);
+      }
+
+      .section code {
+        background: var(--bg);
+        padding: 3px 8px;
+        border-radius: 4px;
+        font-family: 'Courier New', monospace;
+        font-size: 0.95em;
+      }
+
+      .section a {
+        color: var(--accent);
+        font-weight: 600;
+        text-decoration: none;
+      }
+
+      .section a:hover {
+        text-decoration: underline;
+      }
+
+      .step {
+        background: var(--bg);
+        border-left: 5px solid var(--accent-alt);
+        padding: 25px;
+        margin: 20px 0;
+        border-radius: 8px;
+      }
+
+      .step h4 {
+        color: var(--accent-alt);
+        font-size: 1.4em;
+        margin: 0 0 15px 0;
+      }
+
+      .code-block {
+        background: #263238;
+        color: #aed581;
+        padding: 20px;
+        border-radius: 8px;
+        font-family: 'Courier New', monospace;
+        font-size: 1.05em;
+        overflow-x: auto;
+        margin: 15px 0;
+        line-height: 1.6;
+      }
+
+      .code-comment {
+        color: #78909c;
+      }
+
+      .warning {
+        background: #fff3cd;
+        border-left: 5px solid #ffc107;
+        padding: 20px;
+        margin: 20px 0;
+        border-radius: 8px;
+      }
+
+      .warning strong {
+        color: #856404;
+        display: block;
+        margin-bottom: 8px;
+        font-size: 1.2em;
+      }
+
+      .warning p {
+        color: #856404;
+        margin: 5px 0;
+      }
+
+      .info {
+        background: #d1ecf1;
+        border-left: 5px solid var(--accent);
+        padding: 20px;
+        margin: 20px 0;
+        border-radius: 8px;
+      }
+
+      .info strong {
+        color: #0c5460;
+        display: block;
+        margin-bottom: 8px;
+        font-size: 1.2em;
+      }
+
+      .info p {
+        color: #0c5460;
+        margin: 5px 0;
+      }
+
+      .env-var-card {
+        background: var(--bg);
+        border-left: 5px solid var(--accent-alt);
+        padding: 25px;
+        margin: 20px 0;
+        border-radius: 8px;
+      }
+
+      .env-var-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      .env-var-name {
+        font-family: 'Courier New', monospace;
+        font-size: 1.4em;
+        font-weight: bold;
+        color: var(--accent-alt);
+      }
+
+      .badge {
+        padding: 6px 14px;
+        border-radius: 20px;
+        font-size: 0.85em;
+        font-weight: bold;
+        text-transform: uppercase;
+      }
+
+      .badge.required {
+        background: var(--error);
+        color: white;
+      }
+
+      .badge.optional {
+        background: var(--accent);
+        color: white;
+      }
+
+      .env-var-desc {
+        font-size: 1.1em;
+        color: var(--text);
+        margin: 10px 0;
+        line-height: 1.6;
+      }
+
+      .env-var-example {
+        background: var(--bg-alt);
+        border: 2px solid var(--light-gray);
+        padding: 12px;
+        border-radius: 6px;
+        font-family: 'Courier New', monospace;
+        font-size: 1em;
+        margin: 10px 0;
+        overflow-x: auto;
+      }
+
+      .env-var-link {
+        margin-top: 12px;
+        font-size: 1.05em;
+      }
+
+      @media (max-width: 768px) {
+        .header h1 {
+          font-size: 2.5rem;
+        }
+
+        .section {
+          padding: 25px;
+        }
+
+        .tab {
+          padding: 12px 18px;
+          font-size: 1.1em;
+        }
+
+        .env-var-header {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>⚙️ SPOT Setup</h1>
+        <p>Environment Configuration Guide</p>
+      </div>
+
+      <div class="status-card">
+        <span class="status-badge loading" id="status-badge">Loading...</span>
+        <div class="status-message" id="status-message">
+          Checking configuration status...
+        </div>
+        <div class="missing-vars" id="missing-vars"></div>
+      </div>
+
+      <div class="tabs">
+        <button class="tab active" onclick="switchTab('local')">
+          💻 Local Setup
+        </button>
+        <button class="tab" onclick="switchTab('cloud')">
+          ☁️ Cloud Deployment
+        </button>
+        <button class="tab" onclick="switchTab('variables')">
+          📝 All Variables
+        </button>
+        <button class="tab" onclick="switchTab('help')">
+          ❓ Help & FAQ
+        </button>
+      </div>
+
+      <!-- Local Setup Tab -->
+      <div id="local-tab" class="tab-content active">
+        <div class="section">
+          <h2>Local Development Setup</h2>
+          <p>Follow these steps to configure SPOT on your local machine:</p>
+
+          <div class="step">
+            <h4>Step 1: Create .env File</h4>
+            <p>In the root directory of SPOT, copy the example template:</p>
+            <div class="code-block">
+<span class="code-comment"># Windows (PowerShell)</span>
+Copy-Item .env.example .env
+
+<span class="code-comment"># macOS/Linux</span>
+cp .env.example .env
+            </div>
+          </div>
+
+          <div class="step">
+            <h4>Step 2: Configure Environment Variables</h4>
+            <p>Open the <code>.env</code> file in a text editor and fill in these required values:</p>
+            <ul>
+              <li><strong>DATABASE_URL</strong> - Your MongoDB connection string</li>
+              <li><strong>TBA_API_KEY</strong> - The Blue Alliance API key</li>
+              <li><strong>EVENT_NUMBER</strong> - Event identifier (e.g., 2025ilch_official)</li>
+              <li><strong>TBA_EVENT_KEY</strong> - TBA event key (usually same as EVENT_NUMBER)</li>
+            </ul>
+            <p>See the "All Variables" tab for detailed information on each variable.</p>
+          </div>
+
+          <div class="step">
+            <h4>Step 3: Start the Server</h4>
+            <p>After saving your <code>.env</code> file, start SPOT:</p>
+            <div class="code-block">npm start</div>
+            <p>The server will automatically load your environment configuration.</p>
+          </div>
+
+          <div class="warning">
+            <strong>⚠️ Security Warning</strong>
+            <p>Never commit your <code>.env</code> file to version control! It contains sensitive credentials like API keys and database passwords.</p>
+            <p>The <code>.env</code> file is already in <code>.gitignore</code> - keep it that way.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cloud Deployment Tab -->
+      <div id="cloud-tab" class="tab-content">
+        <div class="section">
+          <h2>Render.com Deployment</h2>
+          <p>Deploy SPOT to Render with environment variables:</p>
+
+          <div class="step">
+            <h4>Step 1: Access Environment Settings</h4>
+            <ul>
+              <li>Log in to <a href="https://dashboard.render.com" target="_blank">dashboard.render.com</a></li>
+              <li>Select your SPOT service</li>
+              <li>Click "Environment" in the left sidebar</li>
+            </ul>
+          </div>
+
+          <div class="step">
+            <h4>Step 2: Add Environment Variables</h4>
+            <p>Click "Add Environment Variable" for each of these:</p>
+            <ul>
+              <li><code>DATABASE_URL</code> - Your MongoDB connection string</li>
+              <li><code>TBA_API_KEY</code> - The Blue Alliance API key</li>
+              <li><code>EVENT_NUMBER</code> - Event code (e.g., 2025ilch_official)</li>
+              <li><code>TBA_EVENT_KEY</code> - TBA event key</li>
+              <li><code>VERSION</code> - App version (optional)</li>
+              <li><code>ACCESS_CODE</code> - Admin access code (optional but recommended)</li>
+            </ul>
+          </div>
+
+          <div class="step">
+            <h4>Step 3: Deploy</h4>
+            <p>After adding all variables, trigger a deployment or let Render auto-deploy.</p>
+          </div>
+
+          <div class="info">
+            <strong>✓ Render Best Practices</strong>
+            <p>Environment variables on Render are encrypted and secure.</p>
+            <p>Do NOT add a <code>.env</code> file to your Git repository for production.</p>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>Other Cloud Platforms</h2>
+          
+          <h3>Heroku</h3>
+          <p>Settings → Config Vars → Reveal Config Vars → Add each variable</p>
+
+          <h3>AWS / Azure / DigitalOcean</h3>
+          <p>Look for "Environment Variables", "Secrets", or "Config" in your service settings.</p>
+
+          <h3>Vercel / Netlify</h3>
+          <p>Project Settings → Environment Variables → Add each variable</p>
+
+          <div class="warning">
+            <strong>🔒 Security Note</strong>
+            <p>All cloud platforms encrypt environment variables. Never hardcode secrets or commit <code>.env</code> files.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Variables Tab -->
+      <div id="variables-tab" class="tab-content">
+        <div class="section">
+          <h2>Required Environment Variables</h2>
+
+          <div class="env-var-card">
+            <div class="env-var-header">
+              <span class="env-var-name">DATABASE_URL</span>
+              <span class="badge required">Required</span>
+            </div>
+            <div class="env-var-desc">
+              MongoDB connection string for storing all scouting data.
+            </div>
+            <div class="env-var-example">mongodb+srv://username:password@cluster.mongodb.net/spot_database</div>
+            <div class="env-var-link">
+              Get from: <a href="https://cloud.mongodb.com" target="_blank">MongoDB Atlas</a>
+              → Cluster → Connect → Connection String
+            </div>
+          </div>
+
+          <div class="env-var-card">
+            <div class="env-var-header">
+              <span class="env-var-name">TBA_API_KEY</span>
+              <span class="badge required">Required</span>
+            </div>
+            <div class="env-var-desc">
+              API key for accessing The Blue Alliance data (matches, teams, events).
+            </div>
+            <div class="env-var-example">your_tba_api_key_here</div>
+            <div class="env-var-link">
+              Get from: <a href="https://www.thebluealliance.com/account" target="_blank">TBA Account Settings</a>
+              → Read API Keys → Generate New
+            </div>
+          </div>
+
+          <div class="env-var-card">
+            <div class="env-var-header">
+              <span class="env-var-name">EVENT_NUMBER</span>
+              <span class="badge required">Required</span>
+            </div>
+            <div class="env-var-desc">
+              Unique identifier for your event. This is the event code used internally by SPOT.
+            </div>
+            <div class="env-var-example">2025ilch_official</div>
+            <div class="env-var-link">
+              Format: YYYY + region + code + _type (e.g., 2025ilch_official)
+            </div>
+          </div>
+
+          <div class="env-var-card">
+            <div class="env-var-header">
+              <span class="env-var-name">TBA_EVENT_KEY</span>
+              <span class="badge required">Required</span>
+            </div>
+            <div class="env-var-desc">
+              The Blue Alliance event key for API requests. Usually identical to EVENT_NUMBER.
+            </div>
+            <div class="env-var-example">2025ilch_official</div>
+            <div class="env-var-link">
+              Find at: <a href="https://www.thebluealliance.com/events" target="_blank">TBA Events</a>
+              → Look in the event URL
+            </div>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>Optional Environment Variables</h2>
+
+          <div class="env-var-card">
+            <div class="env-var-header">
+              <span class="env-var-name">VERSION</span>
+              <span class="badge optional">Optional</span>
+            </div>
+            <div class="env-var-desc">
+              Application version number used for display and cache busting.
+            </div>
+            <div class="env-var-example">1.0.0</div>
+          </div>
+
+          <div class="env-var-card">
+            <div class="env-var-header">
+              <span class="env-var-name">ACCESS_CODE</span>
+              <span class="badge optional">Optional</span>
+            </div>
+            <div class="env-var-desc">
+              Admin access code for protecting setup and admin pages. If not set, admin access is unrestricted (not recommended for production).
+            </div>
+            <div class="env-var-example">your_secure_access_code_here</div>
+          </div>
+
+          <div class="env-var-card">
+            <div class="env-var-header">
+              <span class="env-var-name">GOOGLE_CLIENT_ID</span>
+              <span class="badge optional">Optional</span>
+            </div>
+            <div class="env-var-desc">
+              Google OAuth Client ID for authentication features.
+            </div>
+            <div class="env-var-link">
+              Get from: <a href="https://console.cloud.google.com" target="_blank">Google Cloud Console</a>
+              → APIs & Services → Credentials
+            </div>
+          </div>
+
+          <div class="env-var-card">
+            <div class="env-var-header">
+              <span class="env-var-name">GOOGLE_CLIENT_SECRET</span>
+              <span class="badge optional">Optional</span>
+            </div>
+            <div class="env-var-desc">
+              Google OAuth Client Secret (required if GOOGLE_CLIENT_ID is set).
+            </div>
+          </div>
+
+          <div class="env-var-card">
+            <div class="env-var-header">
+              <span class="env-var-name">FMS_API_USERNAME</span>
+              <span class="badge optional">Optional</span>
+            </div>
+            <div class="env-var-desc">
+              FMS API username for direct Field Management System integration (official events only).
+            </div>
+            <div class="env-var-link">
+              Get from: <a href="https://frc-events.firstinspires.org/services/api" target="_blank">FIRST Events API</a>
+            </div>
+          </div>
+
+          <div class="env-var-card">
+            <div class="env-var-header">
+              <span class="env-var-name">FMS_API_KEY</span>
+              <span class="badge optional">Optional</span>
+            </div>
+            <div class="env-var-desc">
+              FMS API key (required if FMS_API_USERNAME is set).
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Help Tab -->
+      <div id="help-tab" class="tab-content">
+        <div class="section">
+          <h2>Frequently Asked Questions</h2>
+
+          <h3>Where do I get my MongoDB connection string?</h3>
+          <p>
+            1. Go to <a href="https://cloud.mongodb.com" target="_blank">MongoDB Atlas</a><br>
+            2. Click "Connect" on your cluster<br>
+            3. Select "Connect your application"<br>
+            4. Copy the connection string and replace <code>&lt;password&gt;</code> with your actual password
+          </p>
+
+          <h3>What's the difference between EVENT_NUMBER and TBA_EVENT_KEY?</h3>
+          <p>
+            <strong>EVENT_NUMBER:</strong> The event identifier used internally by SPOT to filter and organize data in your database.<br>
+            <strong>TBA_EVENT_KEY:</strong> The specific event key used when making API calls to The Blue Alliance.<br>
+            In most cases, these are identical (e.g., <code>2025ilch_official</code>).
+          </p>
+
+          <h3>Do I need an ACCESS_CODE?</h3>
+          <p>
+            No, it's optional. If not set, admin and setup pages are unrestricted. For production deployments, use a strong access code for security.
+          </p>
+
+          <h3>Can I change environment variables after deployment?</h3>
+          <p>
+            Yes! Most cloud platforms allow you to update environment variables in their dashboard. Changes typically take effect after restarting the service.
+          </p>
+
+          <h3>What if my configuration is invalid?</h3>
+          <p>
+            SPOT will display this setup page with a detailed error message showing which variables are missing or invalid. Fix the issues in your <code>.env</code> file (local) or hosting dashboard (cloud) and refresh.
+          </p>
+
+          <h3>How do I find my event code?</h3>
+          <p>
+            Visit <a href="https://www.thebluealliance.com/events" target="_blank">The Blue Alliance Events</a>, find your event, and look at the URL. The event key appears in the format <code>/event/2025ilch</code>.
+          </p>
+
+          <h3>Should I commit my .env file to Git?</h3>
+          <p>
+            <strong>NO!</strong> Your <code>.env</code> file contains sensitive credentials (API keys, database URLs, passwords). It's already in <code>.gitignore</code>. For production, use environment variables in your hosting platform.
+          </p>
+        </div>
+
+        <div class="section">
+          <h2>Need More Help?</h2>
+          <p>
+            <strong>Contact:</strong> <a href="mailto:spot@team3061.org">spot@team3061.org</a><br>
+            <strong>GitHub:</strong> <a href="https://github.com/HuskieRobotics/SPOT" target="_blank">HuskieRobotics/SPOT</a><br>
+            <strong>Documentation:</strong> Check the README.md in the repository
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Tab switching
+      function switchTab(tabName) {
+        // Hide all tabs
+        document.querySelectorAll('.tab-content').forEach(tab => {
+          tab.classList.remove('active');
+        });
+
+        // Remove active from all buttons
+        document.querySelectorAll('.tab').forEach(btn => {
+          btn.classList.remove('active');
+        });
+
+        // Show selected tab
+        document.getElementById(tabName + '-tab').classList.add('active');
+        event.target.classList.add('active');
+      }
+
+      // Load configuration status
+      async function loadStatus() {
+        try {
+          const response = await fetch('/setup/api/status');
+          if (!response.ok) throw new Error('Failed to fetch status');
+          
+          const data = await response.json();
+          const badge = document.getElementById('status-badge');
+          const message = document.getElementById('status-message');
+          const missing = document.getElementById('missing-vars');
+          
+          if (data.valid) {
+            badge.className = 'status-badge success';
+            badge.textContent = '✓ Configuration Valid';
+            message.innerHTML = '<strong>All required environment variables are set!</strong><br>SPOT is ready to use. You can close this page.';
+            missing.classList.remove('show');
+          } else {
+            badge.className = 'status-badge error';
+            badge.textContent = '⚠️ Configuration Incomplete';
+            
+            let msg = '<strong>Some required environment variables are missing.</strong><br>';
+            if (data.environment && data.environment.isLocal) {
+              msg += 'You are running in local development mode. See the "Local Setup" tab for instructions.';
+            } else {
+              msg += 'You appear to be running on a cloud platform. See the "Cloud Deployment" tab for instructions.';
+            }
+            message.innerHTML = msg;
+            
+            if (data.missing && data.missing.length > 0) {
+              let html = '<strong>Missing Variables:</strong><ul>';
+              data.missing.forEach(v => {
+                html += '<li>' + v + '</li>';
+              });
+              html += '</ul>';
+              missing.innerHTML = html;
+              missing.classList.add('show');
+            }
+          }
+        } catch (err) {
+          console.error('Status check failed:', err);
+          document.getElementById('status-badge').className = 'status-badge error';
+          document.getElementById('status-badge').textContent = '⚠️ Error Loading';
+          document.getElementById('status-message').textContent = 'Could not load configuration status. Check your connection and refresh the page.';
+        }
+      }
+
+      // Load on page ready
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', loadStatus);
+      } else {
+        loadStatus();
+      }
+
+      // Auto-refresh every 30 seconds
+      setInterval(loadStatus, 30000);
+    </script>
+  </body>
+</html>
       * {
         margin: 0;
         padding: 0;
