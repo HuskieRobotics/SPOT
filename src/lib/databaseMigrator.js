@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const config = require("../../config/config.json");
+const config = require("./config");
 
 mongoose.connect(config.secrets.DATABASE_URL, {
   useNewUrlParser: true,
@@ -28,7 +28,7 @@ async function changeTypeOfEventCodes() {
     console.log("Events:", events);
 
     const collection = mongoose.connection.db.collection(
-      "teamMatchPerformances"
+      "teamMatchPerformances",
     );
 
     for (let i = 0; i < eventCodes.length; i++) {
@@ -42,11 +42,11 @@ async function changeTypeOfEventCodes() {
           "Updating event number:",
           eventNumber,
           "to ObjectId:",
-          event._id
+          event._id,
         );
         const res = await collection.updateMany(
           { eventNumber: eventNumber },
-          [{ $set: { eventNumber: { $toObjectId: event._id } } }] // Aggregation pipeline update operator
+          [{ $set: { eventNumber: { $toObjectId: event._id } } }], // Aggregation pipeline update operator
         );
         console.log("Modified Count:", res.modifiedCount);
       }

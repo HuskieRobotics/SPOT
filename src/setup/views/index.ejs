@@ -11,7 +11,7 @@
       name="apple-mobile-web-app-status-bar-style"
       content="black-translucent"
     />
-    <title>SPOT - Setup</title>
+    <title>SPOT - Setup Instructions</title>
     <link
       rel="stylesheet"
       href="https://use.fontawesome.com/releases/v5.15.0/css/all.css"
@@ -51,53 +51,624 @@
     <meta name="theme-color" content="#fefefe" />
     <link href="./css/global.css" rel="stylesheet" type="text/css" />
     <link href="./css/internal.css" rel="stylesheet" type="text/css" />
-    <link href="./css/ui-elements.css" rel="stylesheet" type="text/css" />
-    <link href="./css/style.css" rel="stylesheet" type="text/css" />
+    <style>
+      body {
+        font-family: 'Cairo', 'Saira', 'Tajawal', sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        padding: 20px;
+        margin: 0;
+      }
+
+      .container {
+        max-width: 900px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        overflow: hidden;
+      }
+
+      .header {
+        background: linear-gradient(135deg, #30a2ff 0%, #1e88e5 100%);
+        color: white;
+        padding: 30px;
+        text-align: center;
+      }
+
+      .header h1 {
+        margin: 0;
+        font-size: 2.5em;
+        font-weight: 700;
+      }
+
+      .header p {
+        margin: 10px 0 0 0;
+        opacity: 0.9;
+        font-size: 1.1em;
+      }
+
+      .status {
+        padding: 30px;
+        border-bottom: 1px solid #e0e0e0;
+      }
+
+      .status-badge {
+        display: inline-block;
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-weight: 600;
+        margin-bottom: 15px;
+      }
+
+      .status-badge.error {
+        background: #ffebee;
+        color: #c62828;
+      }
+
+      .status-badge.success {
+        background: #e8f5e9;
+        color: #2e7d32;
+      }
+
+      .status-badge.warning {
+        background: #fff3e0;
+        color: #e65100;
+      }
+
+      .content {
+        padding: 30px;
+      }
+
+      .tab-container {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 20px;
+        border-bottom: 2px solid #e0e0e0;
+      }
+
+      .tab {
+        padding: 12px 24px;
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: 1em;
+        font-weight: 600;
+        color: #666;
+        border-bottom: 3px solid transparent;
+        transition: all 0.3s;
+      }
+
+      .tab:hover {
+        color: #30a2ff;
+      }
+
+      .tab.active {
+        color: #30a2ff;
+        border-bottom-color: #30a2ff;
+      }
+
+      .tab-content {
+        display: none;
+      }
+
+      .tab-content.active {
+        display: block;
+      }
+
+      .env-var {
+        background: #f5f5f5;
+        border-left: 4px solid #30a2ff;
+        padding: 20px;
+        margin: 15px 0;
+        border-radius: 4px;
+      }
+
+      .env-var-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 10px;
+      }
+
+      .env-var-name {
+        font-family: 'Courier New', monospace;
+        font-weight: 700;
+        color: #1e88e5;
+        font-size: 1.1em;
+      }
+
+      .env-var-badge {
+        font-size: 0.7em;
+        padding: 4px 8px;
+        border-radius: 10px;
+        text-transform: uppercase;
+        font-weight: 600;
+      }
+
+      .env-var-badge.required {
+        background: #ffebee;
+        color: #c62828;
+      }
+
+      .env-var-badge.optional {
+        background: #e3f2fd;
+        color: #1565c0;
+      }
+
+      .env-var-description {
+        color: #424242;
+        margin-bottom: 10px;
+        line-height: 1.6;
+      }
+
+      .env-var-example {
+        background: #ffffff;
+        padding: 10px;
+        border-radius: 4px;
+        font-family: 'Courier New', monospace;
+        font-size: 0.9em;
+        color: #666;
+        overflow-x: auto;
+      }
+
+      .env-var-link {
+        margin-top: 8px;
+        font-size: 0.9em;
+      }
+
+      .env-var-link a {
+        color: #30a2ff;
+        text-decoration: none;
+      }
+
+      .env-var-link a:hover {
+        text-decoration: underline;
+      }
+
+      .code-block {
+        background: #263238;
+        color: #aed581;
+        padding: 20px;
+        border-radius: 8px;
+        font-family: 'Courier New', monospace;
+        font-size: 0.9em;
+        overflow-x: auto;
+        margin: 15px 0;
+        line-height: 1.6;
+      }
+
+      .code-block .comment {
+        color: #78909c;
+      }
+
+      .step {
+        background: #f5f5f5;
+        padding: 20px;
+        margin: 15px 0;
+        border-radius: 8px;
+        border-left: 4px solid #764ba2;
+      }
+
+      .step h3 {
+        margin-top: 0;
+        color: #764ba2;
+      }
+
+      .step-number {
+        display: inline-block;
+        width: 32px;
+        height: 32px;
+        background: #764ba2;
+        color: white;
+        border-radius: 50%;
+        text-align: center;
+        line-height: 32px;
+        font-weight: 700;
+        margin-right: 10px;
+      }
+
+      .warning-box {
+        background: #fff3e0;
+        border-left: 4px solid #f57c00;
+        padding: 15px;
+        margin: 15px 0;
+        border-radius: 4px;
+      }
+
+      .warning-box strong {
+        color: #e65100;
+      }
+
+      .missing-vars {
+        background: #ffebee;
+        border-left: 4px solid #c62828;
+        padding: 15px;
+        margin: 15px 0;
+        border-radius: 4px;
+      }
+
+      .missing-vars ul {
+        margin: 10px 0;
+        padding-left: 20px;
+      }
+
+      .test-section {
+        background: #e8f5e9;
+        border-left: 4px solid #2e7d32;
+        padding: 20px;
+        margin: 20px 0;
+        border-radius: 4px;
+      }
+
+      .test-button {
+        background: #30a2ff;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 1em;
+        font-weight: 600;
+        transition: background 0.3s;
+      }
+
+      .test-button:hover {
+        background: #1e88e5;
+      }
+
+      .test-button:disabled {
+        background: #ccc;
+        cursor: not-allowed;
+      }
+
+      .test-result {
+        margin-top: 10px;
+        padding: 10px;
+        border-radius: 4px;
+        display: none;
+      }
+
+      .test-result.success {
+        background: #e8f5e9;
+        color: #2e7d32;
+        display: block;
+      }
+
+      .test-result.error {
+        background: #ffebee;
+        color: #c62828;
+        display: block;
+      }
+    </style>
   </head>
 
   <body>
-    <img id="spinner" src="./img/spinner.svg" />
+    <div class="container">
+      <div class="header">
+        <h1><i class="fas fa-cog"></i> SPOT Setup</h1>
+        <p>Environment Configuration Required</p>
+      </div>
 
-    <div id="setup-container">
-      <div id="setup-header">SPOT Setup</div>
+      <div class="status" id="status-section">
+        <span class="status-badge error" id="status-badge">Configuration Required</span>
+        <div id="status-message">Loading configuration status...</div>
+        <div id="missing-vars" class="missing-vars" style="display: none;"></div>
+      </div>
 
-      <form id="setup-form">
-        <input hidden type="text" name="VERSION" value="1.0" />
-        <div>
-          <h1>Access Code</h1>
-          <div>
-            An Access Code is used for logging into SPOT's admin page or editing
-            its configuration. Make sure to save this somewhere, as you will
-            need it to edit this setup configuration or view the admin page.
-          </div>
-          <label class="label">
-            <input
-              type="text"
-              id="ACCESS_CODE"
-              name="ACCESS_CODE"
-              class="input"
-              required
-            />
-            <span>Access Code</span>
-          </label>
+      <div class="content">
+        <div class="tab-container">
+          <button class="tab active" onclick="switchTab('local')">
+            <i class="fas fa-laptop"></i> Local Development
+          </button>
+          <button class="tab" onclick="switchTab('render')">
+            <i class="fas fa-cloud"></i> Render Deployment
+          </button>
+          <button class="tab" onclick="switchTab('variables')">
+            <i class="fas fa-list"></i> All Variables
+          </button>
         </div>
-        <div>
-          <h1>MongoDB Setup</h1>
-          <p>
-            The MongoDB Connection URL is for your database. Your connection URL
-            should look like
-            <code
-              >"mongodb+srv://&lt;username&gt;:&lt;password&gt;&amp;&lt;clusterurl&gt;/myFirstDatabase?retryWrites=true&amp;w=majority"</code
-            >. For more detailed instructions on how to find this for your
-            specific database deployment, read the Quickstart Guide linked in
-            the README.
-          </p>
-          <label class="label">
-            <input
-              type="text"
-              id="DATABASE_URL"
-              name="DATABASE_URL"
-              class="input"
+
+        <!-- Local Development Tab -->
+        <div id="local-tab" class="tab-content active">
+          <h2>Local Development Setup</h2>
+          <p>Follow these steps to configure SPOT for local development:</p>
+
+          <div class="step">
+            <h3><span class="step-number">1</span>Create .env File</h3>
+            <p>In the root directory of SPOT, create a file named <code>.env</code></p>
+            <p>You can copy the template:</p>
+            <div class="code-block">
+              <span class="comment"># Windows (PowerShell)</span><br>
+              Copy-Item .env.example .env<br><br>
+              <span class="comment"># macOS/Linux</span><br>
+              cp .env.example .env
+            </div>
+          </div>
+
+          <div class="step">
+            <h3><span class="step-number">2</span>Fill in Required Values</h3>
+            <p>Open the <code>.env</code> file in a text editor and fill in the required values. See the "All Variables" tab for details on each variable.</p>
+          </div>
+
+          <div class="step">
+            <h3><span class="step-number">3</span>Restart the Server</h3>
+            <p>After saving your <code>.env</code> file, restart SPOT:</p>
+            <div class="code-block">
+              npm start
+            </div>
+          </div>
+
+          <div class="warning-box">
+            <strong><i class="fas fa-exclamation-triangle"></i> Important:</strong>
+            Never commit your <code>.env</code> file to version control! It contains sensitive credentials.
+            The <code>.env</code> file is already in <code>.gitignore</code>.
+          </div>
+        </div>
+
+        <!-- Render Deployment Tab -->
+        <div id="render-tab" class="tab-content">
+          <h2>Render.com Deployment</h2>
+          <p>Configure environment variables in your Render dashboard:</p>
+
+          <div class="step">
+            <h3><span class="step-number">1</span>Access Environment Variables</h3>
+            <p>1. Log in to your Render dashboard at <a href="https://dashboard.render.com" target="_blank">dashboard.render.com</a></p>
+            <p>2. Select your SPOT service</p>
+            <p>3. Click on "Environment" in the left sidebar</p>
+          </div>
+
+          <div class="step">
+            <h3><span class="step-number">2</span>Add Environment Variables</h3>
+            <p>Click "Add Environment Variable" and add each required variable from the list below:</p>
+            <ul>
+              <li><strong>DATABASE_URL</strong> - Your MongoDB connection string</li>
+              <li><strong>TBA_API_KEY</strong> - The Blue Alliance API key</li>
+              <li><strong>EVENT_NUMBER</strong> - Event identifier (e.g., 2025ilch_official)</li>
+              <li><strong>TBA_EVENT_KEY</strong> - TBA event key (usually same as EVENT_NUMBER)</li>
+              <li><strong>VERSION</strong> - App version (e.g., 1.0.0)</li>
+              <li><strong>ACCESS_CODE</strong> - (Optional) Admin access code</li>
+            </ul>
+            <p>See the "All Variables" tab for detailed information on each variable.</p>
+          </div>
+
+          <div class="step">
+            <h3><span class="step-number">3</span>Deploy</h3>
+            <p>After adding all environment variables, trigger a new deployment or  let Render auto-deploy.</p>
+          </div>
+
+          <div class="warning-box">
+            <strong><i class="fas fa-info-circle"></i> Note:</strong>
+            Environment variables in Render are encrypted and secure. Do NOT add a <code>.env</code> file to your repository for production deployments.
+          </div>
+        </div>
+
+        <!-- All Variables Tab -->
+        <div id="variables-tab" class="tab-content">
+          <h2>Environment Variables Reference</h2>
+          <p>Complete list of environment variables used by SPOT:</p>
+
+          <h3 style="margin-top: 30px; color: #c62828;">Required Variables</h3>
+
+          <div class="env-var">
+            <div class="env-var-header">
+              <span class="env-var-name">DATABASE_URL</span>
+              <span class="env-var-badge required">Required</span>
+            </div>
+            <div class="env-var-description">
+              MongoDB connection URL for storing scouting data. Must be a valid MongoDB connection string.
+            </div>
+            <div class="env-var-example">
+              DATABASE_URL=mongodb+srv://username:password@cluster.mongodb.net/spot_database
+            </div>
+            <div class="env-var-link">
+              <i class="fas fa-link"></i> Get from: 
+              <a href="https://cloud.mongodb.com" target="_blank">MongoDB Atlas</a> 
+              (Cluster → Connect → Connect your application)
+            </div>
+          </div>
+
+          <div class="env-var">
+            <div class="env-var-header">
+              <span class="env-var-name">TBA_API_KEY</span>
+              <span class="env-var-badge required">Required</span>
+            </div>
+            <div class="env-var-description">
+              API key for accessing The Blue Alliance data. Used to fetch match schedules and team information.
+            </div>
+            <div class="env-var-example">
+              TBA_API_KEY=your_api_key_here
+            </div>
+            <div class="env-var-link">
+              <i class="fas fa-link"></i> Get from: 
+              <a href="https://www.thebluealliance.com/account" target="_blank">The Blue Alliance Account Settings</a>
+              (Account → Read API Keys)
+            </div>
+          </div>
+
+          <div class="env-var">
+            <div class="env-var-header">
+              <span class="env-var-name">EVENT_NUMBER</span>
+              <span class="env-var-badge required">Required</span>
+            </div>
+            <div class="env-var-description">
+              The event identifier for the competition you're scouting. Format: {year}{region}{code}_{type}
+            </div>
+            <div class="env-var-example">
+              EVENT_NUMBER=2025ilch_official
+            </div>
+            <div class="env-var-link">
+              <i class="fas fa-link"></i> Find event codes at: 
+              <a href="https://www.thebluealliance.com/events" target="_blank">TBA Events</a>
+            </div>
+          </div>
+
+          <div class="env-var">
+            <div class="env-var-header">
+              <span class="env-var-name">TBA_EVENT_KEY</span>
+              <span class="env-var-badge required">Required</span>
+            </div>
+            <div class="env-var-description">
+              The Blue Alliance event key for API calls. Usually the same as EVENT_NUMBER.
+            </div>
+            <div class="env-var-example">
+              TBA_EVENT_KEY=2025ilch_official
+            </div>
+          </div>
+
+          <h3 style="margin-top: 30px; color: #1565c0;">Optional Variables</h3>
+
+          <div class="env-var">
+            <div class="env-var-header">
+              <span class="env-var-name">VERSION</span>
+              <span class="env-var-badge optional">Optional</span>
+            </div>
+            <div class="env-var-description">
+              Application version number for display and cache busting. Defaults to "0.0" if not set.
+            </div>
+            <div class="env-var-example">
+              VERSION=1.0.0
+            </div>
+          </div>
+
+          <div class="env-var">
+            <div class="env-var-header">
+              <span class="env-var-name">ACCESS_CODE</span>
+              <span class="env-var-badge optional">Optional</span>
+            </div>
+            <div class="env-var-description">
+              Admin access code for protected pages. If not set, admin access is unrestricted (not recommended for production).
+              Use a strong, random string for production deployments.
+            </div>
+            <div class="env-var-example">
+              ACCESS_CODE=your_secure_access_code_here
+            </div>
+          </div>
+
+          <div class="env-var">
+            <div class="env-var-header">
+              <span class="env-var-name">GOOGLE_CLIENT_ID</span>
+              <span class="env-var-badge optional">Optional</span>
+            </div>
+            <div class="env-var-description">
+              Google OAuth Client ID for Google authentication features.
+            </div>
+            <div class="env-var-example">
+              GOOGLE_CLIENT_ID=your_client_id.apps.googleusercontent.com
+            </div>
+            <div class="env-var-link">
+              <i class="fas fa-link"></i> Get from: 
+              <a href="https://console.cloud.google.com" target="_blank">Google Cloud Console</a>
+              (APIs & Services → Credentials)
+            </div>
+          </div>
+
+          <div class="env-var">
+            <div class="env-var-header">
+              <span class="env-var-name">GOOGLE_CLIENT_SECRET</span>
+              <span class="env-var-badge optional">Optional</span>
+            </div>
+            <div class="env-var-description">
+              Google OAuth Client Secret (required if GOOGLE_CLIENT_ID is set).
+            </div>
+            <div class="env-var-example">
+              GOOGLE_CLIENT_SECRET=your_client_secret
+            </div>
+          </div>
+
+          <div class="env-var">
+            <div class="env-var-header">
+              <span class="env-var-name">FMS_API_USERNAME</span>
+              <span class="env-var-badge optional">Optional</span>
+            </div>
+            <div class="env-var-description">
+              FMS API username for direct Field Management System integration (only needed for official events with FMS access).
+            </div>
+            <div class="env-var-example">
+              FMS_API_USERNAME=your_fms_username
+            </div>
+          </div>
+
+          <div class="env-var">
+            <div class="env-var-header">
+              <span class="env-var-name">FMS_API_KEY</span>
+              <span class="env-var-badge optional">Optional</span>
+            </div>
+            <div class="env-var-description">
+              FMS API key (required if FMS_API_USERNAME is set).
+            </div>
+            <div class="env-var-example">
+              FMS_API_KEY=your_fms_api_key
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Load configuration status
+      async function loadStatus() {
+        try {
+          const response = await fetch('/setup/api/status');
+          const data = await response.json();
+          
+          const statusBadge = document.getElementById('status-badge');
+          const statusMessage = document.getElementById('status-message');
+          const missingVars = document.getElementById('missing-vars');
+          
+          if (data.valid) {
+            statusBadge.className = 'status-badge success';
+            statusBadge.innerHTML = '<i class="fas fa-check-circle"></i> Configuration Valid';
+            statusMessage.innerHTML = '<p><strong>All required environment variables are set!</strong></p><p>SPOT should be running normally. If you see this page, the application may be in setup mode.</p>';
+            missingVars.style.display = 'none';
+          } else {
+            statusBadge.className = 'status-badge error';
+            statusBadge.innerHTML = '<i class="fas fa-times-circle"></i> Configuration Incomplete';
+            
+            let message = '<p><strong>' + data.instructions.message + '</strong></p>';
+            
+            if (data.environment.isLocal) {
+              message += '<p>You are running in <strong>local development</strong> mode. See the "Local Development" tab for setup instructions.</p>';
+            } else {
+              message += '<p>You appear to be running in <strong>production</strong> mode. See the "Render Deployment" tab for setup instructions.</p>';
+            }
+            
+            statusMessage.innerHTML = message;
+            
+            if (data.missing.length > 0) {
+              missingVars.style.display = 'block';
+              let html = '<strong><i class="fas fa-exclamation-triangle"></i> Missing Required Variables:</strong><ul>';
+              data.missing.forEach(varName => {
+                html += `<li><code>${varName}</code></li>`;
+              });
+              html += '</ul>';
+              missingVars.innerHTML = html;
+            }
+          }
+        } catch (error) {
+          console.error('Failed to load status:', error);
+          document.getElementById('status-message').innerHTML = '<p>Failed to load configuration status.</p>';
+        }
+      }
+
+      // Switch between tabs
+      function switchTab(tabName) {
+        // Update tab buttons
+        const tabs = document.querySelectorAll('.tab');
+        tabs.forEach(tab => tab.classList.remove('active'));
+        event.target.closest('.tab').classList.add('active');
+        
+        // Update tab content
+        const contents = document.querySelectorAll('.tab-content');
+        contents.forEach(content => content.classList.remove('active'));
+        document.getElementById(tabName +'-tab').classList.add('active');
+      }
+
+      // Load status on page load
+      document.addEventListener('DOMContentLoaded', loadStatus);
+    </script>
+  </body>
+</html>
               required
             />
             <span>Database URL</span>

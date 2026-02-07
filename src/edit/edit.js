@@ -1,6 +1,6 @@
 express = require("express");
 const axios = require("axios");
-const config = require("../../config/config.json");
+const config = require("../lib/config");
 
 let router = express.Router();
 
@@ -21,7 +21,7 @@ router.get("/blueApiData", async (req, res) => {
         headers: {
           "X-TBA-Auth-Key": TBA_API_KEY,
         },
-      }
+      },
     )
   ).data;
 

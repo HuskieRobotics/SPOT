@@ -51,6 +51,92 @@ This is a guide on how to use SPOT as well as its features, with a text and a vi
 
 ### [Usage Guide](https://docs.google.com/document/d/e/2PACX-1vTwLwWJwcn1WdrNSZLGY33f04TjXjwypreY7mTkSBck8K20i9injrl6MUOrHQLrpy9u8UvQu99XHLge/pub)
 
+## Environment Configuration
+
+SPOT uses environment variables for configuration. This approach provides security for sensitive credentials and flexibility for different deployment environments (local development, cloud hosting, etc.).
+
+### Required Environment Variables
+
+The following environment variables must be set for SPOT to function:
+
+- **`DATABASE_URL`** - MongoDB connection string
+  - Get this from MongoDB Atlas (cloud.mongodb.com) or your local MongoDB installation
+  - Format: `mongodb+srv://username:password@cluster.mongodb.net/database`
+- **`TBA_API_KEY`** - The Blue Alliance API key
+  - Get this from [The Blue Alliance Account Settings](https://www.thebluealliance.com/account)
+  - Navigate to Account → Read API Keys
+- **`EVENT_NUMBER`** - Event identifier for the competition
+  - Format: `{year}{region}{eventCode}_{type}` (e.g., `2025ilch_official`)
+  - Find event codes at [The Blue Alliance Events](https://www.thebluealliance.com/events)
+- **`TBA_EVENT_KEY`** - TBA event key for API calls
+  - Usually the same as `EVENT_NUMBER`
+
+### Optional Environment Variables
+
+- **`VERSION`** - Application version (defaults to "0.0")
+- **`ACCESS_CODE`** - Admin access code (if not set, admin access is unrestricted)
+- **`GOOGLE_CLIENT_ID`** - Google OAuth client ID (for authentication features)
+- **`GOOGLE_CLIENT_SECRET`** - Google OAuth client secret
+- **`FMS_API_USERNAME`** - FMS API username (for official events with FMS access)
+- **`FMS_API_KEY`** - FMS API key
+
+### Local Development Setup
+
+1. **Copy the environment template:**
+
+   ```bash
+   # Windows (PowerShell)
+   Copy-Item .env.example .env
+
+   # macOS/Linux
+   cp .env.example .env
+   ```
+
+2. **Edit `.env` file:**
+   Open the `.env` file in a text editor and fill in your values:
+
+   ```env
+   DATABASE_URL=mongodb+srv://username:password@cluster.mongodb.net/spot_db
+   TBA_API_KEY=your_tba_api_key_here
+   EVENT_NUMBER=2025ilch_official
+   TBA_EVENT_KEY=2025ilch_official
+   VERSION=1.0.0
+   ACCESS_CODE=your_secure_code
+   ```
+
+3. **Restart the server:**
+   ```bash
+   npm start
+   ```
+
+**Important:** Never commit your `.env` file to version control! It's already listed in `.gitignore`.
+
+### Production Deployment (Render, Heroku, etc.)
+
+For cloud deployments, configure environment variables in your hosting provider's dashboard:
+
+#### Render.com
+
+1. Log in to [dashboard.render.com](https://dashboard.render.com)
+2. Select your SPOT service
+3. Click "Environment" in the sidebar
+4. Click "Add Environment Variable"
+5. Add each required variable (name and value)
+6. Deploy or restart the service
+
+#### Other Platforms
+
+Most hosting platforms provide an environment variables section in their dashboard. Add the same variables listed above.
+
+### Setup Page
+
+If required environment variables are missing, SPOT will display a setup page at `http://localhost:8080/setup` with:
+
+- Status of your current configuration
+- Detailed instructions for local and production setup
+- Links to obtain API keys and credentials
+- Complete reference of all environment variables
+
 ## Configuration
 
 This is a guide to configuring SPOT. You can configure the buttons displayed in the scouting view as well as how data is transformed and displayed.
