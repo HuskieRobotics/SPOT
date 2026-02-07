@@ -20,8 +20,8 @@ class HeatmapScatterPlot {
         .map((team) =>
           getPath(
             dataset.teams[team],
-            this.moduleConfig.options.aggregatedActionsPath,
-          ),
+            this.moduleConfig.options.aggregatedActionsPath
+          )
         )
         .flat()
         .filter((a) => a.id == actionId);
@@ -33,10 +33,10 @@ class HeatmapScatterPlot {
           showlegend: true,
           name: this.moduleConfig.options.actionLabels[actionId],
           x: filteredActionQueue.map(
-            (a) => getPath(a, this.moduleConfig.options.coordinatePath).x,
+            (a) => getPath(a, this.moduleConfig.options.coordinatePath).x
           ),
           y: filteredActionQueue.map(
-            (a) => getPath(a, this.moduleConfig.options.coordinatePath).y,
+            (a) => getPath(a, this.moduleConfig.options.coordinatePath).y
           ),
           marker: {
             size: 16,
@@ -58,8 +58,8 @@ class HeatmapScatterPlot {
       .map((team) =>
         getPath(
           dataset.teams[team],
-          this.moduleConfig.options.aggregatedActionsPath,
-        ),
+          this.moduleConfig.options.aggregatedActionsPath
+        )
       )
       .flat()
       .filter((a) => actionGroups[0].actions.includes(a.id));
@@ -69,10 +69,10 @@ class HeatmapScatterPlot {
       name: "Heatmap",
       showlegend: true,
       x: filteredAllActionQueue.map(
-        (a) => getPath(a, this.moduleConfig.options.coordinatePath).x,
+        (a) => getPath(a, this.moduleConfig.options.coordinatePath).x
       ),
       y: filteredAllActionQueue.map(
-        (a) => getPath(a, this.moduleConfig.options.coordinatePath).y,
+        (a) => getPath(a, this.moduleConfig.options.coordinatePath).y
       ),
       xaxis: "x",
       yaxis: "y",
@@ -103,7 +103,7 @@ class HeatmapScatterPlot {
 
   async setData(data) {
     const fieldImg = await getSvgDataPng(
-      "/analysis/" + this.moduleConfig.options.imgPath,
+      "/" + this.moduleConfig.options.imgPath
     );
 
     const layout = {
