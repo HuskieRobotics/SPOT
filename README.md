@@ -15,11 +15,12 @@ The database schema for SPOT v5 and later is incompatible with SPOT v4 and earli
 - An easy-to-use platform for data entry throughout matches.
 - Works on all platforms, from iOS to Android to the web.
 - An analysis page to display detailed statistics and charts about matches and teams.
-- Admin view for live scouter management at competition.
+- Scores Imported from TBA for accuracy
+- Admin view for live scouter management at the competition.
 - Admins can monitor and verify incoming scouting data to ensure accuracy and consistency throughout the event.
-- Preconfigured for the 2025 REEFSCAPE game with no additional game-specific customization required.
-- Easy deployment experience when teams run a server on Glitch.
-- Optimized for teams who have internet access while scouting but also completely functional for teams with no internet access. [(workflow found here)](https://docs.google.com/document/d/e/2PACX-1vRVXPGirIs_T6EMiAWL_YhG9LXGgbZCH3n0iP5phAYMcYILqNsBTYlxgWW7vkJHRQtXqWpTP7Uwcyo8/pub).
+- Preconfigured for the 2026 REBUILT game with no additional game-specific customization required.
+- Easy deployment experience when teams run a server on Render.
+- Optimized for teams who have internet access while scouting, but also completely functional for teams with no internet access. [(workflow found here)](https://docs.google.com/document/d/e/2PACX-1vRVXPGirIs_T6EMiAWL_YhG9LXGgbZCH3n0iP5phAYMcYILqNsBTYlxgWW7vkJHRQtXqWpTP7Uwcyo8/pub).
 - Quick setup with a built-in first-run wizard to walk teams through configuring their scouting app, connecting to The Blue Alliance or FRC API, and setting up their database.
 - Completely configurable analysis and scouting view without the need for a single line of code.
 - Easy data deletion
