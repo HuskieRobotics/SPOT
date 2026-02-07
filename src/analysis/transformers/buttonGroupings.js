@@ -1,26 +1,22 @@
 /**
-*  @param options.AZButtons {String[]} a list of the actionIds for the alliance zone buttons pressed sorted by timestamp
+*  @param options.zones {String[]} a list of the actionIds for the alliance zone buttons pressed sorted by timestamp
  * @param options.actions {String[]} a list of actionIds that correspond to the action buttons pressed throughout the match sorted by timestamp
  * @param options.ratings {String[]} a list of actionIds that correspond to ratings buttons pressed for a specific action during a certain time interval
  */ 
 _TMP__
-  new DataTransformer("buttonGroupingsPerShift", (dataset,outputPath,options) => {
+  new DataTransformer("buttonGroupingsPerInterval", (dataset,outputPath,options) => {
   for (let tmp of dataset.tmps) {
         let out = {
-            allianceZone: 
-            all: [],
-            allComplete: null,
-            averageTime: null,
-            averageTimeComplete: null,
-            cycleCount: null,
-            cycleCountComplete: null
+            allianceZone: null,
+            actions: null,
+            ratings: null,    
         }
 
         options = Object.assign({
             zones: [],
             actions: [],
             ratings: []
-        },options)
+        }, options)
 
         let ratings = tmp.actionQueue.filter(x=>options.ratings.includes(x.id));
         let actions = tmp.actionQueue.filter(x=>options.actions.includes(x.id));
@@ -66,19 +62,7 @@ _TMP__
         out.cycleCountComplete = out.allComplete.length;
         
         setPath(tmp,outputPath,out);
-    }
-
-    return dataset;
-    return {
-    
-    const actionIds = Array.isArray(options.actions)
-    
-    let AZButtons = [];        
-    AZButtons = matchScoutingConfig.layout.layers.flat().filter(button => button.allianceZoneButton).map(button => button.id);
-        
-    for(let AZButton of AZButtons) {
-        
-      }
-    }};
+        return dataset;
+  });
 __/TMP__
 
