@@ -13,7 +13,7 @@
     "outputPath": "scores.auto",
     "options": {
       "weightedPaths": {
-        "counts.autoLineRobot_Yes": 15
+        "counts.autoTowerRobot_Level1": 15
       }
     }
   },
@@ -23,10 +23,9 @@
     "outputPath": "scores.endgame",
     "options": {
       "weightedPaths": {
-        "counts.endGameRobot_None": 10,
-        "counts.endGameRobot_Parked": 20,
-        "counts.endGameRobot_Deep": 30,
-        "counts.endGameRobot_Shallow": 40
+        "counts.endGameTowerRobot_Level1": 10,
+        "counts.endGameTowerRobot_Level2": 20,
+        "counts.endGameTowerRobot_Level3": 30
       }
     }
   },

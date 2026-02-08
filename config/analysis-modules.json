@@ -62,20 +62,20 @@
       "bars": [
         {
           "name": "Fall",
-          "path": "counts.endGameRobot_None"
+          "path": "counts.fall"
         },
         {
           "name": "L1",
-          "path": "counts.endGameRobot_Parked"
+          "path": "counts.endGameTowerRobot_Level1"
         },
 
         {
           "name": "L2",
-          "path": "counts.endGameRobot_Deep"
+          "path": "counts.endGameTowerRobot_Level2"
         },
         {
           "name": "L3",
-          "path": "counts.endGameRobot_Shallow"
+          "path": "counts.endGameTowerRobot_Level3"
         }
       ]
     }
