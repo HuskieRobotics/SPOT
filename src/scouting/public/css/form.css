@@ -4,14 +4,16 @@
 
 #form .input {
   background-color: var(--bg-alt);
-  border: black 2px solid;
-  color: black;
+  border: var(--text) 2px solid;
+  color: var(--text);
   cursor: pointer;
   text-align: left;
   border-radius: 8px;
   font-size: 1.5em;
   padding: 8px 12px;
-  transition: 0.3s color, 0.3s border;
+  transition:
+    0.3s color,
+    0.3s border;
   outline: none;
 }
 
@@ -39,7 +41,7 @@
 .input:focus + span,
 .input:valid + span {
   transform: scale(0.75) translate(-20px, -46px);
-  color: black !important;
+  color: var(--text) !important;
 }
 
 .input {
@@ -69,6 +71,7 @@
   grid-area: 1/1/2/3;
   margin: 0px 0;
   font-size: 2em;
+  color: var(--text);
 }
 
 #form .form .save {
@@ -103,5 +106,6 @@
   #form .input {
     width: 100%;
     margin: 12px 0;
+    color: var(--text);
   }
 }

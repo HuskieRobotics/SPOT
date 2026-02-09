@@ -24,6 +24,7 @@
 
 #waiting .title {
   background-color: var(--bg-alt);
+  color: var(--text);
   max-width: 75%;
   padding: 0.5em calc(0.5em + var(--border-radius));
   border-radius: var(--border-radius);
@@ -74,17 +75,22 @@
   left: 50%;
   transform: translate(-50%, 0);
   background-color: var(--bg-alt);
+  color: var(--text);
   max-width: 75%;
   padding: 0.5em var(--border-radius);
   border-radius: 0 var(--border-radius);
   text-align: center;
   visibility: hidden;
-  transition: visibility 0.2s, opacity 0.2s;
+  transition:
+    visibility 0.2s,
+    opacity 0.2s;
   opacity: 0;
 }
 
 #waiting .hint .hint-text.visible {
   visibility: unset;
   opacity: 1;
-  transition: visibility 0s 0s, opacity 0.2s 0s;
+  transition:
+    visibility 0s 0s,
+    opacity 0.2s 0s;
 }
