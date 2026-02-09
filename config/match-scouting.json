@@ -1007,7 +1007,7 @@
       ],
       [
         {
-          "id": "autoClimbL1",
+          "id": "autoTowerRobot_Level1",
           "displayText": "Auto Climb L1",
           "gridArea": ["1", "1", "2", "4"],
           "class": "gray",
@@ -1015,7 +1015,7 @@
           "executables": []
         },
         {
-          "id": "teleopL1",
+          "id": "counts.teleopL1",
           "displayText": "Teleop Climb L1",
           "gridArea": ["1", "4", "2", "7"],
           "class": "gray",
@@ -1023,17 +1023,17 @@
           "executables": []
         },
         {
-          "id": "l2",
+          "id": "counts.l2",
           "displayText": "Teleop Climb L2",
-          "gridArea": ["1", "7", "2", "10"],
+          "gridArea": ["1", "4", "2", "7"],
           "class": "gray",
           "type": "action",
           "executables": []
         },
         {
-          "id": "l3",
+          "id": "counts.l3",
           "displayText": "Teleop Climb L3",
-          "gridArea": ["1", "10", "2", "13"],
+          "gridArea": ["1", "4", "2", "7"],
           "class": "gray",
           "type": "action",
           "executables": []

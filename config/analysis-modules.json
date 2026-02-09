@@ -82,6 +82,29 @@
   },
   {
     "view": "team",
+    "module": "Bar",
+    "name": "TBA Climb Levels",
+    "position": "main",
+    "options": {
+      "bars": [
+        {
+          "name": "L1",
+          "path": "counts.endGameTowerRobot_Level1"
+        },
+
+        {
+          "name": "L2",
+          "path": "counts.endGameTowerRobot_Level2"
+        },
+        {
+          "name": "L3",
+          "path": "counts.endGameTowerRobot_Level3"
+        }
+      ]
+    }
+  },
+  {
+    "view": "team",
     "module": "Pie",
     "name": "Pre-Loads",
     "position": "main",
@@ -170,7 +193,6 @@
       ]
     }
   },
-
   {
     "view": "match",
     "module": "SingleDisplay",
