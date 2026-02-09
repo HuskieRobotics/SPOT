@@ -7,35 +7,35 @@ async function executePipeline() {
   // If an event is specified, fetch using the new endpoint.
   if (eventID) {
     tmps = await fetch(`/analysis/api/dataset/${eventID}`).then((res) =>
-      res.json()
+      res.json(),
     );
     tbaData = await fetch(`/analysis/api/blueApiData/${eventID}`).then((res) =>
-      res.json()
+      res.json(),
     );
   } else {
     tmps = await fetch("/analysis/api/dataset").then((res) => res.json());
     tbaData = await fetch("/analysis/api/blueApiData").then((res) =>
-      res.json()
+      res.json(),
     );
   }
 
   tmps.forEach((tmp) => {
     const teamAndAlliance = getTBADataAllianceAndMatch(
       tmp.robotNumber,
-      tmp.matchNumber
+      tmp.matchNumber,
     );
 
     const autoData = getTBADataAutoOrEnd(
       teamAndAlliance.robotNum,
       teamAndAlliance.alliance,
       tmp.matchNumber,
-      "auto"
+      "auto",
     );
     const endGameData = getTBADataAutoOrEnd(
       teamAndAlliance.robotNum,
       teamAndAlliance.alliance,
       tmp.matchNumber,
-      "endGame"
+      "endGame",
     );
 
     tmp.actionQueue.push({
@@ -143,15 +143,12 @@ async function executePipeline() {
     teams[tmp.robotNumber] = {};
   }
 
-  console.log(tmps);
-  console.log(teams);
-
   let dataset = { tmps, teams };
 
   // FIXME: figure out what the manual endpoint is for (and its associated json files)
   const manual = await fetch("./api/manual").then((res) => res.json());
   const pipelineConfig = await fetch(
-    "../../../config/analysis-pipeline.json"
+    "../../../config/analysis-pipeline.json",
   ).then((res) => res.json());
 
   // This will show up as a method that doesn't exist since it is gotten from the server
@@ -161,7 +158,7 @@ async function executePipeline() {
     dataset = transformers[tfConfig.type][tfConfig.name].execute(
       dataset,
       tfConfig.outputPath,
-      tfConfig.options
+      tfConfig.options,
     );
   }
 
@@ -169,7 +166,7 @@ async function executePipeline() {
     manual.tmps.map((tmp) => ({
       ...tmp,
       manual: true,
-    }))
+    })),
   );
   for (const [path, teamData] of Object.entries(manual.teams)) {
     for (const [team, value] of Object.entries(teamData)) {

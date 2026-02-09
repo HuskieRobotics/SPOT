@@ -987,7 +987,7 @@
       ],
       [
         {
-          "id": "autoLineRobot_No",
+          "id": "autoTowerRobot_Level1",
           "displayText": "Auto Climb L1",
           "gridArea": ["1", "1", "2", "4"],
           "class": "gray",
@@ -995,15 +995,7 @@
           "executables": []
         },
         {
-          "id": "autoLineRobot_Yes",
-          "displayText": "Auto Climb L1",
-          "gridArea": ["1", "1", "2", "4"],
-          "class": "gray",
-          "type": "action",
-          "executables": []
-        },
-        {
-          "id": "endGameRobot_None",
+          "id": "endGameTowerRobot_Level1",
           "displayText": "Teleop Climb L1",
           "gridArea": ["1", "4", "2", "7"],
           "class": "gray",
@@ -1011,7 +1003,7 @@
           "executables": []
         },
         {
-          "id": "endGameRobot_Parked",
+          "id": "endGameTowerRobot_Level2",
           "displayText": "Teleop Climb L2",
           "gridArea": ["1", "4", "2", "7"],
           "class": "gray",
@@ -1019,16 +1011,8 @@
           "executables": []
         },
         {
-          "id": "endGameRobot_Deep",
+          "id": "endGameTowerRobot_Level3",
           "displayText": "Teleop Climb L3",
-          "gridArea": ["1", "4", "2", "7"],
-          "class": "gray",
-          "type": "action",
-          "executables": []
-        },
-        {
-          "id": "endGameRobot_Shallow",
-          "displayText": "Teleop Climb L4",
           "gridArea": ["1", "4", "2", "7"],
           "class": "gray",
           "type": "action",

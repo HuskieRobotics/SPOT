@@ -42,16 +42,19 @@ router.get("/blueApiData", async (req, res) => {
   const KEY = config.TBA_EVENT_KEY;
   const TBA_API_KEY = config.secrets.TBA_API_KEY;
 
-  const tbaResults = (
-    await axios.get(
-      `https://www.thebluealliance.com/api/v3/event/${KEY}/matches`,
-      {
-        headers: {
-          "X-TBA-Auth-Key": TBA_API_KEY,
+  if (new Date().getTime() > tbaResultsFetchTime + 300000) {
+    tbaResults = (
+      await axios.get(
+        `https://www.thebluealliance.com/api/v3/event/${KEY}/matches`,
+        {
+          headers: {
+            "X-TBA-Auth-Key": TBA_API_KEY,
+          },
         },
-      },
-    )
-  ).data;
+      )
+    ).data;
+    tbaResultsFetchTime = new Date().getTime();
+  }
 
   res.send(tbaResults);
 });

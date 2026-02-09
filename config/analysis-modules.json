@@ -66,6 +66,29 @@
         },
         {
           "name": "L1",
+          "path": "counts.teleopAttemptL1"
+        },
+
+        {
+          "name": "L2",
+          "path": "counts.attemptL2"
+        },
+        {
+          "name": "L3",
+          "path": "counts.attemptL3"
+        }
+      ]
+    }
+  },
+  {
+    "view": "team",
+    "module": "Bar",
+    "name": "TBA Climb Levels",
+    "position": "main",
+    "options": {
+      "bars": [
+        {
+          "name": "L1",
           "path": "counts.endGameTowerRobot_Level1"
         },
 
