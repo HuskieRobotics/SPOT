@@ -87,6 +87,7 @@ const filesToCache = [
   "/analysis/api/teams",
   "/analysis/api/manual",
   "/analysis/api/events",
+  "/analysis/api/blueApiData",
 
   // config
   "/admin/api/matches",
@@ -132,7 +133,7 @@ self.addEventListener("install", function (event) {
   event.waitUntil(
     caches.open(cacheVersion).then(function (cache) {
       return cache.addAll(filesToCache);
-    })
+    }),
   );
 });
 
@@ -153,6 +154,6 @@ self.addEventListener("fetch", (event) => {
 
         return response || fetchPromise;
       });
-    })
+    }),
   );
 });
