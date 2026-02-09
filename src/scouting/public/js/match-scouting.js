@@ -70,9 +70,10 @@ var previousTimer = [];
     action: (button) => {
       button.element.addEventListener("click", () => {
         let shift = camelCase(displayTextWithShift);
+        button.id = `${shift.replace(" ", "")}${button.id}`;
 
         actionQueue.push({
-          id: `${shift.replace(" ", "")}${button.id}`,
+          id: button.id,
           ts: time,
         });
 
