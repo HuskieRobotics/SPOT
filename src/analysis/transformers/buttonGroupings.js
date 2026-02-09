@@ -6,13 +6,17 @@
 _TMP__
   new DataTransformer("buttonGroupingsPerInterval", (dataset,outputPath,options) => {
   for (let tmp of dataset.tmps) {
-        let out = {
-            allianceZone: null,
-            actions: null,
-            ratings: null,    
-        }
 
-        options = Object.assign({
+        let buttonsPressedDuringMatch = {
+            all: [],
+            zone: null,
+            action: null,
+            rating: null,    
+        }
+        
+        //Options are parameters for this specific data transformer
+        //Object.assign copies properties from the source to the option object (and those properties are zones, actions, and ratings, which are all lists of actionIds for the respective buttons pressed during the match sorted by timestamp)
+        options = Object.assign({ 
             zones: [],
             actions: [],
             ratings: []
@@ -24,44 +28,33 @@ _TMP__
 
         while (zones.length > 0) {
             
-            let zone = zones.shift();
+            let zone = zones.shift(); //remove and get the first zone button pressed
 
             actions = actions.filter(x=>x.ts < zone.ts) //ensure the ratings attributed to a zone occur after the zone
-            if (actions.length === 0) break //no actions can be completed without an action
+            if (actions.length === 0) break //ensure that the actions button was pressed after the zone button, if there are no actions left to remove, break out of the loop
             let action = actions.shift();
             
             ratings = ratings.filter(x=>x.ts < action.ts) //ensure the ratings attributed to an action occur after the action
-            if(ratings.length === 0) break //no ratings can be completed without a rating
+            if(ratings.length === 0) break //ensure that there is a ratings button pressed after the action button, if there are no ratings left to remove, break out of the loop
             let rating = ratings.shift();
 
-            // create a list to keep track of the triplets that were just found
-            out.zones.push({
+            //Based on the zone, action, and rating buttons pressed during a time interval of the match, add that to a list called all, which is a property of the buttonsPressedDuringMatch object. 
+            buttonsPressedDuringMatch.all.push({
                 zone,
+                action,
                 rating,
-                timeDifferential: zone.ts - rating.ts
             })
         }
-            if (endings.length === 0) break //no cycles can be completed without a ending
-
-            let ending = endings.shift();
-
-            out.all.push({
-                pickup,
-                ending,
-                timeDifferential: pickup.ts - ending.ts
-            })
-        }
-        out.averageTime = out.all.reduce((acc,x) => acc+x.timeDifferential, 0) / out.all.length;
         
-        //exclude misses
-        out.allComplete = out.all.filter(x=>!options.misses.includes(x.ending.id));
-        out.averageTimeComplete = out.allComplete.reduce((acc,x) => acc+x.timeDifferential, 0) / out.allComplete.length;
+        //Create paths to return in the outputPath object
 
-        //counts
-        out.cycleCount = out.all.length;
-        out.cycleCountComplete = out.allComplete.length;
-        
-        setPath(tmp,outputPath,out);
+        //For each button grouping in the all property of the buttonsPressedDuringMatch object, create a list of the zones, actions, and ratings for each grouping and set those as properties of the buttonsPressedDuringMatch object.
+        buttonsPressedDuringMatch.zone = buttonsPressedDuringMatch.all.map(x=>x.zone);
+        buttonsPressedDuringMatch.action = buttonsPressedDuringMatch.all.map(x=>x.action);
+        buttonsPressedDuringMatch.rating = buttonsPressedDuringMatch.all.map(x=>x.rating);
+
+        }     
+        setPath(tmp,outputPath,buttonsPressedDuringMatch);
         return dataset;
   });
 __/TMP__
