@@ -34,6 +34,7 @@
     transform: rotate(360deg);
   }
 }
+
 .spinner div {
   position: absolute;
   animation: spinner 0.35s linear infinite;
@@ -174,10 +175,24 @@
 }
 
 #landing .logo {
+  filter: brightness(0) saturate(100%) invert(16%) sepia(7%) saturate(3678%)
+    hue-rotate(192deg) brightness(95%) contrast(98%);
   height: 90vmin;
   position: absolute;
   opacity: 0.05;
   z-index: 1;
+}
+
+@media (prefers-color-scheme: dark) {
+  #landing .logo {
+    filter: brightness(0) saturate(100%) invert(100%) sepia(100%) saturate(0%)
+      hue-rotate(7deg) brightness(102%) contrast(102%);
+  }
+
+  #landing .menu-button {
+    filter: brightness(0) saturate(100%) invert(100%) sepia(100%) saturate(0%)
+      hue-rotate(7deg) brightness(102%) contrast(102%);
+  }
 }
 
 #landing .auth {
