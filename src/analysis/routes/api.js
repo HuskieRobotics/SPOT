@@ -5,14 +5,65 @@ const { setPath } = require("../../lib/util.js");
 const axios = require("axios");
 const config = require("../../../config/config.json");
 const chalk = require("chalk");
+let tbaResults;
+let tbaResultsFetchTime = 0;
 
 let router = Router();
+
+router.get("/blueApiData/:eventID", async (req, res) => {
+  const TBA_EVENT_KEY = req.params.eventID;
+  const TBA_API_KEY = config.secrets.TBA_API_KEY;
+
+  const event = await Event.findOne({ _id: TBA_EVENT_KEY });
+  let eventKey = null;
+  if (event) {
+    eventKey = event.code.split("_")[0];
+  }
+
+  // Gets tba data every 5 minutes (300000 ms)
+  if (new Date().getTime() > tbaResultsFetchTime + 300000) {
+    tbaResults = (
+      await axios.get(
+        `https://www.thebluealliance.com/api/v3/event/${eventKey}/matches`,
+        {
+          headers: {
+            "X-TBA-Auth-Key": TBA_API_KEY,
+          },
+        },
+      )
+    ).data;
+    tbaResultsFetchTime = new Date().getTime();
+  }
+
+  res.send(tbaResults);
+});
+
+router.get("/blueApiData", async (req, res) => {
+  const KEY = config.TBA_EVENT_KEY;
+  const TBA_API_KEY = config.secrets.TBA_API_KEY;
+
+  if (new Date().getTime() > tbaResultsFetchTime + 300000) {
+    tbaResults = (
+      await axios.get(
+        `https://www.thebluealliance.com/api/v3/event/${KEY}/matches`,
+        {
+          headers: {
+            "X-TBA-Auth-Key": TBA_API_KEY,
+          },
+        },
+      )
+    ).data;
+    tbaResultsFetchTime = new Date().getTime();
+  }
+
+  res.send(tbaResults);
+});
 
 router.get("/dataset", async (req, res) => {
   res.json(
     await TeamMatchPerformance.find({
       eventNumber: config.EVENT_NUMBER,
-    })
+    }),
   );
 });
 
@@ -22,7 +73,7 @@ router.get("/isDemo", (req, res) => {
 
 router.get("/dataset/:eventID", async (req, res) => {
   res.json(
-    await TeamMatchPerformance.find({ eventNumber: req.params.eventID })
+    await TeamMatchPerformance.find({ eventNumber: req.params.eventID }),
   );
 });
 
@@ -40,8 +91,8 @@ router.delete("/dataset/:id", async (req, res) => {
 if (!config.secrets.TBA_API_KEY) {
   console.error(
     chalk.whiteBright.bgRed.bold(
-      "TBA_API_KEY not found in config.json file! SPOT will not properly function without this."
-    )
+      "TBA_API_KEY not found in config.json file! SPOT will not properly function without this.",
+    ),
   );
 }
 
@@ -62,13 +113,13 @@ router.get("/teams", async (req, res) => {
             headers: {
               "X-TBA-Auth-Key": config.secrets.TBA_API_KEY,
             },
-          }
+          },
         )
         .catch((e) =>
           console.error(
             e,
-            chalk.bold.red("\nError fetching teams from Blue Alliance API!")
-          )
+            chalk.bold.red("\nError fetching teams from Blue Alliance API!"),
+          ),
         )
     ).data;
   }
@@ -94,8 +145,8 @@ router.get("/teams/:eventID", async (req, res) => {
       .catch((e) =>
         console.error(
           e,
-          chalk.bold.red("\nError fetching teams from Blue Alliance API!")
-        )
+          chalk.bold.red("\nError fetching teams from Blue Alliance API!"),
+        ),
       )
   ).data;
 
@@ -156,7 +207,7 @@ router.get("/csv", async (req, res) => {
       dataset = transformers[tfConfig.type][tfConfig.name].execute(
         dataset,
         tfConfig.outputPath,
-        tfConfig.options
+        tfConfig.options,
       );
     }
 
@@ -164,7 +215,7 @@ router.get("/csv", async (req, res) => {
       manual.tmps.map((tmp) => ({
         ...tmp,
         manual: true,
-      }))
+      })),
     );
     for (const [path, teamData] of Object.entries(manual.teams)) {
       for (const [team, value] of Object.entries(teamData)) {
@@ -200,7 +251,7 @@ router.get("/csv", async (req, res) => {
   const averageScoreKeys = new Set();
   const cycleKeys = new Set();
   for (let [teamNumber, team] of Object.entries(dataset2.teams).filter(
-    ([num, team]) => checkData(team)
+    ([num, team]) => checkData(team),
   )) {
     Object.keys(team.averages).forEach((key) => averageKeys.add(key));
     Object.keys(team.averageScores).forEach((key) => averageScoreKeys.add(key));
@@ -208,7 +259,7 @@ router.get("/csv", async (req, res) => {
   }
 
   for (let [teamNumber, team] of Object.entries(dataset2.teams).filter(
-    ([num, team]) => checkData(team)
+    ([num, team]) => checkData(team),
   )) {
     if (headerRow) {
       headerRow = false;
@@ -218,7 +269,7 @@ router.get("/csv", async (req, res) => {
         ...Array.from(averageScoreKeys).map((key) => key + " Score Average"), // all average scores
         ...Array.from(cycleKeys).map((key) => key + " Cycle Average Time"), // all cycles (average time
         ...Array.from(cycleKeys).map(
-          (key) => key + " Cycle Average Time Complete"
+          (key) => key + " Cycle Average Time Complete",
         ), // all cycles (average time complete)
       ]);
     }
@@ -227,24 +278,24 @@ router.get("/csv", async (req, res) => {
       ...Array.from(averageKeys).map((key) =>
         team.averages[key] !== undefined && !isNaN(team.averages[key])
           ? team.averages[key]
-          : "0"
+          : "0",
       ), // all averages
       ...Array.from(averageScoreKeys).map((key) =>
         team.averageScores[key] !== undefined && !isNaN(team.averageScores[key])
           ? team.averageScores[key]
-          : "0"
+          : "0",
       ), // all average scores
       ...Array.from(cycleKeys).map((key) =>
         team.cycles[key].averageTime !== undefined &&
         !isNaN(team.cycles[key].averageTime)
           ? team.cycles[key].averageTime
-          : "0"
+          : "0",
       ), // all cycles (average time)
       ...Array.from(cycleKeys).map((key) =>
         team.cycles[key].averageTimeComplete !== undefined &&
         !isNaN(team.cycles[key].averageTimeComplete)
           ? team.cycles[key].averageTimeComplete
-          : "0"
+          : "0",
       ), // all cycles (average time complete)
     ]);
   }

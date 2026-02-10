@@ -219,20 +219,43 @@
       "bars": [
         {
           "name": "Fall",
-          "path": "counts.fall"
+          "path": "counts.endgameFall"
         },
         {
           "name": "L1",
-          "path": "counts.attemptL1"
+          "path": "counts.endgameAttemptL1"
         },
 
         {
           "name": "L2",
-          "path": "counts.attemptL2"
+          "path": "counts.endgameAttemptL2"
         },
         {
           "name": "L3",
-          "path": "counts.attemptL3"
+          "path": "counts.endgameAttemptL3"
+        }
+      ]
+    }
+  },
+  {
+    "view": "team",
+    "module": "Bar",
+    "name": "TBA Climb Levels",
+    "position": "main",
+    "options": {
+      "bars": [
+        {
+          "name": "L1",
+          "path": "counts.endGameTowerRobot_Level1"
+        },
+
+        {
+          "name": "L2",
+          "path": "counts.endGameTowerRobot_Level2"
+        },
+        {
+          "name": "L3",
+          "path": "counts.endGameTowerRobot_Level3"
         }
       ]
     }
@@ -264,7 +287,7 @@
       "list": [
         {
           "name": "Average Passing Rating",
-          "path": "averagesScores.passingRating",
+          "path": "averageScores.passingRating",
           "decimals": 2,
           "sort": 1
         },
@@ -327,7 +350,6 @@
       ]
     }
   },
-
   {
     "view": "match",
     "module": "SingleDisplay",
