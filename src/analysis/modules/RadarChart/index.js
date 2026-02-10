@@ -11,7 +11,7 @@ class RadarChart {
   formatData(teams, dataset) {
     console.log(`radar teams recieved: ${teams}`);
     let filteredTeams = teams.filter((team) => team != "|");
-    const values = filteredTeams.map((team) => {
+    const lines = filteredTeams.map((team) => {
       const data = [];
       const sectionNames = [];
       for (let i = 0; i < this.moduleConfig.options.sections.length; i++) {
@@ -25,8 +25,8 @@ class RadarChart {
           j < this.moduleConfig.options.lines[i].times.length;
           j++
         ) {
-          let point = 0;
-          if ( !this.moduleConfig.options.lines[i].times[j].path == "none" ) {
+          let point = 1;
+          if (!(this.moduleConfig.options.lines[i].times[j].path == "none")) {
             point = getPath(
               dataset.teams[team],
               this.moduleConfig.options.lines[i].times[j].path,
@@ -46,7 +46,7 @@ class RadarChart {
       return data;
     });
 
-    return values;
+    return lines.flat();
   }
 
   setData(data) {
@@ -54,7 +54,7 @@ class RadarChart {
       polar: {
         radialaxis: {
           visible: true,
-          range: [0, 40],
+          range: [0, 4],
           tickfont: {
             family: "Cairo, sans-serif",
             size: 16,
@@ -91,7 +91,7 @@ class RadarChart {
         family: "Cairo, sans-serif",
       },
       paper_bgcolor: "#FEFEFE",
-      plot_bgfcolor: "#FEFEFE",
+      plot_bgcolor: "#FEFEFE",
     };
 
     const config = {

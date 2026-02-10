@@ -87,7 +87,7 @@
             },
             {
               "name": "Inactive 1",
-              "path": "averageScores.inactive1CollectingRating"
+              "path": "averageScores.inactiveShift1CollectingRating"
             },
             {
               "name": "Active 2",
@@ -95,7 +95,7 @@
             },
             {
               "name": "Inactive 2",
-              "path": "averageScores.inactive2CollectingRating"
+              "path": "averageScores.inactiveShift2CollectingRating"
             },
             {
               "name": "Endgame",
@@ -120,7 +120,7 @@
             },
             {
               "name": "Inactive 1",
-              "path": "averageScores.inactive1PassingRating"
+              "path": "averageScores.inactiveShift1PassingRating"
             },
             {
               "name": "Active 2",
@@ -128,7 +128,7 @@
             },
             {
               "name": "Inactive 2",
-              "path": "averageScores.inactive2PassingRating"
+              "path": "averageScores.inactiveShift2PassingRating"
             },
             {
               "name": "Endgame",
@@ -150,7 +150,7 @@
             },
             {
               "name": "Inactive 1",
-              "path": "averageScores.inactive1DefenseRating"
+              "path": "averageScores.inactiveShift1DefenseRating"
             },
             {
               "name": "Active 2",
@@ -158,7 +158,7 @@
             },
             {
               "name": "Inactive 2",
-              "path": "averageScores.inactive2DefenseRating"
+              "path": "averageScores.inactiveShift2DefenseRating"
             },
             {
               "name": "Endgame",
