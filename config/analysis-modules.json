@@ -75,7 +75,7 @@
           "times": [
             {
               "name": "Auto",
-              "path": "averageScores.autoCollectingRating"
+              "path": "none"
             },
             {
               "name": "Transition",
@@ -139,30 +139,30 @@
         {
           "name": "Defense",
           "times": [
-            { "name": "Auto", "path": "averageScores.autoDefenseScore" },
+            { "name": "Auto", "path": "none" },
             {
               "name": "Transition",
-              "path": "averageScores.teleopTransitionDefenseScore"
+              "path": "averageScores.teleopTransitionDefenseRating"
             },
             {
               "name": "Active 1",
-              "path": "averageScores.activeShift1DefenseScore"
+              "path": "averageScores.activeShift1DefenseRating"
             },
             {
               "name": "Inactive 1",
-              "path": "averageScores.inactive1DefenseScore"
+              "path": "averageScores.inactive1DefenseRating"
             },
             {
               "name": "Active 2",
-              "path": "averageScores.activeShift2DefenseScore"
+              "path": "averageScores.activeShift2DefenseRating"
             },
             {
               "name": "Inactive 2",
-              "path": "averageScores.inactive2DefenseScore"
+              "path": "averageScores.inactive2DefenseRating"
             },
             {
               "name": "Endgame",
-              "path": "averageScores.endgameDefenseScore"
+              "path": "averageScores.endgameDefenseRating"
             }
           ]
         }
