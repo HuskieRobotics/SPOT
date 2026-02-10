@@ -70,10 +70,11 @@ var previousTimer = [];
     action: (button) => {
       button.element.addEventListener("click", () => {
         let shift = camelCase(displayTextWithShift);
-        button.id = `${shift.replace(" ", "")}${button.id}`;
+        let actionId = `${shift.replace(" ", "")}${button.id}`;
 
         actionQueue.push({
-          id: button.id,
+          id: actionId,
+          baseId: button.id,
           ts: time,
         });
 
@@ -88,8 +89,8 @@ var previousTimer = [];
         ) {
           // Basically, if this code was not in place (^), then you would be able to undo the start of the game.
 
-          const undoneId = actionQueue.pop().id; //remove the last action from the action queue
-          const undoneButton = buttons.find((x) => x.id === undoneId);
+          const undoneAction = actionQueue.pop(); //remove the last action from the action queue
+          const undoneButton = buttons.find((x) => x.id === undoneAction.baseId);
 
           //special case for match-control buttons which have extra undo funcitonality without executables
           if (undoneButton.type === "match-control") {
@@ -136,19 +137,20 @@ var previousTimer = [];
       button.element.addEventListener("click", () => {
         actionQueue.push({
           id: button.id,
+          baseId: button.id,
           ts: time,
           temp: true,
         });
         if (button.id === "teleopActive") {
           currentShift = "active";
 
+          activeShiftCount += 1;
           currentShiftNumber = activeShiftCount;
           lastShiftSwitchTime = time;
-          activeShiftCount++;
           shiftButtonPressed = true;
         } else if (button.id === "teleopInactive") {
           currentShift = "inactive";
-          inactiveShiftCount++;
+          inactiveShiftCount += 1;
           currentShiftNumber = inactiveShiftCount;
           lastShiftSwitchTime = time;
           shiftButtonPressed = true;
@@ -213,6 +215,7 @@ var previousTimer = [];
         actionQueue.push({
           //create a temporary action queue so you can undo it
           id: button.id,
+          baseId: button.id,
           ts: time,
           temp: true,
         });
@@ -282,16 +285,16 @@ var previousTimer = [];
           let elapsedSinceSwitch = Math.abs(time - lastShiftSwitchTime);
           // Handle shift switching during teleop (between teleopTime and endgameTime)
           // Only switch if a shift button has been pressed
-          if (elapsedSinceSwitch >= shiftSwitchInterval) {
+          if (shiftButtonPressed && elapsedSinceSwitch >= shiftSwitchInterval) {
             if (currentShift === "active") {
               currentShift = "inactive";
 
+              inactiveShiftCount += 1;
               currentShiftNumber = inactiveShiftCount;
-              inactiveShiftCount++;
             } else {
               currentShift = "active";
+              activeShiftCount += 1;
               currentShiftNumber = activeShiftCount;
-              activeShiftCount++;
             }
 
             lastShiftSwitchTime = time;
@@ -309,6 +312,8 @@ var previousTimer = [];
                   : `Inactive Shift ${currentShiftNumber}`;
 
               displayTextWithShift = shiftDisplay;
+            } else {
+              displayTextWithShift = `${displayText}`;
             }
           } else if (time <= endgameTime) {
             displayTextWithShift = `Endgame`;
@@ -330,6 +335,7 @@ var previousTimer = [];
   //create button objects in layers
   for (const layer of layers) {
     for (const button of layer) {
+      button.id = button.id || "";
       button.element = document.createElement("div");
 
       //give the button element its properties
