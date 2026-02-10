@@ -1,13 +1,15 @@
 .input {
   background-color: var(--bg-alt);
-  border: black 2px solid;
-  color: black;
+  border: var(--text) 2px solid;
+  color: var(--text);
   cursor: pointer;
   text-align: left;
   border-radius: var(--border-radius);
   font-size: 1.4em;
   padding: 8px 12px;
-  transition: 0.3s color, 0.3s border;
+  transition:
+    0.3s color,
+    0.3s border;
   outline: none;
 }
 
@@ -21,7 +23,8 @@
   margin: 20px 0;
   padding: 16px 0;
   border-top: 1px solid var(--accent-alt);
-  box-shadow: 0 -6px 10px -10px var(--accent-alt),
+  box-shadow:
+    0 -6px 10px -10px var(--accent-alt),
     0 6px 10px -10px var(--accent-alt);
   border-bottom: 1px solid var(--accent-alt);
   border-radius: 6px;
@@ -39,7 +42,9 @@
   top: 24px;
   border-radius: 20px;
   font-size: 1.5em;
-  transition: 0.2s transform, 0.2s top;
+  transition:
+    0.2s transform,
+    0.2s top;
   pointer-events: none;
   color: var(--placeholder);
 }
@@ -47,7 +52,7 @@
 .input:focus + span,
 .input:valid + span {
   transform: scale(0.75) translate(-20px, -46px);
-  color: black !important;
+  color: var(--text) !important;
   top: 30px;
 }
 
@@ -65,6 +70,7 @@ a {
 }
 
 h1 {
+  color: var(--text);
   text-align: center;
   margin-bottom: 12px;
 }
@@ -90,6 +96,7 @@ video {
   padding: 40px;
   border: 2px solid var(--accent-alt);
   background-color: var(--bg-alt);
+  color: var(--text);
   border-radius: var(--border-radius);
   width: 100%;
   display: flex;
@@ -97,6 +104,7 @@ video {
 }
 
 #setup-header {
+  color: var(--text);
   font-size: 4rem;
   line-height: 1em;
   margin: 40px 0;
@@ -116,7 +124,9 @@ video {
 #setup-container {
   width: 100%;
   opacity: 0;
-  transition: 0.3s visibility, opacity;
+  transition:
+    0.3s visibility,
+    opacity;
   visibility: hidden;
   background-color: var(--bg);
   display: flex;
@@ -128,7 +138,9 @@ video {
 #setup-container.visible {
   visibility: unset;
   opacity: 1;
-  transition: visibility 0s 0s, opacity 0.3s 0s;
+  transition:
+    visibility 0s 0s,
+    opacity 0.3s 0s;
 }
 
 .access-input {

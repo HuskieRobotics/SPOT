@@ -113,3 +113,17 @@
   color: white;
   border-radius: 5px;
 }
+
+a {
+  color: var(--text);
+}
+
+h2 {
+  color: var(--text);
+}
+
+button {
+  border: 1px solid var(--bg-alt);
+  background-color: var(--bg-alt);
+  color: var(--text);
+}

@@ -138,6 +138,7 @@ body {
 
 #search-input {
   border-radius: var(--border-radius);
+  color: var(--text);
   border: none;
   width: 100%;
   font-size: 1.2rem;
@@ -147,6 +148,7 @@ body {
 }
 
 #search-icon {
+  color: var(--text);
   position: absolute;
   top: 50%;
   right: 12px;
@@ -268,6 +270,7 @@ body {
 }
 
 #dashboard > div.visible {
+  color: var(--text);
   visibility: unset;
   height: calc(100vh);
   opacity: 1;
@@ -379,6 +382,7 @@ body {
 }
 
 #alliance-vs {
+  color: var(--text);
   font-size: 1.5rem;
 }
 
@@ -412,6 +416,7 @@ body {
 
 #match-select-label {
   font-size: 1.4em;
+  color: var(--text);
   /* font-weight: 00; */
 }
 
@@ -509,7 +514,9 @@ body {
   color: white;
   font-size: 1.2rem;
 }
+
 #event-dropdown {
+  color: var(--text);
   position: absolute;
   top: 10px;
   right: 10px;
@@ -520,13 +527,15 @@ body {
   padding: 8px 8px;
   cursor: pointer;
   margin: 6px 6px;
-  border: #ff6030 solid 2px;
+  border: var(--accent-alt) solid 2px;
+  background-color: var(--bg-alt);
+  color: var(--text);
   border-radius: 15px 15px;
   font-size: medium;
 }
 
 #event-dropdown button:hover {
-  border: #30a2ff solid 2px;
+  border: var(--accent) solid 2px;
   margin: 8px 8px;
   border-radius: 15px 15px;
   padding: 8px 8px;
@@ -537,17 +546,20 @@ body {
   display: none;
   position: absolute;
   right: 0;
-  background: white;
+  background: var(--bg-alt);
   border: 1px solid #ccc;
   min-width: 120px;
 }
+
 #event-menu div {
   padding: 8px 12px;
   cursor: pointer;
 }
+
 #event-menu div:hover {
-  background-color: #f0f0f0;
+  background-color: var(--bg);
 }
+
 /* Modify the existing media query */
 @media screen and (max-width: 1100px) {
   html {
