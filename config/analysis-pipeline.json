@@ -152,6 +152,41 @@
     }
   },
   {
+    "type": "tmp",
+    "name": "buttonGroupingsPerShift",
+    "outputPath": "zoneActionRating",
+    "options": {
+      "zones": ["redZone", "neutralZone", "blueZone"],
+      "actions": ["autoPassing", "autoShooting", "autoCollect"],
+      "ratings": [
+        "autoRatingPassing1",
+        "autoRatingPassing2",
+        "autoRatingPassing3",
+        "autoRatingPassing4",
+        "autoRatingShooting1",
+        "autoRatingShooting2",
+        "autoRatingShooting3",
+        "autoRatingShooting4",
+        "autoRatingCollecting1",
+        "autoRatingCollecting2",
+        "autoRatingCollecting3",
+        "autoRatingCollecting4",
+        "ratingPassing1",
+        "ratingPassing2",
+        "ratingPassing3",
+        "ratingPassing4",
+        "ratingShooting1",
+        "ratingShooting2",
+        "ratingShooting3",
+        "ratingShooting4",
+        "ratingDefense1",
+        "ratingDefense2",
+        "ratingDefense3",
+        "ratingDefense4"
+      ]
+    }
+  },
+  {
     "type": "team",
     "name": "countActions",
     "outputPath": "counts",

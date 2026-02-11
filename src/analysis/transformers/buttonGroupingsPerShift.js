@@ -51,6 +51,7 @@ _TMP__
         output.ratings = output.all.map(x=>x.rating);
 
         setPath(tmp,outputPath,output);
+        // outputPath is object that would store the calculations from analysis-pipeline.json
         
         }     
         return dataset;
