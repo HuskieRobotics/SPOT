@@ -128,13 +128,13 @@
   {
     "type": "tmp",
     "name": "weightedSumAverage",
-    "outputPath": "scores.collectingRating",
+    "outputPath": "scores.storingRating",
     "options": {
       "weightedPaths": {
-        "counts.ratingCollecting1": 1,
-        "counts.ratingCollecting2": 2,
-        "counts.ratingCollecting3": 3,
-        "counts.ratingCollecting4": 4
+        "counts.ratingStoring1": 1,
+        "counts.ratingStoring2": 2,
+        "counts.ratingStoring3": 3,
+        "counts.ratingStoring4": 4
       }
     }
   },
