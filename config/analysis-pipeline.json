@@ -13,7 +13,7 @@
     "outputPath": "scores.auto",
     "options": {
       "weightedPaths": {
-        "counts.autoClimbL1": 15
+        "counts.autoTowerRobot_Level1": 15
       }
     }
   },
@@ -23,9 +23,9 @@
     "outputPath": "scores.endgame",
     "options": {
       "weightedPaths": {
-        "counts.teleopL1": 10,
-        "counts.l2": 20,
-        "counts.l3": 30
+        "counts.endGameTowerRobot_Level1": 10,
+        "counts.endGameTowerRobot_Level2": 20,
+        "counts.endGameTowerRobot_Level3": 30
       }
     }
   },
@@ -151,7 +151,6 @@
       }
     }
   },
-
   {
     "type": "team",
     "name": "countActions",
