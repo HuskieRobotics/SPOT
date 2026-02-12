@@ -127,6 +127,10 @@
           "type": "action",
           "executables": [
             {
+              "type": "climbHighlight",
+              "args": []
+            },
+            {
               "type": "layer",
               "args": [1, 6]
             }
