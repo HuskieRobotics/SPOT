@@ -8,6 +8,12 @@ class PerformanceTimePlot {
     //this.container.innerHTML = '<div style = "font-size: 2em; text-align:center; margin-top:15%">No Team Selected</div>'
   }
 
+  getCssVar(name) {
+    return getComputedStyle(document.documentElement)
+      .getPropertyValue(name)
+      .trim();
+  }
+
   async formatData(teams, dataset) {
     let trackedStats = this.moduleConfig.options.trackedStats;
     if (teams.length > 1)
@@ -51,6 +57,7 @@ class PerformanceTimePlot {
       },
       xaxis: {
         showticklabels: false,
+        gridcolor: this.getCssVar("--text"),
       },
       legend: {
         font: {
@@ -62,9 +69,10 @@ class PerformanceTimePlot {
       },
       font: {
         family: "Cairo, sans-serif",
+        color: this.getCssVar("--text"),
       },
-      paper_bgcolor: "#FEFEFE",
-      plot_bgcolor: "#FEFEFE",
+      paper_bgcolor: this.getCssVar("--bg-alt"),
+      plot_bgcolor: this.getCssVar("--bg-alt"),
     };
 
     const config = {
