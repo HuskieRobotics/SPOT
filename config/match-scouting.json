@@ -128,6 +128,10 @@
           "executables": [
             {
               "type": "climbHighlight",
+              "args": ["autoStartShooting", "autoStopShooting"]
+            },
+            {
+              "type": "clearHighlight",
               "args": []
             },
             {
@@ -244,25 +248,40 @@
           "id": "attemptL3",
           "displayText": "L3",
           "gridArea": ["3", "4", "4", "10"],
-          "class": "gray",
+          "class": "deepBlue",
           "type": "action",
-          "executables": []
+          "executables": [
+            {
+              "type": "climbHighlight",
+              "args": ["attemptL3", "fall", "teleopAttemptL1", "attemptL2"]
+            }
+          ]
         },
         {
           "id": "attemptL2",
           "displayText": "L2",
           "gridArea": ["4", "4", "5", "10"],
-          "class": "gray",
+          "class": "shallowBlue",
           "type": "action",
-          "executables": []
+          "executables": [
+            {
+              "type": "climbHighlight",
+              "args": ["attemptL2", "fall", "teleopAttemptL1", "attemptL3"]
+            }
+          ]
         },
         {
           "id": "teleopAttemptL1",
           "displayText": "L1",
           "gridArea": ["5", "4", "6", "10"],
-          "class": "gray",
+          "class": "blue2026",
           "type": "action",
-          "executables": []
+          "executables": [
+            {
+              "type": "climbHighlight",
+              "args": ["teleopAttemptL1", "attemptL3", "fall", "attemptL2"]
+            }
+          ]
         },
         {
           "id": "fall",
@@ -270,7 +289,12 @@
           "gridArea": ["6", "4", "7", "10"],
           "class": "red",
           "type": "action",
-          "executables": []
+          "executables": [
+            {
+              "type": "climbHighlight",
+              "args": ["fall", "attemptL3", "teleopAttemptL1", "attemptL2"]
+            }
+          ]
         }
       ],
       [
@@ -629,6 +653,10 @@
             {
               "type": "position",
               "args": []
+            },
+            {
+              "type": "climbHighlight",
+              "args": ["startShoot", "stopShoot"]
             }
           ]
         },
@@ -639,6 +667,14 @@
           "class": "fuel2026",
           "type": "action",
           "executables": [
+            {
+              "type": "climbHighlight",
+              "args": ["startShoot", "stopShoot"]
+            },
+            {
+              "type": "clearHighlight",
+              "args": []
+            },
             {
               "type": "layer",
               "args": [7, 10]

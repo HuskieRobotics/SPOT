@@ -138,7 +138,7 @@
 }
 
 .highlight {
-  background-color: #260b3b;
+  background-color: #1b0829;
   color: var(--bg);
 }
 
@@ -148,6 +148,6 @@
 }
 
 #match-scouting .grid-button.highlight {
-  background-color: #260b3b;
+  background-color: #1b0829;
   color: var(--bg);
 }
