@@ -207,33 +207,52 @@
   {
     "view": "match",
     "module": "ColumnDisplay",
-    "name": "Average Shooting Time",
+    "name": "Auto Points",
     "position": "main",
-    "options": [
-      {
-        "name": "Average Auto Shooting Time",
-        "path": "cycles.autoShootingTime.averageTime",
-        "multiplier": 0.001,
-        "decimals": 2,
-        "hideIfValue": 0,
-        "sort": -1,
-        "unit": "s"
-      },
-      {
-        "name": "Average Teleop Shooting Time ",
-        "path": "cycles.shootingTime.averageTime",
-        "multiplier": 0.001,
-        "decimals": 2,
-        "hideIfValue": 0,
-        "sort": -1,
-        "unit": "s"
-      }
-    ]
+    "options": {
+      "path": "averageScores.auto",
+      "sort": 1,
+      "decimals": 2
+    }
   },
   {
     "view": "match",
+    "module": "ColumnDisplay",
+    "name": "Teleop Points",
+    "position": "main",
+    "options": {
+      "path": "averageScores.teleop",
+      "sort": 1,
+      "decimals": 2
+    }
+  },
+  {
+    "view": "match",
+    "module": "ColumnDisplay",
+    "name": "Endgame Points",
+    "position": "main",
+    "options": {
+      "path": "averageScores.endgame",
+      "sort": 1,
+      "decimals": 2
+    }
+  },
+  {
+    "view": "match",
+    "module": "ColumnDisplay",
+    "name": "Total Points",
+    "position": "main",
+    "options": {
+      "path": "averageScores.total",
+      "sort": 1,
+      "decimals": 2
+    }
+  },
+
+  {
+    "view": "match",
     "module": "Stats",
-    "position": "side",
+    "position": "main",
     "name": "Alliance Stats",
     "options": {
       "list": [
@@ -250,8 +269,8 @@
           "aggrMethod": "sum"
         },
         {
-          "name": "Expected Barge Points",
-          "path": "avgEndgamePoints",
+          "name": "Expected Endgame Points",
+          "path": "averageScores.endgame",
           "decimals": 2,
           "aggrMethod": "sum"
         },
