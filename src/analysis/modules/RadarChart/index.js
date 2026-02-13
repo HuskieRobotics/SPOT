@@ -25,7 +25,7 @@ class RadarChart {
           j < this.moduleConfig.options.lines[i].times.length;
           j++
         ) {
-          let point = 1;
+          let point = null;
           if (!(this.moduleConfig.options.lines[i].times[j].path == "none")) {
             point = getPath(
               dataset.teams[team],
@@ -38,8 +38,9 @@ class RadarChart {
           type: "scatterpolar",
           r: values,
           theta: sectionNames,
-          fill: "tonext",
+          fill: "toself",
           name: this.moduleConfig.options.lines[i].name,
+          connectgaps: true,
         };
         data.push(line);
       }
