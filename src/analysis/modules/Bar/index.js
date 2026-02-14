@@ -10,7 +10,7 @@ class Bar {
   formatData(teams, dataset) {
     const values = this.moduleConfig.options.bars.map((bar) => {
       const summed = teams
-        .map((team) => getPath(dataset.teams[team], bar.path))
+        .map((team) => getPath(dataset.teams[team], bar.path, 0))
         .flat()
         .reduce((acc, i) => acc + i, 0);
       if (bar.aggrMethod == "sum") {
