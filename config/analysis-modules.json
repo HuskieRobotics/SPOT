@@ -37,7 +37,7 @@
       "bars": [
         {
           "name": "Fall",
-          "path": "counts.endgameFall"
+          "path": "counts.fall"
         },
         {
           "name": "L1",
@@ -105,7 +105,7 @@
       "list": [
         {
           "name": "Average Passing Rating",
-          "path": "averageScores.passingRating",
+          "path": "averagesScores.passingRating",
           "decimals": 2,
           "sort": 1
         },

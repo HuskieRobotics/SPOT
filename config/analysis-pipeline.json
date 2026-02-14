@@ -52,11 +52,7 @@
     "name": "actionTime",
     "outputPath": "actionTimes.attemptClimb",
     "options": {
-      "actionId": [
-        "activeShift2AttemptClimb",
-        "inactiveShift2AttemptClimb",
-        "endgameAttemptClimb"
-      ]
+      "actionId": ["endgameAttemptClimb"]
     }
   },
   {
@@ -64,8 +60,8 @@
     "name": "cycle",
     "outputPath": "cycle.autoShootingTime",
     "options": {
-      "pickups": ["autoStartShooting"],
-      "scores": ["autoStopShooting"]
+      "pickups": ["StartShooting"],
+      "scores": ["StopShooting"]
     }
   },
   {
@@ -74,14 +70,20 @@
     "outputPath": "cycle.shootingTime",
     "options": {
       "pickups": [
+        "teleopTransitionStartShoot",
         "activeShift1StartShoot",
         "activeShift2StartShoot",
-        "teleopTransitionStartShoot"
+        "inactiveShift1StartShoot",
+        "inactiveShift2StartShoot",
+        "endgameStartShoot"
       ],
       "scores": [
-        "activeShift1stopShoot",
-        "activeShift2stopShoot",
-        "teleopTransitionstopShoot"
+        "teleopTransitionStopShoot",
+        "activeShift1StopShoot",
+        "activeShift2StopShoot",
+        "inactiveShift1StopShoot",
+        "inactiveShift2StopShoot",
+        "endgameStopShoot"
       ]
     }
   },
@@ -325,39 +327,39 @@
   {
     "type": "tmp",
     "name": "weightedSumAverage",
-    "outputPath": "scores.teleopTransitionCollectingRating",
+    "outputPath": "scores.teleopTransitionStoringRating",
     "options": {
       "weightedPaths": {
-        "counts.teleopTransitionRatingCollecting1": 1,
-        "counts.teleopTransitionRatingCollecting2": 2,
-        "counts.teleopTransitionRatingCollecting3": 3,
-        "counts.teleopTransitionRatingCollecting4": 4
+        "counts.teleopTransitionRatingStoring1": 1,
+        "counts.teleopTransitionRatingStoring2": 2,
+        "counts.teleopTransitionRatingStoring3": 3,
+        "counts.teleopTransitionRatingStoring4": 4
       }
     }
   },
   {
     "type": "tmp",
     "name": "weightedSumAverage",
-    "outputPath": "scores.activeShift1CollectingRating",
+    "outputPath": "scores.activeShift1StoringRating",
     "options": {
       "weightedPaths": {
-        "counts.activeShift1RatingCollecting1": 1,
-        "counts.activeShift1RatingCollecting2": 2,
-        "counts.activeShift1RatingCollecting3": 3,
-        "counts.activeShift1RatingCollecting4": 4
+        "counts.activeShift1RatingStoring1": 1,
+        "counts.activeShift1RatingStoring2": 2,
+        "counts.activeShift1RatingStoring3": 3,
+        "counts.activeShift1RatingStoring4": 4
       }
     }
   },
   {
     "type": "tmp",
     "name": "weightedSumAverage",
-    "outputPath": "scores.activeShift2CollectingRating",
+    "outputPath": "scores.activeShift2StoringRating",
     "options": {
       "weightedPaths": {
-        "counts.activeShift2RatingCollecting1": 1,
-        "counts.activeShift2RatingCollecting2": 2,
-        "counts.activeShift2RatingCollecting3": 3,
-        "counts.activeShift2RatingCollecting4": 4
+        "counts.activeShift2RatingStoring1": 1,
+        "counts.activeShift2RatingStoring2": 2,
+        "counts.activeShift2RatingStoring3": 3,
+        "counts.activeShift2RatingStoring4": 4
       }
     }
   },
@@ -365,39 +367,39 @@
   {
     "type": "tmp",
     "name": "weightedSumAverage",
-    "outputPath": "scores.inactiveShift1CollectingRating",
+    "outputPath": "scores.inactiveShift1StoringRating",
     "options": {
       "weightedPaths": {
-        "counts.inactiveShift1RatingCollecting1": 1,
-        "counts.inactiveShift1RatingCollecting2": 2,
-        "counts.inactiveShift1RatingCollecting3": 3,
-        "counts.inactiveShift1RatingCollecting4": 4
+        "counts.inactiveShift1RatingStoring1": 1,
+        "counts.inactiveShift1RatingStoring2": 2,
+        "counts.inactiveShift1RatingStoring3": 3,
+        "counts.inactiveShift1RatingStoring4": 4
       }
     }
   },
   {
     "type": "tmp",
     "name": "weightedSumAverage",
-    "outputPath": "scores.inactiveShift2CollectingRating",
+    "outputPath": "scores.inactiveShift2StoringRating",
     "options": {
       "weightedPaths": {
-        "counts.inactiveShift2RatingCollecting1": 1,
-        "counts.inactiveShift2RatingCollecting2": 2,
-        "counts.inactiveShift2RatingCollecting3": 3,
-        "counts.inactiveShift2RatingCollecting4": 4
+        "counts.inactiveShift2RatingStoring1": 1,
+        "counts.inactiveShift2RatingStoring2": 2,
+        "counts.inactiveShift2RatingStoring3": 3,
+        "counts.inactiveShift2RatingStoring4": 4
       }
     }
   },
   {
     "type": "tmp",
     "name": "weightedSumAverage",
-    "outputPath": "scores.endgameCollectingRating",
+    "outputPath": "scores.endgameStoringRating",
     "options": {
       "weightedPaths": {
-        "counts.endgameRatingCollecting1": 1,
-        "counts.endgameRatingCollecting2": 2,
-        "counts.endgameRatingCollecting3": 3,
-        "counts.endgameRatingCollecting4": 4
+        "counts.endgameRatingStoring1": 1,
+        "counts.endgameRatingStoring2": 2,
+        "counts.endgameRatingStoring3": 3,
+        "counts.endgameRatingStoring4": 4
       }
     }
   },
@@ -408,22 +410,22 @@
     "options": {
       "groups": [
         {
-          "averagePath": "scores.teleopTransitionCollectingRating"
+          "averagePath": "scores.teleopTransitionStoringRating"
         },
         {
-          "averagePath": "scores.activeShift1CollectingRating"
+          "averagePath": "scores.activeShift1StoringRating"
         },
         {
-          "averagePath": "scores.activeShift2CollectingRating"
+          "averagePath": "scores.activeShift2StoringRating"
         },
         {
-          "averagePath": "scores.inactiveShift1CollectingRating"
+          "averagePath": "scores.inactiveShift1StoringRating"
         },
         {
-          "averagePath": "scores.inactiveShift2CollectingRating"
+          "averagePath": "scores.inactiveShift2StoringRating"
         },
         {
-          "averagePath": "scores.endgameCollectingRating"
+          "averagePath": "scores.endgameStoringRating"
         }
       ]
     }
@@ -486,10 +488,10 @@
     "outputPath": "scores.inactiveShift2ShootingRating",
     "options": {
       "weightedPaths": {
-        "counts.ratingCollecting1": 1,
-        "counts.ratingCollecting2": 2,
-        "counts.ratingCollecting3": 3,
-        "counts.ratingCollecting4": 4
+        "counts.inactiveShift2RatingShooting1": 1,
+        "counts.inactiveShift2RatingShooting2": 2,
+        "counts.inactiveShift2RatingShooting3": 3,
+        "counts.inactiveShift2RatingShooting4": 4
       }
     }
   },
@@ -554,7 +556,7 @@
     "name": "averageTime",
     "outputPath": "averageTimes.attemptClimbTime",
     "options": {
-      "path": "actionTimes.attemptClimb"
+      "path": "actionTimes.endgameAttemptClimb"
     }
   },
   {
@@ -591,7 +593,6 @@
       "valuePath": "timeDifferential"
     }
   },
-
   {
     "type": "team",
     "name": "aggregateArray",

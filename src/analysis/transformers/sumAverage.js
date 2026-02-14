@@ -10,7 +10,7 @@ new DataTransformer("sumAverage", (dataset, outputPath, options) => {
             throw new Error(`sumAverage could not derive countPaths from ${averagePath}`);
         }
 
-        const ratingMetrics = ["Passing", "Defense", "Collecting", "Shooting"];
+        const ratingMetrics = ["Passing", "Defense", "Collecting", "Storing", "Shooting"];
         const base = averagePath.slice(prefix.length);
         if (!base.endsWith("Rating")) {
             throw new Error(`sumAverage could not derive countPaths from ${averagePath}`);
@@ -70,7 +70,7 @@ new DataTransformer("sumAverage", (dataset, outputPath, options) => {
             throw new Error(`sumAverage could not derive countPaths from ${averagePath}`);
         }
 
-        const ratingMetrics = ["Passing", "Defense", "Collecting", "Shooting"];
+        const ratingMetrics = ["Passing", "Defense", "Collecting", "Storing", "Shooting"];
         const base = averagePath.slice(prefix.length);
         if (!base.endsWith("Rating")) {
             throw new Error(`sumAverage could not derive countPaths from ${averagePath}`);
