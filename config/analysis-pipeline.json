@@ -404,7 +404,7 @@
   {
     "type": "tmp",
     "name": "sumAverage",
-    "outputPath": "scores.collectingRating",
+    "outputPath": "scores.storingRating",
     "options": {
       "groups": [
         {
@@ -486,10 +486,10 @@
     "outputPath": "scores.inactiveShift2ShootingRating",
     "options": {
       "weightedPaths": {
-        "counts.inactiveShift2RatingShooting1": 1,
-        "counts.inactiveShift2RatingShooting2": 2,
-        "counts.inactiveShift2RatingShooting3": 3,
-        "counts.inactiveShift2RatingShooting4": 4
+        "counts.ratingCollecting1": 1,
+        "counts.ratingCollecting2": 2,
+        "counts.ratingCollecting3": 3,
+        "counts.ratingCollecting4": 4
       }
     }
   },
