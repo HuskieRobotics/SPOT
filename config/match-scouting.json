@@ -197,7 +197,7 @@
           "displayText": "Active",
           "gridArea": ["3", "1", "6", "6"],
           "class": "gray",
-          "type": "action",
+          "type": "none",
           "executables": [
             {
               "type": "layer",
@@ -210,7 +210,7 @@
           "displayText": "Inactive",
           "gridArea": ["3", "7", "6", "12"],
           "class": "gray",
-          "type": "action",
+          "type": "none",
           "executables": [
             {
               "type": "layer",
