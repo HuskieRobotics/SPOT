@@ -60,8 +60,8 @@
     "name": "cycle",
     "outputPath": "cycle.autoShootingTime",
     "options": {
-      "pickups": ["autoStartShoot"],
-      "scores": ["autoStopShoot"]
+      "pickups": ["autoStartShooting"],
+      "scores": ["autoStopShooting"]
     }
   },
   {
@@ -70,20 +70,20 @@
     "outputPath": "cycle.shootingTime",
     "options": {
       "pickups": [
-        "teleopTransitionStartShoot",
-        "activeShift1StartShoot",
-        "activeShift2StartShoot",
-        "inactiveShift1StartShoot",
-        "inactiveShift2StartShoot",
-        "endgameStartShoot"
+        "teleopTransitionStartShooting",
+        "activeShift1StartShooting",
+        "activeShift2StartShooting",
+        "inactiveShift1StartShooting",
+        "inactiveShift2StartShooting",
+        "endgameStartShooting"
       ],
       "scores": [
-        "teleopTransitionStopShoot",
-        "activeShift1StopShoot",
-        "activeShift2StopShoot",
-        "inactiveShift1StopShoot",
-        "inactiveShift2StopShoot",
-        "endgameStopShoot"
+        "teleopTransitionStopShooting",
+        "activeShift1StopShooting",
+        "activeShift2StopShooting",
+        "inactiveShift1StopShooting",
+        "inactiveShift2StopShooting",
+        "endgameStopShooting"
       ]
     }
   },

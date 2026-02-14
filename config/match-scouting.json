@@ -644,7 +644,7 @@
           ]
         },
         {
-          "id": "startShoot",
+          "id": "StartShooting",
           "displayText": "Start Scoring",
           "gridArea": ["4", "2", "5", "6"],
           "class": "fuel2026",
@@ -656,12 +656,12 @@
             },
             {
               "type": "climbHighlight",
-              "args": ["startShoot", "stopShoot"]
+              "args": ["StartShooting", "StopShooting"]
             }
           ]
         },
         {
-          "id": "stopShoot",
+          "id": "StopShooting",
           "displayText": "Stop Scoring",
           "gridArea": ["4", "8", "5", "12"],
           "class": "fuel2026",
@@ -669,7 +669,7 @@
           "executables": [
             {
               "type": "climbHighlight",
-              "args": ["startShoot", "stopShoot"]
+              "args": ["StartShooting", "StopShooting"]
             },
             {
               "type": "clearHighlight",
@@ -2166,7 +2166,7 @@
           "executables": []
         },
         {
-          "id": "teleopTransitionStartShoot",
+          "id": "teleopTransitionStartShooting",
           "displayText": "TT Start Shoot",
           "gridArea": ["15", "1", "16", "2"],
           "class": "fuel2026",
@@ -2174,7 +2174,7 @@
           "executables": []
         },
         {
-          "id": "teleopTransitionStopShoot",
+          "id": "teleopTransitionStopShooting",
           "displayText": "TT Stop Shoot",
           "gridArea": ["15", "2", "16", "3"],
           "class": "fuel2026",
@@ -2182,7 +2182,7 @@
           "executables": []
         },
         {
-          "id": "activeShift1StartShoot",
+          "id": "activeShift1StartShooting",
           "displayText": "AS1 Start Shoot",
           "gridArea": ["15", "3", "16", "4"],
           "class": "fuel2026",
@@ -2190,7 +2190,7 @@
           "executables": []
         },
         {
-          "id": "activeShift1StopShoot",
+          "id": "activeShift1StopShooting",
           "displayText": "AS1 Stop Shoot",
           "gridArea": ["15", "4", "16", "5"],
           "class": "fuel2026",
@@ -2198,7 +2198,7 @@
           "executables": []
         },
         {
-          "id": "activeShift2StartShoot",
+          "id": "activeShift2StartShooting",
           "displayText": "AS2 Start Shoot",
           "gridArea": ["15", "5", "16", "6"],
           "class": "fuel2026",
@@ -2206,7 +2206,7 @@
           "executables": []
         },
         {
-          "id": "activeShift2StopShoot",
+          "id": "activeShift2StopShooting",
           "displayText": "AS2 Stop Shoot",
           "gridArea": ["15", "6", "16", "7"],
           "class": "fuel2026",
@@ -2214,7 +2214,7 @@
           "executables": []
         },
         {
-          "id": "inactiveShift1StartShoot",
+          "id": "inactiveShift1StartShooting",
           "displayText": "IS1 Start Shoot",
           "gridArea": ["15", "7", "16", "8"],
           "class": "fuel2026",
@@ -2222,7 +2222,7 @@
           "executables": []
         },
         {
-          "id": "inactiveShift1StopShoot",
+          "id": "inactiveShift1StopShooting",
           "displayText": "IS1 Stop Shoot",
           "gridArea": ["15", "8", "16", "9"],
           "class": "fuel2026",
@@ -2230,7 +2230,7 @@
           "executables": []
         },
         {
-          "id": "inactiveShift2StartShoot",
+          "id": "inactiveShift2StartShooting",
           "displayText": "IS2 Start Shoot",
           "gridArea": ["15", "9", "16", "10"],
           "class": "fuel2026",
@@ -2238,7 +2238,7 @@
           "executables": []
         },
         {
-          "id": "inactiveShift2StopShoot",
+          "id": "inactiveShift2StopShooting",
           "displayText": "IS2 Stop Shoot",
           "gridArea": ["15", "10", "16", "11"],
           "class": "fuel2026",
@@ -2246,7 +2246,7 @@
           "executables": []
         },
         {
-          "id": "endgameStartShoot",
+          "id": "endgameStartShooting",
           "displayText": "EG Start Shoot",
           "gridArea": ["15", "11", "16", "12"],
           "class": "fuel2026",
@@ -2254,7 +2254,7 @@
           "executables": []
         },
         {
-          "id": "endgameStopShoot",
+          "id": "endgameStopShooting",
           "displayText": "EG Stop Shoot",
           "gridArea": ["15", "12", "16", "13"],
           "class": "fuel2026",
@@ -2262,7 +2262,7 @@
           "executables": []
         },
         {
-          "id": "autoStartShoot",
+          "id": "autoStartShooting",
           "displayText": "Auto Start Shoot",
           "gridArea": ["15", "11", "16", "12"],
           "class": "fuel2026",
@@ -2270,7 +2270,7 @@
           "executables": []
         },
         {
-          "id": "autoStopShoot",
+          "id": "autoStopShooting",
           "displayText": "Auto Stop Shoot",
           "gridArea": ["15", "12", "16", "13"],
           "class": "fuel2026",
