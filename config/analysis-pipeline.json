@@ -52,7 +52,7 @@
     "name": "actionTime",
     "outputPath": "actionTimes.attemptClimb",
     "options": {
-      "actionId": ["endgameAttemptClimb"]
+      "actionId": ["attemptClimb"]
     }
   },
   {
@@ -60,8 +60,8 @@
     "name": "cycle",
     "outputPath": "cycle.autoShootingTime",
     "options": {
-      "pickups": ["StartShooting"],
-      "scores": ["StopShooting"]
+      "pickups": ["autoStartShoot"],
+      "scores": ["autoStopShoot"]
     }
   },
   {
@@ -556,7 +556,7 @@
     "name": "averageTime",
     "outputPath": "averageTimes.attemptClimbTime",
     "options": {
-      "path": "actionTimes.endgameAttemptClimb"
+      "path": "actionTimes.attemptClimb"
     }
   },
   {

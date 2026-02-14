@@ -122,8 +122,8 @@
           "sort": 1
         },
         {
-          "name": "Average Collection Rating",
-          "path": "averageScores.collectingRating",
+          "name": "Average Storing Rating",
+          "path": "averageScores.storingRating",
           "decimals": 2,
           "sort": 1
         },
