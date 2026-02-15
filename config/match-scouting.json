@@ -114,8 +114,8 @@
           "type": "action",
           "executables": [
             {
-              "type": "position",
-              "args": []
+              "type": "climbHighlight",
+              "args": ["autoStartShooting", "autoStopShooting"]
             }
           ]
         },
@@ -127,15 +127,23 @@
           "type": "action",
           "executables": [
             {
-              "type": "position",
+              "type": "climbHighlight",
+              "args": ["autoStartShooting", "autoStopShooting"]
+            },
+            {
+              "type": "clearHighlight",
               "args": []
+            },
+            {
+              "type": "layer",
+              "args": [1, 6]
             }
           ]
         },
         {
           "id": "autoPassing",
-          "displayText": "Pass",
-          "gridArea": ["3", "8", "4", "12"],
+          "displayText": "Passing",
+          "gridArea": ["2", "8", "4", "12"],
           "class": "blue2026",
           "type": "action",
           "executables": [
@@ -146,22 +154,9 @@
           ]
         },
         {
-          "id": "autoShooting",
-          "displayText": "Shoot",
-          "gridArea": ["4", "8", "5", "12"],
-          "class": "blue2026",
-          "type": "action",
-          "executables": [
-            {
-              "type": "layer",
-              "args": [1, 6]
-            }
-          ]
-        },
-        {
-          "id": "autoCollect",
-          "displayText": "Collect",
-          "gridArea": ["5", "8", "6", "12"],
+          "id": "autoStore",
+          "displayText": "Storing",
+          "gridArea": ["4", "8", "6", "12"],
           "class": "blue2026",
           "type": "action",
           "executables": [
@@ -253,25 +248,40 @@
           "id": "attemptL3",
           "displayText": "L3",
           "gridArea": ["3", "4", "4", "10"],
-          "class": "gray",
+          "class": "deepBlue",
           "type": "action",
-          "executables": []
+          "executables": [
+            {
+              "type": "climbHighlight",
+              "args": ["attemptL3", "fall", "teleopAttemptL1", "attemptL2"]
+            }
+          ]
         },
         {
           "id": "attemptL2",
           "displayText": "L2",
           "gridArea": ["4", "4", "5", "10"],
-          "class": "gray",
+          "class": "shallowBlue",
           "type": "action",
-          "executables": []
+          "executables": [
+            {
+              "type": "climbHighlight",
+              "args": ["attemptL2", "fall", "teleopAttemptL1", "attemptL3"]
+            }
+          ]
         },
         {
           "id": "teleopAttemptL1",
           "displayText": "L1",
           "gridArea": ["5", "4", "6", "10"],
-          "class": "gray",
+          "class": "blue2026",
           "type": "action",
-          "executables": []
+          "executables": [
+            {
+              "type": "climbHighlight",
+              "args": ["teleopAttemptL1", "attemptL3", "fall", "attemptL2"]
+            }
+          ]
         },
         {
           "id": "fall",
@@ -279,7 +289,12 @@
           "gridArea": ["6", "4", "7", "10"],
           "class": "red",
           "type": "action",
-          "executables": []
+          "executables": [
+            {
+              "type": "climbHighlight",
+              "args": ["fall", "attemptL3", "teleopAttemptL1", "attemptL2"]
+            }
+          ]
         }
       ],
       [
@@ -577,9 +592,9 @@
           "executables": []
         },
         {
-          "id": "collecting",
-          "displayText": "Collect",
-          "gridArea": ["3", "4", "4", "7"],
+          "id": "Storing",
+          "displayText": "Storing",
+          "gridArea": ["3", "1", "4", "5"],
           "class": "blue2026",
           "type": "action",
           "executables": [
@@ -591,8 +606,8 @@
         },
         {
           "id": "passing",
-          "displayText": "Pass",
-          "gridArea": ["3", "1", "4", "4"],
+          "displayText": "Passing",
+          "gridArea": ["3", "5", "4", "9"],
           "class": "blue2026",
           "type": "action",
           "executables": [
@@ -603,22 +618,9 @@
           ]
         },
         {
-          "id": "shooting",
-          "displayText": "Shoot",
-          "gridArea": ["3", "7", "4", "10"],
-          "class": "blue2026",
-          "type": "action",
-          "executables": [
-            {
-              "type": "layer",
-              "args": [7, 10]
-            }
-          ]
-        },
-        {
           "id": "defense",
-          "displayText": "Defense",
-          "gridArea": ["3", "10", "4", "14"],
+          "displayText": "Defending",
+          "gridArea": ["3", "9", "4", "14"],
           "class": "blue2026",
           "type": "action",
           "executables": [
@@ -643,7 +645,7 @@
         },
         {
           "id": "startShoot",
-          "displayText": "Start Shoot",
+          "displayText": "Start Scoring",
           "gridArea": ["4", "2", "5", "6"],
           "class": "fuel2026",
           "type": "action",
@@ -651,16 +653,33 @@
             {
               "type": "position",
               "args": []
+            },
+            {
+              "type": "climbHighlight",
+              "args": ["startShoot", "stopShoot"]
             }
           ]
         },
         {
           "id": "stopShoot",
-          "displayText": "Stop Shoot",
+          "displayText": "Stop Scoring",
           "gridArea": ["4", "8", "5", "12"],
           "class": "fuel2026",
           "type": "action",
-          "executables": []
+          "executables": [
+            {
+              "type": "climbHighlight",
+              "args": ["startShoot", "stopShoot"]
+            },
+            {
+              "type": "clearHighlight",
+              "args": []
+            },
+            {
+              "type": "layer",
+              "args": [7, 10]
+            }
+          ]
         }
       ],
       [
@@ -933,7 +952,7 @@
           "executables": []
         },
         {
-          "id": "ratingCollecting1",
+          "id": "ratingStoring1",
           "displayText": "Rating 1",
           "gridArea": ["2", "2", "4", "6"],
           "class": "gray",
@@ -946,7 +965,7 @@
           ]
         },
         {
-          "id": "ratingCollecting2",
+          "id": "ratingStoring2",
           "displayText": "Rating 2",
           "gridArea": ["2", "7", "4", "11"],
           "class": "gray",
@@ -959,7 +978,7 @@
           ]
         },
         {
-          "id": "ratingCollecting3",
+          "id": "ratingStoring3",
           "displayText": "Rating 3",
           "gridArea": ["4", "2", "6", "6"],
           "class": "gray",
@@ -972,7 +991,7 @@
           ]
         },
         {
-          "id": "ratingCollecting4",
+          "id": "ratingStoring4",
           "displayText": "Rating 4",
           "gridArea": ["4", "7", "6", "11"],
           "class": "gray",
