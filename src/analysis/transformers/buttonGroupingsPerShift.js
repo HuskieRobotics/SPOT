@@ -1,60 +1,74 @@
 /**
-*  @param options.zones {String[]} a list of the actionIds for the alliance zone buttons pressed sorted by timestamp
- * @param options.actions {String[]} a list of actionIds that correspond to the action buttons pressed throughout the match sorted by timestamp
- * @param options.ratings {String[]} a list of actionIds that correspond to ratings buttons pressed for a specific action during a certain time interval
- */ 
-_TMP__
-  new DataTransformer("buttonGroupingsPerShift", (dataset,outputPath,options) => {
-  for (let tmp of dataset.tmps) {
+*  @param options.zones {String[]} actionIds for alliance zone buttons (e.g., redZone/neutralZone/blueZone)
+*  @param options.actions {String[]} actionIds for action buttons (e.g., defense/passing/stopShoot)
+*  @param options.ratings {String[]} actionIds for rating buttons (e.g., ratingPassing1..4)
+*/ 
+__TMP__
+  new DataTransformer("buttonGroupingsPerShift", (dataset, outputPath, options) => {
+    for (let tmp of dataset.tmps) {
 
-        let output = {
-            all: [], // all will contain all the zones and ratings for this specific match
-            zones: [], // zone represents the zone buttons pressed during a specific match
-            ratings: [], // rating represents the rating buttons pressed during a specific match    
+      // Merge defaults with provided options for safety
+      options = Object.assign({ 
+        zones: [],
+        actions: [],
+        ratings: []
+      }, options);
+
+      // Copy actionQueue so we can splice without mutating original
+      const actionQueue = Array.isArray(tmp.actionQueue) ? tmp.actionQueue.slice() : [];
+
+      // Split by category and sort by timestamp
+      const zones = actionQueue.filter(x => options.zones.includes(x.id)).sort((a,b)=>a.ts-b.ts);
+      const actions = actionQueue.filter(x => options.actions.includes(x.id)).sort((a,b)=>a.ts-b.ts);
+      const ratings = actionQueue.filter(x => options.ratings.includes(x.id)).sort((a,b)=>a.ts-b.ts);
+
+      const output = {
+        list: [],   // sequential triples: { zone, action, rating }
+        rating: {}  // rating[zoneId][actionId][ratingValue] = count
+      };
+
+      // Returns the next item in arr occurring after ts, and removes it from arr
+      const nextAfter = (arr, ts) => {
+        const idx = arr.findIndex(x => x.ts > ts);
+        if (idx === -1) return null;
+        return arr.splice(idx, 1)[0];
+      };
+
+      // Extract trailing digit(s) from ratingId (e.g., ratingPassing3 -> 3)
+      const parseRatingValue = (ratingId) => {
+        const match = String(ratingId).match(/(\d+)$/);
+        return match ? Number(match[1]) : null;
+      };
+
+      // For each zone press, pair it with the next action and next rating after it
+      while (zones.length > 0) {
+        const zone = zones.shift();
+        const action = nextAfter(actions, zone.ts);
+        if (!action) break;
+
+        const rating = nextAfter(ratings, action.ts);
+        if (!rating) break;
+
+        // Save raw triple for debug/inspection
+        output.list.push({ zone, action, rating });
+
+        const zoneId = zone.id;
+        const actionId = action.id;
+        const ratingValue = parseRatingValue(rating.id);
+
+        // Aggregate counts by zone + action + rating value
+        if (ratingValue != null) {
+          if (!output.rating[zoneId]) output.rating[zoneId] = {};
+          if (!output.rating[zoneId][actionId]) output.rating[zoneId][actionId] = {};
+          if (!output.rating[zoneId][actionId][ratingValue]) output.rating[zoneId][actionId][ratingValue] = 0;
+          output.rating[zoneId][actionId][ratingValue] += 1;
         }
+      }
 
-        //Options are parameters for this specific data transformer
-        //Object.assign copies properties from the source to the option object (and those properties are zones, actions, and ratings, which are all lists of actionIds for the respective buttons pressed during the match sorted by timestamp)
-        options = Object.assign({ 
-            zones: [],
-            actions: [],
-            ratings: []
-        }, options)
-
-        let ratings = tmp.actionQueue.filter(x=>options.ratings.includes(x.id));
-        let actions = tmp.actionQueue.filter(x=>options.actions.includes(x.id));
-        let zones = tmp.actionQueue.filter(x=>options.zones.includes(x.id));
-
-        while (zones.length > 0) {
-            
-            let zone = zones.shift(); //remove and get the first zone button pressed
-
-            actions = actions.filter(x=>x.ts < zone.ts) //ensure the ratings attributed to a zone occur after the zone
-            
-            if (actions.length === 0) break //ensure that the actions button was pressed after the zone button, if there are no actions left to remove, break out of the loop
-                let action = actions.shift();
-            
-            ratings = ratings.filter(x=>x.ts < action.ts) //ensure the ratings attributed to an action occur after the action
-            
-            if(ratings.length === 0) break //ensure that there is a ratings button pressed after the action button, if there are no ratings left to remove, break out of the loop
-                let rating = ratings.shift();
-
-            //Based on the zone and rating buttons pressed during a time interval of the match, add that to a list called all, which is a property of the buttonsPressedDuringMatch object. 
-            output.all.push({
-                zones: [zone],
-                ratings: [rating],
-            })
-        }
-
-        //For each button grouping in the all property of the buttonsPressedDuringMatch object, create a list of the zones, actions, and ratings for each grouping and set those as properties of the buttonsPressedDuringMatch object.
-        output.zones = output.all.map(x=>x.zone);
-        output.ratings = output.all.map(x=>x.rating);
-
-        setPath(tmp,outputPath,output);
-        // outputPath is object that would store the calculations from analysis-pipeline.json
-        
-        }     
-        return dataset;
+      // Persist under outputPath in analysis pipeline (e.g., "zoneActionRating")
+      setPath(tmp, outputPath, output);
+    }
+    return dataset;
   });
 __/TMP__
 

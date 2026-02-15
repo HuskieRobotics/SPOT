@@ -157,20 +157,12 @@
     "outputPath": "zoneActionRating",
     "options": {
       "zones": ["redZone", "neutralZone", "blueZone"],
-      "actions": ["autoPassing", "autoShooting", "autoCollect"],
+      "actions": ["defense", "passing", "stopShoot"],
       "ratings": [
-        "autoRatingPassing1",
-        "autoRatingPassing2",
-        "autoRatingPassing3",
-        "autoRatingPassing4",
-        "autoRatingShooting1",
-        "autoRatingShooting2",
-        "autoRatingShooting3",
-        "autoRatingShooting4",
-        "autoRatingCollecting1",
-        "autoRatingCollecting2",
-        "autoRatingCollecting3",
-        "autoRatingCollecting4",
+        "ratingStoring1",
+        "ratingStoring2",
+        "ratingStoring3",
+        "ratingStoring4",
         "ratingPassing1",
         "ratingPassing2",
         "ratingPassing3",
@@ -301,6 +293,14 @@
     "outputPath": "averageScores",
     "options": {
       "path": "scores"
+    }
+  },
+  {
+    "type": "team",
+    "name": "deepAverage",
+    "outputPath": "zoneActionRatingAverages",
+    "options": {
+      "path": "zoneActionRating.rating"
     }
   }
 ]
