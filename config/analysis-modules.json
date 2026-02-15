@@ -257,5 +257,53 @@
         }
       ]
     }
+  },
+  {
+    "view": "team",
+    "module": "Bar",
+    "name": "Zone × Action (Rating 4 Avg Count)",
+    "position": "main",
+    "options": {
+      "bars": [
+        {
+          "name": "Red • Defense • 4",
+          "path": "zoneActionRatingAverages.redZone.defense.4"
+        },
+        {
+          "name": "Red • Passing • 4",
+          "path": "zoneActionRatingAverages.redZone.passing.4"
+        },
+        {
+          "name": "Red • StopShoot • 4",
+          "path": "zoneActionRatingAverages.redZone.stopShoot.4"
+        },
+
+        {
+          "name": "Neutral • Defense • 4",
+          "path": "zoneActionRatingAverages.neutralZone.defense.4"
+        },
+        {
+          "name": "Neutral • Passing • 4",
+          "path": "zoneActionRatingAverages.neutralZone.passing.4"
+        },
+        {
+          "name": "Neutral • StopShoot • 4",
+          "path": "zoneActionRatingAverages.neutralZone.stopShoot.4"
+        },
+
+        {
+          "name": "Blue • Defense • 4",
+          "path": "zoneActionRatingAverages.blueZone.defense.4"
+        },
+        {
+          "name": "Blue • Passing • 4",
+          "path": "zoneActionRatingAverages.blueZone.passing.4"
+        },
+        {
+          "name": "Blue • StopShoot • 4",
+          "path": "zoneActionRatingAverages.blueZone.stopShoot.4"
+        }
+      ]
+    }
   }
 ]
