@@ -105,7 +105,7 @@
       "list": [
         {
           "name": "Average Passing Rating",
-          "path": "averagesScores.passingRating",
+          "path": "averageScores.passingRating",
           "decimals": 2,
           "sort": 1
         },
