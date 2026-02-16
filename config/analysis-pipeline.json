@@ -73,16 +73,12 @@
         "teleopTransitionStartShooting",
         "activeShift1StartShooting",
         "activeShift2StartShooting",
-        "inactiveShift1StartShooting",
-        "inactiveShift2StartShooting",
         "endgameStartShooting"
       ],
       "scores": [
         "teleopTransitionStopShooting",
         "activeShift1StopShooting",
         "activeShift2StopShooting",
-        "inactiveShift1StopShooting",
-        "inactiveShift2StopShooting",
         "endgameStopShooting"
       ]
     }
