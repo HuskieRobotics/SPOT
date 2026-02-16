@@ -9,7 +9,7 @@
   },
   {
     "type": "tmp",
-    "name": "weightedSumAverage",
+    "name": "weightedSum",
     "outputPath": "scores.auto",
     "options": {
       "weightedPaths": {
