@@ -1,10 +1,11 @@
 /**
-*  @param options.zones {String[]} actionIds for alliance zone buttons (e.g., redZone/neutralZone/blueZone)
-*  @param options.actions {String[]} actionIds for action buttons (e.g., defense/passing/stopShoot)
-*  @param options.ratings {String[]} actionIds for rating buttons (e.g., ratingPassing1..4)
-*/ 
+ * @type {DataTransformer}
+ * @param options.zones {String[]} actionIds for alliance zone buttons (e.g., redZone/neutralZone/blueZone)
+ * @param options.actions {String[]} actionIds for action buttons (e.g., defense/passing/stopShoot)
+ * @param options.ratings {String[]} actionIds for rating buttons (e.g., ratingPassing1..4)
+ */ 
 __TMP__
-  new DataTransformer("buttonGroupingsPerShift", (dataset, outputPath, options) => {
+new DataTransformer("buttonGroupingsPerShift", (dataset, outputPath, options) => {
     for (let tmp of dataset.tmps) {
 
       // Merge defaults with provided options for safety
