@@ -16,31 +16,6 @@
   {
     "view": "team",
     "module": "HeatmapScatterPlot",
-    "name": "Auto Start and Stop Shooting Heatmap",
-    "position": "main",
-    "options": {
-      "coordinatePath": "other.pos",
-      "aggregatedActionsPath": "aggregatedActions",
-      "actionGroups": [
-        {
-          "name": "Auto Start Shooting",
-          "actions": ["autoStartShooting"]
-        },
-        {
-          "name": "Auto End Shooting",
-          "actions": ["autoStopShooting"]
-        }
-      ],
-      "actionLabels": {
-        "autoStartShooting": "Auto Start Shooting Position",
-        "autoStopShooting": "Auto End Shooting Position"
-      },
-      "imgPath": "img/field.svg"
-    }
-  },
-  {
-    "view": "team",
-    "module": "HeatmapScatterPlot",
     "name": "Teleop Shooting Heatmap",
     "position": "main",
     "options": {
@@ -76,6 +51,29 @@
         {
           "name": "L3",
           "path": "counts.attemptL3"
+        }
+      ]
+    }
+  },
+  {
+    "view": "team",
+    "module": "Bar",
+    "name": "TBA Climb Levels",
+    "position": "main",
+    "options": {
+      "bars": [
+        {
+          "name": "L1",
+          "path": "counts.endGameTowerRobot_Level1"
+        },
+
+        {
+          "name": "L2",
+          "path": "counts.endGameTowerRobot_Level2"
+        },
+        {
+          "name": "L3",
+          "path": "counts.endGameTowerRobot_Level3"
         }
       ]
     }
@@ -170,7 +168,6 @@
       ]
     }
   },
-
   {
     "view": "match",
     "module": "ColumnDisplay",
@@ -217,8 +214,42 @@
   },
   {
     "view": "match",
+    "module": "ColumnDisplay",
+    "name": "Teleop Points",
+    "position": "main",
+    "options": {
+      "path": "averageScores.teleop",
+      "sort": 1,
+      "decimals": 2
+    }
+  },
+  {
+    "view": "match",
+    "module": "ColumnDisplay",
+    "name": "Endgame Points",
+    "position": "main",
+    "options": {
+      "path": "averageScores.endgame",
+      "sort": 1,
+      "decimals": 2
+    }
+  },
+  {
+    "view": "match",
+    "module": "ColumnDisplay",
+    "name": "Total Points",
+    "position": "main",
+    "options": {
+      "path": "averageScores.total",
+      "sort": 1,
+      "decimals": 2
+    }
+  },
+
+  {
+    "view": "match",
     "module": "Stats",
-    "position": "side",
+    "position": "main",
     "name": "Alliance Stats",
     "options": {
       "list": [
@@ -235,7 +266,7 @@
           "aggrMethod": "sum"
         },
         {
-          "name": "Expected Climb Points",
+          "name": "Expected Endgame Points",
           "path": "averageScores.endgame",
           "decimals": 2,
           "aggrMethod": "sum"
