@@ -76,11 +76,12 @@ async function constructApp(accessCode) {
     document.querySelector("#GOOGLE_CLIENT_SECRET").value =
       config.GOOGLE_CLIENT_SECRET || "";
     document.querySelector("#EVENT_NUMBER").value = config.EVENT_NUMBER || "";
-    if (config.DEMO) {
-      document.querySelector("#DEMO").value = config.DEMO;
+    const demoValue = config.DEMO === true || config.DEMO === "true";
+    if (demoValue) {
+      document.querySelector("#DEMO").value = true;
       document.querySelector("#DEMO").checked = true;
     } else {
-      document.querySelector("#DEMO").value = 0;
+      document.querySelector("#DEMO").value = false;
       document.querySelector("#DEMO").checked = false;
     }
   }
@@ -173,7 +174,7 @@ document
     // Add the candidate to the dropdown if not already present
     const eventSelect = document.getElementById("EVENT_NUMBER");
     const optionExists = Array.from(eventSelect.options).some(
-      (opt) => opt.value === candidate
+      (opt) => opt.value === candidate,
     );
     if (!optionExists) {
       const newOption = document.createElement("option");
@@ -239,7 +240,7 @@ document.querySelector("#submit").addEventListener("click", async () => {
   ];
   let config = { secrets: {} };
   for (let [key, value] of new FormData(
-    document.getElementById("setup-form")
+    document.getElementById("setup-form"),
   )) {
     if (value === "") continue; //dont send unset config values (eg, no ACCESS_CODE)
     if (secrets.includes(key)) {

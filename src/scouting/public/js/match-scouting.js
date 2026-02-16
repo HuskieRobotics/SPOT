@@ -13,9 +13,16 @@ var previousTimer = [];
   var endgameTime = 30000;
   var shiftSwitchInterval = 25000;
   var timerActive = false;
-  var currentShift = "active"; // Track current shift (active/inactive)
-  var lastShiftSwitchTime = teleopTime; // Track when the last shift switch occurred
-  var shiftButtonPressed = false; // Flag to track if a shift button has been pressed
+  var currentShift = ""; // "active" | "inactive"
+  var lastShiftSwitchTime = teleopTime;
+  var shiftButtonPressed = false;
+
+  // NEW: shift counters
+  var activeShiftCount = 0;
+  var inactiveShiftCount = 0;
+  var currentShiftNumber;
+  let displayText = "";
+  let displayTextWithShift = displayText;
 
   //intialize variables
   let varNames = Object.keys(matchScoutingConfig.variables);
@@ -47,6 +54,7 @@ var previousTimer = [];
         lastActions[lastActions.length - 1].num++;
       }
     }
+    console.log(actionQueueIds);
     document.querySelector(".status .last-actions").innerText = lastActions
       .reverse()
       .map((a) => a.id + (a.num > 1 ? ` (${a.num})` : ""))
@@ -60,27 +68,20 @@ var previousTimer = [];
   const buttonBuilders = {
     //an object to give buttons type specific things, button type: function (button)
     action: (button) => {
-      //add an action to the actionQueue
       button.element.addEventListener("click", () => {
+        let shift = camelCase(displayTextWithShift);
+        let actionId = `${shift.replace(" ", "")}${button.id}`;
+
         actionQueue.push({
-          id: button.id,
+          id: actionId,
+          baseId: button.id,
           ts: time,
         });
-        // Update shift based on button press
-        if (button.id === "teleopActive") {
-          currentShift = "active";
-          lastShiftSwitchTime = time;
-          shiftButtonPressed = true;
-        } else if (button.id === "teleopInactive") {
-          currentShift = "inactive";
-          lastShiftSwitchTime = time;
-          shiftButtonPressed = true;
-        }
+
         doExecutables(button);
         updateLastAction();
       });
     },
-
     undo: (button) => {
       button.element.addEventListener("click", () => {
         if (
@@ -88,8 +89,8 @@ var previousTimer = [];
         ) {
           // Basically, if this code was not in place (^), then you would be able to undo the start of the game.
 
-          const undoneId = actionQueue.pop().id; //remove the last action from the action queue
-          const undoneButton = buttons.find((x) => x.id === undoneId);
+          const undoneAction = actionQueue.pop(); //remove the last action from the action queue
+          const undoneButton = buttons.find((x) => x.id === undoneAction.baseId);
 
           //special case for match-control buttons which have extra undo funcitonality without executables
           if (undoneButton.type === "match-control") {
@@ -136,9 +137,24 @@ var previousTimer = [];
       button.element.addEventListener("click", () => {
         actionQueue.push({
           id: button.id,
+          baseId: button.id,
           ts: time,
           temp: true,
         });
+        if (button.id === "teleopActive") {
+          currentShift = "active";
+
+          activeShiftCount += 1;
+          currentShiftNumber = activeShiftCount;
+          lastShiftSwitchTime = time;
+          shiftButtonPressed = true;
+        } else if (button.id === "teleopInactive") {
+          currentShift = "inactive";
+          inactiveShiftCount += 1;
+          currentShiftNumber = inactiveShiftCount;
+          lastShiftSwitchTime = time;
+          shiftButtonPressed = true;
+        }
         doExecutables(button, time);
         updateLastAction();
       });
@@ -199,6 +215,7 @@ var previousTimer = [];
         actionQueue.push({
           //create a temporary action queue so you can undo it
           id: button.id,
+          baseId: button.id,
           ts: time,
           temp: true,
         });
@@ -207,7 +224,6 @@ var previousTimer = [];
           status: ScoutingSync.SCOUTER_STATUS.SCOUTING,
         }); //tell the server that you started scouting
 
-        let displayText = "";
         let start = Date.now();
         devEnd = () => {
           start = Date.now() - (matchScoutingConfig.timing.totalTime - 1);
@@ -266,30 +282,41 @@ var previousTimer = [];
           }
           time = matchScoutingConfig.timing.totalTime - (Date.now() - start);
           window.currentTime = time; // Keep window.currentTime in sync
-
+          let elapsedSinceSwitch = Math.abs(time - lastShiftSwitchTime);
           // Handle shift switching during teleop (between teleopTime and endgameTime)
           // Only switch if a shift button has been pressed
-          if (shiftButtonPressed && time < teleopTime && time > endgameTime) {
-            const elapsedSinceSwitch = lastShiftSwitchTime - time;
-            if (elapsedSinceSwitch >= shiftSwitchInterval) {
-              // Switch shift
-              currentShift = currentShift === "active" ? "inactive" : "active";
-              lastShiftSwitchTime = time; // Update the switch time
+          if (shiftButtonPressed && elapsedSinceSwitch >= shiftSwitchInterval) {
+            if (currentShift === "active") {
+              currentShift = "inactive";
+
+              inactiveShiftCount += 1;
+              currentShiftNumber = inactiveShiftCount;
+            } else {
+              currentShift = "active";
+              activeShiftCount += 1;
+              currentShiftNumber = activeShiftCount;
             }
+
+            lastShiftSwitchTime = time;
           }
 
           // Build display text with shift information
-          let displayTextWithShift = displayText;
+
           if (time > teleopTime) {
             displayTextWithShift = `${displayText}`;
           } else if (time < teleopTime && time > endgameTime) {
             if (shiftButtonPressed) {
               const shiftDisplay =
-                currentShift === "active" ? "Active Shift" : "Inactive Shift";
-              displayTextWithShift = `${shiftDisplay}`;
+                currentShift === "active"
+                  ? `Active Shift ${currentShiftNumber}`
+                  : `Inactive Shift ${currentShiftNumber}`;
+
+              displayTextWithShift = shiftDisplay;
+            } else {
+              displayTextWithShift = `${displayText}`;
             }
           } else if (time <= endgameTime) {
-            displayTextWithShift = `Endgame - Active Shift`;
+            displayTextWithShift = `Endgame`;
           }
 
           buttons
@@ -308,6 +335,7 @@ var previousTimer = [];
   //create button objects in layers
   for (const layer of layers) {
     for (const button of layer) {
+      button.id = button.id || "";
       button.element = document.createElement("div");
 
       //give the button element its properties
@@ -315,7 +343,7 @@ var previousTimer = [];
       button.element.classList.add("grid-button", ...button.class.split(" "));
       button.element.style.gridArea = button.gridArea.join(" / ");
 
-      //apply type to button
+      //apply type to button+
       buttonBuilders[button.type](button);
       //add the button to the grid
       grid.appendChild(button.element);
@@ -425,6 +453,11 @@ var previousTimer = [];
       }
     }
     previousLayers.push(renderedButtons);
+  }
+  function camelCase(str) {
+    return str
+      .replace(/[^a-zA-Z0-9]+(.)/g, (_, chr) => chr.toUpperCase())
+      .replace(/^[A-Z]/, (c) => c.toLowerCase());
   }
 
   // DATA

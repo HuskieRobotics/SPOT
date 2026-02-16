@@ -15,7 +15,7 @@ gapi.load("auth2", () => {
       if (!auth2.isSignedIn.get()) {
         auth2.attachClickHandler(
           document.querySelector(".auth-buttons .google"),
-          {}
+          {},
         );
         spinner.classList.remove("visible");
       }
@@ -54,10 +54,11 @@ async function signOut() {
  */
 async function isDemo() {
   const isDemo = await fetch("./auth/isDemo").then((res) => res.json()); // Check if in demo mode
+  const demoEnabled = isDemo === true || isDemo === "true";
 
   demoLabel = document.querySelector(".demo-label");
 
-  if (isDemo == true) {
+  if (demoEnabled) {
     // Basically makes the demo text appear.
     demoLabel.textContent = "DEMO";
     demoLabel.style.fontSize = "3em";
