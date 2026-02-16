@@ -41,16 +41,16 @@
         },
         {
           "name": "L1",
-          "path": "counts.teleopAttemptL1"
+          "path": "counts.endgameAttemptL1"
         },
 
         {
           "name": "L2",
-          "path": "counts.attemptL2"
+          "path": "counts.endgameAttemptL2"
         },
         {
           "name": "L3",
-          "path": "counts.attemptL3"
+          "path": "counts.endgameAttemptL3"
         }
       ]
     }
@@ -105,7 +105,7 @@
       "list": [
         {
           "name": "Average Passing Rating",
-          "path": "averagesScores.passingRating",
+          "path": "averageScores.passingRating",
           "decimals": 2,
           "sort": 1
         },
@@ -122,8 +122,8 @@
           "sort": 1
         },
         {
-          "name": "Average Collection Rating",
-          "path": "averageScores.collectingRating",
+          "name": "Average Storing Rating",
+          "path": "averageScores.storingRating",
           "decimals": 2,
           "sort": 1
         },
@@ -170,22 +170,44 @@
   },
   {
     "view": "match",
-    "module": "SingleDisplay",
-    "name": "Alliance Score",
+    "module": "ColumnDisplay",
+    "name": "Auto Points",
     "position": "main",
     "options": {
-      "path": "averageScores.total",
-      "aggrMethod": "sum",
+      "path": "averageScores.auto",
+      "sort": 1,
       "decimals": 2
     }
   },
   {
     "view": "match",
     "module": "ColumnDisplay",
-    "name": "Auto Points",
+    "name": "Teleop Points",
     "position": "main",
     "options": {
-      "path": "averageScores.auto",
+      "path": "averageScores.teleop",
+      "sort": 1,
+      "decimals": 2
+    }
+  },
+  {
+    "view": "match",
+    "module": "ColumnDisplay",
+    "name": "Barge Points",
+    "position": "main",
+    "options": {
+      "path": "avgEndgamePoints",
+      "sort": 1,
+      "decimals": 2
+    }
+  },
+  {
+    "view": "match",
+    "module": "ColumnDisplay",
+    "name": "Total Points",
+    "position": "main",
+    "options": {
+      "path": "averageScores.total",
       "sort": 1,
       "decimals": 2
     }
