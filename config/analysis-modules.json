@@ -163,6 +163,14 @@
           "decimals": 2,
           "sort": -1,
           "unit": "s"
+        },
+        {
+          "name": "Average Passing Rating",
+          "path": "averageScores.passingRating",
+          "multiplier": 0.001,
+          "decimals": 2,
+          "sort": -1,
+          "unit": "s"
         }
       ]
     }
