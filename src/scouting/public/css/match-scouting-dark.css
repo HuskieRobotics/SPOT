@@ -33,7 +33,9 @@
   overflow: hidden;
   padding: 7px;
   box-shadow: 0 0 8px 0px var(--black);
-  transition: 0.2s border, 0.2s box-shadow;
+  transition:
+    0.2s border,
+    0.2s box-shadow;
 }
 
 #match-scouting .grid-button:active {
@@ -136,11 +138,16 @@
 }
 
 .highlight {
-  background-color: #260b3b;
+  background-color: #1b0829;
   color: var(--bg);
 }
 
 .disabled {
   opacity: 0.6;
   pointer-events: none;
+}
+
+#match-scouting .grid-button.highlight {
+  background-color: #1b0829;
+  color: var(--bg);
 }

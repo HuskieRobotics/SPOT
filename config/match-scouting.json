@@ -114,8 +114,8 @@
           "type": "action",
           "executables": [
             {
-              "type": "position",
-              "args": []
+              "type": "climbHighlight",
+              "args": ["StartShooting", "StopShooting"]
             }
           ]
         },
@@ -127,7 +127,11 @@
           "type": "action",
           "executables": [
             {
-              "type": "position",
+              "type": "climbHighlight",
+              "args": ["StartShooting", "StopShooting"]
+            },
+            {
+              "type": "clearHighlight",
               "args": []
             }
           ]
@@ -139,19 +143,7 @@
           "class": "blue2026",
           "type": "action",
           "executables": [
-            {
-              "type": "layer",
-              "args": [1, 5]
-            }
-          ]
-        },
-        {
-          "id": "Shooting",
-          "displayText": "Shoot",
-          "gridArea": ["4", "8", "5", "12"],
-          "class": "blue2026",
-          "type": "action",
-          "executables": [
+            },
             {
               "type": "layer",
               "args": [1, 6]
@@ -159,9 +151,28 @@
           ]
         },
         {
+          "id": "Shooting",
+          "displayText": "Shoot",
+          "gridArea": ["4", "8", "5", "12"],
+          "id": "Passing",
+          "displayText": "Passing",
+          "gridArea": ["2", "8", "4", "12"],
+          "class": "blue2026",
+          "type": "action",
+          "executables": [
+            {
+              "type": "layer",
+              "args": [1, 5]
+            }
+          ]
+        },
+        {
           "id": "Collect",
           "displayText": "Collect",
           "gridArea": ["5", "8", "6", "12"],
+          "id": "Storing",
+          "displayText": "Storing",
+          "gridArea": ["4", "8", "6", "12"],
           "class": "blue2026",
           "type": "action",
           "executables": [
@@ -253,12 +264,13 @@
           "id": "AttemptL3",
           "displayText": "L3",
           "gridArea": ["3", "4", "4", "10"],
-          "class": "gray",
+          "class": "deepBlue",
           "type": "action",
           "executables": [
             {
               "type": "climbHighlight",
               "args": ["AttemptL3", "AttemptL2", "AttemptL1", "Fall"]
+              "args": ["attemptL3", "fall", "AttemptL1", "attemptL2"]
             }
           ]
         },
@@ -266,12 +278,13 @@
           "id": "AttemptL2",
           "displayText": "L2",
           "gridArea": ["4", "4", "5", "10"],
-          "class": "gray",
+          "class": "shallowBlue",
           "type": "action",
           "executables": [
             {
               "type": "climbHighlight",
               "args": ["AttemptL3", "AttemptL2", "AttemptL1", "Fall"]
+              "args": ["attemptL2", "fall", "AttemptL1", "attemptL3"]
             }
           ]
         },
@@ -279,12 +292,13 @@
           "id": "AttemptL1",
           "displayText": "L1",
           "gridArea": ["5", "4", "6", "10"],
-          "class": "gray",
+          "class": "blue2026",
           "type": "action",
           "executables": [
             {
               "type": "climbHighlight",
               "args": ["AttemptL3", "AttemptL2", "AttemptL1", "Fall"]
+              "args": ["AttemptL1", "attemptL3", "fall", "attemptL2"]
             }
           ]
         },
@@ -298,6 +312,7 @@
             {
               "type": "climbHighlight",
               "args": ["AttemptL3", "AttemptL2", "AttemptL1", "Fall"]
+              "args": ["fall", "attemptL3", "AttemptL1", "attemptL2"]
             }
           ]
         }
@@ -600,6 +615,9 @@
           "id": "Collecting",
           "displayText": "Collect",
           "gridArea": ["3", "4", "4", "7"],
+          "id": "Storing",
+          "displayText": "Storing",
+          "gridArea": ["3", "1", "4", "5"],
           "class": "blue2026",
           "type": "action",
           "executables": [
@@ -613,6 +631,9 @@
           "id": "Passing",
           "displayText": "Pass",
           "gridArea": ["3", "1", "4", "4"],
+          "id": "passing",
+          "displayText": "Passing",
+          "gridArea": ["3", "5", "4", "9"],
           "class": "blue2026",
           "type": "action",
           "executables": [
@@ -639,6 +660,9 @@
           "id": "Defense",
           "displayText": "Defense",
           "gridArea": ["3", "10", "4", "14"],
+          "id": "defense",
+          "displayText": "Defending",
+          "gridArea": ["3", "9", "4", "14"],
           "class": "blue2026",
           "type": "action",
           "executables": [
@@ -664,6 +688,8 @@
         {
           "id": "StartShoot",
           "displayText": "Start Shoot",
+          "id": "StartShooting",
+          "displayText": "Start Scoring",
           "gridArea": ["4", "2", "5", "6"],
           "class": "fuel2026",
           "type": "action",
@@ -671,16 +697,33 @@
             {
               "type": "position",
               "args": []
+            },
+            {
+              "type": "climbHighlight",
+              "args": ["StartShooting", "StopShooting"]
             }
           ]
         },
         {
-          "id": "stopShoot",
-          "displayText": "Stop Shoot",
+          "id": "StopShooting",
+          "displayText": "Stop Scoring",
           "gridArea": ["4", "8", "5", "12"],
           "class": "fuel2026",
           "type": "action",
-          "executables": []
+          "executables": [
+            {
+              "type": "climbHighlight",
+              "args": ["StartShooting", "StopShooting"]
+            },
+            {
+              "type": "clearHighlight",
+              "args": []
+            },
+            {
+              "type": "layer",
+              "args": [7, 10]
+            }
+          ]
         }
       ],
       [
@@ -954,6 +997,7 @@
         },
         {
           "id": "RatingCollecting1",
+          "id": "RatingStoring1",
           "displayText": "Rating 1",
           "gridArea": ["2", "2", "4", "6"],
           "class": "gray",
@@ -967,6 +1011,7 @@
         },
         {
           "id": "RatingCollecting2",
+          "id": "RatingStoring2",
           "displayText": "Rating 2",
           "gridArea": ["2", "7", "4", "11"],
           "class": "gray",
@@ -980,6 +1025,7 @@
         },
         {
           "id": "RatingCollecting3",
+          "id": "RatingStoring3",
           "displayText": "Rating 3",
           "gridArea": ["4", "2", "6", "6"],
           "class": "gray",
@@ -993,6 +1039,7 @@
         },
         {
           "id": "RatingCollecting4",
+          "id": "RatingStoring4",
           "displayText": "Rating 4",
           "gridArea": ["4", "7", "6", "11"],
           "class": "gray",
@@ -1043,6 +1090,1306 @@
           "displayText": "Teleop Fuel Scored",
           "gridArea": ["2", "1", "3", "7"],
           "class": "fuel2026",
+          "id": "teleopTransitionRatingShooting1",
+          "displayText": "TT Shoot R1",
+          "gridArea": ["3", "1", "4", "2"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "teleopTransitionRatingShooting2",
+          "displayText": "TT Shoot R2",
+          "gridArea": ["3", "2", "4", "3"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "teleopTransitionRatingShooting3",
+          "displayText": "TT Shoot R3",
+          "gridArea": ["3", "3", "4", "4"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "teleopTransitionRatingShooting4",
+          "displayText": "TT Shoot R4",
+          "gridArea": ["3", "4", "4", "5"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "teleopTransitionRatingPassing1",
+          "displayText": "TT Pass R1",
+          "gridArea": ["3", "5", "4", "6"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "teleopTransitionRatingPassing2",
+          "displayText": "TT Pass R2",
+          "gridArea": ["3", "6", "4", "7"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "teleopTransitionRatingPassing3",
+          "displayText": "TT Pass R3",
+          "gridArea": ["3", "7", "4", "8"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "teleopTransitionRatingPassing4",
+          "displayText": "TT Pass R4",
+          "gridArea": ["3", "8", "4", "9"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "teleopTransitionRatingDefense1",
+          "displayText": "TT Def R1",
+          "gridArea": ["3", "9", "4", "10"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "teleopTransitionRatingDefense2",
+          "displayText": "TT Def R2",
+          "gridArea": ["3", "10", "4", "11"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "teleopTransitionRatingDefense3",
+          "displayText": "TT Def R3",
+          "gridArea": ["3", "11", "4", "12"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "teleopTransitionRatingDefense4",
+          "displayText": "TT Def R4",
+          "gridArea": ["3", "12", "4", "13"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "teleopTransitionRatingStoring1",
+          "displayText": "TT Collect R1",
+          "gridArea": ["4", "1", "5", "2"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "teleopTransitionRatingStoring2",
+          "displayText": "TT Collect R2",
+          "gridArea": ["4", "2", "5", "3"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "teleopTransitionRatingStoring3",
+          "displayText": "TT Collect R3",
+          "gridArea": ["4", "3", "5", "4"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "teleopTransitionRatingStoring4",
+          "displayText": "TT Collect R4",
+          "gridArea": ["4", "4", "5", "5"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "activeShift1RatingShooting1",
+          "displayText": "AS1 Shoot R1",
+          "gridArea": ["4", "5", "5", "6"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "activeShift1RatingShooting2",
+          "displayText": "AS1 Shoot R2",
+          "gridArea": ["4", "6", "5", "7"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "activeShift1RatingShooting3",
+          "displayText": "AS1 Shoot R3",
+          "gridArea": ["4", "7", "5", "8"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "activeShift1RatingShooting4",
+          "displayText": "AS1 Shoot R4",
+          "gridArea": ["4", "8", "5", "9"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "activeShift1RatingPassing1",
+          "displayText": "AS1 Pass R1",
+          "gridArea": ["4", "9", "5", "10"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "activeShift1RatingPassing2",
+          "displayText": "AS1 Pass R2",
+          "gridArea": ["4", "10", "5", "11"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "activeShift1RatingPassing3",
+          "displayText": "AS1 Pass R3",
+          "gridArea": ["4", "11", "5", "12"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "activeShift1RatingPassing4",
+          "displayText": "AS1 Pass R4",
+          "gridArea": ["4", "12", "5", "13"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "activeShift1RatingDefense1",
+          "displayText": "AS1 Def R1",
+          "gridArea": ["5", "1", "6", "2"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "activeShift1RatingDefense2",
+          "displayText": "AS1 Def R2",
+          "gridArea": ["5", "2", "6", "3"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "activeShift1RatingDefense3",
+          "displayText": "AS1 Def R3",
+          "gridArea": ["5", "3", "6", "4"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "activeShift1RatingDefense4",
+          "displayText": "AS1 Def R4",
+          "gridArea": ["5", "4", "6", "5"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "activeShift1RatingStoring1",
+          "displayText": "AS1 Collect R1",
+          "gridArea": ["5", "5", "6", "6"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "activeShift1RatingStoring2",
+          "displayText": "AS1 Collect R2",
+          "gridArea": ["5", "6", "6", "7"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "activeShift1RatingStoring3",
+          "displayText": "AS1 Store R3",
+          "gridArea": ["5", "7", "6", "8"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "activeShift1RatingStoring4",
+          "displayText": "AS1 Collect R4",
+          "gridArea": ["5", "8", "6", "9"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "activeShift2RatingShooting1",
+          "displayText": "AS2 Shoot R1",
+          "gridArea": ["5", "9", "6", "10"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "activeShift2RatingShooting2",
+          "displayText": "AS2 Shoot R2",
+          "gridArea": ["5", "10", "6", "11"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "activeShift2RatingShooting3",
+          "displayText": "AS2 Shoot R3",
+          "gridArea": ["5", "11", "6", "12"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "activeShift2RatingShooting4",
+          "displayText": "AS2 Shoot R4",
+          "gridArea": ["5", "12", "6", "13"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "activeShift2RatingPassing1",
+          "displayText": "AS2 Pass R1",
+          "gridArea": ["6", "1", "7", "2"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "activeShift2RatingPassing2",
+          "displayText": "AS2 Pass R2",
+          "gridArea": ["6", "2", "7", "3"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "activeShift2RatingPassing3",
+          "displayText": "AS2 Pass R3",
+          "gridArea": ["6", "3", "7", "4"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "activeShift2RatingPassing4",
+          "displayText": "AS2 Pass R4",
+          "gridArea": ["6", "4", "7", "5"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "activeShift2RatingDefense1",
+          "displayText": "AS2 Def R1",
+          "gridArea": ["6", "5", "7", "6"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "activeShift2RatingDefense2",
+          "displayText": "AS2 Def R2",
+          "gridArea": ["6", "6", "7", "7"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "activeShift2RatingDefense3",
+          "displayText": "AS2 Def R3",
+          "gridArea": ["6", "7", "7", "8"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "activeShift2RatingDefense4",
+          "displayText": "AS2 Def R4",
+          "gridArea": ["6", "8", "7", "9"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "activeShift2RatingStoring1",
+          "displayText": "AS2 Collect R1",
+          "gridArea": ["6", "9", "7", "10"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "activeShift2RatingStoring2",
+          "displayText": "AS2 Collect R2",
+          "gridArea": ["6", "10", "7", "11"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "activeShift2RatingStoring3",
+          "displayText": "AS2 Collect R3",
+          "gridArea": ["6", "11", "7", "12"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "activeShift2RatingStoring4",
+          "displayText": "AS2 Collect R4",
+          "gridArea": ["6", "12", "7", "13"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "inactiveShift1RatingShooting1",
+          "displayText": "IS1 Shoot R1",
+          "gridArea": ["7", "1", "8", "2"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "inactiveShift1RatingShooting2",
+          "displayText": "IS1 Shoot R2",
+          "gridArea": ["7", "2", "8", "3"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "inactiveShift1RatingShooting3",
+          "displayText": "IS1 Shoot R3",
+          "gridArea": ["7", "3", "8", "4"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "inactiveShift1RatingShooting4",
+          "displayText": "IS1 Shoot R4",
+          "gridArea": ["7", "4", "8", "5"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "inactiveShift1RatingPassing1",
+          "displayText": "IS1 Pass R1",
+          "gridArea": ["7", "5", "8", "6"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "inactiveShift1RatingPassing2",
+          "displayText": "IS1 Pass R2",
+          "gridArea": ["7", "6", "8", "7"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "inactiveShift1RatingPassing3",
+          "displayText": "IS1 Pass R3",
+          "gridArea": ["7", "7", "8", "8"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "inactiveShift1RatingPassing4",
+          "displayText": "IS1 Pass R4",
+          "gridArea": ["7", "8", "8", "9"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "inactiveShift1RatingDefense1",
+          "displayText": "IS1 Def R1",
+          "gridArea": ["7", "9", "8", "10"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "inactiveShift1RatingDefense2",
+          "displayText": "IS1 Def R2",
+          "gridArea": ["7", "10", "8", "11"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "inactiveShift1RatingDefense3",
+          "displayText": "IS1 Def R3",
+          "gridArea": ["7", "11", "8", "12"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "inactiveShift1RatingDefense4",
+          "displayText": "IS1 Def R4",
+          "gridArea": ["7", "12", "8", "13"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "inactiveShift1RatingStoring1",
+          "displayText": "IS1 Collect R1",
+          "gridArea": ["8", "1", "9", "2"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "inactiveShift1RatingStoring2",
+          "displayText": "IS1 Collect R2",
+          "gridArea": ["8", "2", "9", "3"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "inactiveShift1RatingStoring3",
+          "displayText": "IS1 Collect R3",
+          "gridArea": ["8", "3", "9", "4"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "inactiveShift1RatingStoring4",
+          "displayText": "IS1 Collect R4",
+          "gridArea": ["8", "4", "9", "5"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "inactiveShift2RatingShooting1",
+          "displayText": "IS2 Shoot R1",
+          "gridArea": ["8", "5", "9", "6"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "inactiveShift2RatingShooting2",
+          "displayText": "IS2 Shoot R2",
+          "gridArea": ["8", "6", "9", "7"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "inactiveShift2RatingShooting3",
+          "displayText": "IS2 Shoot R3",
+          "gridArea": ["8", "7", "9", "8"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "inactiveShift2RatingShooting4",
+          "displayText": "IS2 Shoot R4",
+          "gridArea": ["8", "8", "9", "9"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "inactiveShift2RatingPassing1",
+          "displayText": "IS2 Pass R1",
+          "gridArea": ["8", "9", "9", "10"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "inactiveShift2RatingPassing2",
+          "displayText": "IS2 Pass R2",
+          "gridArea": ["8", "10", "9", "11"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "inactiveShift2RatingPassing3",
+          "displayText": "IS2 Pass R3",
+          "gridArea": ["8", "11", "9", "12"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "inactiveShift2RatingPassing4",
+          "displayText": "IS2 Pass R4",
+          "gridArea": ["8", "12", "9", "13"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "inactiveShift2RatingDefense1",
+          "displayText": "IS2 Def R1",
+          "gridArea": ["9", "1", "10", "2"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "inactiveShift2RatingDefense2",
+          "displayText": "IS2 Def R2",
+          "gridArea": ["9", "2", "10", "3"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "inactiveShift2RatingDefense3",
+          "displayText": "IS2 Def R3",
+          "gridArea": ["9", "3", "10", "4"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "inactiveShift2RatingDefense4",
+          "displayText": "IS2 Def R4",
+          "gridArea": ["9", "4", "10", "5"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "inactiveShift2RatingStoring1",
+          "displayText": "IS2 Collect R1",
+          "gridArea": ["9", "5", "10", "6"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "inactiveShift2RatingStoring2",
+          "displayText": "IS2 Collect R2",
+          "gridArea": ["9", "6", "10", "7"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "inactiveShift2RatingStoring3",
+          "displayText": "IS2 Collect R3",
+          "gridArea": ["9", "7", "10", "8"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "inactiveShift2RatingStoring4",
+          "displayText": "IS2 Collect R4",
+          "gridArea": ["9", "8", "10", "9"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "endgameRatingShooting1",
+          "displayText": "EG Shoot R1",
+          "gridArea": ["9", "9", "10", "10"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "endgameRatingShooting2",
+          "displayText": "EG Shoot R2",
+          "gridArea": ["9", "10", "10", "11"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "endgameRatingShooting3",
+          "displayText": "EG Shoot R3",
+          "gridArea": ["9", "11", "10", "12"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "endgameRatingShooting4",
+          "displayText": "EG Shoot R4",
+          "gridArea": ["9", "12", "10", "13"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "endgameRatingPassing1",
+          "displayText": "EG Pass R1",
+          "gridArea": ["10", "1", "11", "2"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "endgameRatingPassing2",
+          "displayText": "EG Pass R2",
+          "gridArea": ["10", "2", "11", "3"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "endgameRatingPassing3",
+          "displayText": "EG Pass R3",
+          "gridArea": ["10", "3", "11", "4"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "endgameRatingPassing4",
+          "displayText": "EG Pass R4",
+          "gridArea": ["10", "4", "11", "5"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "endgameRatingDefense1",
+          "displayText": "EG Def R1",
+          "gridArea": ["10", "5", "11", "6"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "endgameRatingDefense2",
+          "displayText": "EG Def R2",
+          "gridArea": ["10", "6", "11", "7"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "endgameRatingDefense3",
+          "displayText": "EG Def R3",
+          "gridArea": ["10", "7", "11", "8"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "endgameRatingDefense4",
+          "displayText": "EG Def R4",
+          "gridArea": ["10", "8", "11", "9"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "endgameRatingStoring1",
+          "displayText": "EG Collect R1",
+          "gridArea": ["10", "9", "11", "10"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "endgameRatingStoring2",
+          "displayText": "EG Collect R2",
+          "gridArea": ["10", "10", "11", "11"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "endgameRatingStoring3",
+          "displayText": "EG Collect R3",
+          "gridArea": ["10", "11", "11", "12"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "endgameRatingStoring4",
+          "displayText": "EG Collect R4",
+          "gridArea": ["10", "12", "11", "13"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "teleopTransitionRedZone",
+          "displayText": "TT Red Zone",
+          "gridArea": ["11", "1", "12", "2"],
+          "class": "red",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "teleopTransitionNeutralZone",
+          "displayText": "TT Neutral Zone",
+          "gridArea": ["11", "2", "12", "3"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "teleopTransitionBlueZone",
+          "displayText": "TT Blue Zone",
+          "gridArea": ["11", "3", "12", "4"],
+          "class": "shallowBlue",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "activeShift1RedZone",
+          "displayText": "AS1 Red Zone",
+          "gridArea": ["11", "4", "12", "5"],
+          "class": "red",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "activeShift1NeutralZone",
+          "displayText": "AS1 Neutral Zone",
+          "gridArea": ["11", "5", "12", "6"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "activeShift1BlueZone",
+          "displayText": "AS1 Blue Zone",
+          "gridArea": ["11", "6", "12", "7"],
+          "class": "shallowBlue",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "activeShift2RedZone",
+          "displayText": "AS2 Red Zone",
+          "gridArea": ["11", "7", "12", "8"],
+          "class": "red",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "activeShift2NeutralZone",
+          "displayText": "AS2 Neutral Zone",
+          "gridArea": ["11", "8", "12", "9"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "activeShift2BlueZone",
+          "displayText": "AS2 Blue Zone",
+          "gridArea": ["11", "9", "12", "10"],
+          "class": "shallowBlue",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "inactiveShift1RedZone",
+          "displayText": "IS1 Red Zone",
+          "gridArea": ["11", "10", "12", "11"],
+          "class": "red",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "inactiveShift1NeutralZone",
+          "displayText": "IS1 Neutral Zone",
+          "gridArea": ["11", "11", "12", "12"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "inactiveShift1BlueZone",
+          "displayText": "IS1 Blue Zone",
+          "gridArea": ["11", "12", "12", "13"],
+          "class": "shallowBlue",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "inactiveShift2RedZone",
+          "displayText": "IS2 Red Zone",
+          "gridArea": ["12", "1", "13", "2"],
+          "class": "red",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "inactiveShift2NeutralZone",
+          "displayText": "IS2 Neutral Zone",
+          "gridArea": ["12", "2", "13", "3"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "inactiveShift2BlueZone",
+          "displayText": "IS2 Blue Zone",
+          "gridArea": ["12", "3", "13", "4"],
+          "class": "shallowBlue",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "endgameRedZone",
+          "displayText": "EG Red Zone",
+          "gridArea": ["12", "4", "13", "5"],
+          "class": "red",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "endgameNeutralZone",
+          "displayText": "EG Neutral Zone",
+          "gridArea": ["12", "5", "13", "6"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "endgameBlueZone",
+          "displayText": "EG Blue Zone",
+          "gridArea": ["12", "6", "13", "7"],
+          "class": "shallowBlue",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "teleopTransitionAttemptL1",
+          "displayText": "TT Attempt L1",
+          "gridArea": ["12", "7", "13", "8"],
+          "class": "blue2026",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "teleopTransitionAttemptL2",
+          "displayText": "TT Attempt L2",
+          "gridArea": ["12", "8", "13", "9"],
+          "class": "shallowBlue",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "teleopTransitionAttemptL3",
+          "displayText": "TT Attempt L3",
+          "gridArea": ["12", "9", "13", "10"],
+          "class": "deepBlue",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "teleopTransitionFall",
+          "displayText": "TT Fall",
+          "gridArea": ["12", "10", "13", "11"],
+          "class": "red",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "activeShift1AttemptL1",
+          "displayText": "AS1 Attempt L1",
+          "gridArea": ["12", "11", "13", "12"],
+          "class": "blue2026",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "activeShift1AttemptL2",
+          "displayText": "AS1 Attempt L2",
+          "gridArea": ["12", "12", "13", "13"],
+          "class": "shallowBlue",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "activeShift1AttemptL3",
+          "displayText": "AS1 Attempt L3",
+          "gridArea": ["13", "1", "14", "2"],
+          "class": "deepBlue",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "activeShift1Fall",
+          "displayText": "AS1 Fall",
+          "gridArea": ["13", "2", "14", "3"],
+          "class": "red",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "activeShift2AttemptL1",
+          "displayText": "AS2 Attempt L1",
+          "gridArea": ["13", "3", "14", "4"],
+          "class": "blue2026",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "activeShift2AttemptL2",
+          "displayText": "AS2 Attempt L2",
+          "gridArea": ["13", "4", "14", "5"],
+          "class": "shallowBlue",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "activeShift2AttemptL3",
+          "displayText": "AS2 Attempt L3",
+          "gridArea": ["13", "5", "14", "6"],
+          "class": "deepBlue",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "activeShift2Fall",
+          "displayText": "AS2 Fall",
+          "gridArea": ["13", "6", "14", "7"],
+          "class": "red",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "inactiveShift1AttemptL1",
+          "displayText": "IS1 Attempt L1",
+          "gridArea": ["13", "7", "14", "8"],
+          "class": "blue2026",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "inactiveShift1AttemptL2",
+          "displayText": "IS1 Attempt L2",
+          "gridArea": ["13", "8", "14", "9"],
+          "class": "shallowBlue",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "inactiveShift1AttemptL3",
+          "displayText": "IS1 Attempt L3",
+          "gridArea": ["13", "9", "14", "10"],
+          "class": "deepBlue",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "inactiveShift1Fall",
+          "displayText": "IS1 Fall",
+          "gridArea": ["13", "10", "14", "11"],
+          "class": "red",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "inactiveShift2AttemptL1",
+          "displayText": "IS2 Attempt L1",
+          "gridArea": ["13", "11", "14", "12"],
+          "class": "blue2026",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "inactiveShift2AttemptL2",
+          "displayText": "IS2 Attempt L2",
+          "gridArea": ["13", "12", "14", "13"],
+          "class": "shallowBlue",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "inactiveShift2AttemptL3",
+          "displayText": "IS2 Attempt L3",
+          "gridArea": ["14", "1", "15", "2"],
+          "class": "deepBlue",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "inactiveShift2Fall",
+          "displayText": "IS2 Fall",
+          "gridArea": ["14", "2", "15", "3"],
+          "class": "red",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "endgameAttemptL1",
+          "displayText": "EG Attempt L1",
+          "gridArea": ["14", "3", "15", "4"],
+          "class": "blue2026",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "endgameAttemptL2",
+          "displayText": "EG Attempt L2",
+          "gridArea": ["14", "4", "15", "5"],
+          "class": "shallowBlue",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "endgameAttemptL3",
+          "displayText": "EG Attempt L3",
+          "gridArea": ["14", "5", "15", "6"],
+          "class": "deepBlue",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "endgameFall",
+          "displayText": "EG Fall",
+          "gridArea": ["14", "6", "15", "7"],
+          "class": "red",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "autoCollectOutpost",
+          "displayText": "Auto Collect Outpost",
+          "gridArea": ["14", "7", "15", "9"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "autoCollectDepot",
+          "displayText": "Auto Collect Depot",
+          "gridArea": ["14", "9", "15", "11"],
+          "class": "shallowBlue",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "autoCollectNeutral",
+          "displayText": "Auto Collect Neutral",
+          "gridArea": ["14", "11", "15", "13"],
+          "class": "deepBlue",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "teleopTransitionStartShooting",
+          "displayText": "TT Start Shoot",
+          "gridArea": ["15", "1", "16", "2"],
+          "class": "fuel2026",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "teleopTransitionStopShooting",
+          "displayText": "TT Stop Shoot",
+          "gridArea": ["15", "2", "16", "3"],
+          "class": "fuel2026",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "activeShift1StartShooting",
+          "displayText": "AS1 Start Shoot",
+          "gridArea": ["15", "3", "16", "4"],
+          "class": "fuel2026",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "activeShift1StopShooting",
+          "displayText": "AS1 Stop Shoot",
+          "gridArea": ["15", "4", "16", "5"],
+          "class": "fuel2026",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "activeShift2StartShooting",
+          "displayText": "AS2 Start Shoot",
+          "gridArea": ["15", "5", "16", "6"],
+          "class": "fuel2026",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "activeShift2StopShooting",
+          "displayText": "AS2 Stop Shoot",
+          "gridArea": ["15", "6", "16", "7"],
+          "class": "fuel2026",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "inactiveShift1StartShooting",
+          "displayText": "IS1 Start Shoot",
+          "gridArea": ["15", "7", "16", "8"],
+          "class": "fuel2026",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "inactiveShift1StopShooting",
+          "displayText": "IS1 Stop Shoot",
+          "gridArea": ["15", "8", "16", "9"],
+          "class": "fuel2026",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "inactiveShift2StartShooting",
+          "displayText": "IS2 Start Shoot",
+          "gridArea": ["15", "9", "16", "10"],
+          "class": "fuel2026",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "inactiveShift2StopShooting",
+          "displayText": "IS2 Stop Shoot",
+          "gridArea": ["15", "10", "16", "11"],
+          "class": "fuel2026",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "endgameStartShooting",
+          "displayText": "EG Start Shoot",
+          "gridArea": ["15", "11", "16", "12"],
+          "class": "fuel2026",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "endgameStopShooting",
+          "displayText": "EG Stop Shoot",
+          "gridArea": ["15", "12", "16", "13"],
+          "class": "fuel2026",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "autoStartShooting",
+          "displayText": "Auto Start Shoot",
+          "gridArea": ["15", "11", "16", "12"],
+          "class": "fuel2026",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "autoStopShooting",
+          "displayText": "Auto Stop Shoot",
+          "gridArea": ["15", "12", "16", "13"],
+          "class": "fuel2026",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "autoRatingShooting1",
+          "displayText": "Auto Shoot R1",
+          "gridArea": ["2", "1", "3", "3"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "autoRatingShooting2",
+          "displayText": "Auto Shoot R2",
+          "gridArea": ["2", "2", "3", "4"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "autoRatingShooting3",
+          "displayText": "Auto Shoot R3",
+          "gridArea": ["2", "3", "3", "5"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "autoRatingShooting4",
+          "displayText": "Auto Shoot R4",
+          "gridArea": ["2", "4", "3", "6"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "autoRatingPassing1",
+          "displayText": "Auto Pass R1",
+          "gridArea": ["2", "5", "3", "7"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "autoRatingPassing2",
+          "displayText": "Auto Pass R2",
+          "gridArea": ["2", "6", "3", "8"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "autoRatingPassing3",
+          "displayText": "Auto Pass R3",
+          "gridArea": ["2", "7", "3", "9"],
+          "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "autoRatingPassing4",
+          "displayText": "Auto Pass R4",
+          "gridArea": ["2", "8", "3", "10"],
+          "class": "gray",
           "type": "action",
           "executables": []
         }
