@@ -25,7 +25,7 @@ class RadarChart {
           j < this.moduleConfig.options.lines[i].times.length;
           j++
         ) {
-          let point = null;
+          let point = 0;
           if (!(this.moduleConfig.options.lines[i].times[j].path == "none")) {
             point = getPath(
               dataset.teams[team],

@@ -30,16 +30,19 @@
           "name": "Active 1"
         },
         {
-          "name": "Inactive 1"
+          "name": "Active 2"
         },
         {
-          "name": "Active 2"
+          "name": "Inactive 1"
         },
         {
           "name": "Inactive 2"
         },
         {
           "name": "Endgame"
+        },
+        {
+          "name": "Auto"
         }
       ],
       "lines": [
@@ -58,15 +61,19 @@
               "name": "Active 1",
               "path": "averageScores.activeShift1ShootingRating"
             },
-            { "name": "Inactive 1", "path": "none" },
             {
               "name": "Active 2",
               "path": "averageScores.activeShift2ShootingRating"
             },
+            { "name": "Inactive 1", "path": "none" },
             { "name": "Inactive 2", "path": "none" },
             {
               "name": "Endgame",
               "path": "averageScores.endgameShootingRating"
+            },
+            {
+              "name": "Auto",
+              "path": "averageScores.autoShootingRating"
             }
           ]
         },
@@ -86,12 +93,12 @@
               "path": "averageScores.activeShift1CollectingRating"
             },
             {
-              "name": "Inactive 1",
-              "path": "averageScores.inactiveShift1CollectingRating"
-            },
-            {
               "name": "Active 2",
               "path": "averageScores.activeShift2CollectingRating"
+            },
+            {
+              "name": "Inactive 1",
+              "path": "averageScores.inactiveShift1CollectingRating"
             },
             {
               "name": "Inactive 2",
@@ -100,6 +107,10 @@
             {
               "name": "Endgame",
               "path": "averageScores.endgameCollectingRating"
+            },
+            {
+              "name": "Auto",
+              "path": "none"
             }
           ]
         },
@@ -119,13 +130,14 @@
               "path": "averageScores.activeShift1PassingRating"
             },
             {
-              "name": "Inactive 1",
-              "path": "averageScores.inactiveShift1PassingRating"
-            },
-            {
               "name": "Active 2",
               "path": "averageScores.activeShift2PassingRating"
             },
+            {
+              "name": "Inactive 1",
+              "path": "averageScores.inactiveShift1PassingRating"
+            },
+
             {
               "name": "Inactive 2",
               "path": "averageScores.inactiveShift2PassingRating"
@@ -133,6 +145,10 @@
             {
               "name": "Endgame",
               "path": "averageScores.endgamePassingRating"
+            },
+            {
+              "name": "Auto",
+              "path": "averageScores.autoPassingRating"
             }
           ]
         },
@@ -149,13 +165,14 @@
               "path": "averageScores.activeShift1DefenseRating"
             },
             {
-              "name": "Inactive 1",
-              "path": "averageScores.inactiveShift1DefenseRating"
-            },
-            {
               "name": "Active 2",
               "path": "averageScores.activeShift2DefenseRating"
             },
+            {
+              "name": "Inactive 1",
+              "path": "averageScores.inactiveShift1DefenseRating"
+            },
+
             {
               "name": "Inactive 2",
               "path": "averageScores.inactiveShift2DefenseRating"
@@ -163,7 +180,8 @@
             {
               "name": "Endgame",
               "path": "averageScores.endgameDefenseRating"
-            }
+            },
+            { "name": "Auto", "path": "none" }
           ]
         }
       ]
