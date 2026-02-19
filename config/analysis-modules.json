@@ -78,7 +78,7 @@
           ]
         },
         {
-          "name": "Collecting",
+          "name": "Storing",
           "times": [
             {
               "name": "Auto",
@@ -86,27 +86,27 @@
             },
             {
               "name": "Transition",
-              "path": "averageScores.teleopTransitionCollectingRating"
+              "path": "averageScores.teleopTransitionStoringRating"
             },
             {
               "name": "Active 1",
-              "path": "averageScores.activeShift1CollectingRating"
+              "path": "averageScores.activeShift1StoringRating"
             },
             {
               "name": "Active 2",
-              "path": "averageScores.activeShift2CollectingRating"
+              "path": "averageScores.activeShift2StoringRating"
             },
             {
               "name": "Inactive 1",
-              "path": "averageScores.inactiveShift1CollectingRating"
+              "path": "averageScores.inactiveShift1StoringRating"
             },
             {
               "name": "Inactive 2",
-              "path": "averageScores.inactiveShift2CollectingRating"
+              "path": "averageScores.inactiveShift2StoringRating"
             },
             {
               "name": "Endgame",
-              "path": "averageScores.endgameCollectingRating"
+              "path": "averageScores.endgameStoringRating"
             },
             {
               "name": "Auto",

@@ -133,16 +133,6 @@
             {
               "type": "clearHighlight",
               "args": []
-            }
-          ]
-        },
-        {
-          "id": "Passing",
-          "displayText": "Pass",
-          "gridArea": ["3", "8", "4", "12"],
-          "class": "blue2026",
-          "type": "action",
-          "executables": [
             },
             {
               "type": "layer",
@@ -151,9 +141,6 @@
           ]
         },
         {
-          "id": "Shooting",
-          "displayText": "Shoot",
-          "gridArea": ["4", "8", "5", "12"],
           "id": "Passing",
           "displayText": "Passing",
           "gridArea": ["2", "8", "4", "12"],
@@ -167,9 +154,6 @@
           ]
         },
         {
-          "id": "Collect",
-          "displayText": "Collect",
-          "gridArea": ["5", "8", "6", "12"],
           "id": "Storing",
           "displayText": "Storing",
           "gridArea": ["4", "8", "6", "12"],
@@ -261,7 +245,7 @@
           "executables": []
         },
         {
-          "id": "AttemptL3",
+          "id": "attemptL3",
           "displayText": "L3",
           "gridArea": ["3", "4", "4", "10"],
           "class": "deepBlue",
@@ -269,13 +253,12 @@
           "executables": [
             {
               "type": "climbHighlight",
-              "args": ["AttemptL3", "AttemptL2", "AttemptL1", "Fall"]
               "args": ["attemptL3", "fall", "AttemptL1", "attemptL2"]
             }
           ]
         },
         {
-          "id": "AttemptL2",
+          "id": "attemptL2",
           "displayText": "L2",
           "gridArea": ["4", "4", "5", "10"],
           "class": "shallowBlue",
@@ -283,7 +266,6 @@
           "executables": [
             {
               "type": "climbHighlight",
-              "args": ["AttemptL3", "AttemptL2", "AttemptL1", "Fall"]
               "args": ["attemptL2", "fall", "AttemptL1", "attemptL3"]
             }
           ]
@@ -297,13 +279,12 @@
           "executables": [
             {
               "type": "climbHighlight",
-              "args": ["AttemptL3", "AttemptL2", "AttemptL1", "Fall"]
               "args": ["AttemptL1", "attemptL3", "fall", "attemptL2"]
             }
           ]
         },
         {
-          "id": "Fall",
+          "id": "fall",
           "displayText": "Fall",
           "gridArea": ["6", "4", "7", "10"],
           "class": "red",
@@ -311,7 +292,6 @@
           "executables": [
             {
               "type": "climbHighlight",
-              "args": ["AttemptL3", "AttemptL2", "AttemptL1", "Fall"]
               "args": ["fall", "attemptL3", "AttemptL1", "attemptL2"]
             }
           ]
@@ -612,9 +592,6 @@
           "executables": []
         },
         {
-          "id": "Collecting",
-          "displayText": "Collect",
-          "gridArea": ["3", "4", "4", "7"],
           "id": "Storing",
           "displayText": "Storing",
           "gridArea": ["3", "1", "4", "5"],
@@ -628,9 +605,6 @@
           ]
         },
         {
-          "id": "Passing",
-          "displayText": "Pass",
-          "gridArea": ["3", "1", "4", "4"],
           "id": "passing",
           "displayText": "Passing",
           "gridArea": ["3", "5", "4", "9"],
@@ -644,22 +618,6 @@
           ]
         },
         {
-          "id": "Shooting",
-          "displayText": "Shoot",
-          "gridArea": ["3", "7", "4", "10"],
-          "class": "blue2026",
-          "type": "action",
-          "executables": [
-            {
-              "type": "layer",
-              "args": [7, 10]
-            }
-          ]
-        },
-        {
-          "id": "Defense",
-          "displayText": "Defense",
-          "gridArea": ["3", "10", "4", "14"],
           "id": "defense",
           "displayText": "Defending",
           "gridArea": ["3", "9", "4", "14"],
@@ -673,7 +631,7 @@
           ]
         },
         {
-          "id": "AttemptClimb",
+          "id": "attemptClimb",
           "displayText": "Attempt Climb",
           "gridArea": ["5", "5", "6", "9"],
           "class": "gray",
@@ -686,8 +644,6 @@
           ]
         },
         {
-          "id": "StartShoot",
-          "displayText": "Start Shoot",
           "id": "StartShooting",
           "displayText": "Start Scoring",
           "gridArea": ["4", "2", "5", "6"],
@@ -996,7 +952,6 @@
           "executables": []
         },
         {
-          "id": "RatingCollecting1",
           "id": "RatingStoring1",
           "displayText": "Rating 1",
           "gridArea": ["2", "2", "4", "6"],
@@ -1010,7 +965,6 @@
           ]
         },
         {
-          "id": "RatingCollecting2",
           "id": "RatingStoring2",
           "displayText": "Rating 2",
           "gridArea": ["2", "7", "4", "11"],
@@ -1024,7 +978,6 @@
           ]
         },
         {
-          "id": "RatingCollecting3",
           "id": "RatingStoring3",
           "displayText": "Rating 3",
           "gridArea": ["4", "2", "6", "6"],
@@ -1038,7 +991,6 @@
           ]
         },
         {
-          "id": "RatingCollecting4",
           "id": "RatingStoring4",
           "displayText": "Rating 4",
           "gridArea": ["4", "7", "6", "11"],
@@ -1062,7 +1014,7 @@
           "executables": []
         },
         {
-          "id": "counts.teleopL1",
+          "id": "endGameTowerRobot_Level1",
           "displayText": "Teleop Climb L1",
           "gridArea": ["1", "4", "2", "7"],
           "class": "gray",
@@ -1070,7 +1022,7 @@
           "executables": []
         },
         {
-          "id": "counts.l2",
+          "id": "endGameTowerRobot_Level2",
           "displayText": "Teleop Climb L2",
           "gridArea": ["1", "4", "2", "7"],
           "class": "gray",
@@ -1078,7 +1030,7 @@
           "executables": []
         },
         {
-          "id": "counts.l3",
+          "id": "endGameTowerRobot_Level3",
           "displayText": "Teleop Climb L3",
           "gridArea": ["1", "4", "2", "7"],
           "class": "gray",
@@ -1086,10 +1038,6 @@
           "executables": []
         },
         {
-          "id": "teleopFuelScored",
-          "displayText": "Teleop Fuel Scored",
-          "gridArea": ["2", "1", "3", "7"],
-          "class": "fuel2026",
           "id": "teleopTransitionRatingShooting1",
           "displayText": "TT Shoot R1",
           "gridArea": ["3", "1", "4", "2"],
