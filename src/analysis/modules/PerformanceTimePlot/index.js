@@ -57,7 +57,7 @@ class PerformanceTimePlot {
       },
       xaxis: {
         showticklabels: false,
-        gridcolor: this.getCssVar("--text"),
+        zerolinecolor: this.getCssVar("--text"),
       },
       legend: {
         font: {

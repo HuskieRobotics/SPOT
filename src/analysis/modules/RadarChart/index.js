@@ -8,6 +8,12 @@ class RadarChart {
     //this.container.innerHTML ='<div style = "font-size: 2em; text-align:center;">No Team Selected</div>';
   }
 
+  getCssVar(name) {
+    return getComputedStyle(document.documentElement)
+      .getPropertyValue(name)
+      .trim();
+  }
+
   formatData(teams, dataset) {
     console.log(`radar teams recieved: ${teams}`);
     let filteredTeams = teams.filter((team) => team != "|");
@@ -61,6 +67,8 @@ class RadarChart {
             size: 16,
           },
           angle: 90,
+          linecolor: this.getCssVar("--text"),
+          gridcolor: this.getCssVar("--text"),
         },
         angularaxis: {
           tickfont: {
@@ -69,7 +77,10 @@ class RadarChart {
           },
           direction: "clockwise",
           rotation: 90,
+          linecolor: this.getCssVar("--text"),
+          gridcolor: this.getCssVar("--text"),
         },
+        bgcolor: this.getCssVar("--bg-alt"),
       },
       margin: {
         pad: 12,
@@ -90,9 +101,10 @@ class RadarChart {
       },
       font: {
         family: "Cairo, sans-serif",
+        color: this.getCssVar("--text"),
       },
-      paper_bgcolor: "#FEFEFE",
-      plot_bgcolor: "#FEFEFE",
+      paper_bgcolor: this.getCssVar("--bg-alt"),
+      plot_bgcolor: this.getCssVar("--bg-alt"),
     };
 
     const config = {
