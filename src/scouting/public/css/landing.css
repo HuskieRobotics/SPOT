@@ -232,7 +232,7 @@
 }
 
 #landing .auth-buttons > div > i {
-  color: var(--bg-alt, #fefefe);
+  color: #fefefe;
   background-color: var(--light-gray);
   font-size: 1.75em;
   padding: 14px;
