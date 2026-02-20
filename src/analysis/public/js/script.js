@@ -24,10 +24,11 @@ if ("serviceWorker" in navigator) {
  */
 async function isDemo() {
   const isDemo = await fetch("./api/isDemo").then((res) => res.json()); // Check if in demo mode
+  const demoEnabled = isDemo === true || isDemo === "true";
 
   demoLabel = document.querySelector("#demo-label");
 
-  if (isDemo) {
+  if (demoEnabled) {
     // Basically makes the demo text appear.
     demoLabel.textContent = "DEMO";
     demoLabel.style.fontSize = "3em";

@@ -15,29 +15,179 @@
   },
   {
     "view": "team",
-    "module": "HeatmapScatterPlot",
-    "name": "Auto Start and Stop Shooting Heatmap",
+    "module": "RadarChart",
+    "name": "Ratings By Time Intervals",
     "position": "main",
     "options": {
-      "coordinatePath": "other.pos",
-      "aggregatedActionsPath": "aggregatedActions",
-      "actionGroups": [
+      "sections": [
         {
-          "name": "Auto Start Shooting",
-          "actions": ["autoStartShooting"]
+          "name": "Auto"
         },
         {
-          "name": "Auto End Shooting",
-          "actions": ["autoStopShooting"]
+          "name": "Transition"
+        },
+        {
+          "name": "Active 1"
+        },
+        {
+          "name": "Active 2"
+        },
+        {
+          "name": "Inactive 1"
+        },
+        {
+          "name": "Inactive 2"
+        },
+        {
+          "name": "Endgame"
+        },
+        {
+          "name": "Auto"
         }
       ],
-      "actionLabels": {
-        "autoStartShooting": "Auto Start Shooting Position",
-        "autoStopShooting": "Auto End Shooting Position"
-      },
-      "imgPath": "img/field.svg"
+      "lines": [
+        {
+          "name": "Shooting",
+          "times": [
+            {
+              "name": "Auto",
+              "path": "averageScores.autoShootingRating"
+            },
+            {
+              "name": "Transition",
+              "path": "averageScores.teleopTransitionShootingRating"
+            },
+            {
+              "name": "Active 1",
+              "path": "averageScores.activeShift1ShootingRating"
+            },
+            {
+              "name": "Active 2",
+              "path": "averageScores.activeShift2ShootingRating"
+            },
+            { "name": "Inactive 1", "path": "none" },
+            { "name": "Inactive 2", "path": "none" },
+            {
+              "name": "Endgame",
+              "path": "averageScores.endgameShootingRating"
+            },
+            {
+              "name": "Auto",
+              "path": "averageScores.autoShootingRating"
+            }
+          ]
+        },
+        {
+          "name": "Storing",
+          "times": [
+            {
+              "name": "Auto",
+              "path": "none"
+            },
+            {
+              "name": "Transition",
+              "path": "averageScores.teleopTransitionStoringRating"
+            },
+            {
+              "name": "Active 1",
+              "path": "averageScores.activeShift1StoringRating"
+            },
+            {
+              "name": "Active 2",
+              "path": "averageScores.activeShift2StoringRating"
+            },
+            {
+              "name": "Inactive 1",
+              "path": "averageScores.inactiveShift1StoringRating"
+            },
+            {
+              "name": "Inactive 2",
+              "path": "averageScores.inactiveShift2StoringRating"
+            },
+            {
+              "name": "Endgame",
+              "path": "averageScores.endgameStoringRating"
+            },
+            {
+              "name": "Auto",
+              "path": "none"
+            }
+          ]
+        },
+        {
+          "name": "Passing",
+          "times": [
+            {
+              "name": "Auto",
+              "path": "averageScores.autoPassingRating"
+            },
+            {
+              "name": "Transition",
+              "path": "averageScores.teleopTransitionPassingRating"
+            },
+            {
+              "name": "Active 1",
+              "path": "averageScores.activeShift1PassingRating"
+            },
+            {
+              "name": "Active 2",
+              "path": "averageScores.activeShift2PassingRating"
+            },
+            {
+              "name": "Inactive 1",
+              "path": "averageScores.inactiveShift1PassingRating"
+            },
+
+            {
+              "name": "Inactive 2",
+              "path": "averageScores.inactiveShift2PassingRating"
+            },
+            {
+              "name": "Endgame",
+              "path": "averageScores.endgamePassingRating"
+            },
+            {
+              "name": "Auto",
+              "path": "averageScores.autoPassingRating"
+            }
+          ]
+        },
+        {
+          "name": "Defense",
+          "times": [
+            { "name": "Auto", "path": "none" },
+            {
+              "name": "Transition",
+              "path": "averageScores.teleopTransitionDefenseRating"
+            },
+            {
+              "name": "Active 1",
+              "path": "averageScores.activeShift1DefenseRating"
+            },
+            {
+              "name": "Active 2",
+              "path": "averageScores.activeShift2DefenseRating"
+            },
+            {
+              "name": "Inactive 1",
+              "path": "averageScores.inactiveShift1DefenseRating"
+            },
+
+            {
+              "name": "Inactive 2",
+              "path": "averageScores.inactiveShift2DefenseRating"
+            },
+            {
+              "name": "Endgame",
+              "path": "averageScores.endgameDefenseRating"
+            },
+            { "name": "Auto", "path": "none" }
+          ]
+        }
+      ]
     }
   },
+
   {
     "view": "team",
     "module": "HeatmapScatterPlot",
@@ -56,26 +206,49 @@
   {
     "view": "team",
     "module": "Bar",
-    "name": "Attemped Climb Level",
+    "name": "Attempted Climb Level",
     "position": "main",
     "options": {
       "bars": [
         {
           "name": "Fall",
-          "path": "counts.fall"
+          "path": "counts.endgameFall"
         },
         {
           "name": "L1",
-          "path": "counts.teleopAttemptL1"
+          "path": "counts.endgameAttemptL1"
         },
 
         {
           "name": "L2",
-          "path": "counts.attemptL2"
+          "path": "counts.endgameAttemptL2"
         },
         {
           "name": "L3",
-          "path": "counts.attemptL3"
+          "path": "counts.endgameAttemptL3"
+        }
+      ]
+    }
+  },
+  {
+    "view": "team",
+    "module": "Bar",
+    "name": "TBA Climb Levels",
+    "position": "main",
+    "options": {
+      "bars": [
+        {
+          "name": "L1",
+          "path": "counts.endGameTowerRobot_Level1"
+        },
+
+        {
+          "name": "L2",
+          "path": "counts.endGameTowerRobot_Level2"
+        },
+        {
+          "name": "L3",
+          "path": "counts.endGameTowerRobot_Level3"
         }
       ]
     }
@@ -107,7 +280,7 @@
       "list": [
         {
           "name": "Average Passing Rating",
-          "path": "averagesScores.passingRating",
+          "path": "averageScores.passingRating",
           "decimals": 2,
           "sort": 1
         },
@@ -124,8 +297,8 @@
           "sort": 1
         },
         {
-          "name": "Average Collection Rating",
-          "path": "averageScores.collectingRating",
+          "name": "Average Storing Rating",
+          "path": "averageScores.storingRating",
           "decimals": 2,
           "sort": 1
         },
@@ -170,48 +343,88 @@
       ]
     }
   },
-
   {
     "view": "match",
-    "module": "SingleDisplay",
-    "name": "Alliance Score",
+    "module": "ColumnDisplay",
+    "name": "Auto Points",
     "position": "main",
     "options": {
-      "path": "averageScores.total",
-      "aggrMethod": "sum",
+      "path": "averageScores.auto",
+      "sort": 1,
       "decimals": 2
     }
   },
   {
     "view": "match",
     "module": "ColumnDisplay",
-    "name": "Average Shooting Time",
+    "name": "Teleop Points",
     "position": "main",
-    "options": [
-      {
-        "name": "Average Auto Shooting Time",
-        "path": "cycles.autoShootingTime.averageTime",
-        "multiplier": 0.001,
-        "decimals": 2,
-        "hideIfValue": 0,
-        "sort": -1,
-        "unit": "s"
-      },
-      {
-        "name": "Average Teleop Shooting Time ",
-        "path": "cycles.shootingTime.averageTime",
-        "multiplier": 0.001,
-        "decimals": 2,
-        "hideIfValue": 0,
-        "sort": -1,
-        "unit": "s"
-      }
-    ]
+    "options": {
+      "path": "averageScores.teleop",
+      "sort": 1,
+      "decimals": 2
+    }
   },
   {
     "view": "match",
+    "module": "ColumnDisplay",
+    "name": "Barge Points",
+    "position": "main",
+    "options": {
+      "path": "avgEndgamePoints",
+      "sort": 1,
+      "decimals": 2
+    }
+  },
+  {
+    "view": "match",
+    "module": "ColumnDisplay",
+    "name": "Total Points",
+    "position": "main",
+    "options": {
+      "path": "averageScores.total",
+      "sort": 1,
+      "decimals": 2
+    }
+  },
+  {
+    "view": "match",
+    "module": "ColumnDisplay",
+    "name": "Teleop Points",
+    "position": "main",
+    "options": {
+      "path": "averageScores.teleop",
+      "sort": 1,
+      "decimals": 2
+    }
+  },
+  {
+    "view": "match",
+    "module": "ColumnDisplay",
+    "name": "Endgame Points",
+    "position": "main",
+    "options": {
+      "path": "averageScores.endgame",
+      "sort": 1,
+      "decimals": 2
+    }
+  },
+  {
+    "view": "match",
+    "module": "ColumnDisplay",
+    "name": "Total Points",
+    "position": "main",
+    "options": {
+      "path": "averageScores.total",
+      "sort": 1,
+      "decimals": 2
+    }
+  },
+
+  {
+    "view": "match",
     "module": "Stats",
-    "position": "side",
+    "position": "main",
     "name": "Alliance Stats",
     "options": {
       "list": [
@@ -228,8 +441,8 @@
           "aggrMethod": "sum"
         },
         {
-          "name": "Expected Barge Points",
-          "path": "avgEndgamePoints",
+          "name": "Expected Endgame Points",
+          "path": "averageScores.endgame",
           "decimals": 2,
           "aggrMethod": "sum"
         },
