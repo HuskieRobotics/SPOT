@@ -114,8 +114,8 @@ var previousTimer = [];
 
   function applyZoneButtonPreferences() {
     for (const layer of layers) {
-      const aZoneButton = layer.find((button) => button.id === "AZone");
-      const oaZoneButton = layer.find((button) => button.id === "OAZone");
+      const aZoneButton = layer.find((button) => button.configId === "AZone");
+      const oaZoneButton = layer.find((button) => button.configId === "OAZone");
 
       if (!aZoneButton || !oaZoneButton) continue;
 
@@ -125,8 +125,8 @@ var previousTimer = [];
       let oaZoneClass = oaZoneButton.originalClass;
       let aZoneGridArea = [...aZoneButton.originalGridArea];
       let oaZoneGridArea = [...oaZoneButton.originalGridArea];
-      let aZoneId = aZoneButton.id;
-      let oaZoneId = oaZoneButton.id;
+      let aZoneId = aZoneButton.configId;
+      let oaZoneId = oaZoneButton.configId;
 
       if (enableSwapZoneButtonLocations) {
         [aZoneGridArea, oaZoneGridArea] = [oaZoneGridArea, aZoneGridArea];
@@ -135,7 +135,7 @@ var previousTimer = [];
       if (getCurrentAllianceColor() === "blue") {
         [aZoneClass, oaZoneClass] = [oaZoneClass, aZoneClass];
         [aZoneId, oaZoneId] = [oaZoneId, aZoneId];
-        aZoneDisplayText = "Opposing Zone";
+        aZoneDisplayText = "Alliance Zone ";
       }
 
       applyButtonVisuals(
