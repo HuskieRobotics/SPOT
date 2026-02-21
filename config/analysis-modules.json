@@ -15,6 +15,181 @@
   },
   {
     "view": "team",
+    "module": "RadarChart",
+    "name": "Ratings By Time Intervals",
+    "position": "main",
+    "options": {
+      "sections": [
+        {
+          "name": "Auto"
+        },
+        {
+          "name": "Transition"
+        },
+        {
+          "name": "Active 1"
+        },
+        {
+          "name": "Active 2"
+        },
+        {
+          "name": "Inactive 1"
+        },
+        {
+          "name": "Inactive 2"
+        },
+        {
+          "name": "Endgame"
+        },
+        {
+          "name": "Auto"
+        }
+      ],
+      "lines": [
+        {
+          "name": "Shooting",
+          "times": [
+            {
+              "name": "Auto",
+              "path": "averageScores.autoShootingRating"
+            },
+            {
+              "name": "Transition",
+              "path": "averageScores.teleopTransitionShootingRating"
+            },
+            {
+              "name": "Active 1",
+              "path": "averageScores.activeShift1ShootingRating"
+            },
+            {
+              "name": "Active 2",
+              "path": "averageScores.activeShift2ShootingRating"
+            },
+            { "name": "Inactive 1", "path": "none" },
+            { "name": "Inactive 2", "path": "none" },
+            {
+              "name": "Endgame",
+              "path": "averageScores.endgameShootingRating"
+            },
+            {
+              "name": "Auto",
+              "path": "averageScores.autoShootingRating"
+            }
+          ]
+        },
+        {
+          "name": "Storing",
+          "times": [
+            {
+              "name": "Auto",
+              "path": "none"
+            },
+            {
+              "name": "Transition",
+              "path": "averageScores.teleopTransitionStoringRating"
+            },
+            {
+              "name": "Active 1",
+              "path": "averageScores.activeShift1StoringRating"
+            },
+            {
+              "name": "Active 2",
+              "path": "averageScores.activeShift2StoringRating"
+            },
+            {
+              "name": "Inactive 1",
+              "path": "averageScores.inactiveShift1StoringRating"
+            },
+            {
+              "name": "Inactive 2",
+              "path": "averageScores.inactiveShift2StoringRating"
+            },
+            {
+              "name": "Endgame",
+              "path": "averageScores.endgameStoringRating"
+            },
+            {
+              "name": "Auto",
+              "path": "none"
+            }
+          ]
+        },
+        {
+          "name": "Passing",
+          "times": [
+            {
+              "name": "Auto",
+              "path": "averageScores.autoPassingRating"
+            },
+            {
+              "name": "Transition",
+              "path": "averageScores.teleopTransitionPassingRating"
+            },
+            {
+              "name": "Active 1",
+              "path": "averageScores.activeShift1PassingRating"
+            },
+            {
+              "name": "Active 2",
+              "path": "averageScores.activeShift2PassingRating"
+            },
+            {
+              "name": "Inactive 1",
+              "path": "averageScores.inactiveShift1PassingRating"
+            },
+
+            {
+              "name": "Inactive 2",
+              "path": "averageScores.inactiveShift2PassingRating"
+            },
+            {
+              "name": "Endgame",
+              "path": "averageScores.endgamePassingRating"
+            },
+            {
+              "name": "Auto",
+              "path": "averageScores.autoPassingRating"
+            }
+          ]
+        },
+        {
+          "name": "Defense",
+          "times": [
+            { "name": "Auto", "path": "none" },
+            {
+              "name": "Transition",
+              "path": "averageScores.teleopTransitionDefenseRating"
+            },
+            {
+              "name": "Active 1",
+              "path": "averageScores.activeShift1DefenseRating"
+            },
+            {
+              "name": "Active 2",
+              "path": "averageScores.activeShift2DefenseRating"
+            },
+            {
+              "name": "Inactive 1",
+              "path": "averageScores.inactiveShift1DefenseRating"
+            },
+
+            {
+              "name": "Inactive 2",
+              "path": "averageScores.inactiveShift2DefenseRating"
+            },
+            {
+              "name": "Endgame",
+              "path": "averageScores.endgameDefenseRating"
+            },
+            { "name": "Auto", "path": "none" }
+          ]
+        }
+      ]
+    }
+  },
+
+  {
+    "view": "team",
     "module": "HeatmapScatterPlot",
     "name": "Teleop Shooting Heatmap",
     "position": "main",
@@ -31,13 +206,13 @@
   {
     "view": "team",
     "module": "Bar",
-    "name": "Attemped Climb Level",
+    "name": "Attempted Climb Level",
     "position": "main",
     "options": {
       "bars": [
         {
           "name": "Fall",
-          "path": "counts.fall"
+          "path": "counts.endgameFall"
         },
         {
           "name": "L1",
