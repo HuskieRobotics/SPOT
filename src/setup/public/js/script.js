@@ -11,6 +11,11 @@ if ("serviceWorker" in navigator) {
 }
 
 let oldAccessCode;
+
+function parseBoolean(value) {
+  return value === true || value === "true" || value === "on";
+}
+
 (async () => {
   const authRequest = await fetch("./api/auth").then((res) => res.json());
 
@@ -76,14 +81,9 @@ async function constructApp(accessCode) {
     document.querySelector("#GOOGLE_CLIENT_SECRET").value =
       config.GOOGLE_CLIENT_SECRET || "";
     document.querySelector("#EVENT_NUMBER").value = config.EVENT_NUMBER || "";
-    const demoValue = config.DEMO === true || config.DEMO === "true";
-    if (demoValue) {
-      document.querySelector("#DEMO").value = true;
-      document.querySelector("#DEMO").checked = true;
-    } else {
-      document.querySelector("#DEMO").value = false;
-      document.querySelector("#DEMO").checked = false;
-    }
+    document.querySelector("#DEMO").checked = parseBoolean(config.DEMO);
+    document.querySelector("#SWAP_ZONE_BUTTON_LOCATIONS").checked =
+      parseBoolean(config.SWAP_ZONE_BUTTON_LOCATIONS);
   }
 
   document.querySelector("#setup-container").classList.add("visible");
@@ -249,6 +249,11 @@ document.querySelector("#submit").addEventListener("click", async () => {
       config[key] = value;
     }
   }
+
+  config.DEMO = document.querySelector("#DEMO").checked;
+  config.SWAP_ZONE_BUTTON_LOCATIONS = document.querySelector(
+    "#SWAP_ZONE_BUTTON_LOCATIONS",
+  ).checked;
 
   let res = await (
     await fetch("./api/config", {
