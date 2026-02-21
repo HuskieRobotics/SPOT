@@ -533,11 +533,11 @@
   },
   {
     "type": "tmp",
-    "name": "buttonGroupingsPerShift",
-    "outputPath": "zoneActionRating",
+    "name": "zoneActionRatingGroupings",
+    "outputPath": "scores.zoneActionRating",
     "options": {
-      "zones": ["redZone", "neutralZone", "blueZone"],
-      "actions": ["defense", "Passing", "StopShooting", "Storing"],
+      "zones": ["RedZone", "Neutral", "BlueZone"],
+      "actions": ["Defense", "Passing", "StopShooting", "Storing"],
       "ratings": [
         "activeShift1RatingShooting1",
         "activeShift1RatingShooting2",
