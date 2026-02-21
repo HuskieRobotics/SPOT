@@ -53,7 +53,7 @@ class ScoutingSync {
 
     ScoutingSync.socket.on(
       "connect_error",
-      (err) => new Popup("error", err.toString())
+      (err) => new Popup("error", err.toString()),
     );
 
     ScoutingSync.socket.on("disconnect", () => {
@@ -119,7 +119,7 @@ class ScoutingSync {
           .text(
             `
                 You have been assigned team ${ScoutingSync.state.robotNumber} in match ${ScoutingSync.state.matchNumber}.
-                `
+                `,
           )
           .dismiss("OK");
       }, 100);
@@ -128,13 +128,13 @@ class ScoutingSync {
   static updateState(stateUpdate, incoming = false) {
     return new Promise((res, rej) => {
       Object.assign(ScoutingSync.state, stateUpdate);
+      window.dispatchEvent(new CustomEvent("spot:scouting-state-updated"));
       const updateMatch = ScoutingSync.matches.find(
-        (m) => m.number == ScoutingSync.state.matchNumber
+        (m) => m.number == ScoutingSync.state.matchNumber,
       );
       if (updateMatch) {
-        document.querySelector(
-          ".scouting-info"
-        ).innerText = `Match: ${ScoutingSync.state.matchNumber} | Team: ${ScoutingSync.state.robotNumber}`;
+        document.querySelector(".scouting-info").innerText =
+          `Match: ${ScoutingSync.state.matchNumber} | Team: ${ScoutingSync.state.robotNumber}`;
         document.querySelector(".scouting-info").style.color =
           updateMatch.robots.red.includes(ScoutingSync.state.robotNumber)
             ? "var(--error)"
@@ -162,7 +162,7 @@ class ScoutingSync {
       const teamMatchPerformances =
         await LocalData.getAllTeamMatchPerformances();
       const teamMatchPerformanceIds = teamMatchPerformances.map(
-        (teamMatchPerformance) => teamMatchPerformance.matchId
+        (teamMatchPerformance) => teamMatchPerformance.matchId,
       );
       new Popup("notice", "Syncing Data...", 5000);
       ScoutingSync.socket.emit(
@@ -173,17 +173,17 @@ class ScoutingSync {
             "teamMatchPerformances",
             teamMatchPerformances.filter((teamMatchPerformance) =>
               requestedTeamMatchPerformanceIds.includes(
-                teamMatchPerformance.matchId
-              )
+                teamMatchPerformance.matchId,
+              ),
             ),
             () => {
               new Popup("success", "Data Sync Complete!", 2000);
               clearTimeout(timeout);
               LocalData.clearTeamMatchPerformances();
               res(true);
-            }
+            },
           );
-        }
+        },
       );
     });
   }

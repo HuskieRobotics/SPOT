@@ -12,5 +12,7 @@
 
   "EVENT_NUMBER": "2025ilch_official",
   "VERSION": "0.0",
-  "TBA_EVENT_KEY": ""
+  "TBA_EVENT_KEY": "",
+  "DEMO": false,
+  "SWAP_ZONE_BUTTON_LOCATIONS": false
 }
