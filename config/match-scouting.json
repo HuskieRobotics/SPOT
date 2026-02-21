@@ -585,7 +585,7 @@
         },
         {
           "id": "OAZone",
-          "displayText": "O Zone",
+          "displayText": "Opposing Zone",
           "gridArea": ["2", "9", "3", "14"],
           "class": "shallowBlue",
           "type": "action",
