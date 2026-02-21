@@ -135,7 +135,7 @@ var previousTimer = [];
       if (getCurrentAllianceColor() === "blue") {
         [aZoneClass, oaZoneClass] = [oaZoneClass, aZoneClass];
         [aZoneId, oaZoneId] = [oaZoneId, aZoneId];
-        aZoneDisplayText = "OA Zone";
+        aZoneDisplayText = "Opposing Zone";
       }
 
       applyButtonVisuals(
