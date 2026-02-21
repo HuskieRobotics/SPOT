@@ -5,7 +5,7 @@
  * @param options.ratings {String[]} actionIds for rating buttons (e.g., ratingPassing1..4)
  */ 
 __TMP__
-new DataTransformer("buttonGroupingsPerShift", (dataset, outputPath, options) => {
+new DataTransformer("zoneActionRatingGroupings", (dataset, outputPath, options) => {
     for (let tmp of dataset.tmps) {
 
       // Merge defaults with provided options for safety
@@ -58,26 +58,30 @@ new DataTransformer("buttonGroupingsPerShift", (dataset, outputPath, options) =>
         const ratingValue = parseRatingValue(rating.id);
 
         // Aggregate counts by zone + action + rating value
-        if (ratingValue != null) {
+        if (ratingValue != null && actionId != null && zoneId != null) {
           // if (!output.rating[zoneId]) output.rating[zoneId] = {};
           // if (!output.rating[zoneId][actionId]) output.rating[zoneId][actionId] = {};
           // if (!output.rating[zoneId][actionId][ratingValue]) output.rating[zoneId][actionId][ratingValue] = 0;
           // output.rating[zoneId][actionId][ratingValue] += 1;
 
-        if(output.rating.zoneId === undefined){
-            output.rating.zoneId = {};  }
-        if(output.rating.zoneId.actionId === undefined){
-              output.rating.zoneId.actionId = {}; }
-        if(output.rating.zoneId.actionId.ratingValue === undefined){
-                output.rating.zoneId.actionId.ratingValue = 0; }
-        output.rating.zoneId.actionId.ratingValue += 1;
+          if(output.rating.zoneId === undefined){
+              output.rating.zoneId = {};
+            }
+          if(output.rating.zoneId.actionId === undefined){
+              output.rating.zoneId.actionId = {};
+            }
+          if(output.rating.zoneId.actionId.ratingValue === undefined){
+              output.rating.zoneId.actionId.ratingValue = 0;
+            }
+
+          output.rating.zoneId.actionId.ratingValue += 1;
         }
 
       // Persist under outputPath in analysis pipeline (e.g., "zoneActionRating")
       setPath(tmp, outputPath, output);
     } 
   }
- return dataset; 
-  });
+    return dataset; 
+  })
 __/TMP__
 
