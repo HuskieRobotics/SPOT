@@ -116,7 +116,6 @@ var previousTimer = [];
     for (const layer of layers) {
       const aZoneButton = layer.find((button) => button.configId === "AZone");
       const oaZoneButton = layer.find((button) => button.configId === "OAZone");
-
       if (!aZoneButton || !oaZoneButton) continue;
 
       let aZoneDisplayText = aZoneButton.originalDisplayText;
@@ -131,11 +130,12 @@ var previousTimer = [];
       if (enableSwapZoneButtonLocations) {
         [aZoneGridArea, oaZoneGridArea] = [oaZoneGridArea, aZoneGridArea];
       }
-
       if (getCurrentAllianceColor() === "blue") {
-        [aZoneClass, oaZoneClass] = [oaZoneClass, aZoneClass];
         [aZoneId, oaZoneId] = [oaZoneId, aZoneId];
-        aZoneDisplayText = "Alliance Zone ";
+        [aZoneDisplayText, oaZoneDisplayText] = [
+          oaZoneDisplayText,
+          aZoneDisplayText,
+        ];
       }
 
       applyButtonVisuals(
