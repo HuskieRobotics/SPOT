@@ -15,18 +15,15 @@
   --border-radius: 16px;
   --black: #000000;
   --font: Cairo, sans-serif;
-  --font-family: "Zilla Slab", serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #191b1c;
-    --text: #efefef;
-    --bg-alt: #232323;
-    --accent: #4798b6;
-    --reload-color: #efefef;
-    --green: #75c077;
-  }
+html[data-theme="dark"] {
+  --bg: #191b1c;
+  --text: #efefef;
+  --bg-alt: #232323;
+  --accent: #4798b6;
+  --reload-color: #efefef;
+  --green: #75c077;
 }
 
 html {
@@ -80,6 +77,7 @@ body {
 }
 
 .socket-status {
+  color: var(--text);
   font-weight: 700;
 }
 

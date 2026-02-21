@@ -57,6 +57,13 @@ class PerformanceTimePlot {
       },
       xaxis: {
         showticklabels: false,
+      },
+      yaxis: {
+        tickfont: {
+          size: 16,
+        },
+        linecolor: this.getCssVar("--text-alt"),
+        gridcolor: this.getCssVar("--text-alt"),
         zerolinecolor: this.getCssVar("--text"),
       },
       legend: {

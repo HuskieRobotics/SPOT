@@ -22,7 +22,10 @@ body {
   grid-area: 1 / 1 / 2 / 2;
   background-color: var(--bg-alt);
   opacity: 0;
-  transition: 0.3s visibility, opacity, width;
+  transition:
+    0.3s visibility,
+    opacity,
+    width;
   visibility: hidden;
   border-right: 1px solid var(--text);
   transition: 0.3s all;
@@ -56,7 +59,9 @@ body {
   overflow: hidden;
   white-space: pre;
   opacity: 0;
-  transition: 0.3s opacity, margin;
+  transition:
+    0.3s opacity,
+    margin;
 }
 
 #menu.expanded > * > div {
@@ -73,7 +78,7 @@ body {
 }
 
 #menu-icon-container {
-  border-bottom: 2px solid black;
+  border-bottom: 2px solid var(--text);
   margin-bottom: 16px;
 }
 
@@ -90,7 +95,9 @@ body {
   color: var(--text);
   background: var(--bg);
   opacity: 0;
-  transition: 0.3s visibility, opacity;
+  transition:
+    0.3s visibility,
+    opacity;
   visibility: hidden;
   grid-area: 1 / 2 / 2 / 3;
 }
@@ -98,13 +105,18 @@ body {
 #menu.visible {
   visibility: unset;
   opacity: 1;
-  transition: visibility 0s 0s, opacity 0.3s 0s, 0.3s width;
+  transition:
+    visibility 0s 0s,
+    opacity 0.3s 0s,
+    0.3s width;
 }
 
 #admin-panel.visible {
   visibility: unset;
   opacity: 1;
-  transition: visibility 0s 0s, opacity 0.3s 0s;
+  transition:
+    visibility 0s 0s,
+    opacity 0.3s 0s;
 }
 
 #scouters {

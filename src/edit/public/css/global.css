@@ -13,16 +13,14 @@
   --font: "Cairo", sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #191b1c;
-    --text: #efefef;
-    --bg-alt: #232323;
-    --accent: #4798b6;
-    --reload-color: #efefef;
-    --green: #75c077;
-    --accent-alt: #fd6e42;
-  }
+html[data-theme="dark"] {
+  --bg: #191b1c;
+  --text: #efefef;
+  --bg-alt: #232323;
+  --accent: #4798b6;
+  --reload-color: #efefef;
+  --green: #75c077;
+  --accent-alt: #fd6e42;
 }
 
 html {

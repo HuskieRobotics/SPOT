@@ -91,7 +91,7 @@
   align-items: center;
   border: 2px solid var(--accent);
   margin-left: 15px;
-  font-family: var(--font-family);
+  transition: 250ms all;
 }
 
 #landing .buttonz:hover {
@@ -183,7 +183,7 @@
   z-index: 1;
 }
 
-@media (prefers-color-scheme: dark) {
+html[data-theme="dark"] {
   #landing .logo {
     filter: brightness(0) saturate(100%) invert(100%) sepia(100%) saturate(0%)
       hue-rotate(7deg) brightness(102%) contrast(102%);

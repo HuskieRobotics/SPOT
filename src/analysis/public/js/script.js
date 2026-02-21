@@ -17,6 +17,23 @@ if ("serviceWorker" in navigator) {
   });
 }
 
+const root = document.documentElement;
+const savedTheme = localStorage.getItem("theme");
+
+if (savedTheme == null || savedTheme == "light") {
+  localStorage.setItem("theme", "light");
+  root.setAttribute("data-theme", "light");
+} else {
+  localStorage.setItem("theme", "dark");
+  root.setAttribute("data-theme", "dark");
+}
+
+function getCssVar(name) {
+  return getComputedStyle(document.documentElement)
+    .getPropertyValue(name)
+    .trim();
+}
+
 /**
  * The function of the isDemo method is so that whenever SPOT is in demo mode,
  *  it updates some text so that SPOT makes it very clear that it is in demo mode.
@@ -675,8 +692,8 @@ let matches;
           color: "#FF6030",
         },
         hoverlabel: {
-          bgcolor: "white", // Set the background color of the hover menu to white
-          font: { color: "black" }, // Set the font color to black for better readability
+          bgcolor: getCssVar("--bg-alt"), // Set the background color of the hover menu to white
+          font: { color: getCssVar("--text") }, // Set the font color to black for better readability
         },
         hoverinfo: "text",
         textposition: "bottom center",
@@ -684,11 +701,25 @@ let matches;
 
       const layout = {
         title: "Team Scores Scattergram",
-        xaxis: { title: xAxisField },
+        xaxis: {
+          title: xAxisField,
+          linecolor: getCssVar("--text-alt"),
+          gridcolor: getCssVar("--text-alt"),
+          zerolinecolor: getCssVar("--text-alt"),
+        },
         yaxis: {
           title: yAxisField,
           range: [0, Math.max(...yAxisData) * 1.1],
+          linecolor: getCssVar("--text-alt"),
+          gridcolor: getCssVar("--text-alt"),
+          zerolinecolor: getCssVar("--text"),
         },
+        font: {
+          family: "Cairo, sans-serif",
+          color: getCssVar("--text"),
+        },
+        paper_bgcolor: getCssVar("--bg-alt"),
+        plot_bgcolor: getCssVar("--bg-alt"),
       };
 
       Plotly.newPlot(bubbleSheetContainer, [trace], layout);

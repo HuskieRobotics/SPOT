@@ -7,6 +7,12 @@ class Bar {
     this.container = createDOMElement("div", "container bar");
   }
 
+  getCssVar(name) {
+    return getComputedStyle(document.documentElement)
+      .getPropertyValue(name)
+      .trim();
+  }
+
   formatData(teams, dataset) {
     const values = this.moduleConfig.options.bars.map((bar) => {
       const summed = teams
@@ -58,12 +64,16 @@ class Bar {
         tickfont: {
           size: 16,
         },
+        linecolor: this.getCssVar("--text-alt"),
+        gridcolor: this.getCssVar("--text-alt"),
+        zerolinecolor: this.getCssVar("--text"),
       },
       font: {
         family: "Cairo, sans-serif",
+        color: this.getCssVar("--text"),
       },
-      paper_bgcolor: "#FEFEFE",
-      plot_bgfcolor: "#FEFEFE",
+      paper_bgcolor: this.getCssVar("--bg-alt"),
+      plot_bgcolor: this.getCssVar("--bg-alt"),
     };
 
     const config = {

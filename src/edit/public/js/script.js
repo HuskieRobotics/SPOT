@@ -1,5 +1,16 @@
 let oldAccessCode;
 (async () => {
+  const root = document.documentElement;
+  const savedTheme = localStorage.getItem("theme");
+
+  if (savedTheme == null || savedTheme == "light") {
+    localStorage.setItem("theme", "light");
+    root.setAttribute("data-theme", "light");
+  } else {
+    localStorage.setItem("theme", "dark");
+    root.setAttribute("data-theme", "dark");
+  }
+
   let dataset;
   let transformers;
   console.log("Loading data...");
