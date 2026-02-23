@@ -49,14 +49,19 @@ async function executePipeline() {
       );
     }
 
-    tmp.actionQueue.push({
-      id: `${autoData.actionName}` + "_" + `${autoData.action}`,
-      ts: 0,
-    });
-    tmp.actionQueue.push({
-      id: `${endGameData.actionName}` + "_" + `${endGameData.action}`,
-      ts: 0,
-    });
+    if (autoData) {
+      tmp.actionQueue.push({
+        id: `${autoData.actionName}` + "_" + `${autoData.action}`,
+        ts: 0,
+      });
+    }
+
+    if (endGameData) {
+      tmp.actionQueue.push({
+        id: `${endGameData.actionName}` + "_" + `${endGameData.action}`,
+        ts: 0,
+      });
+    }
     if (scores_for_OPR) {
       tmp.actionQueue.push({
         id: "TBA_OPR" + "_" + `${scores_for_OPR}`,
