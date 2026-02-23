@@ -4,6 +4,9 @@ async function executePipeline() {
 
   let tmps;
   let tbaData;
+  const opr_strings = await fetch("/analysis/api/tbaOPRStrings").then((res) =>
+    res.json(),
+  );
   // If an event is specified, fetch using the new endpoint.
   if (eventID) {
     tmps = await fetch(`/analysis/api/dataset/${eventID}`).then((res) =>
@@ -37,6 +40,14 @@ async function executePipeline() {
       tmp.matchNumber,
       "endGame",
     );
+    let scores_for_OPR;
+    if (!opr_strings.None) {
+      scores_for_OPR = getTBADataScoreBySpecification(
+        teamAndAlliance.alliance,
+        tmp.matchNumber,
+        opr_strings,
+      );
+    }
 
     tmp.actionQueue.push({
       id: `${autoData.actionName}` + "_" + `${autoData.action}`,
@@ -46,6 +57,12 @@ async function executePipeline() {
       id: `${endGameData.actionName}` + "_" + `${endGameData.action}`,
       ts: 0,
     });
+    if (scores_for_OPR) {
+      tmp.actionQueue.push({
+        id: "TBA_OPR" + "_" + `${scores_for_OPR}`,
+        ts: 0,
+      });
+    }
   });
 
   /**
@@ -122,6 +139,39 @@ async function executePipeline() {
             return { actionName, action };
           }
         }
+      }
+    }
+  }
+
+  function getTBADataScoreBySpecification(alliance, match, opr_strings) {
+    let scores = 0;
+
+    // Go through each match in TBA data
+    for (const item of tbaData) {
+      // Check if the competition level is a qualification match and if the match number aligns
+      if (item.comp_level == "qm" && item.match_number == match) {
+        // Get the alliance scores for the inputted color
+        const breakdown = item.score_breakdown?.[alliance];
+        if (!breakdown) return;
+
+        // Go through each item in the breakdown
+        for (const [key, value] of Object.entries(breakdown)) {
+          // Go through each item for the opr strings
+          for (const [opr_key, opr_string_value] of Object.entries(
+            opr_strings,
+          )) {
+            // Check if the key is the same as the inputted opr string
+            if (key == opr_string_value) {
+              // Check whether to add the value or subtract the value
+              if (opr_key.startsWith("add")) {
+                scores += value;
+              } else if (opr_key.startsWith("remove")) {
+                scores -= value;
+              }
+            }
+          }
+        }
+        return scores;
       }
     }
   }
