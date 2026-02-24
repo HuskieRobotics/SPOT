@@ -15,52 +15,52 @@ new DataTransformer("zoneActionRatingGroupings", (dataset, outputPath, options) 
         ratings: []
       }, options);
 
+      let list = []; // to store sequential triples of { zone, action, rating }
+
       // Go through the actionQueue and filter out all the buttons that are rating, action, or zone buttons.
       let ratings = tmp.actionQueue.filter(x=>options.ratings.includes(x.id));
       let actions = tmp.actionQueue.filter(x=>options.actions.includes(x.id));
       let zones = tmp.actionQueue.filter(x=>options.zones.includes(x.id));
 
-       while (zones.length > 0) {
+      while (zones.length > 0) {
             
-            let zone = zones.shift(); //remove and get the first zone button pressed
-            let zoneId = zone.id;
+        let zone = zones.shift(); //remove and get the first zone button pressed
+        let zoneId = zone.id;
 
-            actions = actions.filter(x=>x.ts < zone.ts) // assign the actions array to an array of actions that occur after the selected zone
+        actions = actions.filter(x=>x.ts < zone.ts) // assign the actions array to an array of actions that occur after the selected zone
 
-            if (actions.length === 0) break //ensure that the actions button was pressed after the zone button, if there are no actions left to remove, break out of the loop
-            let action = actions.shift(); //remove the action that comes directly after the most recently pressed zone button
-            let actionId = action.id;
+        if (actions.length === 0) break //ensure that the actions button was pressed after the zone button, if there are no actions left to remove, break out of the loop
+          let action = actions.shift(); //remove the action that comes directly after the most recently pressed zone button
+          let actionId = action.id;
 
-            ratings = ratings.filter(x=>x.ts < action.ts) //populate the ratings array with the ratings of all the ratings that occur after the selected action
+        ratings = ratings.filter(x=>x.ts < action.ts) //populate the ratings array with the ratings of all the ratings that occur after the selected action
             
-            if(ratings.length === 0) break //ensure that there is a rating button pressed after the action button, if there are no ratings left to remove, break out of the loop
-            let rating = ratings.shift(); //remove the rating that comes directly after the most recently pressed action and zone button
-            let ratingValue = parseRatingValue(rating.id);
+        if(ratings.length === 0) break //ensure that there is a rating button pressed after the action button, if there are no ratings left to remove, break out of the loop
+          let rating = ratings.shift(); //remove the rating that comes directly after the most recently pressed action and zone button
+          let ratingValue = parseRatingValue(rating.id);
 
-        list.add({ zone: zoneId, action: actionId, rating: ratingValue }); //add the triple of zone, action, and rating to the list output
+       list.push({ zone: zoneId, action: actionId, rating: ratingValue }); //add the triple of zone, action, and rating to the list output
 
-        // Aggregate counts by zone + action + rating value
-        // if (ratingValue != null && actionId != null && zoneId != null) {
+      // Create paths for each zone, action, and rating combination to store the count of each rating for each zone and action combination. For example, output.rating.redZone.defense.ratingPassing3 would represent the count of ratingPassing3 ratings for redZone defense actions.
+      if (ratingValue != null && actionId != null && zoneId != null) {
 
-      //   if(output.rating.zoneId === undefined){
-      //       output.rating.zoneId = {};
-      //     }
-      //   if(output.rating.zoneId.actionId === undefined){
-      //       output.rating.zoneId.actionId = {};
-      //     }
-      //   if(output.rating.zoneId.actionId.ratingValue === undefined){
-      //       output.rating.zoneId.actionId.ratingValue = 0;
-      //     }
+        if(output.rating.zoneId === undefined){
+            output.rating.zoneId = {};
+          }
+        if(output.rating.zoneId.actionId === undefined){
+            output.rating.zoneId.actionId = {};
+          }
+        if(output.rating.zoneId.actionId.ratingValue === undefined){
+            output.rating.zoneId.actionId.ratingValue = 0;
+          }
 
-      //   output.rating.zoneId.actionId.ratingValue += 1;
-      // }
-
-          
-        }}
+        output.rating.zoneId.actionId.ratingValue += 1;
+        }
+      }
 
       const output = {
         list: [],   // sequential triples: { zone, action, rating }
-        rating: {}  // represents the numeric rating value for each zone, action, and rating combination
+        // rating: {}  // represents the numeric rating value for each zone, action, and rating combination
       };
 
       // Extract trailing digit(s) from ratingId (e.g., ratingPassing3 -> 3)
@@ -68,14 +68,10 @@ new DataTransformer("zoneActionRatingGroupings", (dataset, outputPath, options) 
         const match = String(ratingId).match(/(\d+)$/);
         return match ? Number(match[1]) : null;
       };
-        const zoneId = zone.id;
-        const actionId = action.id;
-        const ratingValue = parseRatingValue(rating.id);
-
-       
-      // Persist under outputPath in analysis pipeline (e.g., "zoneActionRating")
+  
+      // Call the setPath function to set the output at the specified outputPath
       setPath(tmp, outputPath, output);
-    } 
+     
   }
     return dataset; 
   })
