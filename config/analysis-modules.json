@@ -273,6 +273,32 @@
   },
   {
     "view": "team",
+    "module": "Pie",
+    "name": "Action Times (Totals)",
+    "position": "main",
+    "options": {
+      "slices": [
+        {
+          "name": "Shooting",
+          "path": "cycles.shootingTime.totalTime"
+        },
+        {
+          "name": "Passing",
+          "path": "cycles.passingTime.totalTime"
+        },
+        {
+          "name": "Storing",
+          "path": "cycles.storingTime.totalTime"
+        },
+        {
+          "name": "Defense",
+          "path": "cycles.defenseTime.totalTime"
+        }
+      ]
+    }
+  },
+  {
+    "view": "team",
     "module": "Stats",
     "position": "side",
     "name": "Team Stats",

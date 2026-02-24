@@ -625,6 +625,66 @@
   },
   {
     "type": "team",
+    "name": "multiply",
+    "outputPath": "cycles.shootingTime.totalTime",
+    "options": {
+      "multiplicands": [
+        {
+          "path": "cycles.shootingTime.averageTime"
+        },
+        {
+          "path": "cycles.shootingTime.cycleCount"
+        }
+      ]
+    }
+  },
+  {
+    "type": "team",
+    "name": "multiply",
+    "outputPath": "cycles.storingTime.totalTime",
+    "options": {
+      "multiplicands": [
+        {
+          "path": "cycles.storingTime.averageTime"
+        },
+        {
+          "path": "cycles.storingTime.cycleCount"
+        }
+      ]
+    }
+  },
+  {
+    "type": "team",
+    "name": "multiply",
+    "outputPath": "cycles.passingTime.totalTime",
+    "options": {
+      "multiplicands": [
+        {
+          "path": "cycles.passingTime.averageTime"
+        },
+        {
+          "path": "cycles.passingTime.cycleCount"
+        }
+      ]
+    }
+  },
+  {
+    "type": "team",
+    "name": "multiply",
+    "outputPath": "cycles.defenseTime.totalTime",
+    "options": {
+      "multiplicands": [
+        {
+          "path": "cycles.defenseTime.averageTime"
+        },
+        {
+          "path": "cycles.defenseTime.cycleCount"
+        }
+      ]
+    }
+  },
+  {
+    "type": "team",
     "name": "standardDeviation",
     "outputPath": "standardDeviation",
     "options": {
