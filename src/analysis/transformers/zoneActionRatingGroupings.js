@@ -29,32 +29,41 @@ new DataTransformer("zoneActionRatingGroupings", (dataset, outputPath, options) 
 
         actions = actions.filter(x=>x.ts < zone.ts) // assign the actions array to an array of actions that occur after the selected zone
 
-        if (actions.length === 0) break //ensure that the actions button was pressed after the zone button, if there are no actions left to remove, break out of the loop
+        if (actions.length === 0) {
+        break; //ensure that the actions button was pressed after the zone button, if there are no actions left to remove, break out of the loop
+        } else {
           let action = actions.shift(); //remove the action that comes directly after the most recently pressed zone button
           let actionId = action.id;
+        }
 
         ratings = ratings.filter(x=>x.ts < action.ts) //populate the ratings array with the ratings of all the ratings that occur after the selected action
-            
-        if(ratings.length === 0) break //ensure that there is a rating button pressed after the action button, if there are no ratings left to remove, break out of the loop
+          
+        if (ratings.length === 0) {
+        break; //ensure that there is a rating button pressed after the action button, if there are no ratings left to remove, break out of the loop
+        } else {
           let rating = ratings.shift(); //remove the rating that comes directly after the most recently pressed action and zone button
           let ratingValue = parseRatingValue(rating.id);
-
+        }
+        
        list.push({ zone: zoneId, action: actionId, rating: ratingValue }); //add the triple of zone, action, and rating to the list output
 
       // Create paths for each zone, action, and rating combination to store the count of each rating for each zone and action combination. For example, output.rating.redZone.defense.ratingPassing3 would represent the count of ratingPassing3 ratings for redZone defense actions.
       if (ratingValue != null && actionId != null && zoneId != null) {
 
-        if(output.rating.zoneId === undefined){
-            output.rating.zoneId = {};
+        if(output.zoneId === undefined){
+            output.zoneId = {};
           }
-        if(output.rating.zoneId.actionId === undefined){
-            output.rating.zoneId.actionId = {};
+        if(output.zoneId.actionId === undefined){
+            output.zoneId.actionId = {};
           }
-        if(output.rating.zoneId.actionId.ratingValue === undefined){
-            output.rating.zoneId.actionId.ratingValue = 0;
+        if(output.zoneId.actionId.rating === undefined){
+            output.zoneId.actionId.rating = {};
           }
+        if(output.zoneId.actionId.ratingValue === undefined){
+            output.zoneId.actionId.ratingValue = 0;
+        }
 
-        output.rating.zoneId.actionId.ratingValue += 1;
+        output.zoneId.actionId.ratingValue += 1; //increment the count for the specific zone, action, and rating combination by 1
         }
       }
       

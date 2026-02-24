@@ -8,7 +8,7 @@ new DataTransformer("deepAverage", (dataset, outputPath, options) => {
 
   for (let teamNum in dataset.teams) {
     const team = dataset.teams[teamNum];
-    const tmps = team.tmps;
+    const tmps = (dataset.tmps || []).filter(tmp => tmp.robotNumber == teamNum);
     
     // Recursively sum nested objects
     const sumNested = (obj) => {
