@@ -27,16 +27,18 @@ new DataTransformer("zoneActionRatingGroupings", (dataset, outputPath, options) 
       };
 
       // Go through the actionQueue and filter out all the buttons that are rating, action, or zone buttons.
-      let ratings = tmp.actionQueue.filter(x=>options.ratings.includes(x.id));
-      let actions = tmp.actionQueue.filter(x=>options.actions.includes(x.id));
-      let zones = tmp.actionQueue.filter(x=>options.zones.includes(x.id));
+      // Keep each item's original queue index so matching can be done by event order.
+      const queueWithIndex = tmp.actionQueue.map((item, index) => ({ ...item, __queueIndex: index }));
+      let ratings = queueWithIndex.filter(x=>options.ratings.includes(x.id));
+      let actions = queueWithIndex.filter(x=>options.actions.includes(x.id));
+      let zones = queueWithIndex.filter(x=>options.zones.includes(x.id));
 
       while (zones.length > 0) {
             
         let zone = zones.shift(); //remove and get the first zone button pressed
         let zoneId = zone.id;
 
-        const actionIndex = actions.findIndex(x=>x.ts < zone.ts); // assign the first action that occurs after the selected zone (countdown ts)
+        const actionIndex = actions.findIndex(x=>x.__queueIndex > zone.__queueIndex); // assign the first action that occurs after the selected zone
         if (actionIndex === -1) {
           continue;
         }
@@ -44,7 +46,7 @@ new DataTransformer("zoneActionRatingGroupings", (dataset, outputPath, options) 
         let action = actions.splice(actionIndex, 1)[0]; //remove the matched action
         let actionId = action.id;
 
-        const ratingIndex = ratings.findIndex(x=>x.ts < action.ts) //populate the first rating that occurs after the selected action (countdown ts)
+        const ratingIndex = ratings.findIndex(x=>x.__queueIndex > action.__queueIndex) //populate the first rating that occurs after the selected action
         if (ratingIndex === -1) {
           continue;
         }
