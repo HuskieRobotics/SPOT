@@ -89,6 +89,7 @@ const filesToCache = [
   "/analysis/api/events",
   "/analysis/api/blueApiData",
   "/analysis/api/blueApiOPR",
+  "/analysis/api/blueApiOPRString",
 
   // config
   "/admin/api/matches",

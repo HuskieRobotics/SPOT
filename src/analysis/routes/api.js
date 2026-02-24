@@ -12,6 +12,14 @@ let tbaOPRResultFetchTime = 0;
 
 let router = Router();
 
+router.get("/blueApiOPRStrings", async (req, res) => {
+  if (config.TBA_OPR_STRINGS) {
+    res.send(config.TBA_OPR_STRINGS);
+  } else {
+    res.send({ None: None });
+  }
+});
+
 router.get("/blueApiData/:eventID", async (req, res) => {
   const TBA_EVENT_KEY = req.params.eventID;
   const TBA_API_KEY = config.secrets.TBA_API_KEY;

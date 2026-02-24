@@ -280,7 +280,19 @@
       "list": [
         {
           "name": "Fuel OPR",
-          "path": "opr",
+          "path": "opr.Hub Total Count",
+          "decimals": 2,
+          "sort": 1
+        },
+        {
+          "name": "Minor Foul OPR",
+          "path": "opr.minorFoulCount",
+          "decimals": 2,
+          "sort": 1
+        },
+        {
+          "name": "Major Foul OPR",
+          "path": "opr.majorFoulCount",
           "decimals": 2,
           "sort": 1
         },

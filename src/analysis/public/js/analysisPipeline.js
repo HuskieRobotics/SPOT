@@ -136,14 +136,25 @@ async function executePipeline() {
     }
   }
 
+  /**
+   * The purpose of this function is to get the component opr based on the team number that is inputted
+   * @param {Number} team
+   * @param {String} copr_string
+   * @returns opr
+   */
   function sortThroughTBAOPRS(team, copr_string) {
     let opr;
 
-    for (const [key1, value1] of Object.entries(tbaOPRS)) {
-      if (key1 == copr_string) {
-        for (const [key2, value2] of Object.entries(value1)) {
-          if (key2.substring(3) == team) {
-            opr = value2;
+    // Go through each item and value of the oprs
+    for (const [copr_key, teams_values] of Object.entries(tbaOPRS)) {
+      // Check if the copr_name matches the copr_string that is inputted
+      if (copr_key == copr_string) {
+        // Go through each team and opr of the copr
+        for (const [team_key, opr_value] of Object.entries(teams_values)) {
+          // Check if the team key (the key is formatted like "frc..." so this omits the frc) matches the inputted team
+          if (team_key.substring(3) == team) {
+            // Set the opr for the team
+            opr = opr_value;
             return opr;
           }
         }
@@ -168,9 +179,17 @@ async function executePipeline() {
     teams[tmp.robotNumber] = {};
   }
 
-  for (const [key, value] of Object.entries(teams)) {
-    let team_opr = sortThroughTBAOPRS(key, "Hub Total Count");
-    setPath(value, "opr", team_opr);
+  let opr_strings = await fetch("/analysis/api/blueApiOPRStrings").then((res) =>
+    res.json(),
+  );
+
+  if (!opr_strings.None) {
+    for (const [team_key, value] of Object.entries(teams)) {
+      for (const [string_key, string_name] of Object.entries(opr_strings)) {
+        let team_opr = sortThroughTBAOPRS(team_key, string_name);
+        setPath(value, `opr.${string_name}`, team_opr);
+      }
+    }
   }
 
   let dataset = { tmps, teams };
