@@ -85,6 +85,104 @@
   },
   {
     "type": "tmp",
+    "name": "cycle",
+    "outputPath": "cycle.defenseTime",
+    "options": {
+      "pickups": [
+        "teleopTransitionDefense",
+        "activeShift1Defense",
+        "activeShift2Defense",
+        "endgameDefense"
+      ],
+      "scores": [
+        "teleopTransitionRatingDefense1",
+        "teleopTransitionRatingDefense2",
+        "teleopTransitionRatingDefense3",
+        "teleopTransitionRatingDefense4",
+        "activeShift1RatingDefense1",
+        "activeShift1RatingDefense2",
+        "activeShift1RatingDefense3",
+        "activeShift1RatingDefense4",
+        "activeShift2RatingDefense1",
+        "activeShift2RatingDefense2",
+        "activeShift2RatingDefense3",
+        "activeShift2RatingDefense4",
+        "endgameRatingDefense1",
+        "endgameRatingDefense2",
+        "endgameRatingDefense3",
+        "endgameRatingDefense4"
+      ]
+    }
+  },
+  {
+    "type": "tmp",
+    "name": "cycle",
+    "outputPath": "cycle.storingTime",
+    "options": {
+      "pickups": [
+        "teleopTransitionStoring",
+        "activeShift1Storing",
+        "activeShift2Storing",
+        "endgameStoring"
+      ],
+      "scores": [
+        "teleopTransitionRatingStoring1",
+        "teleopTransitionRatingStoring2",
+        "teleopTransitionRatingStoring3",
+        "teleopTransitionRatingStoring4",
+        "activeShift1RatingStoring1",
+        "activeShift1RatingStoring2",
+        "activeShift1RatingStoring3",
+        "activeShift1RatingStoring4",
+        "activeShift2RatingStoring1",
+        "activeShift2RatingStoring2",
+        "activeShift2RatingStoring3",
+        "activeShift2RatingStoring4",
+        "endgameRatingStoring1",
+        "endgameRatingStoring2",
+        "endgameRatingStoring3",
+        "endgameRatingStoring4"
+      ]
+    }
+  },
+  {
+    "type": "tmp",
+    "name": "cycle",
+    "outputPath": "cycle.passingTime",
+    "options": {
+      "pickups": [
+        "autoPassing",
+        "teleopTransitionPassing",
+        "activeShift1Passing",
+        "activeShift2Passing",
+        "endgamePassing"
+      ],
+      "scores": [
+        "autoRatingPassing1",
+        "autoRatingPassing2",
+        "autoRatingPassing3",
+        "autoRatingPassing4",
+        "teleopTransitionRatingPassing1",
+        "teleopTransitionRatingPassing2",
+        "teleopTransitionRatingPassing3",
+        "teleopTransitionRatingPassing4",
+        "activeShift1RatingPassing1",
+        "activeShift1RatingPassing2",
+        "activeShift1RatingPassing3",
+        "activeShift1RatingPassing4",
+        "activeShift2RatingPassing1",
+        "activeShift2RatingPassing2",
+        "activeShift2RatingPassing3",
+        "activeShift2RatingPassing4",
+        "endgameRatingPassing1",
+        "endgameRatingPassing2",
+        "endgameRatingPassing3",
+        "endgameRatingPassing4"
+      ]
+    }
+  },
+  {
+    "type": "tmp",
     "name": "weightedSumAverage",
     "outputPath": "scores.autoPassingRating",
     "options": {
@@ -640,6 +738,14 @@
   },
   {
     "type": "team",
+    "name": "aggregateArray",
+    "outputPath": "cycles.defenseTime.all",
+    "options": {
+      "path": "cycle.defenseTime.all"
+    }
+  },
+  {
+    "type": "team",
     "name": "multiply",
     "outputPath": "cycles.storingTime.totalTime",
     "options": {
@@ -651,6 +757,13 @@
           "path": "cycles.storingTime.cycleCount"
         }
       ]
+    }
+  },
+  {
+    "name": "aggregateArray",
+    "outputPath": "cycles.defenseTime.allComplete",
+    "options": {
+      "path": "cycle.defenseTime.allComplete"
     }
   },
   {
@@ -670,6 +783,15 @@
   },
   {
     "type": "team",
+    "name": "averageArray",
+    "outputPath": "cycles.defenseTime.averageTime",
+    "options": {
+      "arrayPath": "cycles.defenseTime.all",
+      "valuePath": "timeDifferential"
+    }
+  },
+  {
+    "type": "team",
     "name": "multiply",
     "outputPath": "cycles.defenseTime.totalTime",
     "options": {
@@ -681,6 +803,82 @@
           "path": "cycles.defenseTime.cycleCount"
         }
       ]
+    }
+  },
+  {
+    "name": "averageArray",
+    "outputPath": "cycles.defenseTime.averageTimeComplete",
+    "options": {
+      "arrayPath": "cycles.defenseTime.allComplete",
+      "valuePath": "timeDifferential"
+    }
+  },
+  {
+    "type": "team",
+    "name": "aggregateArray",
+    "outputPath": "cycles.storingTime.all",
+    "options": {
+      "path": "cycle.storingTime.all"
+    }
+  },
+  {
+    "type": "team",
+    "name": "aggregateArray",
+    "outputPath": "cycles.storingTime.allComplete",
+    "options": {
+      "path": "cycle.storingTime.allComplete"
+    }
+  },
+  {
+    "type": "team",
+    "name": "averageArray",
+    "outputPath": "cycles.storingTime.averageTime",
+    "options": {
+      "arrayPath": "cycles.storingTime.all",
+      "valuePath": "timeDifferential"
+    }
+  },
+  {
+    "type": "team",
+    "name": "averageArray",
+    "outputPath": "cycles.storingTime.averageTimeComplete",
+    "options": {
+      "arrayPath": "cycles.storingTime.allComplete",
+      "valuePath": "timeDifferential"
+    }
+  },
+  {
+    "type": "team",
+    "name": "aggregateArray",
+    "outputPath": "cycles.passingTime.all",
+    "options": {
+      "path": "cycle.passingTime.all"
+    }
+  },
+  {
+    "type": "team",
+    "name": "aggregateArray",
+    "outputPath": "cycles.passingTime.allComplete",
+    "options": {
+      "path": "cycle.passingTime.allComplete"
+    }
+  },
+  {
+    "type": "team",
+    "name": "averageArray",
+    "outputPath": "cycles.passingTime.averageTime",
+    "options": {
+      "arrayPath": "cycles.passingTime.all",
+      "valuePath": "timeDifferential"
+    }
+  },
+  {
+    "type": "team",
+    "name": "averageArray",
+    "outputPath": "cycles.passingTime.averageTimeComplete",
+    "options": {
+      "arrayPath": "cycles.passingTime.allComplete",
+      "valuePath": "timeDifferential"
     }
   },
   {
