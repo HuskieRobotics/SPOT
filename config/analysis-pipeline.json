@@ -536,18 +536,81 @@
     "name": "zoneActionRatingGroupings",
     "outputPath": "scores.zoneActionRating",
     "options": {
-      "zones": ["RedZone", "Neutral", "BlueZone"],
-      "actions": ["Defense", "Passing", "StopShooting", "Storing"],
+      "zones": [
+        "teleopTransitionAZone",
+        "activeShift1AZone",
+        "activeShift2AZone",
+        "inactiveShift1AZone",
+        "inactiveShift2AZone",
+        "endgameAZone",
+
+        "teleopTransitionNeutralZone",
+        "activeShift1NeutralZone",
+        "activeShift2NeutralZone",
+        "inactiveShift1NeutralZone",
+        "inactiveShift2NeutralZone",
+
+        "teleopTransitionOAZone",
+        "activeShift1OAZone",
+        "activeShift2OAZone",
+        "inactiveShift1OAZone",
+        "inactiveShift2OAZone"
+      ],
+      "actions": [
+        "teleopTransitionDefense",
+        "activeShift1Defense",
+        "activeShift2Defense",
+        "inactiveShift1Defense",
+        "inactiveShift2Defense",
+
+        "teleopTransitionPassing",
+        "activeShift1Passing",
+        "activeShift2Passing",
+        "inactiveShift1Passing",
+        "inactiveShift2Passing",
+
+        "activeShift1StopShooting",
+        "activeShift2StopShooting",
+
+        "teleopTransitionStoring",
+        "inactiveShift1Storing",
+        "inactiveShift2Storing"
+      ],
       "ratings": [
         "activeShift1RatingShooting1",
         "activeShift1RatingShooting2",
         "activeShift1RatingShooting3",
         "activeShift1RatingShooting4",
 
+        "activeShift2RatingShooting1",
+        "activeShift2RatingShooting2",
+        "activeShift2RatingShooting3",
+        "activeShift2RatingShooting4",
+
+        "teleopTransitionRatingPassing1",
+        "teleopTransitionRatingPassing2",
+        "teleopTransitionRatingPassing3",
+        "teleopTransitionRatingPassing4",
+
         "activeShift1RatingPassing1",
         "activeShift1RatingPassing2",
         "activeShift1RatingPassing3",
         "activeShift1RatingPassing4",
+
+        "activeShift2RatingPassing1",
+        "activeShift2RatingPassing2",
+        "activeShift2RatingPassing3",
+        "activeShift2RatingPassing4",
+
+        "inactiveShift1RatingPassing1",
+        "inactiveShift1RatingPassing2",
+        "inactiveShift1RatingPassing3",
+        "inactiveShift1RatingPassing4",
+
+        "inactiveShift2RatingPassing1",
+        "inactiveShift2RatingPassing2",
+        "inactiveShift2RatingPassing3",
+        "inactiveShift2RatingPassing4",
 
         "activeShift1RatingDefense1",
         "activeShift1RatingDefense2",
@@ -559,16 +622,6 @@
         "activeShift1RatingStoring3",
         "activeShift1RatingStoring4",
 
-        "activeShift2RatingShooting1",
-        "activeShift2RatingShooting2",
-        "activeShift2RatingShooting3",
-        "activeShift2RatingShooting4",
-
-        "activeShift2RatingPassing1",
-        "activeShift2RatingPassing2",
-        "activeShift2RatingPassing3",
-        "activeShift2RatingPassing4",
-
         "activeShift2RatingDefense1",
         "activeShift2RatingDefense2",
         "activeShift2RatingDefense3",
@@ -579,16 +632,6 @@
         "activeShift2RatingStoring3",
         "activeShift2RatingStoring4",
 
-        "inactiveShift1RatingShooting1",
-        "inactiveShift1RatingShooting2",
-        "inactiveShift1RatingShooting3",
-        "inactiveShift1RatingShooting4",
-
-        "inactiveShift1RatingPassing1",
-        "inactiveShift1RatingPassing2",
-        "inactiveShift1RatingPassing3",
-        "inactiveShift1RatingPassing4",
-
         "inactiveShift1RatingDefense1",
         "inactiveShift1RatingDefense2",
         "inactiveShift1RatingDefense3",
@@ -598,16 +641,6 @@
         "inactiveShift1RatingStoring2",
         "inactiveShift1RatingStoring3",
         "inactiveShift1RatingStoring4",
-
-        "inactiveShift2RatingShooting1",
-        "inactiveShift2RatingShooting2",
-        "inactiveShift2RatingShooting3",
-        "inactiveShift2RatingShooting4",
-
-        "inactiveShift2RatingPassing1",
-        "inactiveShift2RatingPassing2",
-        "inactiveShift2RatingPassing3",
-        "inactiveShift2RatingPassing4",
 
         "inactiveShift2RatingDefense1",
         "inactiveShift2RatingDefense2",

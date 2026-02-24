@@ -57,7 +57,7 @@ new DataTransformer("zoneActionRatingGroupings", (dataset, outputPath, options) 
         output.rating.zoneId.actionId.ratingValue += 1;
         }
       }
-
+      
       const output = {
         list: [],   // sequential triples: { zone, action, rating }
         // rating: {}  // represents the numeric rating value for each zone, action, and rating combination
@@ -69,7 +69,7 @@ new DataTransformer("zoneActionRatingGroupings", (dataset, outputPath, options) 
         return match ? Number(match[1]) : null;
       };
   
-      // Call the setPath function to set the output at the specified outputPath
+      // Persist under outputPath in analysis pipeline (e.g., "zoneActionRating")
       setPath(tmp, outputPath, output);
      
   }

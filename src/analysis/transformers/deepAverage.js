@@ -71,5 +71,5 @@ new DataTransformer("deepAverage", (dataset, outputPath, options) => {
   }
 
   return dataset;
-});
+})
 __/TEAM__
