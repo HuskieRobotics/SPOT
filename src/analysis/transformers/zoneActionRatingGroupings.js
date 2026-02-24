@@ -36,7 +36,7 @@ new DataTransformer("zoneActionRatingGroupings", (dataset, outputPath, options) 
         let zone = zones.shift(); //remove and get the first zone button pressed
         let zoneId = zone.id;
 
-        const actionIndex = actions.findIndex(x=>x.ts < zone.ts); // assign the first action that occurs after the selected zone
+        const actionIndex = actions.findIndex(x=>x.ts < zone.ts); // assign the first action that occurs after the selected zone (countdown ts)
         if (actionIndex === -1) {
           continue;
         }
@@ -44,7 +44,7 @@ new DataTransformer("zoneActionRatingGroupings", (dataset, outputPath, options) 
         let action = actions.splice(actionIndex, 1)[0]; //remove the matched action
         let actionId = action.id;
 
-        const ratingIndex = ratings.findIndex(x=>x.ts < action.ts) //populate the first rating that occurs after the selected action
+        const ratingIndex = ratings.findIndex(x=>x.ts < action.ts) //populate the first rating that occurs after the selected action (countdown ts)
         if (ratingIndex === -1) {
           continue;
         }

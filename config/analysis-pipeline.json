@@ -774,7 +774,7 @@
   },
   {
     "type": "team",
-    "name": "deepAverage",
+    "name": "weightedSumAverage",
     "outputPath": "zoneActionRatingAverages",
     "options": {
       "path": "zoneActionRating"

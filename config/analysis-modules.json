@@ -457,47 +457,47 @@
   {
     "view": "team",
     "module": "Bar",
-    "name": "Zone × Action (Rating 4 Avg Count)",
+    "name": "Zone × Action Weighted Ratings",
     "position": "main",
     "options": {
       "bars": [
         {
-          "name": "Red • Defense • 4",
-          "path": "zoneActionRatingAverages.redZone.defense.4"
+          "name": "Alliance • Defense",
+          "path": "zoneActionRatingAverages.activeShift1AZone.activeShift1Defense"
         },
         {
-          "name": "Red • Passing • 4",
-          "path": "zoneActionRatingAverages.redZone.passing.4"
+          "name": "Alliance • Passing",
+          "path": "zoneActionRatingAverages.activeShift1AZone.activeShift1Passing"
         },
         {
-          "name": "Red • StopShoot • 4",
-          "path": "zoneActionRatingAverages.redZone.stopShoot.4"
-        },
-
-        {
-          "name": "Neutral • Defense • 4",
-          "path": "zoneActionRatingAverages.neutralZone.defense.4"
-        },
-        {
-          "name": "Neutral • Passing • 4",
-          "path": "zoneActionRatingAverages.neutralZone.passing.4"
-        },
-        {
-          "name": "Neutral • StopShoot • 4",
-          "path": "zoneActionRatingAverages.neutralZone.stopShoot.4"
+          "name": "Alliance • StopShoot",
+          "path": "zoneActionRatingAverages.activeShift1AZone.activeShift1StopShooting"
         },
 
         {
-          "name": "Blue • Defense • 4",
-          "path": "zoneActionRatingAverages.blueZone.defense.4"
+          "name": "Neutral • Defense",
+          "path": "zoneActionRatingAverages.activeShift1NeutralZone.activeShift1Defense"
         },
         {
-          "name": "Blue • Passing • 4",
-          "path": "zoneActionRatingAverages.blueZone.passing.4"
+          "name": "Neutral • Passing",
+          "path": "zoneActionRatingAverages.activeShift1NeutralZone.activeShift1Passing"
         },
         {
-          "name": "Blue • StopShoot • 4",
-          "path": "zoneActionRatingAverages.blueZone.stopShoot.4"
+          "name": "Neutral • StopShoot",
+          "path": "zoneActionRatingAverages.activeShift1NeutralZone.activeShift1StopShooting"
+        },
+
+        {
+          "name": "Opposing • Defense",
+          "path": "zoneActionRatingAverages.activeShift1OAZone.activeShift1Defense"
+        },
+        {
+          "name": "Opposing • Passing",
+          "path": "zoneActionRatingAverages.activeShift1OAZone.activeShift1Passing"
+        },
+        {
+          "name": "Opposing • StopShoot",
+          "path": "zoneActionRatingAverages.activeShift1OAZone.activeShift1StopShooting"
         }
       ]
     }
@@ -510,50 +510,50 @@
     "options": {
       "list": [
         {
-          "name": "AS1 Alliance Defense (R4 Avg)",
-          "path": "zoneActionRatingAverages.activeShift1AZone.activeShift1Defense.rating4",
+          "name": "AS1 Alliance Defense (Weighted Avg)",
+          "path": "zoneActionRatingAverages.activeShift1AZone.activeShift1Defense",
           "decimals": 2,
           "sort": 1
         },
         {
-          "name": "AS1 Neutral Passing (R4 Avg)",
-          "path": "zoneActionRatingAverages.activeShift1NeutralZone.activeShift1Passing.rating4",
+          "name": "AS1 Neutral Passing (Weighted Avg)",
+          "path": "zoneActionRatingAverages.activeShift1NeutralZone.activeShift1Passing",
           "decimals": 2,
           "sort": 1
         },
         {
-          "name": "AS2 Opposing Stop Shooting (R4 Avg)",
-          "path": "zoneActionRatingAverages.activeShift2OAZone.activeShift2StopShooting.rating4",
+          "name": "AS2 Opposing Stop Shooting (Weighted Avg)",
+          "path": "zoneActionRatingAverages.activeShift2OAZone.activeShift2StopShooting",
           "decimals": 2,
           "sort": 1
         },
         {
-          "name": "AS2 Alliance Storing (R4 Avg)",
-          "path": "zoneActionRatingAverages.activeShift2AZone.activeShift2Storing.rating4",
+          "name": "AS2 Alliance Storing (Weighted Avg)",
+          "path": "zoneActionRatingAverages.activeShift2AZone.activeShift2Storing",
           "decimals": 2,
           "sort": 1
         },
         {
-          "name": "IS1 Alliance Defense (R4 Avg)",
-          "path": "zoneActionRatingAverages.inactiveShift1AZone.inactiveShift1Defense.rating4",
+          "name": "IS1 Alliance Defense (Weighted Avg)",
+          "path": "zoneActionRatingAverages.inactiveShift1AZone.inactiveShift1Defense",
           "decimals": 2,
           "sort": 1
         },
         {
-          "name": "IS1 Neutral Passing (R4 Avg)",
-          "path": "zoneActionRatingAverages.inactiveShift1NeutralZone.inactiveShift1Passing.rating4",
+          "name": "IS1 Neutral Passing (Weighted Avg)",
+          "path": "zoneActionRatingAverages.inactiveShift1NeutralZone.inactiveShift1Passing",
           "decimals": 2,
           "sort": 1
         },
         {
-          "name": "IS2 Opposing Stop Shooting (R4 Avg)",
-          "path": "zoneActionRatingAverages.inactiveShift2OAZone.inactiveShift2StopShooting.rating4",
+          "name": "IS2 Opposing Stop Shooting (Weighted Avg)",
+          "path": "zoneActionRatingAverages.inactiveShift2OAZone.inactiveShift2StopShooting",
           "decimals": 2,
           "sort": 1
         },
         {
-          "name": "IS2 Alliance Storing (R4 Avg)",
-          "path": "zoneActionRatingAverages.inactiveShift2AZone.inactiveShift2Storing.rating4",
+          "name": "IS2 Alliance Storing (Weighted Avg)",
+          "path": "zoneActionRatingAverages.inactiveShift2AZone.inactiveShift2Storing",
           "decimals": 2,
           "sort": 1
         }
