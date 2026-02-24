@@ -534,10 +534,40 @@
   {
     "type": "tmp",
     "name": "zoneActionRatingGroupings",
-    "outputPath": "scores.zoneActionRating",
+    "outputPath": "zoneActionRating",
     "options": {
-      "zones": ["RedZone", "Neutral", "BlueZone"],
-      "actions": ["Defense", "Passing", "StopShooting", "Storing"],
+      "zones": [
+        "activeShift1AZone",
+        "activeShift1NeutralZone",
+        "activeShift1OAZone",
+        "activeShift2AZone",
+        "activeShift2NeutralZone",
+        "activeShift2OAZone",
+        "inactiveShift1AZone",
+        "inactiveShift1NeutralZone",
+        "inactiveShift1OAZone",
+        "inactiveShift2AZone",
+        "inactiveShift2NeutralZone",
+        "inactiveShift2OAZone"
+      ],
+      "actions": [
+        "activeShift1Defense",
+        "activeShift1Passing",
+        "activeShift1StopShooting",
+        "activeShift1Storing",
+        "activeShift2Defense",
+        "activeShift2Passing",
+        "activeShift2StopShooting",
+        "activeShift2Storing",
+        "inactiveShift1Defense",
+        "inactiveShift1Passing",
+        "inactiveShift1StopShooting",
+        "inactiveShift1Storing",
+        "inactiveShift2Defense",
+        "inactiveShift2Passing",
+        "inactiveShift2StopShooting",
+        "inactiveShift2Storing"
+      ],
       "ratings": [
         "activeShift1RatingShooting1",
         "activeShift1RatingShooting2",
@@ -553,6 +583,11 @@
         "activeShift1RatingDefense2",
         "activeShift1RatingDefense3",
         "activeShift1RatingDefense4",
+
+        "inactiveShift1RatingStoring1",
+        "inactiveShift1RatingStoring2",
+        "inactiveShift1RatingStoring3",
+        "inactiveShift1RatingStoring4",
 
         "activeShift1RatingStoring1",
         "activeShift1RatingStoring2",

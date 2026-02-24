@@ -501,5 +501,63 @@
         }
       ]
     }
+  },
+  {
+    "view": "team",
+    "module": "Stats",
+    "position": "side",
+    "name": "Zone x Action Shift Ratings",
+    "options": {
+      "list": [
+        {
+          "name": "AS1 Alliance Defense (R4 Avg)",
+          "path": "zoneActionRatingAverages.activeShift1AZone.activeShift1Defense.rating4",
+          "decimals": 2,
+          "sort": 1
+        },
+        {
+          "name": "AS1 Neutral Passing (R4 Avg)",
+          "path": "zoneActionRating.activeShift1NeutralZone.activeShift1Passing.rating4",
+          "decimals": 2,
+          "sort": 1
+        },
+        {
+          "name": "AS2 Opposing Stop Shooting (R4 Avg)",
+          "path": "zoneActionRatingAverages.activeShift2OAZone.activeShift2StopShooting.rating4",
+          "decimals": 2,
+          "sort": 1
+        },
+        {
+          "name": "AS2 Alliance Storing (R4 Avg)",
+          "path": "zoneActionRatingAverages.activeShift2AZone.activeShift2Storing.rating4",
+          "decimals": 2,
+          "sort": 1
+        },
+        {
+          "name": "IS1 Alliance Defense (R4 Avg)",
+          "path": "zoneActionRatingAverages.inactiveShift1AZone.inactiveShift1Defense.rating4",
+          "decimals": 2,
+          "sort": 1
+        },
+        {
+          "name": "IS1 Neutral Passing (R4 Avg)",
+          "path": "zoneActionRatingAverages.inactiveShift1NeutralZone.inactiveShift1Passing.rating4",
+          "decimals": 2,
+          "sort": 1
+        },
+        {
+          "name": "IS2 Opposing Stop Shooting (R4 Avg)",
+          "path": "zoneActionRatingAverages.inactiveShift2OAZone.inactiveShift2StopShooting.rating4",
+          "decimals": 2,
+          "sort": 1
+        },
+        {
+          "name": "IS2 Alliance Storing (R4 Avg)",
+          "path": "zoneActionRatingAverages.inactiveShift2AZone.inactiveShift2Storing.rating4",
+          "decimals": 2,
+          "sort": 1
+        }
+      ]
+    }
   }
 ]
