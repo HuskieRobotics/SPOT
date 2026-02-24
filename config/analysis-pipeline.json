@@ -777,7 +777,7 @@
     "name": "deepAverage",
     "outputPath": "zoneActionRatingAverages",
     "options": {
-      "path": "zoneActionRating.rating"
+      "path": "zoneActionRating"
     }
   }
 ]

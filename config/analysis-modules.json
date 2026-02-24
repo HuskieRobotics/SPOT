@@ -517,7 +517,7 @@
         },
         {
           "name": "AS1 Neutral Passing (R4 Avg)",
-          "path": "zoneActionRating.activeShift1NeutralZone.activeShift1Passing.rating4",
+          "path": "zoneActionRatingAverages.activeShift1NeutralZone.activeShift1Passing.rating4",
           "decimals": 2,
           "sort": 1
         },
