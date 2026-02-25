@@ -732,6 +732,7 @@
   },
 
   {
+    "type": "team",
     "name": "aggregateArray",
     "outputPath": "cycles.defenseTime.allComplete",
     "options": {
@@ -765,6 +766,7 @@
   },
 
   {
+    "type": "team",
     "name": "averageArray",
     "outputPath": "cycles.defenseTime.averageTimeComplete",
     "options": {
