@@ -274,7 +274,7 @@
   {
     "view": "team",
     "module": "Pie",
-    "name": "Action Times (Totals)",
+    "name": "Action Times (Total Seconds)",
     "position": "main",
     "options": {
       "slices": [
