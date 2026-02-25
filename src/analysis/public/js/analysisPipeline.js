@@ -38,14 +38,19 @@ async function executePipeline() {
       "endGame",
     );
 
-    tmp.actionQueue.push({
-      id: `${autoData.actionName}` + "_" + `${autoData.action}`,
-      ts: 0,
-    });
-    tmp.actionQueue.push({
-      id: `${endGameData.actionName}` + "_" + `${endGameData.action}`,
-      ts: 0,
-    });
+    if (autoData) {
+      tmp.actionQueue.push({
+        id: `${autoData.actionName}` + "_" + `${autoData.action}`,
+        ts: 0,
+      });
+    }
+
+    if (endGameData) {
+      tmp.actionQueue.push({
+        id: `${endGameData.actionName}` + "_" + `${endGameData.action}`,
+        ts: 0,
+      });
+    }
   });
 
   /**
