@@ -721,21 +721,7 @@
       "valuePath": "timeDifferential"
     }
   },
-  {
-    "type": "team",
-    "name": "multiply",
-    "outputPath": "cycles.shootingTime.totalTime",
-    "options": {
-      "multiplicands": [
-        {
-          "path": "cycles.shootingTime.averageTime"
-        },
-        {
-          "path": "cycles.shootingTime.cycleCount"
-        }
-      ]
-    }
-  },
+
   {
     "type": "team",
     "name": "aggregateArray",
@@ -744,21 +730,7 @@
       "path": "cycle.defenseTime.all"
     }
   },
-  {
-    "type": "team",
-    "name": "multiply",
-    "outputPath": "cycles.storingTime.totalTime",
-    "options": {
-      "multiplicands": [
-        {
-          "path": "cycles.storingTime.averageTime"
-        },
-        {
-          "path": "cycles.storingTime.cycleCount"
-        }
-      ]
-    }
-  },
+
   {
     "name": "aggregateArray",
     "outputPath": "cycles.defenseTime.allComplete",
@@ -766,21 +738,7 @@
       "path": "cycle.defenseTime.allComplete"
     }
   },
-  {
-    "type": "team",
-    "name": "multiply",
-    "outputPath": "cycles.passingTime.totalTime",
-    "options": {
-      "multiplicands": [
-        {
-          "path": "cycles.passingTime.averageTime"
-        },
-        {
-          "path": "cycles.passingTime.cycleCount"
-        }
-      ]
-    }
-  },
+
   {
     "type": "team",
     "name": "averageArray",
@@ -805,6 +763,7 @@
       ]
     }
   },
+
   {
     "name": "averageArray",
     "outputPath": "cycles.defenseTime.averageTimeComplete",
@@ -872,6 +831,7 @@
       "valuePath": "timeDifferential"
     }
   },
+
   {
     "type": "team",
     "name": "averageArray",
@@ -879,6 +839,51 @@
     "options": {
       "arrayPath": "cycles.passingTime.allComplete",
       "valuePath": "timeDifferential"
+    }
+  },
+  {
+    "type": "team",
+    "name": "multiply",
+    "outputPath": "cycles.shootingTime.totalTime",
+    "options": {
+      "multiplicands": [
+        {
+          "path": "cycles.shootingTime.averageTime"
+        },
+        {
+          "path": "cycles.shootingTime.cycleCount"
+        }
+      ]
+    }
+  },
+  {
+    "type": "team",
+    "name": "multiply",
+    "outputPath": "cycles.passingTime.totalTime",
+    "options": {
+      "multiplicands": [
+        {
+          "path": "cycles.passingTime.averageTime"
+        },
+        {
+          "path": "cycles.passingTime.cycleCount"
+        }
+      ]
+    }
+  },
+  {
+    "type": "team",
+    "name": "multiply",
+    "outputPath": "cycles.storingTime.totalTime",
+    "options": {
+      "multiplicands": [
+        {
+          "path": "cycles.storingTime.averageTime"
+        },
+        {
+          "path": "cycles.storingTime.cycleCount"
+        }
+      ]
     }
   },
   {

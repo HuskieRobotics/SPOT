@@ -1,6 +1,6 @@
 /**
  * @type {DataTransformer}
- * @param options.multiplicands {String[]} array of MatchTeamPerformance outputPaths 
+ * @param options.multiplicands {aggregateArray[]} array of MatchTeamPerformance outputPaths 
  */
 __TMP__
 new DataTransformer("multiply", (dataset, outputPath, options) => {
@@ -19,7 +19,7 @@ __/TMP__
 
 /**
  * @type {DataTransformer}
- * @param options.multiplicands {String[]} array of Team outputPaths
+ * @param options.multiplicands {aggregateArray[]} array of Team outputPaths
  */
 __TEAM__
 new DataTransformer("multiply", (dataset, outputPath, options) => {
