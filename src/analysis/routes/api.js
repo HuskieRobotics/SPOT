@@ -16,7 +16,7 @@ router.get("/blueApiOPRStrings", async (req, res) => {
   if (config.TBA_OPR_STRINGS) {
     res.send(config.TBA_OPR_STRINGS);
   } else {
-    res.send({ None: None });
+    res.send({ None: "None" });
   }
 });
 
