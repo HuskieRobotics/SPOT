@@ -1,6 +1,7 @@
 /**
  * @type {DataTransformer}
  * @param options.multiplicands {(String|{path:String})[]} array of MatchTeamPerformance outputPaths 
+ * @param options.weight {Number} additional multiplier applied to the product
  */
 __TMP__
 new DataTransformer("multiply", (dataset, outputPath, options) => {
@@ -10,6 +11,7 @@ new DataTransformer("multiply", (dataset, outputPath, options) => {
           const multiplicandPath = typeof multiplicand === "string" ? multiplicand : multiplicand.path;
           product *= getPath(tmp, multiplicandPath, 1);
         }
+        product *= options.weight;
 
         setPath(tmp, outputPath, product)
     }
@@ -21,6 +23,7 @@ __/TMP__
 /**
  * @type {DataTransformer}
  * @param options.multiplicands {(String|{path:String})[]} array of Team outputPaths
+ * @param options.weight {Number} additional multiplier applied to the product
  */
 __TEAM__
 new DataTransformer("multiply", (dataset, outputPath, options) => {
@@ -30,6 +33,7 @@ new DataTransformer("multiply", (dataset, outputPath, options) => {
           const multiplicandPath = typeof multiplicand === "string" ? multiplicand : multiplicand.path;
           product *= getPath(team, multiplicandPath, 1);
         }
+        product *= options.weight;
 
         setPath(team, outputPath, product)
     }

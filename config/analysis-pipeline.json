@@ -761,7 +761,8 @@
         {
           "path": "cycles.defenseTime.cycleCount"
         }
-      ]
+      ],
+      "weight": 0.001
     }
   },
 
@@ -855,7 +856,8 @@
         {
           "path": "cycles.shootingTime.cycleCount"
         }
-      ]
+      ],
+      "weight": 0.001
     }
   },
   {
@@ -870,7 +872,8 @@
         {
           "path": "cycles.passingTime.cycleCount"
         }
-      ]
+      ],
+      "weight": 0.001
     }
   },
   {
@@ -885,7 +888,8 @@
         {
           "path": "cycles.storingTime.cycleCount"
         }
-      ]
+      ],
+      "weight": 0.001
     }
   },
   {
