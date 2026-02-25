@@ -8,6 +8,12 @@ class Pie {
     //this.container.innerHTML = '<div style = "font-size: 2em; text-align:center;">No Team Selected</div>'
   }
 
+  getCssVar(name) {
+    return getComputedStyle(document.documentElement)
+      .getPropertyValue(name)
+      .trim();
+  }
+
   formatData(teams, dataset) {
     console.log(`pie teams recieved: ${teams}`);
     let filteredTeams = teams.filter((team) => team != "|");
@@ -68,9 +74,10 @@ class Pie {
       },
       font: {
         family: "Cairo, sans-serif",
+        color: this.getCssVar("--text"),
       },
-      paper_bgcolor: "#FEFEFE",
-      plot_bgfcolor: "#FEFEFE",
+      paper_bgcolor: this.getCssVar("--bg-alt"),
+      plot_bgcolor: this.getCssVar("--bg-alt"),
     };
 
     const config = {
