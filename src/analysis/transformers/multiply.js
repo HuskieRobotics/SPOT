@@ -1,13 +1,14 @@
 /**
  * @type {DataTransformer}
- * @param options.multiplicands {aggregateArray[]} array of MatchTeamPerformance outputPaths 
+ * @param options.multiplicands {(String|{path:String})[]} array of MatchTeamPerformance outputPaths 
  */
 __TMP__
 new DataTransformer("multiply", (dataset, outputPath, options) => {
     for (const tmp of dataset.tmps) {
-      const product = 1;
-        for (const i of options.multiplicands) {
-          product *= getPath(tmp, i, 1);
+      let product = 1;
+        for (const multiplicand of options.multiplicands) {
+          const multiplicandPath = typeof multiplicand === "string" ? multiplicand : multiplicand.path;
+          product *= getPath(tmp, multiplicandPath, 1);
         }
 
         setPath(tmp, outputPath, product)
@@ -19,14 +20,15 @@ __/TMP__
 
 /**
  * @type {DataTransformer}
- * @param options.multiplicands {aggregateArray[]} array of Team outputPaths
+ * @param options.multiplicands {(String|{path:String})[]} array of Team outputPaths
  */
 __TEAM__
 new DataTransformer("multiply", (dataset, outputPath, options) => {
     for (const [teamNumber, team] of Object.entries(dataset.teams)) {
-        const product = 1;
-        for (const i of options.multiplicands) {
-          product *= getPath(team, i, 1);
+        let product = 1;
+        for (const multiplicand of options.multiplicands) {
+          const multiplicandPath = typeof multiplicand === "string" ? multiplicand : multiplicand.path;
+          product *= getPath(team, multiplicandPath, 1);
         }
 
         setPath(team, outputPath, product)
