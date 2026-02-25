@@ -299,12 +299,12 @@ body {
 }
 
 .match .match-teams.red {
-  background: #ff6666;
+  background: var(--match-team-red);
   border-radius: 10px 0 0 10px;
 }
 
 .match .match-teams.blue {
-  background: #6666ff;
+  background: var(--match-team-blue);
   border-radius: 0 10px 10px 0;
 }
 

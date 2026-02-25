@@ -43,6 +43,10 @@
   font-size: 3.3vw;
 }
 
+#last-actions {
+  color: var(--text);
+}
+
 #match-scouting .grid-button.gray {
   background-color: #2d2d2d;
 }

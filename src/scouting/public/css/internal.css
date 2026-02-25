@@ -63,6 +63,7 @@ button {
   transform: translate(-50%, -50%);
   z-index: 99;
   background-color: var(--bg-alt);
+  color: var(--text);
   border-radius: 10px;
   padding: 40px;
   transition: 0.3s all;

@@ -9,6 +9,8 @@
   --gray: #757575;
   --green: #4caf50;
   --placeholder: #a3a3a3;
+  --match-team-red: #ff6666;
+  --match-team-blue: #6666ff;
   --border-radius: 16px;
   --font: Cairo, sans-serif;
 }
@@ -21,6 +23,8 @@ html[data-theme="dark"] {
   --reload-color: #efefef;
   --green: #75c077;
   --accent-alt: #fd6e42;
+  --match-team-red: #ff6666;
+  --match-team-blue: #7e7edf;
 }
 
 html {
