@@ -7,6 +7,13 @@ var previousTimer = [];
 (async () => {
   config = await config;
   matchScoutingConfig = await matchScoutingConfig;
+
+  const parseBoolean = (value) =>
+    value === true || value === "true" || value === "on";
+  const enableSwapZoneButtonLocations = parseBoolean(
+    config.SWAP_ZONE_BUTTON_LOCATIONS,
+  );
+
   //initiate timing
   var time = matchScoutingConfig.timing.totalTime;
   var teleopTime = 130000;
@@ -65,6 +72,89 @@ var previousTimer = [];
   const layers = deepClone(matchScoutingConfig.layout.layers);
   const buttons = layers.flat();
 
+  function getCurrentAllianceColor() {
+    if (!ScoutingSync || !ScoutingSync.matches) return null;
+
+    const currentMatch = ScoutingSync.matches.find(
+      (match) =>
+        String(match.number) === String(ScoutingSync.state.matchNumber),
+    );
+    if (!currentMatch || !currentMatch.robots) return null;
+
+    const robotNumber = String(ScoutingSync.state.robotNumber);
+    const redRobots = (currentMatch.robots.red || []).map(String);
+    const blueRobots = (currentMatch.robots.blue || []).map(String);
+
+    if (redRobots.includes(robotNumber)) return "red";
+    if (blueRobots.includes(robotNumber)) return "blue";
+    return null;
+  }
+
+  function applyButtonVisuals(
+    button,
+    displayText,
+    className,
+    gridArea,
+    buttonId,
+  ) {
+    button.id = buttonId;
+    button.displayText = displayText;
+    button.class = className;
+    button.gridArea = [...gridArea];
+
+    button.element.innerText = displayText;
+    button.element.className = "grid-button";
+    for (const classPart of className.split(" ")) {
+      if (classPart) {
+        button.element.classList.add(classPart);
+      }
+    }
+    button.element.style.gridArea = gridArea.join(" / ");
+  }
+
+  function applyZoneButtonPreferences() {
+    for (const layer of layers) {
+      const aZoneButton = layer.find((button) => button.configId === "AZone");
+      const oaZoneButton = layer.find((button) => button.configId === "OAZone");
+      if (!aZoneButton || !oaZoneButton) continue;
+
+      let aZoneDisplayText = aZoneButton.originalDisplayText;
+      let oaZoneDisplayText = oaZoneButton.originalDisplayText;
+      let aZoneClass = aZoneButton.originalClass;
+      let oaZoneClass = oaZoneButton.originalClass;
+      let aZoneGridArea = [...aZoneButton.originalGridArea];
+      let oaZoneGridArea = [...oaZoneButton.originalGridArea];
+      let aZoneId = aZoneButton.configId;
+      let oaZoneId = oaZoneButton.configId;
+
+      if (enableSwapZoneButtonLocations) {
+        [aZoneGridArea, oaZoneGridArea] = [oaZoneGridArea, aZoneGridArea];
+      }
+      if (getCurrentAllianceColor() === "blue") {
+        [aZoneId, oaZoneId] = [oaZoneId, aZoneId];
+        [aZoneDisplayText, oaZoneDisplayText] = [
+          oaZoneDisplayText,
+          aZoneDisplayText,
+        ];
+      }
+
+      applyButtonVisuals(
+        aZoneButton,
+        aZoneDisplayText,
+        aZoneClass,
+        aZoneGridArea,
+        aZoneId,
+      );
+      applyButtonVisuals(
+        oaZoneButton,
+        oaZoneDisplayText,
+        oaZoneClass,
+        oaZoneGridArea,
+        oaZoneId,
+      );
+    }
+  }
+
   const buttonBuilders = {
     //an object to give buttons type specific things, button type: function (button)
     action: (button) => {
@@ -90,7 +180,9 @@ var previousTimer = [];
           // Basically, if this code was not in place (^), then you would be able to undo the start of the game.
 
           const undoneAction = actionQueue.pop(); //remove the last action from the action queue
-          const undoneButton = buttons.find((x) => x.id === undoneAction.baseId);
+          const undoneButton = buttons.find(
+            (x) => x.id === undoneAction.baseId,
+          );
 
           //special case for match-control buttons which have extra undo funcitonality without executables
           if (undoneButton.type === "match-control") {
@@ -153,6 +245,7 @@ var previousTimer = [];
           inactiveShiftCount += 1;
           currentShiftNumber = inactiveShiftCount;
           lastShiftSwitchTime = time;
+
           shiftButtonPressed = true;
         }
         doExecutables(button, time);
@@ -336,6 +429,10 @@ var previousTimer = [];
   for (const layer of layers) {
     for (const button of layer) {
       button.id = button.id || "";
+      button.configId = button.id;
+      button.originalDisplayText = button.displayText || button.id;
+      button.originalClass = button.class;
+      button.originalGridArea = [...button.gridArea];
       button.element = document.createElement("div");
 
       //give the button element its properties
@@ -351,6 +448,11 @@ var previousTimer = [];
   }
 
   // Expose rebuild function for loadConfig executable
+
+  applyZoneButtonPreferences();
+  window.addEventListener("spot:scouting-state-updated", () => {
+    applyZoneButtonPreferences();
+  });
 
   showLayer(0); //initially show layer 0
 
@@ -382,12 +484,13 @@ var previousTimer = [];
     if (Object.keys(conditional).length > 0) {
       var renderedButtons = [];
       for (let button of layers[layer]) {
+        const configButtonId = button.configId || button.id;
         var targetVariables = [];
         var targetValues = [];
         var thingsToCheck = {};
         for (let [variable, valueData] of Object.entries(conditional)) {
           for (let [value, idList] of Object.entries(valueData)) {
-            if (idList.includes(button.id)) {
+            if (idList.includes(configButtonId)) {
               if (thingsToCheck[variable]) {
                 thingsToCheck[variable].push(value);
               } else {
@@ -404,7 +507,7 @@ var previousTimer = [];
           }
         }
 
-        if (always.includes(button.id) || display) {
+        if (always.includes(configButtonId) || display) {
           button.element.style.display = "flex";
           renderedButtons.push(button);
         }
@@ -423,13 +526,14 @@ var previousTimer = [];
   function conditionalLayer() {
     var renderedButtons = [];
     for (let button of layers[toLayer]) {
+      const configButtonId = button.configId || button.id;
       var targetVariables = [];
       var targetValues = [];
       var thingsToCheck = {};
       console.log(`testing ${button.id}`);
       for (let [variable, valueData] of Object.entries(conditionalRender)) {
         for (let [value, idList] of Object.entries(valueData)) {
-          if (idList.includes(button.id)) {
+          if (idList.includes(configButtonId)) {
             if (thingsToCheck[variable]) {
               thingsToCheck[variable].push(value);
             } else {
@@ -446,7 +550,7 @@ var previousTimer = [];
         }
       }
 
-      if (alwaysRender.includes(button.id) || display) {
+      if (alwaysRender.includes(configButtonId) || display) {
         console.log(`rendering ${button.id}`);
         button.element.style.display = "flex";
         renderedButtons.push(button);
