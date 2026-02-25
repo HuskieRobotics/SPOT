@@ -5,12 +5,7 @@
     "name": "Performance By Each Match",
     "position": "main",
     "options": {
-      "trackedStats": [
-        "scores.auto",
-        "scores.teleop",
-        "scores.endgame",
-        "scores.total"
-      ]
+      "trackedStats": ["scores.auto", "scores.endgame", "scores.total"]
     }
   },
   {
@@ -241,7 +236,6 @@
           "name": "L1",
           "path": "counts.endGameTowerRobot_Level1"
         },
-
         {
           "name": "L2",
           "path": "counts.endGameTowerRobot_Level2"
