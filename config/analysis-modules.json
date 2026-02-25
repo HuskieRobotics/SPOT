@@ -282,13 +282,13 @@
           "name": "Minor Foul OPR",
           "path": "opr.minorFoulCount",
           "decimals": 2,
-          "sort": 1
+          "sort": -1
         },
         {
           "name": "Major Foul OPR",
           "path": "opr.majorFoulCount",
           "decimals": 2,
-          "sort": 1
+          "sort": -1
         },
         {
           "name": "Average Passing Rating",
