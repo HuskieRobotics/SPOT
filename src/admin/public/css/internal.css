@@ -8,6 +8,7 @@ DO NOT REMOVE OR MODIFY ANYTHING UNLESS YOU KNOW WHAT YOU'RE DOING
 }
 
 body {
+  background-color: var(--bg);
   margin: 0;
 }
 
