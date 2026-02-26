@@ -618,7 +618,7 @@
           ]
         },
         {
-          "id": "defense",
+          "id": "Defense",
           "displayText": "Defending",
           "gridArea": ["3", "9", "4", "14"],
           "class": "blue2026",
