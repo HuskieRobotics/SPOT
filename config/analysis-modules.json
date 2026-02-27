@@ -340,52 +340,7 @@
           "unit": "s"
         }
       ]
-    },
-    // "name": "Zone Action Rating Averages",
-    // "options": {
-    //   "list": [
-    //     {
-    //       "name": "Alliance Zone Average Defense Rating",
-    //       "path": "zoneActionRatingAverages.AZone.Defense"
-    //     },
-    //     {
-    //       "name": "Alliance Zone Average Passing Rating",
-    //       "path": "zoneActionRatingAverages.AZone.Passing"
-    //     },
-    //     {
-    //       "name": "Alliance Zone Average Shooting Rating",
-    //       "path": "zoneActionRatingAverages.AZone.StopShooting"
-    //     },
-    //     {
-    //       "name": "Alliance Zone Average Storing Rating",
-    //       "path": "zoneActionRatingAverages.AZone.Storing"
-    //     },
-    //     {
-    //       "name": "Neutral Zone Average Defense Rating",
-    //       "path": "zoneActionRatingAverages.NeutralZone.Defense"
-    //     },
-    //     {
-    //       "name": "Neutral Zone Average Passing Rating",
-    //       "path": "zoneActionRatingAverages.NeutralZone.Passing"
-    //     },
-    //     {
-    //       "name": "Neutral Zone Average Storing Rating",
-    //       "path": "zoneActionRatingAverages.NeutralZone.Storing"
-    //     },
-    //     {
-    //       "name": "Opposing Zone Average Defense Rating",
-    //       "path": "zoneActionRatingAverages.OAZone.Defense"
-    //     },
-    //     {
-    //       "name": "Opposing Zone Average Passing Rating",
-    //       "path": "zoneActionRatingAverages.OAZone.Passing"
-    //     },
-    //     {
-    //       "name": "Opposing Zone Average Storing Rating",
-    //       "path": "zoneActionRatingAverages.OAZone.Storing"
-    //     }
-    //   ]
-    // }
+    }
   },
   {
     "view": "match",

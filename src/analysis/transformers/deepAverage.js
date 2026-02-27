@@ -9,32 +9,53 @@ new DataTransformer("deepAverage", (dataset, outputPath, options) => {
   for (let teamNum in dataset.teams) {
     const team = dataset.teams[teamNum];
     const tmps = (dataset.tmps || []).filter(tmp => tmp.robotNumber == teamNum);
+
+    const addNested = (a, b) => {
+      if (b === undefined) return a;
+      if (a === undefined) return b;
+      if (typeof a === 'number' && typeof b === 'number') return a + b;
+      if (typeof a === 'object' && typeof b === 'object' && a !== null && b !== null) {
+        const result = {};
+        for (let key in a) {
+          result[key] = addNested(a[key], b[key]);
+        }
+        for (let key in b) {
+          if (!(key in a)) result[key] = b[key];
+        }
+        return result;
+      }
+      return a;
+    };
     
     // Recursively sum nested objects
     const sumNested = (obj) => {
       if (typeof obj === 'number') return obj;
-      // TODO: This array reducer is numeric-only; arrays of objects/strings are coerced and can collapse to 0 or invalid strings.
-      // For zoneActionRating, avoid deepAverage on `list` or add explicit handling for non-numeric array payloads.
-      if (Array.isArray(obj)) return obj.reduce((a, v) => a + sumNested(v), 0);
+      if (Array.isArray(obj)) {
+        if (!obj.every(value => typeof value === 'number')) return undefined;
+        return obj.reduce((a, v) => a + v, 0);
+      }
       if (typeof obj === 'object' && obj !== null) {
         const result = {};
         for (let key in obj) {
-          result[key] = sumNested(obj[key]);
+          const summed = sumNested(obj[key]);
+          if (summed !== undefined) result[key] = summed;
         }
-        return result;
+        return Object.keys(result).length > 0 ? result : undefined;
       }
-      return 0;
+      return undefined;
     };
 
     // Recursively divide by count
     const divideNested = (obj, count) => {
       if (typeof obj === 'number') return obj / count;
+      if (obj === undefined) return undefined;
       if (typeof obj === 'object' && obj !== null) {
         const result = {};
         for (let key in obj) {
-          result[key] = divideNested(obj[key], count);
+          const divided = divideNested(obj[key], count);
+          if (divided !== undefined) result[key] = divided;
         }
-        return result;
+        return Object.keys(result).length > 0 ? result : undefined;
       }
       return obj;
     };
@@ -45,24 +66,13 @@ new DataTransformer("deepAverage", (dataset, outputPath, options) => {
     for (let tmp of tmps) {
       const value = getPath(tmp, options.path);
       if (value !== undefined) {
+        const summedValue = sumNested(value);
+        if (summedValue === undefined) continue;
+
         if (sum === null) {
-          sum = sumNested(value);
+          sum = summedValue;
         } else {
-          const addNested = (a, b) => {
-            if (typeof a === 'number' && typeof b === 'number') return a + b;
-            if (typeof a === 'object' && typeof b === 'object') {
-              const result = {};
-              for (let key in a) {
-                result[key] = addNested(a[key], b[key] || 0);
-              }
-              for (let key in b) {
-                if (!(key in a)) result[key] = b[key];
-              }
-              return result;
-            }
-            return a;
-          };
-          sum = addNested(sum, sumNested(value));
+          sum = addNested(sum, summedValue);
         }
         count++;
       }

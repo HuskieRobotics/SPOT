@@ -21,13 +21,19 @@ new DataTransformer("zoneActionRatingGroupings", (dataset, outputPath, options) 
         return match ? Number(match[1]) : null;
       };
 
-      let list = []; // to store sequential triples of { zone, action, rating }
-      // TODO: Push triples into output.list (or assign output.list = list before setPath).
-      // Right now, list is populated but output.list remains empty in persisted output.
+      const normalizeZoneId = (zoneId) => {
+        const match = String(zoneId).match(/(AZone|NeutralZone|OAZone)$/);
+        return match ? match[1] : zoneId;
+      };
+
+      const normalizeActionId = (actionId) => {
+        const match = String(actionId).match(/(Defense|Passing|StopShooting|Storing)$/);
+        return match ? match[1] : actionId;
+      };
 
       const output = {
-        list: [],   // sequential triples: { zone, action, rating }
-        // rating: {}  // represents the numeric rating value for each zone, action, and rating combination
+        list: [],
+        counts: {}
       };
 
       // Go through the actionQueue and filter out all the buttons that are rating, action, or zone buttons.
@@ -64,30 +70,47 @@ new DataTransformer("zoneActionRatingGroupings", (dataset, outputPath, options) 
           rating = ratings.shift(); //remove the rating that comes directly after the most recently pressed action and zone button
           ratingValue = parseRatingValue(rating.id);
         }
-        
-      list.push({ zone: zoneId, action: actionId, rating: ratingValue }); //add the triple of zone, action, and rating to the list output
-          // TODO: This currently only updates local `list`; persisted object uses `output`.
 
-      // Create paths for each zone, action, and rating combination to store the count of each rating for each zone and action combination. For example, output.rating.redZone.defense.ratingPassing3 would represent the count of ratingPassing3 ratings for redZone defense actions.
+      const normalizedZone = normalizeZoneId(zoneId);
+      const normalizedAction = normalizeActionId(actionId);
+
+      output.list.push({ zone: normalizedZone, action: normalizedAction, rating: ratingValue }); //add the triple of zone, action, and rating to the list output
+
       if (ratingValue != null && actionId != null && zoneId != null) {
-        // TODO: Replace literal property access (output.zoneId.actionId.ratingValue)
-        // with dynamic keys based on variable values (zoneId/actionId/ratingValue).
-        // Example intent: output[zoneId][actionId][ratingValue] += 1
+        if(output.counts[normalizedZone] === undefined){
+            output.counts[normalizedZone] = {};
+          }
+        if(output.counts[normalizedZone][normalizedAction] === undefined){
+            output.counts[normalizedZone][normalizedAction] = {};
+          }
+        if(output.counts[normalizedZone][normalizedAction][ratingValue] === undefined){
+            output.counts[normalizedZone][normalizedAction][ratingValue] = 0;
+          }
 
-        if(output.zoneId === undefined){
-            output.zoneId = {};
-          }
-        if(output.zoneId.actionId === undefined){
-            output.zoneId.actionId = {};
-          }
-        if(output.zoneId.actionId.rating === undefined){
-            output.zoneId.actionId.rating = {};
-          }
-        if(output.zoneId.actionId.ratingValue === undefined){
-            output.zoneId.actionId.ratingValue = 0;
-        }
+        output.counts[normalizedZone][normalizedAction][ratingValue] += 1; //increment the count for the specific zone, action, and rating combination by 1
 
-        output.zoneId.actionId.ratingValue += 1; //increment the count for the specific zone, action, and rating combination by 1
+        if(output[normalizedZone] === undefined){
+            output[normalizedZone] = {};
+          }
+        if(output[normalizedZone][normalizedAction] === undefined){
+            output[normalizedZone][normalizedAction] = {
+              sum: 0,
+              count: 0
+            };
+          }
+
+        output[normalizedZone][normalizedAction].sum += ratingValue;
+        output[normalizedZone][normalizedAction].count += 1;
+      }
+      }
+
+      for (let normalizedZone in output) {
+        if (normalizedZone === "list" || normalizedZone === "counts") continue;
+        for (let normalizedAction in output[normalizedZone]) {
+          const summary = output[normalizedZone][normalizedAction];
+          output[normalizedZone][normalizedAction] = summary.count > 0
+            ? summary.sum / summary.count
+            : 0;
         }
       }
   
