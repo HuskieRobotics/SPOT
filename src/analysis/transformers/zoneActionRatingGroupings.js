@@ -22,6 +22,8 @@ new DataTransformer("zoneActionRatingGroupings", (dataset, outputPath, options) 
       };
 
       let list = []; // to store sequential triples of { zone, action, rating }
+      // TODO: Push triples into output.list (or assign output.list = list before setPath).
+      // Right now, list is populated but output.list remains empty in persisted output.
 
       const output = {
         list: [],   // sequential triples: { zone, action, rating }
@@ -63,10 +65,14 @@ new DataTransformer("zoneActionRatingGroupings", (dataset, outputPath, options) 
           ratingValue = parseRatingValue(rating.id);
         }
         
-       list.push({ zone: zoneId, action: actionId, rating: ratingValue }); //add the triple of zone, action, and rating to the list output
+      list.push({ zone: zoneId, action: actionId, rating: ratingValue }); //add the triple of zone, action, and rating to the list output
+          // TODO: This currently only updates local `list`; persisted object uses `output`.
 
       // Create paths for each zone, action, and rating combination to store the count of each rating for each zone and action combination. For example, output.rating.redZone.defense.ratingPassing3 would represent the count of ratingPassing3 ratings for redZone defense actions.
       if (ratingValue != null && actionId != null && zoneId != null) {
+        // TODO: Replace literal property access (output.zoneId.actionId.ratingValue)
+        // with dynamic keys based on variable values (zoneId/actionId/ratingValue).
+        // Example intent: output[zoneId][actionId][ratingValue] += 1
 
         if(output.zoneId === undefined){
             output.zoneId = {};

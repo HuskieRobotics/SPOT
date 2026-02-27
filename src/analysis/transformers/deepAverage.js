@@ -13,6 +13,8 @@ new DataTransformer("deepAverage", (dataset, outputPath, options) => {
     // Recursively sum nested objects
     const sumNested = (obj) => {
       if (typeof obj === 'number') return obj;
+      // TODO: This array reducer is numeric-only; arrays of objects/strings are coerced and can collapse to 0 or invalid strings.
+      // For zoneActionRating, avoid deepAverage on `list` or add explicit handling for non-numeric array payloads.
       if (Array.isArray(obj)) return obj.reduce((a, v) => a + sumNested(v), 0);
       if (typeof obj === 'object' && obj !== null) {
         const result = {};
