@@ -111,9 +111,11 @@ new DataTransformer("zoneActionRatingGroupings", (dataset, outputPath, options) 
         if (normalizedZone === "list" || normalizedZone === "counts") continue;
         for (let normalizedAction in output[normalizedZone]) {
           const summary = output[normalizedZone][normalizedAction];
-          output[normalizedZone][normalizedAction] = summary.count > 0
-            ? summary.sum / summary.count
-            : 0;
+          if (summary.count > 0) {
+            output[normalizedZone][normalizedAction] = summary.sum / summary.count;
+          } else {
+            output[normalizedZone][normalizedAction] = "No data"  ;
+          }
         }
       }
 
@@ -121,6 +123,6 @@ new DataTransformer("zoneActionRatingGroupings", (dataset, outputPath, options) 
       setPath(tmp, outputPath, output);     
   }
     return dataset;
-  })
+  })  
 __/TMP__
 
