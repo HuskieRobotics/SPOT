@@ -21,19 +21,21 @@ new DataTransformer("zoneActionRatingGroupings", (dataset, outputPath, options) 
         return match ? Number(match[1]) : null;
       };
 
+      //Extract the zone id (AZone, NeutralZone, OAZone) from the action id that contains the zone in it (e.g., teleopTransitionAZone -> AZone)
       const normalizeZoneId = (zoneId) => {
         const match = String(zoneId).match(/(AZone|NeutralZone|OAZone)$/);
         return match ? match[1] : zoneId;
       };
 
+      //Parses all action id's to find the id of the specific action that was performed. For example, if the action id was activeShift1RatingPassing1, the function would return "Passing" as the action that was performed.
       const normalizeActionId = (actionId) => {
         const match = String(actionId).match(/(Defense|Passing|StopShooting|Storing)$/);
         return match ? match[1] : actionId;
       };
 
       const output = {
-        list: [],
-        counts: {}
+        list: [], //List contains the list of all the zone, action, and rating triplets that were performed in a specific match. 
+        counts: {} //Counts represents the number of [zone, action, rating] triplets that were collected in the data transformer.
       };
 
       // Go through the actionQueue and filter out all the buttons that are rating, action, or zone buttons.
@@ -65,12 +67,13 @@ new DataTransformer("zoneActionRatingGroupings", (dataset, outputPath, options) 
         ratings = ratings.filter(x=>x.ts < action.ts) //populate the ratings array with the ratings of all the ratings that occur after the selected action
           
         if (ratings.length === 0) {
-        break; //ensure that there is a rating button pressed after the action button, if there are no ratings left to remove, break out of the loop
+        break; // Ensure that there is a rating button pressed after the action button, if there are no ratings left to remove, break out of the loop
         } else {
-          rating = ratings.shift(); //remove the rating that comes directly after the most recently pressed action and zone button
+          rating = ratings.shift(); // Remove the rating that comes directly after the most recently pressed action and zone button
           ratingValue = parseRatingValue(rating.id);
         }
 
+      // Take the current zone and action button id's and call the respective normalize functions on them to get a specific zone and action that was performed in that zone. For example, if the zone button was teleopTransitionAZone, the normalized zone would be AZone. If the action button was activeShift1RatingPassing1, the normalized action would be Passing.
       const normalizedZone = normalizeZoneId(zoneId);
       const normalizedAction = normalizeActionId(actionId);
 
@@ -113,12 +116,11 @@ new DataTransformer("zoneActionRatingGroupings", (dataset, outputPath, options) 
             : 0;
         }
       }
-  
+
       // Persist under outputPath in analysis pipeline (e.g., "zoneActionRating")
-      setPath(tmp, outputPath, output);
-     
+      setPath(tmp, outputPath, output);     
   }
-    return dataset; 
+    return dataset;
   })
 __/TMP__
 
