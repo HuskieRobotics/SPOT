@@ -17,6 +17,21 @@ var previousTimer = [];
   //initiate timing
   var time = matchScoutingConfig.timing.totalTime;
   var teleopTime = 130000;
+  const timingTransitions = Object.entries(
+    matchScoutingConfig.timing.timeTransitions || {},
+  ).map(([transitionTime, transitionData]) => ({
+    time: Number(transitionTime),
+    ...transitionData,
+  }));
+  const teleopTransitionTimes = timingTransitions
+    .filter((transition) =>
+      (transition.displayText || "").toLowerCase().includes("teleop"),
+    )
+    .map((transition) => transition.time)
+    .sort((a, b) => a - b);
+  if (teleopTransitionTimes.length > 0) {
+    teleopTime = teleopTransitionTimes[0];
+  }
   var endgameTime = 30000;
   var shiftSwitchInterval = 25000;
   var timerActive = false;
@@ -71,6 +86,67 @@ var previousTimer = [];
   //build buttons
   const layers = deepClone(matchScoutingConfig.layout.layers);
   const buttons = layers.flat();
+  function findLayerIndexByButtonId(buttonId) {
+    return layers.findIndex((layer) =>
+      layer.some((button) => (button.configId || button.id) === buttonId),
+    );
+  }
+
+  function findTeleopLayerIndex() {
+    const teleopShiftLayerIndex = findLayerIndexByButtonId("teleopActive");
+    if (teleopShiftLayerIndex < 0 || !layers[teleopShiftLayerIndex]) {
+      return -1;
+    }
+
+    const teleopShiftButtons = layers[teleopShiftLayerIndex].filter((button) =>
+      ["teleopActive", "teleopInactive"].includes(button.configId || button.id),
+    );
+
+    for (const shiftButton of teleopShiftButtons) {
+      const layerExecutable = (shiftButton.executables || []).find(
+        (executable) =>
+          executable.type === "layer" &&
+          Array.isArray(executable.args) &&
+          executable.args.length >= 2,
+      );
+      if (layerExecutable) {
+        return Number(layerExecutable.args[1]);
+      }
+    }
+
+    return -1;
+  }
+
+  function isSameLayer(renderedLayer, layerIndex) {
+    const targetLayer = layers[layerIndex];
+    if (!Array.isArray(renderedLayer) || !targetLayer) {
+      return false;
+    }
+
+    if (renderedLayer.length !== targetLayer.length) {
+      return false;
+    }
+
+    const renderedIds = renderedLayer
+      .map((button) => button.configId || button.id)
+      .slice()
+      .sort();
+    const targetIds = targetLayer
+      .map((button) => button.configId || button.id)
+      .slice()
+      .sort();
+
+    return renderedIds.every((id, index) => id === targetIds[index]);
+  }
+
+  const autoTransition = timingTransitions.find((transition) =>
+    (transition.displayText || "").toLowerCase().includes("auto"),
+  );
+  const autoLayerNumber =
+    autoTransition && Number.isFinite(Number(autoTransition.layer))
+      ? Number(autoTransition.layer)
+      : -1;
+  const teleopLayerNumber = findTeleopLayerIndex();
 
   function getCurrentAllianceColor() {
     if (!ScoutingSync || !ScoutingSync.matches) return null;
@@ -196,19 +272,22 @@ var previousTimer = [];
             showLayer(0);
           }
 
-          var totalNumberOfButtonsTeleopLayer = 13;
-          var totalNumberOfButtonsAutoLayer = 11;
-          var teleopLayerNumber = 7;
-
-          if (time < teleopTime) {
+          if (
+            time < teleopTime &&
+            autoLayerNumber >= 0 &&
+            teleopLayerNumber >= 0
+          ) {
             for (let i = 0; i < previousLayers.length; i++) {
-              if (previousLayers[i].length === totalNumberOfButtonsAutoLayer) {
-                previousLayers[i] = layers[teleopLayerNumber];
+              if (isSameLayer(previousLayers[i], autoLayerNumber)) {
+                previousLayers[i] = [...layers[teleopLayerNumber]];
               }
             }
           }
 
-          if (previousLayers[0] === totalNumberOfButtonsTeleopLayer) {
+          if (
+            teleopLayerNumber >= 0 &&
+            isSameLayer(previousLayers[0], teleopLayerNumber)
+          ) {
             showLayer(teleopLayerNumber);
           }
           for (const executable of undoneButton.executables) {
