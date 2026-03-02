@@ -5,12 +5,7 @@
     "name": "Performance By Each Match",
     "position": "main",
     "options": {
-      "trackedStats": [
-        "scores.auto",
-        "scores.teleop",
-        "scores.endgame",
-        "scores.total"
-      ]
+      "trackedStats": ["scores.auto", "scores.endgame", "scores.total"]
     }
   },
   {
@@ -241,7 +236,6 @@
           "name": "L1",
           "path": "counts.endGameTowerRobot_Level1"
         },
-
         {
           "name": "L2",
           "path": "counts.endGameTowerRobot_Level2"
@@ -305,6 +299,24 @@
     "name": "Team Stats",
     "options": {
       "list": [
+        {
+          "name": "Fuel OPR",
+          "path": "opr.Hub Total Count",
+          "decimals": 2,
+          "sort": 1
+        },
+        {
+          "name": "Minor Foul OPR",
+          "path": "opr.minorFoulCount",
+          "decimals": 2,
+          "sort": -1
+        },
+        {
+          "name": "Major Foul OPR",
+          "path": "opr.majorFoulCount",
+          "decimals": 2,
+          "sort": -1
+        },
         {
           "name": "Average Passing Rating",
           "path": "averageScores.passingRating",
@@ -447,7 +459,6 @@
       "decimals": 2
     }
   },
-
   {
     "view": "match",
     "module": "Stats",

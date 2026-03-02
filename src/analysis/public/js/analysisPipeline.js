@@ -4,6 +4,7 @@ async function executePipeline() {
 
   let tmps;
   let tbaData;
+  let tbaOPRS;
   // If an event is specified, fetch using the new endpoint.
   if (eventID) {
     tmps = await fetch(`/analysis/api/dataset/${eventID}`).then((res) =>
@@ -12,11 +13,15 @@ async function executePipeline() {
     tbaData = await fetch(`/analysis/api/blueApiData/${eventID}`).then((res) =>
       res.json(),
     );
+    tbaOPRS = await fetch(`/analysis/api/blueApiOPR/${eventID}`).then((res) =>
+      res.json(),
+    );
   } else {
     tmps = await fetch("/analysis/api/dataset").then((res) => res.json());
     tbaData = await fetch("/analysis/api/blueApiData").then((res) =>
       res.json(),
     );
+    tbaOPRS = await fetch(`/analysis/api/blueApiOPR`).then((res) => res.json());
   }
 
   tmps.forEach((tmp) => {
@@ -131,6 +136,32 @@ async function executePipeline() {
     }
   }
 
+  /**
+   * The purpose of this function is to get the component opr based on the team number that is inputted
+   * @param {Number} team
+   * @param {String} copr_string
+   * @returns opr
+   */
+  function sortThroughTBAOPRS(team, copr_string) {
+    let opr;
+
+    // Go through each item and value of the oprs
+    for (const [copr_key, teams_values] of Object.entries(tbaOPRS)) {
+      // Check if the copr_name matches the copr_string that is inputted
+      if (copr_key == copr_string) {
+        // Go through each team and opr of the copr
+        for (const [team_key, opr_value] of Object.entries(teams_values)) {
+          // Check if the team key (the key is formatted like "frc..." so this omits the frc) matches the inputted team
+          if (team_key.substring(3) == team) {
+            // Set the opr for the team
+            opr = opr_value;
+            return opr;
+          }
+        }
+      }
+    }
+  }
+
   // Get all tmps stored in the local storage (from qr code)
   const storage = localStorage.getItem("teamMatchPerformances");
   if (storage) {
@@ -146,6 +177,19 @@ async function executePipeline() {
   const teams = [];
   for (const tmp of tmps) {
     teams[tmp.robotNumber] = {};
+  }
+
+  let opr_strings = await fetch("/analysis/api/blueApiOPRStrings").then((res) =>
+    res.json(),
+  );
+
+  if (!opr_strings.None) {
+    for (const [team_key, value] of Object.entries(teams)) {
+      for (const [string_key, string_name] of Object.entries(opr_strings)) {
+        let team_opr = sortThroughTBAOPRS(team_key, string_name);
+        setPath(value, `opr.${string_name}`, team_opr);
+      }
+    }
   }
 
   let dataset = { tmps, teams };
