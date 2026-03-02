@@ -274,26 +274,26 @@
   {
     "view": "team",
     "module": "Pie",
-    "name": "Action Times (Total Seconds)",
+    "name": "Average Action Times",
     "position": "main",
     "options": {
       "unit": "s",
       "slices": [
         {
           "name": "Shooting",
-          "path": "cycles.shootingTime.totalTime"
+          "path": "cycles.shootingTime.averageTimeSeconds"
         },
         {
           "name": "Passing",
-          "path": "cycles.passingTime.totalTime"
+          "path": "cycles.passingTime.averageTimeSeconds"
         },
         {
           "name": "Storing",
-          "path": "cycles.storingTime.totalTime"
+          "path": "cycles.storingTime.averageTimeSeconds"
         },
         {
           "name": "Defense",
-          "path": "cycles.defenseTime.totalTime"
+          "path": "cycles.defenseTime.averageTimeSeconds"
         }
       ]
     }

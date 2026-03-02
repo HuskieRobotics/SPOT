@@ -79,6 +79,8 @@
         "teleopTransitionStopShooting",
         "activeShift1StopShooting",
         "activeShift2StopShooting",
+        "inactiveShift1StopShooting",
+        "inactiveShift2StopShooting",
         "endgameStopShooting"
       ]
     }
@@ -90,8 +92,10 @@
     "options": {
       "startAction": [
         "teleopTransitionDefense",
-        "activeShift1defense",
-        "activeShift2defense",
+        "activeShift1Defense",
+        "activeShift2Defense",
+        "inactiveShift1Defense",
+        "inactiveShift2Defense",
         "endgameDefense"
       ],
       "endAction": [
@@ -107,6 +111,14 @@
         "activeShift2RatingDefense2",
         "activeShift2RatingDefense3",
         "activeShift2RatingDefense4",
+        "inactiveShift1RatingDefense1",
+        "inactiveShift1RatingDefense2",
+        "inactiveShift1RatingDefense3",
+        "inactiveShift1RatingDefense4",
+        "inactiveShift2RatingDefense1",
+        "inactiveShift2RatingDefense2",
+        "inactiveShift2RatingDefense3",
+        "inactiveShift2RatingDefense4",
         "endgameRatingDefense1",
         "endgameRatingDefense2",
         "endgameRatingDefense3",
@@ -123,6 +135,8 @@
         "teleopTransitionStoring",
         "activeShift1Storing",
         "activeShift2Storing",
+        "inactiveShift1Storing",
+        "inactiveShift2Storing",
         "endgameStoring"
       ],
       "endAction": [
@@ -138,6 +152,14 @@
         "activeShift2RatingStoring2",
         "activeShift2RatingStoring3",
         "activeShift2RatingStoring4",
+        "inactiveShift1RatingStoring1",
+        "inactiveShift1RatingStoring2",
+        "inactiveShift1RatingStoring3",
+        "inactiveShift1RatingStoring4",
+        "inactiveShift2RatingStoring1",
+        "inactiveShift2RatingStoring2",
+        "inactiveShift2RatingStoring3",
+        "inactiveShift2RatingStoring4",
         "endgameRatingStoring1",
         "endgameRatingStoring2",
         "endgameRatingStoring3",
@@ -155,6 +177,8 @@
         "teleopTransitionPassing",
         "activeShift1Passing",
         "activeShift2Passing",
+        "inactiveShift1Passing",
+        "inactiveShift2Passing",
         "endgamePassing"
       ],
       "endAction": [
@@ -174,6 +198,14 @@
         "activeShift2RatingPassing2",
         "activeShift2RatingPassing3",
         "activeShift2RatingPassing4",
+        "inactiveShift1RatingPassing1",
+        "inactiveShift1RatingPassing2",
+        "inactiveShift1RatingPassing3",
+        "inactiveShift1RatingPassing4",
+        "inactiveShift2RatingPassing1",
+        "inactiveShift2RatingPassing2",
+        "inactiveShift2RatingPassing3",
+        "inactiveShift2RatingPassing4",
         "endgameRatingPassing1",
         "endgameRatingPassing2",
         "endgameRatingPassing3",
@@ -752,14 +784,11 @@
   {
     "type": "team",
     "name": "multiply",
-    "outputPath": "cycles.defenseTime.totalTime",
+    "outputPath": "cycles.defenseTime.averageTimeSeconds",
     "options": {
       "multiplicands": [
         {
           "path": "cycles.defenseTime.averageTime"
-        },
-        {
-          "path": "cycles.defenseTime.cycleCount"
         }
       ],
       "weight": 0.001
@@ -847,14 +876,11 @@
   {
     "type": "team",
     "name": "multiply",
-    "outputPath": "cycles.shootingTime.totalTime",
+    "outputPath": "cycles.shootingTime.averageTimeSeconds",
     "options": {
       "multiplicands": [
         {
           "path": "cycles.shootingTime.averageTime"
-        },
-        {
-          "path": "cycles.shootingTime.cycleCount"
         }
       ],
       "weight": 0.001
@@ -863,14 +889,11 @@
   {
     "type": "team",
     "name": "multiply",
-    "outputPath": "cycles.passingTime.totalTime",
+    "outputPath": "cycles.passingTime.averageTimeSeconds",
     "options": {
       "multiplicands": [
         {
           "path": "cycles.passingTime.averageTime"
-        },
-        {
-          "path": "cycles.passingTime.cycleCount"
         }
       ],
       "weight": 0.001
@@ -879,14 +902,11 @@
   {
     "type": "team",
     "name": "multiply",
-    "outputPath": "cycles.storingTime.totalTime",
+    "outputPath": "cycles.storingTime.averageTimeSeconds",
     "options": {
       "multiplicands": [
         {
           "path": "cycles.storingTime.averageTime"
-        },
-        {
-          "path": "cycles.storingTime.cycleCount"
         }
       ],
       "weight": 0.001
