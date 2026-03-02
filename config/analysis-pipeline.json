@@ -562,12 +562,14 @@
         "activeShift2Defense",
         "inactiveShift1Defense",
         "inactiveShift2Defense",
+        "endgameDefense",
 
         "teleopTransitionPassing",
         "activeShift1Passing",
         "activeShift2Passing",
         "inactiveShift1Passing",
         "inactiveShift2Passing",
+        "endgamePassing",
 
         "teleopTransitionStopShooting",
         "activeShift1StopShooting",
@@ -576,7 +578,9 @@
 
         "teleopTransitionStoring",
         "inactiveShift1Storing",
-        "inactiveShift2Storing"
+        "inactiveShift2Storing",
+        "activeShift1Storing",
+        "activeShift2Storing"
       ],
       "ratings": [
         "teleopTransitionRatingDefense1",
@@ -604,6 +608,11 @@
         "inactiveShift2RatingDefense3",
         "inactiveShift2RatingDefense4",
 
+        "endgameRatingDefense1",
+        "endgameRatingDefense2",
+        "endgameRatingDefense3",
+        "endgameRatingDefense4",
+
         "teleopTransitionRatingPassing1",
         "teleopTransitionRatingPassing2",
         "teleopTransitionRatingPassing3",
@@ -628,6 +637,11 @@
         "inactiveShift2RatingPassing2",
         "inactiveShift2RatingPassing3",
         "inactiveShift2RatingPassing4",
+
+        "endgameRatingPassing1",
+        "endgameRatingPassing2",
+        "endgameRatingPassing3",
+        "endgameRatingPassing4",
 
         "teleopTransitionRatingShooting1",
         "teleopTransitionRatingShooting2",
@@ -662,7 +676,22 @@
         "inactiveShift2RatingStoring1",
         "inactiveShift2RatingStoring2",
         "inactiveShift2RatingStoring3",
-        "inactiveShift2RatingStoring4"
+        "inactiveShift2RatingStoring4",
+
+        "activeShift1RatingStoring1",
+        "activeShift1RatingStoring2",
+        "activeShift1RatingStoring3",
+        "activeShift1RatingStoring4",
+
+        "activeShift2RatingStoring1",
+        "activeShift2RatingStoring2",
+        "activeShift2RatingStoring3",
+        "activeShift2RatingStoring4",
+
+        "endgameRatingStoring1",
+        "endgameRatingStoring2",
+        "endgameRatingStoring3",
+        "endgameRatingStoring4"
       ]
     }
   },
