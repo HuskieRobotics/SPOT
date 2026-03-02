@@ -114,7 +114,7 @@ new DataTransformer("zoneActionRatingGroupings", (dataset, outputPath, options) 
           if (summary.count > 0) {
             output[normalizedZone][normalizedAction] = summary.sum / summary.count;
           } else {
-            output[normalizedZone][normalizedAction] = "No data"  ;
+            output[normalizedZone][normalizedAction] = 0;
           }
         }
       }
