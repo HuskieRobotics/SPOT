@@ -53,6 +53,7 @@ class Pie {
         textinfo: unit ? "text" : "value",
         texttemplate: unit ? `%{value:.${decimals}f}${unit}` : undefined,
         textposition: "inside",
+        sort: false,
       },
     ];
 
