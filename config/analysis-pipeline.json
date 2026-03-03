@@ -60,8 +60,8 @@
     "name": "cycle",
     "outputPath": "cycle.autoShootingTime",
     "options": {
-      "pickups": ["autoStartShooting"],
-      "scores": ["autoStopShooting"]
+      "startAction": ["autoStartShooting"],
+      "endAction": ["autoStopShooting"]
     }
   },
   {
@@ -69,17 +69,147 @@
     "name": "cycle",
     "outputPath": "cycle.shootingTime",
     "options": {
-      "pickups": [
+      "startAction": [
         "teleopTransitionStartShooting",
         "activeShift1StartShooting",
         "activeShift2StartShooting",
         "endgameStartShooting"
       ],
-      "scores": [
+      "endAction": [
         "teleopTransitionStopShooting",
         "activeShift1StopShooting",
         "activeShift2StopShooting",
+        "inactiveShift1StopShooting",
+        "inactiveShift2StopShooting",
         "endgameStopShooting"
+      ]
+    }
+  },
+  {
+    "type": "tmp",
+    "name": "cycle",
+    "outputPath": "cycle.defenseTime",
+    "options": {
+      "startAction": [
+        "teleopTransitionDefense",
+        "activeShift1Defense",
+        "activeShift2Defense",
+        "inactiveShift1Defense",
+        "inactiveShift2Defense",
+        "endgameDefense"
+      ],
+      "endAction": [
+        "teleopTransitionRatingDefense1",
+        "teleopTransitionRatingDefense2",
+        "teleopTransitionRatingDefense3",
+        "teleopTransitionRatingDefense4",
+        "activeShift1RatingDefense1",
+        "activeShift1RatingDefense2",
+        "activeShift1RatingDefense3",
+        "activeShift1RatingDefense4",
+        "activeShift2RatingDefense1",
+        "activeShift2RatingDefense2",
+        "activeShift2RatingDefense3",
+        "activeShift2RatingDefense4",
+        "inactiveShift1RatingDefense1",
+        "inactiveShift1RatingDefense2",
+        "inactiveShift1RatingDefense3",
+        "inactiveShift1RatingDefense4",
+        "inactiveShift2RatingDefense1",
+        "inactiveShift2RatingDefense2",
+        "inactiveShift2RatingDefense3",
+        "inactiveShift2RatingDefense4",
+        "endgameRatingDefense1",
+        "endgameRatingDefense2",
+        "endgameRatingDefense3",
+        "endgameRatingDefense4"
+      ]
+    }
+  },
+  {
+    "type": "tmp",
+    "name": "cycle",
+    "outputPath": "cycle.storingTime",
+    "options": {
+      "startAction": [
+        "teleopTransitionStoring",
+        "activeShift1Storing",
+        "activeShift2Storing",
+        "inactiveShift1Storing",
+        "inactiveShift2Storing",
+        "endgameStoring"
+      ],
+      "endAction": [
+        "teleopTransitionRatingStoring1",
+        "teleopTransitionRatingStoring2",
+        "teleopTransitionRatingStoring3",
+        "teleopTransitionRatingStoring4",
+        "activeShift1RatingStoring1",
+        "activeShift1RatingStoring2",
+        "activeShift1RatingStoring3",
+        "activeShift1RatingStoring4",
+        "activeShift2RatingStoring1",
+        "activeShift2RatingStoring2",
+        "activeShift2RatingStoring3",
+        "activeShift2RatingStoring4",
+        "inactiveShift1RatingStoring1",
+        "inactiveShift1RatingStoring2",
+        "inactiveShift1RatingStoring3",
+        "inactiveShift1RatingStoring4",
+        "inactiveShift2RatingStoring1",
+        "inactiveShift2RatingStoring2",
+        "inactiveShift2RatingStoring3",
+        "inactiveShift2RatingStoring4",
+        "endgameRatingStoring1",
+        "endgameRatingStoring2",
+        "endgameRatingStoring3",
+        "endgameRatingStoring4"
+      ]
+    }
+  },
+  {
+    "type": "tmp",
+    "name": "cycle",
+    "outputPath": "cycle.passingTime",
+    "options": {
+      "startAction": [
+        "autoPassing",
+        "teleopTransitionPassing",
+        "activeShift1Passing",
+        "activeShift2Passing",
+        "inactiveShift1Passing",
+        "inactiveShift2Passing",
+        "endgamePassing"
+      ],
+      "endAction": [
+        "autoRatingPassing1",
+        "autoRatingPassing2",
+        "autoRatingPassing3",
+        "autoRatingPassing4",
+        "teleopTransitionRatingPassing1",
+        "teleopTransitionRatingPassing2",
+        "teleopTransitionRatingPassing3",
+        "teleopTransitionRatingPassing4",
+        "activeShift1RatingPassing1",
+        "activeShift1RatingPassing2",
+        "activeShift1RatingPassing3",
+        "activeShift1RatingPassing4",
+        "activeShift2RatingPassing1",
+        "activeShift2RatingPassing2",
+        "activeShift2RatingPassing3",
+        "activeShift2RatingPassing4",
+        "inactiveShift1RatingPassing1",
+        "inactiveShift1RatingPassing2",
+        "inactiveShift1RatingPassing3",
+        "inactiveShift1RatingPassing4",
+        "inactiveShift2RatingPassing1",
+        "inactiveShift2RatingPassing2",
+        "inactiveShift2RatingPassing3",
+        "inactiveShift2RatingPassing4",
+        "endgameRatingPassing1",
+        "endgameRatingPassing2",
+        "endgameRatingPassing3",
+        "endgameRatingPassing4"
       ]
     }
   },
@@ -621,6 +751,165 @@
     "options": {
       "arrayPath": "cycles.autoShootingTime.allComplete",
       "valuePath": "timeDifferential"
+    }
+  },
+
+  {
+    "type": "team",
+    "name": "aggregateArray",
+    "outputPath": "cycles.defenseTime.all",
+    "options": {
+      "path": "cycle.defenseTime.all"
+    }
+  },
+
+  {
+    "type": "team",
+    "name": "aggregateArray",
+    "outputPath": "cycles.defenseTime.allComplete",
+    "options": {
+      "path": "cycle.defenseTime.allComplete"
+    }
+  },
+
+  {
+    "type": "team",
+    "name": "averageArray",
+    "outputPath": "cycles.defenseTime.averageTime",
+    "options": {
+      "arrayPath": "cycles.defenseTime.all",
+      "valuePath": "timeDifferential"
+    }
+  },
+  {
+    "type": "team",
+    "name": "multiply",
+    "outputPath": "cycles.defenseTime.averageTimeSeconds",
+    "options": {
+      "multiplicands": [
+        {
+          "path": "cycles.defenseTime.averageTime"
+        }
+      ],
+      "weight": 0.001
+    }
+  },
+
+  {
+    "type": "team",
+    "name": "averageArray",
+    "outputPath": "cycles.defenseTime.averageTimeComplete",
+    "options": {
+      "arrayPath": "cycles.defenseTime.allComplete",
+      "valuePath": "timeDifferential"
+    }
+  },
+  {
+    "type": "team",
+    "name": "aggregateArray",
+    "outputPath": "cycles.storingTime.all",
+    "options": {
+      "path": "cycle.storingTime.all"
+    }
+  },
+  {
+    "type": "team",
+    "name": "aggregateArray",
+    "outputPath": "cycles.storingTime.allComplete",
+    "options": {
+      "path": "cycle.storingTime.allComplete"
+    }
+  },
+  {
+    "type": "team",
+    "name": "averageArray",
+    "outputPath": "cycles.storingTime.averageTime",
+    "options": {
+      "arrayPath": "cycles.storingTime.all",
+      "valuePath": "timeDifferential"
+    }
+  },
+  {
+    "type": "team",
+    "name": "averageArray",
+    "outputPath": "cycles.storingTime.averageTimeComplete",
+    "options": {
+      "arrayPath": "cycles.storingTime.allComplete",
+      "valuePath": "timeDifferential"
+    }
+  },
+  {
+    "type": "team",
+    "name": "aggregateArray",
+    "outputPath": "cycles.passingTime.all",
+    "options": {
+      "path": "cycle.passingTime.all"
+    }
+  },
+  {
+    "type": "team",
+    "name": "aggregateArray",
+    "outputPath": "cycles.passingTime.allComplete",
+    "options": {
+      "path": "cycle.passingTime.allComplete"
+    }
+  },
+  {
+    "type": "team",
+    "name": "averageArray",
+    "outputPath": "cycles.passingTime.averageTime",
+    "options": {
+      "arrayPath": "cycles.passingTime.all",
+      "valuePath": "timeDifferential"
+    }
+  },
+
+  {
+    "type": "team",
+    "name": "averageArray",
+    "outputPath": "cycles.passingTime.averageTimeComplete",
+    "options": {
+      "arrayPath": "cycles.passingTime.allComplete",
+      "valuePath": "timeDifferential"
+    }
+  },
+  {
+    "type": "team",
+    "name": "multiply",
+    "outputPath": "cycles.shootingTime.averageTimeSeconds",
+    "options": {
+      "multiplicands": [
+        {
+          "path": "cycles.shootingTime.averageTime"
+        }
+      ],
+      "weight": 0.001
+    }
+  },
+  {
+    "type": "team",
+    "name": "multiply",
+    "outputPath": "cycles.passingTime.averageTimeSeconds",
+    "options": {
+      "multiplicands": [
+        {
+          "path": "cycles.passingTime.averageTime"
+        }
+      ],
+      "weight": 0.001
+    }
+  },
+  {
+    "type": "team",
+    "name": "multiply",
+    "outputPath": "cycles.storingTime.averageTimeSeconds",
+    "options": {
+      "multiplicands": [
+        {
+          "path": "cycles.storingTime.averageTime"
+        }
+      ],
+      "weight": 0.001
     }
   },
   {

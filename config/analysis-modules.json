@@ -267,6 +267,33 @@
   },
   {
     "view": "team",
+    "module": "Pie",
+    "name": "Average Action Times",
+    "position": "main",
+    "options": {
+      "unit": "s",
+      "slices": [
+        {
+          "name": "Shooting",
+          "path": "cycles.shootingTime.averageTimeSeconds"
+        },
+        {
+          "name": "Passing",
+          "path": "cycles.passingTime.averageTimeSeconds"
+        },
+        {
+          "name": "Storing",
+          "path": "cycles.storingTime.averageTimeSeconds"
+        },
+        {
+          "name": "Defense",
+          "path": "cycles.defenseTime.averageTimeSeconds"
+        }
+      ]
+    }
+  },
+  {
+    "view": "team",
     "module": "Stats",
     "position": "side",
     "name": "Team Stats",

@@ -67,7 +67,7 @@
           "executables": []
         },
         {
-          "id": "broken",
+          "id": "Broken",
           "displayText": "Disabled",
           "gridArea": ["1", "1", "2", "3"],
           "class": "red",
@@ -177,7 +177,7 @@
           "executables": []
         },
         {
-          "id": "broken",
+          "id": "Broken",
           "displayText": "Disabled",
           "gridArea": ["1", "1", "2", "3"],
           "class": "red",
@@ -229,7 +229,7 @@
           "executables": []
         },
         {
-          "id": "broken",
+          "id": "Broken",
           "displayText": "Disabled",
           "gridArea": ["1", "1", "2", "3"],
           "class": "red",
@@ -245,7 +245,7 @@
           "executables": []
         },
         {
-          "id": "attemptL3",
+          "id": "AttemptL3",
           "displayText": "L3",
           "gridArea": ["3", "4", "4", "10"],
           "class": "deepBlue",
@@ -253,12 +253,12 @@
           "executables": [
             {
               "type": "climbHighlight",
-              "args": ["attemptL3", "fall", "AttemptL1", "attemptL2"]
+              "args": ["AttemptL3", "fall", "AttemptL1", "AttemptL2"]
             }
           ]
         },
         {
-          "id": "attemptL2",
+          "id": "AttemptL2",
           "displayText": "L2",
           "gridArea": ["4", "4", "5", "10"],
           "class": "shallowBlue",
@@ -266,7 +266,7 @@
           "executables": [
             {
               "type": "climbHighlight",
-              "args": ["attemptL2", "fall", "AttemptL1", "attemptL3"]
+              "args": ["AttemptL2", "fall", "AttemptL1", "AttemptL3"]
             }
           ]
         },
@@ -279,7 +279,7 @@
           "executables": [
             {
               "type": "climbHighlight",
-              "args": ["AttemptL1", "attemptL3", "fall", "attemptL2"]
+              "args": ["AttemptL1", "AttemptL3", "fall", "AttemptL2"]
             }
           ]
         },
@@ -292,7 +292,7 @@
           "executables": [
             {
               "type": "climbHighlight",
-              "args": ["fall", "attemptL3", "AttemptL1", "attemptL2"]
+              "args": ["fall", "AttemptL3", "AttemptL1", "AttemptL2"]
             }
           ]
         }
@@ -307,7 +307,7 @@
           "executables": []
         },
         {
-          "id": "broken",
+          "id": "Broken",
           "displayText": "Disabled",
           "gridArea": ["1", "1", "2", "3"],
           "class": "red",
@@ -380,7 +380,7 @@
           "executables": []
         },
         {
-          "id": "broken",
+          "id": "Broken",
           "displayText": "Disabled",
           "gridArea": ["1", "1", "2", "3"],
           "class": "red",
@@ -466,7 +466,7 @@
           "executables": []
         },
         {
-          "id": "broken",
+          "id": "Broken",
           "displayText": "Disabled",
           "gridArea": ["1", "1", "2", "3"],
           "class": "red",
@@ -552,7 +552,7 @@
           "executables": []
         },
         {
-          "id": "broken",
+          "id": "Broken",
           "displayText": "Disabled",
           "gridArea": ["1", "1", "2", "3"],
           "class": "red",
@@ -605,7 +605,7 @@
           ]
         },
         {
-          "id": "passing",
+          "id": "Passing",
           "displayText": "Passing",
           "gridArea": ["3", "5", "4", "9"],
           "class": "blue2026",
@@ -618,7 +618,7 @@
           ]
         },
         {
-          "id": "defense",
+          "id": "Defense",
           "displayText": "Defending",
           "gridArea": ["3", "9", "4", "14"],
           "class": "blue2026",
@@ -631,7 +631,7 @@
           ]
         },
         {
-          "id": "attemptClimb",
+          "id": "AttemptClimb",
           "displayText": "Attempt Climb",
           "gridArea": ["5", "5", "6", "9"],
           "class": "gray",

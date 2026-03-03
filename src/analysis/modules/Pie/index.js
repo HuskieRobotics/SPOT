@@ -17,6 +17,8 @@ class Pie {
   formatData(teams, dataset) {
     console.log(`pie teams recieved: ${teams}`);
     let filteredTeams = teams.filter((team) => team != "|");
+    const unit = this.moduleConfig.options.unit || "";
+    const decimals = this.moduleConfig.options.decimals ?? 2;
     const values = this.moduleConfig.options.slices.map((slice) => {
       const summed = filteredTeams
         .map((team) => {
@@ -35,17 +37,23 @@ class Pie {
       }
     });
 
+    const numericValues = values.map((value) =>
+      Math.max(0, Number(value) || 0),
+    );
+
     const data = [
       {
         labels: this.moduleConfig.options.slices.map((slice) => slice.name),
-        values: values.map((value) => Math.max(0, value)),
+        values: numericValues,
         type: "pie",
         hole: 0.4,
         textfont: {
           size: 20,
         },
-        textinfo: "value",
+        textinfo: unit ? "text" : "value",
+        texttemplate: unit ? `%{value:.${decimals}f}${unit}` : undefined,
         textposition: "inside",
+        sort: false,
       },
     ];
 

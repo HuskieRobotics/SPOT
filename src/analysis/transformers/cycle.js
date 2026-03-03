@@ -1,7 +1,7 @@
 /**
  * @type {DataTransformer}
- * @param options.pickups {String[]} a list of actionIds that correspond to game piece "pickups" (eg. loading station, ground pickup)
- * @param options.scores {String[]} a list of actionIds that correspond to game piece "scores" (eg. upper hub, lower hub)
+ * @param options.startAction {String[]} a list of actionIds that correspond to game piece "startAction" (eg. loading station, ground pickup)
+ * @param options.endAction {String[]} a list of actionIds that correspond to game piece "endAction" (eg. upper hub, lower hub)
  * @param options.misses {String[]} a list of actionIds that correspond to game piece "misses" (eg. miss)
  */ 
 __TMP__
@@ -17,27 +17,27 @@ new DataTransformer("cycle", (dataset, outputPath, options) => {
         }
 
         options = Object.assign({
-            pickups: [],
-            scores: [],
+            startAction: [],
+            endAction: [],
             misses: []
         },options)
 
-        let pickups = tmp.actionQueue.filter(x=>options.pickups.includes(x.id));
-        let endings = tmp.actionQueue.filter(x=>options.scores.includes(x.id) || options.misses.includes(x.id));
+        let startAction = tmp.actionQueue.filter(x=>options.startAction.includes(x.id));
+        let endings = tmp.actionQueue.filter(x=>options.endAction.includes(x.id) || options.misses.includes(x.id));
 
-        while (pickups.length > 0) {
+        while (startAction.length > 0) {
             
-            let pickup = pickups.shift();
+            let starts = startAction.shift();
 
-            endings = endings.filter(x=>x.ts < pickup.ts) //ensure the ends attributed to a pickup occur after the pickup
+            endings = endings.filter(x=>x.ts < starts.ts) //ensure the ends attributed to a pickup occur after the pickup
             if (endings.length === 0) break //no cycles can be completed without a ending
 
             let ending = endings.shift();
 
             out.all.push({
-                pickup,
+                starts,
                 ending,
-                timeDifferential: pickup.ts - ending.ts
+                timeDifferential: starts.ts - ending.ts
             })
         }
         out.averageTime = out.all.reduce((acc,x) => acc+x.timeDifferential, 0) / out.all.length;
