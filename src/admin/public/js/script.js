@@ -13,6 +13,17 @@ const SCOUTER_STATUS_REVERSE = {
   4: "DISCONNECTED_BY_ADMIN",
 };
 
+const root = document.documentElement;
+const savedTheme = localStorage.getItem("theme");
+
+if (savedTheme == null || savedTheme == "light") {
+  localStorage.setItem("theme", "light");
+  root.setAttribute("data-theme", "light");
+} else {
+  localStorage.setItem("theme", "dark");
+  root.setAttribute("data-theme", "dark");
+}
+
 const scouters = {};
 
 (async () => {

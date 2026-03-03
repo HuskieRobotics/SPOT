@@ -6,7 +6,9 @@
   width: 100%;
   height: 100%;
   background-color: var(--bg-alt);
-  transition: 0.2s opacity, 0.2s visibility;
+  transition:
+    0.2s opacity,
+    0.2s visibility;
   visibility: hidden;
   opacity: 0;
   position: absolute;
@@ -16,7 +18,9 @@
 #landing .spinner-container.visible {
   opacity: 1;
   visibility: unset;
-  transition: visibility 0s 0s, opacity 0.2s 0s;
+  transition:
+    visibility 0s 0s,
+    opacity 0.2s 0s;
 }
 
 @keyframes spinner {
@@ -30,6 +34,7 @@
     transform: rotate(360deg);
   }
 }
+
 .spinner div {
   position: absolute;
   animation: spinner 0.35s linear infinite;
@@ -84,14 +89,14 @@
   background-color: var(--bg-alt);
   border-radius: var(--border-radius, 16px);
   align-items: center;
-  border: 2px solid #30a2ff;
+  border: 2px solid var(--accent);
   margin-left: 15px;
-  font-family: var(--font-family);
+  transition: 250ms all;
 }
 
 #landing .buttonz:hover {
   color: var(--bg-alt);
-  background-color: #30a2ff;
+  background-color: var(--accent);
 }
 
 #landing .landing-screen {
@@ -108,7 +113,9 @@
 #landing .menu-button {
   position: fixed; /* Fix the button to the screen */
   cursor: pointer; /* Change cursor to pointer to indicate it's clickable */
-  transition: transform 0.2s ease, background-color 0.2s ease; /* Smooth transition for hover effect */
+  transition:
+    transform 0.2s ease,
+    background-color 0.2s ease; /* Smooth transition for hover effect */
   width: 35px;
   height: auto;
   top: 10px; /* Position the button from the top of the screen */
@@ -142,8 +149,7 @@
 }
 
 #landing .settings-menu {
-  background-color: white; /* Set background color */
-  border: 1px solid #ccc; /* Add a border */
+  background-color: var(--bg-alt); /* Set background color */
   padding: 20px; /* Add some padding */
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Add a shadow for better visibility */
   z-index: 3; /* Ensure the settings menu is above the overlay */
@@ -158,6 +164,7 @@
   font-size: 5em;
   line-height: 1em;
   margin-bottom: 12px;
+  color: var(--text);
 }
 
 #landing .demo-label {
@@ -168,10 +175,24 @@
 }
 
 #landing .logo {
+  filter: brightness(0) saturate(100%) invert(16%) sepia(7%) saturate(3678%)
+    hue-rotate(192deg) brightness(95%) contrast(98%);
   height: 90vmin;
   position: absolute;
   opacity: 0.05;
   z-index: 1;
+}
+
+html[data-theme="dark"] {
+  #landing .logo {
+    filter: brightness(0) saturate(100%) invert(100%) sepia(100%) saturate(0%)
+      hue-rotate(7deg) brightness(102%) contrast(102%);
+  }
+
+  #landing .menu-button {
+    filter: brightness(0) saturate(100%) invert(100%) sepia(100%) saturate(0%)
+      hue-rotate(7deg) brightness(102%) contrast(102%);
+  }
 }
 
 #landing .auth {
@@ -211,7 +232,7 @@
 }
 
 #landing .auth-buttons > div > i {
-  color: var(--bg-alt, #fefefe);
+  color: #fefefe;
   background-color: var(--light-gray);
   font-size: 1.75em;
   padding: 14px;
@@ -220,7 +241,7 @@
 }
 
 #landing .auth-buttons > div.active > i {
-  background-color: #30a2ff;
+  background-color: var(--accent);
 }
 
 #landing .auth-buttons > div > span {
@@ -246,4 +267,6 @@
   left: 50%;
   bottom: 10px;
   transform: translateX(-50%);
+  color: var(--text);
+  background-color: var(--bg);
 }
