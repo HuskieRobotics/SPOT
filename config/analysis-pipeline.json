@@ -679,12 +679,14 @@
         "activeShift2NeutralZone",
         "inactiveShift1NeutralZone",
         "inactiveShift2NeutralZone",
+        "endgameNeutralZone",
 
         "teleopTransitionOAZone",
         "activeShift1OAZone",
         "activeShift2OAZone",
         "inactiveShift1OAZone",
-        "inactiveShift2OAZone"
+        "inactiveShift2OAZone",
+        "endgameOAZone"
       ],
       "actions": [
         "teleopTransitionDefense",
@@ -710,7 +712,8 @@
         "inactiveShift1Storing",
         "inactiveShift2Storing",
         "activeShift1Storing",
-        "activeShift2Storing"
+        "activeShift2Storing",
+        "endgameStoring"
       ],
       "ratings": [
         "teleopTransitionRatingDefense1",
