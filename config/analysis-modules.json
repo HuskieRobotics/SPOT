@@ -398,43 +398,10 @@
   {
     "view": "match",
     "module": "ColumnDisplay",
-    "name": "Auto Points",
+    "name": "Auto Climb Points",
     "position": "main",
     "options": {
       "path": "averageScores.auto",
-      "sort": 1,
-      "decimals": 2
-    }
-  },
-  {
-    "view": "match",
-    "module": "ColumnDisplay",
-    "name": "Teleop Points",
-    "position": "main",
-    "options": {
-      "path": "averageScores.teleop",
-      "sort": 1,
-      "decimals": 2
-    }
-  },
-  {
-    "view": "match",
-    "module": "ColumnDisplay",
-    "name": "Barge Points",
-    "position": "main",
-    "options": {
-      "path": "avgEndgamePoints",
-      "sort": 1,
-      "decimals": 2
-    }
-  },
-  {
-    "view": "match",
-    "module": "ColumnDisplay",
-    "name": "Total Points",
-    "position": "main",
-    "options": {
-      "path": "averageScores.total",
       "sort": 1,
       "decimals": 2
     }
