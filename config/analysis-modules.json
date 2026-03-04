@@ -505,5 +505,85 @@
         }
       ]
     }
+  },
+  {
+    "view": "team",
+    "module": "Stats",
+    "position": "side",
+    "name": "Zone, Action, and Rating Averages",
+    "options": {
+      "list": [
+        {
+          "name": "Alliance Zone Average Defense Rating",
+          "path": "zoneActionRatingAverages.AZone.Defense",
+          "hideIfValue": 0,
+          "decimals": 2,
+          "sort": 1
+        },
+        {
+          "name": "Alliance Zone Average Passing Rating",
+          "path": "zoneActionRatingAverages.AZone.Passing",
+          "hideIfValue": 0,
+          "decimals": 2,
+          "sort": 1
+        },
+        {
+          "name": "Alliance Zone Average Shooting Rating",
+          "path": "zoneActionRatingAverages.AZone.StopShooting",
+          "hideIfValue": 0,
+          "decimals": 2,
+          "sort": 1
+        },
+        {
+          "name": "Alliance Zone Average Storing Rating",
+          "path": "zoneActionRatingAverages.AZone.Storing",
+          "hideIfValue": 0,
+          "decimals": 2,
+          "sort": 1
+        },
+        {
+          "name": "Neutral Zone Average Defense Rating",
+          "path": "zoneActionRatingAverages.NeutralZone.Defense",
+          "hideIfValue": 0,
+          "decimals": 2,
+          "sort": 1
+        },
+        {
+          "name": "Neutral Zone Average Passing Rating",
+          "path": "zoneActionRatingAverages.NeutralZone.Passing",
+          "hideIfValue": 0,
+          "decimals": 2,
+          "sort": 1
+        },
+        {
+          "name": "Neutral Zone Average Storing Rating",
+          "path": "zoneActionRatingAverages.NeutralZone.Storing",
+          "hideIfValue": 0,
+          "decimals": 2,
+          "sort": 1
+        },
+        {
+          "name": "Opposing Zone Average Defense Rating",
+          "path": "zoneActionRatingAverages.OAZone.Defense",
+          "hideIfValue": 0,
+          "decimals": 2,
+          "sort": 1
+        },
+        {
+          "name": "Opposing Zone Average Passing Rating",
+          "path": "zoneActionRatingAverages.OAZone.Passing",
+          "hideIfValue": 0,
+          "decimals": 2,
+          "sort": 1
+        },
+        {
+          "name": "Opposing Zone Average Storing Rating",
+          "path": "zoneActionRatingAverages.OAZone.Storing",
+          "hideIfValue": 0,
+          "decimals": 2,
+          "sort": 1
+        }
+      ]
+    }
   }
 ]
