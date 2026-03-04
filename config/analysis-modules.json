@@ -192,9 +192,22 @@
       "coordinatePath": "other.pos",
       "aggregatedActionsPath": "aggregatedActions",
       "actionGroups": [
-        { "name": "Teleop Start Shooting", "actions": ["startShoot"] }
+        {
+          "name": "Teleop Start Shooting",
+          "actions": [
+            "teleopTransitionStartShooting",
+            "activeShift1StartShooting",
+            "activeShift2StartShooting",
+            "endgameStartShooting"
+          ]
+        }
       ],
-      "actionLabels": { "startShoot": "Teleop Start Shooting Position" },
+      "actionLabels": {
+        "teleopTransitionStartShooting": "Transition",
+        "activeShift1StartShooting": "Active 1",
+        "activeShift2StartShooting": "Active 2",
+        "endgameStartShooting": "Endgame"
+      },
       "imgPath": "img/field.svg"
     }
   },
