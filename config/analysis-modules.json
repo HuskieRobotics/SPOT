@@ -314,7 +314,7 @@
       "list": [
         {
           "name": "Fuel OPR",
-          "path": "opr.Hub Total Count",
+          "path": "opr.Hub Total Fuel Count",
           "decimals": 2,
           "sort": 1
         },
