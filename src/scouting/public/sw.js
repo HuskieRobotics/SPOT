@@ -1,4 +1,4 @@
-const cacheVersion = "scouting-cache-v2";
+const cacheVersion = "scouting-cache-v3";
 
 /**
  * These are all the files that need to be cached for offline functionality.
@@ -15,16 +15,11 @@ const filesToCache = [
   // scouting page
   "/",
   "/executables.js",
-  "/css/form-dark.css",
   "/css/form.css",
   "/css/global.css",
-  "/css/internal-dark.css",
   "/css/internal.css",
-  "/css/landing-dark.css",
   "/css/landing.css",
-  "/css/match-scouting-dark.css",
   "/css/match-scouting.css",
-  "/css/waiting-dark.css",
   "/css/waiting.css",
   "/icons/android-chrome-192x192.png",
   "/icons/android-chrome-512x512.png",
@@ -32,15 +27,14 @@ const filesToCache = [
   "/icons/favicon-16x16.png",
   "/icons/favicon-32x32.png",
   "/icons/favicon.ico",
-  "/icons/menu-button-dark.png",
   "/icons/menu-button.png",
+  "/icons/menu-button.svg",
   "/icons/mstile-150x150.png",
   "/icons/safari-pinned-tab.svg",
   "/icons/site.webmanifest",
   "/img/field.svg",
   "/img/gear.svg",
-  "/img/logo-dark-mode.png",
-  "/img/logo.png",
+  "/img/logo.svg",
   "/img/spinner.svg",
   "/js/lib/jsqr.js",
   "/js/lib/qrcode.js",
@@ -190,12 +184,23 @@ self.addEventListener("fetch", (event) => {
 
         const fetchPromise = fetch(event.request)
           .then((networkResponse) => {
+            // Cache API rejects some technically successful responses (ex: 206).
+            const isCacheableStatus =
+              networkResponse.type === "opaque" ||
+              (networkResponse.ok && networkResponse.status !== 206);
+
             if (
               shouldCache &&
               event.request.method === "GET" &&
-              (networkResponse.ok || networkResponse.type === "opaque")
+              isCacheableStatus
             ) {
-              cache.put(event.request, networkResponse.clone());
+              cache.put(event.request, networkResponse.clone()).catch((err) => {
+                console.warn(
+                  "[SW] Failed to cache response:",
+                  event.request.url,
+                  err,
+                );
+              });
             }
             return networkResponse;
           })
