@@ -1,4 +1,19 @@
 async function executePipeline() {
+  async function fetchJsonOrFallback(url, fallbackValue) {
+    try {
+      const response = await fetch(url);
+      if (!response.ok) {
+        console.warn(`[Analysis] Request failed (${response.status}) for ${url}`);
+        return fallbackValue;
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.warn(`[Analysis] Request error for ${url}`, error);
+      return fallbackValue;
+    }
+  }
+
   const eventID = getSelectedEvent();
   // Get tmps from database (or cache if offline)
 
@@ -7,21 +22,22 @@ async function executePipeline() {
   let tbaOPRS;
   // If an event is specified, fetch using the new endpoint.
   if (eventID) {
-    tmps = await fetch(`/analysis/api/dataset/${eventID}`).then((res) =>
-      res.json(),
+    tmps = await fetchJsonOrFallback(
+      `/analysis/api/dataset/${eventID}`,
+      [],
     );
-    tbaData = await fetch(`/analysis/api/blueApiData/${eventID}`).then((res) =>
-      res.json(),
+    tbaData = await fetchJsonOrFallback(
+      `/analysis/api/blueApiData/${eventID}`,
+      [],
     );
-    tbaOPRS = await fetch(`/analysis/api/blueApiOPR/${eventID}`).then((res) =>
-      res.json(),
+    tbaOPRS = await fetchJsonOrFallback(
+      `/analysis/api/blueApiOPR/${eventID}`,
+      {},
     );
   } else {
-    tmps = await fetch("/analysis/api/dataset").then((res) => res.json());
-    tbaData = await fetch("/analysis/api/blueApiData").then((res) =>
-      res.json(),
-    );
-    tbaOPRS = await fetch(`/analysis/api/blueApiOPR`).then((res) => res.json());
+    tmps = await fetchJsonOrFallback("/analysis/api/dataset", []);
+    tbaData = await fetchJsonOrFallback("/analysis/api/blueApiData", []);
+    tbaOPRS = await fetchJsonOrFallback(`/analysis/api/blueApiOPR`, {});
   }
 
   tmps.forEach((tmp) => {
