@@ -56,7 +56,7 @@ const filesToCache = [
   "/js/waiting.js",
   "/manifest.json",
 
-  // analysis page
+  //  analysis page
   "/analysis/",
   "/analysis/modules.css",
   "/analysis/modules.js",
