@@ -118,15 +118,10 @@ router.get("/matches", async (req, res) => {
 
 router.get("/matches/:eventID", async (req, res) => {
   const event = await Event.findOne({ _id: req.params.eventID });
-  const eventKey = event?.code ? event.code.split("_")[0] : null;
-
-  if (!eventKey) {
-    return res.json({
-      allMatches: [],
-      currentMatch: ScoutingSync.match,
-    });
+  let eventKey = null;
+  if (event) {
+    eventKey = event.code.split("_")[0];
   }
-
   res.json({
     allMatches: await ScoutingSync.getMatches(eventKey),
     currentMatch: ScoutingSync.match,
