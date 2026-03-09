@@ -164,7 +164,12 @@ let matches;
       teams = await fetch(`/analysis/api/teams`).then((res) => res.json());
     }
     return teams.reduce((acc, t) => {
-      acc[t.team_number] = t.nickname;
+      const teamNumber = String(t.team_number ?? t.robotNumber ?? "").trim();
+      if (!teamNumber) {
+        return acc;
+      }
+
+      acc[teamNumber] = t.nickname || `Team ${teamNumber}`;
       return acc;
     }, {});
   }
@@ -176,7 +181,7 @@ let matches;
     //add to sidebar team list
     for (const [teamNumber, team] of Object.entries(dataset.teams)) {
       // console.log(`team: ${Object.keys(team)}\n num: ${teamNumber}\n allTeams: ${allTeams[teamNumber]}`)
-      if (allTeams[teamNumber]) {
+      if (Object.prototype.hasOwnProperty.call(allTeams, teamNumber)) {
         const teamContainer = constructTeam(teamNumber, team, allTeams);
         teamList.appendChild(teamContainer);
       }
@@ -243,7 +248,7 @@ let matches;
       if (
         dataset.tmps.filter((tmp) => tmp.robotNumber == teamNumber).length >
           0 &&
-        allTeams[teamNumber]
+        Object.prototype.hasOwnProperty.call(allTeams, teamNumber)
       ) {
         //
         //console.log("added team: ")
@@ -442,7 +447,7 @@ let matches;
     for (const teamSelect of teamSelects) {
       for (const team of Object.keys(dataset.teams)) {
         // console.log(team)
-        if (allTeams[team]) {
+        if (Object.prototype.hasOwnProperty.call(allTeams, team)) {
           const option = createDOMElement("option");
           option.innerText = team;
           option.value = team;

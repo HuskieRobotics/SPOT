@@ -12,6 +12,55 @@ let tbaOPRResultFetchTime = 0;
 
 let router = Router();
 
+async function resolveEventKey(eventID) {
+  const event = await Event.findOne({ _id: eventID });
+  if (!event || !event.code) {
+    return null;
+  }
+
+  return event.code.split("_")[0] || null;
+}
+
+async function getScoutedTeams(eventNumber) {
+  const query = eventNumber ? { eventNumber } : {};
+  const robotNumbers = await TeamMatchPerformance.distinct(
+    "robotNumber",
+    query,
+  );
+
+  return robotNumbers
+    .filter((robotNumber) => robotNumber !== null && robotNumber !== undefined)
+    .map((robotNumber) => {
+      const teamNumber = String(robotNumber);
+      return {
+        team_number: Number(teamNumber),
+        nickname: `Team ${teamNumber}`,
+      };
+    });
+}
+
+function mergeTeams(tbaTeams, scoutedTeams) {
+  const mergedTeams = new Map();
+
+  for (const team of scoutedTeams) {
+    mergedTeams.set(String(team.team_number), team);
+  }
+
+  for (const team of tbaTeams) {
+    const teamNumber = String(team.team_number);
+    const existing = mergedTeams.get(teamNumber);
+    mergedTeams.set(teamNumber, {
+      ...existing,
+      ...team,
+      nickname: team.nickname || existing?.nickname || `Team ${teamNumber}`,
+    });
+  }
+
+  return Array.from(mergedTeams.values()).sort(
+    (a, b) => Number(a.team_number) - Number(b.team_number),
+  );
+}
+
 router.get("/blueApiOPRStrings", async (req, res) => {
   if (config.TBA_OPR_STRINGS) {
     res.send(config.TBA_OPR_STRINGS);
@@ -24,24 +73,32 @@ router.get("/blueApiData/:eventID", async (req, res) => {
   const TBA_EVENT_KEY = req.params.eventID;
   const TBA_API_KEY = config.secrets.TBA_API_KEY;
 
-  const event = await Event.findOne({ _id: TBA_EVENT_KEY });
-  let eventKey = null;
-  if (event) {
-    eventKey = event.code.split("_")[0];
+  const eventKey = await resolveEventKey(TBA_EVENT_KEY);
+  if (!eventKey) {
+    return res.json([]);
   }
 
   // Gets tba data every 5 minutes (300000 ms)
   if (new Date().getTime() > tbaResultsFetchTime + 300000) {
-    tbaResults = (
-      await axios.get(
-        `https://www.thebluealliance.com/api/v3/event/${eventKey}/matches`,
-        {
-          headers: {
-            "X-TBA-Auth-Key": TBA_API_KEY,
+    try {
+      tbaResults = (
+        await axios.get(
+          `https://www.thebluealliance.com/api/v3/event/${eventKey}/matches`,
+          {
+            headers: {
+              "X-TBA-Auth-Key": TBA_API_KEY,
+            },
           },
-        },
-      )
-    ).data;
+        )
+      ).data;
+    } catch (error) {
+      console.error(
+        error,
+        chalk.bold.red("\nError fetching event matches from TBA"),
+      );
+      tbaResults = [];
+    }
+
     tbaResultsFetchTime = new Date().getTime();
   }
 
@@ -73,24 +130,32 @@ router.get("/blueApiOPR/:eventID", async (req, res) => {
   const TBA_EVENT_KEY = req.params.eventID;
   const TBA_API_KEY = config.secrets.TBA_API_KEY;
 
-  const event = await Event.findOne({ _id: TBA_EVENT_KEY });
-  let eventKey = null;
-  if (event) {
-    eventKey = event.code.split("_")[0];
+  const eventKey = await resolveEventKey(TBA_EVENT_KEY);
+  if (!eventKey) {
+    return res.json({});
   }
 
   // Gets tba data every 5 minutes (300000 ms)
   if (new Date().getTime() > tbaOPRResultFetchTime + 300000) {
-    tbaOPRResults = (
-      await axios.get(
-        `https://www.thebluealliance.com/api/v3/event/${eventKey}/coprs`,
-        {
-          headers: {
-            "X-TBA-Auth-Key": TBA_API_KEY,
+    try {
+      tbaOPRResults = (
+        await axios.get(
+          `https://www.thebluealliance.com/api/v3/event/${eventKey}/coprs`,
+          {
+            headers: {
+              "X-TBA-Auth-Key": TBA_API_KEY,
+            },
           },
-        },
-      )
-    ).data;
+        )
+      ).data;
+    } catch (error) {
+      console.error(
+        error,
+        chalk.bold.red("\nError fetching event OPR data from TBA"),
+      );
+      tbaOPRResults = {};
+    }
+
     tbaOPRResultFetchTime = new Date().getTime();
   }
 
@@ -157,16 +222,17 @@ if (!config.secrets.TBA_API_KEY) {
 
 router.get("/teams", async (req, res) => {
   if (!config.secrets.TBA_API_KEY) {
-    return res.json([]); //no key, no teams
+    return res.json(await getScoutedTeams(config.EVENT_NUMBER));
   }
+  const scoutedTeams = await getScoutedTeams(config.EVENT_NUMBER);
   let teams = [];
 
   teams = (await axios.get("/schedule/api/tempTeams")).data;
 
   if (teams.length === 0) {
-    teams = (
-      await axios
-        .get(
+    try {
+      teams = (
+        await axios.get(
           `https://www.thebluealliance.com/api/v3/event/${config.TBA_EVENT_KEY}/teams`,
           {
             headers: {
@@ -174,42 +240,53 @@ router.get("/teams", async (req, res) => {
             },
           },
         )
-        .catch((e) =>
-          console.error(
-            e,
-            chalk.bold.red("\nError fetching teams from Blue Alliance API!"),
-          ),
-        )
-    ).data;
+      ).data;
+    } catch (e) {
+      console.error(
+        e,
+        chalk.bold.red("\nError fetching teams from Blue Alliance API!"),
+      );
+      teams = [];
+    }
   }
-  res.json(teams);
+
+  res.json(mergeTeams(teams, scoutedTeams));
 });
 
 router.get("/teams/:eventID", async (req, res) => {
-  if (!config.secrets.TBA_API_KEY) {
-    return res.json([]); //no key, no teams
-  }
-  const event = await Event.findOne({ _id: req.params.eventID });
-  let eventKey = null;
-  if (event) {
-    eventKey = event.code.split("_")[0];
-  }
-  let teams = (
-    await axios
-      .get(`https://www.thebluealliance.com/api/v3/event/${eventKey}/teams`, {
-        headers: {
-          "X-TBA-Auth-Key": config.secrets.TBA_API_KEY,
-        },
-      })
-      .catch((e) =>
-        console.error(
-          e,
-          chalk.bold.red("\nError fetching teams from Blue Alliance API!"),
-        ),
-      )
-  ).data;
+  const scoutedTeams = await getScoutedTeams(req.params.eventID);
 
-  res.json(teams);
+  if (!config.secrets.TBA_API_KEY) {
+    return res.json(scoutedTeams);
+  }
+
+  const eventKey = await resolveEventKey(req.params.eventID);
+  if (!eventKey) {
+    return res.json(scoutedTeams);
+  }
+
+  let teams = [];
+
+  try {
+    teams = (
+      await axios.get(
+        `https://www.thebluealliance.com/api/v3/event/${eventKey}/teams`,
+        {
+          headers: {
+            "X-TBA-Auth-Key": config.secrets.TBA_API_KEY,
+          },
+        },
+      )
+    ).data;
+  } catch (e) {
+    console.error(
+      e,
+      chalk.bold.red("\nError fetching teams from Blue Alliance API!"),
+    );
+    teams = [];
+  }
+
+  res.json(mergeTeams(teams, scoutedTeams));
 });
 
 router.get("/manual", async (req, res) => {
