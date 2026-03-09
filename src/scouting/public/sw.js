@@ -1,4 +1,4 @@
-const cacheVersion = "scouting-cache-v1";
+const cacheVersion = "scouting-cache-v2";
 
 /**
  * These are all the files that need to be cached for offline functionality.
@@ -130,30 +130,88 @@ const filesToCache = [
   "https://cdn.jsdelivr.net/npm/fuzzysort@1.2.1/fuzzysort.js",
 ];
 
+const installFilesToCache = filesToCache.filter((file) => {
+  if (!file.startsWith("/")) {
+    return false;
+  }
+
+  return !file.includes("/api/");
+});
+
 self.addEventListener("install", function (event) {
-  // Perform install steps
   event.waitUntil(
     caches.open(cacheVersion).then(function (cache) {
-      return cache.addAll(filesToCache);
+      return Promise.allSettled(
+        installFilesToCache.map((file) => cache.add(file)),
+      ).then((results) => {
+        const failed = results.filter((result) => result.status === "rejected");
+
+        if (failed.length > 0) {
+          console.warn(
+            `[SW] ${failed.length} asset(s) failed to precache during install.`,
+          );
+        }
+      });
     }),
   );
 });
 
+self.addEventListener("activate", (event) => {
+  event.waitUntil(
+    caches.keys().then((keys) => {
+      return Promise.all(
+        keys
+          .filter((key) => key !== cacheVersion)
+          .map((key) => caches.delete(key)),
+      );
+    }),
+  );
+
+  self.clients.claim();
+});
+
 self.addEventListener("fetch", (event) => {
+  if (event.request.method !== "GET") {
+    return;
+  }
+
+  const requestUrl = new URL(event.request.url);
+  if (requestUrl.protocol !== "http:" && requestUrl.protocol !== "https:") {
+    return;
+  }
+
   event.respondWith(
     caches.open(cacheVersion).then((cache) => {
       return cache.match(event.request).then((response) => {
-        event.request.importance = "low"; //low priority
+        const requestPathname = requestUrl.pathname;
+        const shouldCache =
+          filesToCache.includes(event.request.url) ||
+          filesToCache.includes(requestPathname);
+
         const fetchPromise = fetch(event.request)
           .then((networkResponse) => {
-            if (filesToCache.includes(new URL(event.request.url).pathname)) {
-              //if the file is in the cache list
+            if (
+              shouldCache &&
+              event.request.method === "GET" &&
+              (networkResponse.ok || networkResponse.type === "opaque")
+            ) {
               cache.put(event.request, networkResponse.clone());
             }
             return networkResponse;
           })
-          .catch((e) => console.log(e, "Error fetching:", event.request.url));
+          .catch((e) => {
+            console.log(e, "Error fetching:", event.request.url);
 
+            if (response) {
+              return response;
+            }
+
+            if (event.request.mode === "navigate") {
+              return cache.match("/");
+            }
+
+            return new Response("", { status: 503, statusText: "Offline" });
+          });
         return response || fetchPromise;
       });
     }),
