@@ -50,7 +50,7 @@ const filesToCache = [
   "/manifest.json",
   "/auth/isDemo",
 
-  // analysis page
+  //  analysis page
   "/analysis/",
   "/analysis/modules.css",
   "/analysis/modules.js",
