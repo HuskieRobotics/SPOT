@@ -66,7 +66,6 @@ function getSelectedEvent() {
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
   const eventID = urlParams.get("event");
-  console.log("Event selected:", eventID);
   return eventID;
 }
 

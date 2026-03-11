@@ -170,7 +170,6 @@ async function updateScouters(accessCode) {
       }, 15000);
     }
   }
-  console.log(scouters);
   //prune scouters that no longer exist
   for (let timestamp in scouters) {
     if (!scouterList.find((x) => (x.timestamp = timestamp))) {
