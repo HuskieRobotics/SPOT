@@ -235,10 +235,6 @@ let matches;
     // get an array (teams) of all teams that contain data
     var teams = [];
     for (var [teamNumber, team] of Object.entries(dataset.teams)) {
-      console.log("team: ");
-      console.log(team);
-      console.log("team number: ");
-      console.log(teamNumber);
       if (
         dataset.tmps.filter((tmp) => tmp.robotNumber == teamNumber).length >
           0 &&
@@ -248,19 +244,9 @@ let matches;
         //console.log("added team: ")
         //console.log(team);
         setPath(team, "robotNumber", teamNumber);
-        console.log("data from path: " + getPath(team, "robotNumber"));
         teams.push(team);
-
-        console.log("TEAM ADDED " + teamNumber);
-
-        console.log("team number of first team: ");
-        console.log(teams[0].robotNumber);
-        console.log(teams);
       }
-      console.log("-----------------");
     }
-    console.log("teams before avgprob");
-    console.log(teams);
     // console.log(
     //   "teams type and size: " + typeof teams + teams.length + teams[0]
     // );
@@ -277,8 +263,6 @@ let matches;
       };
     });
 
-    console.log("teams w/ avg probability");
-    console.log(teamsProbability);
     for (let i = 0; i < teams.length; i++) {
       for (let j = 0; j < teamsProbability.length; j++) {
         if (teams[i].robotNumber == teamsProbability[j].robotNumber) {
@@ -340,7 +324,6 @@ let matches;
     }
     setTimeout(() => {
       firstContainer.click();
-      console.log("clicked");
     }, 4);
   }
 
@@ -775,7 +758,6 @@ let matches;
   //call setData on every module in matches
   async function setMatchModules(alliances) {
     for (const module of modules.match.left) {
-      console.log(module.moduleConfig.name);
       var displayedAlliances = alliances[0].filter((teamNumber) => {
         if (teamNumber == "|") {
           return false;
@@ -796,7 +778,6 @@ let matches;
         console.log(`alliances script.js ${alliances}`);
         allTeams.push("|");
         allTeams = allTeams.concat(alliances[1]);
-        console.log(`all teams: ${allTeams}`);
         displayedAlliances = allTeams.filter((teamNumber) => {
           if (
             !module.moduleConfig.separate &&
@@ -828,7 +809,6 @@ let matches;
     }
 
     for (const module of modules.match.right) {
-      console.log(module.moduleConfig.name);
       var displayedAlliances = alliances[1].filter((teamNumber) => {
         if (teamNumber == "|") {
           return false;

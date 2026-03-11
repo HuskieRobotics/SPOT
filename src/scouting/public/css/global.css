@@ -95,6 +95,10 @@ body {
   color: var(--reload-color);
 }
 
+.reload:active {
+  transform: scale(0.9);
+}
+
 .scouting-info {
   display: none;
   position: absolute;

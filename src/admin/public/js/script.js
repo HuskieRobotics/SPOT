@@ -96,7 +96,6 @@ async function constructApp(accessCode) {
         Authorization: accessCode,
       },
     });
-    console.log("ENTER MATCH!");
   });
 
   let menuExpanded = false;
