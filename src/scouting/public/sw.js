@@ -15,16 +15,11 @@ const filesToCache = [
   // scouting page
   "/",
   "/executables.js",
-  "/css/form-dark.css",
   "/css/form.css",
   "/css/global.css",
-  "/css/internal-dark.css",
   "/css/internal.css",
-  "/css/landing-dark.css",
   "/css/landing.css",
-  "/css/match-scouting-dark.css",
   "/css/match-scouting.css",
-  "/css/waiting-dark.css",
   "/css/waiting.css",
   "/icons/android-chrome-192x192.png",
   "/icons/android-chrome-512x512.png",
@@ -32,23 +27,14 @@ const filesToCache = [
   "/icons/favicon-16x16.png",
   "/icons/favicon-32x32.png",
   "/icons/favicon.ico",
-  "/icons/menu-button-dark.png",
-  "/icons/menu-button.png",
+  "/icons/menu-button.svg",
   "/icons/mstile-150x150.png",
   "/icons/safari-pinned-tab.svg",
   "/icons/site.webmanifest",
   "/img/field.svg",
   "/img/gear.svg",
-  "/img/lock_closed.png",
-  "/img/logo_blue.png",
-  "/img/logo_white.png",
-  "/img/logo-dark-mode.png",
-  "/img/spinner_blue.svg",
-  "/img/spinner_gray.svg",
-  "/img/spinner_red.svg",
-  "/img/SPOTBanner.jpg",
-  "/img/TBA_API_KEY.webm",
-  "/img/TBA_EVENT_KEY.webm",
+  "/img/logo.svg",
+  "/img/spinner.svg",
   "/js/lib/jsqr.js",
   "/js/lib/qrcode.js",
   "/js/form.js",
@@ -62,8 +48,9 @@ const filesToCache = [
   "/js/settingsmenu.js",
   "/js/waiting.js",
   "/manifest.json",
+  "/auth/isDemo",
 
-  // analysis page
+  //  analysis page
   "/analysis/",
   "/analysis/modules.css",
   "/analysis/modules.js",
@@ -82,6 +69,10 @@ const filesToCache = [
   "/analysis/api/teams",
   "/analysis/api/manual",
   "/analysis/api/events",
+  "/analysis/api/blueApiData",
+  "/analysis/api/blueApiOPR",
+  "/analysis/api/blueApiOPRStrings",
+  "/analysis/api/isDemo",
 
   // config
   "/admin/api/matches",
@@ -118,7 +109,7 @@ self.addEventListener("install", function (event) {
   event.waitUntil(
     caches.open(cacheVersion).then(function (cache) {
       return cache.addAll(filesToCache);
-    })
+    }),
   );
 });
 
@@ -139,6 +130,6 @@ self.addEventListener("fetch", (event) => {
 
         return response || fetchPromise;
       });
-    })
+    }),
   );
 });

@@ -8,6 +8,12 @@ class HeatmapScatterPlot {
     this.switcher = createDOMElement("div", "switcher");
   }
 
+  getCssVar(name) {
+    return getComputedStyle(document.documentElement)
+      .getPropertyValue(name)
+      .trim();
+  }
+
   async formatData(teams, dataset) {
     let actionGroups = this.moduleConfig.options.actionGroups;
     let actions = actionGroups.reduce((acc, action) => {
@@ -147,9 +153,10 @@ class HeatmapScatterPlot {
       },
       font: {
         family: "Cairo, sans-serif",
+        color: this.getCssVar("--text"),
       },
-      paper_bgcolor: "#FEFEFE",
-      plot_bgcolor: "#FEFEFE",
+      paper_bgcolor: this.getCssVar("--bg-alt"),
+      plot_bgcolor: this.getCssVar("--bg-alt"),
       images: [
         {
           source: fieldImg.src,

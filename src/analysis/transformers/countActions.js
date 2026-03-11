@@ -9,20 +9,28 @@ new DataTransformer("countActions",(dataset,outputPath,options) => { //options {
     /* find which action ids should be counted */
     if (!options) throw new Error("no options provided! Please provide an array of ids or set all to true")
     let countedIds = options.ids;
-    if (options.all) { //count all action ids
+    const countAll = options.all;
+    if (countAll) { //count all action ids
         countedIds = actionIds;
     }
     let actionArrayPath = options.actionArrayPath || "actionQueue"; //by default, count actions in the action queue
 
     /* iterate through TeamMatchPerformances to count said action ids */
     for (let tmp of dataset.tmps) {
-        let out = countedIds.reduce((acc,id) => { // construct an object of {id1: 0, id2: 0, id3: 0} at outputPath
+        let out = countAll ? countedIds.reduce((acc,id) => { // seed with match-scouting ids
+            acc[id] = 0;
+            return acc
+        }, {}) : countedIds.reduce((acc,id) => { // construct an object of {id1: 0, id2: 0, id3: 0} at outputPath
             acc[id] = 0;
             return acc
         }, {});
 
         for (let action of getPath(tmp,actionArrayPath)) { //look at every action in the action queue
-            if (countedIds.includes(action.id)) out[action.id]++; //increment the count of the action's id by 1 if it's supposed to be counted
+            if (countAll) {
+                out[action.id] = (out[action.id] || 0) + 1;
+            } else if (countedIds.includes(action.id)) {
+                out[action.id]++; //increment the count of the action's id by 1 if it's supposed to be counted
+            }
         }
 
         setPath(tmp,outputPath,out);
@@ -42,7 +50,8 @@ new DataTransformer("countActions",(dataset,outputPath,options) => {
     /* find which action ids should be counted */
     if (!options) throw new Error("no options provided! Please provide an array of ids or set all to true")
     let countedIds = options.ids;
-    if (options.all) { //count all action ids
+    const countAll = options.all;
+    if (countAll) { //count all action ids
         countedIds = actionIds;
     }
     let actionArrayPath = options.actionArrayPath || "actionQueue"; //by default, count actions in the action queue
@@ -51,14 +60,21 @@ new DataTransformer("countActions",(dataset,outputPath,options) => {
     for (let [teamNumber,team] of Object.entries(dataset.teams)) {
         let teamTmps = dataset.tmps.filter(x=>x.robotNumber == teamNumber); //only the tmps that are this team's
         
-        let out = countedIds.reduce((acc,id) => { // construct an object of {id1: 0, id2: 0, id3: 0} at outputPath
+        let out = countAll ? countedIds.reduce((acc,id) => { // seed with match-scouting ids
+            acc[id] = 0;
+            return acc
+        }, {}) : countedIds.reduce((acc,id) => { // construct an object of {id1: 0, id2: 0, id3: 0} at outputPath
             acc[id] = 0;
             return acc
         }, {});
 
         for (let tmp of teamTmps) {
             for (let action of getPath(tmp,actionArrayPath)) { //look at every action in the action queue
-                if (countedIds.includes(action.id)) out[action.id]++; //increment the count of the action's id by 1 if it's supposed to be counted
+                if (countAll) {
+                    out[action.id] = (out[action.id] || 0) + 1;
+                } else if (countedIds.includes(action.id)) {
+                    out[action.id]++; //increment the count of the action's id by 1 if it's supposed to be counted
+                }
             }
         }
 
