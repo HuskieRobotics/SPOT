@@ -318,33 +318,7 @@
       }
     }
   },
-  {
-    "type": "tmp",
-    "name": "sumAverage",
-    "outputPath": "scores.defenseRating",
-    "options": {
-      "groups": [
-        {
-          "averagePath": "scores.teleopTransitionDefenseRating"
-        },
-        {
-          "averagePath": "scores.activeShift1DefenseRating"
-        },
-        {
-          "averagePath": "scores.activeShift2DefenseRating"
-        },
-        {
-          "averagePath": "scores.inactiveShift1DefenseRating"
-        },
-        {
-          "averagePath": "scores.inactiveShift2DefenseRating"
-        },
-        {
-          "averagePath": "scores.endgameDefenseRating"
-        }
-      ]
-    }
-  },
+
   {
     "type": "tmp",
     "name": "weightedSumAverage",
@@ -423,33 +397,7 @@
       }
     }
   },
-  {
-    "type": "tmp",
-    "name": "sumAverage",
-    "outputPath": "scores.passingRating",
-    "options": {
-      "groups": [
-        {
-          "averagePath": "scores.teleopTransitionPassingRating"
-        },
-        {
-          "averagePath": "scores.activeShift1PassingRating"
-        },
-        {
-          "averagePath": "scores.activeShift2PassingRating"
-        },
-        {
-          "averagePath": "scores.inactiveShift1PassingRating"
-        },
-        {
-          "averagePath": "scores.inactiveShift2PassingRating"
-        },
-        {
-          "averagePath": "scores.endgamePassingRating"
-        }
-      ]
-    }
-  },
+
   {
     "type": "tmp",
     "name": "weightedSumAverage",
@@ -529,33 +477,7 @@
       }
     }
   },
-  {
-    "type": "tmp",
-    "name": "sumAverage",
-    "outputPath": "scores.storingRating",
-    "options": {
-      "groups": [
-        {
-          "averagePath": "scores.teleopTransitionStoringRating"
-        },
-        {
-          "averagePath": "scores.activeShift1StoringRating"
-        },
-        {
-          "averagePath": "scores.activeShift2StoringRating"
-        },
-        {
-          "averagePath": "scores.inactiveShift1StoringRating"
-        },
-        {
-          "averagePath": "scores.inactiveShift2StoringRating"
-        },
-        {
-          "averagePath": "scores.endgameStoringRating"
-        }
-      ]
-    }
-  },
+
   {
     "type": "tmp",
     "name": "weightedSumAverage",
@@ -636,7 +558,7 @@
   },
   {
     "type": "tmp",
-    "name": "sumAverage",
+    "name": "average",
     "outputPath": "scores.shootingRating",
     "options": {
       "groups": [
@@ -657,6 +579,87 @@
         },
         {
           "averagePath": "scores.endgameShootingRating"
+        }
+      ]
+    }
+  },
+  {
+    "type": "tmp",
+    "name": "average",
+    "outputPath": "scores.passingRating",
+    "options": {
+      "groups": [
+        {
+          "averagePath": "scores.teleopTransitionPassingRating"
+        },
+        {
+          "averagePath": "scores.activeShift1PassingRating"
+        },
+        {
+          "averagePath": "scores.activeShift2PassingRating"
+        },
+        {
+          "averagePath": "scores.inactiveShift1PassingRating"
+        },
+        {
+          "averagePath": "scores.inactiveShift2PassingRating"
+        },
+        {
+          "averagePath": "scores.endgamePassingRating"
+        }
+      ]
+    }
+  },
+  {
+    "type": "tmp",
+    "name": "average",
+    "outputPath": "scores.defenseRating",
+    "options": {
+      "groups": [
+        {
+          "averagePath": "scores.teleopTransitionDefenseRating"
+        },
+        {
+          "averagePath": "scores.activeShift1DefenseRating"
+        },
+        {
+          "averagePath": "scores.activeShift2DefenseRating"
+        },
+        {
+          "averagePath": "scores.inactiveShift1DefenseRating"
+        },
+        {
+          "averagePath": "scores.inactiveShift2DefenseRating"
+        },
+        {
+          "averagePath": "scores.endgameDefenseRating"
+        }
+      ]
+    }
+  },
+  {
+    "type": "tmp",
+    "name": "average",
+    "outputPath": "scores.storingRating",
+    "options": {
+      "groups": [
+        {
+          "averagePath": "scores.teleopTransitionStoringRating"
+        },
+        {
+          "averagePath": "scores.activeShift1StoringRating"
+        },
+        {
+          "averagePath": "scores.activeShift2StoringRating"
+        },
+        {
+          "averagePath": "scores.inactiveShift1StoringRating"
+        },
+        {
+          "averagePath": "scores.inactiveShift2StoringRating"
+        },
+        {
+          "averagePath": "scores.endgameStoringRating"
         }
       ]
     }
@@ -836,6 +839,7 @@
       "all": true
     }
   },
+
   {
     "type": "team",
     "name": "aggregateArray",
