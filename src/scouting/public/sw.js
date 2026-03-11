@@ -12,7 +12,7 @@ const cacheVersion = "scouting-cache-v1";
  */
 
 const filesToCache = [
-  // scouting page
+  // Scouting page
   "/",
   "/executables.js",
   "/css/form.css",
@@ -36,7 +36,7 @@ const filesToCache = [
   "/manifest.json",
   "/auth/isDemo",
 
-  //  analysis page
+  // Analysis page
   "/analysis/",
   "/analysis/modules.css",
   "/analysis/modules.js",
@@ -60,7 +60,7 @@ const filesToCache = [
   "/analysis/api/blueApiOPRStrings",
   "/analysis/api/isDemo",
 
-  // config
+  // Config Files
   "/admin/api/matches",
   "/config/analysis-modules.json",
   "/config/analysis-pipeline.json",
@@ -94,7 +94,7 @@ const filesToCache = [
   "/img/spinner_gray.svg",
   "/img/spinner_red.svg",
 
-  // external files
+  // External files
   "https://cdn.plot.ly/plotly-2.8.3.min.js",
   "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css",
   "https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;700&family=Saira:wght@300;400;700&family=Tajawal:wght@300;400;700&display=swap",
