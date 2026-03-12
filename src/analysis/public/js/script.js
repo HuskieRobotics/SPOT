@@ -632,15 +632,6 @@ let matches;
           const option = document.createElement("option");
           option.value = `opr.${key}`;
           option.label = "OPR " + key.charAt(0).toUpperCase() + key.slice(1);
-          if (axisSelect === xAxisSelect && i === 0) {
-            option.selected = true;
-          } // Set as selected for X-axis
-          if (axisSelect === yAxisSelect && i === 1) {
-            option.selected = true;
-          } // Set as selected for Y-axis
-          if (axisSelect === zAxisSelect && i === 2) {
-            option.selected = true;
-          } // Set as selected for Z-axis
           axisSelect.appendChild(option);
         }
       }
