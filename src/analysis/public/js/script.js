@@ -580,6 +580,15 @@ let matches;
     }
   }
 
+  async function teamsFilterSwitch(dataset, modulesConfig) {
+    //add event listener to the "Filter Teams" button to set reset the UI and switch to the teams filter view
+    filterTeamsSwitch.addEventListener("click", () => {
+      clearInterface();
+      filterTeamsSwitch.classList.add("selected");
+      showFade(filterTeamsSwitch);
+    });
+  }
+
   // Auto pick list UI functions
   async function loadAutoPickList(dataset, modulesConfig) {
     //add event listener to "AutoPickList" button to set reset UI and switch to autopicklist tab
