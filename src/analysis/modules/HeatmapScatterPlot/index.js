@@ -1,3 +1,5 @@
+const { get } = require("mongoose");
+
 class HeatmapScatterPlot {
   container;
   moduleConfig;
@@ -38,12 +40,20 @@ class HeatmapScatterPlot {
           type: "scatter",
           showlegend: true,
           name: this.moduleConfig.options.actionLabels[actionId],
-          x: filteredActionQueue.map(
-            (a) => getPath(a, this.moduleConfig.options.coordinatePath).x,
-          ),
-          y: filteredActionQueue.map(
-            (a) => getPath(a, this.moduleConfig.options.coordinatePath).y,
-          ),
+          x: filteredActionQueue.map((a) => {
+            if (getPath(a, this.moduleConfig.options.coordinatePath).x > 69.5) {
+              return getPath(a, this.moduleConfig.options.coordinatePath).y;
+            } else {
+              return getPath(a, this.moduleConfig.options.coordinatePath).x;
+            }
+          }),
+          y: filteredActionQueue.map((a) => {
+            if (getPath(a, this.moduleConfig.options.coordinatePath).x > 69.5) {
+              return getPath(a, this.moduleConfig.options.coordinatePath).x;
+            } else {
+              return getPath(a, this.moduleConfig.options.coordinatePath).y;
+            }
+          }),
           marker: {
             size: 16,
             line: {
