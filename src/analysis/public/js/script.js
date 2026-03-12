@@ -635,6 +635,34 @@ let matches;
         axisSelect.appendChild(option);
       }
 
+      if (
+        Object.keys(dataset.teams[Object.keys(dataset.teams)[0]].opr).length > 0
+      ) {
+        for (
+          let i = 0;
+          i <
+          Object.keys(dataset.teams[Object.keys(dataset.teams)[0]].opr).length;
+          i++
+        ) {
+          const key = Object.keys(
+            dataset.teams[Object.keys(dataset.teams)[0]].opr,
+          )[i];
+          const option = document.createElement("option");
+          option.value = `opr.${key}`;
+          option.label = "OPR " + key.charAt(0).toUpperCase() + key.slice(1);
+          if (axisSelect === xAxisSelect && i === 0) {
+            option.selected = true;
+          } // Set as selected for X-axis
+          if (axisSelect === yAxisSelect && i === 1) {
+            option.selected = true;
+          } // Set as selected for Y-axis
+          if (axisSelect === zAxisSelect && i === 2) {
+            option.selected = true;
+          } // Set as selected for Z-axis
+          axisSelect.appendChild(option);
+        }
+      }
+
       const option = document.createElement("option");
       option.value = "constant";
       option.label = "Constant";
