@@ -223,8 +223,6 @@ async function populateEventNumbers() {
       return;
     }
 
-    console.log("Event Numbers:", result);
-
     const select = document.getElementById("EVENT_NUMBER");
     select.innerHTML = '<option value="">Select Event Number</option>';
 
