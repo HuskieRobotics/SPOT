@@ -753,6 +753,14 @@ let matches;
       });
     }
 
+    function updateButtonLayout() {
+      buttons.forEach((button) => {
+        if (button.className.equals("different-mobile-layout")) {
+          button.style.setProperty();
+        }
+      });
+    }
+
     sidebarToggle.addEventListener("click", () => {
       const isExpanding = !sidebar.classList.contains("expanded");
       sidebar.classList.toggle("expanded");
