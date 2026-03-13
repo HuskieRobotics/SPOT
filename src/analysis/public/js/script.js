@@ -580,12 +580,12 @@ let matches;
     }
   }
 
-  async function teamsFilterSwitch(dataset, modulesConfig) {
+  async function loadTeamsFilterView(dataset, modulesConfig) {
     //add event listener to the "Filter Teams" button to set reset the UI and switch to the teams filter view
     filterTeamsSwitch.addEventListener("click", () => {
       clearInterface();
       filterTeamsSwitch.classList.add("selected");
-      showFade(filterTeamsSwitch);
+      showFade(filterTeamsView);
     });
   }
 
