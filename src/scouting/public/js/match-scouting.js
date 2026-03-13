@@ -1,8 +1,7 @@
 let actionQueue = [];
 let devEnd;
-var variables = {};
-var previousLayers = [];
-var previousTimer = [];
+let variables = {};
+let previousLayers = [];
 
 (async () => {
   config = await config;
@@ -15,8 +14,8 @@ var previousTimer = [];
   );
 
   //initiate timing
-  var time = matchScoutingConfig.timing.totalTime;
-  var teleopTime = 130000;
+  let time = matchScoutingConfig.timing.totalTime;
+  let teleopTime = 130000;
   const timingTransitions = Object.entries(
     matchScoutingConfig.timing.timeTransitions || {},
   ).map(([transitionTime, transitionData]) => ({
@@ -32,17 +31,17 @@ var previousTimer = [];
   if (teleopTransitionTimes.length > 0) {
     teleopTime = teleopTransitionTimes[0];
   }
-  var endgameTime = 30000;
-  var shiftSwitchInterval = 25000;
-  var timerActive = false;
-  var currentShift = ""; // "active" | "inactive"
-  var lastShiftSwitchTime = teleopTime;
-  var shiftButtonPressed = false;
+  let endgameTime = 30000;
+  let shiftSwitchInterval = 25000;
+  let timerActive = false;
+  let currentShift = ""; // "active" | "inactive"
+  let lastShiftSwitchTime = teleopTime;
+  let shiftButtonPressed = false;
 
-  // NEW: shift counters
-  var activeShiftCount = 0;
-  var inactiveShiftCount = 0;
-  var currentShiftNumber;
+  // shift counters
+  let activeShiftCount = 0;
+  let inactiveShiftCount = 0;
+  let currentShiftNumber;
   let displayText = "";
   let displayTextWithShift = displayText;
 
@@ -76,7 +75,6 @@ var previousTimer = [];
         lastActions[lastActions.length - 1].num++;
       }
     }
-    console.log(actionQueueIds);
     document.querySelector(".status .last-actions").innerText = lastActions
       .reverse()
       .map((a) => a.id + (a.num > 1 ? ` (${a.num})` : ""))
@@ -250,17 +248,28 @@ var previousTimer = [];
     },
     undo: (button) => {
       button.element.addEventListener("click", () => {
+        /* Only allow undoing if the action queue has more entries than the minimum protected length.
+         * minOfQueueLength guards the initial "start match" entry so the timer cannot be undone
+         * once scouting is in progress (unless the match-control special case below applies).
+         */
         if (
           actionQueue.length > matchScoutingConfig.variables.minOfQueueLength
         ) {
           // Basically, if this code was not in place (^), then you would be able to undo the start of the game.
 
+          /* Pop the most-recently recorded action and look up the button object that produced it.
+           * undoneAction has the action id, its original button id (baseId), and the timestamp (ts).
+           */
           const undoneAction = actionQueue.pop(); //remove the last action from the action queue
+          // Resolve baseId back to the live button object so we can access its type and executables.
           const undoneButton = buttons.find(
             (x) => x.id === undoneAction.baseId,
           );
 
-          //special case for match-control buttons which have extra undo funcitonality without executables
+          /* Special case: undoing the "Start Match" button requires resetting all timer state
+           * because match-control buttons manage the interval directly and have no executable to reverse.
+           * special case for match-control buttons which have extra undo funcitonality without executables
+           */
           if (undoneButton.type === "match-control") {
             time = matchScoutingConfig.timing.totalTime; //reset timer
             ScoutingSync.updateState({
@@ -272,6 +281,11 @@ var previousTimer = [];
             showLayer(0);
           }
 
+          /* Dynamic layer correction: if we are currently in teleop (time < teleopTime) and both
+           * auto and teleop layer indices are known, scan the previousLayers history and replace any
+           * stored auto-layer snapshots with the teleop layer. Makes sure that if a layer-switch
+           * action is undone during teleop, the layer history reflects teleop rather than auto.
+           */
           if (
             time < teleopTime &&
             autoLayerNumber >= 0 &&
@@ -284,12 +298,19 @@ var previousTimer = [];
             }
           }
 
+          /* If the earliest recorded layer snapshot is the teleop layer, restore it so the UI
+           * returns to the correct teleop button set after the undo.
+           */
           if (
             teleopLayerNumber >= 0 &&
             isSameLayer(previousLayers[0], teleopLayerNumber)
           ) {
             showLayer(teleopLayerNumber);
           }
+          /* Reverse each executable that was originally triggered by the undone button.
+           * Each executable type exposes a .reverse() method that mirrors what .execute() did
+           * (e.g. popping a layer off the stack, toggling a variable back to its previous value).
+           */
           for (const executable of undoneButton.executables) {
             executables[executable.type].reverse(
               undoneButton,
@@ -298,6 +319,9 @@ var previousTimer = [];
             ); //reverse any executables associated with the undone button
           }
         }
+        /* Always run the undo button's own executables (e.g. to pop the previousLayers stack
+         * and re-display the correct layer regardless of whether an action was actually undone).
+         */
         doExecutables(button, time);
         updateLastAction();
       });
@@ -427,7 +451,6 @@ var previousTimer = [];
                 matchScoutingConfig.timing.timeTransitions[
                   transitions[0]
                 ].variables[key];
-              console.log(`set ${key} to ${variables[key]}`);
             }
             showLayer(
               matchScoutingConfig.timing.timeTransitions[transitions[0]].layer,
@@ -526,8 +549,6 @@ var previousTimer = [];
     }
   }
 
-  // Expose rebuild function for loadConfig executable
-
   applyZoneButtonPreferences();
   window.addEventListener("spot:scouting-state-updated", () => {
     applyZoneButtonPreferences();
@@ -561,12 +582,10 @@ var previousTimer = [];
       b.element.style.display = "none";
     }
     if (Object.keys(conditional).length > 0) {
-      var renderedButtons = [];
+      let renderedButtons = [];
       for (let button of layers[layer]) {
         const configButtonId = button.configId || button.id;
-        var targetVariables = [];
-        var targetValues = [];
-        var thingsToCheck = {};
+        let thingsToCheck = {};
         for (let [variable, valueData] of Object.entries(conditional)) {
           for (let [value, idList] of Object.entries(valueData)) {
             if (idList.includes(configButtonId)) {
@@ -579,7 +598,7 @@ var previousTimer = [];
           }
         }
 
-        var display = false;
+        let display = false;
         for (let [variable, values] of Object.entries(thingsToCheck)) {
           if (values.includes(variables[variable].current)) {
             display = true;
@@ -593,7 +612,7 @@ var previousTimer = [];
       }
       previousLayers.push(renderedButtons);
     } else {
-      var rendered = [];
+      let rendered = [];
       for (const b of layers[layer]) {
         b.element.style.display = "flex";
         rendered.push(b);
@@ -602,41 +621,6 @@ var previousTimer = [];
     }
   }
 
-  function conditionalLayer() {
-    var renderedButtons = [];
-    for (let button of layers[toLayer]) {
-      const configButtonId = button.configId || button.id;
-      var targetVariables = [];
-      var targetValues = [];
-      var thingsToCheck = {};
-      console.log(`testing ${button.id}`);
-      for (let [variable, valueData] of Object.entries(conditionalRender)) {
-        for (let [value, idList] of Object.entries(valueData)) {
-          if (idList.includes(configButtonId)) {
-            if (thingsToCheck[variable]) {
-              thingsToCheck[variable].push(value);
-            } else {
-              thingsToCheck[variable] = [value];
-            }
-          }
-        }
-      }
-
-      var display = false;
-      for (let [variable, values] of Object.entries(thingsToCheck)) {
-        if (values.includes(variables[variable].current)) {
-          display = true;
-        }
-      }
-
-      if (alwaysRender.includes(configButtonId) || display) {
-        console.log(`rendering ${button.id}`);
-        button.element.style.display = "flex";
-        renderedButtons.push(button);
-      }
-    }
-    previousLayers.push(renderedButtons);
-  }
   function camelCase(str) {
     return str
       .replace(/[^a-zA-Z0-9]+(.)/g, (_, chr) => chr.toUpperCase())
