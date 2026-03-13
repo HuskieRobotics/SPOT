@@ -198,6 +198,11 @@ body {
   cursor: pointer;
 }
 
+#start-scouting:active {
+  padding: 4px 19px;
+  font-size: 20px;
+}
+
 #matches {
   padding: 20px;
   padding-top: 24px;

@@ -19,9 +19,6 @@ new DataTransformer("standardDeviation", (dataset, outputPath, options) => {
     let n = scores.length
     let mean = scores.reduce((a, b) => a + b) / n
     let sd = Math.sqrt(scores.map(x => Math.pow(x - mean, 2)).reduce((a, b) => a + b) / n)
-    console.log(scores)
-    console.log(mean)
-    console.log(sd)
     setPath(team,outputPath,sd)
   }
   

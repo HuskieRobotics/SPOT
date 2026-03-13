@@ -1,4 +1,4 @@
-/** concatenates arrays within tmps into a big array per team
+/** concatenates arrays am
  * @type {DataTransformer}
  * @param options.path {String} the path at which the arrays to concatenate exist
  */

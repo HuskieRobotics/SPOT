@@ -192,9 +192,22 @@
       "coordinatePath": "other.pos",
       "aggregatedActionsPath": "aggregatedActions",
       "actionGroups": [
-        { "name": "Teleop Start Shooting", "actions": ["startShoot"] }
+        {
+          "name": "Teleop Start Shooting",
+          "actions": [
+            "teleopTransitionStartShooting",
+            "activeShift1StartShooting",
+            "activeShift2StartShooting",
+            "endgameStartShooting"
+          ]
+        }
       ],
-      "actionLabels": { "startShoot": "Teleop Start Shooting Position" },
+      "actionLabels": {
+        "teleopTransitionStartShooting": "Transition",
+        "activeShift1StartShooting": "Active 1",
+        "activeShift2StartShooting": "Active 2",
+        "endgameStartShooting": "Endgame"
+      },
       "imgPath": "img/field.svg"
     }
   },
@@ -267,6 +280,33 @@
   },
   {
     "view": "team",
+    "module": "Pie",
+    "name": "Average Action Times",
+    "position": "main",
+    "options": {
+      "unit": "s",
+      "slices": [
+        {
+          "name": "Shooting",
+          "path": "cycles.shootingTime.averageTimeSeconds"
+        },
+        {
+          "name": "Passing",
+          "path": "cycles.passingTime.averageTimeSeconds"
+        },
+        {
+          "name": "Storing",
+          "path": "cycles.storingTime.averageTimeSeconds"
+        },
+        {
+          "name": "Defense",
+          "path": "cycles.defenseTime.averageTimeSeconds"
+        }
+      ]
+    }
+  },
+  {
+    "view": "team",
     "module": "Stats",
     "position": "side",
     "name": "Team Stats",
@@ -274,7 +314,7 @@
       "list": [
         {
           "name": "Fuel OPR",
-          "path": "opr.Hub Total Count",
+          "path": "opr.Hub Total Fuel Count",
           "decimals": 2,
           "sort": 1
         },
@@ -358,43 +398,10 @@
   {
     "view": "match",
     "module": "ColumnDisplay",
-    "name": "Auto Points",
+    "name": "Auto Climb Points",
     "position": "main",
     "options": {
       "path": "averageScores.auto",
-      "sort": 1,
-      "decimals": 2
-    }
-  },
-  {
-    "view": "match",
-    "module": "ColumnDisplay",
-    "name": "Teleop Points",
-    "position": "main",
-    "options": {
-      "path": "averageScores.teleop",
-      "sort": 1,
-      "decimals": 2
-    }
-  },
-  {
-    "view": "match",
-    "module": "ColumnDisplay",
-    "name": "Barge Points",
-    "position": "main",
-    "options": {
-      "path": "avgEndgamePoints",
-      "sort": 1,
-      "decimals": 2
-    }
-  },
-  {
-    "view": "match",
-    "module": "ColumnDisplay",
-    "name": "Total Points",
-    "position": "main",
-    "options": {
-      "path": "averageScores.total",
       "sort": 1,
       "decimals": 2
     }
@@ -462,6 +469,86 @@
           "path": "averageScores.total",
           "decimals": 2,
           "aggrMethod": "sum"
+        }
+      ]
+    }
+  },
+  {
+    "view": "team",
+    "module": "Stats",
+    "position": "side",
+    "name": "Zone, Action, and Rating Averages",
+    "options": {
+      "list": [
+        {
+          "name": "Alliance Zone Average Defense Rating",
+          "path": "zoneActionRatingAverages.AZone.Defense",
+          "hideIfValue": 0,
+          "decimals": 2,
+          "sort": 1
+        },
+        {
+          "name": "Alliance Zone Average Passing Rating",
+          "path": "zoneActionRatingAverages.AZone.Passing",
+          "hideIfValue": 0,
+          "decimals": 2,
+          "sort": 1
+        },
+        {
+          "name": "Alliance Zone Average Shooting Rating",
+          "path": "zoneActionRatingAverages.AZone.StopShooting",
+          "hideIfValue": 0,
+          "decimals": 2,
+          "sort": 1
+        },
+        {
+          "name": "Alliance Zone Average Storing Rating",
+          "path": "zoneActionRatingAverages.AZone.Storing",
+          "hideIfValue": 0,
+          "decimals": 2,
+          "sort": 1
+        },
+        {
+          "name": "Neutral Zone Average Defense Rating",
+          "path": "zoneActionRatingAverages.NeutralZone.Defense",
+          "hideIfValue": 0,
+          "decimals": 2,
+          "sort": 1
+        },
+        {
+          "name": "Neutral Zone Average Passing Rating",
+          "path": "zoneActionRatingAverages.NeutralZone.Passing",
+          "hideIfValue": 0,
+          "decimals": 2,
+          "sort": 1
+        },
+        {
+          "name": "Neutral Zone Average Storing Rating",
+          "path": "zoneActionRatingAverages.NeutralZone.Storing",
+          "hideIfValue": 0,
+          "decimals": 2,
+          "sort": 1
+        },
+        {
+          "name": "Opposing Zone Average Defense Rating",
+          "path": "zoneActionRatingAverages.OAZone.Defense",
+          "hideIfValue": 0,
+          "decimals": 2,
+          "sort": 1
+        },
+        {
+          "name": "Opposing Zone Average Passing Rating",
+          "path": "zoneActionRatingAverages.OAZone.Passing",
+          "hideIfValue": 0,
+          "decimals": 2,
+          "sort": 1
+        },
+        {
+          "name": "Opposing Zone Average Storing Rating",
+          "path": "zoneActionRatingAverages.OAZone.Storing",
+          "hideIfValue": 0,
+          "decimals": 2,
+          "sort": 1
         }
       ]
     }

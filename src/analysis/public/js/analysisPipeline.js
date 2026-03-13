@@ -227,7 +227,6 @@ async function executePipeline() {
       }
     }
   }
-  console.log(dataset);
   return dataset;
 }
 if (typeof module !== "undefined") module.exports = { executePipeline };
