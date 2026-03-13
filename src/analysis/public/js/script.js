@@ -590,36 +590,49 @@ let matches;
     const yAxisSelect = document.getElementById("y-axis-select");
     const zAxisSelect = document.getElementById("z-axis-select");
 
+    let averageScoresError = false;
+    let oprError = false;
+
     for (const axisSelect of [xAxisSelect, yAxisSelect, zAxisSelect]) {
       axisSelect.innerHTML = ""; // Clear existing options
-      for (
-        let i = 0;
-        i <
-        Object.keys(dataset.teams[Object.keys(dataset.teams)[0]].averageScores)
-          .length;
-        i++
-      ) {
-        const key = Object.keys(
-          dataset.teams[Object.keys(dataset.teams)[0]].averageScores,
-        )[i];
-        const option = document.createElement("option");
-        option.value = `averageScores.${key}`;
-        option.label = "Average " + key.charAt(0).toUpperCase() + key.slice(1);
-        if (axisSelect === xAxisSelect && i === 0) {
-          option.selected = true;
-        } // Set as selected for X-axis
-        if (axisSelect === yAxisSelect && i === 1) {
-          option.selected = true;
-        } // Set as selected for Y-axis
-        if (axisSelect === zAxisSelect && i === 2) {
-          option.selected = true;
-        } // Set as selected for Z-axis
-        axisSelect.appendChild(option);
+
+      try {
+        for (
+          let i = 0;
+          i <
+          Object.keys(
+            dataset.teams[Object.keys(dataset.teams)[0]].averageScores,
+          ).length;
+          i++
+        ) {
+          const key = Object.keys(
+            dataset.teams[Object.keys(dataset.teams)[0]].averageScores,
+          )[i];
+          const option = document.createElement("option");
+          option.value = `averageScores.${key}`;
+          option.label =
+            "Average " + key.charAt(0).toUpperCase() + key.slice(1);
+          if (axisSelect === xAxisSelect && i === 0) {
+            option.selected = true;
+          } // Set as selected for X-axis
+          if (axisSelect === yAxisSelect && i === 1) {
+            option.selected = true;
+          } // Set as selected for Y-axis
+          if (axisSelect === zAxisSelect && i === 2) {
+            option.selected = true;
+          } // Set as selected for Z-axis
+          axisSelect.appendChild(option);
+        }
+      } catch (error) {
+        if (!averageScoresError) {
+          console.error(
+            "Error fetching average scores for the bubble graph! " + error,
+          );
+          averageScoresError = true;
+        }
       }
 
-      if (
-        Object.keys(dataset.teams[Object.keys(dataset.teams)[0]].opr).length > 0
-      ) {
+      try {
         for (
           let i = 0;
           i <
@@ -633,6 +646,13 @@ let matches;
           option.value = `opr.${key}`;
           option.label = "OPR " + key.charAt(0).toUpperCase() + key.slice(1);
           axisSelect.appendChild(option);
+        }
+      } catch (error) {
+        if (!oprError) {
+          console.error(
+            "OPR could not be gotten for the bubble graph! " + error,
+          );
+          oprError = true;
         }
       }
 
