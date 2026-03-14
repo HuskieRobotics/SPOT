@@ -281,7 +281,8 @@ let previousLayers = [];
             showLayer(0);
           }
 
-          /* Dynamic layer correction: if we are currently in teleop (time < teleopTime) and both
+          /*
+           * Dynamic layer correction: if we are currently in teleop (time < teleopTime) and both
            * auto and teleop layer indices are known, scan the previousLayers history and replace any
            * stored auto-layer snapshots with the teleop layer. Makes sure that if a layer-switch
            * action is undone during teleop, the layer history reflects teleop rather than auto.
@@ -298,7 +299,8 @@ let previousLayers = [];
             }
           }
 
-          /* If the earliest recorded layer snapshot is the teleop layer, restore it so the UI
+          /*
+           * If the earliest recorded layer snapshot is the teleop layer, restore it so the UI
            * returns to the correct teleop button set after the undo.
            */
           if (
@@ -307,7 +309,8 @@ let previousLayers = [];
           ) {
             showLayer(teleopLayerNumber);
           }
-          /* Reverse each executable that was originally triggered by the undone button.
+          /*
+           * Reverse each executable that was originally triggered by the undone button.
            * Each executable type exposes a .reverse() method that mirrors what .execute() did
            * (e.g. popping a layer off the stack, toggling a variable back to its previous value).
            */
@@ -319,7 +322,8 @@ let previousLayers = [];
             ); //reverse any executables associated with the undone button
           }
         }
-        /* Always run the undo button's own executables (e.g. to pop the previousLayers stack
+        /*
+         * Always run the undo button's own executables (e.g. to pop the previousLayers stack
          * and re-display the correct layer regardless of whether an action was actually undone).
          */
         doExecutables(button, time);
