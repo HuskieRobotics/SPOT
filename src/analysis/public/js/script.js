@@ -591,7 +591,32 @@ let matches;
   }
 
   async function loadTeamsForTeamsFilter(dataset, modulesConfig) {
+    //get all of the teams from the database
     const allTeams = await fetchTeams();
+
+    //add all of the teams to the main area in the teams filter view
+    for (const [teamNumber, team] of Object.entries(dataset.teams)) {
+      console.log(
+        `team: ${Object.keys(team)}\n num: ${teamNumber}\n allTeams: ${allTeams[teamNumber]}`,
+      );
+      if (allTeams[teamNumber]) {
+        const teamContainer = constructTeamForTeamsFilter(
+          teamNumber,
+          team,
+          allTeams,
+        );
+        teamList.appendChild(teamContainer);
+      }
+    }
+  }
+
+  function constructTeamForTeamsFilter(teamNumber, team, allTeams) {
+    const mainTeamContainer = document.getElementById("main-team-container");
+    const teamNumDisplay = createDOMElement("div", "team-number-display");
+    teamNumDisplay.innerText = teamNumber;
+    mainTeamContainer.setAttribute("num", teamNumber);
+
+    mainTeamContainer.appendChild(teamNumDisplay);
   }
 
   // Auto pick list UI functions
