@@ -317,6 +317,16 @@ body {
   color: var(--bg-alt);
 }
 
+#filter-teams-view {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 3rem;
+  line-height: 1em;
+  margin-top: 32px;
+  margin-bottom: 10px;
+}
+
 #match-view {
   display: flex;
   flex-direction: column;

@@ -584,6 +584,8 @@ let matches;
     //add event listener to the "Filter Teams" button to set reset the UI and switch to the teams filter view
     filterTeamsSwitch.addEventListener("click", () => {
       clearInterface();
+      loadTeams();
+      displayTeam;
       filterTeamsSwitch.classList.add("selected");
       showFade(filterTeamsView);
     });
@@ -907,6 +909,7 @@ let matches;
     loadMatchView(dataset, modulesConfig);
     loadAutoPickList(dataset, modulesConfig);
     loadBubbleGraph(dataset, modulesConfig);
+    loadTeamsFilterView(dataset, modulesConfig);
 
     searchInput.addEventListener("input", () => {
       if (searchInput.value !== "") {
@@ -957,6 +960,7 @@ let matches;
     hideFade(teamView);
     hideFade(autoPickView);
     hideFade(bubbleSheetView);
+    hideFade(filterTeamsView);
     // hideFade(autoPickStats)
     // hideFade(autoPickMain)
     autoPickStats.style.display = "none";
@@ -965,5 +969,6 @@ let matches;
     matchViewSwitch.classList.remove("selected");
     autoPickSwitch.classList.remove("selected");
     bubbleSheetSwitch.classList.remove("selected");
+    filterTeamsSwitch.classList.remove("selected");
   }
 })();
