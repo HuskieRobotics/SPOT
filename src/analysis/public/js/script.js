@@ -584,11 +584,14 @@ let matches;
     //add event listener to the "Filter Teams" button to set reset the UI and switch to the teams filter view
     filterTeamsSwitch.addEventListener("click", () => {
       clearInterface();
-      loadTeams();
-      displayTeam;
+      loadTeams(dataset, modulesConfig);
       filterTeamsSwitch.classList.add("selected");
       showFade(filterTeamsView);
     });
+  }
+
+  async function loadTeamsForTeamsFilter(dataset, modulesConfig) {
+    const allTeams = await fetchTeams();
   }
 
   // Auto pick list UI functions
