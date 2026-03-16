@@ -15,7 +15,6 @@ class Pie {
   }
 
   formatData(teams, dataset) {
-    console.log(`pie teams recieved: ${teams}`);
     let filteredTeams = teams.filter((team) => team != "|");
     const unit = this.moduleConfig.options.unit || "";
     const decimals = this.moduleConfig.options.decimals ?? 2;
@@ -23,7 +22,6 @@ class Pie {
       const summed = filteredTeams
         .map((team) => {
           let data = getPath(dataset.teams[team], slice.path);
-          console.log(`${slice.path}: ${data}`);
           return data;
         })
         .flat()
