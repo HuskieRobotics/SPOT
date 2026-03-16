@@ -1,5 +1,3 @@
-const { get } = require("mongoose");
-
 class HeatmapScatterPlot {
   container;
   moduleConfig;
@@ -42,15 +40,23 @@ class HeatmapScatterPlot {
           name: this.moduleConfig.options.actionLabels[actionId],
           x: filteredActionQueue.map((a) => {
             if (getPath(a, this.moduleConfig.options.coordinatePath).x > 69.5) {
-              return getPath(a, this.moduleConfig.options.coordinatePath).y;
-            } else {
+              return (
+                100 - getPath(a, this.moduleConfig.options.coordinatePath).x
+              );
+            } else if (
+              getPath(a, this.moduleConfig.options.coordinatePath).x < 30.5
+            ) {
               return getPath(a, this.moduleConfig.options.coordinatePath).x;
             }
           }),
           y: filteredActionQueue.map((a) => {
             if (getPath(a, this.moduleConfig.options.coordinatePath).x > 69.5) {
-              return getPath(a, this.moduleConfig.options.coordinatePath).x;
-            } else {
+              return (
+                100 - getPath(a, this.moduleConfig.options.coordinatePath).y
+              );
+            } else if (
+              getPath(a, this.moduleConfig.options.coordinatePath).x < 30.5
+            ) {
               return getPath(a, this.moduleConfig.options.coordinatePath).y;
             }
           }),
@@ -84,12 +90,24 @@ class HeatmapScatterPlot {
       type: "histogram2dcontour",
       name: "Heatmap",
       showlegend: true,
-      x: filteredAllActionQueue.map(
-        (a) => getPath(a, this.moduleConfig.options.coordinatePath).x,
-      ),
-      y: filteredAllActionQueue.map(
-        (a) => getPath(a, this.moduleConfig.options.coordinatePath).y,
-      ),
+      x: filteredAllActionQueue.map((a) => {
+        if (getPath(a, this.moduleConfig.options.coordinatePath).x > 69.5) {
+          return 100 - getPath(a, this.moduleConfig.options.coordinatePath).x;
+        } else if (
+          getPath(a, this.moduleConfig.options.coordinatePath).x < 30.5
+        ) {
+          return getPath(a, this.moduleConfig.options.coordinatePath).x;
+        }
+      }),
+      y: filteredAllActionQueue.map((a) => {
+        if (getPath(a, this.moduleConfig.options.coordinatePath).x > 69.5) {
+          return 100 - getPath(a, this.moduleConfig.options.coordinatePath).y;
+        } else if (
+          getPath(a, this.moduleConfig.options.coordinatePath).x < 30.5
+        ) {
+          return getPath(a, this.moduleConfig.options.coordinatePath).y;
+        }
+      }),
       xaxis: "x",
       yaxis: "y",
       opacity: 0.7,
