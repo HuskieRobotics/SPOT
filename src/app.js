@@ -42,6 +42,7 @@ if (!validation.valid) {
   require("./scouting/scouting-sync.js")(server);
 
   app.use("/config", require("./configRouter.js"));
+  app.use(express.static(__dirname + "/public"));
   app.use("/", require("./scouting/scouting.js"));
   app.use("/analysis", require("./analysis/analysis.js"));
   app.use("/admin", require("./admin/admin.js"));

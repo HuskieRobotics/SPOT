@@ -6,15 +6,32 @@ if ("serviceWorker" in navigator) {
         // Registration was successful
         console.log(
           "ServiceWorker registration successful with scope: ",
-          registration.scope
+          registration.scope,
         );
       },
       function (err) {
         // registration failed
         console.log("ServiceWorker registration failed: ", err);
-      }
+      },
     );
   });
+}
+
+const root = document.documentElement;
+const savedTheme = localStorage.getItem("theme");
+
+if (savedTheme == null || savedTheme == "light") {
+  localStorage.setItem("theme", "light");
+  root.setAttribute("data-theme", "light");
+} else {
+  localStorage.setItem("theme", "dark");
+  root.setAttribute("data-theme", "dark");
+}
+
+function getCssVar(name) {
+  return getComputedStyle(document.documentElement)
+    .getPropertyValue(name)
+    .trim();
 }
 
 /**
@@ -24,10 +41,11 @@ if ("serviceWorker" in navigator) {
  */
 async function isDemo() {
   const isDemo = await fetch("./api/isDemo").then((res) => res.json()); // Check if in demo mode
+  const demoEnabled = isDemo === true || isDemo === "true";
 
   demoLabel = document.querySelector("#demo-label");
 
-  if (isDemo) {
+  if (demoEnabled) {
     // Basically makes the demo text appear.
     demoLabel.textContent = "DEMO";
     demoLabel.style.fontSize = "3em";
@@ -48,7 +66,6 @@ function getSelectedEvent() {
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
   const eventID = urlParams.get("event");
-  console.log("Event selected:", eventID);
   return eventID;
 }
 
@@ -90,7 +107,7 @@ let matches;
   //start loading animation, fetch modules config, fetch dataset, then initialize UI elements
   await loadAround(async () => {
     const modulesConfig = await fetch(`/config/analysis-modules.json`).then(
-      (res) => res.json()
+      (res) => res.json(),
     );
     dataset = await executePipeline();
 
@@ -114,7 +131,7 @@ let matches;
   async function populateEventDropdown() {
     try {
       const events = await fetch(`/analysis/api/events`).then((res) =>
-        res.json()
+        res.json(),
       );
       const eventMenu = document.getElementById("event-menu");
       eventMenu.innerHTML = "";
@@ -140,7 +157,7 @@ let matches;
     const eventID = getSelectedEvent();
     if (eventID) {
       teams = await fetch(`/analysis/api/teams/${eventID}`).then((res) =>
-        res.json()
+        res.json(),
       );
     } else {
       teams = await fetch(`/analysis/api/teams`).then((res) => res.json());
@@ -218,10 +235,6 @@ let matches;
     // get an array (teams) of all teams that contain data
     var teams = [];
     for (var [teamNumber, team] of Object.entries(dataset.teams)) {
-      console.log("team: ");
-      console.log(team);
-      console.log("team number: ");
-      console.log(teamNumber);
       if (
         dataset.tmps.filter((tmp) => tmp.robotNumber == teamNumber).length >
           0 &&
@@ -231,19 +244,9 @@ let matches;
         //console.log("added team: ")
         //console.log(team);
         setPath(team, "robotNumber", teamNumber);
-        console.log("data from path: " + getPath(team, "robotNumber"));
         teams.push(team);
-
-        console.log("TEAM ADDED " + teamNumber);
-
-        console.log("team number of first team: ");
-        console.log(teams[0].robotNumber);
-        console.log(teams);
       }
-      console.log("-----------------");
     }
-    console.log("teams before avgprob");
-    console.log(teams);
     // console.log(
     //   "teams type and size: " + typeof teams + teams.length + teams[0]
     // );
@@ -260,15 +263,13 @@ let matches;
       };
     });
 
-    console.log("teams w/ avg probability");
-    console.log(teamsProbability);
     for (let i = 0; i < teams.length; i++) {
       for (let j = 0; j < teamsProbability.length; j++) {
         if (teams[i].robotNumber == teamsProbability[j].robotNumber) {
           setPath(
             teams[i],
             "avgProbability",
-            getPath(teamsProbability[j], "avgProbability", 0)
+            getPath(teamsProbability[j], "avgProbability", 0),
           );
         }
       }
@@ -296,7 +297,7 @@ let matches;
     const firstContainer = constructTeamAutoPick(
       teams[0].robotNumber,
       teams[0],
-      allTeams
+      allTeams,
     );
     autoPickTeamList.appendChild(firstContainer);
     firstContainer.click();
@@ -304,7 +305,7 @@ let matches;
       const autoPickTeamContainer = constructTeamAutoPick(
         teams[i].robotNumber,
         teams[i],
-        allTeams
+        allTeams,
       );
       autoPickTeamList.appendChild(autoPickTeamContainer);
     }
@@ -323,7 +324,6 @@ let matches;
     }
     setTimeout(() => {
       firstContainer.click();
-      console.log("clicked");
     }, 4);
   }
 
@@ -363,7 +363,7 @@ let matches;
   // 		called from the event listener in constructTeamsAutoPick
   function displayStats(teamContainer) {
     Array.from(document.querySelector("#auto-pick-team-list").children).map(
-      (t) => t.classList.remove("selected")
+      (t) => t.classList.remove("selected"),
     );
     teamContainer.classList.add("selected");
     autoPickStats.style.display = "block";
@@ -376,7 +376,7 @@ let matches;
       if (
         !module.moduleConfig.separate &&
         Object.keys(dataset.teams[teamNumber]).filter(
-          (prop) => prop !== "manual"
+          (prop) => prop !== "manual",
         ).length == 0
       ) {
         // console.log(`would add hidden: ${teamNumber}`)
@@ -415,7 +415,7 @@ let matches;
 
     //get all dropdowns
     const teamSelects = Array.from(
-      document.querySelectorAll(".alliance-selects")
+      document.querySelectorAll(".alliance-selects"),
     )
       .map((g) => Array.from(g.children))
       .flat();
@@ -485,11 +485,11 @@ let matches;
       if (matchSelect.value !== "none") {
         matchSelect.classList.add("filled");
         const selectedMatch = matches.find(
-          (m) => m.match_string == matchSelect.value
+          (m) => m.match_string == matchSelect.value,
         );
         for (let i = 0; i < 3; i++) {
           teamSelects[i].value = Object.keys(dataset.teams).includes(
-            selectedMatch.robots.red[i]
+            selectedMatch.robots.red[i],
           )
             ? selectedMatch.robots.red[i]
             : "none";
@@ -500,7 +500,7 @@ let matches;
           }
 
           teamSelects[i + 3].value = Object.keys(dataset.teams).includes(
-            selectedMatch.robots.blue[i]
+            selectedMatch.robots.blue[i],
           )
             ? selectedMatch.robots.blue[i]
             : "none";
@@ -590,31 +590,70 @@ let matches;
     const yAxisSelect = document.getElementById("y-axis-select");
     const zAxisSelect = document.getElementById("z-axis-select");
 
+    let averageScoresError = false;
+    let oprError = false;
+
     for (const axisSelect of [xAxisSelect, yAxisSelect, zAxisSelect]) {
       axisSelect.innerHTML = ""; // Clear existing options
-      for (
-        let i = 0;
-        i <
-        Object.keys(dataset.teams[Object.keys(dataset.teams)[0]].averageScores)
-          .length;
-        i++
-      ) {
-        const key = Object.keys(
-          dataset.teams[Object.keys(dataset.teams)[0]].averageScores
-        )[i];
-        const option = document.createElement("option");
-        option.value = `averageScores.${key}`;
-        option.label = "Average " + key.charAt(0).toUpperCase() + key.slice(1);
-        if (axisSelect === xAxisSelect && i === 0) {
-          option.selected = true;
-        } // Set as selected for X-axis
-        if (axisSelect === yAxisSelect && i === 1) {
-          option.selected = true;
-        } // Set as selected for Y-axis
-        if (axisSelect === zAxisSelect && i === 2) {
-          option.selected = true;
-        } // Set as selected for Z-axis
-        axisSelect.appendChild(option);
+
+      try {
+        for (
+          let i = 0;
+          i <
+          Object.keys(
+            dataset.teams[Object.keys(dataset.teams)[0]].averageScores,
+          ).length;
+          i++
+        ) {
+          const key = Object.keys(
+            dataset.teams[Object.keys(dataset.teams)[0]].averageScores,
+          )[i];
+          const option = document.createElement("option");
+          option.value = `averageScores.${key}`;
+          option.label =
+            "Average " + key.charAt(0).toUpperCase() + key.slice(1);
+          if (axisSelect === xAxisSelect && i === 0) {
+            option.selected = true;
+          } // Set as selected for X-axis
+          if (axisSelect === yAxisSelect && i === 1) {
+            option.selected = true;
+          } // Set as selected for Y-axis
+          if (axisSelect === zAxisSelect && i === 2) {
+            option.selected = true;
+          } // Set as selected for Z-axis
+          axisSelect.appendChild(option);
+        }
+      } catch (error) {
+        if (!averageScoresError) {
+          console.error(
+            "Error fetching average scores for the bubble graph! " + error,
+          );
+          averageScoresError = true;
+        }
+      }
+
+      try {
+        for (
+          let i = 0;
+          i <
+          Object.keys(dataset.teams[Object.keys(dataset.teams)[0]].opr).length;
+          i++
+        ) {
+          const key = Object.keys(
+            dataset.teams[Object.keys(dataset.teams)[0]].opr,
+          )[i];
+          const option = document.createElement("option");
+          option.value = `opr.${key}`;
+          option.label = "OPR " + key.charAt(0).toUpperCase() + key.slice(1);
+          axisSelect.appendChild(option);
+        }
+      } catch (error) {
+        if (!oprError) {
+          console.error(
+            "OPR could not be gotten for the bubble graph! " + error,
+          );
+          oprError = true;
+        }
       }
 
       const option = document.createElement("option");
@@ -637,16 +676,16 @@ let matches;
 
       const teams = Object.keys(dataset.teams);
       const xAxisData = teams.map((team) =>
-        getPath(dataset.teams[team], xAxisField, 0).toFixed(2)
+        getPath(dataset.teams[team], xAxisField, 0).toFixed(2),
       );
       const yAxisData = teams.map((team) =>
-        getPath(dataset.teams[team], yAxisField, 0).toFixed(2)
+        getPath(dataset.teams[team], yAxisField, 0).toFixed(2),
       );
       const zAxisData =
         zAxisField === "constant"
           ? teams.map(() => 1) // Default size if z-axis is set to constant
           : teams.map((team) =>
-              getPath(dataset.teams[team], zAxisField, 0).toFixed(2)
+              getPath(dataset.teams[team], zAxisField, 0).toFixed(2),
             );
 
       const hoverTexts = teams.map((team, index) => {
@@ -674,8 +713,8 @@ let matches;
           color: "#FF6030",
         },
         hoverlabel: {
-          bgcolor: "white", // Set the background color of the hover menu to white
-          font: { color: "black" }, // Set the font color to black for better readability
+          bgcolor: getCssVar("--bg-alt"), // Set the background color of the hover menu to white
+          font: { color: getCssVar("--text") }, // Set the font color to black for better readability
         },
         hoverinfo: "text",
         textposition: "bottom center",
@@ -683,11 +722,25 @@ let matches;
 
       const layout = {
         title: "Team Scores Scattergram",
-        xaxis: { title: xAxisField },
+        xaxis: {
+          title: xAxisField,
+          linecolor: getCssVar("--text-alt"),
+          gridcolor: getCssVar("--text-alt"),
+          zerolinecolor: getCssVar("--text-alt"),
+        },
         yaxis: {
           title: yAxisField,
           range: [0, Math.max(...yAxisData) * 1.1],
+          linecolor: getCssVar("--text-alt"),
+          gridcolor: getCssVar("--text-alt"),
+          zerolinecolor: getCssVar("--text"),
         },
+        font: {
+          family: "Cairo, sans-serif",
+          color: getCssVar("--text"),
+        },
+        paper_bgcolor: getCssVar("--bg-alt"),
+        plot_bgcolor: getCssVar("--bg-alt"),
       };
 
       Plotly.newPlot(bubbleSheetContainer, [trace], layout);
@@ -744,7 +797,6 @@ let matches;
   //call setData on every module in matches
   async function setMatchModules(alliances) {
     for (const module of modules.match.left) {
-      console.log(module.moduleConfig.name);
       var displayedAlliances = alliances[0].filter((teamNumber) => {
         if (teamNumber == "|") {
           return false;
@@ -752,7 +804,7 @@ let matches;
         if (
           !module.moduleConfig.separate &&
           Object.keys(dataset.teams[teamNumber]).filter(
-            (prop) => prop !== "manual"
+            (prop) => prop !== "manual",
           ).length == 0
         ) {
           return false;
@@ -765,13 +817,12 @@ let matches;
         console.log(`alliances script.js ${alliances}`);
         allTeams.push("|");
         allTeams = allTeams.concat(alliances[1]);
-        console.log(`all teams: ${allTeams}`);
         displayedAlliances = allTeams.filter((teamNumber) => {
           if (
             !module.moduleConfig.separate &&
             teamNumber != "|" &&
             Object.keys(dataset.teams[teamNumber]).filter(
-              (prop) => prop !== "manual"
+              (prop) => prop !== "manual",
             ).length == 0
           ) {
             return false;
@@ -789,7 +840,7 @@ let matches;
       if (displayedAlliances.length !== 0) {
         module.container.classList.remove("hidden");
         await module.setData(
-          await module.formatData(displayedAlliances, dataset)
+          await module.formatData(displayedAlliances, dataset),
         );
       } else {
         module.container.classList.add("hidden");
@@ -797,7 +848,6 @@ let matches;
     }
 
     for (const module of modules.match.right) {
-      console.log(module.moduleConfig.name);
       var displayedAlliances = alliances[1].filter((teamNumber) => {
         if (teamNumber == "|") {
           return false;
@@ -805,7 +855,7 @@ let matches;
         if (
           !module.moduleConfig.separate &&
           Object.keys(dataset.teams[teamNumber]).filter(
-            (prop) => prop !== "manual"
+            (prop) => prop !== "manual",
           ).length == 0
         ) {
           return false;
@@ -823,7 +873,7 @@ let matches;
             !module.moduleConfig.separate &&
             teamNumber != "|" &&
             Object.keys(dataset.teams[teamNumber]).filter(
-              (prop) => prop !== "manual"
+              (prop) => prop !== "manual",
             ).length == 0
           ) {
             return false;
@@ -835,7 +885,7 @@ let matches;
         if (displayedAlliances.length !== 0) {
           module.container.classList.remove("hidden");
           await module.setData(
-            await module.formatData(displayedAlliances, dataset)
+            await module.formatData(displayedAlliances, dataset),
           );
         } else {
           module.container.classList.add("hidden");
@@ -844,7 +894,7 @@ let matches;
       if (displayedAlliances.length !== 0) {
         module.container.classList.remove("hidden");
         await module.setData(
-          await module.formatData(displayedAlliances, dataset)
+          await module.formatData(displayedAlliances, dataset),
         );
       } else {
         module.container.classList.add("hidden");
@@ -866,7 +916,7 @@ let matches;
           Object.keys(dataset.teams),
           {
             allowTypo: true,
-          }
+          },
         );
         console.log(sortedTeams);
         for (const team of Array.from(teamList.children)) {
@@ -875,7 +925,7 @@ let matches;
         for (const sortResult of sortedTeams) {
           const toAppend = Array.from(teamList.children).find(
             (teamElement) =>
-              teamElement.getAttribute("num") == sortResult.target
+              teamElement.getAttribute("num") == sortResult.target,
           );
           teamList.appendChild(toAppend);
           toAppend.style.display = "flex";
@@ -900,7 +950,7 @@ let matches;
   //reset the UI to state of nothing shown, nothing selected
   function clearInterface() {
     Array.from(document.querySelector("#team-list").children).map((t) =>
-      t.classList.remove("selected")
+      t.classList.remove("selected"),
     );
 
     hideFade(welcomeView);

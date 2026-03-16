@@ -13,6 +13,17 @@ const SCOUTER_STATUS_REVERSE = {
   4: "DISCONNECTED_BY_ADMIN",
 };
 
+const root = document.documentElement;
+const savedTheme = localStorage.getItem("theme");
+
+if (savedTheme == null || savedTheme == "light") {
+  localStorage.setItem("theme", "light");
+  root.setAttribute("data-theme", "light");
+} else {
+  localStorage.setItem("theme", "dark");
+  root.setAttribute("data-theme", "dark");
+}
+
 const scouters = {};
 
 (async () => {
@@ -54,11 +65,12 @@ const scouters = {};
 
 async function isDemo() {
   const isDemo = await fetch("./api/isDemo").then((res) => res.json());
+  const demoEnabled = isDemo === true || isDemo === "true";
 
   let demoItem = document.querySelector(".demo-label");
   let demoItemSmol = document.querySelector("#small-demo-label");
 
-  if (isDemo == true) {
+  if (demoEnabled) {
     demoItem.textContent = "DEMO";
     demoItemSmol.textContent = "DEMO";
   } else {
@@ -84,7 +96,6 @@ async function constructApp(accessCode) {
         Authorization: accessCode,
       },
     });
-    console.log("ENTER MATCH!");
   });
 
   let menuExpanded = false;
@@ -104,13 +115,13 @@ async function constructApp(accessCode) {
 
 async function checkMigration() {
   let checkMigration = await fetch("./api/checkMigration").then((res) =>
-    res.json()
+    res.json(),
   );
   if (checkMigration.needsMigration) {
     let migrationModal = new Modal("small", false).header(
       "The database appears to be from SPOT v4 or earlier and needs to be migrated. " +
         "For more information, please refer to the " +
-        '<a href="https://docs.google.com/document/d/1QYxaoAnmHTYg1HQBiVI71QHKks05prGEybyP5avYMUI/edit?usp=sharing" target="_blank" rel="noopener noreferrer">migration guide</a>.'
+        '<a href="https://docs.google.com/document/d/1QYxaoAnmHTYg1HQBiVI71QHKks05prGEybyP5avYMUI/edit?usp=sharing" target="_blank" rel="noopener noreferrer">migration guide</a>.',
     );
     migrationModal.scale(0.75);
     migrationModal.action("OK", () => {
@@ -158,7 +169,6 @@ async function updateScouters(accessCode) {
       }, 15000);
     }
   }
-  console.log(scouters);
   //prune scouters that no longer exist
   for (let timestamp in scouters) {
     if (!scouterList.find((x) => (x.timestamp = timestamp))) {
@@ -187,8 +197,8 @@ async function updateMatches(accessCode) {
     matchElement.classList.add("match");
     matchElement.innerHTML = `
         <div class="match-header"><strong>${match.number}</strong> - ${
-      match.match_string.toUpperCase().split("_")[0]
-    }-<strong>${match.match_string.toUpperCase().split("_")[1]}</strong></div>
+          match.match_string.toUpperCase().split("_")[0]
+        }-<strong>${match.match_string.toUpperCase().split("_")[1]}</strong></div>
         <input type="checkbox" class="match-select">
         <div class="match-teams red"></div>
         <div class="match-teams blue"></div>
@@ -238,7 +248,7 @@ async function updateMatches(accessCode) {
               `Match ${
                 match.number
               } - ${match.match_string.toUpperCase()} Selected!`,
-              2000
+              2000,
             );
             for (let box of document.querySelectorAll(".match .match-select")) {
               //deselect all boxes
@@ -273,24 +283,24 @@ class ScouterDisplay {
 
     this.scouterElement.onclick = (e) => {
       let disconnectModal = new Modal("small", false).header(
-        "Do you want to Disconnect " + this.scouter.state.scouterId + "?"
+        "Do you want to Disconnect " + this.scouter.state.scouterId + "?",
       );
       disconnectModal.scale(0.75);
       disconnectModal.action("Yes", () => {
         fetch(
           `api/disconnectScouter/${this.scouterElement.getAttribute(
-            "scouter"
+            "scouter",
           )}`,
           {
             headers: {
               Authorization: accessCode,
             },
-          }
+          },
         ).then((res) => res.json());
 
         var scouterID = this.scouterElement.getAttribute("scouter");
         var scouter = Object.values(scouters).find(
-          (s) => s.scouter.state.scouterId == scouterID
+          (s) => s.scouter.state.scouterId == scouterID,
         );
 
         scouter.scouter.state.connected = false;

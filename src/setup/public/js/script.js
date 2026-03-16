@@ -10,7 +10,23 @@ if ("serviceWorker" in navigator) {
   });
 }
 
+const root = document.documentElement;
+const savedTheme = localStorage.getItem("theme");
+
+if (savedTheme == null || savedTheme == "light") {
+  localStorage.setItem("theme", "light");
+  root.setAttribute("data-theme", "light");
+} else {
+  localStorage.setItem("theme", "dark");
+  root.setAttribute("data-theme", "dark");
+}
+
 let oldAccessCode;
+
+function parseBoolean(value) {
+  return value === true || value === "true" || value === "on";
+}
+
 (async () => {
   const authRequest = await fetch("./api/auth").then((res) => res.json());
 
@@ -76,13 +92,9 @@ async function constructApp(accessCode) {
     document.querySelector("#GOOGLE_CLIENT_SECRET").value =
       config.GOOGLE_CLIENT_SECRET || "";
     document.querySelector("#EVENT_NUMBER").value = config.EVENT_NUMBER || "";
-    if (config.DEMO) {
-      document.querySelector("#DEMO").value = config.DEMO;
-      document.querySelector("#DEMO").checked = true;
-    } else {
-      document.querySelector("#DEMO").value = 0;
-      document.querySelector("#DEMO").checked = false;
-    }
+    document.querySelector("#DEMO").checked = parseBoolean(config.DEMO);
+    document.querySelector("#SWAP_ZONE_BUTTON_LOCATIONS").checked =
+      parseBoolean(config.SWAP_ZONE_BUTTON_LOCATIONS);
   }
 
   document.querySelector("#setup-container").classList.add("visible");
@@ -173,7 +185,7 @@ document
     // Add the candidate to the dropdown if not already present
     const eventSelect = document.getElementById("EVENT_NUMBER");
     const optionExists = Array.from(eventSelect.options).some(
-      (opt) => opt.value === candidate
+      (opt) => opt.value === candidate,
     );
     if (!optionExists) {
       const newOption = document.createElement("option");
@@ -211,8 +223,6 @@ async function populateEventNumbers() {
       return;
     }
 
-    console.log("Event Numbers:", result);
-
     const select = document.getElementById("EVENT_NUMBER");
     select.innerHTML = '<option value="">Select Event Number</option>';
 
@@ -239,7 +249,7 @@ document.querySelector("#submit").addEventListener("click", async () => {
   ];
   let config = { secrets: {} };
   for (let [key, value] of new FormData(
-    document.getElementById("setup-form")
+    document.getElementById("setup-form"),
   )) {
     if (value === "") continue; //dont send unset config values (eg, no ACCESS_CODE)
     if (secrets.includes(key)) {
@@ -248,6 +258,11 @@ document.querySelector("#submit").addEventListener("click", async () => {
       config[key] = value;
     }
   }
+
+  config.DEMO = document.querySelector("#DEMO").checked;
+  config.SWAP_ZONE_BUTTON_LOCATIONS = document.querySelector(
+    "#SWAP_ZONE_BUTTON_LOCATIONS",
+  ).checked;
 
   let res = await (
     await fetch("./api/config", {

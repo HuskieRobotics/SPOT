@@ -5,6 +5,7 @@
   transform: translate(-50%, -50%);
   z-index: 99;
   background-color: var(--bg-alt);
+  color: var(--text);
   border-radius: 10px;
   padding: 40px;
   transition: 0.3s all;
@@ -17,7 +18,9 @@
 .modal.visible {
   visibility: unset;
   opacity: 1;
-  transition: visibility 0s 0s, opacity 0.3s 0s;
+  transition:
+    visibility 0s 0s,
+    opacity 0.3s 0s;
 }
 
 .modal-blind {
@@ -37,7 +40,9 @@
 .modal-blind.visible {
   visibility: unset;
   opacity: 0.7;
-  transition: visibility 0s 0s, opacity 0.3s 0s;
+  transition:
+    visibility 0s 0s,
+    opacity 0.3s 0s;
 }
 
 .modal-close {

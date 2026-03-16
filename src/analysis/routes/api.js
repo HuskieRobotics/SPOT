@@ -6,9 +6,19 @@ const axios = require("axios");
 const config = require("../../lib/config");
 const chalk = require("chalk");
 let tbaResults;
+let tbaOPRResults;
 let tbaResultsFetchTime = 0;
+let tbaOPRResultFetchTime = 0;
 
 let router = Router();
+
+router.get("/blueApiOPRStrings", async (req, res) => {
+  if (config.TBA_OPR_STRINGS) {
+    res.send(config.TBA_OPR_STRINGS);
+  } else {
+    res.send({ None: "None" });
+  }
+});
 
 router.get("/blueApiData/:eventID", async (req, res) => {
   const TBA_EVENT_KEY = req.params.eventID;
@@ -57,6 +67,55 @@ router.get("/blueApiData", async (req, res) => {
   }
 
   res.send(tbaResults);
+});
+
+router.get("/blueApiOPR/:eventID", async (req, res) => {
+  const TBA_EVENT_KEY = req.params.eventID;
+  const TBA_API_KEY = config.secrets.TBA_API_KEY;
+
+  const event = await Event.findOne({ _id: TBA_EVENT_KEY });
+  let eventKey = null;
+  if (event) {
+    eventKey = event.code.split("_")[0];
+  }
+
+  // Gets tba data every 5 minutes (300000 ms)
+  if (new Date().getTime() > tbaOPRResultFetchTime + 300000) {
+    tbaOPRResults = (
+      await axios.get(
+        `https://www.thebluealliance.com/api/v3/event/${eventKey}/coprs`,
+        {
+          headers: {
+            "X-TBA-Auth-Key": TBA_API_KEY,
+          },
+        },
+      )
+    ).data;
+    tbaOPRResultFetchTime = new Date().getTime();
+  }
+
+  res.send(tbaOPRResults);
+});
+
+router.get("/blueApiOPR", async (req, res) => {
+  const KEY = config.TBA_EVENT_KEY;
+  const TBA_API_KEY = config.secrets.TBA_API_KEY;
+
+  if (new Date().getTime() > tbaOPRResultFetchTime + 300000) {
+    tbaOPRResults = (
+      await axios.get(
+        `https://www.thebluealliance.com/api/v3/event/${KEY}/coprs`,
+        {
+          headers: {
+            "X-TBA-Auth-Key": TBA_API_KEY,
+          },
+        },
+      )
+    ).data;
+    tbaOPRResultFetchTime = new Date().getTime();
+  }
+
+  res.send(tbaOPRResults);
 });
 
 router.get("/dataset", async (req, res) => {

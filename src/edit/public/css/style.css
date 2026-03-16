@@ -29,6 +29,7 @@ body {
 }
 
 .match-item-top {
+  color: var(--text);
   display: flex;
   align-items: center;
   padding: 10px;
@@ -64,6 +65,7 @@ body {
   border: 2px solid var(--accent-alt);
   border-radius: 4px;
   background-color: var(--bg-alt);
+  color: var(--text);
   flex: 1;
 }
 
@@ -83,6 +85,7 @@ body {
   padding: 10px;
   background-color: var(--bg-alt);
   border-top: 2px solid var(--accent);
+  color: var(--text);
   margin-bottom: 6px;
 }
 
@@ -102,6 +105,7 @@ body {
 
 #title {
   background-color: var(--bg);
+  color: var(--text);
   font: 2em/1em "Cairo";
   padding-left: 50px;
   padding-top: 40px;
@@ -111,7 +115,9 @@ body {
 #title.visible {
   visibility: visible;
   opacity: 1;
-  transition: visibility 0s 0s, opacity 0.3s 0s;
+  transition:
+    visibility 0s 0s,
+    opacity 0.3s 0s;
 }
 
 /* not all of the following is necessary - just copied from style.css in setup */
@@ -125,7 +131,9 @@ body {
   border-radius: var(--border-radius);
   font-size: 1.4em;
   padding: 8px 12px;
-  transition: 0.3s color, 0.3s border;
+  transition:
+    0.3s color,
+    0.3s border;
   outline: none;
 }
 
@@ -139,7 +147,8 @@ body {
   margin: 20px 0;
   padding: 16px 0;
   border-top: 1px solid var(--accent-alt);
-  box-shadow: 0 -6px 10px -10px var(--accent-alt),
+  box-shadow:
+    0 -6px 10px -10px var(--accent-alt),
     0 6px 10px -10px var(--accent-alt);
   border-bottom: 1px solid var(--accent-alt);
   border-radius: 6px;
@@ -157,7 +166,9 @@ body {
   top: 24px;
   border-radius: 20px;
   font-size: 1.5em;
-  transition: 0.2s transform, 0.2s top;
+  transition:
+    0.2s transform,
+    0.2s top;
   pointer-events: none;
   color: var(--placeholder);
 }
@@ -234,7 +245,9 @@ video {
 #setup-container {
   width: 100%;
   opacity: 0;
-  transition: 0.3s visibility, opacity;
+  transition:
+    0.3s visibility,
+    opacity;
   visibility: hidden;
   background-color: var(--bg);
   display: flex;
@@ -246,7 +259,9 @@ video {
 #setup-container.visible {
   visibility: unset;
   opacity: 1;
-  transition: visibility 0s 0s, opacity 0.3s 0s;
+  transition:
+    visibility 0s 0s,
+    opacity 0.3s 0s;
 }
 
 .access-input {
