@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const chalk = require("chalk");
-const config = require("../../config/config.json");
+const config = require("./config");
 
 mongoose
   .connect(config.secrets.DATABASE_URL, {
@@ -11,8 +11,8 @@ mongoose
     console.error(
       e,
       chalk.whiteBright.bgRed.bold(
-        `\nError connecting to MongoDB! This could be because DATABASE_URL is incorrect in your config.json file. SPOT will not properly function without a database.`
-      )
+        `\nError connecting to MongoDB! This could be because DATABASE_URL is incorrect in your environment variables. SPOT will not properly function without a database.`,
+      ),
     );
   });
 
@@ -69,19 +69,19 @@ const teamMatchPerformanceSchema = new mongoose.Schema(
       },
     ],
   },
-  { collection: "teamMatchPerformances" }
+  { collection: "teamMatchPerformances" },
 );
 
 const TeamMatchPerformance = new mongoose.model(
   "TeamMatchPerformance",
-  teamMatchPerformanceSchema
+  teamMatchPerformanceSchema,
 );
 
 const eventSchema = new mongoose.Schema(
   {
     code: String,
   },
-  { collection: "events" }
+  { collection: "events" },
 );
 
 const Event = new mongoose.model("Event", eventSchema);

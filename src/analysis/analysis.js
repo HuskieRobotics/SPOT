@@ -1,7 +1,7 @@
 const express = require("express");
 const path = require("path");
 const fs = require("fs");
-const config = require("../../config/config.json"); // Import the config file
+const config = require("../lib/config");
 let router = express.Router();
 const { setPath } = require("../lib/util");
 const ss = require("simple-statistics");
@@ -21,7 +21,7 @@ router.get("/modules.js", (req, res) => {
     const moduleList = fs.readdirSync(__dirname + "/modules");
     for (let module of moduleList) {
       const moduleFile = fs.readFileSync(
-        `${__dirname}/modules/${module}/index.js`
+        `${__dirname}/modules/${module}/index.js`,
       );
       output += `\n\n//${module}\n`;
       output += moduleFile;
@@ -47,13 +47,13 @@ async function transformers(route) {
   if (route == 1) {
     output = fs
       .readFileSync(
-        `${__dirname}/transformers/${analysisTransformer.template.file}`
+        `${__dirname}/transformers/${analysisTransformer.template.file}`,
       )
       .toString();
   } else if (route == 2) {
     output = fs
       .readFileSync(
-        `${__dirname}/transformers/${analysisTransformer.template2.file}`
+        `${__dirname}/transformers/${analysisTransformer.template2.file}`,
       )
       .toString();
   }
@@ -79,7 +79,7 @@ async function transformers(route) {
     for (const transformerType of analysisTransformer.types) {
       const pattern = new RegExp(
         `__${transformerType.identifier}__\\s*([\\s\\S]*?)\\s*__/${transformerType.identifier}__`,
-        "i"
+        "i",
       );
       const match = pattern.exec(contents);
 
@@ -123,12 +123,12 @@ async function transformers(route) {
   if (route == 1) {
     output = output.replace(
       analysisTransformer.template.placeholder,
-      conjugate
+      conjugate,
     );
   } else if (route == 2) {
     output = output.replace(
       analysisTransformer.template2.placeholder,
-      conjugate
+      conjugate,
     );
   }
 
@@ -154,7 +154,7 @@ router.get("/modules.css", (req, res) => {
     for (let module of fs.readdirSync(__dirname + "/modules")) {
       if (module !== "index.js") {
         const moduleFile = fs.readFileSync(
-          `${__dirname}/modules/${module}/style.css`
+          `${__dirname}/modules/${module}/style.css`,
         );
         output += moduleFile;
       }

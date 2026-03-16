@@ -1,6 +1,6 @@
 const { Router } = require("express");
 let router = Router();
-const config = require("../../../config/config.json");
+const config = require("../../lib/config");
 const { TeamMatchPerformance } = require("../../lib/db");
 
 var schedule = [];

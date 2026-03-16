@@ -1,261 +1,604 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, user-scalable=no, viewport-fit=cover"
-    />
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta
-      name="apple-mobile-web-app-status-bar-style"
-      content="black-translucent"
-    />
-    <title>SPOT - Setup</title>
-    <link
-      rel="stylesheet"
-      href="https://use.fontawesome.com/releases/v5.15.0/css/all.css"
-    />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;700&family=Saira:wght@300;400;700&family=Tajawal:wght@300;400;700&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      rel="apple-touch-icon"
-      sizes="180x180"
-      href="/icons/apple-touch-icon.png"
-    />
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="32x32"
-      href="/icons/favicon-32x32.png"
-    />
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="16x16"
-      href="/icons/favicon-16x16.png"
-    />
-    <link rel="manifest" href="/icons/site.webmanifest" />
-    <link
-      rel="mask-icon"
-      href="/icons/safari-pinned-tab.svg"
-      color="#30a2ff"
-    />
-    <link rel="shortcut icon" href="/icons/favicon.ico" />
-    <meta name="msapplication-TileColor" content="#fefefe" />
-    <meta name="msapplication-config" content="/icons/browserconfig.xml" />
-    <meta name="theme-color" content="#fefefe" />
-    <link href="./css/global.css" rel="stylesheet" type="text/css" />
-    <link href="./css/internal.css" rel="stylesheet" type="text/css" />
-    <link href="./css/ui-elements.css" rel="stylesheet" type="text/css" />
-    <link href="./css/style.css" rel="stylesheet" type="text/css" />
-  </head>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>SPOT Setup - Configuration Guide</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="./icons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="./icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="./icons/favicon-16x16.png">
+    <link rel="manifest" href="./icons/site.webmanifest">
+    <link rel="shortcut icon" href="./icons/favicon.ico">
+    <meta name="msapplication-TileColor" content="#fefefe">
+    <meta name="theme-color" content="#fefefe">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-  <body>
-    <img id="spinner" src="/img/spinner_red.svg" />
+        body {
+            font-family: 'Cairo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #efefef;
+            color: #232323;
+            line-height: 1.6;
+            padding: 20px;
+        }
 
-    <div id="setup-container">
-      <div id="setup-header">SPOT Setup</div>
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
 
-      <form id="setup-form">
-        <input hidden type="text" name="VERSION" value="1.0" />
-        <div>
-          <h1>Access Code</h1>
-          <div>
-            An Access Code is used for logging into SPOT's admin page or editing
-            its configuration. Make sure to save this somewhere, as you will
-            need it to edit this setup configuration or view the admin page.
-          </div>
-          <label class="label">
-            <input
-              type="text"
-              id="ACCESS_CODE"
-              name="ACCESS_CODE"
-              class="input"
-              required
-            />
-            <span>Access Code</span>
-          </label>
-        </div>
-        <div>
-          <h1>MongoDB Setup</h1>
-          <p>
-            The MongoDB Connection URL is for your database. Your connection URL
-            should look like
-            <code
-              >"mongodb+srv://&lt;username&gt;:&lt;password&gt;&amp;&lt;clusterurl&gt;/myFirstDatabase?retryWrites=true&amp;w=majority"</code
-            >. For more detailed instructions on how to find this for your
-            specific database deployment, read the Quickstart Guide linked in
-            the README.
-          </p>
-          <label class="label">
-            <input
-              type="text"
-              id="DATABASE_URL"
-              name="DATABASE_URL"
-              class="input"
-              required
-            />
-            <span>Database URL</span>
-          </label>
-        </div>
-        <div>
-          <h1>TheBlueAlliance Setup</h1>
-          <p>
-            SPOT uses TheBlueAlliance to help load in matches automatically. For
-            SPOT to function correctly you need a TheBlueAlliance API Key and
-            event-specific Event Key.
-          </p>
-          <br />
-          <p>
-            To obtain an API key, visit
-            <a href="https://www.thebluealliance.com/">their site</a>, navigate
-            to the "account" page under "more" in the navbar. Login if you have
-            to, then under the "Read API Keys" section, add a new API Key. Copy
-            that key and paste it into the box below.
-          </p>
-          <video controls muted playsinline>
-            <source src="/img/TBA_API_KEY.webm" type="video/webm" />
-          </video>
-          <label class="label">
-            <input
-              type="text"
-              id="TBA_API_KEY"
-              name="TBA_API_KEY"
-              class="input"
-              required
-            />
-            <span>TBA API Key</span>
-          </label>
-          <br />
-        </div>
-        <div>
-          <h1>FIRST Robotics Setup</h1>
-          <p>
-            SPOT can <strong>optionally</strong> use the FRC API to get
-            information that doesn't show up on TheBlueAlliance, like practice
-            matches. To obtain an api key and username, visit
-            <a href="https://frc-events.firstinspires.org/services/api/register"
-              >their API Registration</a
-            >, and enter the data they ask from you. Once you finish, check your
-            email for the username and key (you'll need them both), and enter
-            them below.
-          </p>
-          <label class="label">
-            <input
-              type="text"
-              id="FMS_API_USERNAME"
-              name="FMS_API_USERNAME"
-              class="input"
-              required
-            />
-            <span>FRC API username</span>
-          </label>
-          <br />
-          <label class="label">
-            <input
-              type="text"
-              id="FMS_API_KEY"
-              name="FMS_API_KEY"
-              class="input"
-              required
-            />
-            <span>FRC API key</span>
-          </label>
-        </div>
-        <div>
-          <h1>Google Sign-In Setup (Coming Soon, optional)</h1>
-          <p>
-            Google Sign-In is not currently a functioning part of SPOT, but it
-            will be in the near future.
-          </p>
-          <br />
-          <label class="label">
-            <input
-              type="text"
-              id="GOOGLE_CLIENT_ID"
-              name="GOOGLE_CLIENT_ID"
-              class="input"
-              disabled
-            />
-            <span>Client ID</span>
-          </label>
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px 20px;
+        }
 
-          <label class="label">
-            <input
-              type="text"
-              id="GOOGLE_CLIENT_SECRET"
-              name="GOOGLE_CLIENT_SECRET"
-              class="input"
-              disabled
-            />
-            <span>Client Secret</span>
-          </label>
+        .header h1 {
+            font-size: 3.5rem;
+            color: #ff6030;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .header p {
+            font-size: 1.4rem;
+            color: #666;
+        }
+
+        .section {
+            background: #fefefe;
+            border: 3px solid #ff6030;
+            border-radius: 16px;
+            padding: 35px;
+            margin-bottom: 30px;
+        }
+
+        .section h2 {
+            color: #ff6030;
+            font-size: 2rem;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #ff6030;
+        }
+
+        .section h3 {
+            color: #232323;
+            font-size: 1.5rem;
+            margin: 25px 0 15px 0;
+        }
+
+        .section p {
+            color: #444;
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            line-height: 1.7;
+        }
+
+        .section ul {
+            margin: 15px 0 15px 30px;
+        }
+
+        .section li {
+            color: #444;
+            font-size: 1.1rem;
+            margin: 10px 0;
+        }
+
+        .section code {
+            background: #efefef;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95em;
+            color: #c62828;
+        }
+
+        .section a {
+            color: #ff6030;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .section a:hover {
+            text-decoration: underline;
+        }
+
+        .status-box {
+            background: #fefefe;
+            border: 3px solid #ff6030;
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+        }
+
+        .status-badge.loading {
+            background: #e0e0e0;
+            color: #666;
+        }
+
+        .status-badge.success {
+            background: #4caf50;
+            color: white;
+        }
+
+        .status-badge.error {
+            background: #f44336;
+            color: white;
+        }
+
+        .status-message {
+            font-size: 1.2rem;
+            color: #232323;
+            line-height: 1.7;
+        }
+
+        .missing-vars {
+            margin-top: 20px;
+            padding: 20px;
+            background: #fff3e0;
+            border-left: 5px solid #ff6030;
+            border-radius: 8px;
+            display: none;
+            text-align: left;
+        }
+
+        .missing-vars.show {
+            display: block;
+        }
+
+        .missing-vars strong {
+            color: #ff6030;
+            display: block;
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+
+        .missing-vars ul {
+            margin: 10px 0 0 20px;
+        }
+
+        .missing-vars li {
+            margin: 6px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 1.1rem;
+            color: #c62828;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            border-bottom: 3px solid #ddd;
+            flex-wrap: wrap;
+        }
+
+        .tab {
+            padding: 15px 30px;
+            background: none;
+            border: none;
+            border-bottom: 4px solid transparent;
+            cursor: pointer;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #666;
+            transition: all 0.3s;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        .tab:hover {
+            color: #ff6030;
+            border-bottom-color: #ff6030;
+        }
+
+        .tab.active {
+            color: #ff6030;
+            border-bottom-color: #ff6030;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .step {
+            background: #f9f9f9;
+            border-left: 5px solid #ff6030;
+            padding: 25px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+
+        .step h4 {
+            color: #ff6030;
+            font-size: 1.4rem;
+            margin: 0 0 15px 0;
+        }
+
+        .code-block {
+            background: #263238;
+            color: #aed581;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 1rem;
+            overflow-x: auto;
+            margin: 15px 0;
+            line-height: 1.6;
+        }
+
+        .code-comment {
+            color: #78909c;
+        }
+
+        .warning {
+            background: #fff3cd;
+            border-left: 5px solid #ff9800;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+
+        .warning strong {
+            color: #e65100;
+            display: block;
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+
+        .warning p {
+            color: #856404;
+            margin: 5px 0;
+        }
+
+        .info {
+            background: #e8f5e9;
+            border-left: 5px solid #4caf50;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+
+        .info strong {
+            color: #2e7d32;
+            display: block;
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+
+        .info p {
+            color: #1b5e20;
+            margin: 5px 0;
+        }
+
+        .var-card {
+            background: #f9f9f9;
+            border-left: 5px solid #ff6030;
+            padding: 25px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+
+        .var-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .var-name {
+            font-family: 'Courier New', monospace;
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #ff6030;
+        }
+
+        .badge {
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .badge.required {
+            background: #f44336;
+            color: white;
+        }
+
+        .badge.optional {
+            background: #2196f3;
+            color: white;
+        }
+
+        .var-desc {
+            font-size: 1.1rem;
+            color: #444;
+            margin: 10px 0;
+            line-height: 1.6;
+        }
+
+        .var-example {
+            background: #fefefe;
+            border: 2px solid #ddd;
+            padding: 12px;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            font-size: 1rem;
+            margin: 10px 0;
+            overflow-x: auto;
+            color: #666;
+        }
+
+        .var-link {
+            margin-top: 12px;
+            font-size: 1.05rem;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2.5rem;
+            }
+
+            .section {
+                padding: 25px;
+            }
+
+            .tab {
+                padding: 12px 18px;
+                font-size: 1.1rem;
+            }
+
+            .var-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>⚙️ SPOT Setup</h1>
+            <p>Environment Configuration Guide</p>
         </div>
-        <div>
-          <h1>Event Setup</h1>
-          <p>
-            Next, you need to find the Event Key for your competition. Using
-            TheBlueAlliance's search box, find your event. Make sure the year is
-            correct, or else the matches displayed in your admin view won't
-            match the schedule. In your browser's address bar, copy the Event
-            Key, the text following "/event/", and paste it into the box below.
-          </p>
-          <video controls muted playsinline>
-            <source src="/img/TBA_EVENT_KEY.webm" type="video/webm" />
-          </video>
-          <label class="label">
-            <input
-              type="text"
-              id="TBA_EVENT_KEY"
-              name="TBA_EVENT_KEY"
-              class="input"
-              required
-            />
-            <span>TBA Event Key</span>
-          </label>
-        
-          <p>
-            The event code is a unique identifier for your event. It is used to store and retrieve data specific to this event. If you would like to use a previously used event code, select it in the dropdown. If you would like to generate a new one, press the generate button and type in the label for this set of data (e.g., "official", "practice", "debugging"). The event code will be the current TBA event key combined with the specified label. Your TBA event key MUST match the selected code from the dropdown menu for it to work.
-          </p>
-        
-          <div class="event-number-container">
-            <select
-              id="EVENT_NUMBER"
-              name="EVENT_NUMBER"
-              class="input"
-              required
-            >
-              <option value="">Select Event Number</option>
-            </select>
-            <button type="button" id="generateEventNumber">
-              Generate event code
-            </button>
-          </div>
-          </label>
+
+        <div class="status-box">
+            <span class="status-badge loading" id="status-badge">Loading...</span>
+            <div class="status-message" id="status-message">Checking configuration status...</div>
+            <div class="missing-vars" id="missing-vars"></div>
         </div>
-        <div>
-          <h1>Demo Mode</h1>
-          <p>
-            Demo mode disables certain functionality in order to allow use
-            without altering the database
-          </p>
-          <label class="switch" id="toggleSwitch">
-            <input
-              class="switch-input"
-              type="checkbox"
-              id="DEMO"
-              name="DEMO"
-              class="input"
-            />
-            <span class="slider round"></span>
-            <span class="on">ON</span>
-            <span class="off">OFF</span>
-          </label>
+
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('local')">💻 Local Setup</button>
+            <button class="tab" onclick="switchTab('cloud')">☁️ Cloud Deployment</button>
+            <button class="tab" onclick="switchTab('variables')">📝 Variables</button>
+            <button class="tab" onclick="switchTab('help')">❓ Help</button>
+        </div>
+
+        <!-- Local Setup Tab -->
+        <div id="local-tab" class="tab-content active">
+            <div class="section">
+                <h2>Local Development Setup</h2>
+                <p>Configure SPOT on your local machine:</p>
+
+                <div class="step">
+                    <h4>Step 1: Create .env File</h4>
+                    <p>Copy the example template in the root directory:</p>
+                    <div class="code-block"><span class="code-comment"># Windows PowerShell</span>
+Copy-Item .env.example .env
+
+<span class="code-comment"># macOS/Linux</span>
+cp .env.example .env</div>
+                </div>
+
+                <div class="step">
+                    <h4>Step 2: Configure Environment Variables</h4>
+                    <p>Open <code>.env</code> in a text editor and fill in these <strong>required</strong> values:</p>
+                    <ul>
+                        <li><strong>DATABASE_URL</strong> - MongoDB connection string</li>
+                        <li><strong>TBA_API_KEY</strong> - The Blue Alliance API key</li>
+                        <li><strong>EVENT_NUMBER</strong> - Event identifier (e.g., 2025ilch_official)</li>
+                        <li><strong>TBA_EVENT_KEY</strong> - TBA event key (usually same as EVENT_NUMBER)</li>
+                    </ul>
+                    <p>See the "Variables" tab for detailed information.</p>
+                </div>
+
+                <div class="step">
+                    <h4>Step 3: Start the Server</h4>
+                    <p>After saving your <code>.env</code> file:</p>
+                    <div class="code-block">npm start</div>
+                    <p>The server will automatically load your environment configuration.</p>
+                </div>
+
+                <div class="warning">
+                    <strong>⚠️ Security Warning</strong>
+                    <p>Never commit your <code>.env</code> file to version control! It contains sensitive credentials like API keys and database passwords.</p>
+                    <p>The <code>.env</code> file is already in <code>.gitignore</code> - keep it that way.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cloud Deployment Tab -->
+        <div id="cloud-tab" class="tab-content">
+            <div class="section">
+                <h2>Render.com Deployment</h2>
+                <p>Deploy SPOT to Render using environment variables:</p>
+
+                <div class="step">
+                    <h4>Step 1: Access Environment Settings</h4>
+                    <ul>
+                        <li>Log in to <a href="https://dashboard.render.com" target="_blank">dashboard.render.com</a></li>
+                        <li>Select your SPOT service</li>
+                        <li>Click "Environment" in the left sidebar</li>
+                    </ul>
+                </div>
+
+                <div class="step">
+                    <h4>Step 2: Add Environment Variables</h4>
+                    <p>Click "Add Environment Variable" for each:</p>
+                    <ul>
+                        <li><code>DATABASE_URL</code> - MongoDB connection string</li>
+                        <li><code>TBA_API_KEY</code> - The Blue Alliance API key</li>
+                        <li><code>EVENT_NUMBER</code> - Event code (e.g., 2025ilch_official)</li>
+                        <li><code>TBA_EVENT_KEY</code> - TBA event key</li>
+                        <li><code>VERSION</code> - App version (optional)</li>
+                        <li><code>ACCESS_CODE</code> - Admin access code (optional but recommended)</li>
+                    </ul>
+                </div>
+
+                <div class="step">
+                    <h4>Step 3: Deploy</h4>
+                    <p>After adding all variables, trigger a deployment or let Render auto-deploy.</p>
+                </div>
+
+                <div class="info">
+                    <strong>✓ Render Best Practices</strong>
+                    <p>Environment variables on Render are encrypted and secure.</p>
+                    <p>Do NOT add a <code>.env</code> file to your Git repository for production.</p>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>Other Cloud Platforms</h2>
+                
+                <h3>Heroku</h3>
+                <p>Settings → Config Vars → Reveal Config Vars → Add each variable</p>
+
+                <h3>AWS / Azure / DigitalOcean</h3>
+                <p>Look for "Environment Variables", "Secrets", or "Config" in your service settings.</p>
+
+                <h3>Vercel / Netlify</h3>
+                <p>Project Settings → Environment Variables → Add each variable</p>
+
+                <div class="warning">
+                    <strong>🔒 Security Note</strong>
+                    <p>All cloud platforms encrypt environment variables. Never hardcode secrets or commit <code>.env</code> files.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Variables Tab -->
+        <div id="variables-tab" class="tab-content">
+            <div class="section">
+                <h2>Required Environment Variables</h2>
+
+                <div class="var-card">
+                    <div class="var-header">
+                        <span class="var-name">DATABASE_URL</span>
+                        <span class="badge required">Required</span>
+                    </div>
+                    <div class="var-desc">MongoDB connection string for storing all scouting data.</div>
+                    <div class="var-example">mongodb+srv://username:password@cluster.mongodb.net/spot_database</div>
+                    <div class="var-link">Get from: <a href="https://cloud.mongodb.com" target="_blank">MongoDB Atlas</a> → Cluster → Connect → Connection String</div>
+                </div>
+
+                <div class="var-card">
+                    <div class="var-header">
+                        <span class="var-name">TBA_API_KEY</span>
+                        <span class="badge required">Required</span>
+                    </div>
+                    <div class="var-desc">API key for accessing The Blue Alliance data (matches, teams, events).</div>
+                    <div class="var-example">your_tba_api_key_here</div>
+                    <div class="var-link">Get from: <a href="https://www.thebluealliance.com/account" target="_blank">TBA Account Settings</a> → Read API Keys → Generate New</div>
+                </div>
+
+                <div class="var-card">
+                    <div class="var-header">
+                        <span class="var-name">EVENT_NUMBER</span>
+                        <span class="badge required">Required</span>
+                    </div>
+                    <div class="var-desc">Unique identifier for your event. This is the event code used internally by SPOT.</div>
+                    <div class="var-example">2025ilch_official</div>
+                    <div class="var-link">Format: YYYY + region + code + _type (e.g., 2025ilch_official)</div>
+                </div>
+
+                <div class="var-card">
+                    <div class="var-header">
+                        <span class="var-name">TBA_EVENT_KEY</span>
+                        <span class="badge required">Required</span>
+                    </div>
+                    <div class="var-desc">The Blue Alliance event key for API requests. Usually identical to EVENT_NUMBER.</div>
+                    <div class="var-example">2025ilch_official</div>
+                    <div class="var-link">Find at: <a href="https://www.thebluealliance.com/events" target="_blank">TBA Events</a> → Look in the event URL</div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>Optional Environment Variables</h2>
+
+                <div class="var-card">
+                    <div class="var-header">
+                        <span class="var-name">VERSION</span>
+                        <span class="badge optional">Optional</span>
+                    </div>
+                    <div class="var-desc">Application version number used for display and cache busting.</div>
+                    <div class="var-example">1.0.0</div>
+                </div>
+
+                <div class="var-card">
+                    <div class="var-header">
+                        <span class="var-name">ACCESS_CODE</span>
+                        <span class="badge optional">Optional</span>
+                    </div>
+                    <div class="var-desc">Admin access code for protecting setup and admin pages. If not set, admin access is unrestricted (not recommended for production).</div>
+                    <div class="var-example">your_secure_access_code_here</div>
+                </div>
+
+                <div class="var-card">
+                    <div class="var-header">
+                        <span class="var-name">GOOGLE_CLIENT_ID</span>
+                        <span class="badge optional">Optional</span>
+                    </div>
+                    <div class="var-desc">Google OAuth Client ID for authentication features.</div>
+                    <div class="var-link">Get from: <a href="https://console.cloud.google.com" target="_blank">Google Cloud Console</a> → APIs & Services → Credentials</div>
+                </div>
+
+                <div class="var-card">
+                    <div class="var-header">
+                        <span class="var-name">GOOGLE_CLIENT_SECRET</span>
+                        <span class="badge optional">Optional</span>
+                    </div>
+                    <div class="var-desc">Google OAuth Client Secret (required if GOOGLE_CLIENT_ID is set).</div>
+                </div>
+
+                <div class="var-card">
+                    <div class="var-header">
+                        <span class="var-name">FMS_API_USERNAME</span>
+                        <span class="badge optional">Optional</span>
+                    </div>
+                    <div class="var-desc">FMS API username for direct Field Management System integration (official events only).</div>
+                    <div class="var-link">Get from: <a href="https://frc-events.firstinspires.org/services/api" target="_blank">FIRST Events API</a></div>
+                </div>
+
+                <div class="var-card">
+                    <div class="var-header">
+                        <span class="var-name">FMS_API_KEY</span>
+                        <span class="badge optional">Optional</span>
+                    </div>
+                    <div class="var-desc">FMS API key (required if FMS_API_USERNAME is set).</div>
+                </div>
+            </div>
         </div>
 
         <div>
@@ -278,11 +621,116 @@
         </div>
       </form>
 
-      <button id="submit">Submit</button>
+        <!-- Help Tab -->
+        <div id="help-tab" class="tab-content">
+            <div class="section">
+                <h2>Frequently Asked Questions</h2>
+
+                <h3>Where do I get my MongoDB connection string?</h3>
+                <p>1. Go to <a href="https://cloud.mongodb.com" target="_blank">MongoDB Atlas</a></p>
+                <p>2. Click "Connect" on your cluster</p>
+                <p>3. Select "Connect your application"</p>
+                <p>4. Copy the connection string and replace <code>&lt;password&gt;</code> with your actual password</p>
+
+                <h3>What's the difference between EVENT_NUMBER and TBA_EVENT_KEY?</h3>
+                <p><strong>EVENT_NUMBER:</strong> The event identifier used internally by SPOT to filter and organize data in your database.</p>
+                <p><strong>TBA_EVENT_KEY:</strong> The specific event key used when making API calls to The Blue Alliance.</p>
+                <p>In most cases, these are identical (e.g., <code>2025ilch_official</code>).</p>
+
+                <h3>Do I need an ACCESS_CODE?</h3>
+                <p>No, it's optional. If not set, admin and setup pages are unrestricted. For production deployments, use a strong access code for security.</p>
+
+                <h3>Can I change environment variables after deployment?</h3>
+                <p>Yes! Most cloud platforms allow you to update environment variables in their dashboard. Changes typically take effect after restarting the service.</p>
+
+                <h3>What if my configuration is invalid?</h3>
+                <p>SPOT will display this setup page with a detailed error message showing which variables are missing or invalid. Fix the issues in your <code>.env</code> file (local) or hosting dashboard (cloud) and refresh.</p>
+
+                <h3>How do I find my event code?</h3>
+                <p>Visit <a href="https://www.thebluealliance.com/events" target="_blank">The Blue Alliance Events</a>, find your event, and look at the URL. The event key appears in the format <code>/event/2025ilch</code>.</p>
+
+                <h3>Should I commit my .env file to Git?</h3>
+                <p><strong>NO!</strong> Your <code>.env</code> file contains sensitive credentials (API keys, database URLs, passwords). It's already in <code>.gitignore</code>. For production, use environment variables in your hosting platform.</p>
+            </div>
+
+            <div class="section">
+                <h2>Need More Help?</h2>
+                <p><strong>Contact:</strong> <a href="mailto:spot@team3061.org">spot@team3061.org</a></p>
+                <p><strong>GitHub:</strong> <a href="https://github.com/HuskieRobotics/SPOT" target="_blank">HuskieRobotics/SPOT</a></p>
+                <p><strong>Documentation:</strong> Check the README.md in the repository</p>
+            </div>
+        </div>
     </div>
 
-    <script src="./js/demo.js"></script>
-    <script src="./js/ui-elements.js"></script>
-    <script src="./js/script.js"></script>
-  </body>
+    <script>
+        function switchTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            // Remove active from all buttons
+            document.querySelectorAll('.tab').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // Show selected tab
+            document.getElementById(tabName + '-tab').classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        async function loadStatus() {
+            try {
+                const response = await fetch('/setup/api/status');
+                if (!response.ok) throw new Error('Failed to fetch status');
+                
+                const data = await response.json();
+                const badge = document.getElementById('status-badge');
+                const message = document.getElementById('status-message');
+                const missing = document.getElementById('missing-vars');
+                
+                if (data.valid) {
+                    badge.className = 'status-badge success';
+                    badge.textContent = '✓ Configuration Valid';
+                    message.innerHTML = '<strong>All required environment variables are set!</strong><br>SPOT is ready to use.';
+                    missing.classList.remove('show');
+                } else {
+                    badge.className = 'status-badge error';
+                    badge.textContent = '⚠️ Configuration Incomplete';
+                    
+                    let msg = '<strong>Some required environment variables are missing.</strong><br>';
+                    if (data.environment && data.environment.isLocal) {
+                        msg += 'You are running in local development mode. See the "Local Setup" tab for instructions.';
+                    } else {
+                        msg += 'You appear to be running on a cloud platform. See the "Cloud Deployment" tab for instructions.';
+                    }
+                    message.innerHTML = msg;
+                    
+                    if (data.missing && data.missing.length > 0) {
+                        let html = '<strong>Missing Variables:</strong><ul>';
+                        data.missing.forEach(v => {
+                            html += '<li>' + v + '</li>';
+                        });
+                        html += '</ul>';
+                        missing.innerHTML = html;
+                        missing.classList.add('show');
+                    }
+                }
+            } catch (err) {
+                console.error('Status check failed:', err);
+                document.getElementById('status-badge').className = 'status-badge error';
+                document.getElementById('status-badge').textContent = '⚠️ Error Loading';
+                document.getElementById('status-message').textContent = 'Could not load configuration status. Check your connection and refresh the page.';
+            }
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', loadStatus);
+        } else {
+            loadStatus();
+        }
+
+        setInterval(loadStatus, 30000);
+    </script>
+</body>
 </html>

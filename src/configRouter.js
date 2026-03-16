@@ -1,12 +1,11 @@
 const express = require("express");
 const path = require("path");
 let router = express.Router();
-const config = require("../config/config.json");
+const { getPublicConfig } = require("./lib/config");
 
 router.get("/config.json", (req, res) => {
-  const configClone = { ...config };
-  delete configClone.secrets; //dont send secrets to client
-  res.json(configClone);
+  // Send config without secrets (using getPublicConfig helper)
+  res.json(getPublicConfig());
 });
 
 router.get("/match-scouting.json", (req, res) => {

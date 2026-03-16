@@ -3,7 +3,7 @@ const { TeamMatchPerformance, Event } = require("../../lib/db.js");
 //const { executePipeline } = require("../public/js/analysisPipeline.js");
 const { setPath } = require("../../lib/util.js");
 const axios = require("axios");
-const config = require("../../../config/config.json");
+const config = require("../../lib/config");
 const chalk = require("chalk");
 let tbaResults;
 let tbaOPRResults;
@@ -150,7 +150,7 @@ router.delete("/dataset/:id", async (req, res) => {
 if (!config.secrets.TBA_API_KEY) {
   console.error(
     chalk.whiteBright.bgRed.bold(
-      "TBA_API_KEY not found in config.json file! SPOT will not properly function without this.",
+      "TBA_API_KEY not found in environment variables! SPOT will not properly function without this.",
     ),
   );
 }
