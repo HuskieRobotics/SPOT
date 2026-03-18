@@ -78,6 +78,42 @@ new DataTransformer("deepAverage", (dataset, outputPath, options) => {
       }
     }
 
+    /*
+    * FIXME: THE BELOW METHOD MIGHT NOT BE CORRECT 
+    */
+    // Recursively sum nested objects and count occurrences of numeric leaves
+const sumAndCountNested = (obj, sum = {}, count = {}) => {
+  if (typeof obj === 'number') {
+    return {
+      sum: obj,
+      count: 1
+    };
+  }
+  if (Array.isArray(obj)) {
+    if (!obj.every(value => typeof value === 'number')) return { sum: undefined, count: undefined };
+    return {
+      sum: obj.reduce((a, v) => a + v, 0),
+      count: obj.length
+    };
+  }
+  if (typeof obj === 'object' && obj !== null) {
+    const sumResult = {};
+    const countResult = {};
+    for (let key in obj) {
+      const { sum, count } = sumAndCountNested(obj[key]);
+      if (sum !== undefined && count !== undefined) {
+        sumResult[key] = (sumResult[key] || 0) + sum;
+        countResult[key] = (countResult[key] || 0) + count;
+      }
+    }
+    return {
+      sum: Object.keys(sumResult).length > 0 ? sumResult : undefined,
+      count: Object.keys(countResult).length > 0 ? countResult : undefined
+    };
+  }
+  return { sum: undefined, count: undefined };
+};
+
     const avg = count > 0 ? divideNested(sum, count) : null;
     setPath(team, outputPath, avg);
   }
