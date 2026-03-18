@@ -24,6 +24,28 @@ if (savedTheme == null || savedTheme == "light") {
   root.setAttribute("data-theme", "dark");
 }
 
+const restart_button = document.getElementById("server-restart");
+restart_button.addEventListener("click", async () => {
+  const restart_modal = new Modal("small", false).header(
+    "Are you sure you want to restart the server?",
+  );
+  const confirm_button = document.createElement("button");
+  confirm_button.innerHTML = "Yes";
+  const deny_button = document.createElement("button");
+  deny_button.innerHTML = "No";
+
+  restart_modal.element.appendChild(confirm_button);
+  restart_modal.element.appendChild(deny_button);
+
+  confirm_button.addEventListener("click", async () => {
+    new Popup("success", "Restarting Server...", 2000);
+  });
+
+  deny_button.addEventListener("click", async () => {
+    restart_modal.modalExit();
+  });
+});
+
 const scouters = {};
 
 (async () => {
