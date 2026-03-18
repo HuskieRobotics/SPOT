@@ -2,8 +2,8 @@
  * @type {DataTransformer}
  * Removes duplicate TMPs for the same team and match, keeping only the most recent one
  */
-__TEAM__
-new DataTransformer("removeDuplicates", (dataset, outputPath, options) => {
+__TMP__
+new DataTransformer("removeDuplicates", (dataset) => {
     // Create a map to track the most recent TMP for each team-match combination
     const latestTmpsByTeamMatch = {};
     
@@ -21,4 +21,4 @@ new DataTransformer("removeDuplicates", (dataset, outputPath, options) => {
     
     return dataset;
 })
-__/TEAM__
+__/TMP__

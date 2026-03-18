@@ -67,17 +67,14 @@ new DataTransformer("deepAverage", (dataset, outputPath, options) => {
       const value = getPath(tmp, options.path);
       if (value !== undefined) {
         const summedValue = sumNested(value);
-        if (summedValue === undefined)
-        {
-          if (sum === null) {
+        if (summedValue === undefined) continue;
+
+        if (sum === null) {
           sum = summedValue;
-          } 
-          else
-          {
-            sum = addNested(sum, summedValue);
-          }
-          count++;
-        }        
+        } else {
+          sum = addNested(sum, summedValue);
+        }
+        count++;
       }
     }
 
