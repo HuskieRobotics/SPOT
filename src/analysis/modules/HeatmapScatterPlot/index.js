@@ -137,7 +137,7 @@ class HeatmapScatterPlot {
 
   async setData(data) {
     const fieldImg = await getSvgDataPng(
-      "/analysis/" + this.moduleConfig.options.imgPath,
+      "/" + this.moduleConfig.options.imgPath,
     );
 
     const layout = {

@@ -15,7 +15,6 @@ class RadarChart {
   }
 
   formatData(teams, dataset) {
-    console.log(`radar teams recieved: ${teams}`);
     let filteredTeams = teams.filter((team) => team != "|");
     const lines = filteredTeams.map((team) => {
       const data = [];

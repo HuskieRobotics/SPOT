@@ -8,11 +8,19 @@ let positionConfig = {
   LOCK_BORDER_COLOR: "#00ffa5",
 };
 
+const swapZoneButtonLocationsEnabled = (async () => {
+  if (typeof config === "undefined") {
+    return false;
+  }
+  const loadedConfig = await config;
+  return loadedConfig.SWAP_ZONE_BUTTON_LOCATIONS === true;
+})();
+
 let lockedPosition;
 let lockedTime;
 
 executables["position"] = {
-  execute(button, layers) {
+  async execute(button, layers) {
     //position lock check
     if (lockedTime + positionConfig.POSITION_LOCK_DELAY_MS > Date.now()) {
       // if there's a position in lockedPosition, put it in the action.
@@ -45,6 +53,7 @@ executables["position"] = {
             align-items: center;
             background-color: white;
         `;
+    const shouldRotateField = await swapZoneButtonLocationsEnabled;
     const positionImage = new Image();
     positionImage.src = "/img/field.svg";
     positionImage.style.cssText = `
@@ -52,6 +61,7 @@ executables["position"] = {
             height: 100%;
             object-fit: contain;
             background-color: black;
+            transform: rotate(${shouldRotateField ? 180 : 0}deg);
         `;
     positionContainer.appendChild(positionImage);
     document.body.appendChild(positionContainer);
@@ -80,6 +90,11 @@ executables["position"] = {
       x = Math.round(Math.max(Math.min(x, 100), 0));
       y = Math.round(Math.max(Math.min(y, 100), 0));
 
+      if (shouldRotateField) {
+        x = 100 - x;
+        y = 100 - y;
+      }
+
       //add the pos to the last action of the action queue (SHOULD be the action from the button that triggered this)
       if (!actionQueue[actionQueue.length - 1].other)
         actionQueue[actionQueue.length - 1].other = {};
@@ -91,7 +106,7 @@ executables["position"] = {
       clickIndicator.style.left = `${e.clientX - 10}px`;
       clickIndicator.style.top = `${e.clientY - 10}px`;
       document.body.appendChild(clickIndicator);
-      
+
       // Remove indicator after animation completes
       setTimeout(() => {
         if (clickIndicator.parentNode) {
