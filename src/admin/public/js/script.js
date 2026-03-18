@@ -38,7 +38,13 @@ restart_button.addEventListener("click", async () => {
   restart_modal.element.appendChild(deny_button);
 
   confirm_button.addEventListener("click", async () => {
-    new Popup("success", "Restarting Server...", 2000);
+    const restart = await fetch("/admin/restart/Yes");
+
+    if (restart.status == 200) {
+      console.log(restart.status);
+    } else if (restart.status == 400) {
+      new Popup("error", "There was a problem restarting the server!", 2000);
+    }
   });
 
   deny_button.addEventListener("click", async () => {
