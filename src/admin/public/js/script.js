@@ -50,8 +50,6 @@ restart_button.addEventListener("click", async () => {
       },
     });
 
-    console.log(restart);
-
     restart.then(
       (response) => {
         if (response.status == 400) {
