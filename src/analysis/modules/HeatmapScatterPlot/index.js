@@ -41,12 +41,13 @@ class HeatmapScatterPlot {
           x: filteredActionQueue.map((a) => {
             if (getPath(a, this.moduleConfig.options.coordinatePath).x > 69.5) {
               return (
-                100 - getPath(a, this.moduleConfig.options.coordinatePath).x
+                (100 - getPath(a, this.moduleConfig.options.coordinatePath).x) *
+                2
               );
             } else if (
               getPath(a, this.moduleConfig.options.coordinatePath).x < 30.5
             ) {
-              return getPath(a, this.moduleConfig.options.coordinatePath).x;
+              return getPath(a, this.moduleConfig.options.coordinatePath).x * 2;
             }
           }),
           y: filteredActionQueue.map((a) => {
@@ -61,7 +62,7 @@ class HeatmapScatterPlot {
             }
           }),
           marker: {
-            size: 16,
+            size: 13,
             line: {
               color: "white",
               width: 1,
@@ -92,11 +93,13 @@ class HeatmapScatterPlot {
       showlegend: true,
       x: filteredAllActionQueue.map((a) => {
         if (getPath(a, this.moduleConfig.options.coordinatePath).x > 69.5) {
-          return 100 - getPath(a, this.moduleConfig.options.coordinatePath).x;
+          return (
+            (100 - getPath(a, this.moduleConfig.options.coordinatePath).x) * 2
+          );
         } else if (
           getPath(a, this.moduleConfig.options.coordinatePath).x < 30.5
         ) {
-          return getPath(a, this.moduleConfig.options.coordinatePath).x;
+          return getPath(a, this.moduleConfig.options.coordinatePath).x * 2;
         }
       }),
       y: filteredAllActionQueue.map((a) => {
@@ -147,6 +150,7 @@ class HeatmapScatterPlot {
         pad: 12,
         // b: 40
       },
+      height: 500,
       title: {
         text: this.moduleConfig.name,
         font: {
