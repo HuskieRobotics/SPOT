@@ -41,15 +41,13 @@ new DataTransformer("sumAverage", (dataset, outputPath, options) => {
                 return acc + getPath(tmp, path, 0);
             }, 0);
 
-            if (groupCount === 0){
+            if (groupCount === 0) continue;
 
-                const avg = getPath(tmp, group.averagePath, null);
-                if (avg === null || typeof avg === "undefined")
-                {
-                    weightedSum += avg * groupCount;
-                    totalCount += groupCount;
-                }
-            }
+            const avg = getPath(tmp, group.averagePath, null);
+            if (avg === null || typeof avg === "undefined") continue;
+
+            weightedSum += avg * groupCount;
+            totalCount += groupCount;
         }
 
         const average = totalCount === 0 ? null : weightedSum / totalCount;
@@ -103,17 +101,13 @@ new DataTransformer("sumAverage", (dataset, outputPath, options) => {
                 return acc + getPath(team, path, 0);
             }, 0);
 
-            if (groupCount === 0)
-            {
-                const avg = getPath(team, group.averagePath, null);
-                if (avg === null || typeof avg === "undefined")
-                {
-                    weightedSum += avg * groupCount;
-                    totalCount += groupCount;
-                }
+            if (groupCount === 0) continue;
 
-            }
-            
+            const avg = getPath(team, group.averagePath, null);
+            if (avg === null || typeof avg === "undefined") continue;
+
+            weightedSum += avg * groupCount;
+            totalCount += groupCount;
         }
 
         const average = totalCount === 0 ? null : weightedSum / totalCount;
