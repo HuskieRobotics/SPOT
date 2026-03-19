@@ -2,10 +2,15 @@
   {
     "view": "team",
     "module": "PerformanceTimePlot",
-    "name": "Performance By Each Match",
+    "name": "Robot Action Counts Each Match",
     "position": "main",
     "options": {
-      "trackedStats": ["scores.auto", "scores.endgame", "scores.total"]
+      "trackedStats": [
+        "counts.shooting",
+        "counts.passing",
+        "counts.storing",
+        "counts.defense"
+      ]
     }
   },
   {
