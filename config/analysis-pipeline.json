@@ -1,6 +1,11 @@
 [
   {
     "type": "tmp",
+    "name": "removeDuplicates",
+    "outputPath": "matches"
+  },
+  {
+    "type": "tmp",
     "name": "countActions",
     "outputPath": "counts",
     "options": {
