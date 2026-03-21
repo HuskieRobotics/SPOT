@@ -77,8 +77,8 @@ new DataTransformer("deepAverage", (dataset, outputPath, options) => {
         }
 
         const tmpsWithThisPath = tmps.filter((tmp) => getPath(tmp, options.path) !== null)
-        //count = tmpsWithThisPath.length;
-        count = 1;
+        count = tmpsWithThisPath.length;
+        //count = 1; // for debugging purposes, set count = 1 to see the sum instead of the average
       }
     }
 
