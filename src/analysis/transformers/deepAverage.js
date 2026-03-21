@@ -25,6 +25,25 @@ new DataTransformer("deepAverage", (dataset, outputPath, options) => {
     // Example leaf: AZone.StopShooting
     const sums = {};
     const counts = {};
+    const leafShape = {};
+
+    // Marks a leaf path as expected in the output, even if it later has no non-zero samples.
+    const addLeafShape = (pathSegments) => {
+      let node = leafShape;
+      for (let i = 0; i < pathSegments.length; i++) {
+        const segment = pathSegments[i];
+        const isLeaf = i === pathSegments.length - 1;
+
+        if (isLeaf) {
+          node[segment] = true;
+        } else {
+          if (node[segment] === undefined || typeof node[segment] !== "object" || node[segment] === null) {
+            node[segment] = {};
+          }
+          node = node[segment];
+        }
+      }
+    };
 
     // Adds one numeric value into the nested sum/count trees at a specific leaf path.
     const addPathValue = (pathSegments, value) => {
@@ -59,6 +78,10 @@ new DataTransformer("deepAverage", (dataset, outputPath, options) => {
     // Each leaf keeps its own denominator (count), so sparse paths are handled correctly.
     const collectNumericLeaves = (value, pathSegments) => {
       if (typeof value === "number" && Number.isFinite(value)) {
+        // Track shape from all numeric leaves, including zeros, so output paths always exist.
+        addLeafShape(pathSegments);
+        // Treat 0 as missing data for averaging so it does not contribute to the denominator.
+        if (value === 0) return; 
         addPathValue(pathSegments, value);
         return;
       }
@@ -71,6 +94,20 @@ new DataTransformer("deepAverage", (dataset, outputPath, options) => {
           pathSegments.pop();
         }
       }
+    };
+
+    // Fill every expected leaf path; if an averaged value is missing, emit 0 for that leaf.
+    const fillMissingLeaves = (shapeNode, avgNode) => {
+      if (shapeNode === true) {
+        return avgNode === undefined ? 0 : avgNode;
+      }
+
+      const result = {};
+      for (const key of Object.keys(shapeNode)) {
+        const childAvgNode = avgNode && typeof avgNode === "object" ? avgNode[key] : undefined;
+        result[key] = fillMissingLeaves(shapeNode[key], childAvgNode);
+      }
+      return result;
     };
 
     // Rebuild the output object by dividing sum/count at each numeric leaf.
@@ -103,7 +140,8 @@ new DataTransformer("deepAverage", (dataset, outputPath, options) => {
 
     // If no numeric data exists for this team/path, store null to indicate no average.
     const avgTree = computeAverageTree(sums, counts);
-    const avg = avgTree === undefined ? null : avgTree;
+    const hasShape = Object.keys(leafShape).length > 0;
+    const avg = hasShape ? fillMissingLeaves(leafShape, avgTree) : null;
     setPath(team, outputPath, avg);
   }
 
