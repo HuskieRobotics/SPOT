@@ -1,30 +1,50 @@
 /**
+ * Computes a weighted average from multiple rating averages, where each group's weight is its total rating count.
  * @type {DataTransformer}
  * @param options.groups {Object[]} [{averagePath: "scores.phaseRating", countPaths: ["counts.phaseRating1", ...]}]
  */
 __TMP__
 new DataTransformer("sumAverage", (dataset, outputPath, options) => {
-    function deriveCountPaths(averagePath) {
+    function deriveCountPaths(entity, averagePath) {
         const prefix = "scores.";
         if (!averagePath || !averagePath.startsWith(prefix)) {
             throw new Error(`sumAverage could not derive countPaths from ${averagePath}`);
         }
 
-        const ratingMetrics = ["Passing", "Defense", "Storing", "Shooting"];
+        // Example: scores.teleopTransitionCollectingRating -> teleopTransitionCollectingRating
         const base = averagePath.slice(prefix.length);
         if (!base.endsWith("Rating")) {
             throw new Error(`sumAverage could not derive countPaths from ${averagePath}`);
         }
 
-        const withoutRating = base.slice(0, -"Rating".length);
-        const metric = ratingMetrics.find((name) => withoutRating.endsWith(name));
-        if (!metric) {
+        // We infer valid count keys from existing counts data so new metrics work automatically.
+        const counts = getPath(entity, "counts", {});
+        const ratingRegex = /^(.*)Rating(.+?)(\d+)$/;
+        const matches = [];
+
+        for (let key of Object.keys(counts)) {
+            const match = key.match(ratingRegex);
+            if (!match) continue;
+
+            const phase = match[1];
+            const metric = match[2];
+            const ratingNum = Number(match[3]);
+
+            // Convert count key form (phaseRatingMetricN) to average form (phaseMetricRating).
+            const normalized = `${phase}${metric}Rating`;
+            if (normalized !== base) continue;
+
+            matches.push({ ratingNum, path: `counts.${key}` });
+        }
+
+        if (matches.length === 0) {
             throw new Error(`sumAverage could not derive countPaths from ${averagePath}`);
         }
 
-        const phase = withoutRating.slice(0, -metric.length);
-        const countPrefix = `counts.${phase}Rating${metric}`;
-        return [1, 2, 3, 4].map((num) => `${countPrefix}${num}`);
+        // Keep path order stable: Rating1, Rating2, Rating3, ...
+        return matches
+            .sort((a, b) => a.ratingNum - b.ratingNum)
+            .map((match) => match.path);
     }
 
     if (!options || !Array.isArray(options.groups)) {
@@ -36,7 +56,7 @@ new DataTransformer("sumAverage", (dataset, outputPath, options) => {
         let totalCount = 0;
 
         for (let group of options.groups) {
-            const countPaths = group.countPaths || deriveCountPaths(group.averagePath);
+            const countPaths = group.countPaths || deriveCountPaths(tmp, group.averagePath);
             const groupCount = countPaths.reduce((acc, path) => {
                 return acc + getPath(tmp, path, 0);
             }, 0);
@@ -59,32 +79,52 @@ new DataTransformer("sumAverage", (dataset, outputPath, options) => {
 __/TMP__
 
 /**
+ * Computes a weighted average from multiple rating averages, where each group's weight is its total rating count.
  * @type {DataTransformer}
  * @param options.groups {Object[]} [{averagePath: "scores.phaseRating", countPaths: ["counts.phaseRating1", ...]}]
  */
 __TEAM__
 new DataTransformer("sumAverage", (dataset, outputPath, options) => {
-    function deriveCountPaths(averagePath) {
+    function deriveCountPaths(entity, averagePath) {
         const prefix = "scores.";
         if (!averagePath || !averagePath.startsWith(prefix)) {
             throw new Error(`sumAverage could not derive countPaths from ${averagePath}`);
         }
 
-        const ratingMetrics = ["Passing", "Defense", "Storing", "Shooting"];
+        // Example: scores.teleopTransitionCollectingRating -> teleopTransitionCollectingRating
         const base = averagePath.slice(prefix.length);
         if (!base.endsWith("Rating")) {
             throw new Error(`sumAverage could not derive countPaths from ${averagePath}`);
         }
 
-        const withoutRating = base.slice(0, -"Rating".length);
-        const metric = ratingMetrics.find((name) => withoutRating.endsWith(name));
-        if (!metric) {
+        // We infer valid count keys from existing counts data so new metrics work automatically.
+        const counts = getPath(entity, "counts", {});
+        const ratingRegex = /^(.*)Rating(.+?)(\d+)$/;
+        const matches = [];
+
+        for (let key of Object.keys(counts)) {
+            const match = key.match(ratingRegex);
+            if (!match) continue;
+
+            const phase = match[1];
+            const metric = match[2];
+            const ratingNum = Number(match[3]);
+
+            // Convert count key form (phaseRatingMetricN) to average form (phaseMetricRating).
+            const normalized = `${phase}${metric}Rating`;
+            if (normalized !== base) continue;
+
+            matches.push({ ratingNum, path: `counts.${key}` });
+        }
+
+        if (matches.length === 0) {
             throw new Error(`sumAverage could not derive countPaths from ${averagePath}`);
         }
 
-        const phase = withoutRating.slice(0, -metric.length);
-        const countPrefix = `counts.${phase}Rating${metric}`;
-        return [1, 2, 3, 4].map((num) => `${countPrefix}${num}`);
+        // Keep path order stable: Rating1, Rating2, Rating3, ...
+        return matches
+            .sort((a, b) => a.ratingNum - b.ratingNum)
+            .map((match) => match.path);
     }
 
     if (!options || !Array.isArray(options.groups)) {
@@ -96,7 +136,7 @@ new DataTransformer("sumAverage", (dataset, outputPath, options) => {
         let totalCount = 0;
 
         for (let group of options.groups) {
-            const countPaths = group.countPaths || deriveCountPaths(group.averagePath);
+            const countPaths = group.countPaths || deriveCountPaths(team, group.averagePath);
             const groupCount = countPaths.reduce((acc, path) => {
                 return acc + getPath(team, path, 0);
             }, 0);

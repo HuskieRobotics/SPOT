@@ -78,7 +78,7 @@
           ]
         },
         {
-          "name": "Storing",
+          "name": "Collecting",
           "times": [
             {
               "name": "Auto",
@@ -300,7 +300,7 @@
           "path": "cycles.passingTime.averageTimeSeconds"
         },
         {
-          "name": "Storing",
+          "name": "Collecting",
           "path": "cycles.storingTime.averageTimeSeconds"
         },
         {
@@ -354,7 +354,7 @@
           "sort": 1
         },
         {
-          "name": "Average Storing Rating",
+          "name": "Average Collecting Rating",
           "path": "averageScores.storingRating",
           "decimals": 2,
           "sort": 1
@@ -507,7 +507,7 @@
           "sort": 1
         },
         {
-          "name": "Alliance Zone Average Storing Rating",
+          "name": "Alliance Zone Average Collecting Rating",
           "path": "zoneActionRatingAverages.AZone.Storing",
           "hideIfValue": 0,
           "decimals": 2,
@@ -528,7 +528,7 @@
           "sort": 1
         },
         {
-          "name": "Neutral Zone Average Storing Rating",
+          "name": "Neutral Zone Average Collecting Rating",
           "path": "zoneActionRatingAverages.NeutralZone.Storing",
           "hideIfValue": 0,
           "decimals": 2,
@@ -549,7 +549,7 @@
           "sort": 1
         },
         {
-          "name": "Opposing Zone Average Storing Rating",
+          "name": "Opposing Zone Average Collecting Rating",
           "path": "zoneActionRatingAverages.OAZone.Storing",
           "hideIfValue": 0,
           "decimals": 2,
