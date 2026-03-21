@@ -296,7 +296,7 @@
         },
         {
           "name": "Collecting",
-          "path": "cycles.CollectingTime.averageTimeSeconds"
+          "path": "cycles.collectingTime.averageTimeSeconds"
         },
         {
           "name": "Defense",

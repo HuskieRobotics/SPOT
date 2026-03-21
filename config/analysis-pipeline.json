@@ -129,7 +129,7 @@
   {
     "type": "tmp",
     "name": "cycle",
-    "outputPath": "cycle.CollectingTime",
+    "outputPath": "cycle.collectingTime",
     "options": {
       "startAction": [
         "teleopTransitionCollecting",
