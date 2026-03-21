@@ -73,7 +73,7 @@
           ]
         },
         {
-          "name": "Storing",
+          "name": "Collecting",
           "times": [
             {
               "name": "Auto",
@@ -81,27 +81,27 @@
             },
             {
               "name": "Transition",
-              "path": "averageScores.teleopTransitionStoringRating"
+              "path": "averageScores.teleopTransitionCollectingRating"
             },
             {
               "name": "Active 1",
-              "path": "averageScores.activeShift1StoringRating"
+              "path": "averageScores.activeShift1CollectingRating"
             },
             {
               "name": "Active 2",
-              "path": "averageScores.activeShift2StoringRating"
+              "path": "averageScores.activeShift2CollectingRating"
             },
             {
               "name": "Inactive 1",
-              "path": "averageScores.inactiveShift1StoringRating"
+              "path": "averageScores.inactiveShift1CollectingRating"
             },
             {
               "name": "Inactive 2",
-              "path": "averageScores.inactiveShift2StoringRating"
+              "path": "averageScores.inactiveShift2CollectingRating"
             },
             {
               "name": "Endgame",
-              "path": "averageScores.endgameStoringRating"
+              "path": "averageScores.endgameCollectingRating"
             },
             {
               "name": "Auto",
@@ -295,8 +295,8 @@
           "path": "cycles.passingTime.averageTimeSeconds"
         },
         {
-          "name": "Storing",
-          "path": "cycles.storingTime.averageTimeSeconds"
+          "name": "Collecting",
+          "path": "cycles.CollectingTime.averageTimeSeconds"
         },
         {
           "name": "Defense",
@@ -349,8 +349,8 @@
           "sort": 1
         },
         {
-          "name": "Average Storing Rating",
-          "path": "averageScores.storingRating",
+          "name": "Average Collecting Rating",
+          "path": "averageScores.CollectingRating",
           "decimals": 2,
           "sort": 1
         },
@@ -502,8 +502,8 @@
           "sort": 1
         },
         {
-          "name": "Alliance Zone Average Storing Rating",
-          "path": "zoneActionRatingAverages.AZone.Storing",
+          "name": "Alliance Zone Average Collecting Rating",
+          "path": "zoneActionRatingAverages.AZone.Collecting",
           "hideIfValue": 0,
           "decimals": 2,
           "sort": 1
@@ -523,8 +523,8 @@
           "sort": 1
         },
         {
-          "name": "Neutral Zone Average Storing Rating",
-          "path": "zoneActionRatingAverages.NeutralZone.Storing",
+          "name": "Neutral Zone Average Collecting Rating",
+          "path": "zoneActionRatingAverages.NeutralZone.Collecting",
           "hideIfValue": 0,
           "decimals": 2,
           "sort": 1
@@ -544,8 +544,8 @@
           "sort": 1
         },
         {
-          "name": "Opposing Zone Average Storing Rating",
-          "path": "zoneActionRatingAverages.OAZone.Storing",
+          "name": "Opposing Zone Average Collecting Rating",
+          "path": "zoneActionRatingAverages.OAZone.Collecting",
           "hideIfValue": 0,
           "decimals": 2,
           "sort": 1
