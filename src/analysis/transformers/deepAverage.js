@@ -1,6 +1,7 @@
 /**
  * @type {DataTransformer}
- * Recursively averages all numeric leaf values in a nested object structure
+ * Recursively averages all numeric values in the path of all the tmps for an object.
+ * @param options.path {String} a numerical path in a tmp to be averaged, or a path containing an object with numerical paths to be averaged
  */
 __TEAM__
 new DataTransformer("deepAverage", (dataset, outputPath, options) => {
@@ -58,11 +59,11 @@ new DataTransformer("deepAverage", (dataset, outputPath, options) => {
         return Object.keys(result).length > 0 ? result : undefined;
       }
       return obj;
-    };
+    }; 
 
     let sum = null;
     let count = 0;
-
+    
     for (let tmp of tmps) {
       const value = getPath(tmp, options.path);
       if (value !== undefined) {
@@ -74,45 +75,16 @@ new DataTransformer("deepAverage", (dataset, outputPath, options) => {
         } else {
           sum = addNested(sum, summedValue);
         }
-        count++;
-      }
-    }
 
-    /*
-    * FIXME: THE BELOW METHOD MIGHT NOT BE CORRECT 
-    */
-    // Recursively sum nested objects and count occurrences of numeric leaves
-const sumAndCountNested = (obj, sum = {}, count = {}) => {
-  if (typeof obj === 'number') {
-    return {
-      sum: obj,
-      count: 1
-    };
-  }
-  if (Array.isArray(obj)) {
-    if (!obj.every(value => typeof value === 'number')) return { sum: undefined, count: undefined };
-    return {
-      sum: obj.reduce((a, v) => a + v, 0),
-      count: obj.length
-    };
-  }
-  if (typeof obj === 'object' && obj !== null) {
-    const sumResult = {};
-    const countResult = {};
-    for (let key in obj) {
-      const { sum, count } = sumAndCountNested(obj[key]);
-      if (sum !== undefined && count !== undefined) {
-        sumResult[key] = (sumResult[key] || 0) + sum;
-        countResult[key] = (countResult[key] || 0) + count;
+        const pathResult = getPath(tmp, options.path)
+
+        if((pathResult !== null) && (pathResult === options.path))
+        {
+          count++;
+        }
+        
       }
     }
-    return {
-      sum: Object.keys(sumResult).length > 0 ? sumResult : undefined,
-      count: Object.keys(countResult).length > 0 ? countResult : undefined
-    };
-  }
-  return { sum: undefined, count: undefined };
-};
 
     const avg = count > 0 ? divideNested(sum, count) : null;
     setPath(team, outputPath, avg);
