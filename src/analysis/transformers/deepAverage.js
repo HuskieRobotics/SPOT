@@ -6,83 +6,104 @@
 __TEAM__
 new DataTransformer("deepAverage", (dataset, outputPath, options) => {
   options = Object.assign({ path: "" }, options);
+  const tmpsByTeam = {};
 
+  // Build a one-time lookup table so each team can access only its own tmps.
+  for (const tmp of (dataset.tmps || [])) {
+    const robotKey = String(tmp.robotNumber);
+    if (!tmpsByTeam[robotKey]) tmpsByTeam[robotKey] = [];
+    tmpsByTeam[robotKey].push(tmp);
+  }
+
+  // Process one team at a time and write the averaged nested output to that team object.
   for (let teamNum in dataset.teams) {
     const team = dataset.teams[teamNum];
-    const tmps = (dataset.tmps || []).filter(tmp => tmp.robotNumber == teamNum);
+    // Only use tmps from the current team when computing this team's average tree.
+    const tmps = tmpsByTeam[String(teamNum)] || [];
 
-    const addNested = (a, b) => {
-      if (b === undefined) return a;
-      if (a === undefined) return b;
-      if (typeof a === 'number' && typeof b === 'number') return a + b;
-      if (typeof a === 'object' && typeof b === 'object' && a !== null && b !== null) {
-        const result = {};
-        for (let key in a) {
-          result[key] = addNested(a[key], b[key]);
-        }
-        for (let key in b) {
-          if (!(key in a)) result[key] = b[key];
-        }
-        return result;
-      }
-      return a;
-    };
-    
-    // Recursively sum nested objects
-    const sumNested = (obj) => {
-      if (typeof obj === 'number') return obj;
-      if (Array.isArray(obj)) {
-        if (!obj.every(value => typeof value === 'number')) return undefined;
-        return obj.reduce((a, v) => a + v, 0);
-      }
-      if (typeof obj === 'object' && obj !== null) {
-        const result = {};
-        for (let key in obj) {
-          const summed = sumNested(obj[key]);
-          if (summed !== undefined) result[key] = summed;
-        }
-        return Object.keys(result).length > 0 ? result : undefined;
-      }
-      return undefined;
-    };
+    // Mirror trees that store per-leaf totals and per-leaf sample counts.
+    // Example leaf: AZone.StopShooting
+    const sums = {};
+    const counts = {};
 
-    // Recursively divide by count
-    const divideNested = (obj, count) => {
-      if (typeof obj === 'number') return obj / count;
-      if (obj === undefined) return undefined;
-      if (typeof obj === 'object' && obj !== null) {
-        const result = {};
-        for (let key in obj) {
-          const divided = divideNested(obj[key], count);
-          if (divided !== undefined) result[key] = divided;
-        }
-        return Object.keys(result).length > 0 ? result : undefined;
-      }
-      return obj;
-    }; 
+    // Adds one numeric value into the nested sum/count trees at a specific leaf path.
+    const addPathValue = (pathSegments, value) => {
+      let sumNode = sums;
+      let countNode = counts;
 
-    let sum = null;
-    let count;
-    
-    for (let tmp of tmps) {
-      const pathData = getPath(tmp, options.path);
-      if (pathData !== undefined) {
-        const summedValue = sumNested(pathData);
-        if (summedValue === undefined) continue;
+      // Walk each segment in the leaf path and create missing intermediate objects as needed.
+      for (let i = 0; i < pathSegments.length; i++) {
+        const segment = pathSegments[i];
+        const isLeaf = i === pathSegments.length - 1;
 
-        if (sum === null) {
-          sum = summedValue;
+        if (isLeaf) {
+          // Final segment in the path: update the running total and sample count for this exact metric.
+          sumNode[segment] = (sumNode[segment] || 0) + value;
+          countNode[segment] = (countNode[segment] || 0) + 1;
         } else {
-          sum = addNested(sum, summedValue);
+          // Intermediate segment in the path: ensure branch objects exist before descending deeper.
+          if (sumNode[segment] === undefined || typeof sumNode[segment] !== "object" || sumNode[segment] === null) {
+            sumNode[segment] = {};
+          }
+          if (countNode[segment] === undefined || typeof countNode[segment] !== "object" || countNode[segment] === null) {
+            countNode[segment] = {};
+          }
+          // Move both cursors to the child branch so the next path segment is processed at the correct depth.
+          sumNode = sumNode[segment];
+          countNode = countNode[segment];
         }
+      }
+    };
 
-        const tmpsWithThisPath = tmps.filter((tmp) => getPath(tmp, options.path) !== null)
-        count = tmpsWithThisPath.length;
-        //count = 1; // for debugging purposes, set count = 1 to see the sum instead of the average
+    // Walk a nested object and collect all finite numeric leaves.
+    // Each leaf keeps its own denominator (count), so sparse paths are handled correctly.
+    const collectNumericLeaves = (value, pathSegments) => {
+      if (typeof value === "number" && Number.isFinite(value)) {
+        addPathValue(pathSegments, value);
+        return;
+      }
+
+      if (value && typeof value === "object") {
+        // Visit each child key depth-first while reusing the same path array to avoid extra allocations.
+        for (const key of Object.keys(value)) {
+          pathSegments.push(key);
+          collectNumericLeaves(value[key], pathSegments);
+          pathSegments.pop();
+        }
+      }
+    };
+
+    // Rebuild the output object by dividing sum/count at each numeric leaf.
+    // Branches with no valid numeric descendants are omitted.
+    const computeAverageTree = (sumNode, countNode) => {
+      if (typeof sumNode === "number" && typeof countNode === "number") {
+        return countNode > 0 ? sumNode / countNode : undefined;
+      }
+
+      if (!sumNode || typeof sumNode !== "object") return undefined;
+
+      const result = {};
+      // Recurse through every branch in the sum tree and compute a matching averaged branch.
+      for (const key of Object.keys(sumNode)) {
+        const avgValue = computeAverageTree(sumNode[key], countNode ? countNode[key] : undefined);
+        if (avgValue !== undefined) result[key] = avgValue;
+      }
+
+      return Object.keys(result).length > 0 ? result : undefined;
+    };
+
+    // Read the configured path from each tmp and collect all numeric leaves into sums/counts.
+    // Each tmp contributes only to the leaf paths it actually contains.
+    for (const tmp of tmps) {
+      const pathData = getPath(tmp, options.path);
+      if (pathData !== undefined && pathData !== null) {
+        collectNumericLeaves(pathData, []);
       }
     }
 
-    const avg = count > 0 ? divideNested(sum, count) : null;
+    // If no numeric data exists for this team/path, store null to indicate no average.
+    const avgTree = computeAverageTree(sums, counts);
+    const avg = avgTree === undefined ? null : avgTree;
     setPath(team, outputPath, avg);
   }
 
