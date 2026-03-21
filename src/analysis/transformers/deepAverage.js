@@ -79,7 +79,13 @@ new DataTransformer("deepAverage", (dataset, outputPath, options) => {
         const tmpsWithThisPath = tmps.filter((tmp) => getPath(tmp, options.path) !== null)
 
         for(let tmp of tmpsWithThisPath){
-          if(tmp.counts.options.path > 0)
+           let out = countAll ? countedIds.reduce((acc,id) => { // seed with match-scouting ids
+            acc[id] = 0;
+            return acc
+        }, {}) : countedIds.reduce((acc,id) => { // construct an object of {id1: 0, id2: 0, id3: 0} at outputPath
+            acc[id] = 0;
+            return acc
+        }, {});
           count++;
         }
         
