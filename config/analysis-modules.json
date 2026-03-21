@@ -350,7 +350,7 @@
         },
         {
           "name": "Average Collecting Rating",
-          "path": "averageScores.CollectingRating",
+          "path": "averageScores.collectingRating",
           "decimals": 2,
           "sort": 1
         },
