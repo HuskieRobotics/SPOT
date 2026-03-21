@@ -154,8 +154,8 @@
           ]
         },
         {
-          "id": "Storing",
-          "displayText": "Storing",
+          "id": "Collecting",
+          "displayText": "Collecting",
           "gridArea": ["4", "8", "6", "12"],
           "class": "blue2026",
           "type": "action",
@@ -592,8 +592,8 @@
           "executables": []
         },
         {
-          "id": "Storing",
-          "displayText": "Storing",
+          "id": "Collecting",
+          "displayText": "Collecting",
           "gridArea": ["3", "1", "4", "5"],
           "class": "blue2026",
           "type": "action",
@@ -952,7 +952,7 @@
           "executables": []
         },
         {
-          "id": "RatingStoring1",
+          "id": "RatingCollecting1",
           "displayText": "Rating 1",
           "gridArea": ["2", "2", "4", "6"],
           "class": "gray",
@@ -965,7 +965,7 @@
           ]
         },
         {
-          "id": "RatingStoring2",
+          "id": "RatingCollecting2",
           "displayText": "Rating 2",
           "gridArea": ["2", "7", "4", "11"],
           "class": "gray",
@@ -978,7 +978,7 @@
           ]
         },
         {
-          "id": "RatingStoring3",
+          "id": "RatingCollecting3",
           "displayText": "Rating 3",
           "gridArea": ["4", "2", "6", "6"],
           "class": "gray",
@@ -991,7 +991,7 @@
           ]
         },
         {
-          "id": "RatingStoring4",
+          "id": "RatingCollecting4",
           "displayText": "Rating 4",
           "gridArea": ["4", "7", "6", "11"],
           "class": "gray",
@@ -1134,7 +1134,7 @@
           "executables": []
         },
         {
-          "id": "teleopTransitionRatingStoring1",
+          "id": "teleopTransitionRatingCollecting1",
           "displayText": "TT Collect R1",
           "gridArea": ["4", "1", "5", "2"],
           "class": "gray",
@@ -1142,7 +1142,7 @@
           "executables": []
         },
         {
-          "id": "teleopTransitionRatingStoring2",
+          "id": "teleopTransitionRatingCollecting2",
           "displayText": "TT Collect R2",
           "gridArea": ["4", "2", "5", "3"],
           "class": "gray",
@@ -1150,7 +1150,7 @@
           "executables": []
         },
         {
-          "id": "teleopTransitionRatingStoring3",
+          "id": "teleopTransitionRatingCollecting3",
           "displayText": "TT Collect R3",
           "gridArea": ["4", "3", "5", "4"],
           "class": "gray",
@@ -1158,7 +1158,7 @@
           "executables": []
         },
         {
-          "id": "teleopTransitionRatingStoring4",
+          "id": "teleopTransitionRatingCollecting4",
           "displayText": "TT Collect R4",
           "gridArea": ["4", "4", "5", "5"],
           "class": "gray",
@@ -1262,7 +1262,7 @@
           "executables": []
         },
         {
-          "id": "activeShift1RatingStoring1",
+          "id": "activeShift1RatingCollecting1",
           "displayText": "AS1 Collect R1",
           "gridArea": ["5", "5", "6", "6"],
           "class": "gray",
@@ -1270,7 +1270,7 @@
           "executables": []
         },
         {
-          "id": "activeShift1RatingStoring2",
+          "id": "activeShift1RatingCollecting2",
           "displayText": "AS1 Collect R2",
           "gridArea": ["5", "6", "6", "7"],
           "class": "gray",
@@ -1278,7 +1278,7 @@
           "executables": []
         },
         {
-          "id": "activeShift1RatingStoring3",
+          "id": "activeShift1RatingCollecting3",
           "displayText": "AS1 Store R3",
           "gridArea": ["5", "7", "6", "8"],
           "class": "gray",
@@ -1286,7 +1286,7 @@
           "executables": []
         },
         {
-          "id": "activeShift1RatingStoring4",
+          "id": "activeShift1RatingCollecting4",
           "displayText": "AS1 Collect R4",
           "gridArea": ["5", "8", "6", "9"],
           "class": "gray",
@@ -1390,7 +1390,7 @@
           "executables": []
         },
         {
-          "id": "activeShift2RatingStoring1",
+          "id": "activeShift2RatingCollecting1",
           "displayText": "AS2 Collect R1",
           "gridArea": ["6", "9", "7", "10"],
           "class": "gray",
@@ -1398,7 +1398,7 @@
           "executables": []
         },
         {
-          "id": "activeShift2RatingStoring2",
+          "id": "activeShift2RatingCollecting2",
           "displayText": "AS2 Collect R2",
           "gridArea": ["6", "10", "7", "11"],
           "class": "gray",
@@ -1406,7 +1406,7 @@
           "executables": []
         },
         {
-          "id": "activeShift2RatingStoring3",
+          "id": "activeShift2RatingCollecting3",
           "displayText": "AS2 Collect R3",
           "gridArea": ["6", "11", "7", "12"],
           "class": "gray",
@@ -1414,7 +1414,7 @@
           "executables": []
         },
         {
-          "id": "activeShift2RatingStoring4",
+          "id": "activeShift2RatingCollecting4",
           "displayText": "AS2 Collect R4",
           "gridArea": ["6", "12", "7", "13"],
           "class": "gray",
@@ -1518,7 +1518,7 @@
           "executables": []
         },
         {
-          "id": "inactiveShift1RatingStoring1",
+          "id": "inactiveShift1RatingCollecting1",
           "displayText": "IS1 Collect R1",
           "gridArea": ["8", "1", "9", "2"],
           "class": "gray",
@@ -1526,7 +1526,7 @@
           "executables": []
         },
         {
-          "id": "inactiveShift1RatingStoring2",
+          "id": "inactiveShift1RatingCollecting2",
           "displayText": "IS1 Collect R2",
           "gridArea": ["8", "2", "9", "3"],
           "class": "gray",
@@ -1534,7 +1534,7 @@
           "executables": []
         },
         {
-          "id": "inactiveShift1RatingStoring3",
+          "id": "inactiveShift1RatingCollecting3",
           "displayText": "IS1 Collect R3",
           "gridArea": ["8", "3", "9", "4"],
           "class": "gray",
@@ -1542,7 +1542,7 @@
           "executables": []
         },
         {
-          "id": "inactiveShift1RatingStoring4",
+          "id": "inactiveShift1RatingCollecting4",
           "displayText": "IS1 Collect R4",
           "gridArea": ["8", "4", "9", "5"],
           "class": "gray",
@@ -1646,7 +1646,7 @@
           "executables": []
         },
         {
-          "id": "inactiveShift2RatingStoring1",
+          "id": "inactiveShift2RatingCollecting1",
           "displayText": "IS2 Collect R1",
           "gridArea": ["9", "5", "10", "6"],
           "class": "gray",
@@ -1654,7 +1654,7 @@
           "executables": []
         },
         {
-          "id": "inactiveShift2RatingStoring2",
+          "id": "inactiveShift2RatingCollecting2",
           "displayText": "IS2 Collect R2",
           "gridArea": ["9", "6", "10", "7"],
           "class": "gray",
@@ -1662,7 +1662,7 @@
           "executables": []
         },
         {
-          "id": "inactiveShift2RatingStoring3",
+          "id": "inactiveShift2RatingCollecting3",
           "displayText": "IS2 Collect R3",
           "gridArea": ["9", "7", "10", "8"],
           "class": "gray",
@@ -1670,7 +1670,7 @@
           "executables": []
         },
         {
-          "id": "inactiveShift2RatingStoring4",
+          "id": "inactiveShift2RatingCollecting4",
           "displayText": "IS2 Collect R4",
           "gridArea": ["9", "8", "10", "9"],
           "class": "gray",
@@ -1774,7 +1774,7 @@
           "executables": []
         },
         {
-          "id": "endgameRatingStoring1",
+          "id": "endgameRatingCollecting1",
           "displayText": "EG Collect R1",
           "gridArea": ["10", "9", "11", "10"],
           "class": "gray",
@@ -1782,7 +1782,7 @@
           "executables": []
         },
         {
-          "id": "endgameRatingStoring2",
+          "id": "endgameRatingCollecting2",
           "displayText": "EG Collect R2",
           "gridArea": ["10", "10", "11", "11"],
           "class": "gray",
@@ -1790,7 +1790,7 @@
           "executables": []
         },
         {
-          "id": "endgameRatingStoring3",
+          "id": "endgameRatingCollecting3",
           "displayText": "EG Collect R3",
           "gridArea": ["10", "11", "11", "12"],
           "class": "gray",
@@ -1798,7 +1798,7 @@
           "executables": []
         },
         {
-          "id": "endgameRatingStoring4",
+          "id": "endgameRatingCollecting4",
           "displayText": "EG Collect R4",
           "gridArea": ["10", "12", "11", "13"],
           "class": "gray",
@@ -2383,7 +2383,7 @@
           "executables": []
         },
         {
-          "id": "teleopTransitionStoring",
+          "id": "teleopTransitionCollecting",
           "displayText": "TT Store",
           "gridArea": ["18", "1", "19", "2"],
           "class": "blue2026",
@@ -2391,7 +2391,7 @@
           "executables": []
         },
         {
-          "id": "activeShift1Storing",
+          "id": "activeShift1Collecting",
           "displayText": "AS1 Store",
           "gridArea": ["18", "2", "19", "3"],
           "class": "blue2026",
@@ -2399,7 +2399,7 @@
           "executables": []
         },
         {
-          "id": "activeShift2Storing",
+          "id": "activeShift2Collecting",
           "displayText": "AS2 Store",
           "gridArea": ["18", "3", "19", "4"],
           "class": "blue2026",
@@ -2407,7 +2407,7 @@
           "executables": []
         },
         {
-          "id": "inactiveShift1Storing",
+          "id": "inactiveShift1Collecting",
           "displayText": "IS1 Store",
           "gridArea": ["18", "4", "19", "5"],
           "class": "blue2026",
@@ -2415,7 +2415,7 @@
           "executables": []
         },
         {
-          "id": "inactiveShift2Storing",
+          "id": "inactiveShift2Collecting",
           "displayText": "IS2 Store",
           "gridArea": ["18", "5", "19", "6"],
           "class": "blue2026",
@@ -2423,7 +2423,7 @@
           "executables": []
         },
         {
-          "id": "endgameStoring",
+          "id": "endgameCollecting",
           "displayText": "EG Store",
           "gridArea": ["18", "6", "19", "7"],
           "class": "blue2026",
@@ -2431,7 +2431,7 @@
           "executables": []
         },
         {
-          "id": "autoStoring",
+          "id": "autoCollecting",
           "displayText": "Auto Store",
           "gridArea": ["18", "7", "19", "8"],
           "class": "blue2026",
