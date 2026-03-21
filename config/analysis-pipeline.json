@@ -49,6 +49,68 @@
   },
   {
     "type": "tmp",
+    "name": "sum",
+    "outputPath": "counts.shooting",
+    "options": {
+      "addends": [
+        "counts.autoStopShooting",
+        "counts.teleopTransitionStopShooting",
+        "counts.activeShift1StopShooting",
+        "counts.activeShift2StopShooting",
+        "counts.inactiveShift1StopShooting",
+        "counts.inactiveShift2StopShooting",
+        "counts.endgameStopShooting"
+      ]
+    }
+  },
+  {
+    "type": "tmp",
+    "name": "sum",
+    "outputPath": "counts.passing",
+    "options": {
+      "addends": [
+        "counts.autoPassing",
+        "counts.teleopTransitionPassing",
+        "counts.activeShift1Passing",
+        "counts.activeShift2Passing",
+        "counts.inactiveShift1Passing",
+        "counts.inactiveShift2Passing",
+        "counts.endgamePassing"
+      ]
+    }
+  },
+  {
+    "type": "tmp",
+    "name": "sum",
+    "outputPath": "counts.storing",
+    "options": {
+      "addends": [
+        "counts.teleopTransitionStoring",
+        "counts.activeShift1Storing",
+        "counts.activeShift2Storing",
+        "counts.inactiveShift1Storing",
+        "counts.inactiveShift2Storing",
+        "counts.endgameStoring"
+      ]
+    }
+  },
+  {
+    "type": "tmp",
+    "name": "sum",
+    "outputPath": "counts.defense",
+    "options": {
+      "addends": [
+        "counts.teleopTransitionDefense",
+        "counts.activeShift1Defense",
+        "counts.activeShift2Defense",
+        "counts.inactiveShift1Defense",
+        "counts.inactiveShift2Defense",
+        "counts.endgameDefense"
+      ]
+    }
+  },
+  {
+    "type": "tmp",
     "name": "actionTime",
     "outputPath": "actionTimes.attemptClimb",
     "options": {
@@ -64,6 +126,7 @@
       "endAction": ["autoStopShooting"]
     }
   },
+
   {
     "type": "tmp",
     "name": "cycle",
@@ -836,6 +899,7 @@
       "all": true
     }
   },
+
   {
     "type": "team",
     "name": "aggregateArray",
