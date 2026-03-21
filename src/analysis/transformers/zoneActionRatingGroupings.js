@@ -6,14 +6,12 @@
  */ 
 __TMP__
 new DataTransformer("zoneActionRatingGroupings", (dataset, outputPath, options) => {
-    for (let tmp of dataset.tmps) {
-
-      // create an options object that will return an array of all the zones selected, actions selected, and ratings selected for a specific match.
-      options = Object.assign({ 
-        zones: [],
-        actions: [],
-        ratings: []
-      }, options);
+    // create an options object that will return an array of all the zones selected, actions selected, and ratings selected for a specific match.
+    options = Object.assign({ 
+      zones: [],
+      actions: [],
+      ratings: []
+    }, options);
 
       // Extract trailing digit(s) from ratingId (e.g., ratingPassing3 -> 3)
       const parseRatingValue = (ratingId) => {
@@ -33,9 +31,26 @@ new DataTransformer("zoneActionRatingGroupings", (dataset, outputPath, options) 
         return match ? match[1] : actionId;
       };
 
+    const normalizedZones = Array.from(new Set(options.zones.map(normalizeZoneId)));
+    const normalizedActions = Array.from(new Set(options.actions.map(normalizeActionId)));
+
+    const createDefaultScoreTree = () => {
+      const defaults = {};
+      for (const normalizedZone of normalizedZones) {
+        defaults[normalizedZone] = {};
+        for (const normalizedAction of normalizedActions) {
+          // Protection barrier: when a path is missing in this tmp, keep it as 0 so traversal is always safe.
+          defaults[normalizedZone][normalizedAction] = 0;
+        }
+      }
+      return defaults;
+    };
+
+    for (let tmp of dataset.tmps) {
       const output = {
-        list: [], //List contains the list of all the zone, action, and rating triplets that were performed in a specific match. 
-        counts: {} //Counts represents the number of [zone, action, rating] triplets that were collected in the data transformer.
+        list: [], //List contains the list of all the zone, action, and rating triplets that were performed in a specific match.
+        counts: {}, //Counts represents the number of [zone, action, rating] triplets that were collected in the data transformer.
+        ...createDefaultScoreTree()
       };
 
       // Go through the actionQueue and filter out all the buttons that are rating, action, or zone buttons.
@@ -58,7 +73,7 @@ new DataTransformer("zoneActionRatingGroupings", (dataset, outputPath, options) 
         actions = actions.filter(x=>x.ts < zone.ts) // assign the actions array to an array of actions that occur after the selected zone
 
         if (actions.length === 0) {
-        break; //ensure that the actions button was pressed after the zone button, if there are no actions left to remove, break out of the loop
+        continue; // If no action follows this zone, skip this pair and keep scanning later zones.
         } else {
           action = actions.shift(); //remove the action that comes directly after the most recently pressed zone button
           actionId = action.id;
@@ -67,7 +82,7 @@ new DataTransformer("zoneActionRatingGroupings", (dataset, outputPath, options) 
         ratings = ratings.filter(x=>x.ts < action.ts) //populate the ratings array with the ratings of all the ratings that occur after the selected action
           
         if (ratings.length === 0) {
-        break; // Ensure that there is a rating button pressed after the action button, if there are no ratings left to remove, break out of the loop
+        continue; // If no rating follows this action, skip this pair and keep scanning later zones.
         } else {
           rating = ratings.shift(); // Remove the rating that comes directly after the most recently pressed action and zone button
           ratingValue = parseRatingValue(rating.id);
@@ -95,7 +110,7 @@ new DataTransformer("zoneActionRatingGroupings", (dataset, outputPath, options) 
         if(output[normalizedZone] === undefined){
             output[normalizedZone] = {};
           }
-        if(output[normalizedZone][normalizedAction] === undefined){
+        if(output[normalizedZone][normalizedAction] === undefined || typeof output[normalizedZone][normalizedAction] !== "object"){
             output[normalizedZone][normalizedAction] = {
               sum: 0,
               count: 0
@@ -111,10 +126,8 @@ new DataTransformer("zoneActionRatingGroupings", (dataset, outputPath, options) 
         if (normalizedZone === "list" || normalizedZone === "counts") continue;
         for (let normalizedAction in output[normalizedZone]) {
           const summary = output[normalizedZone][normalizedAction];
-          if (summary.count > 0) {
+          if (summary && typeof summary === "object" && summary.count > 0) {
             output[normalizedZone][normalizedAction] = summary.sum / summary.count;
-          } else {
-            output[normalizedZone][normalizedAction] = 0;
           }
         }
       }
