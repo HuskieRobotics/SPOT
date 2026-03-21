@@ -62,7 +62,7 @@ new DataTransformer("deepAverage", (dataset, outputPath, options) => {
     }; 
 
     let sum = null;
-    let count = 0;
+    let count;
     
     for (let tmp of tmps) {
       const pathData = getPath(tmp, options.path);
@@ -77,44 +77,10 @@ new DataTransformer("deepAverage", (dataset, outputPath, options) => {
         }
 
         const tmpsWithThisPath = tmps.filter((tmp) => getPath(tmp, options.path) !== null)
-
-        for(let tmp of tmpsWithThisPath){
-           let out = countAll ? countedIds.reduce((acc,id) => { // seed with match-scouting ids
-            acc[id] = 0;
-            return acc
-        }, {}) : countedIds.reduce((acc,id) => { // construct an object of {id1: 0, id2: 0, id3: 0} at outputPath
-            acc[id] = 0;
-            return acc
-        }, {});
-          count++;
-        }
-        
+        //count = tmpsWithThisPath.length;
+        count = 1;
       }
     }
-
-    // for (const [teamNumber, team] of Object.entries(dataset.teams)) {
-    //     const teamTmps = dataset.tmps.filter(x=>x.robotNumber == teamNumber); //only the tmps that are this team's
-    //     const pathResult = getPath(teamTmps[0], options.path)
-
-    //     if (typeof pathResult == "object" && pathResult !== null) { //average all properties in object
-    //         let out = {};
-    //         for (let subpath in getPath(teamTmps[0], options.path)) {
-    //             const filteredTeamTmps = teamTmps.filter((tmp) => getPath(tmp, `${options.path}.${subpath}`,null) !== null)
-    //             let average = filteredTeamTmps.reduce((acc, tmp) => {
-    //                 return acc + getPath(tmp, `${options.path}.${subpath}`) //if this is causing an error, your tmps may not have the same schema (eg. some keys (which you are trying to average) are not defined in some tmps)
-    //             }, 0) / filteredTeamTmps.length;
-    //             out[subpath] = average;
-    //         }
-    //         setPath(team, outputPath, out)
-    //     } else { //normal numeric / null average
-    //         const filteredTeamTmps = teamTmps.filter((tmp) => getPath(tmp, options.path) !== null)
-    //         let average = filteredTeamTmps.reduce((acc, tmp) => {
-    //             return acc + getPath(tmp, options.path)
-    //         }, 0) / filteredTeamTmps.length
-
-    //         setPath(team, outputPath, average)
-    //     }
-    // }
 
     const avg = count > 0 ? divideNested(sum, count) : null;
     setPath(team, outputPath, avg);
