@@ -1,6 +1,6 @@
 /**
  * @type {DataTransformer}
- * Removes duplicate TMPs for the same team and match, keeping only the first scouted one
+ * Removes duplicate TMPs for the same team and match, keeping only the latest one based on the timestamp.
  */
 __TMP__
 new DataTransformer("removeDuplicates", (dataset) => {
