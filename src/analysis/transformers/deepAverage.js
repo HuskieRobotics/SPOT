@@ -9,6 +9,7 @@ new DataTransformer("deepAverage", (dataset, outputPath, options) => {
   const tmpsByTeam = {};
 
   // Build a one-time lookup table so each team can access only its own tmps.
+  // Add the tmp object to an array of the tmps for a specific team, using the robot's number as the key to determine if a specific tmp belongs to a team.
   for (const tmp of (dataset.tmps || [])) {
     const robotKey = String(tmp.robotNumber);
     if (!tmpsByTeam[robotKey]) tmpsByTeam[robotKey] = [];
@@ -18,7 +19,7 @@ new DataTransformer("deepAverage", (dataset, outputPath, options) => {
   // Process one team at a time and write the averaged nested output to that team object.
   for (let teamNum in dataset.teams) {
     const team = dataset.teams[teamNum];
-    // Only use tmps from the current team when computing this team's average tree.
+    // Only use tmps from the current team when computing this team's zone, action, and rating averages.
     const tmps = tmpsByTeam[String(teamNum)] || [];
 
     // Mirror trees that store per-leaf totals and per-leaf sample counts.
@@ -29,6 +30,7 @@ new DataTransformer("deepAverage", (dataset, outputPath, options) => {
 
     // Marks a leaf path as expected in the output, even if it later has no non-zero samples.
     const addLeafShape = (pathSegments) => {
+      // Iterate through all the nodes in the tree until the leaf is found.
       let node = leafShape;
       for (let i = 0; i < pathSegments.length; i++) {
         const segment = pathSegments[i];
@@ -112,11 +114,12 @@ new DataTransformer("deepAverage", (dataset, outputPath, options) => {
 
     // Rebuild the output object by dividing sum/count at each numeric leaf.
     // Branches with no valid numeric descendants are omitted.
+    // Compute the averages for each path based on the sum and counts for that path; if no data exists for a path, it is left undefined.
     const computeAverageTree = (sumNode, countNode) => {
       if (typeof sumNode === "number" && typeof countNode === "number") {
         return countNode > 0 ? sumNode / countNode : undefined;
       }
-
+      
       if (!sumNode || typeof sumNode !== "object") return undefined;
 
       const result = {};
@@ -130,7 +133,7 @@ new DataTransformer("deepAverage", (dataset, outputPath, options) => {
     };
 
     // Read the configured path from each tmp and collect all numeric leaves into sums/counts.
-    // Each tmp contributes only to the leaf paths it actually contains.
+    // Each tmp contributes only to the zone, action, and rating paths it actually contains.
     for (const tmp of tmps) {
       const pathData = getPath(tmp, options.path);
       if (pathData !== undefined && pathData !== null) {
