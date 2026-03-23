@@ -32,9 +32,11 @@ class RadarChart {
         ) {
           let point = 0;
           if (!(this.moduleConfig.options.lines[i].times[j].path == "none")) {
+            // Some metrics may be missing for a team; default to 0 so the chart can still render.
             point = getPath(
               dataset.teams[team],
               this.moduleConfig.options.lines[i].times[j].path,
+              0,
             );
           }
           values.push(point);
