@@ -486,13 +486,6 @@
     "options": {
       "list": [
         {
-          "name": "Alliance Zone Average Defense Rating",
-          "path": "zoneActionRatingAverages.AZone.Defense",
-          "hideIfValue": 0,
-          "decimals": 2,
-          "sort": 1
-        },
-        {
           "name": "Alliance Zone Average Passing Rating",
           "path": "zoneActionRatingAverages.AZone.Passing",
           "hideIfValue": 0,
