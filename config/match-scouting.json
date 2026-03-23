@@ -155,7 +155,7 @@
         },
         {
           "id": "Storing",
-          "displayText": "Storing",
+          "displayText": "Collecting",
           "gridArea": ["4", "8", "6", "12"],
           "class": "blue2026",
           "type": "action",
@@ -593,7 +593,7 @@
         },
         {
           "id": "Storing",
-          "displayText": "Storing",
+          "displayText": "Collecting",
           "gridArea": ["3", "1", "4", "5"],
           "class": "blue2026",
           "type": "action",
