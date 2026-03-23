@@ -39,6 +39,7 @@ class HeatmapScatterPlot {
           showlegend: true,
           name: this.moduleConfig.options.actionLabels[actionId],
           x: filteredActionQueue.map((a) => {
+            // this if statement was specifically made to mirror some of the points for the 2026-27 field heatmap. for future years, replace if statement with filteredActionQueue.map((a) => getPath(a, this.moduleConfig.options.coordinatePath).x) and same for y
             if (getPath(a, this.moduleConfig.options.coordinatePath).x > 69.5) {
               return (
                 (100 - getPath(a, this.moduleConfig.options.coordinatePath).x) *
@@ -92,6 +93,7 @@ class HeatmapScatterPlot {
       name: "Heatmap",
       showlegend: true,
       x: filteredAllActionQueue.map((a) => {
+        // this if statement was specifically made to mirror some of the points for the 2026-27 field heatmap. for future years, replace if statement with filteredActionQueue.map((a) => getPath(a, this.moduleConfig.options.coordinatePath).x) and same for y
         if (getPath(a, this.moduleConfig.options.coordinatePath).x > 69.5) {
           return (
             (100 - getPath(a, this.moduleConfig.options.coordinatePath).x) * 2
