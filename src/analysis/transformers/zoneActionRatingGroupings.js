@@ -27,7 +27,7 @@ new DataTransformer("zoneActionRatingGroupings", (dataset, outputPath, options) 
 
       //Parses all action id's to find the id of the specific action that was performed. For example, if the action id was activeShift1RatingPassing1, the function would return "Passing" as the action that was performed.
       const normalizeActionId = (actionId) => {
-        const match = String(actionId).match(/(Defense|Passing|StopShooting|Storing)$/);
+        const match = String(actionId).match(/(Defense|Passing|StartShooting|StopShooting|Storing)$/);
         return match ? match[1] : actionId;
       };
 

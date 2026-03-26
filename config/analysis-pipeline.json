@@ -771,6 +771,11 @@
         "inactiveShift2Passing",
         "endgamePassing",
 
+        "teleopTransitionStartShooting",
+        "activeShift1StartShooting",
+        "activeShift2StartShooting",
+        "endgameStartShooting",
+
         "teleopTransitionStopShooting",
         "activeShift1StopShooting",
         "activeShift2StopShooting",
