@@ -116,10 +116,11 @@
   },
   {
     "type": "tmp",
-    "name": "actionTime",
-    "outputPath": "actionTimes.attemptClimb",
+    "name": "cycle",
+    "outputPath": "cycle.attemptClimb",
     "options": {
-      "actionId": ["attemptClimb"]
+      "startAction": ["endgameAttemptClimb"],
+      "endAction": ["endgameAttemptL1", "endgameAttemptL2", "endgameAttemptL3"]
     }
   },
   {
@@ -915,10 +916,36 @@
   },
   {
     "type": "team",
-    "name": "averageTime",
-    "outputPath": "averageTimes.attemptClimbTime",
+    "name": "aggregateArray",
+    "outputPath": "cycles.attemptClimb.all",
     "options": {
-      "path": "actionTimes.attemptClimb"
+      "path": "cycle.attemptClimb.all"
+    }
+  },
+  {
+    "type": "team",
+    "name": "aggregateArray",
+    "outputPath": "cycles.attemptClimb.allComplete",
+    "options": {
+      "path": "cycle.attemptClimb.allComplete"
+    }
+  },
+  {
+    "type": "team",
+    "name": "averageArray",
+    "outputPath": "cycles.attemptClimb.averageTime",
+    "options": {
+      "arrayPath": "cycles.attemptClimb.all",
+      "valuePath": "timeDifferential"
+    }
+  },
+  {
+    "type": "team",
+    "name": "averageArray",
+    "outputPath": "cycles.attemptClimb.averageTimeComplete",
+    "options": {
+      "arrayPath": "cycles.attemptClimb.allComplete",
+      "valuePath": "timeDifferential"
     }
   },
   {
