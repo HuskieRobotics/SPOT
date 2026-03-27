@@ -398,12 +398,12 @@ let matches;
   //match UI functions
   async function loadMatchView(dataset, modulesConfig) {
     //add event listener to "Simulate Match" button to set reset UI and switch to match view
-    matchViewSwitch.addEventListener("click", () => {
-      clearInterface();
-      matchViewSwitch.classList.add("selected");
-      bubbleSheetSwitch.classList.remove("selected");
-      showFade(matchView);
-    });
+    // matchViewSwitch.addEventListener("click", () => {
+    //   clearInterface();
+    //   matchViewSwitch.classList.add("selected");
+    //   bubbleSheetSwitch.classList.remove("selected");
+    //   showFade(matchView);
+    // });
 
     const matchSelect = document.querySelector("#match-select");
     for (const match of matches) {
@@ -565,13 +565,13 @@ let matches;
   // Auto pick list UI functions
   async function loadAutoPickList(dataset, modulesConfig) {
     //add event listener to "AutoPickList" button to set reset UI and switch to autopicklist tab
-    autoPickSwitch.addEventListener("click", () => {
-      clearInterface();
-      autoPickSwitch.classList.add("selected");
-      bubbleSheetSwitch.classList.remove("selected");
-      loadTeamsAutoPick(dataset, modulesConfig);
-      showFade(autoPickView);
-    });
+    // autoPickSwitch.addEventListener("click", () => {
+    //   clearInterface();
+    //   autoPickSwitch.classList.add("selected");
+    //   bubbleSheetSwitch.classList.remove("selected");
+    //   loadTeamsAutoPick(dataset, modulesConfig);
+    //   showFade(autoPickView);
+    // });
   }
 
   // Bubble Sheet UI functions
@@ -963,8 +963,8 @@ let matches;
     autoPickStats.style.display = "none";
     autoPickMain.style.display = "none";
     bubbleGraphContainer.style.display = "none";
-    matchViewSwitch.classList.remove("selected");
-    autoPickSwitch.classList.remove("selected");
+    // matchViewSwitch.classList.remove("selected");
+    // autoPickSwitch.classList.remove("selected");
     bubbleSheetSwitch.classList.remove("selected");
   }
 })();
