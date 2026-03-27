@@ -1,108 +1,126 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, user-scalable=no, viewport-fit=cover"
+    />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+    <title>SPOT - Analysis</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;700&family=Saira:wght@300;400;700&family=Tajawal:wght@300;400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link href="./css/global.css" rel="stylesheet" type="text/css" />
+    <link href="./css/internal.css" rel="stylesheet" type="text/css" />
+    <link href="./modules.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="./css/style.css" />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="/icons/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="/icons/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="/icons/favicon-16x16.png"
+    />
+    <link rel="manifest" href="/icons/site.webmanifest" />
+    <link rel="mask-icon" href="/icons/safari-pinned-tab.svg" color="#30a2ff" />
+    <link rel="shortcut icon" href="/icons/favicon.ico" />
+    <meta name="msapplication-TileColor" content="#fefefe" />
+    <meta name="msapplication-config" content="/icons/browserconfig.xml" />
+    <meta name="theme-color" content="#fefefe" />
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="msapplication-TileColor" content="#ffffff" />
+    <meta name="msapplication-TileImage" content="/icons/ms-icon-144x144.png" />
+    <meta name="theme-color" content="#ffffff" />
+    <script src="/socket.io/socket.io.js"></script>
+  </head>
 
-<head>
-	<meta charset="utf-8">
-	<meta name='viewport' content='width=device-width, initial-scale=1, user-scalable=no, viewport-fit=cover'>
-	<meta name="mobile-web-app-capable" content="yes">
-	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-	<title>SPOT - Analysis</title>
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css">
-	<link rel="preconnect" href="https://fonts.googleapis.com">
-	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-	<link
-		href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;700&family=Saira:wght@300;400;700&family=Tajawal:wght@300;400;700&display=swap"
-		rel="stylesheet">
-	<link href="./css/global.css" rel="stylesheet" type="text/css" />
-	<link href="./css/internal.css" rel="stylesheet" type="text/css" />
-	<link href="./modules.css" rel="stylesheet" type="text/css" />
-	<link rel="stylesheet" href="./css/style.css">
-	<link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png">
-	<link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png">
-	<link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png">
-	<link rel="manifest" href="/icons/site.webmanifest">
-	<link rel="mask-icon" href="/icons/safari-pinned-tab.svg" color="#30a2ff">
-	<link rel="shortcut icon" href="/icons/favicon.ico">
-	<meta name="msapplication-TileColor" content="#fefefe">
-	<meta name="msapplication-config" content="/icons/browserconfig.xml">
-	<meta name="theme-color" content="#fefefe">
-	<link rel="manifest" href="/manifest.json">
-	<meta name="msapplication-TileColor" content="#ffffff">
-	<meta name="msapplication-TileImage" content="/icons/ms-icon-144x144.png">
-	<meta name="theme-color" content="#ffffff">
-	<script src="/socket.io/socket.io.js"></script>
-</head>
-
-<body>
-	  <!-- new event dropdown -->
-  <div id="event-dropdown">
-    <button id="event-button">Choose Event</button>
-    <div id="event-menu">
-      <!-- Options will be appended dynamically -->
+  <body>
+    <!-- new event dropdown -->
+    <div id="event-dropdown">
+      <button id="event-button">Choose Event</button>
+      <div id="event-menu">
+        <!-- Options will be appended dynamically -->
+      </div>
     </div>
-  </div>
-	<div id="loading-bar-container">
-		<div id="loading-bar"></div>
-	</div>
+    <div id="loading-bar-container">
+      <div id="loading-bar"></div>
+    </div>
 
-	<img id="spinner" src="/img/spinner_red.svg">
+    <img id="spinner" src="/img/spinner_red.svg" />
 
-	
-	<div id="app">
+    <div id="app">
+      <div id="menu">
+        <div id="logo">
+          <img src="/img/logo.svg" id="logo-img" />
+          <div id="logo-text">SPOT</div>
+        </div>
 
-		<div id = "menu">
-			<div id="logo">
-				<img src="/img/logo.svg" id="logo-img">
-				<div id="logo-text">SPOT</div>
-			</div>
+        <div id="sidebar">
+          <button id="sidebar-toggle" class="sidebar-toggle">
+            <i class="fas fa-bars"></i>
+          </button>
+          <div id="button-container">
+            <!-- <button id="match-view-switch" data-mobile-text="Simulate" data-desktop-text="Simulate Match">Simulate Match</button> -->
+            <!-- <button id="auto-pick-switch" data-mobile-text="Auto" data-desktop-text="Auto Pick List">Auto Pick List</button> -->
+            <button
+              id="bubble-sheet-switch"
+              data-mobile-text="Compare"
+              data-desktop-text="Compare Team Scores"
+            >
+              Compare Team Scores
+            </button>
+          </div>
+          <div id="search-container">
+            <div id="search">
+              <input placeholder="Search Teams" id="search-input" required />
+              <i id="search-icon" class="fa fa-search"></i>
+            </div>
+          </div>
 
-			<div id="sidebar">
-				<button id="sidebar-toggle" class="sidebar-toggle">
-  				<i class="fas fa-bars"></i>
-				</button>
-				<div id="button-container">
-					
-					<button id="match-view-switch" data-mobile-text="Simulate" data-desktop-text="Simulate Match">Simulate Match</button>
-    			<button id="auto-pick-switch" data-mobile-text="Auto" data-desktop-text="Auto Pick List">Auto Pick List</button>
-    			<button id="bubble-sheet-switch" data-mobile-text="Compare" data-desktop-text="Compare Team Scores">Compare Team Scores</button>
-				</div>
-				<div id="search-container">
-					<div id="search">
-						<input placeholder="Search Teams" id="search-input" required />
-						<i id="search-icon" class="fa fa-search"></i>
-					</div>
-				</div>
+          <div id="team-list"></div>
+        </div>
+      </div>
 
-				<div id="team-list">
-
-				</div>
-			</div>
-		</div>
-
-		<!-- black bar -->
-		<!-- <div id="header">
+      <!-- black bar -->
+      <!-- <div id="header">
 
 		</div> -->
 
-		
+      <div id="dashboard">
+        <div id="welcome" class="visible">
+          <div id="welcome-text">SPOT Analysis</div>
+          <div id="demo-label">DEMO</div>
+          <div id="welcome-subtext">Select a Team</div>
+        </div>
+        <div id="team-view">
+          <div id="main-list"></div>
 
-		<div id="dashboard">
-			<div id="welcome" class="visible">
-				<div id="welcome-text">SPOT Analysis</div>
-				<div id="demo-label">DEMO</div>
-				<div id="welcome-subtext">Select a Team</div>
-			</div>
-			<div id="team-view">
-				<div id="main-list">
+          <div id="side-list"></div>
+        </div>
 
-				</div>
-
-				<div id="side-list">
-
-				</div>
-			</div>
-
-			<div id="match-view">
+        <!-- <div id="match-view">
 				<div id="select-teams-text">Select Teams</div>
 				<div id="match-select-container">
 					<div id="match-select-label">Match</div>
@@ -145,8 +163,8 @@
 
 					</div>
 				</div>
-			</div>
-			<div id = "auto-pick-view">
+			</div> -->
+        <!-- <div id = "auto-pick-view">
 				<div id = "team-list-container">
 					<div id = "pick-list-text">Auto Pick List</div>
 					<div id = "auto-pick-team-list"></div>
@@ -156,47 +174,42 @@
 				<div id = "auto-pick-side">
 					<div id = "auto-pick-stats"></div>	
 				</div>
-			</div>
-			
-			<div id="bubble-sheet-view">
-    <!-- Controls for the Bubble Sheet -->
-    <div id="bubble-sheet-controls">
-        <!-- Dropdown for selecting the X-Axis -->
-        <label for="x-axis-select">X-Axis:</label>
-        <select id="x-axis-select">
-        </select>
+			</div> -->
 
-        <!-- Dropdown for selecting the Y-Axis -->
-        <label for="y-axis-select">Y-Axis:</label>
-        <select id="y-axis-select">
-        </select>
+        <div id="bubble-sheet-view">
+          <!-- Controls for the Bubble Sheet -->
+          <div id="bubble-sheet-controls">
+            <!-- Dropdown for selecting the X-Axis -->
+            <label for="x-axis-select">X-Axis:</label>
+            <select id="x-axis-select"></select>
 
-        <!-- Dropdown for selecting the Z-Axis (Bubble Size) -->
-        <label for="z-axis-select">Z-Axis (Bubble Size):</label>
-        <select id="z-axis-select"> 
-        </select>
+            <!-- Dropdown for selecting the Y-Axis -->
+            <label for="y-axis-select">Y-Axis:</label>
+            <select id="y-axis-select"></select>
+
+            <!-- Dropdown for selecting the Z-Axis (Bubble Size) -->
+            <label for="z-axis-select">Z-Axis (Bubble Size):</label>
+            <select id="z-axis-select"></select>
+          </div>
+
+          <!-- Container for the Bubble Sheet Graph -->
+          <div id="bubble-sheet-container">
+            <div class="graph" id="bubble-sheet-graph"></div>
+          </div>
+        </div>
+      </div>
     </div>
-
-    <!-- Container for the Bubble Sheet Graph -->
-    <div id="bubble-sheet-container">
-        <div class="graph" id="bubble-sheet-graph"></div>
-    </div>
-</div>
-		</div>
-	</div>
-	<script src="https://unpkg.com/simple-statistics@7.8.0/dist/simple-statistics.min.js"></script>
-	<script src="./js/util.js"></script>
-	<script src="./js/autoPick.js"></script>
-	<script src="./js/ui.js"></script>
-	<script src="./js/elements.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/fuzzysort@1.2.1/fuzzysort.js"></script>
-	<script src="https://cdn.plot.ly/plotly-2.8.3.min.js"></script>
-	<script src="./js/DataTransformer.js"></script>
-	<script src="./modules.js"></script>
-	<script src="./js/analysisPipeline.js"></script>
-	<script src="./transformers.js"></script>
-	<script src="./js/script.js"></script>	
-
-</body>
-
+    <script src="https://unpkg.com/simple-statistics@7.8.0/dist/simple-statistics.min.js"></script>
+    <script src="./js/util.js"></script>
+    <script src="./js/autoPick.js"></script>
+    <script src="./js/ui.js"></script>
+    <script src="./js/elements.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fuzzysort@1.2.1/fuzzysort.js"></script>
+    <script src="https://cdn.plot.ly/plotly-2.8.3.min.js"></script>
+    <script src="./js/DataTransformer.js"></script>
+    <script src="./modules.js"></script>
+    <script src="./js/analysisPipeline.js"></script>
+    <script src="./transformers.js"></script>
+    <script src="./js/script.js"></script>
+  </body>
 </html>
