@@ -732,7 +732,7 @@
   {
     "type": "tmp",
     "name": "zoneActionRatingGroupings",
-    "outputPath": "scores.zoneActionRating",
+    "outputPath": "zoneActionRating",
     "options": {
       "zones": [
         "teleopTransitionAZone",
@@ -1177,7 +1177,7 @@
     "name": "deepAverage",
     "outputPath": "zoneActionRatingAverages",
     "options": {
-      "path": "scores.zoneActionRating"
+      "path": "zoneActionRating"
     }
   }
 ]
