@@ -391,19 +391,19 @@ let matches;
         await module.setData(await module.formatData([teamNumber], dataset));
       }
     }
-    autoPickStats.style.display = "none";
-    autoPickMain.style.display = "none";
+    // autoPickStats.style.display = "none";
+    // autoPickMain.style.display = "none";
   }
 
   //match UI functions
   async function loadMatchView(dataset, modulesConfig) {
     //add event listener to "Simulate Match" button to set reset UI and switch to match view
-    // matchViewSwitch.addEventListener("click", () => {
-    //   clearInterface();
-    //   matchViewSwitch.classList.add("selected");
-    //   bubbleSheetSwitch.classList.remove("selected");
-    //   showFade(matchView);
-    // });
+    matchViewSwitch.addEventListener("click", () => {
+      clearInterface();
+      //   matchViewSwitch.classList.add("selected");
+      bubbleSheetSwitch.classList.remove("selected");
+      showFade(matchView);
+    });
 
     const matchSelect = document.querySelector("#match-select");
     for (const match of matches) {
@@ -905,8 +905,8 @@ let matches;
   //dashboard initializer, loads teams, match view, and autopicklist
   function initDashboard(dataset, modulesConfig) {
     loadTeams(dataset, modulesConfig);
-    loadMatchView(dataset, modulesConfig);
-    loadAutoPickList(dataset, modulesConfig);
+    // loadMatchView(dataset, modulesConfig);
+    // loadAutoPickList(dataset, modulesConfig);
     loadBubbleGraph(dataset, modulesConfig);
 
     searchInput.addEventListener("input", () => {
@@ -954,14 +954,14 @@ let matches;
     );
 
     hideFade(welcomeView);
-    hideFade(matchView);
+    // hideFade(matchView);
     hideFade(teamView);
-    hideFade(autoPickView);
+    // hideFade(autoPickView);
     hideFade(bubbleSheetView);
     // hideFade(autoPickStats)
     // hideFade(autoPickMain)
-    autoPickStats.style.display = "none";
-    autoPickMain.style.display = "none";
+    // autoPickStats.style.display = "none";
+    // autoPickMain.style.display = "none";
     bubbleGraphContainer.style.display = "none";
     // matchViewSwitch.classList.remove("selected");
     // autoPickSwitch.classList.remove("selected");
