@@ -234,6 +234,18 @@ let oldAccessCode;
         matchScouter.classList.add("match-info");
         topRow.appendChild(matchScouter);
 
+        const flagButton = document.createElement("button");
+        flagButton.textContent = "Flag Match";
+        flagButton.classList.add("flag-button");
+        topRow.appendChild(flagButton);
+
+        const flag = document.createElement("img");
+        flag.src = "/img/flag.png";
+        flag.alt = "Flagged match";
+        flag.classList.add("flag-image");
+        flag.hidden = !match.flagged;
+        topRow.appendChild(flag);
+
         const trashButton = document.createElement("button");
         trashButton.textContent = "X";
         trashButton.classList.add("trash-button");

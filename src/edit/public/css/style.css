@@ -38,6 +38,11 @@ body {
   font-size: 1.5em;
 }
 
+.flag-image {
+  width: 24px;
+  height: 24px;
+}
+
 .trash-button {
   background: none;
   border: none;
