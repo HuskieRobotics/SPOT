@@ -904,7 +904,22 @@
       "all": true
     }
   },
-
+  {
+    "type": "team",
+    "name": "sum",
+    "outputPath": "disabledCounts",
+    "options": {
+      "addends": [
+        "counts.autoBroken",
+        "counts.teleopTransitionBroken",
+        "counts.activeShift1Broken",
+        "counts.activeShift2Broken",
+        "counts.inactiveShift1Broken",
+        "counts.inactiveShift2Broken",
+        "counts.endgameBroken"
+      ]
+    }
+  },
   {
     "type": "team",
     "name": "aggregateArray",
