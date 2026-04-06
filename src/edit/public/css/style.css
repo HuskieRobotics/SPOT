@@ -43,6 +43,21 @@ body {
   height: 24px;
 }
 
+.flag-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-left: auto;
+  font-size: 1.2em;
+  color: var(--bg-alt);
+  background-color: #ff6666;
+  display: flex;
+  align-items: center;
+  height: 1.3em;
+  border-radius: 3em;
+  padding: 10px;
+}
+
 .trash-button {
   background: none;
   border: none;
