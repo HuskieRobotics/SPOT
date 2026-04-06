@@ -910,6 +910,7 @@
     "outputPath": "disabledCounts",
     "options": {
       "addends": [
+        "counts.autoBroken",
         "counts.teleopTransitionBroken",
         "counts.activeShift1Broken",
         "counts.activeShift2Broken",

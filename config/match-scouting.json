@@ -2487,6 +2487,14 @@
           "executables": []
         },
         {
+          "id": "autoBroken",
+          "displayText": "Disabled",
+          "gridArea": ["1", "1", "2", "3"],
+          "class": "red",
+          "type": "action",
+          "executables": []
+        },
+        {
           "id": "teleopTransitionBroken",
           "displayText": "Disabled",
           "gridArea": ["1", "1", "2", "3"],
