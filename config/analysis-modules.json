@@ -339,13 +339,13 @@
           "name": "A-Stop Count",
           "path": "counts.autoaStop",
           "decimals": 2,
-          "sort": 1
+          "sort": -1
         },
         {
           "name": "Disabled Count",
           "path": "disabledCounts",
           "decimals": 2,
-          "sort": 1
+          "sort": -1
         },
         {
           "name": "Average Passing Rating",
