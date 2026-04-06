@@ -324,6 +324,12 @@
           "sort": 1
         },
         {
+          "name": "Auto Fuel OPR",
+          "path": "opr.Hub Auto Fuel Count",
+          "decimals": 2,
+          "sort": 1
+        },
+        {
           "name": "Minor Foul OPR",
           "path": "opr.minorFoulCount",
           "decimals": 2,
