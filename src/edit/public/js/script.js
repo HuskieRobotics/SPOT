@@ -319,6 +319,12 @@ let oldAccessCode;
           dropdownButton.textContent = isHidden ? "▼" : "►";
         };
 
+        flagButton.onclick = () => {
+          const isFlagged = !match.flagged;
+          match.flagged = isFlagged;
+          flag.hidden = !isFlagged;
+        };
+
         trashButton.onclick = async () => {
           console.log("Trash button clicked for match id:", match._id);
           if (
