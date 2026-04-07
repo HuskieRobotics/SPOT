@@ -101,6 +101,15 @@ router.post("/setMatch", (req, res) => {
   }
 });
 
+router.post("/flagMatch", async (req, res) => {
+  const match = await TeamMatchPerformance.findOne({
+    matchId_rand: req.body.matchId_rand,
+  });
+  match.flagged = !match.flagged;
+  await match.save();
+  res.json(true);
+});
+
 router.get("/matches", async (req, res) => {
   let manualSchedule = (await axios.get("/schedule/api/matches")).data;
   if (manualSchedule.length) {

@@ -183,6 +183,8 @@ let oldAccessCode;
 
       // Create items for filtered data
       filteredData.forEach((match) => {
+        console.log(match);
+
         const listItem = document.createElement("div");
         listItem.classList.add(`match-item`);
         let allianceColor;
@@ -244,6 +246,7 @@ let oldAccessCode;
         flag.alt = "Flagged match";
         flag.classList.add("flag-image");
         flag.hidden = !match.flagged;
+        console.log(flag.hidden);
         topRow.appendChild(flag);
 
         const trashButton = document.createElement("button");
@@ -321,7 +324,16 @@ let oldAccessCode;
 
         flagButton.onclick = () => {
           const isFlagged = !match.flagged;
-          match.flagged = isFlagged;
+          console.log(match);
+          fetch("/admin/api/flagMatch", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: accessCode,
+            },
+            body: JSON.stringify(match),
+          });
+          console.log(match);
           flag.hidden = !isFlagged;
         };
 
