@@ -87,10 +87,16 @@
             <button
               id="bubble-sheet-switch"
               data-mobile-text="Compare"
-              data-desktop-text="Compare Team Scores"
-            >
+              data-desktop-text="Compare Team Scores">
               Compare Team Scores
             </button>
+          <button
+            id="filter-teams-switch"
+            class="different-mobile-layout"
+            data-mobile-text="Filter"
+            data-desktop-text="Filter Teams"
+          > Filter Teams
+          </button>  
           </div>
           <div id="search-container">
             <div id="search">
@@ -98,6 +104,7 @@
               <i id="search-icon" class="fa fa-search"></i>
             </div>
           </div>
+          
 
           <div id="team-list"></div>
         </div>
@@ -105,8 +112,7 @@
 
       <!-- black bar -->
       <!-- <div id="header">
-
-		</div> -->
+      </div> -->
 
       <div id="dashboard">
         <div id="welcome" class="visible">
@@ -164,6 +170,7 @@
 					</div>
 				</div>
 			</div> -->
+
         <!-- <div id = "auto-pick-view">
 				<div id = "team-list-container">
 					<div id = "pick-list-text">Auto Pick List</div>
@@ -174,11 +181,11 @@
 				<div id = "auto-pick-side">
 					<div id = "auto-pick-stats"></div>	
 				</div>
-			</div>
+			</div> -->
 
 			<div id="filter-teams-view">
 				Filter Teams Based On Actions and Ratings
-			<div class="main-team-container"> </div>
+			<div class="main-team-container-for-teams-filter"> </div>
 			</div>
 			
 			<div id="bubble-sheet-view">
@@ -188,7 +195,6 @@
           <label for="x-axis-select">X-Axis:</label>
           <select id="x-axis-select"></select>
         </div>
-        -->
 
         <div id="bubble-sheet-view">
           <!-- Controls for the Bubble Sheet -->

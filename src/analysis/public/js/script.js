@@ -576,6 +576,10 @@ let matches;
     //get all of the teams from the database
     const allTeams = await fetchTeams();
 
+    //create the main container on the page for the teams to show up on
+    const mainTeamContainer = document.createElement("div");
+    mainTeamContainer.id = "filter-teams-main-team-container";
+
     //add all of the teams to the main area in the teams filter view
     for (const [teamNumber, team] of Object.entries(dataset.teams)) {
       console.log(
@@ -593,7 +597,9 @@ let matches;
   }
 
   function constructTeamForTeamsFilter(teamNumber, team, allTeams) {
-    const mainTeamContainer = document.getElementById("main-team-container");
+    const mainTeamContainer = document.getElementById(
+      "main-team-container-for-teams-filter",
+    );
     const teamNumDisplay = createDOMElement("div", "team-number-display");
     teamNumDisplay.innerText = teamNumber;
     mainTeamContainer.setAttribute("num", teamNumber);
