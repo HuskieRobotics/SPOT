@@ -229,6 +229,27 @@ let previousLayers = [];
     }
   }
 
+  function addPressFeedback(buttonElement) {
+    let clearPressedTimeout;
+
+    const setPressed = () => {
+      clearTimeout(clearPressedTimeout);
+      buttonElement.classList.add("pressed");
+    };
+
+    const clearPressed = () => {
+      clearTimeout(clearPressedTimeout);
+      clearPressedTimeout = setTimeout(() => {
+        buttonElement.classList.remove("pressed");
+      }, 90);
+    };
+
+    buttonElement.addEventListener("pointerdown", setPressed);
+    buttonElement.addEventListener("pointerup", clearPressed);
+    buttonElement.addEventListener("pointerleave", clearPressed);
+    buttonElement.addEventListener("pointercancel", clearPressed);
+  }
+
   const buttonBuilders = {
     //an object to give buttons type specific things, button type: function (button)
     action: (button) => {
@@ -545,6 +566,7 @@ let previousLayers = [];
       button.element.innerText = button.displayText || button.id;
       button.element.classList.add("grid-button", ...button.class.split(" "));
       button.element.style.gridArea = button.gridArea.join(" / ");
+      addPressFeedback(button.element);
 
       //apply type to button+
       buttonBuilders[button.type](button);
