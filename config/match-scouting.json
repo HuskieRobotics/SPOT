@@ -155,7 +155,7 @@
         },
         {
           "id": "Storing",
-          "displayText": "Storing",
+          "displayText": "Collecting",
           "gridArea": ["4", "8", "6", "12"],
           "class": "blue2026",
           "type": "action",
@@ -405,7 +405,7 @@
         },
         {
           "id": "RatingPassing1",
-          "displayText": "Rating 1",
+          "displayText": "Rating 1 \n (Attempted but Ineffective)",
           "gridArea": ["2", "2", "4", "6"],
           "class": "gray",
           "type": "action",
@@ -418,7 +418,7 @@
         },
         {
           "id": "RatingPassing2",
-          "displayText": "Rating 2",
+          "displayText": "Rating 2 \n (Slow/ Bad Aim)",
           "gridArea": ["2", "7", "4", "11"],
           "class": "gray",
           "type": "action",
@@ -431,7 +431,7 @@
         },
         {
           "id": "RatingPassing3",
-          "displayText": "Rating 3",
+          "displayText": "Rating 3 \n (Moderately Accurate + Fast)",
           "gridArea": ["4", "2", "6", "6"],
           "class": "gray",
           "type": "action",
@@ -444,7 +444,7 @@
         },
         {
           "id": "RatingPassing4",
-          "displayText": "Rating 4",
+          "displayText": "Rating 4 \n (Very Accurate + Very Fast)",
           "gridArea": ["4", "7", "6", "11"],
           "class": "gray",
           "type": "action",
@@ -491,7 +491,7 @@
         },
         {
           "id": "RatingShooting1",
-          "displayText": "Rating 1",
+          "displayText": "Rating 1 \n (Really Low Accuracy and Volume)",
           "gridArea": ["2", "2", "4", "6"],
           "class": "gray",
           "type": "action",
@@ -504,7 +504,7 @@
         },
         {
           "id": "RatingShooting2",
-          "displayText": "Rating 2",
+          "displayText": "Rating 2 \n (>50% Missed and Low Volume)",
           "gridArea": ["2", "7", "4", "11"],
           "class": "gray",
           "type": "action",
@@ -517,7 +517,7 @@
         },
         {
           "id": "RatingShooting3",
-          "displayText": "Rating 3",
+          "displayText": "Rating 3 \n (< 20% missed and Moderate Volume)",
           "gridArea": ["4", "2", "6", "6"],
           "class": "gray",
           "type": "action",
@@ -530,7 +530,7 @@
         },
         {
           "id": "RatingShooting4",
-          "displayText": "Rating 4",
+          "displayText": "Rating 4 \n (~100% Accuracy and High Volume)",
           "gridArea": ["4", "7", "6", "11"],
           "class": "gray",
           "type": "action",
@@ -593,7 +593,7 @@
         },
         {
           "id": "Storing",
-          "displayText": "Storing",
+          "displayText": "Collecting",
           "gridArea": ["3", "1", "4", "5"],
           "class": "blue2026",
           "type": "action",
@@ -709,7 +709,7 @@
         },
         {
           "id": "RatingDefense1",
-          "displayText": "Rating 1",
+          "displayText": "Rating 1 \n (No Impact)",
           "gridArea": ["2", "2", "4", "6"],
           "class": "gray",
           "type": "action",
@@ -722,7 +722,7 @@
         },
         {
           "id": "RatingDefense2",
-          "displayText": "Rating 2",
+          "displayText": "Rating 2 \n (Minor Disruption)",
           "gridArea": ["2", "7", "4", "11"],
           "class": "gray",
           "type": "action",
@@ -735,7 +735,7 @@
         },
         {
           "id": "RatingDefense3",
-          "displayText": "Rating 3",
+          "displayText": "Rating 3 \n (Moderate Disruption)",
           "gridArea": ["4", "2", "6", "6"],
           "class": "gray",
           "type": "action",
@@ -748,7 +748,7 @@
         },
         {
           "id": "RatingDefense4",
-          "displayText": "Rating 4",
+          "displayText": "Rating 4 \n (Severe Disruption/Match Altering)",
           "gridArea": ["4", "7", "6", "11"],
           "class": "gray",
           "type": "action",
@@ -797,7 +797,7 @@
         },
         {
           "id": "RatingPassing1",
-          "displayText": "Rating 1",
+          "displayText": "Rating 1 \n (Attempted but Ineffective)",
           "gridArea": ["2", "2", "4", "6"],
           "class": "gray",
           "type": "action",
@@ -810,7 +810,7 @@
         },
         {
           "id": "RatingPassing2",
-          "displayText": "Rating 2",
+          "displayText": "Rating 2 \n (Slow/ Bad Aim)",
           "gridArea": ["2", "7", "4", "11"],
           "class": "gray",
           "type": "action",
@@ -823,7 +823,7 @@
         },
         {
           "id": "RatingPassing3",
-          "displayText": "Rating 3",
+          "displayText": "Rating 3 \n (Moderately Accurate + Fast)",
           "gridArea": ["4", "2", "6", "6"],
           "class": "gray",
           "type": "action",
@@ -836,7 +836,7 @@
         },
         {
           "id": "RatingPassing4",
-          "displayText": "Rating 4",
+          "displayText": "Rating 4 \n (Very Accurate + Very Fast)",
           "gridArea": ["4", "7", "6", "11"],
           "class": "gray",
           "type": "action",
@@ -875,7 +875,7 @@
         },
         {
           "id": "RatingShooting1",
-          "displayText": "Rating 1",
+          "displayText": "Rating 1 \n (Really Low Accuracy and Volume)",
           "gridArea": ["2", "2", "4", "6"],
           "class": "gray",
           "type": "action",
@@ -888,7 +888,7 @@
         },
         {
           "id": "RatingShooting2",
-          "displayText": "Rating 2",
+          "displayText": "Rating 2 \n (>50% Missed and Low Volume)",
           "gridArea": ["2", "7", "4", "11"],
           "class": "gray",
           "type": "action",
@@ -901,7 +901,7 @@
         },
         {
           "id": "RatingShooting3",
-          "displayText": "Rating 3",
+          "displayText": "Rating 3 \n (< 20% missed and Moderate Volume)",
           "gridArea": ["4", "2", "6", "6"],
           "class": "gray",
           "type": "action",
@@ -914,7 +914,7 @@
         },
         {
           "id": "RatingShooting4",
-          "displayText": "Rating 4",
+          "displayText": "Rating 4 \n (~100% Accuracy and High Volume)",
           "gridArea": ["4", "7", "6", "11"],
           "class": "gray",
           "type": "action",
@@ -953,7 +953,7 @@
         },
         {
           "id": "RatingStoring1",
-          "displayText": "Rating 1",
+          "displayText": "Rating 1 \n (Ineffective/No Collection)",
           "gridArea": ["2", "2", "4", "6"],
           "class": "gray",
           "type": "action",
@@ -966,7 +966,7 @@
         },
         {
           "id": "RatingStoring2",
-          "displayText": "Rating 2",
+          "displayText": "Rating 2 \n (Slow and some Collection)",
           "gridArea": ["2", "7", "4", "11"],
           "class": "gray",
           "type": "action",
@@ -979,7 +979,7 @@
         },
         {
           "id": "RatingStoring3",
-          "displayText": "Rating 3",
+          "displayText": "Rating 3 \n (Smooth and Good Volume)",
           "gridArea": ["4", "2", "6", "6"],
           "class": "gray",
           "type": "action",
@@ -992,7 +992,7 @@
         },
         {
           "id": "RatingStoring4",
-          "displayText": "Rating 4",
+          "displayText": "Rating 4 \n (Vacuum/High Collection)",
           "gridArea": ["4", "7", "6", "11"],
           "class": "gray",
           "type": "action",
@@ -2415,6 +2415,14 @@
           "executables": []
         },
         {
+          "id": "autoaStop",
+          "displayText": "A-Stop",
+          "gridArea": ["1", "3", "2", "4"],
+          "class": "red",
+          "type": "action",
+          "executables": []
+        },
+        {
           "id": "inactiveShift2Storing",
           "displayText": "IS2 Store",
           "gridArea": ["18", "5", "19", "6"],
@@ -2475,6 +2483,62 @@
           "displayText": "Auto Pass R1",
           "gridArea": ["2", "5", "3", "7"],
           "class": "gray",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "autoBroken",
+          "displayText": "Disabled",
+          "gridArea": ["1", "1", "2", "3"],
+          "class": "red",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "teleopTransitionBroken",
+          "displayText": "Disabled",
+          "gridArea": ["1", "1", "2", "3"],
+          "class": "red",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "inactiveShift1Broken",
+          "displayText": "Disabled",
+          "gridArea": ["1", "1", "2", "3"],
+          "class": "red",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "inactiveShift2Broken",
+          "displayText": "Disabled",
+          "gridArea": ["1", "1", "2", "3"],
+          "class": "red",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "endgameBroken",
+          "displayText": "Disabled",
+          "gridArea": ["1", "1", "2", "3"],
+          "class": "red",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "activeShift1Broken",
+          "displayText": "Disabled",
+          "gridArea": ["1", "1", "2", "3"],
+          "class": "red",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "activeShift2Broken",
+          "displayText": "Disabled",
+          "gridArea": ["1", "1", "2", "3"],
+          "class": "red",
           "type": "action",
           "executables": []
         },

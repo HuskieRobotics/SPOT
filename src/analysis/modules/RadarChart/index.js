@@ -15,7 +15,6 @@ class RadarChart {
   }
 
   formatData(teams, dataset) {
-    console.log(`radar teams recieved: ${teams}`);
     let filteredTeams = teams.filter((team) => team != "|");
     const lines = filteredTeams.map((team) => {
       const data = [];
@@ -33,9 +32,11 @@ class RadarChart {
         ) {
           let point = 0;
           if (!(this.moduleConfig.options.lines[i].times[j].path == "none")) {
+            // Some metrics may be missing for a team; default to 0 so the chart can still render.
             point = getPath(
               dataset.teams[team],
               this.moduleConfig.options.lines[i].times[j].path,
+              0,
             );
           }
           values.push(point);

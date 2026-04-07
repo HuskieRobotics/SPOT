@@ -66,7 +66,6 @@ function getSelectedEvent() {
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
   const eventID = urlParams.get("event");
-  console.log("Event selected:", eventID);
   return eventID;
 }
 
@@ -236,10 +235,6 @@ let matches;
     // get an array (teams) of all teams that contain data
     var teams = [];
     for (var [teamNumber, team] of Object.entries(dataset.teams)) {
-      console.log("team: ");
-      console.log(team);
-      console.log("team number: ");
-      console.log(teamNumber);
       if (
         dataset.tmps.filter((tmp) => tmp.robotNumber == teamNumber).length >
           0 &&
@@ -249,19 +244,9 @@ let matches;
         //console.log("added team: ")
         //console.log(team);
         setPath(team, "robotNumber", teamNumber);
-        console.log("data from path: " + getPath(team, "robotNumber"));
         teams.push(team);
-
-        console.log("TEAM ADDED " + teamNumber);
-
-        console.log("team number of first team: ");
-        console.log(teams[0].robotNumber);
-        console.log(teams);
       }
-      console.log("-----------------");
     }
-    console.log("teams before avgprob");
-    console.log(teams);
     // console.log(
     //   "teams type and size: " + typeof teams + teams.length + teams[0]
     // );
@@ -278,8 +263,6 @@ let matches;
       };
     });
 
-    console.log("teams w/ avg probability");
-    console.log(teamsProbability);
     for (let i = 0; i < teams.length; i++) {
       for (let j = 0; j < teamsProbability.length; j++) {
         if (teams[i].robotNumber == teamsProbability[j].robotNumber) {
@@ -341,7 +324,6 @@ let matches;
     }
     setTimeout(() => {
       firstContainer.click();
-      console.log("clicked");
     }, 4);
   }
 
@@ -409,8 +391,8 @@ let matches;
         await module.setData(await module.formatData([teamNumber], dataset));
       }
     }
-    autoPickStats.style.display = "none";
-    autoPickMain.style.display = "none";
+    // autoPickStats.style.display = "none";
+    // autoPickMain.style.display = "none";
   }
 
   //match UI functions
@@ -418,7 +400,7 @@ let matches;
     //add event listener to "Simulate Match" button to set reset UI and switch to match view
     matchViewSwitch.addEventListener("click", () => {
       clearInterface();
-      matchViewSwitch.classList.add("selected");
+      //   matchViewSwitch.classList.add("selected");
       bubbleSheetSwitch.classList.remove("selected");
       showFade(matchView);
     });
@@ -622,13 +604,13 @@ let matches;
   // Auto pick list UI functions
   async function loadAutoPickList(dataset, modulesConfig) {
     //add event listener to "AutoPickList" button to set reset UI and switch to autopicklist tab
-    autoPickSwitch.addEventListener("click", () => {
-      clearInterface();
-      autoPickSwitch.classList.add("selected");
-      bubbleSheetSwitch.classList.remove("selected");
-      loadTeamsAutoPick(dataset, modulesConfig);
-      showFade(autoPickView);
-    });
+    // autoPickSwitch.addEventListener("click", () => {
+    //   clearInterface();
+    //   autoPickSwitch.classList.add("selected");
+    //   bubbleSheetSwitch.classList.remove("selected");
+    //   loadTeamsAutoPick(dataset, modulesConfig);
+    //   showFade(autoPickView);
+    // });
   }
 
   // Bubble Sheet UI functions
@@ -647,31 +629,70 @@ let matches;
     const yAxisSelect = document.getElementById("y-axis-select");
     const zAxisSelect = document.getElementById("z-axis-select");
 
+    let averageScoresError = false;
+    let oprError = false;
+
     for (const axisSelect of [xAxisSelect, yAxisSelect, zAxisSelect]) {
       axisSelect.innerHTML = ""; // Clear existing options
-      for (
-        let i = 0;
-        i <
-        Object.keys(dataset.teams[Object.keys(dataset.teams)[0]].averageScores)
-          .length;
-        i++
-      ) {
-        const key = Object.keys(
-          dataset.teams[Object.keys(dataset.teams)[0]].averageScores,
-        )[i];
-        const option = document.createElement("option");
-        option.value = `averageScores.${key}`;
-        option.label = "Average " + key.charAt(0).toUpperCase() + key.slice(1);
-        if (axisSelect === xAxisSelect && i === 0) {
-          option.selected = true;
-        } // Set as selected for X-axis
-        if (axisSelect === yAxisSelect && i === 1) {
-          option.selected = true;
-        } // Set as selected for Y-axis
-        if (axisSelect === zAxisSelect && i === 2) {
-          option.selected = true;
-        } // Set as selected for Z-axis
-        axisSelect.appendChild(option);
+
+      try {
+        for (
+          let i = 0;
+          i <
+          Object.keys(
+            dataset.teams[Object.keys(dataset.teams)[0]].averageScores,
+          ).length;
+          i++
+        ) {
+          const key = Object.keys(
+            dataset.teams[Object.keys(dataset.teams)[0]].averageScores,
+          )[i];
+          const option = document.createElement("option");
+          option.value = `averageScores.${key}`;
+          option.label =
+            "Average " + key.charAt(0).toUpperCase() + key.slice(1);
+          if (axisSelect === xAxisSelect && i === 0) {
+            option.selected = true;
+          } // Set as selected for X-axis
+          if (axisSelect === yAxisSelect && i === 1) {
+            option.selected = true;
+          } // Set as selected for Y-axis
+          if (axisSelect === zAxisSelect && i === 2) {
+            option.selected = true;
+          } // Set as selected for Z-axis
+          axisSelect.appendChild(option);
+        }
+      } catch (error) {
+        if (!averageScoresError) {
+          console.error(
+            "Error fetching average scores for the bubble graph! " + error,
+          );
+          averageScoresError = true;
+        }
+      }
+
+      try {
+        for (
+          let i = 0;
+          i <
+          Object.keys(dataset.teams[Object.keys(dataset.teams)[0]].opr).length;
+          i++
+        ) {
+          const key = Object.keys(
+            dataset.teams[Object.keys(dataset.teams)[0]].opr,
+          )[i];
+          const option = document.createElement("option");
+          option.value = `opr.${key}`;
+          option.label = "OPR " + key.charAt(0).toUpperCase() + key.slice(1);
+          axisSelect.appendChild(option);
+        }
+      } catch (error) {
+        if (!oprError) {
+          console.error(
+            "OPR could not be gotten for the bubble graph! " + error,
+          );
+          oprError = true;
+        }
       }
 
       const option = document.createElement("option");
@@ -823,7 +844,6 @@ let matches;
   //call setData on every module in matches
   async function setMatchModules(alliances) {
     for (const module of modules.match.left) {
-      console.log(module.moduleConfig.name);
       var displayedAlliances = alliances[0].filter((teamNumber) => {
         if (teamNumber == "|") {
           return false;
@@ -844,7 +864,6 @@ let matches;
         console.log(`alliances script.js ${alliances}`);
         allTeams.push("|");
         allTeams = allTeams.concat(alliances[1]);
-        console.log(`all teams: ${allTeams}`);
         displayedAlliances = allTeams.filter((teamNumber) => {
           if (
             !module.moduleConfig.separate &&
@@ -876,7 +895,6 @@ let matches;
     }
 
     for (const module of modules.match.right) {
-      console.log(module.moduleConfig.name);
       var displayedAlliances = alliances[1].filter((teamNumber) => {
         if (teamNumber == "|") {
           return false;
@@ -934,8 +952,8 @@ let matches;
   //dashboard initializer, loads teams, match view, and autopicklist
   function initDashboard(dataset, modulesConfig) {
     loadTeams(dataset, modulesConfig);
-    loadMatchView(dataset, modulesConfig);
-    loadAutoPickList(dataset, modulesConfig);
+    // loadMatchView(dataset, modulesConfig);
+    // loadAutoPickList(dataset, modulesConfig);
     loadBubbleGraph(dataset, modulesConfig);
     loadTeamsFilterView(dataset, modulesConfig);
 
@@ -984,18 +1002,18 @@ let matches;
     );
 
     hideFade(welcomeView);
-    hideFade(matchView);
+    // hideFade(matchView);
     hideFade(teamView);
-    hideFade(autoPickView);
+    // hideFade(autoPickView);
     hideFade(bubbleSheetView);
     hideFade(filterTeamsView);
     // hideFade(autoPickStats)
     // hideFade(autoPickMain)
-    autoPickStats.style.display = "none";
-    autoPickMain.style.display = "none";
+    // autoPickStats.style.display = "none";
+    // autoPickMain.style.display = "none";
     bubbleGraphContainer.style.display = "none";
-    matchViewSwitch.classList.remove("selected");
-    autoPickSwitch.classList.remove("selected");
+    // matchViewSwitch.classList.remove("selected");
+    // autoPickSwitch.classList.remove("selected");
     bubbleSheetSwitch.classList.remove("selected");
     filterTeamsSwitch.classList.remove("selected");
   }

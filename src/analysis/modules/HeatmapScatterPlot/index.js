@@ -21,6 +21,23 @@ class HeatmapScatterPlot {
       return acc;
     }, []);
 
+    // helper to map action -> transformed coordinate (or null if out-of-scope)
+    const transformPoint = (a) => {
+      const coord = getPath(a, this.moduleConfig.options.coordinatePath, null);
+      if (!coord || typeof coord.x !== "number" || typeof coord.y !== "number")
+        return null;
+
+      const xRaw = coord.x;
+      const yRaw = coord.y;
+
+      if (xRaw > 69.5) {
+        return { x: (100 - xRaw) * 2, y: 100 - yRaw };
+      } else if (xRaw < 30.5) {
+        return { x: xRaw * 2, y: yRaw };
+      }
+      return null;
+    };
+
     const data = actions.reduce((acc, actionId) => {
       const filteredActionQueue = teams
         .map((team) =>
@@ -31,21 +48,20 @@ class HeatmapScatterPlot {
         )
         .flat()
         .filter((a) => a.id == actionId);
-      // console.log(this.moduleConfig.options.actionLabels[actionId])
-      if (filteredActionQueue.length) {
+
+      // produce paired coordinates and drop nulls
+      const pts = filteredActionQueue.map(transformPoint).filter(Boolean);
+
+      if (pts.length) {
         acc.push({
           mode: "markers",
           type: "scatter",
           showlegend: true,
           name: this.moduleConfig.options.actionLabels[actionId],
-          x: filteredActionQueue.map(
-            (a) => getPath(a, this.moduleConfig.options.coordinatePath).x,
-          ),
-          y: filteredActionQueue.map(
-            (a) => getPath(a, this.moduleConfig.options.coordinatePath).y,
-          ),
+          x: pts.map((p) => p.x),
+          y: pts.map((p) => p.y),
           marker: {
-            size: 16,
+            size: 13,
             line: {
               color: "white",
               width: 1,
@@ -58,8 +74,7 @@ class HeatmapScatterPlot {
       return acc;
     }, []);
 
-    // console.log(data)
-
+    // build heatmap data using the same transform and explicit bins (consistent with image 0-100)
     const filteredAllActionQueue = teams
       .map((team) =>
         getPath(
@@ -70,31 +85,22 @@ class HeatmapScatterPlot {
       .flat()
       .filter((a) => actionGroups[0].actions.includes(a.id));
 
+    const heatPts = filteredAllActionQueue.map(transformPoint).filter(Boolean);
+
     data.push({
       type: "histogram2dcontour",
       name: "Heatmap",
       showlegend: true,
-      x: filteredAllActionQueue.map(
-        (a) => getPath(a, this.moduleConfig.options.coordinatePath).x,
-      ),
-      y: filteredAllActionQueue.map(
-        (a) => getPath(a, this.moduleConfig.options.coordinatePath).y,
-      ),
+      x: heatPts.map((p) => p.x),
+      y: heatPts.map((p) => p.y),
       xaxis: "x",
       yaxis: "y",
       opacity: 0.7,
-      nbinsx: 10,
-      nbinsy: 10,
-      // xbins: {
-      //     start: 0,
-      //     size: 5,
-      //     end: 100
-      // },
-      // ybins: {
-      //     start: 0,
-      //     size: 5,
-      //     end: 100
-      // },
+      // explicit bins so the heatmap doesn't rescale based on data extent
+      nbinsx: undefined,
+      nbinsy: undefined,
+      xbins: { start: 0, end: 100, size: 8 },
+      ybins: { start: 0, end: 100, size: 8 },
       zmin: 0,
       showscale: false,
       colorscale: [
@@ -109,7 +115,7 @@ class HeatmapScatterPlot {
 
   async setData(data) {
     const fieldImg = await getSvgDataPng(
-      "/analysis/" + this.moduleConfig.options.imgPath,
+      "/" + this.moduleConfig.options.imgPath,
     );
 
     const layout = {
@@ -119,6 +125,7 @@ class HeatmapScatterPlot {
         pad: 12,
         // b: 40
       },
+      height: 500,
       title: {
         text: this.moduleConfig.name,
         font: {
@@ -189,12 +196,20 @@ async function getSvgDataPng(url) {
   img.src = url;
   return new Promise((r) => {
     img.onload = () => {
+      // use natural size and devicePixelRatio for consistent aspect and crispness
+      const scale = window.devicePixelRatio || 1;
+      const naturalW = img.naturalWidth || img.width;
+      const naturalH = img.naturalHeight || img.height;
+
       const canvas = document.createElement("canvas");
-      canvas.width = img.width * 4;
-      canvas.height = img.height * 4;
+      canvas.width = Math.round(naturalW * scale);
+      canvas.height = Math.round(naturalH * scale);
       const ctx = canvas.getContext("2d");
-      ctx.drawImage(img, 0, 0, img.width * 4, img.height * 4);
-      r({ src: canvas.toDataURL(), w: img.width, h: img.height });
+      // scale context so returned image is crisp on high-DPI displays
+      ctx.setTransform(scale, 0, 0, scale, 0, 0);
+      ctx.drawImage(img, 0, 0, naturalW, naturalH);
+      r({ src: canvas.toDataURL(), w: naturalW, h: naturalH });
     };
+    img.onerror = () => r({ src: "", w: 1, h: 1 });
   });
 }

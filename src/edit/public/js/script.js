@@ -13,7 +13,6 @@ let oldAccessCode;
 
   let dataset;
   let transformers;
-  console.log("Loading data...");
 
   function showFade(element) {
     element.classList.add("visible");
@@ -138,7 +137,9 @@ let oldAccessCode;
       const items = listContainer.querySelectorAll(".match-item");
       items.forEach((item) => item.remove());
 
-      let tbaData = await fetch("/edit/blueApiData").then((res) => res.json());
+      let tbaData = await fetch("/analysis/api/blueApiData").then((res) =>
+        res.json(),
+      );
 
       // Build robots by match from qualification matches (keep first occurrence)
       const robotsByMatch = tbaData.reduce((acc, match) => {

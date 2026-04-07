@@ -24,6 +24,49 @@ if (savedTheme == null || savedTheme == "light") {
   root.setAttribute("data-theme", "dark");
 }
 
+const restart_button = document.getElementById("server-restart");
+restart_button.addEventListener("click", async () => {
+  const restart_modal = new Modal("small", false).header(
+    "Are you sure you want to restart the server?",
+  );
+  const accessCodeInput = createDOMElement("input", "access-input");
+  accessCodeInput.placeholder = "Access Code";
+  accessCodeInput.type = "password";
+  const confirm_button = document.createElement("button");
+  confirm_button.innerHTML = "Yes";
+  const deny_button = document.createElement("button");
+  deny_button.innerHTML = "No";
+
+  restart_modal.element.appendChild(accessCodeInput);
+  restart_modal.element.appendChild(confirm_button);
+  restart_modal.element.appendChild(deny_button);
+
+  confirm_button.addEventListener("click", async () => {
+    const accessCode = accessCodeInput.value;
+
+    const restart = fetch("/admin/restart", {
+      headers: {
+        Authorization: accessCode,
+      },
+    });
+
+    restart.then(
+      (response) => {
+        if (response.status == 400) {
+          new Popup("error", "Wrong Access Code!", 2000);
+        }
+      },
+      () => {
+        restart_modal.modalExit();
+      },
+    );
+  });
+
+  deny_button.addEventListener("click", async () => {
+    restart_modal.modalExit();
+  });
+});
+
 const scouters = {};
 
 (async () => {
@@ -96,7 +139,6 @@ async function constructApp(accessCode) {
         Authorization: accessCode,
       },
     });
-    console.log("ENTER MATCH!");
   });
 
   let menuExpanded = false;
@@ -170,7 +212,6 @@ async function updateScouters(accessCode) {
       }, 15000);
     }
   }
-  console.log(scouters);
   //prune scouters that no longer exist
   for (let timestamp in scouters) {
     if (!scouterList.find((x) => (x.timestamp = timestamp))) {
