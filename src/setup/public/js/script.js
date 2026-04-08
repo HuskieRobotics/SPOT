@@ -27,6 +27,27 @@ function parseBoolean(value) {
   return value === true || value === "true" || value === "on";
 }
 
+// Normalizes stored OPR strings from config into an object for UI display.
+// Handles stringified JSON values and invalid values by returning an empty object.
+function normalizeOPRStrings(value) {
+  if (!value) return {};
+  if (typeof value === "object") return value;
+
+  if (typeof value === "string") {
+    const parsed = JSON.parse(value);
+    return parsed && typeof parsed === "object" ? parsed : {};
+  }
+  return {};
+}
+
+// Validates and parses the OPR strings text input before saving config.
+// Returns null when the input is not valid JSON object syntax.
+function parseOPRStringsInput(value) {
+  if (typeof value !== "string") return null;
+  const parsed = JSON.parse(value);
+  return parsed && typeof parsed === "object" ? parsed : null;
+}
+
 (async () => {
   const authRequest = await fetch("./api/auth").then((res) => res.json());
 
@@ -96,7 +117,7 @@ async function constructApp(accessCode) {
     document.querySelector("#SWAP_ZONE_BUTTON_LOCATIONS").checked =
       parseBoolean(config.SWAP_ZONE_BUTTON_LOCATIONS);
     document.querySelector("#TBA_OPR_STRINGS").value = JSON.stringify(
-      config.TBA_OPR_STRINGS || {},
+      normalizeOPRStrings(config.TBA_OPR_STRINGS),
     );
   }
 
@@ -266,6 +287,21 @@ document.querySelector("#submit").addEventListener("click", async () => {
   config.SWAP_ZONE_BUTTON_LOCATIONS = document.querySelector(
     "#SWAP_ZONE_BUTTON_LOCATIONS",
   ).checked;
+
+  if (typeof config.TBA_OPR_STRINGS === "string") {
+    const parsedOPRStrings = parseOPRStringsInput(config.TBA_OPR_STRINGS);
+    if (!parsedOPRStrings) {
+      new Modal("small")
+        .header("Invalid OPR Strings")
+        .text(
+          'TBA_OPR_STRINGS must be valid JSON (for example: {"string_1":"Hub Total Fuel Count"}).',
+        )
+        .dismiss();
+      return;
+    }
+
+    config.TBA_OPR_STRINGS = parsedOPRStrings;
+  }
 
   let res = await (
     await fetch("./api/config", {
