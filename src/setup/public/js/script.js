@@ -95,6 +95,9 @@ async function constructApp(accessCode) {
     document.querySelector("#DEMO").checked = parseBoolean(config.DEMO);
     document.querySelector("#SWAP_ZONE_BUTTON_LOCATIONS").checked =
       parseBoolean(config.SWAP_ZONE_BUTTON_LOCATIONS);
+    document.querySelector("#TBA_OPR_STRINGS").value = JSON.stringify(
+      config.TBA_OPR_STRINGS || {},
+    );
   }
 
   document.querySelector("#setup-container").classList.add("visible");
