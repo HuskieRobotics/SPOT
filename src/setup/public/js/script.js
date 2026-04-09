@@ -27,8 +27,8 @@ function parseBoolean(value) {
   return value === true || value === "true" || value === "on";
 }
 
-// Normalizes stored OPR strings from config into an object for UI display.
-// Handles stringified JSON values and invalid values by returning an empty object.
+// Turns saved OPR text into an object the page can use.
+// If the value is bad or missing, it gives back an empty object {}.
 function normalizeOPRStrings(value) {
   if (!value) return {};
   if (typeof value === "object") return value;
@@ -40,8 +40,8 @@ function normalizeOPRStrings(value) {
   return {};
 }
 
-// Validates and parses the OPR strings text input before saving config.
-// Returns null when the input is not valid JSON object syntax.
+// Checks OPR text before saving and turns it into an object.
+// If the text is not valid JSON object text, it returns null.
 function parseOPRStringsInput(value) {
   if (typeof value !== "string") return null;
   const parsed = JSON.parse(value);
