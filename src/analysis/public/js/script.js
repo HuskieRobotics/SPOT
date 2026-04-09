@@ -569,6 +569,7 @@ let matches;
       loadTeams(dataset, modulesConfig);
       filterTeamsSwitch.classList.add("selected");
       showFade(filterTeamsView);
+      loadTeamsForTeamsFilter(dataset, modulesConfig);
     });
   }
 
