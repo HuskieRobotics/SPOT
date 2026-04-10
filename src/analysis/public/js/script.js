@@ -571,6 +571,8 @@ let matches;
       showFade(filterTeamsView);
       loadTeamsForTeamsFilter(dataset, modulesConfig);
     });
+
+    // teamFilterInput.addEventListener("input", () => {});
   }
 
   async function loadTeamsForTeamsFilter(dataset, modulesConfig) {
@@ -603,21 +605,21 @@ let matches;
 
   function constructTeamForTeamsFilter(teamNumber, team, allTeams) {
     // get the main container on the page by the container's ID
-    const mainTeamContainer = document.getElementById(
-      "main-team-container-for-teams-filter",
-    );
+    // const mainTeamContainer = document.getElementById(
+    //   "main-team-container-for-teams-filter",
+    // );
 
     // create a new div element for each specific team name
     const teamContainer = createDOMElement("div", "team-container");
 
-    // create a div element for each specific team number and set the text of the div to the team number, then append it to the main team container
+    // create a div element for each specific team number and set the text of the div to the team number, then append it to the container for the team
     const teamNumDisplay = createDOMElement("div", "team-number");
     teamNumDisplay.innerText = teamNumber;
 
     teamContainer.appendChild(teamNumDisplay);
 
     if (allTeams && allTeams[teamNumber]) {
-      // create a div element for each specific team name and set the text of the div to the team name, then append it to the main team container
+      // create a div element for each specific team name and set the text of the div to the team name, then append it to the container for the team
       const teamNameDisplay = createDOMElement("div", "team-name");
       teamNameDisplay.innerText = allTeams[teamNumber];
       teamContainer.appendChild(teamNameDisplay);
