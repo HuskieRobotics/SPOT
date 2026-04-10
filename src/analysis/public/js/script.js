@@ -577,11 +577,15 @@ let matches;
     //get all of the teams from the database
     const allTeams = await fetchTeams();
 
-    //create the main container on the page for the teams to show up on
-    const mainTeamContainer = document.createElement("div");
-    mainTeamContainer.id = "filter-teams-main-team-container";
+    //get the main container on the page by the container's ID
+    const containerForTeams = document.getElementById(
+      "main-team-container-for-teams-filter",
+    );
 
-    //add all of the teams to the main area in the teams filter view
+    // Clear the container
+    containerForTeams.innerHTML = "";
+
+    //add all of the teams to the container that was just obtained
     for (const [teamNumber, team] of Object.entries(dataset.teams)) {
       console.log(
         `team: ${Object.keys(team)}\n num: ${teamNumber}\n allTeams: ${allTeams[teamNumber]}`,
@@ -592,20 +596,33 @@ let matches;
           team,
           allTeams,
         );
-        teamList.appendChild(teamContainer);
+        containerForTeams.appendChild(teamContainer);
       }
     }
   }
 
   function constructTeamForTeamsFilter(teamNumber, team, allTeams) {
+    // get the main container on the page by the container's ID
     const mainTeamContainer = document.getElementById(
       "main-team-container-for-teams-filter",
     );
-    const teamNumDisplay = createDOMElement("div", "team-number-display");
-    teamNumDisplay.innerText = teamNumber;
-    mainTeamContainer.setAttribute("num", teamNumber);
 
-    mainTeamContainer.appendChild(teamNumDisplay);
+    // create a new div element for each specific team name
+    const teamContainer = createDOMElement("div", "team-container");
+
+    // create a div element for each specific team number and set the text of the div to the team number, then append it to the main team container
+    const teamNumDisplay = createDOMElement("div", "team-number");
+    teamNumDisplay.innerText = teamNumber;
+
+    teamContainer.appendChild(teamNumDisplay);
+
+    if (allTeams && allTeams[teamNumber]) {
+      // create a div element for each specific team name and set the text of the div to the team name, then append it to the main team container
+      const teamNameDisplay = createDOMElement("div", "team-name");
+      teamNameDisplay.innerText = allTeams[teamNumber];
+      teamContainer.appendChild(teamNameDisplay);
+    }
+    return teamContainer; //return the container created for the specific team
   }
 
   // Auto pick list UI functions
