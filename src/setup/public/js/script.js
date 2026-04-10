@@ -40,12 +40,57 @@ function normalizeOPRStrings(value) {
   return {};
 }
 
-// Checks OPR text before saving and turns it into an object.
-// If the text is not valid JSON object text, it returns null.
-function parseOPRStringsInput(value) {
-  if (typeof value !== "string") return null;
-  const parsed = JSON.parse(value);
-  return parsed && typeof parsed === "object" ? parsed : null;
+// Creates one visible textbox for a single OPR key.
+// The same helper is used for both initial render and "Add OPR String" clicks.
+function createOPRKeyInput(value = "") {
+  const input = document.createElement("input");
+  input.type = "text";
+  input.className = "input opr-key-input";
+  input.placeholder = "Input Eg: minorFoulCount";
+  input.value = value;
+  return input;
+}
+
+// Reads all OPR key textboxes and builds the config shape expected by SPOT.
+// Non-empty rows are converted into sequential keys: string_1, string_2, ...
+function buildOPRStringsObject() {
+  const container = document.getElementById("opr-keys-container");
+  const keys = Array.from(container.querySelectorAll(".opr-key-input"))
+    .map((input) => input.value.trim())
+    .filter(Boolean);
+
+  const oprStrings = {};
+  keys.forEach((key, index) => {
+    oprStrings[`string_${index + 1}`] = key;
+  });
+
+  return oprStrings;
+}
+
+// Renders textbox rows from saved config data.
+// It normalizes old/new formats, sorts by numeric suffix for stable order,
+// and guarantees at least one empty textbox when no values are saved yet.
+function renderOPRKeyInputs(oprStringsValue) {
+  const container = document.getElementById("opr-keys-container");
+  if (!container) return;
+
+  container.innerHTML = "";
+
+  const normalized = normalizeOPRStrings(oprStringsValue);
+  const orderedValues = Object.entries(normalized)
+    .sort(([aKey], [bKey]) =>
+      aKey.localeCompare(bKey, undefined, { numeric: true }),
+    )
+    .map(([, value]) => String(value || "").trim())
+    .filter(Boolean);
+
+  if (orderedValues.length === 0) {
+    container.appendChild(createOPRKeyInput());
+  } else {
+    orderedValues.forEach((value) => {
+      container.appendChild(createOPRKeyInput(value));
+    });
+  }
 }
 
 (async () => {
@@ -57,7 +102,7 @@ function parseOPRStringsInput(value) {
     accessCodeInput.placeholder = "Access Code";
     accessCodeInput.type = "password";
     accessCodeInput.addEventListener("keydown", (e) => {
-      if (e.keyCode == 13) {
+      if (e.key === "Enter") {
         validate(accessCodeInput.value, authModal);
       }
     });
@@ -116,9 +161,9 @@ async function constructApp(accessCode) {
     document.querySelector("#DEMO").checked = parseBoolean(config.DEMO);
     document.querySelector("#SWAP_ZONE_BUTTON_LOCATIONS").checked =
       parseBoolean(config.SWAP_ZONE_BUTTON_LOCATIONS);
-    document.querySelector("#TBA_OPR_STRINGS").value = JSON.stringify(
-      normalizeOPRStrings(config.TBA_OPR_STRINGS),
-    );
+    renderOPRKeyInputs(config.TBA_OPR_STRINGS);
+  } else {
+    renderOPRKeyInputs({});
   }
 
   document.querySelector("#setup-container").classList.add("visible");
@@ -181,7 +226,6 @@ async function createNewEventCode(candidate) {
 }
 
 // Add event listener for Generate Event Number button
-document;
 document
   .getElementById("generateEventNumber")
   .addEventListener("click", async () => {
@@ -219,6 +263,13 @@ document
     }
     eventSelect.value = candidate; // Automatically select the new candidate
   });
+
+document.getElementById("addOPRString").addEventListener("click", () => {
+  const container = document.getElementById("opr-keys-container");
+  const newInput = createOPRKeyInput();
+  container.appendChild(newInput);
+  newInput.focus();
+});
 
 async function populateEventNumbers() {
   const databaseURL = document.getElementById("DATABASE_URL").value;
@@ -288,19 +339,13 @@ document.querySelector("#submit").addEventListener("click", async () => {
     "#SWAP_ZONE_BUTTON_LOCATIONS",
   ).checked;
 
-  if (typeof config.TBA_OPR_STRINGS === "string") {
-    const parsedOPRStrings = parseOPRStringsInput(config.TBA_OPR_STRINGS);
-    if (!parsedOPRStrings) {
-      new Modal("small")
-        .header("Invalid OPR Strings")
-        .text(
-          'TBA_OPR_STRINGS must be valid JSON (for example: {"string_1":"Hub Total Fuel Count"}).',
-        )
-        .dismiss();
-      return;
-    }
-
-    config.TBA_OPR_STRINGS = parsedOPRStrings;
+  config.TBA_OPR_STRINGS = buildOPRStringsObject();
+  if (Object.keys(config.TBA_OPR_STRINGS).length === 0) {
+    new Modal("small")
+      .header("Missing OPR Strings")
+      .text("Add at least one OPR key before saving.")
+      .dismiss();
+    return;
   }
 
   let res = await (
