@@ -14,8 +14,8 @@ module.exports = (server) => {
     if (!server) {
       console.warn(
         chalk.yellow(
-          "You need to pass in an http server to initialize ScoutingSync. This can be ignored if ScoutingSync is initialized elsewhere."
-        )
+          "You need to pass in an http server to initialize ScoutingSync. This can be ignored if ScoutingSync is initialized elsewhere.",
+        ),
       );
     } else {
       ScoutingSync.initialize(server); //initialize the socketio stuff
@@ -45,8 +45,8 @@ class ScoutingSync {
     if (!config.secrets.TBA_API_KEY) {
       console.error(
         chalk.whiteBright.bgRed.bold(
-          "TBA_API_KEY not found in config.json file! SPOT will not properly function without this."
-        )
+          "TBA_API_KEY not found in config.json file! SPOT will not properly function without this.",
+        ),
       );
     }
     ScoutingSync.match = (await ScoutingSync.getMatches())[0] || {
@@ -65,7 +65,7 @@ class ScoutingSync {
           if (!newScouter.connected) {
             //remove old disconnnected scouters
             ScoutingSync.scouters = ScoutingSync.scouters.filter(
-              (x) => !(!x.connected && x.timestamp == newScouter.timestamp)
+              (x) => !(!x.connected && x.timestamp == newScouter.timestamp),
             );
           }
         }, 60000);
@@ -100,18 +100,18 @@ class ScoutingSync {
       .catch((e) =>
         console.log(
           e,
-          chalk.bold.red("\nError fetching matches from Blue Alliance Api!")
-        )
+          chalk.bold.red("\nError fetching matches from Blue Alliance Api!"),
+        ),
       );
 
     if (tbaMatches === undefined) {
       if (config.secrets.FMS_API_KEY) {
         let uri = `https://frc-api.firstinspires.org/v3.0/${eventKey.substring(
           0,
-          4
+          4,
         )}/schedule/${eventKey.substring(
           4,
-          eventKey.length
+          eventKey.length,
         )}?tournamentLevel=practice`;
 
         let frcPracticeMatches = await axios
@@ -124,8 +124,8 @@ class ScoutingSync {
           .catch((e) =>
             console.log(
               e,
-              chalk.bold.red("\nError fetching practice matches from FMS!")
-            )
+              chalk.bold.red("\nError fetching practice matches from FMS!"),
+            ),
           );
 
         if (frcPracticeMatches === undefined) return formattedMatches;
@@ -207,7 +207,7 @@ class ScoutingSync {
    */
   static assignScouters() {
     let nextRobots = new Set(
-      ScoutingSync.match.robots.red.concat(ScoutingSync.match.robots.blue)
+      ScoutingSync.match.robots.red.concat(ScoutingSync.match.robots.blue),
     ); //the robots that are next in line to be assigned to scouters
 
     //if someone is ACTIVELY scouting the robot, remove it from the set of robots to be scouted
@@ -229,7 +229,9 @@ class ScoutingSync {
         //check to see if nextRobots is empty, if so repopulate it with all the robots in the match
         if (nextRobots.size <= 0) {
           nextRobots = new Set(
-            ScoutingSync.match.robots.red.concat(ScoutingSync.match.robots.blue)
+            ScoutingSync.match.robots.red.concat(
+              ScoutingSync.match.robots.blue,
+            ),
           );
         }
 
@@ -249,7 +251,7 @@ class ScoutingSync {
       (x) =>
         x.state.matchNumber == ScoutingSync.match.number &&
         x.state.status == ScoutingSync.SCOUTER_STATUS.WAITING &&
-        x.state.connected
+        x.state.connected,
     );
 
     if (!DEMO) {
@@ -258,7 +260,7 @@ class ScoutingSync {
         ScoutingSync.scouters.filter(
           (x) =>
             x.state.matchNumber == ScoutingSync.match.number &&
-            x.state.status == ScoutingSync.SCOUTER_STATUS.SCOUTING
+            x.state.status == ScoutingSync.SCOUTER_STATUS.SCOUTING,
         ).length > 0
       ) {
         for (let scouter of currentMatchWaitingScouters) {
@@ -310,8 +312,11 @@ class Scouter {
     //socket listeners below
 
     this.socket.on("disconnect", () => {
-      this.updateState({ connected: false }); //the scouter should probably get killed here
-      ScoutingSync.assignScouters(); //reassign scouters, this matters if there are two scouters on one robot and a scouter scouting 1 robot leaves
+      if (socket.active) {
+      } else {
+        this.updateState({ connected: false }); //the scouter should probably get killed here
+        ScoutingSync.assignScouters(); //reassign scouters, this matters if there are two scouters on one robot and a scouter scouting 1 robot leaves
+      }
     });
 
     this.socket.on("updateState", (stateUpdate, ack) => {
@@ -335,8 +340,8 @@ class Scouter {
           let filteredTmps = clientTeamMatchPerformanceIds.filter(
             (clientTeamMatchPerformanceId) =>
               !serverTeamMatchPerformanceIds.includes(
-                clientTeamMatchPerformanceId
-              )
+                clientTeamMatchPerformanceId,
+              ),
           );
           filteredTmps = filteredTmps.filter((clientTeamMatchPerformanceId) => {
             const parts = clientTeamMatchPerformanceId.split("-");
@@ -347,7 +352,7 @@ class Scouter {
         } else {
           requestTeamMatchPerformances([]); //dont request any tmps for the demo
         }
-      }
+      },
     );
     // comment out the clearData command
     // this.socket.on("clearData", async () => {
