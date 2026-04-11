@@ -732,7 +732,7 @@
   {
     "type": "tmp",
     "name": "zoneActionRatingGroupings",
-    "outputPath": "zoneActionRating",
+    "outputPath": "scores.zoneActionRating",
     "options": {
       "zones": [
         "teleopTransitionAZone",
@@ -904,22 +904,7 @@
       "all": true
     }
   },
-  {
-    "type": "team",
-    "name": "sum",
-    "outputPath": "disabledCounts",
-    "options": {
-      "addends": [
-        "counts.autoBroken",
-        "counts.teleopTransitionBroken",
-        "counts.activeShift1Broken",
-        "counts.activeShift2Broken",
-        "counts.inactiveShift1Broken",
-        "counts.inactiveShift2Broken",
-        "counts.endgameBroken"
-      ]
-    }
-  },
+
   {
     "type": "team",
     "name": "aggregateArray",
@@ -1192,7 +1177,7 @@
     "name": "deepAverage",
     "outputPath": "zoneActionRatingAverages",
     "options": {
-      "path": "zoneActionRating"
+      "path": "scores.zoneActionRating"
     }
   }
 ]

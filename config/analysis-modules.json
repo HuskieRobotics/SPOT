@@ -213,7 +213,7 @@
         "activeShift2StartShooting": "Active 2",
         "endgameStartShooting": "Endgame"
       },
-      "imgPath": "img/half-field.svg"
+      "imgPath": "img/field.svg"
     }
   },
   {
@@ -336,18 +336,6 @@
           "sort": -1
         },
         {
-          "name": "A-Stop Count",
-          "path": "counts.autoaStop",
-          "decimals": 2,
-          "sort": -1
-        },
-        {
-          "name": "Disabled Count",
-          "path": "disabledCounts",
-          "decimals": 2,
-          "sort": -1
-        },
-        {
           "name": "Average Passing Rating",
           "path": "averageScores.passingRating",
           "decimals": 2,
@@ -398,6 +386,14 @@
           "multiplier": 0.001,
           "decimals": 2,
           "hideIfValue": 0,
+          "sort": -1,
+          "unit": "s"
+        },
+        {
+          "name": "Average Climb Time",
+          "path": "averageTimes.attemptClimbTime",
+          "multiplier": 0.001,
+          "decimals": 2,
           "sort": -1,
           "unit": "s"
         }
@@ -478,6 +474,86 @@
           "path": "averageScores.total",
           "decimals": 2,
           "aggrMethod": "sum"
+        }
+      ]
+    }
+  },
+  {
+    "view": "team",
+    "module": "Stats",
+    "position": "side",
+    "name": "Zone, Action, and Rating Averages",
+    "options": {
+      "list": [
+        {
+          "name": "Alliance Zone Average Defense Rating",
+          "path": "zoneActionRatingAverages.AZone.Defense",
+          "hideIfValue": 0,
+          "decimals": 2,
+          "sort": 1
+        },
+        {
+          "name": "Alliance Zone Average Passing Rating",
+          "path": "zoneActionRatingAverages.AZone.Passing",
+          "hideIfValue": 0,
+          "decimals": 2,
+          "sort": 1
+        },
+        {
+          "name": "Alliance Zone Average Shooting Rating",
+          "path": "zoneActionRatingAverages.AZone.StopShooting",
+          "hideIfValue": 0,
+          "decimals": 2,
+          "sort": 1
+        },
+        {
+          "name": "Alliance Zone Average Collecting Rating",
+          "path": "zoneActionRatingAverages.AZone.Storing",
+          "hideIfValue": 0,
+          "decimals": 2,
+          "sort": 1
+        },
+        {
+          "name": "Neutral Zone Average Defense Rating",
+          "path": "zoneActionRatingAverages.NeutralZone.Defense",
+          "hideIfValue": 0,
+          "decimals": 2,
+          "sort": 1
+        },
+        {
+          "name": "Neutral Zone Average Passing Rating",
+          "path": "zoneActionRatingAverages.NeutralZone.Passing",
+          "hideIfValue": 0,
+          "decimals": 2,
+          "sort": 1
+        },
+        {
+          "name": "Neutral Zone Average Collecting Rating",
+          "path": "zoneActionRatingAverages.NeutralZone.Storing",
+          "hideIfValue": 0,
+          "decimals": 2,
+          "sort": 1
+        },
+        {
+          "name": "Opposing Zone Average Defense Rating",
+          "path": "zoneActionRatingAverages.OAZone.Defense",
+          "hideIfValue": 0,
+          "decimals": 2,
+          "sort": 1
+        },
+        {
+          "name": "Opposing Zone Average Passing Rating",
+          "path": "zoneActionRatingAverages.OAZone.Passing",
+          "hideIfValue": 0,
+          "decimals": 2,
+          "sort": 1
+        },
+        {
+          "name": "Opposing Zone Average Collecting Rating",
+          "path": "zoneActionRatingAverages.OAZone.Storing",
+          "hideIfValue": 0,
+          "decimals": 2,
+          "sort": 1
         }
       ]
     }

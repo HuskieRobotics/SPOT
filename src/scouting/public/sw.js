@@ -45,7 +45,7 @@ const filesToCache = [
   "/analysis/css/internal.css",
   "/analysis/css/style.css",
   "/analysis/js/analysisPipeline.js",
-  // "/analysis/js/autoPick.js",
+  "/analysis/js/autoPick.js",
   "/analysis/js/DataTransformer.js",
   "/analysis/js/elements.js",
   "/analysis/js/script.js",
