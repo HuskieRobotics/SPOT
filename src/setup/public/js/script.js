@@ -44,10 +44,14 @@ function normalizeOPRStrings(value) {
 // The same helper is used for both initial render and "Add OPR String" clicks.
 function createOPRKeyInput(value = "") {
   const input = document.createElement("input");
-  input.type = "text";
-  input.className = "input opr-key-input";
   input.placeholder = "Input Eg: minorFoulCount";
   input.value = value;
+  input.style.width = "125%";
+  input.style.marginLeft = "-12.5%";
+  input.style.display = "block";
+  input.style.margin = "0 auto 12px"; // centers the box
+  input.type = "text";
+  input.className = "input opr-key-input";
   return input;
 }
 
