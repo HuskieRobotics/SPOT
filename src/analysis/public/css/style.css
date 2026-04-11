@@ -329,6 +329,44 @@ body {
   margin-bottom: 10px;
 }
 
+.filter-container {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+  align-items: center;
+}
+
+#dropdown-for-robot-actions,
+#dropdown-for-robot-action-ratings {
+  text-align: center;
+  font-size: 1rem;
+  color: var(--accent-alt);
+  /* border: 5px solid var(--accent-alt);
+  border-radius: var(--border-radius); */
+  background-color: var(--bg);
+  cursor: pointer;
+  transition:
+    0.3s color,
+    0.3s background-color,
+    0.3s border-color;
+  padding: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.filter-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  align-items: center;
+  border: 5px solid;
+  border-radius: var(--border-radius);
+  border-color: var(--accent-alt);
+}
+
 #match-view {
   display: flex;
   flex-direction: column;

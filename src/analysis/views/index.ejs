@@ -187,16 +187,37 @@
 				Filter Teams Based On Actions and Ratings 
         <!-- Bar to Filter Teams by Actions and Ratings-->
         <div class="filter-container"> 
-          <div class="search-bar-for-teams-filter">
-            <search>
-              <label for="select">Search for a specific Action and Rating for that action</label>
-              <input type="search">
-              <input type="checkbox"  class="match-select">
-            </search>
-            <!-- <label for="x-axis-select">X-Axis:</label>
-            <select id="x-axis-select"></select> -->
-          </div>
-          
+
+          <div id="container-for-dropdown-menu">
+            <!-- <div class="search-bar-for-teams-filter">
+              <search>
+                <label for="select">Search for a specific Action and Rating for that action</label>
+                <input type="search">
+                <input type="checkbox"  class="match-select">
+              </search>
+            </div> -->
+
+            <label for="dropdown-for-robot-actions" id="dropdown-for-robot-actions">
+              Choose A Robot Action
+              <select multiple>
+                <option>a</option>
+                <option>b</option>
+                <option>c</option>
+                <option>d</option>
+                <option>e</option>
+                <option>f</option>
+                <option>g</option>
+              </select>
+            </label>
+
+            <label for="dropdown-for-robot-action-ratings" id="dropdown-for-robot-action-ratings">
+              Choose A Corresponding Rating For An action
+              <select id="ratings-for-robot-actions" multiple>
+                
+              </select>
+            </label>
+            </div>
+
         </div>
         <div id="main-team-container-for-teams-filter"> </div>
       </div>

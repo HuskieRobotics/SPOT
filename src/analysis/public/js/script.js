@@ -572,7 +572,7 @@ let matches;
       loadTeamsForTeamsFilter(dataset, modulesConfig);
     });
 
-    // teamFilterInput.addEventListener("input", () => {});
+    teamFilterInput.addEventListener("input", () => {});
   }
 
   async function loadTeamsForTeamsFilter(dataset, modulesConfig) {
