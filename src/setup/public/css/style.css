@@ -181,3 +181,15 @@ video {
   padding: 15px 30px;
   border-radius: var(--border-radius);
 }
+
+#addOPRString {
+  color: var(--bg-alt);
+  background-color: var(--accent-alt);
+  font-size: 1.5em;
+  line-height: 1em;
+  border: none;
+  padding: 10px 15px;
+  border-radius: var(--border-radius);
+  display: block;
+  margin: 0 auto;
+}
