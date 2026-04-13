@@ -106,8 +106,14 @@ router.post("/flagMatch", async (req, res) => {
     matchId_rand: req.body.matchId_rand,
   });
   match.flagged = !match.flagged;
-  await match.save();
-  res.json(true);
+  try {
+    await match.save();
+    return res.json({ success: true });
+  } catch (err) {
+    console.log(err);
+    res.status(500).end();
+    return;
+  }
 });
 
 router.get("/matches", async (req, res) => {

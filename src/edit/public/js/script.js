@@ -322,19 +322,19 @@ let oldAccessCode;
           dropdownButton.textContent = isHidden ? "▼" : "►";
         };
 
-        flagButton.onclick = () => {
-          const isFlagged = !match.flagged;
+        flagButton.onclick = async () => {
           console.log(match);
-          fetch("/admin/api/flagMatch", {
+          await fetch("/admin/api/flagMatch", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
-              Authorization: accessCode,
+              Authorization: oldAccessCode || "",
             },
             body: JSON.stringify(match),
           });
+          match.flagged = !match.flagged;
           console.log(match);
-          flag.hidden = !isFlagged;
+          flag.hidden = !match.flagged;
         };
 
         trashButton.onclick = async () => {
