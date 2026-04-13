@@ -184,42 +184,28 @@
 			</div> -->
 
 			<div id="filter-teams-view">
-				Filter Teams Based On Actions and Ratings 
-        <!-- Bar to Filter Teams by Actions and Ratings-->
-        <div class="filter-container"> 
+        <div id="filter-navbar">
+          <div class="filter-control" id="robot-action-control">
+            <button class="filter-menu-button" id="robot-action-button" type="button">
+              Robot Action
+              <i class="fa-solid fa-chevron-down"></i>
+            </button>
+            <div class="filter-dropdown" id="robot-action-dropdown"></div>
+          </div>
 
-          <div id="container-for-dropdown-menu">
-            <!-- <div class="search-bar-for-teams-filter">
-              <search>
-                <label for="select">Search for a specific Action and Rating for that action</label>
-                <input type="search">
-                <input type="checkbox"  class="match-select">
-              </search>
-            </div> -->
+          <div id="filter-navbar-title">Select a Filter</div>
 
-            <label id="dropdown-for-robot-actions">
-              Choose A Robot Action
-              <select multiple>
-                <option>a</option>
-                <option>b</option>
-                <option>c</option>
-                <option>d</option>
-                <option>e</option>
-                <option>f</option>
-                <option>g</option>
-              </select>
-            </label>
-
-            <label id="dropdown-for-robot-action-ratings">
-              Choose A Corresponding Rating For An action
-              <select id="ratings-for-robot-actions" multiple>
-                
-              </select>
-            </label>
-            </div>
-
+          <div class="filter-control" id="action-rating-control">
+            <button class="filter-menu-button" id="action-rating-button" type="button">
+              Rating/OPR Score
+              <i class="fa-solid fa-chevron-down"></i>
+            </button>
+            <div class="filter-dropdown" id="action-rating-dropdown"></div>
+          </div>
         </div>
-        <div id="main-team-container-for-teams-filter"> </div>
+
+        <div id="selected-filter-chips"></div>
+        <div id="main-team-container-for-teams-filter"></div>
       </div>
 			
 			<div id="bubble-sheet-view">

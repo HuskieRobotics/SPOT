@@ -320,51 +320,187 @@ body {
 }
 
 #filter-teams-view {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  font-size: 3rem;
-  line-height: 1em;
-  margin-top: 32px;
-  margin-bottom: 10px;
+  display: grid;
+  grid-template-rows: auto auto minmax(0, 1fr);
+  justify-items: center;
+  align-items: start;
+  gap: 18px;
+  padding: 24px 24px 24px;
+  height: 100%;
+  overflow-y: auto;
 }
 
-.filter-container {
+#filter-navbar {
+  width: min(1080px, 100%);
   display: flex;
   flex-direction: row;
-  gap: 16px;
+  justify-content: space-between;
   align-items: center;
+  gap: 16px;
+  padding: 14px 18px;
+  border-radius: 18px;
+  border: 1px solid var(--accent-alt);
+  background: linear-gradient(115deg, var(--bg-alt), var(--bg));
+  box-shadow: 0 10px 30px -24px rgba(0, 0, 0, 0.6);
 }
 
-#dropdown-for-robot-actions,
-#dropdown-for-robot-action-ratings {
-  text-align: center;
-  font-size: 1rem;
+#filter-navbar-title {
+  font-size: clamp(1rem, 1.4vw, 1.35rem);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
   color: var(--accent-alt);
-  /* border: 5px solid var(--accent-alt);
-  border-radius: var(--border-radius); */
-  background-color: var(--bg);
+  white-space: nowrap;
+}
+
+.filter-control {
+  position: relative;
+  min-width: 220px;
+}
+
+.filter-menu-button {
+  width: 100%;
+  border: 1px solid var(--accent-alt);
+  border-radius: 999px;
+  padding: 10px 14px;
+  background: var(--bg);
+  color: var(--text);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  font-size: 1rem;
+  font-weight: 700;
   cursor: pointer;
   transition:
-    0.3s color,
-    0.3s background-color,
-    0.3s border-color;
-  padding: auto;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+    0.2s transform,
+    0.2s border-color,
+    0.2s box-shadow,
+    0.2s background-color;
 }
 
-.filter-container {
+.filter-menu-button:hover {
+  border-color: var(--accent);
+  box-shadow: 0 8px 22px -18px rgba(0, 0, 0, 0.7);
+}
+
+.filter-menu-button.menu-open {
+  transform: translateY(-1px);
+  border-color: var(--accent);
+  background: var(--bg-alt);
+}
+
+.filter-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  width: 100%;
+  max-height: 300px;
+  overflow-y: auto;
+  border-radius: 12px;
+  border: 1px solid var(--accent-alt);
+  background-color: var(--bg);
+  padding: 8px;
+  display: none;
+  z-index: 50;
+  box-shadow: 0 16px 34px -24px rgba(0, 0, 0, 0.8);
+}
+
+.filter-option {
   display: flex;
-  flex-direction: row;
-  justify-content: center;
   align-items: center;
-  gap: 16px;
+  gap: 10px;
+  font-size: 0.95rem;
+  color: var(--text);
+  border-radius: 10px;
+  padding: 8px 10px;
+  cursor: pointer;
+}
+
+.filter-option:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.filter-option input {
+  accent-color: var(--accent);
+}
+
+#selected-filter-chips {
+  width: min(1080px, 100%);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  min-height: 44px;
+  align-items: flex-start;
+  align-content: flex-start;
+}
+
+.filter-chip {
+  display: flex;
+  gap: 8px;
   align-items: center;
-  border: 5px solid;
-  border-radius: var(--border-radius);
-  border-color: var(--accent-alt);
+  border-radius: 999px;
+  border: 1px solid var(--accent-alt);
+  background: var(--bg-alt);
+  color: var(--text);
+  padding: 6px 10px 6px 12px;
+  animation: filter-chip-appear 0.22s ease-out;
+}
+
+.filter-chip-remove {
+  border: none;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text);
+  cursor: pointer;
+  line-height: 1;
+  font-size: 0.92rem;
+}
+
+#main-team-container-for-teams-filter {
+  width: min(1080px, 100%);
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 14px;
+  padding-bottom: 24px;
+  overflow-y: auto;
+  min-height: 0;
+  align-content: start;
+}
+
+#main-team-container-for-teams-filter .team-container {
+  margin: 0;
+}
+
+@keyframes filter-chip-appear {
+  from {
+    opacity: 0;
+    transform: translateY(6px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (max-width: 860px) {
+  #filter-navbar {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+  }
+
+  #filter-navbar-title {
+    order: -1;
+    width: 100%;
+    text-align: center;
+  }
+
+  .filter-control {
+    flex: 1 1 240px;
+  }
 }
 
 #match-view {

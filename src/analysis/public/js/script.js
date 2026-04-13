@@ -562,6 +562,26 @@ let matches;
     }
   }
 
+  // Shared UI state for team filters. Set is used for O(1)-style add/remove/has checks.
+  const filterTeamState = {
+    initialized: false,
+    selectedActions: new Set(),
+    selectedRatings: new Set(),
+  };
+
+  // Static rating options used to populate the rating dropdown.
+  const ratingBands = [
+    { id: "Rating4", label: "Rating4" },
+    { id: "Rating3", label: "Rating3" },
+    { id: "Rating2", label: "Rating2" },
+    { id: "Rating1", label: "Rating1" },
+    { id: "eliteOPR", label: "Elite OPR (170+)" },
+    { id: "strongOPR", label: "Strong OPR (101-170)" },
+    { id: "decentOPR", label: "Decent OPR (51-100)" },
+    { id: "lowOPR", label: "Low OPR (0-50)" },
+    { id: "negativeOPR", label: "Negative OPR" },
+  ];
+
   async function loadTeamsFilterView(dataset, modulesConfig) {
     //add event listener to the "Filter Teams" button to set reset the UI and switch to the teams filter view
     filterTeamsSwitch.addEventListener("click", () => {
@@ -569,14 +589,202 @@ let matches;
       loadTeams(dataset, modulesConfig);
       filterTeamsSwitch.classList.add("selected");
       showFade(filterTeamsView);
-      loadTeamsForTeamsFilter(dataset, modulesConfig);
+      setupFilterMenus(dataset);
+      loadTeamsForTeamsFilter(dataset);
     });
-
-    teamFilterInput.addEventListener("input", () => {});
   }
 
-  async function loadTeamsForTeamsFilter(dataset, modulesConfig) {
-    //get all of the teams from the database
+  function setupFilterMenus(dataset) {
+    // Resolve filter controls once each time this view is shown.
+    const actionButton = document.getElementById("robot-action-button");
+    const actionDropdown = document.getElementById("robot-action-dropdown");
+    const ratingButton = document.getElementById("action-rating-button");
+    const ratingDropdown = document.getElementById("action-rating-dropdown");
+
+    if (!actionButton || !actionDropdown || !ratingButton || !ratingDropdown) {
+      return;
+    }
+
+    // Build option lists: action list is dynamic from data, rating list is fixed from ratingBands.
+    const actionOptions = extractActionOptions(dataset);
+    renderFilterOptions(
+      actionDropdown,
+      actionOptions,
+      filterTeamState.selectedActions,
+      "action",
+    );
+    renderFilterOptions(
+      ratingDropdown,
+      ratingBands,
+      filterTeamState.selectedRatings,
+      "rating",
+    );
+
+    if (!filterTeamState.initialized) {
+      // Keep only one menu open at a time by closing both before opening the requested one.
+      const openMenu = (button, dropdown) => {
+        const isOpen = dropdown.style.display === "block";
+        [actionDropdown, ratingDropdown].forEach(
+          (d) => (d.style.display = "none"),
+        );
+        [actionButton, ratingButton].forEach((b) =>
+          b.classList.remove("menu-open"),
+        );
+
+        if (!isOpen) {
+          dropdown.style.display = "block";
+          button.classList.add("menu-open");
+        }
+      };
+
+      actionButton.addEventListener("click", (event) => {
+        // Prevent document click handler from immediately closing the menu.
+        event.stopPropagation();
+        openMenu(actionButton, actionDropdown);
+      });
+
+      ratingButton.addEventListener("click", (event) => {
+        // Prevent document click handler from immediately closing the menu.
+        event.stopPropagation();
+        openMenu(ratingButton, ratingDropdown);
+      });
+
+      document.addEventListener("click", (event) => {
+        // Close menus when clicking outside the filter navbar.
+        const filterNav = document.getElementById("filter-navbar");
+        if (filterNav && !filterNav.contains(event.target)) {
+          [actionDropdown, ratingDropdown].forEach(
+            (d) => (d.style.display = "none"),
+          );
+          [actionButton, ratingButton].forEach((b) =>
+            b.classList.remove("menu-open"),
+          );
+        }
+      });
+
+      filterTeamState.initialized = true;
+    }
+
+    renderSelectedFilterChips();
+  }
+
+  function getSelectedFilterSet(type) {
+    // Route filter operations to the correct Set based on filter type.
+    return type === "action"
+      ? filterTeamState.selectedActions
+      : filterTeamState.selectedRatings;
+  }
+
+  function setFilterSelection(type, value, isSelected) {
+    // Single mutation helper for checkbox and chip interactions.
+    const selectedSet = getSelectedFilterSet(type);
+    if (isSelected) {
+      selectedSet.add(value);
+    } else {
+      selectedSet.delete(value);
+    }
+  }
+
+  function extractActionOptions(dataset) {
+    // Collect unique action keys from both averageScores and opr using Set + nested loops.
+    const actions = new Set();
+    for (const team of Object.values(dataset.teams)) {
+      for (const source of [team.averageScores, team.opr]) {
+        if (!source || typeof source !== "object") {
+          continue;
+        }
+        for (const key of Object.keys(source)) {
+          actions.add(key);
+        }
+      }
+    }
+
+    // Convert to sorted UI options using map for label formatting.
+    return Array.from(actions)
+      .sort((a, b) => a.localeCompare(b))
+      .map((action) => ({ id: action, label: toTitleCase(action) }));
+  }
+
+  function renderFilterOptions(container, options, selectedSet, type) {
+    // Re-render pattern: clear existing options and recreate based on current state.
+    container.innerHTML = "";
+
+    for (const option of options) {
+      const optionLabel = createDOMElement("label", "filter-option");
+      const checkbox = createDOMElement("input");
+      checkbox.type = "checkbox";
+      checkbox.checked = selectedSet.has(option.id);
+      checkbox.dataset.filterType = type;
+      checkbox.dataset.filterValue = option.id;
+
+      checkbox.addEventListener("change", () => {
+        // Keep state in sync with checkboxes, then update selected chips UI.
+        setFilterSelection(type, option.id, checkbox.checked);
+        renderSelectedFilterChips();
+      });
+
+      const text = createDOMElement("span");
+      text.innerText = option.label;
+
+      optionLabel.appendChild(checkbox);
+      optionLabel.appendChild(text);
+      container.appendChild(optionLabel);
+    }
+  }
+
+  function renderSelectedFilterChips() {
+    // Chips are derived UI: generated from selected Sets rather than stored separately.
+    const chipsContainer = document.getElementById("selected-filter-chips");
+    if (!chipsContainer) {
+      return;
+    }
+
+    chipsContainer.innerHTML = "";
+
+    // Spread + map merges action and rating selections into one render list.
+    const selectedItems = [
+      ...Array.from(filterTeamState.selectedActions).map((id) => ({
+        type: "action",
+        id,
+        label: toTitleCase(id),
+      })),
+      ...Array.from(filterTeamState.selectedRatings).map((id) => ({
+        type: "rating",
+        id,
+        label: ratingBands.find((rating) => rating.id === id)?.label || id,
+      })),
+    ];
+
+    for (const item of selectedItems) {
+      const chip = createDOMElement("div", "filter-chip");
+      const chipText = createDOMElement("span");
+      chipText.innerText = item.label;
+
+      const removeButton = createDOMElement("button", "filter-chip-remove");
+      removeButton.type = "button";
+      removeButton.innerText = "x";
+      removeButton.addEventListener("click", () => {
+        // Removing a chip updates Set state and mirrors that change back to the checkbox.
+        setFilterSelection(item.type, item.id, false);
+
+        const checkbox = document.querySelector(
+          `input[data-filter-type="${item.type}"][data-filter-value="${item.id}"]`,
+        );
+        if (checkbox) {
+          checkbox.checked = false;
+        }
+
+        renderSelectedFilterChips();
+      });
+
+      chip.appendChild(chipText);
+      chip.appendChild(removeButton);
+      chipsContainer.appendChild(chip);
+    }
+  }
+
+  async function loadTeamsForTeamsFilter(dataset) {
+    // Build team cards for filter view: fetch display names, clear container, repopulate.
     const allTeams = await fetchTeams();
 
     //get the main container on the page by the container's ID
@@ -588,22 +796,15 @@ let matches;
     containerForTeams.innerHTML = "";
 
     //add all of the teams to the container that was just obtained
-    for (const [teamNumber, team] of Object.entries(dataset.teams)) {
-      console.log(
-        `team: ${Object.keys(team)}\n num: ${teamNumber}\n allTeams: ${allTeams[teamNumber]}`,
-      );
+    for (const [teamNumber] of Object.entries(dataset.teams)) {
       if (allTeams[teamNumber]) {
-        const teamContainer = constructTeamForTeamsFilter(
-          teamNumber,
-          team,
-          allTeams,
-        );
+        const teamContainer = constructTeamForTeamsFilter(teamNumber, allTeams);
         containerForTeams.appendChild(teamContainer);
       }
     }
   }
 
-  function constructTeamForTeamsFilter(teamNumber, team, allTeams) {
+  function constructTeamForTeamsFilter(teamNumber, allTeams) {
     // get the main container on the page by the container's ID
     // const mainTeamContainer = document.getElementById(
     //   "main-team-container-for-teams-filter",
@@ -624,7 +825,18 @@ let matches;
       teamNameDisplay.innerText = allTeams[teamNumber];
       teamContainer.appendChild(teamNameDisplay);
     }
+
     return teamContainer; //return the container created for the specific team
+  }
+
+  function toTitleCase(input) {
+    // Human-readable label normalization: replace separators, split words, capitalize, rejoin.
+    return input
+      .replace(/[_-]/g, " ")
+      .trim()
+      .split(/\s+/)
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
   }
 
   // Auto pick list UI functions
