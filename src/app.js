@@ -2,7 +2,7 @@ const express = require("express");
 let app = express();
 const server = app.listen(process.env.PORT || 8080, () => {
   console.log(
-    chalk.cyan(`Server listening on port ${process.env.PORT || 8080}`)
+    chalk.cyan(`Server listening on port ${process.env.PORT || 8080}`),
   );
 });
 const chalk = require("chalk");
@@ -26,7 +26,7 @@ if (fs.existsSync("config/config.json")) {
     fs.writeFileSync("config/config.json", JSON.stringify(config));
   }
 
-  require("./scouting/scouting-sync.js")(server);
+  require("./scouting/scouting-sync-server.js")(server);
 
   app.use("/config", require("./configRouter.js"));
   app.use(express.static(__dirname + "/public"));
@@ -40,8 +40,8 @@ if (fs.existsSync("config/config.json")) {
 } else {
   console.log(
     chalk.cyan.bold.underline(
-      "config.json not detected! First time setup flow enabled on server."
-    )
+      "config.json not detected! First time setup flow enabled on server.",
+    ),
   );
   app.use("/", require("./setup/setup.js"));
 }

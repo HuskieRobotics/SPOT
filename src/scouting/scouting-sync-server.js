@@ -1,5 +1,5 @@
 /*
-Socket-IO communication to synchronize many aspects of the client and server. See /scouting/public/js/scouting-sync.js for the client
+Socket-IO communication to synchronize many aspects of the client and server. See /scouting/public/js/scouting-sync-client.js for the client
 */
 
 let io;

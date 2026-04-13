@@ -347,6 +347,8 @@ class ScouterDisplay {
         );
 
         scouter.scouter.state.connected = false;
+        scouter.scouter.state.status = 4;
+        this.updateScouterElement(scouter.scouter.state);
         new Popup("success", `Scouter ${scouterID} Disconnected!`, 2000);
         disconnectModal.modalExit();
       });
@@ -362,6 +364,7 @@ class ScouterDisplay {
   }
 
   updateScouterElement(state) {
+    console.log(state);
     //update state
     this.scouter.state = state || this.scouter.state;
     this.scouterElement.setAttribute("scouter", this.scouter.state.scouterId);
@@ -417,7 +420,7 @@ class ScouterDisplay {
     }
     if (
       !this.scouter.state.connected &&
-      !(this.scouter.state.status == SCOUTER_STATUS.DISCONNECTED_BY_ADMIN)
+      this.scouter.state.status == SCOUTER_STATUS.DISCONNECTED_BY_ADMIN
     ) {
       //disconnected by admin
       this.scouterElement.querySelector(".scouter-status").style.color =
@@ -429,6 +432,19 @@ class ScouterDisplay {
         DISCONNECTED_COLOR;
       this.scouterElement.querySelector(".scouter-status").innerText =
         "ADMIN DISCONNECT";
+    } else if (
+      !this.scouter.state.connected &&
+      !(this.scouter.state.status == SCOUTER_STATUS.DISCONNECTED_BY_ADMIN)
+    ) {
+      this.scouterElement.querySelector(".scouter-status").style.color =
+        DISCONNECTED_COLOR;
+      this.scouterElement.style.borderColor = DISCONNECTED_COLOR;
+      this.scouterElement.querySelector(".match-number").style.backgroundColor =
+        DISCONNECTED_COLOR;
+      this.scouterElement.querySelector(".match-number").style.borderColor =
+        DISCONNECTED_COLOR;
+      this.scouterElement.querySelector(".scouter-status").innerText =
+        "DISCONNECT";
     }
   }
   destruct() {

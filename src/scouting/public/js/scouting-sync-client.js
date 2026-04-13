@@ -4,7 +4,7 @@ class ScoutingSync {
 
   static SCOUTER_STATUS = {
     NEW: 0, //scouters who have connected but have not sent their state data
-    WAITING: 1, //scouters not actively in the process of scouting (up to when they click the start button)
+    WAITING: 1, //scouters not actively in the process of scouting (dont have the scouting ui open)
     SCOUTING: 2, //scouters actively scouting a match
     COMPLETE: 3,
     DISCONNECTED_BY_ADMIN: 4,
@@ -86,8 +86,7 @@ class ScoutingSync {
     ScoutingSync.socket.on("adminDisconnect", () => {
       console.log("adminDisconnectStarted");
       switchPage("landing");
-      ScoutingSync.state.status =
-        ScoutingSync.SCOUTER_STATUS.DISCONNECTED_BY_ADMIN;
+      ScoutingSync.state.status = ScoutingSync.SCOUTER_STATUS.DIE;
       console.log("adminDisconnectComplete");
     });
 

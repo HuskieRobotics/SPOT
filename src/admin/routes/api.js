@@ -1,5 +1,5 @@
 const { Router } = require("express");
-const ScoutingSync = require("../../scouting/scouting-sync")();
+const ScoutingSync = require("../../scouting/scouting-sync-server")();
 let router = Router();
 const config = require("../../../config/config.json");
 const { TeamMatchPerformance, Event } = require("../../lib/db");
