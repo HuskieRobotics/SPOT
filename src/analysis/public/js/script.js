@@ -575,10 +575,10 @@ let matches;
     { id: "Rating3", label: "Rating3" },
     { id: "Rating2", label: "Rating2" },
     { id: "Rating1", label: "Rating1" },
-    { id: "eliteOPR", label: "Elite OPR (170+)" },
-    { id: "strongOPR", label: "Strong OPR (101-170)" },
-    { id: "decentOPR", label: "Decent OPR (51-100)" },
-    { id: "lowOPR", label: "Low OPR (0-50)" },
+    { id: "eliteOPR", label: "Elite OPR (250+)" },
+    { id: "strongOPR", label: "Strong OPR (151-250)" },
+    { id: "decentOPR", label: "Decent OPR (101-150)" },
+    { id: "lowOPR", label: "Low OPR (0-100)" },
     { id: "negativeOPR", label: "Negative OPR" },
   ];
 
