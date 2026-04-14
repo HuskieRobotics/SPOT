@@ -331,7 +331,7 @@ body {
 }
 
 #filter-navbar {
-  width: min(1080px, 100%);
+  width: 100%; /* min(1080px, 100%) */
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -342,15 +342,20 @@ body {
   border: 1px solid var(--accent-alt);
   background: linear-gradient(115deg, var(--bg-alt), var(--bg));
   box-shadow: 0 10px 30px -24px rgba(0, 0, 0, 0.6);
+  flex-wrap: wrap;
 }
 
-#filter-navbar-title {
-  font-size: clamp(1rem, 1.4vw, 1.35rem);
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+.filter-navbar-title {
+  font-size: 1.2rem; /* Reduce from clamp or larger value */
+  line-height: 1.2; /* Tighter line spacing */
+  max-width: 320px; /* Limit width so it wraps at a reasonable point */
+  white-space: nowrap; /* Prevent breaking the sentence into multiple lines */
+  margin: 0; /* Remove extra margin if present */
+  padding: 0; /* Remove extra padding if present */
   color: var(--accent-alt);
-  white-space: nowrap;
+  text-transform: none;
+  letter-spacing: 0.06em;
+  font-weight: 700;
 }
 
 .filter-control {
@@ -362,14 +367,14 @@ body {
   width: 100%;
   border: 1px solid var(--accent-alt);
   border-radius: 999px;
-  padding: 10px 14px;
+  padding: 8px 12px;
   background: var(--bg);
   color: var(--text);
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 10px;
-  font-size: 1rem;
+  font-size: 1.2rem;
   font-weight: 700;
   cursor: pointer;
   transition:
