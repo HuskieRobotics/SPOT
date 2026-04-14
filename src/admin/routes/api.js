@@ -102,17 +102,33 @@ router.post("/setMatch", (req, res) => {
 });
 
 router.post("/flagMatch", async (req, res) => {
-  const match = await TeamMatchPerformance.findOne({
-    matchId_rand: req.body.matchId_rand,
-  });
-  match.flagged = !match.flagged;
   try {
-    await match.save();
-    return res.json({ success: true });
+    const { id, flagged } = req.body;
+
+    if (!id || typeof flagged !== "boolean") {
+      return res.status(400).json({
+        success: false,
+        error: "Missing or invalid id/flagged payload",
+      });
+    }
+
+    const match = await TeamMatchPerformance.findByIdAndUpdate(
+      id,
+      { flagged },
+      { new: true },
+    );
+
+    if (!match) {
+      return res.status(404).json({
+        success: false,
+        error: "Match not found",
+      });
+    }
+
+    return res.json({ success: true, flagged: match.flagged });
   } catch (err) {
     console.log(err);
-    res.status(500).end();
-    return;
+    return res.status(500).json({ success: false, error: "Failed to flag" });
   }
 });
 
