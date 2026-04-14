@@ -16,6 +16,8 @@ const SCOUTER_STATUS_REVERSE = {
 const root = document.documentElement;
 const savedTheme = localStorage.getItem("theme");
 
+var disconnected_by_admin = false;
+
 if (savedTheme == null || savedTheme == "light") {
   localStorage.setItem("theme", "light");
   root.setAttribute("data-theme", "light");
@@ -185,7 +187,20 @@ async function updateScouters(accessCode) {
 
   for (let scouter of scouterList) {
     if (scouter.timestamp in scouters) {
-      scouters[scouter.timestamp].updateScouterElement(scouter.state);
+      console.log(scouter.state.robotNumber);
+      console.log(scouter.state.connected);
+      if (scouter.state.robotNumber != "" && scouter.state.connected != false) {
+        scouter.state.status = 2;
+        scouters[scouter.timestamp].updateScouterElement(scouter.state);
+      } else if (
+        scouter.state.robotNumber == "" &&
+        scouter.state.connected != false
+      ) {
+        scouters[scouter.timestamp].updateScouterElement(scouter.state);
+      }
+      if (!disconnected_by_admin && scouter.state.status != 0) {
+        scouters[scouter.timestamp].updateScouterElement(scouter.state);
+      }
     } else {
       if (
         scouter.state.status == SCOUTER_STATUS.COMPLETE ||
@@ -207,6 +222,7 @@ async function updateScouters(accessCode) {
             !scouters[scouter.timestamp].scouter.state.connected)
         ) {
           scouters[scouter.timestamp].destruct();
+          disconnected_by_admin = false;
           delete scouters[scouter.timestamp];
         }
       }, 15000);
@@ -349,6 +365,7 @@ class ScouterDisplay {
         scouter.scouter.state.connected = false;
         scouter.scouter.state.status = 4;
         this.updateScouterElement(scouter.scouter.state);
+        disconnected_by_admin = true;
         new Popup("success", `Scouter ${scouterID} Disconnected!`, 2000);
         disconnectModal.modalExit();
       });
