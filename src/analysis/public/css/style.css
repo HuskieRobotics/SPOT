@@ -346,7 +346,7 @@ body {
 }
 
 .filter-navbar-title {
-  font-size: 1.2rem; /* Reduce from clamp or larger value */
+  font-size: 1.4rem; /* Reduce from clamp or larger value */
   line-height: 1.2; /* Tighter line spacing */
   max-width: 320px; /* Limit width so it wraps at a reasonable point */
   white-space: nowrap; /* Prevent breaking the sentence into multiple lines */

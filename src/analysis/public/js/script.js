@@ -571,10 +571,10 @@ let matches;
 
   // Static rating options used to populate the rating dropdown.
   const ratingBands = [
-    { id: "Rating4", label: "Rating4" },
-    { id: "Rating3", label: "Rating3" },
-    { id: "Rating2", label: "Rating2" },
-    { id: "Rating1", label: "Rating1" },
+    // { id: "Rating4", label: "Rating4" },
+    // { id: "Rating3", label: "Rating3" },
+    // { id: "Rating2", label: "Rating2" },
+    // { id: "Rating1", label: "Rating1" },
     { id: "eliteOPR", label: "Elite OPR (250+)" },
     { id: "strongOPR", label: "Strong OPR (151-250)" },
     { id: "decentOPR", label: "Decent OPR (101-150)" },
@@ -795,12 +795,26 @@ let matches;
     // Clear the container
     containerForTeams.innerHTML = "";
 
-    //add all of the teams to the container that was just obtained
-    for (const [teamNumber] of Object.entries(dataset.teams)) {
-      if (allTeams[teamNumber]) {
-        const teamContainer = constructTeamForTeamsFilter(teamNumber, allTeams);
-        containerForTeams.appendChild(teamContainer);
+    // Collect the filtered teams in an array
+    let filteredTeams = [];
+    for (const [teamNumber, team] of Object.entries(dataset.teams)) {
+      if (allTeams[teamNumber] && teamMatchesFilter(team)) {
+        filteredTeams.push({ teamNumber, team });
       }
+    }
+
+    for (const [teamNumber, team] of Object.entries(dataset.teams)) {
+      if (allTeams[teamNumber] && teamMatchesFilters(team)) {
+        containerForTeams.appendChild(
+          constructTeamForTeamsFilter(teamNumber, allTeams),
+        );
+      }
+    }
+
+    //add all of the teams to the container that was just obtained
+    for (const [teamNumber, team] of filteredTeams) {
+      const teamContainer = constructTeamForTeamsFilter(teamNumber, allTeams);
+      containerForTeams.appendChild(teamContainer);
     }
   }
 
@@ -827,6 +841,40 @@ let matches;
     }
 
     return teamContainer; //return the container created for the specific team
+  }
+
+  function teamMatchesFilter(team) {
+    // return the teams that match the specified filter
+    // const filteredTeams = Object.keys(dataset.teams).filter((team) => {
+    //   let = getPath(dataset.teams[team], stat.path, 0);
+    //   teamStatToFilter = this.applyModifiers(stat, teamStatToFilter);
+
+    //   return !isNaN(teamStatToFilter) && teamStatToFilter != stat.hideIfValue;
+    // });
+
+    // If no actions or ratings are selected, show all teams
+    if (
+      filterTeamState.selectedActions.size === 0 ||
+      filterTeamState.selectedRatings.size === 0
+    ) {
+      return true;
+    }
+    // For each selected action, check if the team has a value for that action that matches any selected rating
+    for (const action of filterTeamState.selectedActions) {
+      // Try both averageScores and opr
+      let value = null;
+      if (team.averageScores && team.averageScores[action] != null) {
+        value = team.averageScores[action];
+      } else if (team.opr && team.opr[action] != null) {
+        value = team.opr[action];
+      }
+      // If the value is not in the selected ratings, filter out
+      // Convert both to string for comparison, in case ratings are strings
+      if (!filterTeamState.selectedRatings.has(String(value))) {
+        return false;
+      }
+    }
+    return true;
   }
 
   function toTitleCase(input) {
