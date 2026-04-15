@@ -12,7 +12,7 @@ class ScoutingSync {
 
   static state = {
     connected: false,
-
+    scouting: false,
     offlineMode: true, //offline mode is for users who never connect to the server and access the app without internet.
     status: ScoutingSync.SCOUTER_STATUS.NEW,
     scouterId: "",

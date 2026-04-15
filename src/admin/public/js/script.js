@@ -187,17 +187,7 @@ async function updateScouters(accessCode) {
 
   for (let scouter of scouterList) {
     if (scouter.timestamp in scouters) {
-      console.log(scouter.state.robotNumber);
-      console.log(scouter.state.connected);
-      if (scouter.state.robotNumber != "" && scouter.state.connected != false) {
-        scouter.state.status = 2;
-        scouters[scouter.timestamp].updateScouterElement(scouter.state);
-      } else if (
-        scouter.state.robotNumber == "" &&
-        scouter.state.connected != false
-      ) {
-        scouters[scouter.timestamp].updateScouterElement(scouter.state);
-      }
+      console.log(scouter.state.scouting);
       if (!disconnected_by_admin && scouter.state.status != 0) {
         scouters[scouter.timestamp].updateScouterElement(scouter.state);
       }
@@ -381,7 +371,6 @@ class ScouterDisplay {
   }
 
   updateScouterElement(state) {
-    console.log(state);
     //update state
     this.scouter.state = state || this.scouter.state;
     this.scouterElement.setAttribute("scouter", this.scouter.state.scouterId);

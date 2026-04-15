@@ -265,17 +265,20 @@ class ScoutingSync {
       ) {
         for (let scouter of currentMatchWaitingScouters) {
           scouter.socket.emit("enterMatch");
+          scouter.updateState({ status: ScoutingSync.SCOUTER_STATUS.SCOUTING });
         }
       } else if (currentMatchWaitingScouters.length >= 6) {
         //if there are 6 scouters waiting, enter match.
         for (let scouter of currentMatchWaitingScouters) {
           scouter.socket.emit("enterMatch");
+          scouter.updateState({ status: ScoutingSync.SCOUTER_STATUS.SCOUTING });
         }
       }
     } else {
       for (let scouter of currentMatchWaitingScouters) {
         //for demo, everyone should enter immediately
         scouter.socket.emit("enterMatch");
+        scouter.updateState({ status: ScoutingSync.SCOUTER_STATUS.SCOUTING });
       }
     }
   }
@@ -300,6 +303,7 @@ class Scouter {
   state = {
     status: ScoutingSync.SCOUTER_STATUS.NEW,
     connected: true, //connected by default
+    scouting: false,
     offlineMode: false, //they are connected to the server, they can't be offline
   };
   socket;
@@ -314,6 +318,7 @@ class Scouter {
     this.socket.on("disconnect", () => {
       if (socket.active) {
       } else {
+        this.updateState({ scouting: false });
         this.updateState({ connected: false }); //the scouter should probably get killed here
         ScoutingSync.assignScouters(); //reassign scouters, this matters if there are two scouters on one robot and a scouter scouting 1 robot leaves
       }
