@@ -346,8 +346,8 @@ body {
 }
 
 .filter-navbar-title {
-  font-size: 1.4rem; /* Reduce from clamp or larger value */
-  line-height: 1.2; /* Tighter line spacing */
+  font-size: 2rem; /* Reduce from clamp or larger value */
+  line-height: 1; /* Tighter line spacing */
   max-width: 320px; /* Limit width so it wraps at a reasonable point */
   white-space: nowrap; /* Prevent breaking the sentence into multiple lines */
   margin: 0; /* Remove extra margin if present */
@@ -355,7 +355,9 @@ body {
   color: var(--accent-alt);
   text-transform: none;
   letter-spacing: 0.06em;
-  font-weight: 700;
+  font-weight: 500;
+  line-height: 1.05;
+  font: bold var(--font);
 }
 
 .filter-control {

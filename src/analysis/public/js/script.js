@@ -571,10 +571,10 @@ let matches;
 
   // Static rating options used to populate the rating dropdown.
   const ratingBands = [
-    // { id: "Rating4", label: "Rating4" },
-    // { id: "Rating3", label: "Rating3" },
-    // { id: "Rating2", label: "Rating2" },
-    // { id: "Rating1", label: "Rating1" },
+    { id: "Rating4", label: "Rating4" },
+    { id: "Rating3", label: "Rating3" },
+    { id: "Rating2", label: "Rating2" },
+    { id: "Rating1", label: "Rating1" },
     { id: "eliteOPR", label: "Elite OPR (250+)" },
     { id: "strongOPR", label: "Strong OPR (151-250)" },
     { id: "decentOPR", label: "Decent OPR (101-150)" },
@@ -721,6 +721,8 @@ let matches;
         // Keep state in sync with checkboxes, then update selected chips UI.
         setFilterSelection(type, option.id, checkbox.checked);
         renderSelectedFilterChips();
+
+        collectFilteredTeams();
       });
 
       const text = createDOMElement("span");
@@ -731,6 +733,17 @@ let matches;
       container.appendChild(optionLabel);
     }
   }
+
+  // function collectFilteredTeams() {
+  //   const filteredTeams = [];
+  //   for (const [teamNumber, team] of Object.entries(dataset.teams)) {
+  //     if (teamMatchesFilter(team)) {
+  //       filteredTeams.push([teamNumber, team]);
+  //     }
+  //   }
+  //   // log the filtered teams for debugging purposes
+  //   console.log(filteredTeams);
+  // }
 
   function renderSelectedFilterChips() {
     // Chips are derived UI: generated from selected Sets rather than stored separately.
@@ -795,21 +808,33 @@ let matches;
     // Clear the container
     containerForTeams.innerHTML = "";
 
-    // Collect the filtered teams in an array
-    let filteredTeams = [];
+    // Load all the teams onto the page automatically before any filters are applied
     for (const [teamNumber, team] of Object.entries(dataset.teams)) {
-      if (allTeams[teamNumber] && teamMatchesFilter(team)) {
-        filteredTeams.push({ teamNumber, team });
-      }
-    }
-
-    for (const [teamNumber, team] of Object.entries(dataset.teams)) {
-      if (allTeams[teamNumber] && teamMatchesFilter(team)) {
+      if (allTeams[teamNumber]) {
         containerForTeams.appendChild(
           constructTeamForTeamsFilter(teamNumber, allTeams),
         );
       }
     }
+
+    // Collect the filtered teams in an array
+    let filteredTeams = [];
+    for (const [teamNumber, team] of Object.entries(dataset.teams)) {
+      if (allTeams[teamNumber] && teamMatchesFilter(team)) {
+        filteredTeams.push({ teamNumber, team });
+        containerForTeams.appendChild(
+          constructTeamForTeamsFilter(teamNumber, allTeams),
+        );
+      }
+    }
+
+    // for (const [teamNumber, team] of Object.entries(dataset.teams)) {
+    //   if (allTeams[teamNumber] && teamMatchesFilter(team)) {
+    //     containerForTeams.appendChild(
+    //       constructTeamForTeamsFilter(teamNumber, allTeams),
+    //     );
+    //   }
+    // }
 
     //add all of the teams to the container that was just obtained
     for (const [teamNumber, team] of filteredTeams) {
@@ -843,23 +868,23 @@ let matches;
     return teamContainer; //return the container created for the specific team
   }
 
-  function teamMatchesFilter(team) {
-    // Show all teams if no actions OR ratings are selected
-    if (
-      filterTeamState.selectedActions.size === 0 ||
-      filterTeamState.selectedRatings.size === 0
-    ) {
-      return true;
-    }
+  // function teamMatchesFilter(team) {
+  //   // Show all teams if no actions OR ratings are selected
+  //   if (
+  //     filterTeamState.selectedActions.size === 0 ||
+  //     filterTeamState.selectedRatings.size === 0
+  //   ) {
+  //     return false;
+  //   }
 
-    for (const action of filterTeamState.selectedActions) {
-      const value = team.averageScores?.[action] ?? team.opr?.[action];
-      if (!filterTeamState.selectedRatings.has(String(value))) {
-        return false;
-      }
-    }
-    return true;
-  }
+  //   for (const action of filterTeamState.selectedActions) {
+  //     const value = team.averageScores?.[action] ?? team.opr?.[action];
+  //     if (!filterTeamState.selectedRatings.has(String(value))) {
+  //       return false;
+  //     }
+  //   }
+  //   return true;
+  // }
 
   function toTitleCase(input) {
     // Human-readable label normalization: replace separators, split words, capitalize, rejoin.
