@@ -804,7 +804,7 @@ let matches;
     }
 
     for (const [teamNumber, team] of Object.entries(dataset.teams)) {
-      if (allTeams[teamNumber] && teamMatchesFilters(team)) {
+      if (allTeams[teamNumber] && teamMatchesFilter(team)) {
         containerForTeams.appendChild(
           constructTeamForTeamsFilter(teamNumber, allTeams),
         );
@@ -844,32 +844,16 @@ let matches;
   }
 
   function teamMatchesFilter(team) {
-    // return the teams that match the specified filter
-    // const filteredTeams = Object.keys(dataset.teams).filter((team) => {
-    //   let = getPath(dataset.teams[team], stat.path, 0);
-    //   teamStatToFilter = this.applyModifiers(stat, teamStatToFilter);
-
-    //   return !isNaN(teamStatToFilter) && teamStatToFilter != stat.hideIfValue;
-    // });
-
-    // If no actions or ratings are selected, show all teams
+    // Show all teams if no actions OR ratings are selected
     if (
       filterTeamState.selectedActions.size === 0 ||
       filterTeamState.selectedRatings.size === 0
     ) {
       return true;
     }
-    // For each selected action, check if the team has a value for that action that matches any selected rating
+
     for (const action of filterTeamState.selectedActions) {
-      // Try both averageScores and opr
-      let value = null;
-      if (team.averageScores && team.averageScores[action] != null) {
-        value = team.averageScores[action];
-      } else if (team.opr && team.opr[action] != null) {
-        value = team.opr[action];
-      }
-      // If the value is not in the selected ratings, filter out
-      // Convert both to string for comparison, in case ratings are strings
+      const value = team.averageScores?.[action] ?? team.opr?.[action];
       if (!filterTeamState.selectedRatings.has(String(value))) {
         return false;
       }
