@@ -562,6 +562,12 @@ let matches;
     }
   }
 
+  // Once the filter teams button is clicked, this function will go to the filterTeams.js file
+  filterTeamsSwitch.addEventListener("click", async () => {
+    const module = await import("/analysis/js/filterTeams.js");
+    module.init(dataset, modulesConfig);
+  });
+
   // Shared UI state for team filters. Set is used for O(1)-style add/remove/has checks.
   const filterTeamState = {
     initialized: false,
