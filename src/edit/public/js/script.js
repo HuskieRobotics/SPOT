@@ -1,3 +1,5 @@
+const e = require("express");
+
 let oldAccessCode;
 (async () => {
   const root = document.documentElement;
@@ -237,7 +239,11 @@ let oldAccessCode;
         topRow.appendChild(matchScouter);
 
         const flagButton = document.createElement("button");
-        flagButton.textContent = "Flag Match";
+        if (match.flagged) {
+          flagButton.textContent = "";
+        } else {
+          flagButton.textContent = "Flag Match";
+        }
         flagButton.classList.add("flag-button");
         topRow.appendChild(flagButton);
 
@@ -246,7 +252,7 @@ let oldAccessCode;
         flag.alt = "Flagged match";
         flag.classList.add("flag-image");
         flag.hidden = !match.flagged;
-        topRow.appendChild(flag);
+        flagButton.appendChild(flag);
 
         const trashButton = document.createElement("button");
         trashButton.textContent = "X";
@@ -328,6 +334,12 @@ let oldAccessCode;
           match.flagged = nextFlaggedState;
           flag.hidden = !nextFlaggedState;
           flagButton.disabled = true;
+
+          if (nextFlaggedState) {
+            flagButton.textContent = "";
+          } else {
+            flagButton.textContent = "Flag Match";
+          }
 
           try {
             const response = await fetch("/admin/api/flagMatch", {
