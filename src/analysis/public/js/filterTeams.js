@@ -188,10 +188,14 @@ function renderFilterOptions(container, options, selectedSet, type) {
 // It does NOT update the UI by itself
 function collectFilteredTeams() {
   const allTeamsArray = Object.entries(dataset.teams);
-  const filteredTeams = allTeamsArray.filter(([teamNumber, team]) =>
-    teamMatchesFilter(team),
-  );
-  console.log(filteredTeams);
+  const filteredTeams = allTeamsArray.filter(([teamNumber, team]) => {
+    return teamMatchesFilter(team);
+  });
+  console.log("All Teams:", allTeamsArray);
+  console.log("Selected Actions:", filterTeamState.selectedActions);
+  console.log("Selected Ratings:", filterTeamState.selectedRatings);
+  console.log("number of teams matching filter:", filteredTeams.length);
+  console.log("Filtered Teams:", filteredTeams);
   return filteredTeams;
 }
 
@@ -201,7 +205,7 @@ function updateTeamsFilterUI() {
     "main-team-container-for-teams-filter",
   );
   if (!containerForTeams) return;
-  containerForTeams.innerHTML = "";
+  // containerForTeams.innerHTML = "";
   fetchTeams().then((allTeams) => {
     let teamsToShow;
     if (
@@ -213,7 +217,7 @@ function updateTeamsFilterUI() {
       teamsToShow = collectFilteredTeams();
     }
     for (const [teamNumber, team] of teamsToShow) {
-      if (allTeams[teamNumber]) {
+      if (teamsToShow.includes(teamNumber)) {
         const teamContainer = constructTeamForTeamsFilter(teamNumber, allTeams);
         containerForTeams.appendChild(teamContainer);
       }

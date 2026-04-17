@@ -802,77 +802,77 @@ let matches;
     }
   }
 
-  async function loadTeamsForTeamsFilter(dataset) {
-    // Build team cards for filter view: fetch display names, clear container, repopulate.
-    const allTeams = await fetchTeams();
+  // async function loadTeamsForTeamsFilter(dataset) {
+  //   // Build team cards for filter view: fetch display names, clear container, repopulate.
+  //   const allTeams = await fetchTeams();
 
-    //get the main container on the page by the container's ID
-    const containerForTeams = document.getElementById(
-      "main-team-container-for-teams-filter",
-    );
+  //   //get the main container on the page by the container's ID
+  //   const containerForTeams = document.getElementById(
+  //     "main-team-container-for-teams-filter",
+  //   );
 
-    // Clear the container
-    containerForTeams.innerHTML = "";
+  //   // Clear the container
+  //   containerForTeams.innerHTML = "";
 
-    // Load all the teams onto the page automatically before any filters are applied
-    for (const [teamNumber, team] of Object.entries(dataset.teams)) {
-      if (allTeams[teamNumber]) {
-        containerForTeams.appendChild(
-          constructTeamForTeamsFilter(teamNumber, allTeams),
-        );
-      }
-    }
+  //   // Load all the teams onto the page automatically before any filters are applied
+  //   for (const [teamNumber, team] of Object.entries(dataset.teams)) {
+  //     if (allTeams[teamNumber]) {
+  //       containerForTeams.appendChild(
+  //         constructTeamForTeamsFilter(teamNumber, allTeams),
+  //       );
+  //     }
+  //   }
 
-    // Collect the filtered teams in an array
-    let filteredTeams = [];
-    for (const [teamNumber, team] of Object.entries(dataset.teams)) {
-      if (allTeams[teamNumber] && teamMatchesFilter(team)) {
-        filteredTeams.push({ teamNumber, team });
-        containerForTeams.appendChild(
-          constructTeamForTeamsFilter(teamNumber, allTeams),
-        );
-      }
-    }
+  //   // Collect the filtered teams in an array
+  //   let filteredTeams = [];
+  //   for (const [teamNumber, team] of Object.entries(dataset.teams)) {
+  //     if (allTeams[teamNumber] && teamMatchesFilter(team)) {
+  //       filteredTeams.push({ teamNumber, team });
+  //       containerForTeams.appendChild(
+  //         constructTeamForTeamsFilter(teamNumber, allTeams),
+  //       );
+  //     }
+  //   }
 
-    // for (const [teamNumber, team] of Object.entries(dataset.teams)) {
-    //   if (allTeams[teamNumber] && teamMatchesFilter(team)) {
-    //     containerForTeams.appendChild(
-    //       constructTeamForTeamsFilter(teamNumber, allTeams),
-    //     );
-    //   }
-    // }
+  //   // for (const [teamNumber, team] of Object.entries(dataset.teams)) {
+  //   //   if (allTeams[teamNumber] && teamMatchesFilter(team)) {
+  //   //     containerForTeams.appendChild(
+  //   //       constructTeamForTeamsFilter(teamNumber, allTeams),
+  //   //     );
+  //   //   }
+  //   // }
 
-    //add all of the teams to the container that was just obtained
-    for (const [teamNumber, team] of filteredTeams) {
-      const teamContainer = constructTeamForTeamsFilter(teamNumber, allTeams);
-      containerForTeams.appendChild(teamContainer);
-    }
-  }
+  //   //add all of the teams to the container that was just obtained
+  //   for (const [teamNumber, team] of filteredTeams) {
+  //     const teamContainer = constructTeamForTeamsFilter(teamNumber, allTeams);
+  //     containerForTeams.appendChild(teamContainer);
+  //   }
+  // }
 
-  function constructTeamForTeamsFilter(teamNumber, allTeams) {
-    // get the main container on the page by the container's ID
-    // const mainTeamContainer = document.getElementById(
-    //   "main-team-container-for-teams-filter",
-    // );
+  // function constructTeamForTeamsFilter(teamNumber, allTeams) {
+  //   // get the main container on the page by the container's ID
+  //   // const mainTeamContainer = document.getElementById(
+  //   //   "main-team-container-for-teams-filter",
+  //   // );
 
-    // create a new div element for each specific team name
-    const teamContainer = createDOMElement("div", "team-container");
+  //   // create a new div element for each specific team name
+  //   const teamContainer = createDOMElement("div", "team-container");
 
-    // create a div element for each specific team number and set the text of the div to the team number, then append it to the container for the team
-    const teamNumDisplay = createDOMElement("div", "team-number");
-    teamNumDisplay.innerText = teamNumber;
+  //   // create a div element for each specific team number and set the text of the div to the team number, then append it to the container for the team
+  //   const teamNumDisplay = createDOMElement("div", "team-number");
+  //   teamNumDisplay.innerText = teamNumber;
 
-    teamContainer.appendChild(teamNumDisplay);
+  //   teamContainer.appendChild(teamNumDisplay);
 
-    if (allTeams && allTeams[teamNumber]) {
-      // create a div element for each specific team name and set the text of the div to the team name, then append it to the container for the team
-      const teamNameDisplay = createDOMElement("div", "team-name");
-      teamNameDisplay.innerText = allTeams[teamNumber];
-      teamContainer.appendChild(teamNameDisplay);
-    }
+  //   if (allTeams && allTeams[teamNumber]) {
+  //     // create a div element for each specific team name and set the text of the div to the team name, then append it to the container for the team
+  //     const teamNameDisplay = createDOMElement("div", "team-name");
+  //     teamNameDisplay.innerText = allTeams[teamNumber];
+  //     teamContainer.appendChild(teamNameDisplay);
+  //   }
 
-    return teamContainer; //return the container created for the specific team
-  }
+  //   return teamContainer; //return the container created for the specific team
+  // }
 
   // function teamMatchesFilter(team) {
   //   // Show all teams if no actions OR ratings are selected
