@@ -1,5 +1,3 @@
-const e = require("express");
-
 let oldAccessCode;
 (async () => {
   const root = document.documentElement;
