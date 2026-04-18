@@ -37,6 +37,8 @@ new DataTransformer("zoneActionRatingGroupings", (dataset, outputPath, options) 
           if (stopShooting) {
             return stopShooting.id;
           }
+          return; // If no corresponding stopShooting action is found, skip this startShooting action
+          // FIXME: unsure if a return statement needs to be here
         }
         return match ? match[1] : actionId;
       };
