@@ -26,13 +26,23 @@ new DataTransformer("zoneActionRatingGroupings", (dataset, outputPath, options) 
       };
 
       //Parses all action id's to find the id of the specific action that was performed. For example, if the action id was activeShift1RatingPassing1, the function would return "Passing" as the action that was performed.
-      const normalizeActionId = (actionId) => {
-        const match = String(actionId).match(/(Defense|Passing|StartShooting|StopShooting|Storing)$/);
+      const normalizeAction = (action) => {
+        const actionId = action.id;
+        const actionTimestamp = action.ts;
+        const match = String(actionId).match(/(Defense|Passing|StartShooting|Storing)$/);
+        if (match && match[1] === "StartShooting") {
+          // Look for the next stopShooting action ID after the startShooting action ID was found
+          const stopShooting = tmp.actionQueue.find(a => options.actions.includes(a.id) && a.id.match(/StopShooting$/) && a.ts > actionTimestamp);
+          // options.actions.find((a) => a.id.match(/StopShooting$/) && a.ts > actionTimestamp);
+          if (stopShooting) {
+            return stopShooting.id;
+          }
+        }
         return match ? match[1] : actionId;
       };
 
     const normalizedZones = Array.from(new Set(options.zones.map(normalizeZoneId)));
-    const normalizedActions = Array.from(new Set(options.actions.map(normalizeActionId)));
+    const normalizedActions = Array.from(new Set(options.actions.map(normalizeAction)));
 
     const createDefaultScoreTree = () => {
       const defaults = {};
@@ -90,7 +100,7 @@ new DataTransformer("zoneActionRatingGroupings", (dataset, outputPath, options) 
 
       // Take the current zone and action button id's and call the respective normalize functions on them to get a specific zone and action that was performed in that zone. For example, if the zone button was teleopTransitionAZone, the normalized zone would be AZone. If the action button was activeShift1RatingPassing1, the normalized action would be Passing.
       const normalizedZone = normalizeZoneId(zoneId);
-      const normalizedAction = normalizeActionId(actionId);
+      const normalizedAction = normalizeAction(action);
 
       output.list.push({ zone: normalizedZone, action: normalizedAction, rating: ratingValue }); //add the triple of zone, action, and rating to the list output
 
