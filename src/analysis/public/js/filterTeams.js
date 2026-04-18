@@ -1,5 +1,11 @@
 // Entry point for initializing the filter view from outside this module
 export function init(dataset, modulesConfig) {
+  // clearInterface();
+  // loadTeams(dataset, modulesConfig);
+  // filterTeamsSwitch.classList.add("selected");
+  // showFade(filterTeamsView);
+  // setupFilterMenus(dataset);
+  // loadTeamsForTeamsFilter(dataset);
   loadTeamsFilterView(dataset, modulesConfig);
 }
 
@@ -28,14 +34,12 @@ const ratingBands = [
 // Only call this ONCE per page load.
 async function loadTeamsFilterView(dataset, modulesConfig) {
   // WARNING: If this is called more than once, multiple event listeners will be attached!
-  filterTeamsSwitch.addEventListener("click", () => {
-    clearInterface();
-    loadTeams(dataset, modulesConfig);
-    filterTeamsSwitch.classList.add("selected");
-    showFade(filterTeamsView);
-    setupFilterMenus(dataset);
-    loadTeamsForTeamsFilter(dataset);
-  });
+  clearInterface();
+  loadTeams(dataset, modulesConfig);
+  filterTeamsSwitch.classList.add("selected");
+  showFade(filterTeamsView);
+  setupFilterMenus(dataset);
+  loadTeamsForTeamsFilter(dataset);
 }
 
 // Sets up the filter dropdowns and their event listeners
