@@ -34,10 +34,11 @@ const ratingBands = [
 // Only call this ONCE per page load.
 async function loadTeamsFilterView(dataset, modulesConfig) {
   // WARNING: If this is called more than once, multiple event listeners will be attached!
-  clearInterface();
-  loadTeams(dataset, modulesConfig);
-  filterTeamsSwitch.classList.add("selected");
-  showFade(filterTeamsView);
+
+  // clearInterface();
+  // loadTeams(dataset, modulesConfig);
+  // filterTeamsSwitch.classList.add("selected");
+  // showFade(filterTeamsView);
   setupFilterMenus(dataset);
   loadTeamsForTeamsFilter(dataset);
 }

@@ -968,7 +968,10 @@ let matches;
     // Move to the filterTeams.js for filter teams logic
     filterTeamsSwitch.addEventListener("click", async () => {
       const module = await import("/analysis/js/filterTeams.js");
-
+      clearInterface();
+      loadTeams(dataset, modulesConfig);
+      filterTeamsSwitch.classList.add("selected");
+      showFade(filterTeamsView);
       module.init(dataset, modulesConfig);
     });
   }
