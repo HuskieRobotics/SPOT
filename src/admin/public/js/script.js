@@ -10,7 +10,7 @@ const SCOUTER_STATUS_REVERSE = {
   1: "WAITING",
   2: "SCOUTING",
   3: "COMPLETE",
-  4: "DISCONNECTED_BY_ADMIN",
+  4: "ADMIN DISCONNECT",
 };
 
 const root = document.documentElement;
@@ -187,7 +187,6 @@ async function updateScouters(accessCode) {
 
   for (let scouter of scouterList) {
     if (scouter.timestamp in scouters) {
-      console.log(scouter.state.scouting);
       if (!disconnected_by_admin && scouter.state.status != 0) {
         scouters[scouter.timestamp].updateScouterElement(scouter.state);
       }
@@ -204,18 +203,21 @@ async function updateScouters(accessCode) {
       !scouter.state.connected
     ) {
       //prune offline/complete scouters from the list
-      setTimeout(() => {
-        if (
-          scouters[scouter.timestamp] &&
-          (scouters[scouter.timestamp].scouter.state.status ==
-            SCOUTER_STATUS.COMPLETE ||
-            !scouters[scouter.timestamp].scouter.state.connected)
-        ) {
-          scouters[scouter.timestamp].destruct();
-          disconnected_by_admin = false;
-          delete scouters[scouter.timestamp];
-        }
-      }, 15000);
+      if (
+        scouters[scouter.timestamp] &&
+        scouters[scouter.timestamp].scouter.state.status == SC
+      )
+        setTimeout(() => {
+          if (
+            scouters[scouter.timestamp] &&
+            scouters[scouter.timestamp].scouter.state.status ==
+              SCOUTER_STATUS.COMPLETE
+          ) {
+            scouters[scouter.timestamp].destruct();
+            disconnected_by_admin = false;
+            delete scouters[scouter.timestamp];
+          }
+        }, 2000);
     }
   }
   //prune scouters that no longer exist
@@ -389,6 +391,7 @@ class ScouterDisplay {
       1: "#ffa500", //WAITING
       2: "var(--accent)", //SCOUTING
       3: "var(--green)", //COMPLETE
+      4: "var(--error)", // DISCONNECT
     };
     const DISCONNECTED_COLOR = "var(--error)";
 
@@ -402,55 +405,68 @@ class ScouterDisplay {
       !this.scouter.state.connected &&
       !(this.scouter.state.status == SCOUTER_STATUS.COMPLETE)
     ) {
-      //disconneted and not complete
-      this.scouterElement.querySelector(".scouter-status").style.color =
-        DISCONNECTED_COLOR;
+      // Disconnected and not complete
+
       this.scouterElement.style.borderColor = DISCONNECTED_COLOR;
-      this.scouterElement.querySelector(".match-number").style.backgroundColor =
-        DISCONNECTED_COLOR;
-      this.scouterElement.querySelector(".match-number").style.borderColor =
+
+      this.scouterElement.querySelector(".scouter-status").style.color =
         DISCONNECTED_COLOR;
       this.scouterElement.querySelector(".scouter-status").innerText =
         "DISCONNECTED";
+
+      this.scouterElement.querySelector(".match-number").style.backgroundColor =
+        DISCONNECTED_COLOR;
+      this.scouterElement.querySelector(".match-number").style.borderColor =
+        DISCONNECTED_COLOR;
     } else {
-      this.scouterElement.querySelector(".scouter-status").style.color =
-        SCOUTER_STATUS_COLOR[this.scouter.state.status];
       this.scouterElement.style.borderColor =
         SCOUTER_STATUS_COLOR[this.scouter.state.status];
+
+      this.scouterElement.querySelector(".scouter-status").style.color =
+        SCOUTER_STATUS_COLOR[this.scouter.state.status];
+      this.scouterElement.querySelector(".scouter-status").innerText =
+        SCOUTER_STATUS_REVERSE[this.scouter.state.status];
+
       this.scouterElement.querySelector(".match-number").style.backgroundColor =
         SCOUTER_STATUS_COLOR[this.scouter.state.status];
       this.scouterElement.querySelector(".match-number").style.borderColor =
         SCOUTER_STATUS_COLOR[this.scouter.state.status];
-      this.scouterElement.querySelector(".scouter-status").innerText =
-        SCOUTER_STATUS_REVERSE[this.scouter.state.status];
     }
     if (
       !this.scouter.state.connected &&
       this.scouter.state.status == SCOUTER_STATUS.DISCONNECTED_BY_ADMIN
     ) {
-      //disconnected by admin
+      // Disconnected by admin
+
+      this.scouterElement.style.borderColor =
+        SCOUTER_STATUS_COLOR[this.scouter.state.status];
+
       this.scouterElement.querySelector(".scouter-status").style.color =
-        DISCONNECTED_COLOR;
-      this.scouterElement.style.borderColor = DISCONNECTED_COLOR;
-      this.scouterElement.querySelector(".match-number").style.backgroundColor =
-        DISCONNECTED_COLOR;
-      this.scouterElement.querySelector(".match-number").style.borderColor =
-        DISCONNECTED_COLOR;
+        SCOUTER_STATUS_COLOR[this.scouter.status];
       this.scouterElement.querySelector(".scouter-status").innerText =
-        "ADMIN DISCONNECT";
+        SCOUTER_STATUS_REVERSE[this.scouter.state.status];
+
+      this.scouterElement.querySelector(".match-number").style.backgroundColor =
+        SCOUTER_STATUS_COLOR[this.scouter.state.status];
+      this.scouterElement.querySelector(".match-number").style.borderColor =
+        SCOUTER_STATUS_COLOR[this.scouter.state.status];
     } else if (
       !this.scouter.state.connected &&
       !(this.scouter.state.status == SCOUTER_STATUS.DISCONNECTED_BY_ADMIN)
     ) {
+      // User disconnect
+
+      this.scouterElement.style.borderColor = DISCONNECTED_COLOR;
+
       this.scouterElement.querySelector(".scouter-status").style.color =
         DISCONNECTED_COLOR;
-      this.scouterElement.style.borderColor = DISCONNECTED_COLOR;
+      this.scouterElement.querySelector(".scouter-status").innerText =
+        "USER DISCONNECT";
+
       this.scouterElement.querySelector(".match-number").style.backgroundColor =
         DISCONNECTED_COLOR;
       this.scouterElement.querySelector(".match-number").style.borderColor =
         DISCONNECTED_COLOR;
-      this.scouterElement.querySelector(".scouter-status").innerText =
-        "DISCONNECT";
     }
   }
   destruct() {
