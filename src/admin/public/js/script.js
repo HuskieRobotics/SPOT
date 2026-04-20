@@ -16,6 +16,8 @@ const SCOUTER_STATUS_REVERSE = {
 const root = document.documentElement;
 const savedTheme = localStorage.getItem("theme");
 
+// This variable exists to ensure that a scouter disconnected by the admin is properly marked as such.
+// For some reason, the scouter status does not automatically ensure this, so that is worth looking into.
 var disconnected_by_admin = false;
 
 if (savedTheme == null || savedTheme == "light") {
@@ -187,6 +189,10 @@ async function updateScouters(accessCode) {
 
   for (let scouter of scouterList) {
     if (scouter.timestamp in scouters) {
+      /**
+       * This piece of logic is here so that if a scouter is disconnected by an admin, it will continue to show that they were
+       *  disconnected by the admin instead of being overwritten.
+       */
       if (!disconnected_by_admin && scouter.state.status != 0) {
         scouters[scouter.timestamp].updateScouterElement(scouter.state);
       }
@@ -198,27 +204,19 @@ async function updateScouters(accessCode) {
         continue; //it's already submitted/disconnected, dont show it.
       scouters[scouter.timestamp] = new ScouterDisplay(scouter, accessCode);
     }
-    if (
-      scouter.state.status == SCOUTER_STATUS.COMPLETE ||
-      !scouter.state.connected
-    ) {
-      //prune offline/complete scouters from the list
+    //prune offline/complete scouters from the list
+    setTimeout(() => {
       if (
         scouters[scouter.timestamp] &&
-        scouters[scouter.timestamp].scouter.state.status == SC
-      )
-        setTimeout(() => {
-          if (
-            scouters[scouter.timestamp] &&
-            scouters[scouter.timestamp].scouter.state.status ==
-              SCOUTER_STATUS.COMPLETE
-          ) {
-            scouters[scouter.timestamp].destruct();
-            disconnected_by_admin = false;
-            delete scouters[scouter.timestamp];
-          }
-        }, 2000);
-    }
+        (scouters[scouter.timestamp].scouter.state.status ==
+          SCOUTER_STATUS.COMPLETE ||
+          !scouter.state.connected)
+      ) {
+        scouters[scouter.timestamp].destruct();
+        disconnected_by_admin = false;
+        delete scouters[scouter.timestamp];
+      }
+    }, 2000);
   }
   //prune scouters that no longer exist
   for (let timestamp in scouters) {
@@ -406,7 +404,6 @@ class ScouterDisplay {
       !(this.scouter.state.status == SCOUTER_STATUS.COMPLETE)
     ) {
       // Disconnected and not complete
-
       this.scouterElement.style.borderColor = DISCONNECTED_COLOR;
 
       this.scouterElement.querySelector(".scouter-status").style.color =
@@ -437,7 +434,6 @@ class ScouterDisplay {
       this.scouter.state.status == SCOUTER_STATUS.DISCONNECTED_BY_ADMIN
     ) {
       // Disconnected by admin
-
       this.scouterElement.style.borderColor =
         SCOUTER_STATUS_COLOR[this.scouter.state.status];
 
@@ -455,7 +451,6 @@ class ScouterDisplay {
       !(this.scouter.state.status == SCOUTER_STATUS.DISCONNECTED_BY_ADMIN)
     ) {
       // User disconnect
-
       this.scouterElement.style.borderColor = DISCONNECTED_COLOR;
 
       this.scouterElement.querySelector(".scouter-status").style.color =
