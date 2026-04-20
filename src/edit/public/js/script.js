@@ -24,7 +24,9 @@ let oldAccessCode;
 
   async function getTMPS() {
     // Get tmps from database (or cache if offline)
-    let tmps = await fetch("/analysis/api/dataset").then((res) => res.json());
+    let tmps = await fetch(`/analysis/api/dataset?_=${Date.now()}`, {
+      cache: "no-store",
+    }).then((res) => res.json());
 
     // Get all tmps stored in the local storage (from qr code)
     const storage = localStorage.getItem("teamMatchPerformances");
@@ -235,12 +237,12 @@ let oldAccessCode;
         topRow.appendChild(matchScouter);
 
         const flagButton = document.createElement("button");
-        if (match.flagged) {
-          flagButton.textContent = "";
-        } else {
-          flagButton.textContent = "Flag Match";
-        }
         flagButton.classList.add("flag-button");
+
+        const flagLabel = document.createElement("span");
+        flagLabel.textContent = match.flagged ? "" : "Flag Match";
+        flagButton.appendChild(flagLabel);
+
         topRow.appendChild(flagButton);
 
         const flag = document.createElement("img");
@@ -330,12 +332,7 @@ let oldAccessCode;
           match.flagged = nextFlaggedState;
           flag.hidden = !nextFlaggedState;
           flagButton.disabled = true;
-
-          if (nextFlaggedState) {
-            flagButton.textContent = "";
-          } else {
-            flagButton.textContent = "Flag Match";
-          }
+          flagLabel.textContent = nextFlaggedState ? "" : "Flag Match";
 
           try {
             const response = await fetch("/admin/api/flagMatch", {
@@ -359,11 +356,13 @@ let oldAccessCode;
             if (typeof result.flagged === "boolean") {
               match.flagged = result.flagged;
               flag.hidden = !result.flagged;
+              flagLabel.textContent = result.flagged ? "" : "Flag Match";
             }
           } catch (error) {
             // Roll back local state if the save fails.
             match.flagged = !nextFlaggedState;
             flag.hidden = nextFlaggedState;
+            flagLabel.textContent = nextFlaggedState ? "Flag Match" : "";
             console.error("Failed to update match flag:", error);
           } finally {
             flagButton.disabled = false;
