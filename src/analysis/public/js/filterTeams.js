@@ -1,12 +1,9 @@
-// Entry point for initializing the filter view from outside this module
-export function init(dataset, modulesConfig) {
-  // clearInterface();
-  // loadTeams(dataset, modulesConfig);
-  // filterTeamsSwitch.classList.add("selected");
-  // showFade(filterTeamsView);
-  // setupFilterMenus(dataset);
-  // loadTeamsForTeamsFilter(dataset);
-  loadTeamsFilterView(dataset, modulesConfig);
+// Entry point for initializing the filter view from outside this module.
+// Dependencies are injected from script.js to avoid cross-file scope coupling.
+export function init({ dataset, fetchTeams }) {
+  filterTeamState.dataset = dataset;
+  filterTeamState.fetchTeams = fetchTeams;
+  loadTeamsFilterView();
 }
 
 // Shared UI state for team filters. Set is used for O(1)-style add/remove/has checks.
@@ -14,6 +11,8 @@ const filterTeamState = {
   initialized: false,
   selectedActions: new Set(),
   selectedRatings: new Set(),
+  dataset: null,
+  fetchTeams: null,
 };
 
 // Static rating options used to populate the rating dropdown.
@@ -29,22 +28,20 @@ const ratingBands = [
   { id: "negativeOPR", label: "Negative OPR" },
 ];
 
-// This function adds an event listener to the filterTeamsSwitch button.
-// If this is called multiple times, it will add multiple listeners, which can cause duplicate UI updates or bugs.
-// Only call this ONCE per page load.
-async function loadTeamsFilterView(dataset, modulesConfig) {
-  // WARNING: If this is called more than once, multiple event listeners will be attached!
+function loadTeamsFilterView() {
+  if (
+    !filterTeamState.dataset ||
+    typeof filterTeamState.fetchTeams !== "function"
+  ) {
+    return;
+  }
 
-  // clearInterface();
-  // loadTeams(dataset, modulesConfig);
-  // filterTeamsSwitch.classList.add("selected");
-  // showFade(filterTeamsView);
-  setupFilterMenus(dataset);
-  loadTeamsForTeamsFilter(dataset);
+  setupFilterMenus();
+  loadTeamsForTeamsFilter();
 }
 
 // Sets up the filter dropdowns and their event listeners
-function setupFilterMenus(dataset) {
+function setupFilterMenus() {
   // Resolve filter controls once each time this view is shown.
   const actionButton = document.getElementById("robot-action-button");
   const actionDropdown = document.getElementById("robot-action-dropdown");
@@ -57,7 +54,7 @@ function setupFilterMenus(dataset) {
   }
 
   // Build option lists: action list is dynamic from data, rating list is fixed from ratingBands.
-  const actionOptions = extractActionOptions(dataset);
+  const actionOptions = extractActionOptions(filterTeamState.dataset);
   renderFilterOptions(
     actionDropdown,
     actionOptions,
@@ -162,6 +159,15 @@ function extractActionOptions(dataset) {
     .map((action) => ({ id: action, label: toTitleCase(action) }));
 }
 
+function toTitleCase(input) {
+  return input
+    .replace(/[_-]/g, " ")
+    .trim()
+    .split(/\s+/)
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
+}
+
 // Renders the filter checkboxes and attaches change listeners
 // WARNING: If this is called repeatedly without clearing old listeners, you may get duplicate events.
 function renderFilterOptions(container, options, selectedSet, type) {
@@ -192,8 +198,8 @@ function renderFilterOptions(container, options, selectedSet, type) {
 // This function returns the filtered teams as an array
 // It does NOT update the UI by itself
 function collectFilteredTeams() {
-  const allTeamsArray = Object.entries(dataset.teams);
-  const filteredTeams = allTeamsArray.filter(([teamNumber, team]) => {
+  const allTeamsArray = Object.entries(filterTeamState.dataset.teams);
+  const filteredTeams = allTeamsArray.filter(([, team]) => {
     return teamMatchesFilter(team);
   });
   console.log("All Teams:", allTeamsArray);
@@ -210,22 +216,20 @@ function updateTeamsFilterUI() {
     "main-team-container-for-teams-filter",
   );
   if (!containerForTeams) return;
-  // containerForTeams.innerHTML = "";
-  fetchTeams().then((allTeams) => {
+  containerForTeams.innerHTML = "";
+  filterTeamState.fetchTeams().then((allTeams) => {
     let teamsToShow;
     if (
       filterTeamState.selectedActions.size === 0 &&
       filterTeamState.selectedRatings.size === 0
     ) {
-      teamsToShow = Object.entries(dataset.teams);
+      teamsToShow = Object.entries(filterTeamState.dataset.teams);
     } else {
       teamsToShow = collectFilteredTeams();
     }
-    for (const [teamNumber, team] of teamsToShow) {
-      if (teamsToShow.includes(teamNumber)) {
-        const teamContainer = constructTeamForTeamsFilter(teamNumber, allTeams);
-        containerForTeams.appendChild(teamContainer);
-      }
+    for (const [teamNumber] of teamsToShow) {
+      const teamContainer = constructTeamForTeamsFilter(teamNumber, allTeams);
+      containerForTeams.appendChild(teamContainer);
     }
   });
 }
@@ -274,6 +278,7 @@ function renderSelectedFilterChips() {
       }
 
       renderSelectedFilterChips();
+      updateTeamsFilterUI();
     });
 
     chip.appendChild(chipText);
@@ -283,7 +288,7 @@ function renderSelectedFilterChips() {
 }
 
 // Loads the teams UI for the filter view (called once when entering the view)
-async function loadTeamsForTeamsFilter(dataset) {
+function loadTeamsForTeamsFilter() {
   updateTeamsFilterUI();
 }
 
@@ -315,14 +320,78 @@ function constructTeamForTeamsFilter(teamNumber, allTeams) {
 
 // Returns true if a team matches the selected filters
 function teamMatchesFilter(team) {
-  if (
-    filterTeamState.selectedActions.size === 0 ||
-    filterTeamState.selectedRatings.size === 0
-  ) {
-    return true; // If no filters, show all teams
+  const selectedActions = Array.from(filterTeamState.selectedActions);
+  const selectedRatings = Array.from(filterTeamState.selectedRatings);
+
+  if (selectedActions.length === 0 && selectedRatings.length === 0) {
+    return true;
   }
-  return Array.from(filterTeamState.selectedActions).every((action) => {
-    const value = team.averageScores?.[action] ?? team.opr?.[action];
-    return filterTeamState.selectedRatings.has(String(value));
+
+  if (selectedActions.length > 0 && selectedRatings.length === 0) {
+    return selectedActions.every(
+      (action) => getTeamActionValue(team, action) != null,
+    );
+  }
+
+  if (selectedActions.length === 0 && selectedRatings.length > 0) {
+    return (
+      Object.entries(team.averageScores || {}).some(([, value]) =>
+        selectedRatings.some((ratingId) =>
+          valueMatchesRatingBand(value, ratingId),
+        ),
+      ) ||
+      Object.entries(team.opr || {}).some(([, value]) =>
+        selectedRatings.some((ratingId) =>
+          valueMatchesRatingBand(value, ratingId),
+        ),
+      )
+    );
+  }
+
+  return selectedActions.every((action) => {
+    const value = getTeamActionValue(team, action);
+    return selectedRatings.some((ratingId) =>
+      valueMatchesRatingBand(value, ratingId),
+    );
   });
+}
+
+function getTeamActionValue(team, action) {
+  if (team.averageScores && team.averageScores[action] != null) {
+    return team.averageScores[action];
+  }
+  if (team.opr && team.opr[action] != null) {
+    return team.opr[action];
+  }
+  return null;
+}
+
+function valueMatchesRatingBand(value, ratingId) {
+  const num = Number(value);
+  if (Number.isNaN(num)) {
+    return false;
+  }
+
+  switch (ratingId) {
+    case "Rating4":
+      return num === 4;
+    case "Rating3":
+      return num === 3;
+    case "Rating2":
+      return num === 2;
+    case "Rating1":
+      return num === 1;
+    case "eliteOPR":
+      return num >= 250;
+    case "strongOPR":
+      return num >= 151 && num <= 250;
+    case "decentOPR":
+      return num >= 101 && num <= 150;
+    case "lowOPR":
+      return num >= 0 && num <= 100;
+    case "negativeOPR":
+      return num < 0;
+    default:
+      return false;
+  }
 }

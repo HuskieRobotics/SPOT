@@ -972,7 +972,7 @@ let matches;
       loadTeams(dataset, modulesConfig);
       filterTeamsSwitch.classList.add("selected");
       showFade(filterTeamsView);
-      module.init(dataset, modulesConfig);
+      module.init({ dataset, fetchTeams });
     });
   }
 
