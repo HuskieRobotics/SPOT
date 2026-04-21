@@ -166,6 +166,22 @@
   background-color: #707070;
 }
 
+.rating-lowest {
+  background-color: #ff4545;
+}
+
+.rating-second-lowest {
+  background-color: #ffa941;
+}
+
+.rating-second-highest {
+  background-color: #a1c326;
+}
+
+.rating-highest {
+  background-color: #00b844;
+}
+
 .disabled {
   opacity: 0.6;
   pointer-events: none;
