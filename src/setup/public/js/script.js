@@ -27,6 +27,76 @@ function parseBoolean(value) {
   return value === true || value === "true" || value === "on";
 }
 
+// Turns saved OPR text into an object the page can use.
+// If the value is bad or missing, it gives back an empty object {}.
+function normalizeOPRStrings(value) {
+  if (!value) return {};
+  if (typeof value === "object") return value;
+
+  if (typeof value === "string") {
+    const parsed = JSON.parse(value);
+    return parsed && typeof parsed === "object" ? parsed : {};
+  }
+  return {};
+}
+
+// Creates one visible textbox for a single OPR key.
+// The same helper is used for both initial render and "Add OPR String" clicks.
+function createOPRKeyInput(value = "") {
+  const input = document.createElement("input");
+  input.placeholder = "Input Eg: minorFoulCount";
+  input.value = value;
+  input.style.width = "125%";
+  input.style.marginLeft = "-12.5%";
+  input.style.display = "block";
+  input.style.margin = "0 auto 12px"; // centers the box
+  input.type = "text";
+  input.className = "input opr-key-input";
+  return input;
+}
+
+// Reads all OPR key textboxes and builds the config shape expected by SPOT.
+// Non-empty rows are converted into sequential keys: string_1, string_2, ...
+function buildOPRStringsObject() {
+  const container = document.getElementById("opr-keys-container");
+  const keys = Array.from(container.querySelectorAll(".opr-key-input"))
+    .map((input) => input.value.trim())
+    .filter(Boolean);
+
+  const oprStrings = {};
+  keys.forEach((key, index) => {
+    oprStrings[`string_${index + 1}`] = key;
+  });
+
+  return oprStrings;
+}
+
+// Renders textbox rows from saved config data.
+// It normalizes old/new formats, sorts by numeric suffix for stable order,
+// and guarantees at least one empty textbox when no values are saved yet.
+function renderOPRKeyInputs(oprStringsValue) {
+  const container = document.getElementById("opr-keys-container");
+  if (!container) return;
+
+  container.innerHTML = "";
+
+  const normalized = normalizeOPRStrings(oprStringsValue);
+  const orderedValues = Object.entries(normalized)
+    .sort(([aKey], [bKey]) =>
+      aKey.localeCompare(bKey, undefined, { numeric: true }),
+    )
+    .map(([, value]) => String(value || "").trim())
+    .filter(Boolean);
+
+  if (orderedValues.length === 0) {
+    container.appendChild(createOPRKeyInput());
+  } else {
+    orderedValues.forEach((value) => {
+      container.appendChild(createOPRKeyInput(value));
+    });
+  }
+}
+
 (async () => {
   const authRequest = await fetch("./api/auth").then((res) => res.json());
 
@@ -36,7 +106,7 @@ function parseBoolean(value) {
     accessCodeInput.placeholder = "Access Code";
     accessCodeInput.type = "password";
     accessCodeInput.addEventListener("keydown", (e) => {
-      if (e.keyCode == 13) {
+      if (e.key === "Enter") {
         validate(accessCodeInput.value, authModal);
       }
     });
@@ -95,6 +165,9 @@ async function constructApp(accessCode) {
     document.querySelector("#DEMO").checked = parseBoolean(config.DEMO);
     document.querySelector("#SWAP_ZONE_BUTTON_LOCATIONS").checked =
       parseBoolean(config.SWAP_ZONE_BUTTON_LOCATIONS);
+    renderOPRKeyInputs(config.TBA_OPR_STRINGS);
+  } else {
+    renderOPRKeyInputs({});
   }
 
   document.querySelector("#setup-container").classList.add("visible");
@@ -157,7 +230,6 @@ async function createNewEventCode(candidate) {
 }
 
 // Add event listener for Generate Event Number button
-document;
 document
   .getElementById("generateEventNumber")
   .addEventListener("click", async () => {
@@ -195,6 +267,13 @@ document
     }
     eventSelect.value = candidate; // Automatically select the new candidate
   });
+
+document.getElementById("addOPRString").addEventListener("click", () => {
+  const container = document.getElementById("opr-keys-container");
+  const newInput = createOPRKeyInput();
+  container.appendChild(newInput);
+  newInput.focus();
+});
 
 async function populateEventNumbers() {
   const databaseURL = document.getElementById("DATABASE_URL").value;
@@ -263,6 +342,15 @@ document.querySelector("#submit").addEventListener("click", async () => {
   config.SWAP_ZONE_BUTTON_LOCATIONS = document.querySelector(
     "#SWAP_ZONE_BUTTON_LOCATIONS",
   ).checked;
+
+  config.TBA_OPR_STRINGS = buildOPRStringsObject();
+  if (Object.keys(config.TBA_OPR_STRINGS).length === 0) {
+    new Modal("small")
+      .header("Missing OPR Strings")
+      .text("Add at least one OPR key before saving.")
+      .dismiss();
+    return;
+  }
 
   let res = await (
     await fetch("./api/config", {
