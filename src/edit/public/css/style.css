@@ -45,12 +45,13 @@ body {
 
 .flag-button {
   background: none;
-  border: none;
+  border: 2px solid var(--accent);
+  bordercolor: #fefefe;
   cursor: pointer;
   margin-left: auto;
   font-size: 1.2em;
   color: var(--bg-alt);
-  background-color: #a5a5a5;
+  background-color: #fefefe;
   display: flex;
   align-items: center;
   height: 1.3em;

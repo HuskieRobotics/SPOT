@@ -238,6 +238,10 @@ let oldAccessCode;
 
         const flagButton = document.createElement("button");
         flagButton.classList.add("flag-button");
+        flagButton.style.backgroundColor = match.flagged
+          ? "#fefefe"
+          : "#ff6666";
+        flagButton.style.borderColor = !match.flagged ? "#fefefe" : "#ff6666";
 
         const flagLabel = document.createElement("span");
         flagLabel.textContent = match.flagged ? "" : "Flag Match";
@@ -333,6 +337,12 @@ let oldAccessCode;
           flag.hidden = !nextFlaggedState;
           flagButton.disabled = true;
           flagLabel.textContent = nextFlaggedState ? "" : "Flag Match";
+          flagButton.style.backgroundColor = nextFlaggedState
+            ? "#fefefe"
+            : "#ff6666";
+          flagButton.style.borderColor = !nextFlaggedState
+            ? "#fefefe"
+            : "#ff6666";
 
           try {
             const response = await fetch("/admin/api/flagMatch", {
