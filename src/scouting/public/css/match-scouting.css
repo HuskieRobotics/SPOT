@@ -167,19 +167,19 @@
 }
 
 .rating-lowest {
-  background-color: #ff564a;
+  background-color: #ff4545;
 }
 
 .rating-second-lowest {
-  background-color: #ff7f76;
+  background-color: #ffa534;
 }
 
 .rating-second-highest {
-  background-color: #81ff8c;
+  background-color: #b7dd29;
 }
 
 .rating-highest {
-  background-color: #54e460;
+  background-color: #00b844;
 }
 
 .disabled {
