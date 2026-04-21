@@ -13,6 +13,8 @@ const filterTeamState = {
   selectedRatings: new Set(),
   dataset: null,
   fetchTeams: null,
+  // Incremented on each refresh so stale async responses are ignored.
+  renderVersion: 0,
 };
 
 // Static rating options used to populate the rating dropdown.
@@ -216,8 +218,16 @@ function updateTeamsFilterUI() {
     "main-team-container-for-teams-filter",
   );
   if (!containerForTeams) return;
+
+  // Track render requests so stale async responses cannot append duplicate cards.
+  const renderVersion = ++filterTeamState.renderVersion;
   containerForTeams.innerHTML = "";
+
   filterTeamState.fetchTeams().then((allTeams) => {
+    if (renderVersion !== filterTeamState.renderVersion) {
+      return;
+    }
+
     let teamsToShow;
     if (
       filterTeamState.selectedActions.size === 0 &&
@@ -328,12 +338,26 @@ function teamMatchesFilter(team) {
   }
 
   if (selectedActions.length > 0 && selectedRatings.length === 0) {
-    return selectedActions.every(
-      (action) => getTeamActionValue(team, action) != null,
-    );
+    // Action-only mode: team must have a positive (>0) value for every selected action.
+    return selectedActions.every((action) => {
+      const value = Number(getTeamActionValue(team, action));
+      return !Number.isNaN(value) && value > 0;
+    });
   }
 
   if (selectedActions.length === 0 && selectedRatings.length > 0) {
+    // Rating-only mode: if only Rating1-4 are selected, treat them as a minimum threshold.
+    const ratingThreshold = getSelectedRatingThreshold(selectedRatings);
+    if (ratingThreshold != null) {
+      const positiveActionRatings = getPositiveRobotActionRatings(team);
+      // Every positive action rating for the team must satisfy the selected threshold.
+      return (
+        positiveActionRatings.length > 0 &&
+        positiveActionRatings.every((value) => value >= ratingThreshold)
+      );
+    }
+
+    // Non Rating1-4 options (OPR bands) keep the original band-matching behavior.
     return (
       Object.entries(team.averageScores || {}).some(([, value]) =>
         selectedRatings.some((ratingId) =>
@@ -348,8 +372,12 @@ function teamMatchesFilter(team) {
     );
   }
 
+  // Action + rating mode: each selected action must be present (>0) and match a selected rating.
   return selectedActions.every((action) => {
-    const value = getTeamActionValue(team, action);
+    const value = Number(getTeamActionValue(team, action));
+    if (Number.isNaN(value) || value <= 0) {
+      return false;
+    }
     return selectedRatings.some((ratingId) =>
       valueMatchesRatingBand(value, ratingId),
     );
@@ -366,6 +394,40 @@ function getTeamActionValue(team, action) {
   return null;
 }
 
+function getSelectedRatingThreshold(selectedRatings) {
+  const ratingThresholdMap = {
+    Rating1: 1,
+    Rating2: 2,
+    Rating3: 3,
+    Rating4: 4,
+  };
+
+  const thresholds = selectedRatings
+    .map((ratingId) => ratingThresholdMap[ratingId])
+    .filter((value) => value != null);
+
+  if (thresholds.length !== selectedRatings.length || thresholds.length === 0) {
+    // Mixed rating types (e.g., Rating3 + OPR band) cannot be reduced to one threshold.
+    return null;
+  }
+
+  // If multiple rating levels are selected, satisfy the strictest requirement.
+  return Math.max(...thresholds);
+}
+
+function getPositiveRobotActionRatings(team) {
+  const actionRatings = [];
+  // Rating-only filtering uses robot action ratings from averageScores (ignores OPR values).
+  for (const value of Object.values(team.averageScores || {})) {
+    const numericValue = Number(value);
+    if (Number.isNaN(numericValue) || numericValue <= 0) {
+      continue;
+    }
+    actionRatings.push(numericValue);
+  }
+  return actionRatings;
+}
+
 function valueMatchesRatingBand(value, ratingId) {
   const num = Number(value);
   if (Number.isNaN(num)) {
@@ -374,21 +436,21 @@ function valueMatchesRatingBand(value, ratingId) {
 
   switch (ratingId) {
     case "Rating4":
-      return num === 4;
+      return num === 4.0;
     case "Rating3":
-      return num === 3;
+      return num >= 3.0;
     case "Rating2":
-      return num === 2;
+      return num >= 2.0;
     case "Rating1":
-      return num === 1;
+      return num >= 1.0;
     case "eliteOPR":
-      return num >= 250;
+      return num >= 250.0;
     case "strongOPR":
-      return num >= 151 && num <= 250;
+      return num >= 151.0 && num <= 250.0;
     case "decentOPR":
-      return num >= 101 && num <= 150;
+      return num >= 101.0 && num <= 150.0;
     case "lowOPR":
-      return num >= 0 && num <= 100;
+      return num >= 0.0 && num <= 100.0;
     case "negativeOPR":
       return num < 0;
     default:

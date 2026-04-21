@@ -170,6 +170,12 @@ let matches;
 
   //team UI functions
   async function loadTeams(dataset, modulesConfig) {
+    // Rebuild team UI from a clean state each call (prevents duplicate stats/modules on re-entry).
+    teamList.innerHTML = "";
+    mainList.innerHTML = "";
+    sideList.innerHTML = "";
+    modules.team = [];
+
     //get blue alliance teams
     const allTeams = await fetchTeams();
     //add to sidebar team list
