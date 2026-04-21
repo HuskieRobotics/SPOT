@@ -452,7 +452,7 @@ function valueMatchesRatingBand(value, ratingId) {
     case "lowOPR":
       return num >= 0.0 && num <= 100.0;
     case "negativeOPR":
-      return num < 0;
+      return num < 0.0;
     default:
       return false;
   }
