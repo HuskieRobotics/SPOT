@@ -142,6 +142,7 @@ function setFilterSelection(type, value, isSelected) {
 function extractActionOptions(dataset) {
   // Collect unique action keys from both averageScores and opr using Set + nested loops.
   const actions = new Set();
+
   for (const team of Object.values(dataset.teams)) {
     for (const source of [team.averageScores, team.opr]) {
       if (!source || typeof source !== "object") {
@@ -199,8 +200,8 @@ function renderFilterOptions(container, options, selectedSet, type) {
 // It does NOT update the UI by itself
 function collectFilteredTeams() {
   const allTeamsArray = Object.entries(filterTeamState.dataset.teams);
-  const filteredTeams = allTeamsArray.filter(([, team]) => {
-    return teamMatchesFilter(team);
+  const filteredTeams = allTeamsArray.filter(([, teamData]) => {
+    return teamMatchesFilter(teamData);
   });
   console.log("All Teams:", allTeamsArray);
   console.log("Selected Actions:", filterTeamState.selectedActions);
