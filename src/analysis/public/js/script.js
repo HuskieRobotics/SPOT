@@ -973,7 +973,7 @@ let matches;
 
     // Move to the filterTeams.js for filter teams logic
     filterTeamsSwitch.addEventListener("click", async () => {
-      const module = await import("/analysis/js/filterTeams.js");
+      const module = await import("/analysis/js/filterTeams.js"); //import filterTeams.js as a module in order to access functions defined in the file
       clearInterface();
       loadTeams(dataset, modulesConfig);
       filterTeamsSwitch.classList.add("selected");
