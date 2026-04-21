@@ -52,7 +52,6 @@ const filesToCache = [
   "/analysis/js/script.js",
   "/analysis/js/ui.js",
   "/analysis/js/util.js",
-  "/analysis/js/filterTeams.js",
   "/analysis/api/dataset",
   "/analysis/api/teams",
   "/analysis/api/manual",
