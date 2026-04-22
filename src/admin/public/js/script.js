@@ -187,6 +187,9 @@ async function updateScouters(accessCode) {
     })
   ).json();
 
+  var offlineScouters = [];
+  var i = 0;
+
   for (let scouter of scouterList) {
     if (scouter.timestamp in scouters) {
       /**
@@ -205,27 +208,29 @@ async function updateScouters(accessCode) {
       scouters[scouter.timestamp] = new ScouterDisplay(scouter, accessCode);
     }
     //prune offline/complete scouters from the list
-    setTimeout(() => {
+
+    if (!scouter.state.connected && scouter.state.scouterId !== "") {
+      offlineScouters[i] = scouter;
+      i++;
+    }
+
+    for (let offlineScouter of offlineScouters) {
       if (
-        scouters[scouter.timestamp] &&
-        (scouters[scouter.timestamp].scouter.state.status ==
-          SCOUTER_STATUS.COMPLETE ||
-          !scouter.state.connected)
+        scouter.state.connected &&
+        scouter.state.scouterId == offlineScouter.state.scouterId
       ) {
-        scouters[scouter.timestamp].destruct();
-        disconnected_by_admin = false;
-        delete scouters[scouter.timestamp];
+        if (scouter.state.status != 0 || scouter.state.status != 4) {
+          scouters[offlineScouter.timestamp].destruct();
+          disconnected_by_admin = false;
+          delete scouters[offlineScouter.timestamp];
+        }
       }
-    }, 2000);
-  }
-  //prune scouters that no longer exist
-  for (let timestamp in scouters) {
-    if (!scouterList.find((x) => (x.timestamp = timestamp))) {
-      //they no longer exist
-      scouters[timestamp].destruct();
-      delete scouters[timestamp];
     }
   }
+
+  console.log(offlineScouters);
+
+  //prune scouters that no longer exist
 }
 
 async function updateMatches(accessCode) {
