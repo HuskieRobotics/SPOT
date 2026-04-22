@@ -23,6 +23,15 @@ if (savedTheme == null || savedTheme == "light") {
 
 let oldAccessCode;
 
+const DEFAULT_OPR_STRINGS = {
+  string_1: "Hub Total Fuel Count",
+  string_2: "minorFoulCount",
+  string_3: "majorFoulCount",
+  string_4: "Hub Auto Fuel Count",
+  string_5: "Hub Teleop Fuel Count",
+  string_6: "Hub Uncounted",
+};
+
 function parseBoolean(value) {
   return value === true || value === "true" || value === "on";
 }
@@ -34,8 +43,12 @@ function normalizeOPRStrings(value) {
   if (typeof value === "object") return value;
 
   if (typeof value === "string") {
-    const parsed = JSON.parse(value);
-    return parsed && typeof parsed === "object" ? parsed : {};
+    try {
+      const parsed = JSON.parse(value);
+      return parsed && typeof parsed === "object" ? parsed : {};
+    } catch {
+      return {};
+    }
   }
   return {};
 }
@@ -165,9 +178,14 @@ async function constructApp(accessCode) {
     document.querySelector("#DEMO").checked = parseBoolean(config.DEMO);
     document.querySelector("#SWAP_ZONE_BUTTON_LOCATIONS").checked =
       parseBoolean(config.SWAP_ZONE_BUTTON_LOCATIONS);
-    renderOPRKeyInputs(config.TBA_OPR_STRINGS);
+    const savedOPRStrings = normalizeOPRStrings(config.TBA_OPR_STRINGS);
+    if (Object.keys(savedOPRStrings).length > 0) {
+      renderOPRKeyInputs(savedOPRStrings);
+    } else {
+      renderOPRKeyInputs(DEFAULT_OPR_STRINGS);
+    }
   } else {
-    renderOPRKeyInputs({});
+    renderOPRKeyInputs(DEFAULT_OPR_STRINGS);
   }
 
   document.querySelector("#setup-container").classList.add("visible");
@@ -344,13 +362,6 @@ document.querySelector("#submit").addEventListener("click", async () => {
   ).checked;
 
   config.TBA_OPR_STRINGS = buildOPRStringsObject();
-  if (Object.keys(config.TBA_OPR_STRINGS).length === 0) {
-    new Modal("small")
-      .header("Missing OPR Strings")
-      .text("Add at least one OPR key before saving.")
-      .dismiss();
-    return;
-  }
 
   let res = await (
     await fetch("./api/config", {
