@@ -486,13 +486,13 @@ function getSelectedRatingThreshold(selectedRatings) {
   return Math.max(...thresholds);
 }
 
-// Extracts all positive action ratings (scores > 0) from a team's averageScores data.
+// Extracts all action ratings for each specific action that has been recorded for that team.
 function getPositiveRobotActionRatings(team) {
   const actionRatings = [];
-  // Loop through all the action scores in the team's averageScores
+  // Loop through all the ratings for each specific action ID in the team's averageScores
   for (const value of Object.values(team.averageScores || {})) {
     const numericValue = Number(value);
-    // Skip scores that are zero or invalid
+    // Skip ratings that do not exist, are 0, or negative
     if (Number.isNaN(numericValue) || numericValue <= 0) {
       continue;
     }
