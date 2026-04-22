@@ -1,0 +1,15 @@
+node_modules
+npm-debug.log*
+.git
+.github
+.vscode
+.env
+.env.*
+config/config.json
+config/config.bak.json
+deploy/
+*.md
+LICENSE
+.gitignore
+.nvmrc
+.prettierignore
