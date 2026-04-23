@@ -193,3 +193,9 @@ video {
   display: block;
   margin: 0 auto;
 }
+
+.setting-image {
+  max-width: 100%;
+  height: auto;
+  max-height: 400px;
+}
