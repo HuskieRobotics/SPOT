@@ -195,7 +195,8 @@ video {
 }
 
 .setting-image {
-  max-width: 100%;
-  height: auto;
+  max-width: 50%;
+  height: 50%;
   max-height: 400px;
+  margin: 1.5em auto;
 }
