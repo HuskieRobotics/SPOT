@@ -226,6 +226,18 @@ async function updateScouters(accessCode) {
         }
       }
     }
+
+    setTimeout(() => {
+      if (
+        scouters[scouter.timestamp] &&
+        scouters[scouter.timestamp].scouter.state.status ==
+          SCOUTER_STATUS.COMPLETE
+      ) {
+        scouters[scouter.timestamp].destruct();
+        disconnected_by_admin = false;
+        delete scouters[scouter.timestamp];
+      }
+    }, 2000);
   }
 
   console.log(offlineScouters);
