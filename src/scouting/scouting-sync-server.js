@@ -59,6 +59,9 @@ class ScoutingSync {
 
     //new scouter flow
     io.on("connection", (socket) => {
+      for (let scouter of ScoutingSync.scouters) {
+        console.log(scouter.state.scouterId);
+      }
       let newScouter = new Scouter(socket);
       newScouter.socket.on("disconnect", () => {
         setTimeout(() => {
