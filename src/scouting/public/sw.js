@@ -121,11 +121,23 @@ self.addEventListener("install", function (event) {
 self.addEventListener("fetch", (event) => {
   event.respondWith(
     caches.open(cacheVersion).then((cache) => {
+      const requestPath = new URL(event.request.url).pathname;
+
+      // Network-first for live dataset reads to avoid stale values after edits.
+      if (requestPath === "/analysis/api/dataset") {
+        return fetch(event.request)
+          .then((networkResponse) => {
+            cache.put(event.request, networkResponse.clone());
+            return networkResponse;
+          })
+          .catch(() => cache.match(event.request));
+      }
+
       return cache.match(event.request).then((response) => {
         event.request.importance = "low"; //low priority
         const fetchPromise = fetch(event.request)
           .then((networkResponse) => {
-            if (filesToCache.includes(new URL(event.request.url).pathname)) {
+            if (filesToCache.includes(requestPath)) {
               //if the file is in the cache list
               cache.put(event.request, networkResponse.clone());
             }

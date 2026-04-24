@@ -64,13 +64,13 @@ class Stats {
             (a, b) =>
               (this.applyModifiers(
                 stat,
-                getPath(dataset.teams[b], stat.path, 0)
+                getPath(dataset.teams[b], stat.path, 0),
               ) -
                 this.applyModifiers(
                   stat,
-                  getPath(dataset.teams[a], stat.path, 0)
+                  getPath(dataset.teams[a], stat.path, 0),
                 )) *
-              stat.sort
+              stat.sort,
           );
           statRank = rankedTeams.indexOf(teams[0]) + 1;
           // console.log(stat.name)

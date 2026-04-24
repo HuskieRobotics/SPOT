@@ -11,8 +11,8 @@ mongoose
     console.error(
       e,
       chalk.whiteBright.bgRed.bold(
-        `\nError connecting to MongoDB! This could be because DATABASE_URL is incorrect in your config.json file. SPOT will not properly function without a database.`
-      )
+        `\nError connecting to MongoDB! This could be because DATABASE_URL is incorrect in your config.json file. SPOT will not properly function without a database.`,
+      ),
     );
   });
 
@@ -61,6 +61,7 @@ const teamMatchPerformanceSchema = new mongoose.Schema(
     eventNumber: mongoose.Schema.ObjectId,
     matchId: String,
     matchId_rand: String,
+    flagged: { type: Boolean, default: false },
     actionQueue: [
       {
         id: String, //button id
@@ -69,19 +70,19 @@ const teamMatchPerformanceSchema = new mongoose.Schema(
       },
     ],
   },
-  { collection: "teamMatchPerformances" }
+  { collection: "teamMatchPerformances" },
 );
 
 const TeamMatchPerformance = new mongoose.model(
   "TeamMatchPerformance",
-  teamMatchPerformanceSchema
+  teamMatchPerformanceSchema,
 );
 
 const eventSchema = new mongoose.Schema(
   {
     code: String,
   },
-  { collection: "events" }
+  { collection: "events" },
 );
 
 const Event = new mongoose.model("Event", eventSchema);

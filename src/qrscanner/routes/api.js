@@ -33,6 +33,7 @@ router.post("/teamMatchPerformance", async (req, res) => {
       eventNumber: req.body.eventNumber,
       matchId: req.body.matchId,
       matchId_rand: req.body.matchId_rand,
+      flagged: req.body.flagged,
       actionQueue: req.body.actionQueue,
     });
   } catch (err) {

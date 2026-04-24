@@ -24,7 +24,9 @@ let oldAccessCode;
 
   async function getTMPS() {
     // Get tmps from database (or cache if offline)
-    let tmps = await fetch("/analysis/api/dataset").then((res) => res.json());
+    let tmps = await fetch(`/analysis/api/dataset?_=${Date.now()}`, {
+      cache: "no-store",
+    }).then((res) => res.json());
 
     // Get all tmps stored in the local storage (from qr code)
     const storage = localStorage.getItem("teamMatchPerformances");
@@ -234,6 +236,26 @@ let oldAccessCode;
         matchScouter.classList.add("match-info");
         topRow.appendChild(matchScouter);
 
+        const flagButton = document.createElement("button");
+        flagButton.classList.add("flag-button");
+        flagButton.style.backgroundColor = match.flagged
+          ? "#fefefe"
+          : "#ff6666";
+        flagButton.style.borderColor = !match.flagged ? "#fefefe" : "#ff6666";
+
+        const flagLabel = document.createElement("span");
+        flagLabel.textContent = match.flagged ? "" : "Flag Match";
+        flagButton.appendChild(flagLabel);
+
+        topRow.appendChild(flagButton);
+
+        const flag = document.createElement("img");
+        flag.src = "/img/flag.png";
+        flag.alt = "Flagged match";
+        flag.classList.add("flag-image");
+        flag.hidden = !match.flagged;
+        flagButton.appendChild(flag);
+
         const trashButton = document.createElement("button");
         trashButton.textContent = "X";
         trashButton.classList.add("trash-button");
@@ -305,6 +327,56 @@ let oldAccessCode;
           const isHidden = dropdownContent.style.display === "none";
           dropdownContent.style.display = isHidden ? "block" : "none";
           dropdownButton.textContent = isHidden ? "▼" : "►";
+        };
+
+        flagButton.onclick = async () => {
+          const nextFlaggedState = !match.flagged;
+
+          // Optimistically update UI so flagging feels instant.
+          match.flagged = nextFlaggedState;
+          flag.hidden = !nextFlaggedState;
+          flagButton.disabled = true;
+          flagLabel.textContent = nextFlaggedState ? "" : "Flag Match";
+          flagButton.style.backgroundColor = nextFlaggedState
+            ? "#fefefe"
+            : "#ff6666";
+          flagButton.style.borderColor = !nextFlaggedState
+            ? "#fefefe"
+            : "#ff6666";
+
+          try {
+            const response = await fetch("/admin/api/flagMatch", {
+              method: "POST",
+              keepalive: true,
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: oldAccessCode || "",
+              },
+              body: JSON.stringify({
+                id: match._id,
+                flagged: nextFlaggedState,
+              }),
+            });
+
+            if (!response.ok) {
+              throw new Error(`Failed to save flag: ${response.status}`);
+            }
+
+            const result = await response.json();
+            if (typeof result.flagged === "boolean") {
+              match.flagged = result.flagged;
+              flag.hidden = !result.flagged;
+              flagLabel.textContent = result.flagged ? "" : "Flag Match";
+            }
+          } catch (error) {
+            // Roll back local state if the save fails.
+            match.flagged = !nextFlaggedState;
+            flag.hidden = nextFlaggedState;
+            flagLabel.textContent = nextFlaggedState ? "Flag Match" : "";
+            console.error("Failed to update match flag:", error);
+          } finally {
+            flagButton.disabled = false;
+          }
         };
 
         trashButton.onclick = async () => {

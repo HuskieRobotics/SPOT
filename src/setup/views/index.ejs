@@ -276,6 +276,20 @@
             <span class="off">OFF</span>
           </label>
         </div>
+        <div> 
+            <h1>TheBlueAlliance OPR Strings</h1>
+            <p>
+              Add one OPR key per textbox. Press "Add OPR String" to add another textbox. These values will be saved as a JSON object like {"string_1":"minorFoulCount","string_2":"majorFoulCount"} in the setup config.Below is the list of all the OPR keys available on TheBlueAlliance. You can choose any of these, but make sure to type them in exactly as they appear on the site, or else SPOT won't be able to find the data you're looking for. We already have some default OPR keys inputted for you, but feel free to change them as you see fit.
+            </p>
+            <img src="/img/26OPRKeys.webp" alt="Example OPR keys" class="setting-image" />
+            <label class="input-label" id="oprKeysLabel">
+              <div id="opr-keys-container"></div>
+              <button type="button" id="addOPRString">
+                Add OPR String
+              </button>
+            </label>
+        </div>
+
       </form>
 
       <button id="submit">Submit</button>

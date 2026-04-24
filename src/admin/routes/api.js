@@ -101,6 +101,37 @@ router.post("/setMatch", (req, res) => {
   }
 });
 
+router.post("/flagMatch", async (req, res) => {
+  try {
+    const { id, flagged } = req.body;
+
+    if (!id || typeof flagged !== "boolean") {
+      return res.status(400).json({
+        success: false,
+        error: "Missing or invalid id/flagged payload",
+      });
+    }
+
+    const match = await TeamMatchPerformance.findByIdAndUpdate(
+      id,
+      { flagged },
+      { new: true },
+    );
+
+    if (!match) {
+      return res.status(404).json({
+        success: false,
+        error: "Match not found",
+      });
+    }
+
+    return res.json({ success: true, flagged: match.flagged });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ success: false, error: "Failed to flag" });
+  }
+});
+
 router.get("/matches", async (req, res) => {
   let manualSchedule = (await axios.get("/schedule/api/matches")).data;
   if (manualSchedule.length) {
