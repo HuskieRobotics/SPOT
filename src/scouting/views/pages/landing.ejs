@@ -31,6 +31,10 @@
         <i class="fas fa-pen-square"></i>
         <span>Sign in Manually</span>
       </div>
+      <div class="feedback active" onclick="toggleFeedbackMenu()">
+        <i class="fas fa-comment-dots"></i>
+        <span>Give Feedback</span>
+      </div>
     </div>
   </div>
 
@@ -47,6 +51,40 @@
 
       <div class="button-outside">
         <button class="buttonz" onclick="goToAdmin()">Go To Admin</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="feedbackOverlay" class="settings-overlay" style="display: none">
+    <div id="feedbackMenu" class="settings-menu">
+      <div class="button-outside">
+        <p class="feedback-text">
+          We appreciate your feedback!</p>
+          <button
+            class="buttonz"
+            onclick="
+              window.open(
+                'https://github.com/HuskieRobotics/SPOT/issues',
+                '_blank',
+              )
+            "
+          >
+            Create GitHub Issue
+          </button>
+        </p>
+      </div>
+      <div class="button-outside">
+        <button
+          class="buttonz"
+          onclick="
+            window.open(
+              'https://mail.google.com/mail/?view=cm&fs=1&to=spot@team3061.org',
+              '_blank',
+            )
+          "
+        >
+          Email Feedback
+        </button>
       </div>
     </div>
   </div>
