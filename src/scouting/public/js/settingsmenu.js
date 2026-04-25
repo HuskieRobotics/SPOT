@@ -1,5 +1,30 @@
 function toggleSettingsMenu() {
   var overlay = document.getElementById("settingsOverlay");
+  var feedbackOverlay = document.getElementById("feedbackOverlay");
+
+  if (feedbackOverlay) {
+    feedbackOverlay.style.display = "none";
+  }
+
+  if (overlay.style.display === "none" || overlay.style.display === "") {
+    overlay.style.display = "flex";
+  } else {
+    overlay.style.display = "none";
+  }
+}
+
+function toggleFeedbackMenu() {
+  var overlay = document.getElementById("feedbackOverlay");
+  var settingsOverlay = document.getElementById("settingsOverlay");
+
+  if (!overlay) {
+    return;
+  }
+
+  if (settingsOverlay) {
+    settingsOverlay.style.display = "none";
+  }
+
   if (overlay.style.display === "none" || overlay.style.display === "") {
     overlay.style.display = "flex";
   } else {
@@ -17,17 +42,26 @@ function goToAdmin() {
 
 window.onclick = function (event) {
   var overlay = document.getElementById("settingsOverlay");
+  var feedbackOverlay = document.getElementById("feedbackOverlay");
+  var darkModeButton = document.getElementById("darkModeOn");
+
   if (event.target === overlay) {
     overlay.style.display = "none";
   }
 
-  if (
-    localStorage.getItem("theme") == null ||
-    localStorage.getItem("theme") == "light"
-  ) {
-    document.getElementById("darkModeOn").innerHTML = "Enable Dark Mode";
-  } else {
-    document.getElementById("darkModeOn").innerHTML = "Disable Dark Mode";
+  if (event.target === feedbackOverlay) {
+    feedbackOverlay.style.display = "none";
+  }
+
+  if (darkModeButton) {
+    if (
+      localStorage.getItem("theme") == null ||
+      localStorage.getItem("theme") == "light"
+    ) {
+      darkModeButton.innerHTML = "Enable Dark Mode";
+    } else {
+      darkModeButton.innerHTML = "Disable Dark Mode";
+    }
   }
 };
 
