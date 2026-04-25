@@ -244,7 +244,7 @@ function collectFilteredTeams() {
   const filteredTeams = allTeamsArray.filter(([, team]) => {
     return teamMatchesFilter(team);
   });
-  // Debug logging (can be removed once development is complete)
+  // Debug logging
   console.log("All Teams:", allTeamsArray);
   console.log("Selected Actions:", filterTeamState.selectedActions);
   console.log("Selected Ratings:", filterTeamState.selectedRatings);
