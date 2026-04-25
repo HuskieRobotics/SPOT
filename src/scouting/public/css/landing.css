@@ -168,6 +168,11 @@
   margin: 0 0 10px 15px;
 }
 
+#landing #feedbackMenu .buttonz {
+  font-size: 0.85em;
+  padding: 6px 10px;
+}
+
 #landing .sign-in-text {
   font-size: 5em;
   line-height: 1em;
