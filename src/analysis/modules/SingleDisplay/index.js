@@ -37,7 +37,7 @@ class SingleDisplay {
       if (teams.length > 1) {
         summed = teams
           .map((team) =>
-            getPath(dataset.teams[team], this.moduleConfig.options.path, 0)
+            getPath(dataset.teams[team], this.moduleConfig.options.path, 0),
           )
           .flat()
           .reduce((acc, i) => acc + i, 0);
@@ -45,7 +45,7 @@ class SingleDisplay {
         summed = getPath(
           dataset.teams[teams[0]],
           this.moduleConfig.options.path,
-          0
+          0,
         );
       }
 
@@ -69,7 +69,7 @@ class SingleDisplay {
     } else {
       if (this.moduleConfig.options.decimals !== undefined) {
         formattedDisplay = formattedDisplay.toFixed(
-          this.moduleConfig.options.decimals
+          this.moduleConfig.options.decimals,
         );
       }
 
@@ -99,10 +99,10 @@ class SingleDisplay {
 
   /**
    *
-   * @param {*an allaicne of any length*} alliance1
+   * @param {*an alliance of any length*} alliance1
    * @param {*an alliance to compare to of any length*} alliance2
-   * @param {*the data set that holds the infomation of the teams*} dataset
-   * @returns {*the avg difference in score between allaicne 1 and allaicne 2*}
+   * @param {*the data set that holds the information of the teams*} dataset
+   * @returns {*the avg difference in score between alliance 1 and alliance 2*}
    */
   matchAverage(alliance1, alliance2, dataset) {
     let alliance1Avg = 0;
@@ -118,10 +118,10 @@ class SingleDisplay {
 
   /**
    *
-   * @param {*an allaicne of any length*} alliance1
+   * @param {*an alliance of any length*} alliance1
    * @param {*an alliance to compare to of any length*} alliance2
-   * @param {*the data set that holds the infomation of the teams*} dataset
-   * @returns {*the standard deveation of the given match*}
+   * @param {*the data set that holds the information of the teams*} dataset
+   * @returns {*the standard deviation of the given match*}
    */
   matchStandardDeviation(alliance1, alliance2, dataset) {
     let alliance1SD = 0;
@@ -145,16 +145,16 @@ class SingleDisplay {
 
   /**
    *
-   * @param {*an allaicne of any length*} alliance1
+   * @param {*an alliance of any length*} alliance1
    * @param {*an alliance to compare to of any length*} alliance2
-   * @param {*the data set that holds the infomation of the teams*} dataset
+   * @param {*the data set that holds the information of the teams*} dataset
    * @returns {*the percent chance that alliance1 will win this match*}
    */
   compareAlliances(alliance1, alliance2, dataset) {
     let zscore = ss.zScore(
       0,
       this.matchAverage(alliance1, alliance2, dataset),
-      this.matchStandardDeviation(alliance1, alliance2, dataset)
+      this.matchStandardDeviation(alliance1, alliance2, dataset),
     );
     let probAlliance2Wins = ss.cumulativeStdNormalProbability(zscore);
     return 1 - probAlliance2Wins;
