@@ -14,38 +14,6 @@
   },
   {
     "type": "tmp",
-    "name": "weightedSum",
-    "outputPath": "scores.auto",
-    "options": {
-      "weightedPaths": {
-        "counts.autoTowerRobot_Level1": 15
-      }
-    }
-  },
-  {
-    "type": "tmp",
-    "name": "weightedSum",
-    "outputPath": "scores.endgame",
-    "options": {
-      "weightedPaths": {
-        "counts.endGameTowerRobot_Level1": 10,
-        "counts.endGameTowerRobot_Level2": 20,
-        "counts.endGameTowerRobot_Level3": 30
-      }
-    }
-  },
-  {
-    "type": "tmp",
-    "name": "weightedSum",
-    "outputPath": "scores.teleop",
-    "options": {
-      "weightedPaths": {
-        "counts.teleopFuelScored": 1
-      }
-    }
-  },
-  {
-    "type": "tmp",
     "name": "sum",
     "outputPath": "scores.total",
     "options": {
