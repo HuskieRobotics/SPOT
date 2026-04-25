@@ -15,14 +15,6 @@
   {
     "type": "tmp",
     "name": "sum",
-    "outputPath": "scores.total",
-    "options": {
-      "addends": ["scores.auto", "scores.teleop", "scores.endgame"]
-    }
-  },
-  {
-    "type": "tmp",
-    "name": "sum",
     "outputPath": "counts.shooting",
     "options": {
       "addends": [
@@ -1129,14 +1121,6 @@
         }
       ],
       "weight": 0.001
-    }
-  },
-  {
-    "type": "team",
-    "name": "standardDeviation",
-    "outputPath": "standardDeviation",
-    "options": {
-      "path": "scores.total"
     }
   },
   {
