@@ -104,9 +104,21 @@ let previousLayers = [];
     );
   }
 
-  // Layouts can rename the A-Stop button, so detect it by id text.
+  // Detect it by either label or id text so that it works even if the button name/Id is slightly changed or if the button is configured with a custom display text.
   function isAStopButton(button) {
-    return /astop/i.test(button.configId || button.id || "");
+    const buttonIdentifiers = [
+      button.originalDisplayText,
+      button.displayText,
+      button.configId,
+      button.id,
+    ]
+      .filter(Boolean)
+      .join(" ");
+
+    return buttonIdentifiers
+      .toLowerCase()
+      .replace(/[\s-]/g, "")
+      .includes("astop");
   }
 
   // Sync the disabled state and viewer-facing banner with the current timer.
