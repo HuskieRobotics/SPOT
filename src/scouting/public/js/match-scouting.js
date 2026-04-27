@@ -674,6 +674,7 @@ let previousLayers = [];
         matchNumber: Number(ScoutingSync.state.matchNumber),
         eventNumber: config.EVENT_NUMBER,
         actionQueue: filteredActionQueue,
+        flagged: false,
       };
     }
   }

@@ -170,6 +170,12 @@ let matches;
 
   //team UI functions
   async function loadTeams(dataset, modulesConfig) {
+    // Rebuild team UI from a clean state each call (prevents duplicate stats/modules on re-entry).
+    teamList.innerHTML = "";
+    mainList.innerHTML = "";
+    sideList.innerHTML = "";
+    modules.team = [];
+
     //get blue alliance teams
     const allTeams = await fetchTeams();
     //add to sidebar team list
@@ -562,6 +568,16 @@ let matches;
     }
   }
 
+  function toTitleCase(input) {
+    // Human-readable label normalization: replace separators, split words, capitalize, rejoin.
+    return input
+      .replace(/[_-]/g, " ")
+      .trim()
+      .split(/\s+/)
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
+  }
+
   // Auto pick list UI functions
   async function loadAutoPickList(dataset, modulesConfig) {
     //add event listener to "AutoPickList" button to set reset UI and switch to autopicklist tab
@@ -765,6 +781,14 @@ let matches;
       });
     }
 
+    function updateButtonLayout() {
+      buttons.forEach((button) => {
+        if (button.className.equals("different-mobile-layout")) {
+          button.style.setProperty();
+        }
+      });
+    }
+
     sidebarToggle.addEventListener("click", () => {
       const isExpanding = !sidebar.classList.contains("expanded");
       sidebar.classList.toggle("expanded");
@@ -908,6 +932,7 @@ let matches;
     // loadMatchView(dataset, modulesConfig);
     // loadAutoPickList(dataset, modulesConfig);
     loadBubbleGraph(dataset, modulesConfig);
+    // loadTeamsFilterView(dataset, modulesConfig);
 
     searchInput.addEventListener("input", () => {
       if (searchInput.value !== "") {
@@ -945,6 +970,16 @@ let matches;
         }
       }
     });
+
+    // Move to the filterTeams.js for filter teams logic
+    filterTeamsSwitch.addEventListener("click", async () => {
+      const module = await import("./filterTeams.js"); //import filterTeams.js as a module in order to access functions defined in the file
+      clearInterface();
+      loadTeams(dataset, modulesConfig);
+      filterTeamsSwitch.classList.add("selected");
+      showFade(filterTeamsView);
+      module.init({dataset, fetchTeams});
+    });
   }
 
   //reset the UI to state of nothing shown, nothing selected
@@ -958,6 +993,7 @@ let matches;
     hideFade(teamView);
     // hideFade(autoPickView);
     hideFade(bubbleSheetView);
+    hideFade(filterTeamsView);
     // hideFade(autoPickStats)
     // hideFade(autoPickMain)
     // autoPickStats.style.display = "none";
@@ -966,5 +1002,6 @@ let matches;
     // matchViewSwitch.classList.remove("selected");
     // autoPickSwitch.classList.remove("selected");
     bubbleSheetSwitch.classList.remove("selected");
+    filterTeamsSwitch.classList.remove("selected");
   }
 })();
