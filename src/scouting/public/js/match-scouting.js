@@ -31,12 +31,15 @@ let previousLayers = [];
   if (teleopTransitionTimes.length > 0) {
     teleopTime = teleopTransitionTimes[0];
   }
+  // This is the auto window cutoff; it follows the configured teleop transition.
+  const autoPhaseEndTime = 140000;
   let endgameTime = 30000;
   let shiftSwitchInterval = 25000;
   let timerActive = false;
   let currentShift = ""; // "active" | "inactive"
   let lastShiftSwitchTime = teleopTime;
   let shiftButtonPressed = false;
+  let aStopLockActive = false;
 
   // shift counters
   let activeShiftCount = 0;
@@ -55,6 +58,14 @@ let previousLayers = [];
   }
   //create grid
   const grid = document.querySelector("#match-scouting .button-grid");
+  const matchScoutingRoot = document.querySelector("#match-scouting");
+  // Visible warning shown while the temporary A-Stop lock is active.
+  const aStopLockBanner = document.createElement("div");
+  aStopLockBanner.className = "a-stop-lock-banner";
+  aStopLockBanner.innerText =
+    "You pressed the A-Stop button, all the buttons will be disabled until Auto ends. If this is a mistake then press the Undo button";
+  aStopLockBanner.hidden = true;
+  matchScoutingRoot.appendChild(aStopLockBanner);
   grid.style.gridTemplateColumns = `repeat(${matchScoutingConfig.layout.gridColumns}, 1fr)`;
   grid.style.gridTemplateRows = `repeat(${matchScoutingConfig.layout.gridRows}, 1fr)`;
 
@@ -84,10 +95,51 @@ let previousLayers = [];
   //build buttons
   const layers = deepClone(matchScoutingConfig.layout.layers);
   const buttons = layers.flat();
+  // Keep Undo and match-control available so the operator can recover.
+  const aStopExemptTypes = new Set(["undo", "match-control"]);
+
   function findLayerIndexByButtonId(buttonId) {
     return layers.findIndex((layer) =>
       layer.some((button) => (button.configId || button.id) === buttonId),
     );
+  }
+
+  // Detect it by either label or id text so that it works even if the button name/Id is slightly changed or if the button is configured with a custom display text.
+  function isAStopButton(button) {
+    const buttonIdentifiers = [
+      button.originalDisplayText,
+      button.displayText,
+      button.configId,
+      button.id,
+    ]
+      .filter(Boolean)
+      .join(" ");
+
+    return buttonIdentifiers
+      .toLowerCase()
+      .replace(/[\s-]/g, "")
+      .includes("astop");
+  }
+
+  // Sync the disabled state and viewer-facing banner with the current timer.
+  function updateAStopLockState() {
+    const locked = aStopLockActive && time > autoPhaseEndTime;
+
+    for (const button of buttons) {
+      if (aStopExemptTypes.has(button.type)) {
+        button.element.classList.remove("disabled");
+        continue;
+      }
+
+      button.element.classList.toggle("disabled", locked);
+    }
+
+    matchScoutingRoot.classList.toggle("a-stop-active", locked);
+    aStopLockBanner.hidden = !locked;
+
+    if (!locked && aStopLockActive && time <= autoPhaseEndTime) {
+      aStopLockActive = false;
+    }
   }
 
   function findTeleopLayerIndex() {
@@ -254,6 +306,11 @@ let previousLayers = [];
     //an object to give buttons type specific things, button type: function (button)
     action: (button) => {
       button.element.addEventListener("click", () => {
+        // Pressing A-Stop during auto enables the temporary lock until auto ends.
+        if (isAStopButton(button) && time > autoPhaseEndTime) {
+          aStopLockActive = true;
+        }
+
         let shift = camelCase(displayTextWithShift);
         let actionId = `${shift.replace(" ", "")}${button.id}`;
 
@@ -265,6 +322,7 @@ let previousLayers = [];
 
         doExecutables(button);
         updateLastAction();
+        updateAStopLockState();
       });
     },
     undo: (button) => {
@@ -293,6 +351,8 @@ let previousLayers = [];
            */
           if (undoneButton.type === "match-control") {
             time = matchScoutingConfig.timing.totalTime; //reset timer
+            // Resetting the match also clears any active A-Stop lock.
+            aStopLockActive = false;
             ScoutingSync.updateState({
               status: ScoutingSync.SCOUTER_STATUS.WAITING,
             }); //tell the server that you are now waiting to start
@@ -300,6 +360,11 @@ let previousLayers = [];
             undoneButton.element.innerText = "Start Match";
             timerActive = false;
             showLayer(0);
+          }
+
+          if (undoneButton && isAStopButton(undoneButton)) {
+            // Undoing the A-Stop action restores normal button interaction immediately.
+            aStopLockActive = false;
           }
 
           /*
@@ -349,6 +414,7 @@ let previousLayers = [];
          */
         doExecutables(button, time);
         updateLastAction();
+        updateAStopLockState();
       });
     },
 
@@ -433,6 +499,9 @@ let previousLayers = [];
 
         if (timerActive) return;
 
+        aStopLockActive = false;
+        updateAStopLockState();
+
         actionQueue.push({
           //create a temporary action queue so you can undo it
           id: button.id,
@@ -502,6 +571,7 @@ let previousLayers = [];
           }
           time = matchScoutingConfig.timing.totalTime - (Date.now() - start);
           window.currentTime = time; // Keep window.currentTime in sync
+          updateAStopLockState();
           let elapsedSinceSwitch = Math.abs(time - lastShiftSwitchTime);
           // Handle shift switching during teleop (between teleopTime and endgameTime)
           // Only switch if a shift button has been pressed
