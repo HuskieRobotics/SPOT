@@ -303,7 +303,6 @@ class Scouter {
   state = {
     status: ScoutingSync.SCOUTER_STATUS.NEW,
     connected: true, //connected by default
-    scouting: false,
     offlineMode: false, //they are connected to the server, they can't be offline
   };
   socket;
@@ -318,7 +317,6 @@ class Scouter {
     this.socket.on("disconnect", () => {
       if (socket.active) {
       } else {
-        this.updateState({ scouting: false });
         this.updateState({ connected: false }); //the scouter should probably get killed here
         ScoutingSync.assignScouters(); //reassign scouters, this matters if there are two scouters on one robot and a scouter scouting 1 robot leaves
       }

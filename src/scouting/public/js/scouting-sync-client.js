@@ -12,7 +12,6 @@ class ScoutingSync {
 
   static state = {
     connected: false,
-    scouting: false,
     offlineMode: true, //offline mode is for users who never connect to the server and access the app without internet.
     status: ScoutingSync.SCOUTER_STATUS.NEW,
     scouterId: "",
@@ -86,7 +85,7 @@ class ScoutingSync {
     ScoutingSync.socket.on("adminDisconnect", () => {
       console.log("adminDisconnectStarted");
       switchPage("landing");
-      ScoutingSync.state.status = ScoutingSync.SCOUTER_STATUS.DIE;
+      ScoutingSync.state.status = ScoutingSync.DISCONNECTED_BY_ADMIN;
       console.log("adminDisconnectComplete");
     });
 

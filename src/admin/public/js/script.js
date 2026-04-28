@@ -196,7 +196,8 @@ async function updateScouters(accessCode) {
        * This piece of logic is here so that if a scouter is disconnected by an admin, it will continue to show that they were
        *  disconnected by the admin instead of being overwritten.
        */
-      if (!disconnected_by_admin && scouter.state.status != 0) {
+      console.log(scouter.state.status);
+      if (scouter.state.status != 4 && scouter.state.status != 0) {
         scouters[scouter.timestamp].updateScouterElement(scouter.state);
       }
     } else {
@@ -388,6 +389,7 @@ class ScouterDisplay {
   }
 
   updateScouterElement(state) {
+    console.log(state);
     //update state
     this.scouter.state = state || this.scouter.state;
     this.scouterElement.setAttribute("scouter", this.scouter.state.scouterId);
