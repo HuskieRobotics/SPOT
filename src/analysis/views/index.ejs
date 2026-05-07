@@ -87,16 +87,18 @@
             <button
               id="bubble-sheet-switch"
               data-mobile-text="Compare"
-              data-desktop-text="Compare Team Scores">
+              data-desktop-text="Compare Team Scores"
+            >
               Compare Team Scores
             </button>
-          <button
-            id="filter-teams-switch"
-            class="different-mobile-layout"
-            data-mobile-text="Filter"
-            data-desktop-text="Filter Teams"
-          > Filter Teams
-          </button>  
+            <button
+              id="filter-teams-switch"
+              class="different-mobile-layout"
+              data-mobile-text="Filter"
+              data-desktop-text="Filter Teams"
+            >
+              Filter Teams
+            </button>
           </div>
           <div id="search-container">
             <div id="search">
@@ -104,7 +106,6 @@
               <i id="search-icon" class="fa fa-search"></i>
             </div>
           </div>
-          
 
           <div id="team-list"></div>
         </div>
@@ -183,42 +184,42 @@
 				</div>
 			</div> -->
 
-			<div id="filter-teams-view">
-        <div id="filter-navbar">
-          <div style="width: 200px; margin: 0 auto;">
-            <div class="filter-navbar-title" style="margin-bottom: 4px;"></div>
-            <div class="filter-control" id="robot-action-control">
-              <button class="filter-menu-button" id="robot-action-button" type="button">
-                Action/OPR Key
-                <i class="fa-solid fa-chevron-down"></i>
-              </button>
-              <div class="filter-dropdown" id="robot-action-dropdown"></div>
+        <div id="filter-teams-view">
+          <div id="filter-navbar">
+            <div style="width: 200px; margin: 0 auto">
+              <div class="filter-navbar-title" style="margin-bottom: 4px"></div>
+              <div class="filter-control" id="robot-action-control">
+                <button
+                  class="filter-menu-button"
+                  id="robot-action-button"
+                  type="button"
+                >
+                  Action/OPR Key
+                  <i class="fa-solid fa-chevron-down"></i>
+                </button>
+                <div class="filter-dropdown" id="robot-action-dropdown"></div>
+              </div>
+            </div>
+            <div class="filter-navbar-title">Select a Filter</div>
+
+            <div style="width: 200px; margin: 0 auto">
+              <div class="filter-navbar-title" style="margin-bottom: 4px"></div>
+              <div class="filter-control" id="action-rating-control">
+                <button
+                  class="filter-menu-button"
+                  id="action-rating-button"
+                  type="button"
+                >
+                  Rating/OPR Score
+                  <i class="fa-solid fa-chevron-down"></i>
+                </button>
+                <div class="filter-dropdown" id="action-rating-dropdown"></div>
+              </div>
             </div>
           </div>
-          <div class="filter-navbar-title">Select a Filter</div>
 
-        <div style="width: 200px; margin: 0 auto">
-          <div class="filter-navbar-title" style="margin-bottom: 4px;"></div>
-          <div class="filter-control" id="action-rating-control">
-            <button class="filter-menu-button" id="action-rating-button" type="button">
-              Rating/OPR Score
-              <i class="fa-solid fa-chevron-down"></i>
-            </button>
-            <div class="filter-dropdown" id="action-rating-dropdown"></div>
-          </div>
-        </div>
-      </div>
-
-        <div id="selected-filter-chips"></div>
-        <div id="main-team-container-for-teams-filter"></div>
-      </div>
-			
-			<div id="bubble-sheet-view">
-    <!-- Controls for the Bubble Sheet -->
-        <div id="bubble-sheet-controls">
-          <!-- Dropdown for selecting the X-Axis -->
-          <label for="x-axis-select">X-Axis:</label>
-          <select id="x-axis-select"></select>
+          <div id="selected-filter-chips"></div>
+          <div id="main-team-container-for-teams-filter"></div>
         </div>
 
         <div id="bubble-sheet-view">

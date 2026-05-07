@@ -245,11 +245,11 @@ function collectFilteredTeams() {
     return teamMatchesFilter(team);
   });
   // Debug logging
-  console.log("All Teams:", allTeamsArray);
-  console.log("Selected Actions:", filterTeamState.selectedActions);
-  console.log("Selected Ratings:", filterTeamState.selectedRatings);
-  console.log("number of teams matching filter:", filteredTeams.length);
-  console.log("Filtered Teams:", filteredTeams);
+  // console.log("All Teams:", allTeamsArray);
+  // console.log("Selected Actions:", filterTeamState.selectedActions);
+  // console.log("Selected Ratings:", filterTeamState.selectedRatings);
+  // console.log("number of teams matching filter:", filteredTeams.length);
+  // console.log("Filtered Teams:", filteredTeams);
   return filteredTeams;
 }
 

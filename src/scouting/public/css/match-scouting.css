@@ -187,6 +187,33 @@
   pointer-events: none;
 }
 
+.a-stop-lock-banner {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: min(90vw, 54rem);
+  max-width: min(90vw, 54rem);
+  padding: 0.9rem 1.2rem;
+  box-sizing: border-box;
+  border-radius: var(--border-radius, 16px);
+  border: 2px solid rgba(255, 255, 255, 0.75);
+  background: rgba(153, 31, 31, 0.93);
+  color: #fff;
+  font-size: max(1.6vw, 16px);
+  line-height: 1.25;
+  text-align: center;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.28);
+}
+
+.a-stop-lock-banner[hidden] {
+  display: none;
+}
+
 .click-indicator {
   position: absolute;
   width: 20px;
