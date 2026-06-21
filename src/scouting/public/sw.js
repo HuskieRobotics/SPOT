@@ -30,7 +30,7 @@ const filesToCache = [
   "/js/local-data.js",
   "/js/match-scouting.js",
   "/js/qrcode.js",
-  "/js/scouting-sync.js",
+  "/js/scouting-sync-client.js",
   "/js/settingsmenu.js",
   "/js/waiting.js",
   "/manifest.json",
