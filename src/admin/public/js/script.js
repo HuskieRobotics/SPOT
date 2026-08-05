@@ -197,7 +197,10 @@ async function updateScouters(accessCode) {
        *  disconnected by the admin instead of being overwritten.
        */
       console.log(scouter.state.status);
-      if (scouter.state.status != 4 && scouter.state.status != 0) {
+      if (
+        scouter.state.status != SCOUTER_STATUS.NEW &&
+        scouter.state.status != SCOUTER_STATUS.DISCONNECTED_BY_ADMIN
+      ) {
         scouters[scouter.timestamp].updateScouterElement(scouter.state);
       }
     } else {
@@ -220,7 +223,10 @@ async function updateScouters(accessCode) {
         scouter.state.connected &&
         scouter.state.scouterId == offlineScouter.state.scouterId
       ) {
-        if (scouter.state.status != 0 || scouter.state.status != 4) {
+        if (
+          scouter.state.status != SCOUTER_STATUS.NEW ||
+          scouter.state.status != SCOUTER_STATUS.DISCONNECTED_BY_ADMIN
+        ) {
           scouters[offlineScouter.timestamp].destruct();
           disconnected_by_admin = false;
           delete scouters[offlineScouter.timestamp];
