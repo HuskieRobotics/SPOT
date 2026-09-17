@@ -1,0 +1,150 @@
+{
+  "checkout": "/private/tmp/claude-501/-Users-geoff-GitHub-SPOT/498cb687-7cbc-4b23-b955-2fae4a5f1393/scratchpad/spot-v4.2.0",
+  "eventCode": "2025ilch_official",
+  "eventId": "68bf4411906f900a12f7c6cd",
+  "tmpCount": 407,
+  "enrich": false,
+  "unknownActionIds": [],
+  "transformerErrors": [],
+  "registry": [
+    {
+      "file": "actionTime.js",
+      "type": "tmp",
+      "name": "actionTime"
+    },
+    {
+      "file": "actionTimeFilter.js",
+      "type": "tmp",
+      "name": "actionTimeFilter"
+    },
+    {
+      "file": "aggregateArray.js",
+      "type": "team",
+      "name": "aggregateArray"
+    },
+    {
+      "file": "average.js",
+      "type": "team",
+      "name": "average"
+    },
+    {
+      "file": "averageArray.js",
+      "type": "tmp",
+      "name": "averageArray"
+    },
+    {
+      "file": "averageArray.js",
+      "type": "team",
+      "name": "averageArray"
+    },
+    {
+      "file": "countActions.js",
+      "type": "tmp",
+      "name": "countActions"
+    },
+    {
+      "file": "countActions.js",
+      "type": "team",
+      "name": "countActions"
+    },
+    {
+      "file": "countHybrid.js",
+      "type": "tmp",
+      "name": "countHybrid"
+    },
+    {
+      "file": "countHybrid.js",
+      "type": "team",
+      "name": "countHybrid"
+    },
+    {
+      "file": "countMatches.js",
+      "type": "team",
+      "name": "countMatches"
+    },
+    {
+      "file": "cycle.js",
+      "type": "tmp",
+      "name": "cycle"
+    },
+    {
+      "file": "finalActionOccurrence.js",
+      "type": "tmp",
+      "name": "finalActionOccurrence"
+    },
+    {
+      "file": "map.js",
+      "type": "tmp",
+      "name": "map"
+    },
+    {
+      "file": "ratio.js",
+      "type": "tmp",
+      "name": "ratio"
+    },
+    {
+      "file": "ratio.js",
+      "type": "team",
+      "name": "ratio"
+    },
+    {
+      "file": "standardDeviation.js",
+      "type": "team",
+      "name": "standardDeviation"
+    },
+    {
+      "file": "subtract.js",
+      "type": "tmp",
+      "name": "subtract"
+    },
+    {
+      "file": "subtract.js",
+      "type": "team",
+      "name": "subtract"
+    },
+    {
+      "file": "sum.js",
+      "type": "tmp",
+      "name": "sum"
+    },
+    {
+      "file": "sum.js",
+      "type": "team",
+      "name": "sum"
+    },
+    {
+      "file": "template.js",
+      "type": "tmp",
+      "name": "name"
+    },
+    {
+      "file": "template.js",
+      "type": "team",
+      "name": "name"
+    },
+    {
+      "file": "threshold.js",
+      "type": "team",
+      "name": "threshold"
+    },
+    {
+      "file": "weightedSum.js",
+      "type": "tmp",
+      "name": "weightedSum"
+    }
+  ],
+  "pipelineMs": 66,
+  "pipelineEntries": 46,
+  "teamCount": 42,
+  "sampleTeamPaths": [
+    "algaeAccuracy",
+    "averageScores",
+    "averages",
+    "coralAccuracy",
+    "counts",
+    "cycles",
+    "standardDeviation",
+    "temp",
+    "timePerGamePiece"
+  ]
+}
