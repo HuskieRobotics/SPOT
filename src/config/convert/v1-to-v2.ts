@@ -67,8 +67,11 @@ export interface V1Qr {
 }
 
 export interface ConvertOptions {
-  /** Force id prefixing mode; default: auto-detect (catalog layer present → "phase"). */
-  idPrefixing?: "phase" | "none";
+  /**
+   * Prefix recorded ids with the phase/segment (the 2026 scheme). Default: auto-detect, which
+   * treats a hidden catalog layer as the sign that the legacy config used composite ids.
+   */
+  prefixIds?: boolean;
   /** TBA component-OPR names (v1 kept them in config.json TBA_OPR_STRINGS). */
   oprStrings?: Record<string, string> | string[];
   /** Enable TBA score-breakdown enrichment in the pipeline (default true). */
@@ -228,7 +231,7 @@ export function convertMatchScouting(
 ): ConvertResult<MatchScoutingConfig> {
   const warnings: string[] = [];
   const catalogIndex = findCatalogLayer(v1);
-  const idPrefixing = opts.idPrefixing ?? (catalogIndex !== null ? "phase" : "none");
+  const prefixIds = opts.prefixIds ?? catalogIndex !== null;
 
   // layer ids: layer-N (index preserved so executables map 1:1)
   const layerIds = v1.layout.layers.map((_, i) => `layer-${i}`);
@@ -266,7 +269,7 @@ export function convertMatchScouting(
 
   const usedPhaseIds = new Set<string>();
   const prefixOf = (label: string, ms: number) =>
-    idPrefixing === "phase" ? camelCase(label) || `phase${ms}` : "";
+    prefixIds ? camelCase(label) || `phase${ms}` : "";
   const layerOf = (t: Transition) => layerIds[Number(t.t.layer)] ?? "layer-0";
   const carryOver = (phase: Phase, t: Transition) => {
     if (t.t.variables && Object.keys(t.t.variables).length) phase.variables = t.t.variables;
@@ -353,9 +356,7 @@ export function convertMatchScouting(
   };
 
   const teleopGroup =
-    hasShiftButtons && idPrefixing === "phase"
-      ? transitions.filter((t) => /teleop/i.test(t.label))
-      : [];
+    hasShiftButtons && prefixIds ? transitions.filter((t) => /teleop/i.test(t.label)) : [];
   const phases: Phase[] = [];
   for (const t of transitions) {
     if (teleopGroup.includes(t)) {
@@ -371,7 +372,7 @@ export function convertMatchScouting(
     );
   }
   // Endgame is its own phase (no layer change in 2026) so analysis can separate it from teleop.
-  if (idPrefixing === "phase" && !phases.some((p) => p.startMs === ENDGAME_START_MS)) {
+  if (prefixIds && !phases.some((p) => p.startMs === ENDGAME_START_MS)) {
     phases.push({
       id: uniqueId("endgame", usedPhaseIds),
       label: "Endgame",
@@ -429,7 +430,6 @@ export function convertMatchScouting(
     $schema: `${opts.schemaBase ?? "../src/config/schema"}/match-scouting.schema.json`,
     version: 2,
     timing,
-    idPrefixing,
     variables,
     rules: {
       undo: { minQueueLength },

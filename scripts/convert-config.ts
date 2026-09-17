@@ -45,7 +45,7 @@ const schemaBase = relative(outDir, join(process.cwd(), "src", "config", "schema
   .split("\\")
   .join("/");
 const opts = {
-  idPrefixing: flag("prefixing") as "phase" | "none" | undefined,
+  prefixIds: flag("prefixing") ? flag("prefixing") === "phase" : undefined,
   oprStrings: flag("opr-strings")
     ? (JSON.parse(flag("opr-strings")!) as Record<string, string>)
     : undefined,

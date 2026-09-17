@@ -23,7 +23,6 @@ const minimalMatchScouting = (): MatchScoutingConfig => ({
       { id: "teleop", label: "Teleop", startMs: 130000, layer: "teleop", prefix: "teleop" },
     ],
   },
-  idPrefixing: "phase",
   variables: {},
   rules: {
     undo: { minQueueLength: 2 },

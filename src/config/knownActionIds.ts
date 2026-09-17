@@ -30,8 +30,8 @@ export function phasePrefixes(phase: Phase): string[] {
 }
 
 export function derivePrefixes(config: MatchScoutingConfig): string[] {
-  if (config.idPrefixing === "none") return [""];
-  // "" covers actions recorded before the match starts, when no phase is active yet.
+  // "" covers actions recorded before the match starts, when no phase is active yet. A config
+  // whose prefixes are all empty (every season before 2026) derives exactly [""].
   const prefixes = new Set<string>([""]);
   for (const phase of config.timing.phases) {
     for (const prefix of phasePrefixes(phase)) prefixes.add(prefix);

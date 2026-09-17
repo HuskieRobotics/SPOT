@@ -5,15 +5,7 @@
   "description": "Defines the scouting button grid, match timing/phases, and the rules the scouting client applies. See docs/spec/20-config-schema-v2.md.",
   "type": "object",
   "additionalProperties": false,
-  "required": [
-    "version",
-    "timing",
-    "idPrefixing",
-    "variables",
-    "rules",
-    "layout",
-    "extraActionIds"
-  ],
+  "required": ["version", "timing", "variables", "rules", "layout", "extraActionIds"],
   "properties": {
     "$schema": {
       "type": "string"
@@ -40,9 +32,6 @@
           "description": "Clock-driven periods of the match, in the order they occur (highest startMs first). Auto, teleop and endgame are phases; sub-periods inside a phase are segments."
         }
       }
-    },
-    "idPrefixing": {
-      "enum": ["phase", "none"]
     },
     "variables": {
       "type": "object",
@@ -143,7 +132,8 @@
     },
     "prefix": {
       "type": "string",
-      "pattern": "^[A-Za-z0-9_]*$"
+      "pattern": "^[A-Za-z0-9_]*$",
+      "description": "Prepended to the ids of actions recorded in this period. Empty means the raw button id is recorded, which is how every season before 2026 worked."
     },
     "phase": {
       "type": "object",

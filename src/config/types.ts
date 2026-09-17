@@ -120,8 +120,6 @@ export interface MatchScoutingConfig {
     /** Clock-driven periods, highest `startMs` first. */
     phases: Phase[];
   };
-  /** "phase": recorded id = phase/segment prefix + button id (2026); "none": raw button ids. */
-  idPrefixing: "phase" | "none";
   variables: Record<string, string | number | boolean>;
   rules: {
     undo: { minQueueLength: number };
