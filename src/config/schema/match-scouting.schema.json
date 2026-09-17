@@ -1,0 +1,287 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://spot.team3061.org/schema/v2/match-scouting.schema.json",
+  "title": "SPOT match-scouting configuration (v2)",
+  "description": "Defines the scouting button grid, match timing/phases, and the rules the scouting client applies. See docs/spec/20-config-schema-v2.md.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "version",
+    "timing",
+    "idPrefixing",
+    "variables",
+    "rules",
+    "layout",
+    "extraActionIds"
+  ],
+  "properties": {
+    "$schema": { "type": "string" },
+    "version": { "const": 2 },
+    "timing": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["totalMs", "phases"],
+      "properties": {
+        "totalMs": {
+          "type": "integer",
+          "minimum": 10000,
+          "description": "Total match time in milliseconds (never seconds)."
+        },
+        "phases": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/phase" }
+        },
+        "shifts": { "$ref": "#/$defs/shifts" },
+        "endgame": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["startMs", "prefix", "label"],
+          "properties": {
+            "startMs": { "type": "integer", "minimum": 0 },
+            "prefix": { "$ref": "#/$defs/prefix" },
+            "label": { "type": "string" }
+          }
+        }
+      }
+    },
+    "idPrefixing": { "enum": ["phase", "none"] },
+    "variables": {
+      "type": "object",
+      "additionalProperties": { "type": ["string", "number", "boolean"] }
+    },
+    "rules": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["undo", "positionLockMs", "locks", "allianceRelativeButtons", "fieldMap"],
+      "properties": {
+        "undo": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["minQueueLength"],
+          "properties": { "minQueueLength": { "type": "integer", "minimum": 0 } }
+        },
+        "positionLockMs": { "type": "integer", "minimum": 0 },
+        "locks": { "type": "array", "items": { "$ref": "#/$defs/lock" } },
+        "allianceRelativeButtons": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["own", "opposing"],
+            "properties": { "own": { "$ref": "#/$defs/id" }, "opposing": { "$ref": "#/$defs/id" } }
+          }
+        },
+        "fieldMap": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["image"],
+          "properties": { "image": { "type": "string" } }
+        }
+      }
+    },
+    "layout": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["rows", "columns", "initialLayer", "layers"],
+      "properties": {
+        "rows": { "type": "integer", "minimum": 1 },
+        "columns": { "type": "integer", "minimum": 1 },
+        "initialLayer": { "$ref": "#/$defs/id" },
+        "layers": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/layer" } }
+      }
+    },
+    "extraActionIds": { "type": "array", "items": { "$ref": "#/$defs/id" } }
+  },
+  "$defs": {
+    "id": { "type": "string", "pattern": "^[A-Za-z0-9_-]+$" },
+    "prefix": { "type": "string", "pattern": "^[A-Za-z0-9_]*$" },
+    "phase": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "label", "startMs", "prefix"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "label": { "type": "string" },
+        "startMs": { "type": "integer", "minimum": 0 },
+        "layer": {
+          "$ref": "#/$defs/id",
+          "description": "Layer shown when the phase begins; omit to leave the current layer."
+        },
+        "prefix": { "$ref": "#/$defs/prefix" },
+        "pauseMs": { "type": "integer", "minimum": 0 },
+        "variables": {
+          "type": "object",
+          "additionalProperties": { "type": ["string", "number", "boolean"] }
+        },
+        "always": { "type": "array", "items": { "$ref": "#/$defs/id" } },
+        "conditional": { "$ref": "#/$defs/conditional" }
+      }
+    },
+    "conditional": {
+      "type": "object",
+      "description": "variable name -> variable value -> button ids rendered when the variable has that value",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": { "type": "array", "items": { "$ref": "#/$defs/id" } }
+      }
+    },
+    "shifts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["intervalMs", "startMs", "endMs", "maxIndex", "kinds"],
+      "properties": {
+        "intervalMs": { "type": "integer", "minimum": 1000 },
+        "startMs": { "type": "integer", "minimum": 0 },
+        "endMs": { "type": "integer", "minimum": 0 },
+        "maxIndex": { "type": "integer", "minimum": 1, "maximum": 20 },
+        "kinds": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["id", "prefix", "toggleButton"],
+            "properties": {
+              "id": { "$ref": "#/$defs/id" },
+              "prefix": { "$ref": "#/$defs/prefix" },
+              "toggleButton": { "$ref": "#/$defs/id" }
+            }
+          }
+        }
+      }
+    },
+    "lock": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "triggerButtons", "untilPhase", "exemptTypes", "message"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "triggerButtons": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/id" } },
+        "untilPhase": { "$ref": "#/$defs/id" },
+        "exemptTypes": { "type": "array", "items": { "$ref": "#/$defs/buttonType" } },
+        "message": { "type": "string" }
+      }
+    },
+    "buttonType": { "enum": ["action", "undo", "none", "match-control", "label"] },
+    "layer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "buttons"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "name": { "type": "string" },
+        "buttons": { "type": "array", "items": { "$ref": "#/$defs/button" } }
+      }
+    },
+    "button": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "type", "gridArea", "executables"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "label": { "type": "string" },
+        "type": { "$ref": "#/$defs/buttonType" },
+        "gridArea": {
+          "type": "array",
+          "minItems": 4,
+          "maxItems": 4,
+          "items": { "type": "integer", "minimum": 1 },
+          "description": "row-start, column-start, row-end, column-end (CSS grid lines)"
+        },
+        "color": { "type": "string" },
+        "textColor": { "type": "string" },
+        "legacyClass": { "type": "string" },
+        "executables": { "type": "array", "items": { "$ref": "#/$defs/executable" } }
+      }
+    },
+    "executable": {
+      "type": "object",
+      "required": ["type"],
+      "anyOf": [
+        {
+          "additionalProperties": false,
+          "required": ["type", "to"],
+          "properties": { "type": { "const": "layer" }, "to": { "$ref": "#/$defs/id" } }
+        },
+        {
+          "additionalProperties": false,
+          "required": ["type", "to", "always", "conditional"],
+          "properties": {
+            "type": { "const": "conditionalLayer" },
+            "to": { "$ref": "#/$defs/id" },
+            "always": { "type": "array", "items": { "$ref": "#/$defs/id" } },
+            "conditional": { "$ref": "#/$defs/conditional" }
+          }
+        },
+        {
+          "additionalProperties": false,
+          "required": ["type", "name", "value"],
+          "properties": {
+            "type": { "const": "setVariable" },
+            "name": { "type": "string" },
+            "value": { "type": ["string", "number", "boolean"] }
+          }
+        },
+        {
+          "additionalProperties": false,
+          "required": ["type"],
+          "properties": {
+            "type": { "const": "position" },
+            "lockMs": { "type": "integer", "minimum": 0 }
+          }
+        },
+        {
+          "additionalProperties": false,
+          "required": ["type", "position"],
+          "properties": {
+            "type": { "const": "constantPosition" },
+            "position": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["x", "y"],
+              "properties": { "x": { "type": "number" }, "y": { "type": "number" } }
+            }
+          }
+        },
+        {
+          "additionalProperties": false,
+          "required": ["type", "group"],
+          "properties": { "type": { "const": "exclusiveHighlight" }, "group": { "type": "string" } }
+        },
+        { "additionalProperties": false, "properties": { "type": { "const": "clearHighlight" } } },
+        { "additionalProperties": false, "properties": { "type": { "const": "hide" } } },
+        {
+          "additionalProperties": false,
+          "required": ["type", "count"],
+          "properties": {
+            "type": { "const": "multiplier" },
+            "count": { "type": "integer", "minimum": 2 }
+          }
+        },
+        {
+          "description": "Custom executable from an extension",
+          "properties": {
+            "type": {
+              "type": "string",
+              "not": {
+                "enum": [
+                  "layer",
+                  "conditionalLayer",
+                  "setVariable",
+                  "position",
+                  "constantPosition",
+                  "exclusiveHighlight",
+                  "clearHighlight",
+                  "hide",
+                  "multiplier"
+                ]
+              }
+            },
+            "args": { "type": "array" }
+          }
+        }
+      ]
+    }
+  }
+}

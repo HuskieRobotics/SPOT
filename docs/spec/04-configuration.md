@@ -95,12 +95,19 @@ Button object:
   and to the QR id enumeration. The 2026 config uses layer index 12 for this (195 buttons).
   **[A-23]** This was a hack; the rewrite MUST replace it with an explicit `knownActionIds`
   list (or derive the set from phase prefixes × button ids) in configuration.
+  **Done in schema v2** (document 20, CS-5): ids are derived from prefixes × action buttons
+  plus `extraActionIds`; the converter removes the catalog layer.
 - **CF-9a** **[A-22]** The composite-id scheme (phase prefix + button id) was new in 2026 and
   configs depend on it; the rewrite should keep the recorded ids compatible while looking for
   a generic way to express phases/shifts in config (see document 05, SC-22/23).
 - **CF-9b** **[A-51]** Button `class` names may be replaced by explicit colors in the schema;
-  a converter for old configs is optional.
-- **CF-9c** **BL-60** The position-lock delay must be configurable.
+  a converter for old configs is optional. **Done in schema v2** (CS-8; converter exists).
+- **CF-9c** **BL-60** The position-lock delay must be configurable. **Done in schema v2**
+  (`rules.positionLockMs`, CS-9).
+
+> **Schema v2.** This document describes the v1 (legacy) files, which are kept in `config/v1/`.
+> The v6 application reads the v2 files in `config/` described in document 20; the semantics
+> below still apply unless document 20 says otherwise.
 
 Executable catalog (`type` → `args`), see document 05 for behavior:
 

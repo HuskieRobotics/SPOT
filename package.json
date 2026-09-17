@@ -13,10 +13,13 @@
     "test:e2e": "playwright test",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "oracle": "bash tools/oracle/run-all.sh"
+    "oracle": "bash tools/oracle/run-all.sh",
+    "config:convert": "tsx scripts/convert-config.ts"
   },
   "dependencies": {
     "@base-ui/react": "^1.8.0",
+    "ajv": "^8.20.0",
+    "ajv-formats": "^3.0.1",
     "class-variance-authority": "^0.7.1",
     "cn": "^0.3.0",
     "lucide-react": "^1.47.0",
@@ -37,6 +40,7 @@
     "prettier": "^3.9.8",
     "prettier-plugin-tailwindcss": "^0.8.1",
     "tailwindcss": "^4",
+    "tsx": "^4.23.13",
     "typescript": "^5",
     "vitest": "^5.0.1"
   },

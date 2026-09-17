@@ -1,0 +1,559 @@
+{
+  "$schema": "../src/config/schema/analysis-modules.schema.json",
+  "version": 2,
+  "modules": [
+    {
+      "view": "team",
+      "module": "PerformanceTimePlot",
+      "name": "Robot Action Counts Each Match",
+      "options": {
+        "trackedStats": ["counts.shooting", "counts.passing", "counts.storing", "counts.defense"]
+      },
+      "position": "main"
+    },
+    {
+      "view": "team",
+      "module": "RadarChart",
+      "name": "Ratings By Time Intervals",
+      "options": {
+        "sections": [
+          {
+            "name": "Auto"
+          },
+          {
+            "name": "Transition"
+          },
+          {
+            "name": "Active 1"
+          },
+          {
+            "name": "Active 2"
+          },
+          {
+            "name": "Inactive 1"
+          },
+          {
+            "name": "Inactive 2"
+          },
+          {
+            "name": "Endgame"
+          },
+          {
+            "name": "Auto"
+          }
+        ],
+        "lines": [
+          {
+            "name": "Shooting",
+            "times": [
+              {
+                "name": "Auto",
+                "path": "averageScores.autoShootingRating"
+              },
+              {
+                "name": "Transition",
+                "path": "averageScores.teleopTransitionShootingRating"
+              },
+              {
+                "name": "Active 1",
+                "path": "averageScores.activeShift1ShootingRating"
+              },
+              {
+                "name": "Active 2",
+                "path": "averageScores.activeShift2ShootingRating"
+              },
+              {
+                "name": "Inactive 1",
+                "path": "none"
+              },
+              {
+                "name": "Inactive 2",
+                "path": "none"
+              },
+              {
+                "name": "Endgame",
+                "path": "averageScores.endgameShootingRating"
+              },
+              {
+                "name": "Auto",
+                "path": "averageScores.autoShootingRating"
+              }
+            ]
+          },
+          {
+            "name": "Collecting",
+            "times": [
+              {
+                "name": "Auto",
+                "path": "none"
+              },
+              {
+                "name": "Transition",
+                "path": "averageScores.teleopTransitionStoringRating"
+              },
+              {
+                "name": "Active 1",
+                "path": "averageScores.activeShift1StoringRating"
+              },
+              {
+                "name": "Active 2",
+                "path": "averageScores.activeShift2StoringRating"
+              },
+              {
+                "name": "Inactive 1",
+                "path": "averageScores.inactiveShift1StoringRating"
+              },
+              {
+                "name": "Inactive 2",
+                "path": "averageScores.inactiveShift2StoringRating"
+              },
+              {
+                "name": "Endgame",
+                "path": "averageScores.endgameStoringRating"
+              },
+              {
+                "name": "Auto",
+                "path": "none"
+              }
+            ]
+          },
+          {
+            "name": "Passing",
+            "times": [
+              {
+                "name": "Auto",
+                "path": "averageScores.autoPassingRating"
+              },
+              {
+                "name": "Transition",
+                "path": "averageScores.teleopTransitionPassingRating"
+              },
+              {
+                "name": "Active 1",
+                "path": "averageScores.activeShift1PassingRating"
+              },
+              {
+                "name": "Active 2",
+                "path": "averageScores.activeShift2PassingRating"
+              },
+              {
+                "name": "Inactive 1",
+                "path": "averageScores.inactiveShift1PassingRating"
+              },
+              {
+                "name": "Inactive 2",
+                "path": "averageScores.inactiveShift2PassingRating"
+              },
+              {
+                "name": "Endgame",
+                "path": "averageScores.endgamePassingRating"
+              },
+              {
+                "name": "Auto",
+                "path": "averageScores.autoPassingRating"
+              }
+            ]
+          },
+          {
+            "name": "Defense",
+            "times": [
+              {
+                "name": "Auto",
+                "path": "none"
+              },
+              {
+                "name": "Transition",
+                "path": "averageScores.teleopTransitionDefenseRating"
+              },
+              {
+                "name": "Active 1",
+                "path": "averageScores.activeShift1DefenseRating"
+              },
+              {
+                "name": "Active 2",
+                "path": "averageScores.activeShift2DefenseRating"
+              },
+              {
+                "name": "Inactive 1",
+                "path": "averageScores.inactiveShift1DefenseRating"
+              },
+              {
+                "name": "Inactive 2",
+                "path": "averageScores.inactiveShift2DefenseRating"
+              },
+              {
+                "name": "Endgame",
+                "path": "averageScores.endgameDefenseRating"
+              },
+              {
+                "name": "Auto",
+                "path": "none"
+              }
+            ]
+          }
+        ]
+      },
+      "position": "main"
+    },
+    {
+      "view": "team",
+      "module": "HeatmapScatterPlot",
+      "name": "Teleop Shooting Heatmap",
+      "options": {
+        "coordinatePath": "other.pos",
+        "aggregatedActionsPath": "aggregatedActions",
+        "actionGroups": [
+          {
+            "name": "Teleop Start Shooting",
+            "actions": [
+              "teleopTransitionStartShooting",
+              "activeShift1StartShooting",
+              "activeShift2StartShooting",
+              "endgameStartShooting"
+            ]
+          }
+        ],
+        "actionLabels": {
+          "teleopTransitionStartShooting": "Transition",
+          "activeShift1StartShooting": "Active 1",
+          "activeShift2StartShooting": "Active 2",
+          "endgameStartShooting": "Endgame"
+        },
+        "imgPath": "img/half-field.svg",
+        "coordinateTransform": "foldHalfField"
+      },
+      "position": "main"
+    },
+    {
+      "view": "team",
+      "module": "Bar",
+      "name": "Attempted Climb Level",
+      "options": {
+        "bars": [
+          {
+            "name": "Fall",
+            "path": "counts.endgameFall"
+          },
+          {
+            "name": "L1",
+            "path": "counts.endgameAttemptL1"
+          },
+          {
+            "name": "L2",
+            "path": "counts.endgameAttemptL2"
+          },
+          {
+            "name": "L3",
+            "path": "counts.endgameAttemptL3"
+          }
+        ]
+      },
+      "position": "main"
+    },
+    {
+      "view": "team",
+      "module": "Bar",
+      "name": "TBA Climb Levels",
+      "options": {
+        "bars": [
+          {
+            "name": "L1",
+            "path": "counts.endGameTowerRobot_Level1"
+          },
+          {
+            "name": "L2",
+            "path": "counts.endGameTowerRobot_Level2"
+          },
+          {
+            "name": "L3",
+            "path": "counts.endGameTowerRobot_Level3"
+          }
+        ]
+      },
+      "position": "main"
+    },
+    {
+      "view": "team",
+      "module": "Pie",
+      "name": "Pre-Loads",
+      "options": {
+        "slices": [
+          {
+            "name": "Pre-Loaded Fuel",
+            "path": "counts.preloadFuel"
+          },
+          {
+            "name": "Pre-Load None",
+            "path": "counts.preloadNone"
+          }
+        ]
+      },
+      "position": "main"
+    },
+    {
+      "view": "team",
+      "module": "Pie",
+      "name": "Average Action Times",
+      "options": {
+        "unit": "s",
+        "slices": [
+          {
+            "name": "Shooting",
+            "path": "cycles.shootingTime.averageTimeSeconds"
+          },
+          {
+            "name": "Passing",
+            "path": "cycles.passingTime.averageTimeSeconds"
+          },
+          {
+            "name": "Collecting",
+            "path": "cycles.storingTime.averageTimeSeconds"
+          },
+          {
+            "name": "Defense",
+            "path": "cycles.defenseTime.averageTimeSeconds"
+          }
+        ]
+      },
+      "position": "main"
+    },
+    {
+      "view": "team",
+      "module": "Stats",
+      "name": "Team Stats",
+      "options": {
+        "list": [
+          {
+            "name": "Fuel OPR",
+            "path": "opr.Hub Total Fuel Count",
+            "decimals": 2,
+            "sort": 1
+          },
+          {
+            "name": "Auto Fuel OPR",
+            "path": "opr.Hub Auto Fuel Count",
+            "decimals": 2,
+            "sort": 1
+          },
+          {
+            "name": "Minor Foul OPR",
+            "path": "opr.minorFoulCount",
+            "decimals": 2,
+            "sort": -1
+          },
+          {
+            "name": "Major Foul OPR",
+            "path": "opr.majorFoulCount",
+            "decimals": 2,
+            "sort": -1
+          },
+          {
+            "name": "A-Stop Count",
+            "path": "counts.autoaStop",
+            "decimals": 2,
+            "sort": -1
+          },
+          {
+            "name": "Disabled Count",
+            "path": "disabledCounts",
+            "decimals": 2,
+            "sort": -1
+          },
+          {
+            "name": "Average Passing Rating",
+            "path": "averageScores.passingRating",
+            "decimals": 2,
+            "sort": 1
+          },
+          {
+            "name": "Average Defense Rating",
+            "path": "averageScores.defenseRating",
+            "decimals": 2,
+            "sort": 1
+          },
+          {
+            "name": "Average Shooting Rating",
+            "path": "averageScores.shootingRating",
+            "decimals": 2,
+            "sort": 1
+          },
+          {
+            "name": "Average Collecting Rating",
+            "path": "averageScores.storingRating",
+            "decimals": 2,
+            "sort": 1
+          },
+          {
+            "name": "Average Auto Shooting Rating",
+            "path": "averageScores.autoShootingRating",
+            "decimals": 2,
+            "sort": 1
+          },
+          {
+            "name": "Average Auto Passing Rating",
+            "path": "averageScores.autoPassingRating",
+            "decimals": 2,
+            "sort": 1
+          },
+          {
+            "name": "Average Auto Shooting Time",
+            "path": "cycles.autoShootingTime.averageTime",
+            "multiplier": 0.001,
+            "decimals": 2,
+            "hideIfValue": 0,
+            "sort": -1,
+            "unit": "s"
+          },
+          {
+            "name": "Average Teleop Shooting Time",
+            "path": "cycles.shootingTime.averageTime",
+            "multiplier": 0.001,
+            "decimals": 2,
+            "hideIfValue": 0,
+            "sort": -1,
+            "unit": "s"
+          }
+        ]
+      },
+      "position": "side"
+    },
+    {
+      "view": "match",
+      "module": "ColumnDisplay",
+      "name": "Auto Climb Points",
+      "options": {
+        "path": "averageScores.auto",
+        "sort": 1,
+        "decimals": 2
+      },
+      "position": "main"
+    },
+    {
+      "view": "match",
+      "module": "ColumnDisplay",
+      "name": "Teleop Points",
+      "options": {
+        "path": "averageScores.teleop",
+        "sort": 1,
+        "decimals": 2
+      },
+      "position": "main"
+    },
+    {
+      "view": "match",
+      "module": "ColumnDisplay",
+      "name": "Endgame Points",
+      "options": {
+        "path": "averageScores.endgame",
+        "sort": 1,
+        "decimals": 2
+      },
+      "position": "main"
+    },
+    {
+      "view": "match",
+      "module": "ColumnDisplay",
+      "name": "Total Points",
+      "options": {
+        "path": "averageScores.total",
+        "sort": 1,
+        "decimals": 2
+      },
+      "position": "main"
+    },
+    {
+      "view": "match",
+      "module": "Stats",
+      "name": "Alliance Stats",
+      "options": {
+        "list": [
+          {
+            "name": "Expected Auto Points",
+            "path": "averageScores.auto",
+            "decimals": 2,
+            "aggrMethod": "sum"
+          },
+          {
+            "name": "Expected Teleop Points",
+            "path": "averageScores.teleop",
+            "decimals": 2,
+            "aggrMethod": "sum"
+          },
+          {
+            "name": "Expected Endgame Points",
+            "path": "averageScores.endgame",
+            "decimals": 2,
+            "aggrMethod": "sum"
+          },
+          {
+            "name": "Expected Score",
+            "path": "averageScores.total",
+            "decimals": 2,
+            "aggrMethod": "sum"
+          }
+        ]
+      },
+      "position": "main"
+    }
+  ],
+  "filterTeams": {
+    "ratingBands": [
+      {
+        "id": "Rating4",
+        "label": "Rating4",
+        "kind": "exact",
+        "value": 4
+      },
+      {
+        "id": "Rating3",
+        "label": "Rating3",
+        "kind": "min",
+        "value": 3
+      },
+      {
+        "id": "Rating2",
+        "label": "Rating2",
+        "kind": "min",
+        "value": 2
+      },
+      {
+        "id": "Rating1",
+        "label": "Rating1",
+        "kind": "min",
+        "value": 1
+      },
+      {
+        "id": "eliteOPR",
+        "label": "Elite OPR (250+)",
+        "kind": "min",
+        "value": 250
+      },
+      {
+        "id": "strongOPR",
+        "label": "Strong OPR (151-250)",
+        "kind": "range",
+        "min": 151,
+        "max": 250
+      },
+      {
+        "id": "decentOPR",
+        "label": "Decent OPR (101-150)",
+        "kind": "range",
+        "min": 101,
+        "max": 150
+      },
+      {
+        "id": "lowOPR",
+        "label": "Low OPR (0-100)",
+        "kind": "range",
+        "min": 0,
+        "max": 100
+      },
+      {
+        "id": "negativeOPR",
+        "label": "Negative OPR",
+        "kind": "negative"
+      }
+    ]
+  }
+}

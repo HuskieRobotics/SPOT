@@ -36,7 +36,8 @@ and the code disagree, the code wins and the discrepancy is called out.
 | 16  | [16-github-issue-backlog.md](16-github-issue-backlog.md)                         | The 41 open GitHub issues classified as core / next / covered / drop for the rewrite, with backlog requirement ids `BL-<issue>`                                                                                                                      |
 | 17  | [17-rewrite-plan-and-next-steps.md](17-rewrite-plan-and-next-steps.md)           | Repository/branch strategy, Phase 0 preparation (behavioral oracle, synthetic data, schema v2, scaffold), phased build order, working practices, and immediate next steps                                                                            |
 | 18  | [18-offline-requirements.md](18-offline-requirements.md)                         | Offline operation as a first-class requirement: the three offline situations, what the service worker must cache (including generated bundles and data endpoints), OF-1 to OF-9                                                                      |
-| 19 | [19-model-fit-guide.md](19-model-fit-guide.md) | Which Claude model (Opus vs Fable 5.1) suits which kind of rewrite work, by phase and work item |
+| 19  | [19-model-fit-guide.md](19-model-fit-guide.md)                                   | Which Claude model (Opus vs Fable 5.1) suits which kind of rewrite work, by phase and work item                                                                                                                                                      |
+| 20  | [20-config-schema-v2.md](20-config-schema-v2.md)                                 | Configuration schema v2 (JSON Schema, decisions CS-1..15), the v1 → v2 converter mapping, and the T-3 tests                                                                                                                                          |
 
 ## Behavioral oracle
 

@@ -179,7 +179,7 @@ Do these before writing application code. Each one removes a class of rework lat
    - keep or drop the manual schedule (A-8);
    - security model: adopt R-32 and the per-event scouting join code, or a lighter variant;
    - extension mechanism details (runtime-served `extensions/` folder, document 15).
-4. **Write the configuration schema v2 as JSON Schema** before any UI: `match-scouting`,
+4. **Done 2026-09-17 (document 20).** **Write the configuration schema v2 as JSON Schema** before any UI: `match-scouting`,
    `analysis-pipeline`, `analysis-modules`, `qr`, and the new settings document. Include
    `knownActionIds`, `pauseMs`, explicit colors, configurable shift/A-Stop/filter bands, and
    the TBA enrichment mapping. Write a converter from the 2026 config and validate the
@@ -235,5 +235,6 @@ fixed, which is why Phase 0 items 4 and 5 come first.
 3. Create the `v6` branch, move the spec to `docs/spec/`, add `CLAUDE.md`, and land the
    scaffold PR with CI.
 4. Start the oracle: legacy pipeline run against the fixtures, golden outputs committed.
-5. Draft the JSON Schema for `match-scouting.json` v2 and convert the 2026 config as the
-   first test.
+5. ~~Draft the JSON Schema for `match-scouting.json` v2 and convert the 2026 config as the
+   first test.~~ Done: all four schemas, converter, tests, and the converted 2026 config as
+   the active `config/*.json` (document 20).

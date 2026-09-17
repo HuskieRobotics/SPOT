@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://spot.team3061.org/schema/v2/qr.schema.json",
+  "title": "SPOT QR payload configuration (v2)",
+  "description": "Bit layout for each action in the offline QR payload. `id` is encoded as an index into the derived known-action-id list (docs/spec/20), so it needs enough bits for that list.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["version", "actionSchema"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "version": { "const": 2 },
+    "actionSchema": {
+      "type": "array",
+      "minItems": 2,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["key", "bits"],
+        "properties": {
+          "key": { "enum": ["id", "ts"] },
+          "bits": { "type": "integer", "minimum": 1, "maximum": 32 }
+        }
+      }
+    }
+  }
+}
