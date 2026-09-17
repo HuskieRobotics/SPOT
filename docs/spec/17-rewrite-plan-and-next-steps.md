@@ -174,19 +174,23 @@ Do these before writing application code. Each one removes a class of rework lat
    oracle beyond real data.
 3. **Close the open decisions** that block the data model and config schema (each is one
    short discussion):
-   - composite action-id scheme vs. `{ id, phase, shift }` fields (A-22);
+   - ~~composite action-id scheme vs. `{ id, phase, shift }` fields (A-22)~~ **decided
+     2026-09-17**: actions carry `phase` and `segment` fields and the composite id stays
+     derivable from them (document 20 §2.1); implement in step 5 and Phase 1;
    - start rules for entering a match (A-28, BL-34);
    - keep or drop the manual schedule (A-8);
    - security model: adopt R-32 and the per-event scouting join code, or a lighter variant;
    - extension mechanism details (runtime-served `extensions/` folder, document 15).
-4. **Write the configuration schema v2 as JSON Schema** before any UI: `match-scouting`,
+4. **Done 2026-09-17 (document 20).** **Write the configuration schema v2 as JSON Schema** before any UI: `match-scouting`,
    `analysis-pipeline`, `analysis-modules`, `qr`, and the new settings document. Include
    `knownActionIds`, `pauseMs`, explicit colors, configurable shift/A-Stop/filter bands, and
    the TBA enrichment mapping. Write a converter from the 2026 config and validate the
    archived configs to see how far they convert. JSON Schema also gives editor autocomplete,
    which directly serves the "students without programming experience" requirement.
 5. **Write the data model v2 and the v5→v6 migration script** (document 03 hooks: flag
-   metadata, `notes`, `tags`, no per-action `_id`, tenant/event scoping, `scouters`).
+   metadata, `notes`, `tags`, no per-action `_id`, tenant/event scoping, `scouters`), including
+   the `phase`/`segment` fields on each action and the split of legacy composite ids
+   (document 20 §2.1).
 6. **Scaffold the `v6` branch**: Next.js (App Router, TypeScript), Tailwind + shadcn with a
    tweakcn theme seeded from the current palette, ESLint/Prettier, Vitest, Playwright,
    MongoDB memory server for tests, GitHub Actions running all of it on every PR,
@@ -235,5 +239,6 @@ fixed, which is why Phase 0 items 4 and 5 come first.
 3. Create the `v6` branch, move the spec to `docs/spec/`, add `CLAUDE.md`, and land the
    scaffold PR with CI.
 4. Start the oracle: legacy pipeline run against the fixtures, golden outputs committed.
-5. Draft the JSON Schema for `match-scouting.json` v2 and convert the 2026 config as the
-   first test.
+5. ~~Draft the JSON Schema for `match-scouting.json` v2 and convert the 2026 config as the
+   first test.~~ Done: all four schemas, converter, tests, and the converted 2026 config as
+   the active `config/*.json` (document 20).

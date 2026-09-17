@@ -1,0 +1,1202 @@
+{
+  "$schema": "../src/config/schema/match-scouting.schema.json",
+  "version": 2,
+  "timing": {
+    "totalMs": 160000,
+    "phases": [
+      {
+        "id": "auto",
+        "label": "Auto",
+        "startMs": 159999,
+        "layer": "layer-1",
+        "prefix": "auto"
+      },
+      {
+        "id": "teleop",
+        "label": "Teleop",
+        "startMs": 140000,
+        "layer": "layer-7",
+        "prefix": "teleop",
+        "segments": [
+          {
+            "id": "transition",
+            "label": "Teleop Transition",
+            "startMs": 140000,
+            "prefix": "teleopTransition"
+          },
+          {
+            "id": "shift",
+            "label": "Shift",
+            "startMs": 130000,
+            "layer": "layer-2",
+            "repeat": {
+              "intervalMs": 25000,
+              "count": 4
+            },
+            "kinds": [
+              {
+                "id": "active",
+                "label": "Active",
+                "prefix": "activeShift",
+                "toggleButton": "teleopActive"
+              },
+              {
+                "id": "inactive",
+                "label": "Inactive",
+                "prefix": "inactiveShift",
+                "toggleButton": "teleopInactive"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "endgame",
+        "label": "Endgame",
+        "startMs": 30000,
+        "prefix": "endgame"
+      }
+    ]
+  },
+  "variables": {},
+  "rules": {
+    "undo": {
+      "minQueueLength": 2
+    },
+    "positionLockMs": 1000,
+    "locks": [
+      {
+        "id": "aStop",
+        "triggerButtons": ["aStop"],
+        "untilPhase": "teleop",
+        "exemptTypes": ["undo", "match-control"],
+        "message": "You pressed the A-Stop button, all the buttons will be disabled until Auto ends. If this is a mistake then press the Undo button"
+      }
+    ],
+    "allianceRelativeButtons": [
+      {
+        "own": "AZone",
+        "opposing": "OAZone"
+      }
+    ],
+    "fieldMap": {
+      "image": "/img/field.svg"
+    }
+  },
+  "layout": {
+    "rows": 6,
+    "columns": 11,
+    "initialLayer": "layer-0",
+    "layers": [
+      {
+        "id": "layer-0",
+        "buttons": [
+          {
+            "id": "startGame",
+            "type": "match-control",
+            "gridArea": [2, 1, 4, 12],
+            "executables": [
+              {
+                "type": "layer",
+                "to": "layer-1"
+              }
+            ],
+            "label": "Start Match",
+            "color": "#919191",
+            "legacyClass": "silver timer"
+          },
+          {
+            "id": "preloadFuel",
+            "type": "action",
+            "gridArea": [4, 1, 6, 6],
+            "executables": [],
+            "label": "Preload Fuel",
+            "color": "#e6bd39",
+            "legacyClass": "fuel2026"
+          },
+          {
+            "id": "preloadNone",
+            "type": "action",
+            "gridArea": [4, 7, 6, 12],
+            "executables": [],
+            "label": "Preload None",
+            "color": "#707070",
+            "legacyClass": "gray"
+          }
+        ]
+      },
+      {
+        "id": "layer-1",
+        "buttons": [
+          {
+            "id": "startGame",
+            "type": "match-control",
+            "gridArea": [1, 4, 2, 9],
+            "executables": [],
+            "label": "Start",
+            "color": "#919191",
+            "legacyClass": "silver timer"
+          },
+          {
+            "id": "Broken",
+            "type": "action",
+            "gridArea": [1, 1, 2, 3],
+            "executables": [],
+            "label": "Disabled",
+            "color": "#ff4436",
+            "legacyClass": "red"
+          },
+          {
+            "id": "aStop",
+            "type": "action",
+            "gridArea": [1, 3, 2, 4],
+            "executables": [],
+            "label": "A-Stop",
+            "color": "#ff4436",
+            "legacyClass": "red"
+          },
+          {
+            "id": "undo",
+            "type": "undo",
+            "gridArea": [1, 10, 2, 12],
+            "executables": [],
+            "label": "Undo",
+            "color": "#ffa347",
+            "legacyClass": "sherbert"
+          },
+          {
+            "id": "AttemptL1",
+            "type": "action",
+            "gridArea": [3, 1, 5, 4],
+            "executables": [],
+            "label": "Attempted Climb",
+            "color": "#5a929e",
+            "legacyClass": "blue2026"
+          },
+          {
+            "id": "FallL1",
+            "type": "action",
+            "gridArea": [5, 1, 6, 4],
+            "executables": [],
+            "label": "Fall",
+            "color": "#ff4436",
+            "legacyClass": "red"
+          },
+          {
+            "id": "StartShooting",
+            "type": "action",
+            "gridArea": [4, 4, 6, 6],
+            "executables": [
+              {
+                "type": "exclusiveHighlight",
+                "group": "default"
+              }
+            ],
+            "label": "Start Shooting",
+            "color": "#e6bd39",
+            "legacyClass": "fuel2026"
+          },
+          {
+            "id": "StopShooting",
+            "type": "action",
+            "gridArea": [4, 6, 6, 8],
+            "executables": [
+              {
+                "type": "exclusiveHighlight",
+                "group": "default"
+              },
+              {
+                "type": "clearHighlight"
+              },
+              {
+                "type": "layer",
+                "to": "layer-6"
+              }
+            ],
+            "label": "Stop Shooting",
+            "color": "#e6bd39",
+            "legacyClass": "fuel2026"
+          },
+          {
+            "id": "Passing",
+            "type": "action",
+            "gridArea": [2, 8, 4, 12],
+            "executables": [
+              {
+                "type": "layer",
+                "to": "layer-5"
+              }
+            ],
+            "color": "#5a929e",
+            "legacyClass": "blue2026"
+          },
+          {
+            "id": "Storing",
+            "type": "action",
+            "gridArea": [4, 8, 6, 12],
+            "executables": [
+              {
+                "type": "layer",
+                "to": "layer-4"
+              }
+            ],
+            "label": "Collecting",
+            "color": "#5a929e",
+            "legacyClass": "blue2026"
+          }
+        ]
+      },
+      {
+        "id": "layer-2",
+        "buttons": [
+          {
+            "id": "startGame",
+            "type": "match-control",
+            "gridArea": [1, 5, 2, 9],
+            "executables": [],
+            "label": "Start",
+            "color": "#919191",
+            "legacyClass": "silver timer"
+          },
+          {
+            "id": "Broken",
+            "type": "action",
+            "gridArea": [1, 1, 2, 3],
+            "executables": [],
+            "label": "Disabled",
+            "color": "#ff4436",
+            "legacyClass": "red"
+          },
+          {
+            "id": "undo",
+            "type": "undo",
+            "gridArea": [1, 10, 2, 12],
+            "executables": [],
+            "label": "Undo",
+            "color": "#ffa347",
+            "legacyClass": "sherbert"
+          },
+          {
+            "id": "teleopActive",
+            "type": "none",
+            "gridArea": [3, 1, 6, 6],
+            "executables": [
+              {
+                "type": "layer",
+                "to": "layer-7"
+              }
+            ],
+            "label": "Active",
+            "color": "#707070",
+            "legacyClass": "gray"
+          },
+          {
+            "id": "teleopInactive",
+            "type": "none",
+            "gridArea": [3, 7, 6, 12],
+            "executables": [
+              {
+                "type": "layer",
+                "to": "layer-7"
+              }
+            ],
+            "label": "Inactive",
+            "color": "#707070",
+            "legacyClass": "gray"
+          }
+        ]
+      },
+      {
+        "id": "layer-3",
+        "buttons": [
+          {
+            "id": "startGame",
+            "type": "match-control",
+            "gridArea": [1, 5, 2, 9],
+            "executables": [],
+            "label": "Start",
+            "color": "#919191",
+            "legacyClass": "silver timer"
+          },
+          {
+            "id": "Broken",
+            "type": "action",
+            "gridArea": [1, 1, 2, 3],
+            "executables": [],
+            "label": "Disabled",
+            "color": "#ff4436",
+            "legacyClass": "red"
+          },
+          {
+            "id": "undo",
+            "type": "undo",
+            "gridArea": [1, 10, 2, 14],
+            "executables": [],
+            "label": "Undo",
+            "color": "#ffa347",
+            "legacyClass": "sherbert"
+          },
+          {
+            "id": "AttemptL3",
+            "type": "action",
+            "gridArea": [3, 4, 4, 10],
+            "executables": [
+              {
+                "type": "exclusiveHighlight",
+                "group": "default"
+              }
+            ],
+            "label": "L3",
+            "color": "#001f3f",
+            "legacyClass": "deepBlue"
+          },
+          {
+            "id": "AttemptL2",
+            "type": "action",
+            "gridArea": [4, 4, 5, 10],
+            "executables": [
+              {
+                "type": "exclusiveHighlight",
+                "group": "default"
+              }
+            ],
+            "label": "L2",
+            "color": "#2063b1",
+            "legacyClass": "shallowBlue"
+          },
+          {
+            "id": "AttemptL1",
+            "type": "action",
+            "gridArea": [5, 4, 6, 10],
+            "executables": [
+              {
+                "type": "exclusiveHighlight",
+                "group": "default"
+              }
+            ],
+            "label": "L1",
+            "color": "#5a929e",
+            "legacyClass": "blue2026"
+          },
+          {
+            "id": "fall",
+            "type": "action",
+            "gridArea": [6, 4, 7, 10],
+            "executables": [
+              {
+                "type": "exclusiveHighlight",
+                "group": "default"
+              }
+            ],
+            "label": "Fall",
+            "color": "#ff4436",
+            "legacyClass": "red"
+          }
+        ]
+      },
+      {
+        "id": "layer-4",
+        "buttons": [
+          {
+            "id": "startGame",
+            "type": "match-control",
+            "gridArea": [1, 5, 2, 9],
+            "executables": [],
+            "label": "Start",
+            "color": "#919191",
+            "legacyClass": "silver timer"
+          },
+          {
+            "id": "Broken",
+            "type": "action",
+            "gridArea": [1, 1, 2, 3],
+            "executables": [],
+            "label": "Disabled",
+            "color": "#ff4436",
+            "legacyClass": "red"
+          },
+          {
+            "id": "aStop",
+            "type": "action",
+            "gridArea": [1, 3, 2, 4],
+            "executables": [],
+            "label": "A-Stop",
+            "color": "#ff4436",
+            "legacyClass": "red"
+          },
+          {
+            "id": "undo",
+            "type": "undo",
+            "gridArea": [1, 10, 2, 12],
+            "executables": [],
+            "label": "Undo",
+            "color": "#ffa347",
+            "legacyClass": "sherbert"
+          },
+          {
+            "id": "CollectOutpost",
+            "type": "action",
+            "gridArea": [3, 1, 5, 4],
+            "executables": [
+              {
+                "type": "layer",
+                "to": "layer-1"
+              }
+            ],
+            "label": "Collect Outpost",
+            "color": "#707070",
+            "legacyClass": "gray"
+          },
+          {
+            "id": "CollectDepot",
+            "type": "action",
+            "gridArea": [3, 5, 5, 8],
+            "executables": [
+              {
+                "type": "layer",
+                "to": "layer-1"
+              }
+            ],
+            "label": "Collect Depot",
+            "color": "#2063b1",
+            "legacyClass": "shallowBlue"
+          },
+          {
+            "id": "CollectNeutral",
+            "type": "action",
+            "gridArea": [3, 9, 5, 12],
+            "executables": [
+              {
+                "type": "layer",
+                "to": "layer-1"
+              }
+            ],
+            "label": "Collect Neutral",
+            "color": "#001f3f",
+            "legacyClass": "deepBlue"
+          }
+        ]
+      },
+      {
+        "id": "layer-5",
+        "buttons": [
+          {
+            "id": "startGame",
+            "type": "match-control",
+            "gridArea": [1, 5, 2, 9],
+            "executables": [],
+            "label": "Start",
+            "color": "#919191",
+            "legacyClass": "silver timer"
+          },
+          {
+            "id": "Broken",
+            "type": "action",
+            "gridArea": [1, 1, 2, 3],
+            "executables": [],
+            "label": "Disabled",
+            "color": "#ff4436",
+            "legacyClass": "red"
+          },
+          {
+            "id": "aStop",
+            "type": "action",
+            "gridArea": [1, 3, 2, 4],
+            "executables": [],
+            "label": "A-Stop",
+            "color": "#ff4436",
+            "legacyClass": "red"
+          },
+          {
+            "id": "undo",
+            "type": "undo",
+            "gridArea": [1, 10, 2, 12],
+            "executables": [],
+            "label": "Undo",
+            "color": "#ffa347",
+            "legacyClass": "sherbert"
+          },
+          {
+            "id": "RatingPassing1",
+            "type": "action",
+            "gridArea": [2, 2, 4, 6],
+            "executables": [
+              {
+                "type": "layer",
+                "to": "layer-1"
+              }
+            ],
+            "label": "Rating 1 \n (Attempted but Ineffective)",
+            "color": "#ff4545",
+            "legacyClass": "rating-lowest"
+          },
+          {
+            "id": "RatingPassing2",
+            "type": "action",
+            "gridArea": [2, 7, 4, 11],
+            "executables": [
+              {
+                "type": "layer",
+                "to": "layer-1"
+              }
+            ],
+            "label": "Rating 2 \n (Slow/ Bad Aim)",
+            "color": "#ffa941",
+            "legacyClass": "rating-second-lowest"
+          },
+          {
+            "id": "RatingPassing3",
+            "type": "action",
+            "gridArea": [4, 2, 6, 6],
+            "executables": [
+              {
+                "type": "layer",
+                "to": "layer-1"
+              }
+            ],
+            "label": "Rating 3 \n (Moderately Accurate + Fast)",
+            "color": "#a1c326",
+            "legacyClass": "rating-second-highest"
+          },
+          {
+            "id": "RatingPassing4",
+            "type": "action",
+            "gridArea": [4, 7, 6, 11],
+            "executables": [
+              {
+                "type": "layer",
+                "to": "layer-1"
+              }
+            ],
+            "label": "Rating 4 \n (Very Accurate + Very Fast)",
+            "color": "#00b844",
+            "legacyClass": "rating-highest"
+          }
+        ]
+      },
+      {
+        "id": "layer-6",
+        "buttons": [
+          {
+            "id": "startGame",
+            "type": "match-control",
+            "gridArea": [1, 5, 2, 9],
+            "executables": [],
+            "label": "Start",
+            "color": "#919191",
+            "legacyClass": "silver timer"
+          },
+          {
+            "id": "Broken",
+            "type": "action",
+            "gridArea": [1, 1, 2, 3],
+            "executables": [],
+            "label": "Disabled",
+            "color": "#ff4436",
+            "legacyClass": "red"
+          },
+          {
+            "id": "aStop",
+            "type": "action",
+            "gridArea": [1, 3, 2, 4],
+            "executables": [],
+            "label": "A-Stop",
+            "color": "#ff4436",
+            "legacyClass": "red"
+          },
+          {
+            "id": "undo",
+            "type": "undo",
+            "gridArea": [1, 10, 2, 12],
+            "executables": [],
+            "label": "Undo",
+            "color": "#ffa347",
+            "legacyClass": "sherbert"
+          },
+          {
+            "id": "RatingShooting1",
+            "type": "action",
+            "gridArea": [2, 2, 4, 6],
+            "executables": [
+              {
+                "type": "layer",
+                "to": "layer-1"
+              }
+            ],
+            "label": "Rating 1 \n (Really Low Accuracy and Volume)",
+            "color": "#ff4545",
+            "legacyClass": "rating-lowest"
+          },
+          {
+            "id": "RatingShooting2",
+            "type": "action",
+            "gridArea": [2, 7, 4, 11],
+            "executables": [
+              {
+                "type": "layer",
+                "to": "layer-1"
+              }
+            ],
+            "label": "Rating 2 \n (>50% Missed and Low Volume)",
+            "color": "#ffa941",
+            "legacyClass": "rating-second-lowest"
+          },
+          {
+            "id": "RatingShooting3",
+            "type": "action",
+            "gridArea": [4, 2, 6, 6],
+            "executables": [
+              {
+                "type": "layer",
+                "to": "layer-1"
+              }
+            ],
+            "label": "Rating 3 \n (< 20% missed and Moderate Volume)",
+            "color": "#a1c326",
+            "legacyClass": "rating-second-highest"
+          },
+          {
+            "id": "RatingShooting4",
+            "type": "action",
+            "gridArea": [4, 7, 6, 11],
+            "executables": [
+              {
+                "type": "layer",
+                "to": "layer-1"
+              }
+            ],
+            "label": "Rating 4 \n (~100% Accuracy and High Volume)",
+            "color": "#00b844",
+            "legacyClass": "rating-highest"
+          }
+        ]
+      },
+      {
+        "id": "layer-7",
+        "buttons": [
+          {
+            "id": "startGame",
+            "type": "match-control",
+            "gridArea": [1, 5, 2, 9],
+            "executables": [],
+            "label": "Start",
+            "color": "#919191",
+            "legacyClass": "silver timer"
+          },
+          {
+            "id": "Broken",
+            "type": "action",
+            "gridArea": [1, 1, 2, 3],
+            "executables": [],
+            "label": "Disabled",
+            "color": "#ff4436",
+            "legacyClass": "red"
+          },
+          {
+            "id": "undo",
+            "type": "undo",
+            "gridArea": [1, 10, 2, 14],
+            "executables": [],
+            "label": "Undo",
+            "color": "#ffa347",
+            "legacyClass": "sherbert"
+          },
+          {
+            "id": "AZone",
+            "type": "action",
+            "gridArea": [2, 1, 3, 5],
+            "executables": [],
+            "label": "Alliance Zone",
+            "color": "#ff4436",
+            "legacyClass": "red"
+          },
+          {
+            "id": "NeutralZone",
+            "type": "action",
+            "gridArea": [2, 5, 3, 9],
+            "executables": [],
+            "label": "Neutral Zone",
+            "color": "#707070",
+            "legacyClass": "gray"
+          },
+          {
+            "id": "OAZone",
+            "type": "action",
+            "gridArea": [2, 9, 3, 14],
+            "executables": [],
+            "label": "Opposing Zone",
+            "color": "#2063b1",
+            "legacyClass": "shallowBlue"
+          },
+          {
+            "id": "Storing",
+            "type": "action",
+            "gridArea": [3, 1, 4, 5],
+            "executables": [
+              {
+                "type": "layer",
+                "to": "layer-11"
+              }
+            ],
+            "label": "Collecting",
+            "color": "#5a929e",
+            "legacyClass": "blue2026"
+          },
+          {
+            "id": "Passing",
+            "type": "action",
+            "gridArea": [3, 5, 4, 9],
+            "executables": [
+              {
+                "type": "layer",
+                "to": "layer-9"
+              }
+            ],
+            "color": "#5a929e",
+            "legacyClass": "blue2026"
+          },
+          {
+            "id": "Defense",
+            "type": "action",
+            "gridArea": [3, 9, 4, 14],
+            "executables": [
+              {
+                "type": "layer",
+                "to": "layer-8"
+              }
+            ],
+            "label": "Defending",
+            "color": "#5a929e",
+            "legacyClass": "blue2026"
+          },
+          {
+            "id": "AttemptClimb",
+            "type": "action",
+            "gridArea": [5, 5, 6, 9],
+            "executables": [
+              {
+                "type": "layer",
+                "to": "layer-3"
+              }
+            ],
+            "label": "Attempt Climb",
+            "color": "#707070",
+            "legacyClass": "gray"
+          },
+          {
+            "id": "StartShooting",
+            "type": "action",
+            "gridArea": [4, 2, 5, 6],
+            "executables": [
+              {
+                "type": "position"
+              },
+              {
+                "type": "exclusiveHighlight",
+                "group": "default"
+              }
+            ],
+            "label": "Start Scoring",
+            "color": "#e6bd39",
+            "legacyClass": "fuel2026"
+          },
+          {
+            "id": "StopShooting",
+            "type": "action",
+            "gridArea": [4, 8, 5, 12],
+            "executables": [
+              {
+                "type": "exclusiveHighlight",
+                "group": "default"
+              },
+              {
+                "type": "clearHighlight"
+              },
+              {
+                "type": "layer",
+                "to": "layer-10"
+              }
+            ],
+            "label": "Stop Scoring",
+            "color": "#e6bd39",
+            "legacyClass": "fuel2026"
+          }
+        ]
+      },
+      {
+        "id": "layer-8",
+        "buttons": [
+          {
+            "id": "startGame",
+            "type": "match-control",
+            "gridArea": [1, 5, 2, 9],
+            "executables": [],
+            "label": "Start",
+            "color": "#919191",
+            "legacyClass": "silver timer"
+          },
+          {
+            "id": "disabled",
+            "type": "action",
+            "gridArea": [1, 1, 2, 3],
+            "executables": [],
+            "label": "Disabled",
+            "color": "#ff4436",
+            "legacyClass": "red"
+          },
+          {
+            "id": "undo",
+            "type": "undo",
+            "gridArea": [1, 9, 2, 12],
+            "executables": [],
+            "label": "Undo",
+            "color": "#ffa347",
+            "legacyClass": "sherbert"
+          },
+          {
+            "id": "RatingDefense1",
+            "type": "action",
+            "gridArea": [2, 2, 4, 6],
+            "executables": [
+              {
+                "type": "layer",
+                "to": "layer-7"
+              }
+            ],
+            "label": "Rating 1 \n (No Impact)",
+            "color": "#ff4545",
+            "legacyClass": "rating-lowest"
+          },
+          {
+            "id": "RatingDefense2",
+            "type": "action",
+            "gridArea": [2, 7, 4, 11],
+            "executables": [
+              {
+                "type": "layer",
+                "to": "layer-7"
+              }
+            ],
+            "label": "Rating 2 \n (Minor Disruption)",
+            "color": "#ffa941",
+            "legacyClass": "rating-second-lowest"
+          },
+          {
+            "id": "RatingDefense3",
+            "type": "action",
+            "gridArea": [4, 2, 6, 6],
+            "executables": [
+              {
+                "type": "layer",
+                "to": "layer-7"
+              }
+            ],
+            "label": "Rating 3 \n (Moderate Disruption)",
+            "color": "#a1c326",
+            "legacyClass": "rating-second-highest"
+          },
+          {
+            "id": "RatingDefense4",
+            "type": "action",
+            "gridArea": [4, 7, 6, 11],
+            "executables": [
+              {
+                "type": "layer",
+                "to": "layer-7"
+              }
+            ],
+            "label": "Rating 4 \n (Severe Disruption/Match Altering)",
+            "color": "#00b844",
+            "legacyClass": "rating-highest"
+          }
+        ]
+      },
+      {
+        "id": "layer-9",
+        "buttons": [
+          {
+            "id": "startGame",
+            "type": "match-control",
+            "gridArea": [1, 5, 2, 9],
+            "executables": [],
+            "label": "Start",
+            "color": "#919191",
+            "legacyClass": "silver timer"
+          },
+          {
+            "id": "disabled",
+            "type": "action",
+            "gridArea": [1, 1, 2, 3],
+            "executables": [
+              {
+                "type": "layer",
+                "to": "layer-7"
+              }
+            ],
+            "label": "Disabled",
+            "color": "#ff4436",
+            "legacyClass": "red"
+          },
+          {
+            "id": "undo",
+            "type": "undo",
+            "gridArea": [1, 9, 2, 12],
+            "executables": [
+              {
+                "type": "layer",
+                "to": "layer-7"
+              }
+            ],
+            "label": "Undo",
+            "color": "#ffa347",
+            "legacyClass": "sherbert"
+          },
+          {
+            "id": "RatingPassing1",
+            "type": "action",
+            "gridArea": [2, 2, 4, 6],
+            "executables": [
+              {
+                "type": "layer",
+                "to": "layer-7"
+              }
+            ],
+            "label": "Rating 1 \n (Attempted but Ineffective)",
+            "color": "#ff4545",
+            "legacyClass": "rating-lowest"
+          },
+          {
+            "id": "RatingPassing2",
+            "type": "action",
+            "gridArea": [2, 7, 4, 11],
+            "executables": [
+              {
+                "type": "layer",
+                "to": "layer-7"
+              }
+            ],
+            "label": "Rating 2 \n (Slow/ Bad Aim)",
+            "color": "#ffa941",
+            "legacyClass": "rating-second-lowest"
+          },
+          {
+            "id": "RatingPassing3",
+            "type": "action",
+            "gridArea": [4, 2, 6, 6],
+            "executables": [
+              {
+                "type": "layer",
+                "to": "layer-7"
+              }
+            ],
+            "label": "Rating 3 \n (Moderately Accurate + Fast)",
+            "color": "#a1c326",
+            "legacyClass": "rating-second-highest"
+          },
+          {
+            "id": "RatingPassing4",
+            "type": "action",
+            "gridArea": [4, 7, 6, 11],
+            "executables": [
+              {
+                "type": "layer",
+                "to": "layer-7"
+              }
+            ],
+            "label": "Rating 4 \n (Very Accurate + Very Fast)",
+            "color": "#00b844",
+            "legacyClass": "rating-highest"
+          }
+        ]
+      },
+      {
+        "id": "layer-10",
+        "buttons": [
+          {
+            "id": "startGame",
+            "type": "match-control",
+            "gridArea": [1, 5, 2, 9],
+            "executables": [],
+            "label": "Start",
+            "color": "#919191",
+            "legacyClass": "silver timer"
+          },
+          {
+            "id": "disabled",
+            "type": "action",
+            "gridArea": [1, 1, 2, 3],
+            "executables": [],
+            "label": "Disabled",
+            "color": "#ff4436",
+            "legacyClass": "red"
+          },
+          {
+            "id": "undo",
+            "type": "undo",
+            "gridArea": [1, 9, 2, 12],
+            "executables": [],
+            "label": "Undo",
+            "color": "#ffa347",
+            "legacyClass": "sherbert"
+          },
+          {
+            "id": "RatingShooting1",
+            "type": "action",
+            "gridArea": [2, 2, 4, 6],
+            "executables": [
+              {
+                "type": "layer",
+                "to": "layer-7"
+              }
+            ],
+            "label": "Rating 1 \n (Really Low Accuracy and Volume)",
+            "color": "#ff4545",
+            "legacyClass": "rating-lowest"
+          },
+          {
+            "id": "RatingShooting2",
+            "type": "action",
+            "gridArea": [2, 7, 4, 11],
+            "executables": [
+              {
+                "type": "layer",
+                "to": "layer-7"
+              }
+            ],
+            "label": "Rating 2 \n (>50% Missed and Low Volume)",
+            "color": "#ffa941",
+            "legacyClass": "rating-second-lowest"
+          },
+          {
+            "id": "RatingShooting3",
+            "type": "action",
+            "gridArea": [4, 2, 6, 6],
+            "executables": [
+              {
+                "type": "layer",
+                "to": "layer-7"
+              }
+            ],
+            "label": "Rating 3 \n (< 20% missed and Moderate Volume)",
+            "color": "#a1c326",
+            "legacyClass": "rating-second-highest"
+          },
+          {
+            "id": "RatingShooting4",
+            "type": "action",
+            "gridArea": [4, 7, 6, 11],
+            "executables": [
+              {
+                "type": "layer",
+                "to": "layer-7"
+              }
+            ],
+            "label": "Rating 4 \n (~100% Accuracy and High Volume)",
+            "color": "#00b844",
+            "legacyClass": "rating-highest"
+          }
+        ]
+      },
+      {
+        "id": "layer-11",
+        "buttons": [
+          {
+            "id": "startGame",
+            "type": "match-control",
+            "gridArea": [1, 5, 2, 9],
+            "executables": [],
+            "label": "Start",
+            "color": "#919191",
+            "legacyClass": "silver timer"
+          },
+          {
+            "id": "disabled",
+            "type": "action",
+            "gridArea": [1, 1, 2, 3],
+            "executables": [],
+            "label": "Disabled",
+            "color": "#ff4436",
+            "legacyClass": "red"
+          },
+          {
+            "id": "undo",
+            "type": "undo",
+            "gridArea": [1, 9, 2, 12],
+            "executables": [],
+            "label": "Undo",
+            "color": "#ffa347",
+            "legacyClass": "sherbert"
+          },
+          {
+            "id": "RatingStoring1",
+            "type": "action",
+            "gridArea": [2, 2, 4, 6],
+            "executables": [
+              {
+                "type": "layer",
+                "to": "layer-7"
+              }
+            ],
+            "label": "Rating 1 \n (Ineffective/No Collection)",
+            "color": "#ff4545",
+            "legacyClass": "rating-lowest"
+          },
+          {
+            "id": "RatingStoring2",
+            "type": "action",
+            "gridArea": [2, 7, 4, 11],
+            "executables": [
+              {
+                "type": "layer",
+                "to": "layer-7"
+              }
+            ],
+            "label": "Rating 2 \n (Slow and some Collection)",
+            "color": "#ffa941",
+            "legacyClass": "rating-second-lowest"
+          },
+          {
+            "id": "RatingStoring3",
+            "type": "action",
+            "gridArea": [4, 2, 6, 6],
+            "executables": [
+              {
+                "type": "layer",
+                "to": "layer-7"
+              }
+            ],
+            "label": "Rating 3 \n (Smooth and Good Volume)",
+            "color": "#a1c326",
+            "legacyClass": "rating-second-highest"
+          },
+          {
+            "id": "RatingStoring4",
+            "type": "action",
+            "gridArea": [4, 7, 6, 11],
+            "executables": [
+              {
+                "type": "layer",
+                "to": "layer-7"
+              }
+            ],
+            "label": "Rating 4 \n (Vacuum/High Collection)",
+            "color": "#00b844",
+            "legacyClass": "rating-highest"
+          }
+        ]
+      }
+    ]
+  },
+  "extraActionIds": [
+    "activeShift1Fall",
+    "activeShift2Fall",
+    "autoTowerRobot_Level1",
+    "endGameTowerRobot_Level1",
+    "endGameTowerRobot_Level2",
+    "endGameTowerRobot_Level3",
+    "endgameFall",
+    "inactiveShift1Fall",
+    "inactiveShift2Fall",
+    "teleopTransitionFall"
+  ]
+}

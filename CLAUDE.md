@@ -50,6 +50,7 @@ npm test             # vitest (unit, config validation, oracle fixture checks)
 npm run build && npm start
 npm run test:e2e     # playwright (expects a built app; see playwright.config.ts)
 npm run oracle -- <v4.2.0-worktree> <v5-worktree>   # regenerate golden outputs
+npm run config:convert -- config/v1 <out dir> [--opr-strings '<json>']   # v1 -> v2 config converter
 ```
 
 CI (`.github/workflows/ci.yml`) runs lint, typecheck, unit tests, build, and e2e on every PR.

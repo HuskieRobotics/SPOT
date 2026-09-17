@@ -1,0 +1,970 @@
+{
+  "$schema": "../../../src/config/schema/match-scouting.schema.json",
+  "version": 2,
+  "timing": {
+    "totalMs": 153000,
+    "phases": [
+      {
+        "id": "auto",
+        "label": "Auto",
+        "startMs": 152999,
+        "layer": "layer-1",
+        "prefix": ""
+      },
+      {
+        "id": "teleop",
+        "label": "Teleop",
+        "startMs": 135000,
+        "layer": "layer-2",
+        "prefix": ""
+      }
+    ]
+  },
+  "variables": {},
+  "rules": {
+    "undo": {
+      "minQueueLength": 2
+    },
+    "positionLockMs": 1000,
+    "locks": [
+      {
+        "id": "aStop",
+        "triggerButtons": ["aStop"],
+        "untilPhase": "teleop",
+        "exemptTypes": ["undo", "match-control"],
+        "message": "You pressed the A-Stop button, all the buttons will be disabled until Auto ends. If this is a mistake then press the Undo button"
+      }
+    ],
+    "allianceRelativeButtons": [],
+    "fieldMap": {
+      "image": "/img/field.svg"
+    }
+  },
+  "layout": {
+    "rows": 6,
+    "columns": 9,
+    "initialLayer": "layer-0",
+    "layers": [
+      {
+        "id": "layer-0",
+        "buttons": [
+          {
+            "id": "startGame",
+            "type": "match-control",
+            "gridArea": [2, 1, 4, 10],
+            "executables": [
+              {
+                "type": "layer",
+                "to": "layer-1"
+              }
+            ],
+            "label": "Start",
+            "color": "#919191",
+            "legacyClass": "silver timer"
+          },
+          {
+            "id": "preloadCoral",
+            "type": "action",
+            "gridArea": [4, 1, 6, 5],
+            "executables": [],
+            "label": "Preload Coral",
+            "color": "#ff69b4",
+            "legacyClass": "lightCoral"
+          },
+          {
+            "id": "preloadNone",
+            "type": "action",
+            "gridArea": [4, 6, 6, 10],
+            "executables": [],
+            "label": "Preload None",
+            "color": "#707070",
+            "legacyClass": "gray"
+          }
+        ]
+      },
+      {
+        "id": "layer-1",
+        "buttons": [
+          {
+            "id": "startGame",
+            "type": "match-control",
+            "gridArea": [1, 4, 2, 7],
+            "executables": [],
+            "label": "Start",
+            "color": "#919191",
+            "legacyClass": "silver timer"
+          },
+          {
+            "id": "broken",
+            "type": "action",
+            "gridArea": [1, 1, 2, 3],
+            "executables": [],
+            "label": "Disabled",
+            "color": "#ff4436",
+            "legacyClass": "red"
+          },
+          {
+            "id": "aStop",
+            "type": "action",
+            "gridArea": [1, 3, 2, 4],
+            "executables": [],
+            "label": "A-Stop",
+            "color": "#ff4436",
+            "legacyClass": "red"
+          },
+          {
+            "id": "autoGroundPickupCoral",
+            "type": "action",
+            "gridArea": [2, 1, 4, 3],
+            "executables": [
+              {
+                "type": "layer",
+                "to": "layer-7"
+              }
+            ],
+            "label": "Pickup Ground",
+            "color": "#ff69b4",
+            "legacyClass": "lightCoral"
+          },
+          {
+            "id": "autoStationPickupCoral",
+            "type": "action",
+            "gridArea": [4, 1, 6, 3],
+            "executables": [],
+            "label": "Pickup Station",
+            "color": "#ff69b4",
+            "legacyClass": "lightCoral"
+          },
+          {
+            "id": "autoCoralDrop",
+            "type": "action",
+            "gridArea": [6, 1, 7, 3],
+            "executables": [],
+            "label": "Drop",
+            "color": "#c71585",
+            "legacyClass": "darkCoral"
+          },
+          {
+            "id": "autoScoreCoral",
+            "type": "none",
+            "gridArea": [3, 3, 5, 5],
+            "executables": [
+              {
+                "type": "layer",
+                "to": "layer-5"
+              }
+            ],
+            "label": "Coral",
+            "color": "#ff1493",
+            "legacyClass": "coral"
+          },
+          {
+            "id": "undo",
+            "type": "undo",
+            "gridArea": [1, 8, 2, 10],
+            "executables": [],
+            "label": "Undo",
+            "color": "#ffa347",
+            "legacyClass": "sherbert"
+          },
+          {
+            "id": "autoGroundPickupAlgae",
+            "type": "action",
+            "gridArea": [2, 8, 4, 10],
+            "executables": [
+              {
+                "type": "layer",
+                "to": "layer-6"
+              }
+            ],
+            "label": "Pickup Ground",
+            "color": "#56b8b8",
+            "legacyClass": "lightbluegreen"
+          },
+          {
+            "id": "autoReefPickupAlgae",
+            "type": "action",
+            "gridArea": [4, 8, 6, 10],
+            "executables": [],
+            "label": "Pickup Reef",
+            "color": "#56b8b8",
+            "legacyClass": "lightbluegreen"
+          },
+          {
+            "id": "autoScoreAlgae",
+            "type": "action",
+            "gridArea": [3, 6, 5, 8],
+            "executables": [
+              {
+                "type": "layer",
+                "to": "layer-4"
+              }
+            ],
+            "label": "Algae",
+            "color": "#0babab",
+            "legacyClass": "bluegreen"
+          },
+          {
+            "id": "autoAlgaeDrop",
+            "type": "action",
+            "gridArea": [6, 8, 7, 10],
+            "executables": [],
+            "label": "Drop",
+            "color": "#077777",
+            "legacyClass": "darkbluegreen"
+          },
+          {
+            "id": "leave",
+            "type": "action",
+            "gridArea": [6, 4, 7, 7],
+            "executables": [],
+            "label": "Leave",
+            "color": "#707070",
+            "legacyClass": "gray"
+          }
+        ]
+      },
+      {
+        "id": "layer-2",
+        "buttons": [
+          {
+            "id": "startGame",
+            "type": "match-control",
+            "gridArea": [1, 4, 2, 7],
+            "executables": [],
+            "label": "Start",
+            "color": "#919191",
+            "legacyClass": "silver timer"
+          },
+          {
+            "id": "broken",
+            "type": "action",
+            "gridArea": [1, 1, 2, 3],
+            "executables": [],
+            "label": "Disabled",
+            "color": "#ff4436",
+            "legacyClass": "red"
+          },
+          {
+            "id": "teleopGroundPickupCoral",
+            "type": "action",
+            "gridArea": [2, 1, 4, 3],
+            "executables": [],
+            "label": "Pickup Ground",
+            "color": "#ff69b4",
+            "legacyClass": "lightCoral"
+          },
+          {
+            "id": "teleopStationPickupCoral",
+            "type": "action",
+            "gridArea": [4, 1, 6, 3],
+            "executables": [],
+            "label": "Pickup Station",
+            "color": "#ff69b4",
+            "legacyClass": "lightCoral"
+          },
+          {
+            "id": "teleopCoralDrop",
+            "type": "action",
+            "gridArea": [6, 1, 7, 3],
+            "executables": [],
+            "label": "Drop",
+            "color": "#c71585",
+            "legacyClass": "darkCoral"
+          },
+          {
+            "id": "teleopScoreCoral",
+            "type": "action",
+            "gridArea": [3, 3, 5, 5],
+            "executables": [
+              {
+                "type": "layer",
+                "to": "layer-9"
+              }
+            ],
+            "label": "Coral",
+            "color": "#ff1493",
+            "legacyClass": "coral"
+          },
+          {
+            "id": "undo",
+            "type": "undo",
+            "gridArea": [1, 8, 2, 10],
+            "executables": [],
+            "label": "Undo",
+            "color": "#ffa347",
+            "legacyClass": "sherbert"
+          },
+          {
+            "id": "teleopGroundPickupAlgae",
+            "type": "action",
+            "gridArea": [2, 8, 4, 10],
+            "executables": [],
+            "label": "Pickup Ground",
+            "color": "#56b8b8",
+            "legacyClass": "lightbluegreen"
+          },
+          {
+            "id": "teleopReefPickupAlgae",
+            "type": "action",
+            "gridArea": [4, 8, 6, 10],
+            "executables": [],
+            "label": "Pickup Reef",
+            "color": "#56b8b8",
+            "legacyClass": "lightbluegreen"
+          },
+          {
+            "id": "teleopScoreAlgae",
+            "type": "action",
+            "gridArea": [3, 6, 5, 8],
+            "executables": [
+              {
+                "type": "layer",
+                "to": "layer-8"
+              }
+            ],
+            "label": "Algae",
+            "color": "#0babab",
+            "legacyClass": "bluegreen"
+          },
+          {
+            "id": "teleopAlgaeDrop",
+            "type": "action",
+            "gridArea": [6, 8, 7, 10],
+            "executables": [],
+            "label": "Drop",
+            "color": "#077777",
+            "legacyClass": "darkbluegreen"
+          },
+          {
+            "id": "barge",
+            "type": "action",
+            "gridArea": [6, 4, 7, 7],
+            "executables": [
+              {
+                "type": "layer",
+                "to": "layer-3"
+              }
+            ],
+            "label": "Barge",
+            "color": "#707070",
+            "legacyClass": "gray"
+          }
+        ]
+      },
+      {
+        "id": "layer-3",
+        "buttons": [
+          {
+            "id": "startGame",
+            "type": "match-control",
+            "gridArea": [1, 4, 2, 7],
+            "executables": [],
+            "label": "Start",
+            "color": "#919191",
+            "legacyClass": "silver timer"
+          },
+          {
+            "id": "broken",
+            "type": "action",
+            "gridArea": [1, 1, 2, 3],
+            "executables": [],
+            "label": "Disabled",
+            "color": "#ff4436",
+            "legacyClass": "red"
+          },
+          {
+            "id": "undo",
+            "type": "undo",
+            "gridArea": [1, 8, 2, 10],
+            "executables": [],
+            "label": "Undo",
+            "color": "#ffa347",
+            "legacyClass": "sherbert"
+          },
+          {
+            "id": "park",
+            "type": "action",
+            "gridArea": [3, 4, 4, 7],
+            "executables": [],
+            "label": "Park",
+            "color": "#707070",
+            "legacyClass": "gray"
+          },
+          {
+            "id": "shallow",
+            "type": "action",
+            "gridArea": [4, 4, 5, 7],
+            "executables": [],
+            "label": "Shallow Cage",
+            "color": "#2063b1",
+            "legacyClass": "shallowBlue"
+          },
+          {
+            "id": "deep",
+            "type": "action",
+            "gridArea": [5, 4, 6, 7],
+            "executables": [],
+            "label": "Deep Cage",
+            "color": "#001f3f",
+            "legacyClass": "deepBlue"
+          },
+          {
+            "id": "bargeFall",
+            "type": "action",
+            "gridArea": [6, 4, 7, 7],
+            "executables": [],
+            "label": "Fall",
+            "color": "#ff4436",
+            "legacyClass": "red"
+          }
+        ]
+      },
+      {
+        "id": "layer-4",
+        "buttons": [
+          {
+            "id": "startGame",
+            "type": "match-control",
+            "gridArea": [1, 4, 2, 7],
+            "executables": [],
+            "label": "Start",
+            "color": "#919191",
+            "legacyClass": "silver timer"
+          },
+          {
+            "id": "broken",
+            "type": "action",
+            "gridArea": [1, 1, 2, 3],
+            "executables": [],
+            "label": "Disabled",
+            "color": "#ff4436",
+            "legacyClass": "red"
+          },
+          {
+            "id": "undo",
+            "type": "undo",
+            "gridArea": [1, 8, 2, 10],
+            "executables": [],
+            "label": "Undo",
+            "color": "#ffa347",
+            "legacyClass": "sherbert"
+          },
+          {
+            "id": "autoMissProcessor",
+            "type": "action",
+            "gridArea": [5, 2, 5, 5],
+            "executables": [
+              {
+                "type": "layer",
+                "to": "layer-1"
+              }
+            ],
+            "label": "Miss Processor",
+            "color": "#077777",
+            "legacyClass": "darkbluegreen"
+          },
+          {
+            "id": "autoMissNet",
+            "type": "action",
+            "gridArea": [5, 6, 6, 9],
+            "executables": [
+              {
+                "type": "layer",
+                "to": "layer-1"
+              }
+            ],
+            "label": "Miss Net",
+            "color": "#077777",
+            "legacyClass": "darkbluegreen"
+          },
+          {
+            "id": "autoScoreProcessor",
+            "type": "action",
+            "gridArea": [3, 2, 5, 5],
+            "executables": [
+              {
+                "type": "layer",
+                "to": "layer-1"
+              }
+            ],
+            "label": "Score Processor",
+            "color": "#0babab",
+            "legacyClass": "bluegreen"
+          },
+          {
+            "id": "autoScoreNet",
+            "type": "action",
+            "gridArea": [3, 6, 5, 9],
+            "executables": [
+              {
+                "type": "layer",
+                "to": "layer-1"
+              }
+            ],
+            "label": "Score Net",
+            "color": "#0babab",
+            "legacyClass": "bluegreen"
+          }
+        ]
+      },
+      {
+        "id": "layer-5",
+        "buttons": [
+          {
+            "id": "startGame",
+            "type": "match-control",
+            "gridArea": [1, 4, 2, 7],
+            "executables": [],
+            "label": "Start",
+            "color": "#919191",
+            "legacyClass": "silver timer"
+          },
+          {
+            "id": "broken",
+            "type": "action",
+            "gridArea": [1, 1, 2, 3],
+            "executables": [],
+            "label": "Disabled",
+            "color": "#ff4436",
+            "legacyClass": "red"
+          },
+          {
+            "id": "undo",
+            "type": "undo",
+            "gridArea": [1, 8, 2, 10],
+            "executables": [],
+            "label": "Undo",
+            "color": "#ffa347",
+            "legacyClass": "sherbert"
+          },
+          {
+            "id": "autol4",
+            "type": "action",
+            "gridArea": [3, 4, 4, 7],
+            "executables": [
+              {
+                "type": "layer",
+                "to": "layer-1"
+              }
+            ],
+            "label": "L4",
+            "color": "#ff69b4",
+            "legacyClass": "lightCoral"
+          },
+          {
+            "id": "autol3",
+            "type": "action",
+            "gridArea": [4, 4, 5, 7],
+            "executables": [
+              {
+                "type": "layer",
+                "to": "layer-1"
+              }
+            ],
+            "label": "L3",
+            "color": "#ff1493",
+            "legacyClass": "coral"
+          },
+          {
+            "id": "autol2",
+            "type": "action",
+            "gridArea": [5, 4, 6, 7],
+            "executables": [
+              {
+                "type": "layer",
+                "to": "layer-1"
+              }
+            ],
+            "label": "L2",
+            "color": "#c71585",
+            "legacyClass": "darkCoral"
+          },
+          {
+            "id": "autol1",
+            "type": "action",
+            "gridArea": [6, 4, 7, 7],
+            "executables": [
+              {
+                "type": "layer",
+                "to": "layer-1"
+              }
+            ],
+            "label": "L1",
+            "color": "#707070",
+            "legacyClass": "gray"
+          },
+          {
+            "id": "autoMissCoral",
+            "type": "action",
+            "gridArea": [6, 1, 7, 3],
+            "executables": [
+              {
+                "type": "layer",
+                "to": "layer-1"
+              }
+            ],
+            "label": "Miss",
+            "color": "#ff4436",
+            "legacyClass": "red"
+          }
+        ]
+      },
+      {
+        "id": "layer-6",
+        "buttons": [
+          {
+            "id": "startGame",
+            "type": "match-control",
+            "gridArea": [1, 4, 2, 7],
+            "executables": [],
+            "label": "Start",
+            "color": "#919191",
+            "legacyClass": "silver timer"
+          },
+          {
+            "id": "undo",
+            "type": "undo",
+            "gridArea": [1, 8, 2, 10],
+            "executables": [],
+            "label": "Undo",
+            "color": "#ffa347",
+            "legacyClass": "sherbert"
+          },
+          {
+            "id": "broken",
+            "type": "action",
+            "gridArea": [1, 1, 2, 3],
+            "executables": [],
+            "label": "Disabled",
+            "color": "#ff4436",
+            "legacyClass": "red"
+          },
+          {
+            "id": "autoAlgaeLeft",
+            "type": "action",
+            "gridArea": [3, 1, 6, 4],
+            "executables": [
+              {
+                "type": "layer",
+                "to": "layer-1"
+              }
+            ],
+            "label": "O",
+            "color": "#56b8b8",
+            "legacyClass": "lightbluegreen"
+          },
+          {
+            "id": "autoAlgaeCenter",
+            "type": "action",
+            "gridArea": [3, 4, 6, 7],
+            "executables": [
+              {
+                "type": "layer",
+                "to": "layer-1"
+              }
+            ],
+            "label": "O",
+            "color": "#56b8b8",
+            "legacyClass": "lightbluegreen"
+          },
+          {
+            "id": "autoAlgaeRight",
+            "type": "action",
+            "gridArea": [3, 7, 6, 10],
+            "executables": [
+              {
+                "type": "layer",
+                "to": "layer-1"
+              }
+            ],
+            "label": "O",
+            "color": "#56b8b8",
+            "legacyClass": "lightbluegreen"
+          },
+          {
+            "id": "Reef",
+            "type": "label",
+            "gridArea": [6, 4, 7, 7],
+            "executables": [],
+            "color": "#707070",
+            "legacyClass": "gray"
+          }
+        ]
+      },
+      {
+        "id": "layer-7",
+        "buttons": [
+          {
+            "id": "startGame",
+            "type": "match-control",
+            "gridArea": [1, 4, 2, 7],
+            "executables": [],
+            "label": "Start",
+            "color": "#919191",
+            "legacyClass": "silver timer"
+          },
+          {
+            "id": "undo",
+            "type": "undo",
+            "gridArea": [1, 8, 2, 10],
+            "executables": [],
+            "label": "Undo",
+            "color": "#ffa347",
+            "legacyClass": "sherbert"
+          },
+          {
+            "id": "broken",
+            "type": "action",
+            "gridArea": [1, 1, 2, 3],
+            "executables": [],
+            "label": "Disabled",
+            "color": "#ff4436",
+            "legacyClass": "red"
+          },
+          {
+            "id": "autoCoralLeft",
+            "type": "action",
+            "gridArea": [3, 1, 6, 4],
+            "executables": [
+              {
+                "type": "layer",
+                "to": "layer-1"
+              }
+            ],
+            "label": "I",
+            "color": "#ff69b4",
+            "legacyClass": "lightCoral"
+          },
+          {
+            "id": "autoCoralCenter",
+            "type": "action",
+            "gridArea": [3, 4, 6, 7],
+            "executables": [
+              {
+                "type": "layer",
+                "to": "layer-1"
+              }
+            ],
+            "label": "I",
+            "color": "#ff69b4",
+            "legacyClass": "lightCoral"
+          },
+          {
+            "id": "autoCoralRight",
+            "type": "action",
+            "gridArea": [3, 7, 6, 10],
+            "executables": [
+              {
+                "type": "layer",
+                "to": "layer-1"
+              }
+            ],
+            "label": "I",
+            "color": "#ff69b4",
+            "legacyClass": "lightCoral"
+          },
+          {
+            "id": "Reef",
+            "type": "label",
+            "gridArea": [6, 4, 7, 7],
+            "executables": [],
+            "color": "#707070",
+            "legacyClass": "gray"
+          }
+        ]
+      },
+      {
+        "id": "layer-8",
+        "buttons": [
+          {
+            "id": "startGame",
+            "type": "match-control",
+            "gridArea": [1, 4, 2, 7],
+            "executables": [],
+            "label": "Start",
+            "color": "#919191",
+            "legacyClass": "silver timer"
+          },
+          {
+            "id": "broken",
+            "type": "action",
+            "gridArea": [1, 1, 2, 3],
+            "executables": [],
+            "label": "Disabled",
+            "color": "#ff4436",
+            "legacyClass": "red"
+          },
+          {
+            "id": "undo",
+            "type": "undo",
+            "gridArea": [1, 8, 2, 10],
+            "executables": [],
+            "label": "Undo",
+            "color": "#ffa347",
+            "legacyClass": "sherbert"
+          },
+          {
+            "id": "teleopMissProcessor",
+            "type": "action",
+            "gridArea": [5, 2, 5, 5],
+            "executables": [
+              {
+                "type": "layer",
+                "to": "layer-2"
+              }
+            ],
+            "label": "Miss Processor",
+            "color": "#077777",
+            "legacyClass": "darkbluegreen"
+          },
+          {
+            "id": "teleopMissNet",
+            "type": "action",
+            "gridArea": [5, 6, 6, 9],
+            "executables": [
+              {
+                "type": "layer",
+                "to": "layer-2"
+              }
+            ],
+            "label": "Miss Net",
+            "color": "#077777",
+            "legacyClass": "darkbluegreen"
+          },
+          {
+            "id": "teleopScoreProcessor",
+            "type": "action",
+            "gridArea": [3, 2, 5, 5],
+            "executables": [
+              {
+                "type": "layer",
+                "to": "layer-2"
+              }
+            ],
+            "label": "Score Processor",
+            "color": "#0babab",
+            "legacyClass": "bluegreen"
+          },
+          {
+            "id": "teleopScoreNet",
+            "type": "action",
+            "gridArea": [3, 6, 5, 9],
+            "executables": [
+              {
+                "type": "layer",
+                "to": "layer-2"
+              }
+            ],
+            "label": "Score Net",
+            "color": "#0babab",
+            "legacyClass": "bluegreen"
+          }
+        ]
+      },
+      {
+        "id": "layer-9",
+        "buttons": [
+          {
+            "id": "startGame",
+            "type": "match-control",
+            "gridArea": [1, 4, 2, 7],
+            "executables": [],
+            "label": "Start",
+            "color": "#919191",
+            "legacyClass": "silver timer"
+          },
+          {
+            "id": "broken",
+            "type": "action",
+            "gridArea": [1, 1, 2, 3],
+            "executables": [],
+            "label": "Disabled",
+            "color": "#ff4436",
+            "legacyClass": "red"
+          },
+          {
+            "id": "undo",
+            "type": "undo",
+            "gridArea": [1, 8, 2, 10],
+            "executables": [],
+            "label": "Undo",
+            "color": "#ffa347",
+            "legacyClass": "sherbert"
+          },
+          {
+            "id": "teleopl4",
+            "type": "action",
+            "gridArea": [3, 4, 4, 7],
+            "executables": [
+              {
+                "type": "layer",
+                "to": "layer-2"
+              }
+            ],
+            "label": "L4",
+            "color": "#ff69b4",
+            "legacyClass": "lightCoral"
+          },
+          {
+            "id": "teleopl3",
+            "type": "action",
+            "gridArea": [4, 4, 5, 7],
+            "executables": [
+              {
+                "type": "layer",
+                "to": "layer-2"
+              }
+            ],
+            "label": "L3",
+            "color": "#ff1493",
+            "legacyClass": "coral"
+          },
+          {
+            "id": "teleopl2",
+            "type": "action",
+            "gridArea": [5, 4, 6, 7],
+            "executables": [
+              {
+                "type": "layer",
+                "to": "layer-2"
+              }
+            ],
+            "label": "L2",
+            "color": "#c71585",
+            "legacyClass": "darkCoral"
+          },
+          {
+            "id": "teleopl1",
+            "type": "action",
+            "gridArea": [6, 4, 7, 7],
+            "executables": [
+              {
+                "type": "layer",
+                "to": "layer-2"
+              }
+            ],
+            "label": "L1",
+            "color": "#707070",
+            "legacyClass": "gray"
+          },
+          {
+            "id": "teleopMissCoral",
+            "type": "action",
+            "gridArea": [6, 1, 7, 3],
+            "executables": [
+              {
+                "type": "layer",
+                "to": "layer-2"
+              }
+            ],
+            "label": "Miss",
+            "color": "#ff4436",
+            "legacyClass": "red"
+          }
+        ]
+      }
+    ]
+  },
+  "extraActionIds": []
+}

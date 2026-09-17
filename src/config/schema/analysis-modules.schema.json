@@ -1,0 +1,317 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://spot.team3061.org/schema/v2/analysis-modules.schema.json",
+  "title": "SPOT analysis-modules configuration (v2)",
+  "description": "Dashboard widgets for the team and match views, plus Filter Teams rating bands. Built-in module options are validated strictly; extension modules accept any options. See docs/spec/09 and docs/spec/20.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["version", "modules", "filterTeams"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "version": { "const": 2 },
+    "modules": { "type": "array", "items": { "$ref": "#/$defs/module" } },
+    "filterTeams": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ratingBands"],
+      "properties": {
+        "ratingBands": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["id", "label", "kind"],
+            "properties": {
+              "id": { "type": "string", "pattern": "^[A-Za-z0-9_-]+$" },
+              "label": { "type": "string" },
+              "kind": { "enum": ["exact", "min", "range", "negative"] },
+              "value": { "type": "number" },
+              "min": { "type": "number" },
+              "max": { "type": "number" }
+            }
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "path": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^\\S(.*\\S)?$",
+      "description": "Dot-separated object path (no leading/trailing whitespace)."
+    },
+    "stat": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "path"],
+      "properties": {
+        "name": { "type": "string" },
+        "path": { "$ref": "#/$defs/path" },
+        "aggrMethod": { "enum": ["sum", "average"] },
+        "multiplier": { "type": "number" },
+        "addend": { "type": "number" },
+        "decimals": { "type": "integer", "minimum": 0 },
+        "unit": { "type": "string" },
+        "hideIfValue": {},
+        "sort": { "enum": [-1, 0, 1] }
+      }
+    },
+    "namedPath": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "path"],
+      "properties": {
+        "name": { "type": "string" },
+        "path": { "$ref": "#/$defs/path" },
+        "aggrMethod": { "enum": ["sum", "average"] }
+      }
+    },
+    "module": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["view", "module", "name", "options"],
+      "properties": {
+        "view": { "enum": ["team", "match"] },
+        "module": { "type": "string", "pattern": "^[A-Za-z][A-Za-z0-9]*$" },
+        "position": { "enum": ["main", "side"] },
+        "name": { "type": "string" },
+        "separate": { "type": "boolean" },
+        "wholeMatch": { "type": "boolean" },
+        "options": { "type": "object" }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "module": { "const": "Stats" } } },
+          "then": {
+            "properties": {
+              "options": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["list"],
+                "properties": { "list": { "type": "array", "items": { "$ref": "#/$defs/stat" } } }
+              }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "module": { "const": "Bar" } } },
+          "then": {
+            "properties": {
+              "options": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["bars"],
+                "properties": {
+                  "bars": { "type": "array", "items": { "$ref": "#/$defs/namedPath" } }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "module": { "const": "Pie" } } },
+          "then": {
+            "properties": {
+              "options": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["slices"],
+                "properties": {
+                  "slices": { "type": "array", "items": { "$ref": "#/$defs/namedPath" } },
+                  "unit": { "type": "string" },
+                  "decimals": { "type": "integer", "minimum": 0 }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "module": { "const": "PerformanceTimePlot" } } },
+          "then": {
+            "properties": {
+              "options": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["trackedStats"],
+                "properties": {
+                  "trackedStats": { "type": "array", "items": { "$ref": "#/$defs/path" } }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "module": { "const": "HeatmapScatterPlot" } } },
+          "then": {
+            "properties": {
+              "options": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "coordinatePath",
+                  "aggregatedActionsPath",
+                  "actionGroups",
+                  "actionLabels",
+                  "imgPath"
+                ],
+                "properties": {
+                  "coordinatePath": { "$ref": "#/$defs/path" },
+                  "aggregatedActionsPath": { "$ref": "#/$defs/path" },
+                  "actionGroups": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": ["name", "actions"],
+                      "properties": {
+                        "name": { "type": "string" },
+                        "actions": { "type": "array", "items": { "type": "string" } }
+                      }
+                    }
+                  },
+                  "actionLabels": {
+                    "type": "object",
+                    "additionalProperties": { "type": "string" }
+                  },
+                  "imgPath": { "type": "string" },
+                  "coordinateTransform": {
+                    "enum": ["none", "foldHalfField"],
+                    "description": "foldHalfField reproduces the 2026 behavior: x>69.5 mirrored onto the left half, 30.5..69.5 dropped."
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "module": { "const": "RadarChart" } } },
+          "then": {
+            "properties": {
+              "options": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["sections", "lines"],
+                "properties": {
+                  "sections": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": ["name"],
+                      "properties": { "name": { "type": "string" } }
+                    }
+                  },
+                  "lines": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": ["name", "times"],
+                      "properties": {
+                        "name": { "type": "string" },
+                        "times": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "additionalProperties": false,
+                            "required": ["name", "path"],
+                            "properties": {
+                              "name": { "type": "string" },
+                              "path": { "type": "string" }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "module": { "const": "SingleDisplay" } } },
+          "then": {
+            "properties": {
+              "options": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "path": { "$ref": "#/$defs/path" },
+                  "aggrMethod": { "enum": ["sum", "average", "percentChanceOfWinning"] },
+                  "decimals": { "type": "integer", "minimum": 0 },
+                  "unit": { "type": "string" },
+                  "multiplier": { "type": "number" },
+                  "addend": { "type": "number" },
+                  "hideIfValue": {}
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "module": { "const": "ColumnDisplay" } } },
+          "then": {
+            "properties": {
+              "options": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["path"],
+                "properties": {
+                  "path": { "$ref": "#/$defs/path" },
+                  "sort": { "enum": [-1, 0, 1] },
+                  "decimals": { "type": "integer", "minimum": 0 },
+                  "unit": { "type": "string" },
+                  "multiplier": { "type": "number" },
+                  "addend": { "type": "number" },
+                  "hideIfValue": {},
+                  "string": { "type": "boolean" }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "module": { "const": "Grid" } } },
+          "then": {
+            "properties": {
+              "options": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["rows", "cols", "cells"],
+                "properties": {
+                  "rows": { "type": "integer" },
+                  "cols": { "type": "integer" },
+                  "decimals": { "type": "integer" },
+                  "min": { "type": "number" },
+                  "max": { "type": "number" },
+                  "cells": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": ["x", "y", "path", "hex"],
+                      "properties": {
+                        "x": { "type": "integer" },
+                        "y": { "type": "integer" },
+                        "path": { "$ref": "#/$defs/path" },
+                        "hex": { "type": "string" }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "module": { "const": "Divider" } } },
+          "then": {
+            "properties": { "options": { "type": "object", "additionalProperties": false } }
+          }
+        }
+      ]
+    }
+  }
+}
