@@ -181,7 +181,7 @@ Do these before writing application code. Each one removes a class of rework lat
    - keep or drop the manual schedule (A-8);
    - security model: adopt R-32 and the per-event scouting join code, or a lighter variant;
    - extension mechanism details (runtime-served `extensions/` folder, document 15).
-4. **Done 2026-09-17 (document 20).** **Write the configuration schema v2 as JSON Schema** before any UI: `match-scouting`,
+4. **Write the configuration schema v2 as JSON Schema** before any UI (**done**, see section 5): `match-scouting`,
    `analysis-pipeline`, `analysis-modules`, `qr`, and the new settings document. Include
    `knownActionIds`, `pauseMs`, explicit colors, configurable shift/A-Stop/filter bands, and
    the TBA enrichment mapping. Write a converter from the 2026 config and validate the
@@ -231,14 +231,73 @@ fixed, which is why Phase 0 items 4 and 5 come first.
 - **Time-box the stack decision.** If SSE proves awkward in the first week of phase 2, fall
   back to polling (answer 50 allows it) rather than adding a custom server.
 
-## 5. Immediate next steps (this week)
+## 5. Status and next steps
 
-1. Request `mongoexport` JSON of one 2026 event **and one 2025 event**, record the TBA
-   fixtures for both; the 2025 baseline is `v4.2.0` (section 2.1).
-2. Decide the five open items in section 2.3 and record them in document 12.
-3. Create the `v6` branch, move the spec to `docs/spec/`, add `CLAUDE.md`, and land the
-   scaffold PR with CI.
-4. Start the oracle: legacy pipeline run against the fixtures, golden outputs committed.
-5. ~~Draft the JSON Schema for `match-scouting.json` v2 and convert the 2026 config as the
-   first test.~~ Done: all four schemas, converter, tests, and the converted 2026 config as
-   the active `config/*.json` (document 20).
+Last updated 2026-09-17. Phase 0 items are numbered as in section 2.
+
+| #   | Phase 0 item                       | Status                                                                                                                                                               |
+| --- | ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | Fixtures and the behavioral oracle | **Done.** 2025 golden output from tag `v4.2.0` and 2026 from v5 commit `902db06`, with TBA fixtures for both, in `tools/oracle/`.                                    |
+| 2   | Synthetic TMP generator            | Not started. Unblocked now that the v2 schema exists; required by T-4 and answer 45.                                                                                 |
+| 3   | Close the five open decisions      | **1 of 5.** Composite ids resolved (phase/segment fields, document 20 §2.1). Open: start rules (BL-34), manual schedule, security model, extension mechanism.        |
+| 4   | Configuration schema v2            | **Done.** PR #304, merged 2026-09-17: four JSON Schemas, types, Ajv validator, derived known ids, v1 → v2 converter, active 2026 config, 2025 example (document 20). |
+| 5   | Data model v2 and migration        | Not started. **The last item blocking Phase 1.** Must include the `phase`/`segment` fields and the split of legacy composite ids.                                    |
+| 6   | Scaffold with CI                   | **Done.** Commit `df772fa` on `v6`: Next.js, Tailwind, shadcn, Vitest, Playwright, GitHub Actions, no Docker.                                                        |
+| 7   | Architecture decision records      | Not started. `docs/adr/` does not exist yet.                                                                                                                         |
+| 8   | Work tracking                      | Not started. No `v6` label, milestone or board.                                                                                                                      |
+
+Recommended order from here:
+
+1. **Settle the security model and the extension mechanism** (section 2 item 3). Both reach
+   into the data model and the engine, so deciding them after step 5 means rework. Section 5.1
+   lists exactly what each one has to answer.
+2. **Data model v2 and the migration script** (item 5). This is what Phase 1 waits on.
+3. **Synthetic generator** (item 2), so Phase 1 starts with real and synthetic coverage.
+4. **Decision records and work tracking** (items 7 and 8) alongside the above. These matter
+   more than usual because students pick up phases 1 and 3.
+
+Start rules (BL-34) and the manual schedule block Phase 2, not Phase 1, so they can wait until
+the scouting slice starts.
+
+### 5.1 What the two blocking decisions have to answer
+
+**Security model** (S-1 to S-4, R-32, answers 30 to 32). Already settled: secrets come from
+environment variables, the browser never supplies a database URL, and admin is distinguished
+from other roles. Still open:
+
+- **Is the dataset world-readable?** Reading scouting data is unauthenticated today. R-32 puts
+  reads behind a per-event join code. This is an operational question as much as a security
+  one, because alliance partners and other teams are sometimes shown the dashboard at an event.
+- **What does a scouter present?** A per-event join code, an identity, or both. Today a scouter
+  types a free-text name and the server trusts it.
+- **How long does a session last, and does it survive offline?** Tablets sleep between matches
+  and may be offline for a whole event (document 18), so any token must outlive that and must
+  not require a round trip to keep working.
+- **One shared admin password or accounts?** R-32 assumes a single environment-provided
+  password. Confirm, because accounts change the data model.
+- **Which writes are gated.** Match submission, QR scanning, edit and delete, restart, and
+  demo mode each need a role.
+
+Data-model consequences to fix before step 5: whether join codes and the admin password are
+stored (hashed) or environment-only, whether a `scouters` collection exists, and whether
+documents carry tenant/event scoping (document 16 reserves this hook).
+
+**Extension mechanism** (A-5, A-49, document 15 part 2). The decision is build-time registry
+versus runtime folder scan, and it is really three questions:
+
+- **Rebuild or drop-in?** A build-time registry means adding one import line and running
+  `next build`, which is not acceptable mid-event on a bare-Node EC2 box. A runtime scan keeps
+  "drop a file in a folder" but puts a stable public runtime API on us forever.
+- **Do extensions run on the server?** Transformers run in the browser for the dashboard and on
+  the server for CSV export. Runtime-loading them server-side re-creates the `eval` path this
+  rewrite removes (S-5). Client-only extensions avoid that and cost a CSV limitation.
+- **Who installs one?** Filesystem access on the host, or an upload in the admin UI. An upload
+  is arbitrary code execution and cannot be decided separately from the security model.
+
+Also decide whether an extension declares a JSON Schema for its options, so extension options
+get the same strict validation built-ins now have (document 20, open items), and what happens
+when an extension targets an older runtime API.
+
+A defensible answer to both: ship Phase 1 with built-ins only and closed option schemas, keep
+configuration as the customization path (principle P4), and revisit the loader in Phase 5 once
+a real extension is wanted. Record whichever way it goes as an ADR.
