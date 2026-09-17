@@ -1,7 +1,7 @@
 # SPOT behavioral oracle
 
 Golden outputs of the legacy analysis pipeline, used as the acceptance target for the SPOT
-rewrite (see `claude/17-rewrite-plan-and-next-steps.md`, section 2.1).
+rewrite (see `docs/spec/17-rewrite-plan-and-next-steps.md`, section 2.1).
 
 `run.js` executes a SPOT analysis pipeline headlessly with the transformer code of **any**
 checkout, against an exported set of TeamMatchPerformances, and writes normalized JSON.
@@ -20,21 +20,22 @@ tools/oracle/
     tba/<eventKey>/          recorded TBA v3 responses: matches.json, teams.json, coprs.json
   golden/
     2025ilch_official-v4.2.0/  teams.json, tmps.json, report.json
-    2026mnwi_official-HEAD/    teams.json, tmps.json, report.json
+    2026mnwi_official-v5/      teams.json, tmps.json, report.json
 ```
 
 ## Seasons
 
-| Season | Event | Code checkout | Configs | Enrichment |
-|--------|-------|---------------|---------|------------|
-| 2025 (REEFSCAPE) | `2025ilch_official` | tag `v4.2.0` (post-season release; transformer logic identical to the in-season code, ObjectId schema) | `v4.2.0` defaults (`match-scouting.json`, `analysis-pipeline.json`) | off (did not exist in 2025) |
-| 2026 (REBUILT) | `2026mnwi_official` | `HEAD` of `main` (v5.2.x) | repo `config/` | on: TBA score-breakdown synthetic actions + component OPRs (`TBA_OPR_STRINGS` from `config/config.json`) |
+| Season           | Event               | Code checkout                                                                                                      | Configs                                                             | Enrichment                                                                                        |
+| ---------------- | ------------------- | ------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
+| 2025 (REEFSCAPE) | `2025ilch_official` | tag `v4.2.0` (post-season release; transformer logic identical to the in-season code, ObjectId schema)             | `v4.2.0` defaults (`match-scouting.json`, `analysis-pipeline.json`) | off (did not exist in 2025)                                                                       |
+| 2026 (REBUILT)   | `2026mnwi_official` | legacy v5 code (`main` at commit `902db06`, v5.2.x; on the `v6` branch the legacy tree is gone, so use a worktree) | that checkout's `config/`                                           | on: TBA score-breakdown synthetic actions + component OPRs (`fixtures/opr-strings/2026mnwi.json`) |
 
 ## Regenerating
 
 ```sh
-# one-time: a detached worktree of the 2025 code
+# one-time: detached worktrees of the 2025 and v5 code
 git worktree add --detach /path/to/spot-v4.2.0 v4.2.0
+git worktree add --detach /path/to/spot-v5 main        # legacy v5 (or the v5 branch after cutover)
 
 # 2025
 node tools/oracle/run.js --checkout /path/to/spot-v4.2.0 \
@@ -44,16 +45,17 @@ node tools/oracle/run.js --checkout /path/to/spot-v4.2.0 \
   --out tools/oracle/golden/2025ilch_official-v4.2.0
 
 # 2026
-node tools/oracle/run.js --checkout . \
+node tools/oracle/run.js --checkout /path/to/spot-v5 \
   --tmps tools/oracle/fixtures/db/2026Rebuilt.teamMatchPerformances.json \
   --events tools/oracle/fixtures/db/2026Rebuilt.events.json \
   --event 2026mnwi_official \
   --tba tools/oracle/fixtures/tba/2026mnwi --enrich \
-  --opr-strings "$(node -e 'console.log(JSON.stringify(require("./config/config.json").TBA_OPR_STRINGS))')" \
-  --out tools/oracle/golden/2026mnwi_official-HEAD
+  --opr-strings tools/oracle/fixtures/opr-strings/2026mnwi.json \
+  --out tools/oracle/golden/2026mnwi_official-v5
 ```
 
-Or `./tools/oracle/run-all.sh /path/to/spot-v4.2.0`.
+Or `./tools/oracle/run-all.sh /path/to/spot-v4.2.0 /path/to/spot-v5`. `report.json` records the
+checkout commit (`checkoutCommit`).
 
 ## Output conventions
 
@@ -62,7 +64,8 @@ Or `./tools/oracle/run-all.sh /path/to/spot-v4.2.0`.
 - `NaN`, `Infinity`, `-Infinity`, and `undefined` are written as the strings `"__NaN__"`,
   `"__Infinity__"`, `"__-Infinity__"`, `"__undefined__"` so they survive JSON.
 - Mongo bookkeeping (`__v`, per-action `_id`) is removed; `eventNumber` is the ObjectId hex.
-- `report.json` lists the transformer registry, any transformer errors, timing, and every
+- `report.json` lists input (`tmpCount`) and derived (`derivedTmpCount`, after the pipeline; the
+  2026 pipeline's `removeDuplicates` drops re-scouted robot/match pairs) TMP counts, the transformer registry, any transformer errors, timing, and every
   action id present in the data but absent from the season's `match-scouting.json`
   (`unknownActionIds`). Current `countActions(all)` counts such ids; the 2025-era code
   ignored them (decision: the rewrite keeps current behavior).
@@ -72,7 +75,7 @@ Or `./tools/oracle/run-all.sh /path/to/spot-v4.2.0`.
 - 2025: `teams.json` and derived `tmps.json` exactly, except at paths affected by
   `unknownActionIds` (if any) where the rewrite counts and the legacy output does not.
 - 2026: `teams.json` and derived `tmps.json` exactly, except where a known legacy defect
-  listed in `claude/12-rewrite-notes-and-test-plan.md` is deliberately fixed; each such
+  listed in `docs/spec/12-rewrite-notes-and-test-plan.md` is deliberately fixed; each such
   difference is recorded alongside the golden file.
 
 TBA fixtures were recorded with a team API key that is **not** stored in this repository.

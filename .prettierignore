@@ -1,1 +1,7 @@
-**/src/analysis/transformers/*.js
+node_modules
+.next
+out
+tools/oracle/golden
+tools/oracle/fixtures
+config/v1
+package-lock.json

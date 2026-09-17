@@ -39,17 +39,28 @@ function parseArgs(argv) {
     const key = a.slice(2);
     const next = argv[i + 1];
     if (next === undefined || next.startsWith("--")) args[key] = true;
-    else { args[key] = next; i++; }
+    else {
+      args[key] = next;
+      i++;
+    }
   }
   return args;
 }
 const args = parseArgs(process.argv);
-function need(k) { if (!args[k]) { console.error(`missing --${k}`); process.exit(2); } return args[k]; }
+function need(k) {
+  if (!args[k]) {
+    console.error(`missing --${k}`);
+    process.exit(2);
+  }
+  return args[k];
+}
 
 const checkout = path.resolve(need("checkout"));
 const configDir = path.resolve(args.config || path.join(checkout, "config"));
 const pipelineFile = path.resolve(args.pipeline || path.join(configDir, "analysis-pipeline.json"));
-const matchScoutingFile = path.resolve(args["match-scouting"] || path.join(configDir, "match-scouting.json"));
+const matchScoutingFile = path.resolve(
+  args["match-scouting"] || path.join(configDir, "match-scouting.json"),
+);
 const tmpsFile = path.resolve(need("tmps"));
 const eventsFile = path.resolve(need("events"));
 const eventCode = need("event");
@@ -65,7 +76,13 @@ function fromExtendedJSON(v) {
     if (keys.length === 1) {
       const k = keys[0];
       if (k === "$oid") return v.$oid;
-      if (k === "$numberLong" || k === "$numberInt" || k === "$numberDouble" || k === "$numberDecimal") return Number(v[k]);
+      if (
+        k === "$numberLong" ||
+        k === "$numberInt" ||
+        k === "$numberDouble" ||
+        k === "$numberDecimal"
+      )
+        return Number(v[k]);
       if (k === "$date") return typeof v.$date === "object" ? fromExtendedJSON(v.$date) : v.$date;
     }
     const out = {};
@@ -77,19 +94,32 @@ function fromExtendedJSON(v) {
 function loadExport(file) {
   const raw = fs.readFileSync(file, "utf8").trim();
   let docs;
-  try { docs = JSON.parse(raw); if (!Array.isArray(docs)) docs = [docs]; }
-  catch { docs = raw.split("\n").filter(Boolean).map((l) => JSON.parse(l)); }
+  try {
+    docs = JSON.parse(raw);
+    if (!Array.isArray(docs)) docs = [docs];
+  } catch {
+    docs = raw
+      .split("\n")
+      .filter(Boolean)
+      .map((l) => JSON.parse(l));
+  }
   return docs.map(fromExtendedJSON);
 }
 
 // ---------------------------------------------------------------- inputs
 const events = loadExport(eventsFile);
 const event = events.find((e) => e.code === eventCode);
-if (!event) { console.error(`event code ${eventCode} not found in ${eventsFile}`); process.exit(2); }
+if (!event) {
+  console.error(`event code ${eventCode} not found in ${eventsFile}`);
+  process.exit(2);
+}
 const eventId = String(event._id);
 
 let tmps = loadExport(tmpsFile).filter((t) => String(t.eventNumber) === eventId);
-if (tmps.length === 0) { console.error(`no TMPs for event ${eventCode} (${eventId})`); process.exit(2); }
+if (tmps.length === 0) {
+  console.error(`no TMPs for event ${eventCode} (${eventId})`);
+  process.exit(2);
+}
 // Match what the browser sees from /analysis/api/dataset: Mongoose JSON (ids are strings).
 // We drop Mongo bookkeeping so golden files are stable across exports.
 for (const t of tmps) {
@@ -97,7 +127,9 @@ for (const t of tmps) {
   for (const a of t.actionQueue) delete a._id;
 }
 // deterministic order (Mongo natural order ≈ insertion; sort by timestamp then matchId)
-tmps.sort((a, b) => (a.timestamp - b.timestamp) || String(a.matchId).localeCompare(String(b.matchId)));
+tmps.sort(
+  (a, b) => a.timestamp - b.timestamp || String(a.matchId).localeCompare(String(b.matchId)),
+);
 
 const matchScoutingConfig = JSON.parse(fs.readFileSync(matchScoutingFile, "utf8"));
 const pipelineConfig = JSON.parse(fs.readFileSync(pipelineFile, "utf8"));
@@ -135,7 +167,8 @@ let ignore = [];
 const atConfig = path.join(checkout, "config", "analysis-transformers.json");
 if (fs.existsSync(atConfig)) {
   const at = JSON.parse(fs.readFileSync(atConfig, "utf8"));
-  if (Array.isArray(at.types)) types = at.types.map((t) => ({ name: t.name, identifier: t.identifier }));
+  if (Array.isArray(at.types))
+    types = at.types.map((t) => ({ name: t.name, identifier: t.identifier }));
   if (Array.isArray(at.ignore)) ignore = at.ignore;
 }
 
@@ -159,7 +192,9 @@ for (const file of fs.readdirSync(transformersDir).sort()) {
     if (!m) continue;
     const name = file.split(".")[0];
     try {
-      transformers[t.name][name] = vm.runInContext(`(${m[1].trim()})`, sandbox, { filename: `${file}#${t.identifier}` });
+      transformers[t.name][name] = vm.runInContext(`(${m[1].trim()})`, sandbox, {
+        filename: `${file}#${t.identifier}`,
+      });
       registryReport.push({ file, type: t.name, name: transformers[t.name][name].name });
     } catch (e) {
       registryReport.push({ file, type: t.name, error: String(e) });
@@ -168,20 +203,52 @@ for (const file of fs.readdirSync(transformersDir).sort()) {
 }
 
 // ---------------------------------------------------------------- enrichment (mirrors analysisPipeline.js, 2026 code)
-const report = { checkout, eventCode, eventId, tmpCount: tmps.length, enrich, unknownActionIds: [], transformerErrors: [], registry: registryReport };
+let checkoutCommit = null;
+try {
+  checkoutCommit = require("child_process")
+    .execSync("git rev-parse --short HEAD", { cwd: checkout, stdio: ["ignore", "pipe", "ignore"] })
+    .toString()
+    .trim();
+} catch {
+  /* not a git checkout */
+}
+const report = {
+  checkout,
+  checkoutCommit,
+  eventCode,
+  eventId,
+  tmpCount: tmps.length,
+  enrich,
+  unknownActionIds: [],
+  transformerErrors: [],
+  registry: registryReport,
+};
 
 function enrichWithTBA() {
   const tbaData = tba.matches;
   const tbaOPRS = tba.coprs;
 
   function getTBADataAllianceAndMatch(team, match) {
-    let robotNum = ""; let alliance = "";
+    let robotNum = "";
+    let alliance = "";
     tbaData.forEach((item) => {
       if (item.comp_level == "qm" && item.match_number == match) {
         let i = 0;
-        for (const blueTeam of item.alliances.blue.team_keys) { i++; if (blueTeam.substring(3) == team) { alliance = "blue"; robotNum = i; } }
+        for (const blueTeam of item.alliances.blue.team_keys) {
+          i++;
+          if (blueTeam.substring(3) == team) {
+            alliance = "blue";
+            robotNum = i;
+          }
+        }
         i = 0;
-        for (const redTeam of item.alliances.red.team_keys) { i++; if (redTeam.substring(3) == team) { alliance = "red"; robotNum = i; } }
+        for (const redTeam of item.alliances.red.team_keys) {
+          i++;
+          if (redTeam.substring(3) == team) {
+            alliance = "red";
+            robotNum = i;
+          }
+        }
       }
     });
     return { robotNum, alliance };
@@ -204,7 +271,8 @@ function enrichWithTBA() {
     const autoData = getTBADataAutoOrEnd(ta.robotNum, ta.alliance, tmp.matchNumber, "auto");
     const endGameData = getTBADataAutoOrEnd(ta.robotNum, ta.alliance, tmp.matchNumber, "endGame");
     if (autoData) tmp.actionQueue.push({ id: `${autoData.actionName}_${autoData.action}`, ts: 0 });
-    if (endGameData) tmp.actionQueue.push({ id: `${endGameData.actionName}_${endGameData.action}`, ts: 0 });
+    if (endGameData)
+      tmp.actionQueue.push({ id: `${endGameData.actionName}_${endGameData.action}`, ts: 0 });
   });
 
   return function attachOPR(teams) {
@@ -214,7 +282,12 @@ function enrichWithTBA() {
         let opr;
         for (const [coprKey, teamsValues] of Object.entries(tbaOPRS)) {
           if (coprKey == stringName) {
-            for (const [tk, ov] of Object.entries(teamsValues)) { if (tk.substring(3) == teamKey) { opr = ov; break; } }
+            for (const [tk, ov] of Object.entries(teamsValues)) {
+              if (tk.substring(3) == teamKey) {
+                opr = ov;
+                break;
+              }
+            }
             break;
           }
         }
@@ -226,7 +299,10 @@ function enrichWithTBA() {
 
 let attachOPR = null;
 if (enrich) {
-  if (!tba) { console.error("--enrich requires --tba"); process.exit(2); }
+  if (!tba) {
+    console.error("--enrich requires --tba");
+    process.exit(2);
+  }
   attachOPR = enrichWithTBA();
 }
 
@@ -239,8 +315,11 @@ if (attachOPR) attachOPR(teams);
 {
   const known = new Set(actionIds);
   const seen = new Map();
-  for (const t of tmps) for (const a of t.actionQueue) if (!known.has(a.id)) seen.set(a.id, (seen.get(a.id) || 0) + 1);
-  report.unknownActionIds = [...seen.entries()].sort((a, b) => b[1] - a[1]).map(([id, count]) => ({ id, count }));
+  for (const t of tmps)
+    for (const a of t.actionQueue) if (!known.has(a.id)) seen.set(a.id, (seen.get(a.id) || 0) + 1);
+  report.unknownActionIds = [...seen.entries()]
+    .sort((a, b) => b[1] - a[1])
+    .map(([id, count]) => ({ id, count }));
 }
 
 let dataset = { tmps, teams };
@@ -250,16 +329,34 @@ const t0 = Date.now();
 pipelineConfig.forEach((tf, index) => {
   const impl = transformers[tf.type] && transformers[tf.type][tf.name];
   if (!impl) {
-    report.transformerErrors.push({ index, type: tf.type, name: tf.name, outputPath: tf.outputPath, error: "transformer not found in checkout" });
+    report.transformerErrors.push({
+      index,
+      type: tf.type,
+      name: tf.name,
+      outputPath: tf.outputPath,
+      error: "transformer not found in checkout",
+    });
     return;
   }
   try {
     const result = impl.execute(dataset, tf.outputPath, tf.options);
     if (result === undefined) {
-      report.transformerErrors.push({ index, type: tf.type, name: tf.name, outputPath: tf.outputPath, error: "transformer returned undefined (dataset kept)" });
+      report.transformerErrors.push({
+        index,
+        type: tf.type,
+        name: tf.name,
+        outputPath: tf.outputPath,
+        error: "transformer returned undefined (dataset kept)",
+      });
     } else dataset = result;
   } catch (e) {
-    report.transformerErrors.push({ index, type: tf.type, name: tf.name, outputPath: tf.outputPath, error: String(e && e.stack || e) });
+    report.transformerErrors.push({
+      index,
+      type: tf.type,
+      name: tf.name,
+      outputPath: tf.outputPath,
+      error: String((e && e.stack) || e),
+    });
   }
 });
 report.pipelineMs = Date.now() - t0;
@@ -271,10 +368,11 @@ if (fs.existsSync(manualDir)) {
   const mt = JSON.parse(fs.readFileSync(path.join(manualDir, "tmps.json"), "utf8"));
   const mteams = JSON.parse(fs.readFileSync(path.join(manualDir, "teams.json"), "utf8"));
   dataset.tmps = dataset.tmps.concat(mt.map((tmp) => ({ ...tmp, manual: true })));
-  for (const [p, teamData] of Object.entries(mteams)) for (const [team, value] of Object.entries(teamData)) {
-    if (!(team in dataset.teams)) dataset.teams[team] = {};
-    sandbox.setPath(dataset.teams[team], "manual." + p, value);
-  }
+  for (const [p, teamData] of Object.entries(mteams))
+    for (const [team, value] of Object.entries(teamData)) {
+      if (!(team in dataset.teams)) dataset.teams[team] = {};
+      sandbox.setPath(dataset.teams[team], "manual." + p, value);
+    }
 }
 
 // ---------------------------------------------------------------- normalize + write
@@ -301,13 +399,31 @@ fs.mkdirSync(outDir, { recursive: true });
 fs.writeFileSync(path.join(outDir, "teams.json"), JSON.stringify(normalize(teamsObj), null, 1));
 fs.writeFileSync(path.join(outDir, "tmps.json"), JSON.stringify(normalize(dataset.tmps), null, 1));
 report.teamCount = Object.keys(teamsObj).length;
-report.sampleTeamPaths = Object.keys(teamsObj).length ? Object.keys(teamsObj[Object.keys(teamsObj)[0]]).sort() : [];
+report.derivedTmpCount = dataset.tmps.length; // after the pipeline (e.g. removeDuplicates may drop re-scouts)
+report.sampleTeamPaths = Object.keys(teamsObj).length
+  ? Object.keys(teamsObj[Object.keys(teamsObj)[0]]).sort()
+  : [];
 fs.writeFileSync(path.join(outDir, "report.json"), JSON.stringify(report, null, 2));
 
 console.log(`oracle: ${eventCode} @ ${path.basename(checkout)} -> ${outDir}`);
-console.log(`  tmps=${tmps.length} teams=${report.teamCount} pipeline=${pipelineConfig.length} entries in ${report.pipelineMs}ms enrich=${enrich}`);
-console.log(`  unknown action ids: ${report.unknownActionIds.length}${report.unknownActionIds.length ? " -> " + report.unknownActionIds.slice(0, 8).map((x) => `${x.id}(${x.count})`).join(", ") : ""}`);
+console.log(
+  `  tmps=${tmps.length} (derived ${report.derivedTmpCount}) teams=${report.teamCount} pipeline=${pipelineConfig.length} entries in ${report.pipelineMs}ms enrich=${enrich}`,
+);
+console.log(
+  `  unknown action ids: ${report.unknownActionIds.length}${
+    report.unknownActionIds.length
+      ? " -> " +
+        report.unknownActionIds
+          .slice(0, 8)
+          .map((x) => `${x.id}(${x.count})`)
+          .join(", ")
+      : ""
+  }`,
+);
 if (report.transformerErrors.length) {
   console.log(`  transformer errors: ${report.transformerErrors.length}`);
-  for (const e of report.transformerErrors) console.log(`    [${e.index}] ${e.type}/${e.name} -> ${e.outputPath}: ${String(e.error).split("\n")[0]}`);
+  for (const e of report.transformerErrors)
+    console.log(
+      `    [${e.index}] ${e.type}/${e.name} -> ${e.outputPath}: ${String(e.error).split("\n")[0]}`,
+    );
 }

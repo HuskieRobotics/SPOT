@@ -1,0 +1,331 @@
+{
+  "checkout": "/private/tmp/claude-501/-Users-geoff-GitHub-SPOT/498cb687-7cbc-4b23-b955-2fae4a5f1393/scratchpad/spot-v5",
+  "checkoutCommit": "902db06",
+  "eventCode": "2026mnwi_official",
+  "eventId": "69a5ac455b39b683634e795e",
+  "tmpCount": 435,
+  "enrich": true,
+  "unknownActionIds": [
+    {
+      "id": "autoTowerRobot_None",
+      "count": 409
+    },
+    {
+      "id": "endGameTowerRobot_None",
+      "count": 399
+    },
+    {
+      "id": "autoAttemptL1",
+      "count": 16
+    },
+    {
+      "id": "endgameAttemptClimb",
+      "count": 16
+    },
+    {
+      "id": "activeShift3StopShooting",
+      "count": 7
+    },
+    {
+      "id": "activeShift3StartShooting",
+      "count": 7
+    },
+    {
+      "id": "teleopTransitionAttemptClimb",
+      "count": 3
+    },
+    {
+      "id": "activeShift3AZone",
+      "count": 3
+    },
+    {
+      "id": "teleopStoring",
+      "count": 3
+    },
+    {
+      "id": "teleopStartShooting",
+      "count": 3
+    },
+    {
+      "id": "teleopStopShooting",
+      "count": 3
+    },
+    {
+      "id": "teleopRatingShooting4",
+      "count": 3
+    },
+    {
+      "id": "inactiveShift3Passing",
+      "count": 2
+    },
+    {
+      "id": "teleopBroken",
+      "count": 2
+    },
+    {
+      "id": "activeShift3RatingShooting4",
+      "count": 2
+    },
+    {
+      "id": "activeShift3Storing",
+      "count": 2
+    },
+    {
+      "id": "teleopRatingStoring4",
+      "count": 2
+    },
+    {
+      "id": "activeShift3RatingShooting2",
+      "count": 2
+    },
+    {
+      "id": "activeShift3RatingShooting1",
+      "count": 1
+    },
+    {
+      "id": "inactiveShift3RatingStoring4",
+      "count": 1
+    },
+    {
+      "id": "inactiveShift3RatingPassing3",
+      "count": 1
+    },
+    {
+      "id": "inactiveShift3RatingPassing4",
+      "count": 1
+    },
+    {
+      "id": "activeShift3RatingShooting3",
+      "count": 1
+    },
+    {
+      "id": "autoFallL1",
+      "count": 1
+    },
+    {
+      "id": "teleopRatingStoring1",
+      "count": 1
+    },
+    {
+      "id": "teleopPassing",
+      "count": 1
+    },
+    {
+      "id": "teleopRatingPassing3",
+      "count": 1
+    },
+    {
+      "id": "teleopRatingStoring3",
+      "count": 1
+    },
+    {
+      "id": "teleopAZone",
+      "count": 1
+    },
+    {
+      "id": "teleopDefense",
+      "count": 1
+    },
+    {
+      "id": "teleopRatingDefense4",
+      "count": 1
+    },
+    {
+      "id": "activeShift3RatingStoring2",
+      "count": 1
+    }
+  ],
+  "transformerErrors": [],
+  "registry": [
+    {
+      "file": "actionTime.js",
+      "type": "tmp",
+      "name": "actionTime"
+    },
+    {
+      "file": "actionTimeFilter.js",
+      "type": "tmp",
+      "name": "actionTimeFilter"
+    },
+    {
+      "file": "aggregateArray.js",
+      "type": "team",
+      "name": "aggregateArray"
+    },
+    {
+      "file": "average.js",
+      "type": "team",
+      "name": "average"
+    },
+    {
+      "file": "averageArray.js",
+      "type": "tmp",
+      "name": "averageArray"
+    },
+    {
+      "file": "averageArray.js",
+      "type": "team",
+      "name": "averageArray"
+    },
+    {
+      "file": "averageTime.js",
+      "type": "team",
+      "name": "averageTime"
+    },
+    {
+      "file": "countActions.js",
+      "type": "tmp",
+      "name": "countActions"
+    },
+    {
+      "file": "countActions.js",
+      "type": "team",
+      "name": "countActions"
+    },
+    {
+      "file": "countHybrid.js",
+      "type": "tmp",
+      "name": "countHybrid"
+    },
+    {
+      "file": "countHybrid.js",
+      "type": "team",
+      "name": "countHybrid"
+    },
+    {
+      "file": "countMatches.js",
+      "type": "team",
+      "name": "countMatches"
+    },
+    {
+      "file": "cycle.js",
+      "type": "tmp",
+      "name": "cycle"
+    },
+    {
+      "file": "deepAverage.js",
+      "type": "team",
+      "name": "deepAverage"
+    },
+    {
+      "file": "finalActionOccurrence.js",
+      "type": "tmp",
+      "name": "finalActionOccurrence"
+    },
+    {
+      "file": "map.js",
+      "type": "tmp",
+      "name": "map"
+    },
+    {
+      "file": "multiply.js",
+      "type": "tmp",
+      "name": "multiply"
+    },
+    {
+      "file": "multiply.js",
+      "type": "team",
+      "name": "multiply"
+    },
+    {
+      "file": "ratio.js",
+      "type": "tmp",
+      "name": "ratio"
+    },
+    {
+      "file": "ratio.js",
+      "type": "team",
+      "name": "ratio"
+    },
+    {
+      "file": "removeDuplicates.js",
+      "type": "tmp",
+      "name": "removeDuplicates"
+    },
+    {
+      "file": "standardDeviation.js",
+      "type": "team",
+      "name": "standardDeviation"
+    },
+    {
+      "file": "subtract.js",
+      "type": "tmp",
+      "name": "subtract"
+    },
+    {
+      "file": "subtract.js",
+      "type": "team",
+      "name": "subtract"
+    },
+    {
+      "file": "sum.js",
+      "type": "tmp",
+      "name": "sum"
+    },
+    {
+      "file": "sum.js",
+      "type": "team",
+      "name": "sum"
+    },
+    {
+      "file": "sumAverage.js",
+      "type": "tmp",
+      "name": "sumAverage"
+    },
+    {
+      "file": "sumAverage.js",
+      "type": "team",
+      "name": "sumAverage"
+    },
+    {
+      "file": "template.js",
+      "type": "tmp",
+      "name": "name"
+    },
+    {
+      "file": "template.js",
+      "type": "team",
+      "name": "name"
+    },
+    {
+      "file": "threshold.js",
+      "type": "team",
+      "name": "threshold"
+    },
+    {
+      "file": "weightedSum.js",
+      "type": "tmp",
+      "name": "weightedSum"
+    },
+    {
+      "file": "weightedSumAverage.js",
+      "type": "tmp",
+      "name": "weightedSumAverage"
+    },
+    {
+      "file": "weightedSumAverage.js",
+      "type": "team",
+      "name": "weightedSumAverage"
+    },
+    {
+      "file": "zoneActionRatingGroupings.js",
+      "type": "tmp",
+      "name": "zoneActionRatingGroupings"
+    }
+  ],
+  "pipelineMs": 611,
+  "pipelineEntries": 74,
+  "teamCount": 48,
+  "derivedTmpCount": 413,
+  "sampleTeamPaths": [
+    "aggregatedActions",
+    "averageScores",
+    "averageTimes",
+    "averages",
+    "counts",
+    "cycles",
+    "disabledCounts",
+    "opr",
+    "zoneActionRatingAverages"
+  ]
+}
