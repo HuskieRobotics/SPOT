@@ -24,4 +24,5 @@ Until the 2026 configuration is edited by hand for the new client, the drift tes
 test when you start hand-editing.
 
 `config.json` (server secrets and settings) no longer exists in v6; use environment variables
-(`.env.example`). The `v1/` folder holds the legacy configurations used as converter inputs.
+(`.env.example`). The `v1/` folder holds the legacy configurations used as converter inputs, and
+`seasons/` holds converted past seasons as worked examples and oracle inputs (see its README).

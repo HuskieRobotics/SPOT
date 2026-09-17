@@ -1,0 +1,14 @@
+{
+  "$schema": "../../../src/config/schema/qr.schema.json",
+  "version": 2,
+  "actionSchema": [
+    {
+      "key": "id",
+      "bits": 16
+    },
+    {
+      "key": "ts",
+      "bits": 32
+    }
+  ]
+}

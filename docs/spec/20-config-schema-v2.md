@@ -205,7 +205,17 @@ npm run config:convert -- config/v1 <out dir> [--match-scouting f] [--pipeline f
 
 The CLI writes the four files, prints every warning, validates the outputs, and exits 1 if any
 is invalid. The active `config/*.json` were produced with the 2026 OPR strings fixture (see
-`config/README.md`).
+`config/README.md`), and `config/seasons/2025/` holds the converted `2025v2` set as a
+typical-season example and as an oracle input (`config/seasons/README.md`).
+
+Converting 2025 is the useful counterpoint to 2026. It produces **no warnings** for
+`match-scouting`: there is no catalog layer to remove and no client constant to guess. The
+result is two phases with empty prefixes and no segments, so recorded ids are raw button ids.
+2025 instead wrote the period into the button id by hand (`teleopGroundPickupCoral`), which is
+what prefixes replaced in 2026, and it has no endgame period at all: climb and park were
+distinguished by button, not by time. A 2025-style season that wanted endgame analysis would add
+a third phase at 30000 ms; giving that phase a prefix would change the recorded ids, so for
+existing data the prefix stays empty.
 
 ## 4. Tests (T-3)
 
