@@ -21,6 +21,7 @@ import type {
   PipelineEntry,
   QrConfig,
   RatingBand,
+  Segment,
 } from "../types";
 
 // ---------------------------------------------------------------------------- v1 shapes (loose)
@@ -102,6 +103,11 @@ function normalize(s: string): string {
 }
 
 // ---------------------------------------------------------------------------- match-scouting
+
+/** 2026 client constants the v1 configs did not carry; the converter warns wherever it uses them. */
+const ENDGAME_START_MS = 30000;
+const SHIFT_INTERVAL_MS = 25000;
+const DEFAULT_SHIFT_COUNT = 4;
 
 const BUTTON_TYPES: ButtonType[] = ["action", "undo", "none", "match-control", "label"];
 
@@ -246,30 +252,134 @@ export function convertMatchScouting(
     layers.push(layer);
   });
 
-  // phases from transitions, sorted by start time descending
+  // Shift toggle buttons decide whether teleop gets segments, so find them before the phases.
+  const allButtons = layers.flatMap((l) => l.buttons);
+  const hasShiftButtons =
+    allButtons.some((b) => b.id === "teleopActive") &&
+    allButtons.some((b) => b.id === "teleopInactive");
+
+  // v1 time transitions, largest time remaining first (the order phases occur in).
+  const transitions = Object.entries(v1.timing.timeTransitions ?? {})
+    .map(([ms, t]) => ({ ms: Number(ms), t, label: t.displayText ?? `Phase ${ms}` }))
+    .sort((a, b) => b.ms - a.ms);
+  type Transition = (typeof transitions)[number];
+
   const usedPhaseIds = new Set<string>();
-  const phases: Phase[] = Object.entries(v1.timing.timeTransitions ?? {})
-    .map(([ms, t]) => ({ ms: Number(ms), t }))
-    .sort((a, b) => b.ms - a.ms)
-    .map(({ ms, t }) => {
-      const label = t.displayText ?? `Phase ${ms}`;
-      const base = camelCase(label) || `phase${ms}`;
-      const phase: Phase = {
-        id: uniqueId(base, usedPhaseIds),
-        label,
-        startMs: ms,
-        layer: layerIds[Number(t.layer)] ?? "layer-0",
-        prefix: idPrefixing === "phase" ? base : "",
-      };
-      if (t.variables && Object.keys(t.variables).length) phase.variables = t.variables;
-      if (t.always) phase.always = t.always;
-      if (t.conditional) phase.conditional = t.conditional;
-      return phase;
-    });
+  const prefixOf = (label: string, ms: number) =>
+    idPrefixing === "phase" ? camelCase(label) || `phase${ms}` : "";
+  const layerOf = (t: Transition) => layerIds[Number(t.t.layer)] ?? "layer-0";
+  const carryOver = (phase: Phase, t: Transition) => {
+    if (t.t.variables && Object.keys(t.t.variables).length) phase.variables = t.t.variables;
+    if (t.t.always) phase.always = t.t.always;
+    if (t.t.conditional) phase.conditional = t.t.conditional;
+  };
+
+  const simplePhase = (t: Transition): Phase => {
+    const base = camelCase(t.label) || `phase${t.ms}`;
+    const phase: Phase = {
+      id: uniqueId(base, usedPhaseIds),
+      label: t.label,
+      startMs: t.ms,
+      layer: layerOf(t),
+      prefix: prefixOf(t.label, t.ms),
+    };
+    carryOver(phase, t);
+    return phase;
+  };
+
+  /** "teleopTransition" inside phase "teleop" becomes segment id "transition". */
+  const segmentId = (label: string, phasePrefix: string): string => {
+    const base = camelCase(label);
+    if (phasePrefix && base.length > phasePrefix.length && base.startsWith(phasePrefix)) {
+      const rest = base.slice(phasePrefix.length);
+      return rest.charAt(0).toLowerCase() + rest.slice(1);
+    }
+    return base;
+  };
+
+  /**
+   * 2026 model: every teleop transition collapses into one `teleop` phase whose segments are the
+   * transition period and then the repeating shifts, so analysis can filter on auto / teleop /
+   * endgame while the recorded ids stay exactly what the v5 client produced (docs/spec/20 CS-4).
+   */
+  const buildTeleopPhase = (group: Transition[]): Phase => {
+    const first = group[0];
+    const last = group[group.length - 1];
+    const prefix = prefixOf(last.label, last.ms);
+    const phase: Phase = {
+      id: uniqueId(prefix || "teleop", usedPhaseIds),
+      label: last.label,
+      startMs: first.ms,
+      layer: layerOf(first),
+      prefix,
+      segments: [],
+    };
+    carryOver(phase, first);
+    // every member but the last is a plain segment; the last is where the shifts begin
+    for (const t of group.slice(0, -1)) {
+      const segment: Segment = { id: segmentId(t.label, prefix), label: t.label, startMs: t.ms };
+      if (layerOf(t) !== phase.layer) segment.layer = layerOf(t);
+      segment.prefix = prefixOf(t.label, t.ms);
+      phase.segments!.push(segment);
+      if (t !== first && (t.t.variables || t.t.always || t.t.conditional))
+        warnings.push(
+          `transition "${t.label}": variables/always/conditional dropped by the merge into ${phase.id}`,
+        );
+    }
+    const span = last.ms - ENDGAME_START_MS;
+    let count = DEFAULT_SHIFT_COUNT;
+    if (span > 0 && span % SHIFT_INTERVAL_MS === 0) count = span / SHIFT_INTERVAL_MS;
+    else
+      warnings.push(
+        `shift span ${span} ms is not a whole number of ${SHIFT_INTERVAL_MS} ms shifts; count defaulted to ${count}`,
+      );
+    const shift: Segment = { id: "shift", label: "Shift", startMs: last.ms };
+    if (layerOf(last) !== phase.layer) shift.layer = layerOf(last);
+    shift.repeat = { intervalMs: SHIFT_INTERVAL_MS, count };
+    shift.kinds = [
+      { id: "active", label: "Active", prefix: "activeShift", toggleButton: "teleopActive" },
+      {
+        id: "inactive",
+        label: "Inactive",
+        prefix: "inactiveShift",
+        toggleButton: "teleopInactive",
+      },
+    ];
+    phase.segments!.push(shift);
+    warnings.push(
+      `shift timing (${count} x ${SHIFT_INTERVAL_MS / 1000} s from ${last.ms} ms) copied from the 2026 client constants; verify`,
+    );
+    return phase;
+  };
+
+  const teleopGroup =
+    hasShiftButtons && idPrefixing === "phase"
+      ? transitions.filter((t) => /teleop/i.test(t.label))
+      : [];
+  const phases: Phase[] = [];
+  for (const t of transitions) {
+    if (teleopGroup.includes(t)) {
+      if (t === teleopGroup[0]) phases.push(buildTeleopPhase(teleopGroup));
+      continue;
+    }
+    phases.push(simplePhase(t));
+  }
   if (phases.length === 0) {
     phases.push({ id: "match", label: "Match", startMs: v1.timing.totalTime, prefix: "" });
     warnings.push(
       "no timeTransitions found; added a single 'match' phase covering the whole match",
+    );
+  }
+  // Endgame is its own phase (no layer change in 2026) so analysis can separate it from teleop.
+  if (idPrefixing === "phase" && !phases.some((p) => p.startMs === ENDGAME_START_MS)) {
+    phases.push({
+      id: uniqueId("endgame", usedPhaseIds),
+      label: "Endgame",
+      startMs: ENDGAME_START_MS,
+      prefix: "endgame",
+    });
+    warnings.push(
+      `added an 'endgame' phase at ${ENDGAME_START_MS} ms with no layer change (2026 client constant); verify`,
     );
   }
 
@@ -283,35 +393,7 @@ export function convertMatchScouting(
     warnings.push("variables.minOfQueueLength missing; undo guard defaults to 1");
   }
 
-  // 2026-style shift and endgame models (only meaningful with phase prefixing)
-  const allButtons = layers.flatMap((l) => l.buttons);
-  const hasShiftButtons =
-    allButtons.some((b) => b.id === "teleopActive") &&
-    allButtons.some((b) => b.id === "teleopInactive");
   const timing: MatchScoutingConfig["timing"] = { totalMs: v1.timing.totalTime, phases };
-  if (idPrefixing === "phase") {
-    const teleopPhases = phases
-      .filter((p) => p.label.toLowerCase().includes("teleop"))
-      .map((p) => p.startMs)
-      .sort((a, b) => a - b);
-    const teleopStart = teleopPhases[0] ?? 130000;
-    timing.endgame = { startMs: 30000, prefix: "endgame", label: "Endgame" };
-    if (hasShiftButtons) {
-      timing.shifts = {
-        intervalMs: 25000,
-        startMs: teleopStart,
-        endMs: 30000,
-        maxIndex: 4,
-        kinds: [
-          { id: "active", prefix: "activeShift", toggleButton: "teleopActive" },
-          { id: "inactive", prefix: "inactiveShift", toggleButton: "teleopInactive" },
-        ],
-      };
-    }
-    warnings.push(
-      "shift/endgame timing (25 s shifts, endgame at 30 s) copied from the 2026 client constants; verify",
-    );
-  }
   if (v1.timing.totalTime < 10000)
     warnings.push(
       `timing.totalTime=${v1.timing.totalTime} looks like seconds; v2 requires milliseconds`,

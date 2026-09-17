@@ -50,6 +50,11 @@ export interface Layer {
   buttons: Button[];
 }
 
+/**
+ * A period of the match selected by the clock: auto, teleop, endgame. The current phase is the
+ * one with the largest `startMs` that is <= the time remaining. Phases are the unit analysis
+ * filters on, which is why endgame is a phase and not a flag inside teleop.
+ */
 export interface Phase {
   id: string;
   label: string;
@@ -61,30 +66,41 @@ export interface Phase {
   prefix: string;
   /** Hold the match clock this long when the phase begins (field-timer pause, BL-298). */
   pauseMs?: number;
+  /** Sub-periods inside this phase (a transition period, then repeating shifts). */
+  segments?: Segment[];
   variables?: Record<string, string | number | boolean>;
   always?: string[];
   conditional?: Record<string, Record<string, string[]>>;
 }
 
-export interface ShiftKind {
+/** A scouter-selected variant of a segment, chosen by pressing `toggleButton`. */
+export interface SegmentKind {
   id: string;
+  label?: string;
+  /** Prefix for ids recorded in this kind; the repeat index is appended. */
   prefix: string;
   toggleButton: string;
 }
 
-export interface Shifts {
-  intervalMs: number;
+/**
+ * A sub-period of a phase. The active segment is the one with the largest `startMs` that is
+ * <= the time remaining, within the current phase.
+ *
+ * Prefix precedence for a recorded action id: the selected kind's prefix plus the repeat index,
+ * else the segment `prefix`, else the phase `prefix`.
+ */
+export interface Segment {
+  id: string;
+  label?: string;
+  /** Match time remaining (ms) at which this segment begins. */
   startMs: number;
-  endMs: number;
-  /** Highest shift index that can be recorded per kind (used to derive known ids). */
-  maxIndex: number;
-  kinds: ShiftKind[];
-}
-
-export interface Endgame {
-  startMs: number;
-  prefix: string;
-  label: string;
+  /** Layer shown when the segment begins; omit to keep the current layer. */
+  layer?: string;
+  /** Prefix used when the segment has no kinds, or while no kind is selected. */
+  prefix?: string;
+  /** The segment repeats; the 1-based index is appended to the prefix. */
+  repeat?: { intervalMs: number; count: number };
+  kinds?: SegmentKind[];
 }
 
 export interface Lock {
@@ -101,11 +117,10 @@ export interface MatchScoutingConfig {
   version: 2;
   timing: {
     totalMs: number;
+    /** Clock-driven periods, highest `startMs` first. */
     phases: Phase[];
-    shifts?: Shifts;
-    endgame?: Endgame;
   };
-  /** "phase": recorded id = phase/shift prefix + button id (2026); "none": raw button ids. */
+  /** "phase": recorded id = phase/segment prefix + button id (2026); "none": raw button ids. */
   idPrefixing: "phase" | "none";
   variables: Record<string, string | number | boolean>;
   rules: {

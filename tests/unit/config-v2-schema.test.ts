@@ -179,6 +179,32 @@ describe("v2 configuration schemas", () => {
     expect(validateConfig("analysis-modules", m).ok).toBe(true);
   });
 
+  it("accepts phase segments with repeats and kinds, and rejects malformed ones", () => {
+    const c = minimalMatchScouting();
+    c.timing.phases[1].segments = [
+      { id: "transition", startMs: 130000, prefix: "teleopTransition" },
+      {
+        id: "shift",
+        startMs: 120000,
+        layer: "teleop",
+        repeat: { intervalMs: 25000, count: 4 },
+        kinds: [{ id: "active", prefix: "activeShift", toggleButton: "startGame" }],
+      },
+    ];
+    expect(validateConfig("match-scouting", c)).toEqual({ ok: true, issues: [] });
+
+    c.timing.phases[1].segments[1].repeat = { intervalMs: 25000, count: 0 };
+    expect(validateConfig("match-scouting", c).ok).toBe(false);
+
+    const bad = minimalMatchScouting() as unknown as Record<string, unknown>;
+    const phases = (bad.timing as { phases: Record<string, unknown>[] }).phases;
+    phases[1].segments = [{ id: "shift", startMs: 120000, maxIndex: 4 }];
+    expect(validateConfig("match-scouting", bad).issues).toContainEqual({
+      path: "timing.phases.1.segments.0",
+      message: 'unknown property "maxIndex"',
+    });
+  });
+
   it("validates executables by type and accepts custom executables", () => {
     const c = minimalMatchScouting();
     c.layout.layers[1].buttons[0].executables = [

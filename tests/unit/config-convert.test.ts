@@ -123,20 +123,52 @@ describe("converted 2026 match-scouting configuration", () => {
     expect(config.layout.layers.every((l) => l.buttons.length < 20)).toBe(true);
   });
 
-  it("derives phases, prefixes, shifts and endgame in milliseconds", () => {
+  it("derives the three analysis phases in milliseconds", () => {
     expect(config.timing.totalMs).toBe(160000);
     expect(config.timing.phases.map((p) => [p.id, p.prefix, p.startMs])).toEqual([
       ["auto", "auto", 159999],
-      ["teleopTransition", "teleopTransition", 140000],
-      ["teleop", "teleop", 130000],
+      ["teleop", "teleop", 140000],
+      ["endgame", "endgame", 30000],
     ]);
-    expect(config.timing.shifts?.kinds.map((k) => k.prefix)).toEqual([
-      "activeShift",
-      "inactiveShift",
+    // endgame is a phase of its own so analysis can separate it from the rest of teleop
+    expect(config.timing.phases[2].layer).toBeUndefined();
+  });
+
+  it("folds the teleop transition and the shifts into segments of the teleop phase", () => {
+    const teleop = config.timing.phases[1];
+    expect(teleop.segments?.map((s) => [s.id, s.startMs])).toEqual([
+      ["transition", 140000],
+      ["shift", 130000],
     ]);
-    expect(config.timing.endgame?.prefix).toBe("endgame");
-    expect(derivePrefixes(config)).toContain("activeShift3");
-    expect(derivePrefixes(config)).toContain("");
+    const [transition, shift] = teleop.segments!;
+    // the transition keeps the layer the phase starts on; the shifts switch to the shift layer
+    expect(transition.prefix).toBe("teleopTransition");
+    expect(transition.layer).toBeUndefined();
+    expect(teleop.layer).toBe("layer-7");
+    expect(shift.layer).toBe("layer-2");
+    expect(shift.repeat).toEqual({ intervalMs: 25000, count: 4 });
+    expect(shift.kinds?.map((k) => [k.prefix, k.toggleButton])).toEqual([
+      ["activeShift", "teleopActive"],
+      ["inactiveShift", "teleopInactive"],
+    ]);
+    // the four shifts end exactly where the endgame phase begins
+    expect(shift.startMs - shift.repeat!.intervalMs * shift.repeat!.count).toBe(
+      config.timing.phases[2].startMs,
+    );
+  });
+
+  it("derives one prefix per phase, segment, shift index and kind", () => {
+    const prefixes = derivePrefixes(config);
+    expect(prefixes).toContain("");
+    expect(prefixes).toContain("auto");
+    expect(prefixes).toContain("teleop");
+    expect(prefixes).toContain("teleopTransition");
+    expect(prefixes).toContain("endgame");
+    expect(prefixes).toContain("activeShift3");
+    expect(prefixes).toContain("inactiveShift4");
+    expect(prefixes).not.toContain("activeShift5");
+    // "" + auto + teleop + teleopTransition + endgame + 4 active + 4 inactive shifts
+    expect(prefixes).toHaveLength(13);
   });
 
   it("moves the undo guard, the A-Stop lock and the alliance-relative zones into rules", () => {
@@ -144,7 +176,7 @@ describe("converted 2026 match-scouting configuration", () => {
     expect(config.variables).toEqual({});
     expect(config.rules.locks).toHaveLength(1);
     expect(config.rules.locks[0].triggerButtons).toEqual(["aStop"]);
-    expect(config.rules.locks[0].untilPhase).toBe("teleopTransition");
+    expect(config.rules.locks[0].untilPhase).toBe("teleop");
     expect(config.rules.allianceRelativeButtons).toEqual([{ own: "AZone", opposing: "OAZone" }]);
   });
 

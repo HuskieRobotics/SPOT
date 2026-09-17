@@ -2,23 +2,39 @@
  * Derive the complete set of action ids a match-scouting configuration can produce.
  *
  * Replaces the v1 "hidden catalog layer" hack (docs/spec/04 CF-9, docs/spec/12 F-4): the set is
- * prefixes × action-button ids, where prefixes come from the phases, the shift model, the
- * endgame model, and the empty pre-match prefix, plus any `extraActionIds`.
+ * prefixes × action-button ids, plus any `extraActionIds`. Prefixes come from the phases, from
+ * the segments inside each phase (including each repeat index and each scouter-selected kind),
+ * and from the empty pre-match prefix.
  *
  * The result is deterministic and ordered (stable QR index, docs/spec/03 and qr.schema.json).
  */
-import type { MatchScoutingConfig } from "./types";
+import type { MatchScoutingConfig, Phase, Segment } from "./types";
+
+/** Prefixes a segment can contribute: kind prefixes (or its own), each with the repeat index. */
+export function segmentPrefixes(segment: Segment): string[] {
+  const bases = segment.kinds?.length
+    ? segment.kinds.map((k) => k.prefix)
+    : segment.prefix !== undefined
+      ? [segment.prefix]
+      : [];
+  if (!segment.repeat) return bases;
+  const out: string[] = [];
+  for (const base of bases) {
+    for (let i = 1; i <= segment.repeat.count; i++) out.push(`${base}${i}`);
+  }
+  return out;
+}
+
+export function phasePrefixes(phase: Phase): string[] {
+  return [phase.prefix, ...(phase.segments ?? []).flatMap(segmentPrefixes)];
+}
 
 export function derivePrefixes(config: MatchScoutingConfig): string[] {
   if (config.idPrefixing === "none") return [""];
+  // "" covers actions recorded before the match starts, when no phase is active yet.
   const prefixes = new Set<string>([""]);
-  for (const phase of config.timing.phases) prefixes.add(phase.prefix);
-  if (config.timing.endgame) prefixes.add(config.timing.endgame.prefix);
-  const shifts = config.timing.shifts;
-  if (shifts) {
-    for (const kind of shifts.kinds) {
-      for (let i = 1; i <= shifts.maxIndex; i++) prefixes.add(`${kind.prefix}${i}`);
-    }
+  for (const phase of config.timing.phases) {
+    for (const prefix of phasePrefixes(phase)) prefixes.add(prefix);
   }
   return [...prefixes];
 }

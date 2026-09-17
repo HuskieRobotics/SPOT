@@ -12,43 +12,51 @@
         "prefix": "auto"
       },
       {
-        "id": "teleopTransition",
-        "label": "Teleop Transition",
-        "startMs": 140000,
-        "layer": "layer-7",
-        "prefix": "teleopTransition"
-      },
-      {
         "id": "teleop",
         "label": "Teleop",
-        "startMs": 130000,
-        "layer": "layer-2",
-        "prefix": "teleop"
+        "startMs": 140000,
+        "layer": "layer-7",
+        "prefix": "teleop",
+        "segments": [
+          {
+            "id": "transition",
+            "label": "Teleop Transition",
+            "startMs": 140000,
+            "prefix": "teleopTransition"
+          },
+          {
+            "id": "shift",
+            "label": "Shift",
+            "startMs": 130000,
+            "layer": "layer-2",
+            "repeat": {
+              "intervalMs": 25000,
+              "count": 4
+            },
+            "kinds": [
+              {
+                "id": "active",
+                "label": "Active",
+                "prefix": "activeShift",
+                "toggleButton": "teleopActive"
+              },
+              {
+                "id": "inactive",
+                "label": "Inactive",
+                "prefix": "inactiveShift",
+                "toggleButton": "teleopInactive"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "endgame",
+        "label": "Endgame",
+        "startMs": 30000,
+        "prefix": "endgame"
       }
-    ],
-    "endgame": {
-      "startMs": 30000,
-      "prefix": "endgame",
-      "label": "Endgame"
-    },
-    "shifts": {
-      "intervalMs": 25000,
-      "startMs": 130000,
-      "endMs": 30000,
-      "maxIndex": 4,
-      "kinds": [
-        {
-          "id": "active",
-          "prefix": "activeShift",
-          "toggleButton": "teleopActive"
-        },
-        {
-          "id": "inactive",
-          "prefix": "inactiveShift",
-          "toggleButton": "teleopInactive"
-        }
-      ]
-    }
+    ]
   },
   "idPrefixing": "phase",
   "variables": {},
@@ -61,7 +69,7 @@
       {
         "id": "aStop",
         "triggerButtons": ["aStop"],
-        "untilPhase": "teleopTransition",
+        "untilPhase": "teleop",
         "exemptTypes": ["undo", "match-control"],
         "message": "You pressed the A-Stop button, all the buttons will be disabled until Auto ends. If this is a mistake then press the Undo button"
       }

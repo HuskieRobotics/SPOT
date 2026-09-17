@@ -15,8 +15,12 @@
     "extraActionIds"
   ],
   "properties": {
-    "$schema": { "type": "string" },
-    "version": { "const": 2 },
+    "$schema": {
+      "type": "string"
+    },
+    "version": {
+      "const": 2
+    },
     "timing": {
       "type": "object",
       "additionalProperties": false,
@@ -30,25 +34,21 @@
         "phases": {
           "type": "array",
           "minItems": 1,
-          "items": { "$ref": "#/$defs/phase" }
-        },
-        "shifts": { "$ref": "#/$defs/shifts" },
-        "endgame": {
-          "type": "object",
-          "additionalProperties": false,
-          "required": ["startMs", "prefix", "label"],
-          "properties": {
-            "startMs": { "type": "integer", "minimum": 0 },
-            "prefix": { "$ref": "#/$defs/prefix" },
-            "label": { "type": "string" }
-          }
+          "items": {
+            "$ref": "#/$defs/phase"
+          },
+          "description": "Clock-driven periods of the match, in the order they occur (highest startMs first). Auto, teleop and endgame are phases; sub-periods inside a phase are segments."
         }
       }
     },
-    "idPrefixing": { "enum": ["phase", "none"] },
+    "idPrefixing": {
+      "enum": ["phase", "none"]
+    },
     "variables": {
       "type": "object",
-      "additionalProperties": { "type": ["string", "number", "boolean"] }
+      "additionalProperties": {
+        "type": ["string", "number", "boolean"]
+      }
     },
     "rules": {
       "type": "object",
@@ -59,24 +59,48 @@
           "type": "object",
           "additionalProperties": false,
           "required": ["minQueueLength"],
-          "properties": { "minQueueLength": { "type": "integer", "minimum": 0 } }
+          "properties": {
+            "minQueueLength": {
+              "type": "integer",
+              "minimum": 0
+            }
+          }
         },
-        "positionLockMs": { "type": "integer", "minimum": 0 },
-        "locks": { "type": "array", "items": { "$ref": "#/$defs/lock" } },
+        "positionLockMs": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "locks": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/lock"
+          }
+        },
         "allianceRelativeButtons": {
           "type": "array",
           "items": {
             "type": "object",
             "additionalProperties": false,
             "required": ["own", "opposing"],
-            "properties": { "own": { "$ref": "#/$defs/id" }, "opposing": { "$ref": "#/$defs/id" } }
+            "properties": {
+              "own": {
+                "$ref": "#/$defs/id"
+              },
+              "opposing": {
+                "$ref": "#/$defs/id"
+              }
+            }
           }
         },
         "fieldMap": {
           "type": "object",
           "additionalProperties": false,
           "required": ["image"],
-          "properties": { "image": { "type": "string" } }
+          "properties": {
+            "image": {
+              "type": "string"
+            }
+          }
         }
       }
     },
@@ -85,37 +109,158 @@
       "additionalProperties": false,
       "required": ["rows", "columns", "initialLayer", "layers"],
       "properties": {
-        "rows": { "type": "integer", "minimum": 1 },
-        "columns": { "type": "integer", "minimum": 1 },
-        "initialLayer": { "$ref": "#/$defs/id" },
-        "layers": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/layer" } }
+        "rows": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "columns": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "initialLayer": {
+          "$ref": "#/$defs/id"
+        },
+        "layers": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/layer"
+          }
+        }
       }
     },
-    "extraActionIds": { "type": "array", "items": { "$ref": "#/$defs/id" } }
+    "extraActionIds": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/id"
+      }
+    }
   },
   "$defs": {
-    "id": { "type": "string", "pattern": "^[A-Za-z0-9_-]+$" },
-    "prefix": { "type": "string", "pattern": "^[A-Za-z0-9_]*$" },
+    "id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_-]+$"
+    },
+    "prefix": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_]*$"
+    },
     "phase": {
       "type": "object",
       "additionalProperties": false,
       "required": ["id", "label", "startMs", "prefix"],
       "properties": {
-        "id": { "$ref": "#/$defs/id" },
-        "label": { "type": "string" },
-        "startMs": { "type": "integer", "minimum": 0 },
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "label": {
+          "type": "string"
+        },
+        "startMs": {
+          "type": "integer",
+          "minimum": 0
+        },
         "layer": {
           "$ref": "#/$defs/id",
           "description": "Layer shown when the phase begins; omit to leave the current layer."
         },
-        "prefix": { "$ref": "#/$defs/prefix" },
-        "pauseMs": { "type": "integer", "minimum": 0 },
+        "prefix": {
+          "$ref": "#/$defs/prefix"
+        },
+        "pauseMs": {
+          "type": "integer",
+          "minimum": 0
+        },
         "variables": {
           "type": "object",
-          "additionalProperties": { "type": ["string", "number", "boolean"] }
+          "additionalProperties": {
+            "type": ["string", "number", "boolean"]
+          }
         },
-        "always": { "type": "array", "items": { "$ref": "#/$defs/id" } },
-        "conditional": { "$ref": "#/$defs/conditional" }
+        "always": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/id"
+          }
+        },
+        "conditional": {
+          "$ref": "#/$defs/conditional"
+        },
+        "segments": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/segment"
+          },
+          "description": "Sub-periods inside this phase (for example a transition period, then repeating shifts)."
+        }
+      },
+      "description": "A period of the match selected by the clock. The current phase is the one with the largest startMs that is <= the time remaining."
+    },
+    "segment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "startMs"],
+      "description": "A sub-period of a phase. The active segment is the one with the largest startMs that is <= the time remaining, within the current phase. Id prefix precedence for a recorded action: selected kind prefix + repeat index, else the segment prefix, else the phase prefix.",
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "label": {
+          "type": "string"
+        },
+        "startMs": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "layer": {
+          "$ref": "#/$defs/id",
+          "description": "Layer shown when the segment begins; omit to keep the current layer."
+        },
+        "prefix": {
+          "$ref": "#/$defs/prefix",
+          "description": "Prefix used when the segment has no kinds, or while no kind is selected; omit to use the phase prefix."
+        },
+        "repeat": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["intervalMs", "count"],
+          "description": "The segment repeats; the 1-based index is appended to the prefix (activeShift1, activeShift2, ...).",
+          "properties": {
+            "intervalMs": {
+              "type": "integer",
+              "minimum": 1000
+            },
+            "count": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 20
+            }
+          }
+        },
+        "kinds": {
+          "type": "array",
+          "minItems": 1,
+          "description": "Scouter-selected variants of the segment; pressing a kind's toggle button selects it.",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["id", "prefix", "toggleButton"],
+            "properties": {
+              "id": {
+                "$ref": "#/$defs/id"
+              },
+              "label": {
+                "type": "string"
+              },
+              "prefix": {
+                "$ref": "#/$defs/prefix"
+              },
+              "toggleButton": {
+                "$ref": "#/$defs/id"
+              }
+            }
+          }
+        }
       }
     },
     "conditional": {
@@ -123,30 +268,10 @@
       "description": "variable name -> variable value -> button ids rendered when the variable has that value",
       "additionalProperties": {
         "type": "object",
-        "additionalProperties": { "type": "array", "items": { "$ref": "#/$defs/id" } }
-      }
-    },
-    "shifts": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": ["intervalMs", "startMs", "endMs", "maxIndex", "kinds"],
-      "properties": {
-        "intervalMs": { "type": "integer", "minimum": 1000 },
-        "startMs": { "type": "integer", "minimum": 0 },
-        "endMs": { "type": "integer", "minimum": 0 },
-        "maxIndex": { "type": "integer", "minimum": 1, "maximum": 20 },
-        "kinds": {
+        "additionalProperties": {
           "type": "array",
-          "minItems": 1,
           "items": {
-            "type": "object",
-            "additionalProperties": false,
-            "required": ["id", "prefix", "toggleButton"],
-            "properties": {
-              "id": { "$ref": "#/$defs/id" },
-              "prefix": { "$ref": "#/$defs/prefix" },
-              "toggleButton": { "$ref": "#/$defs/id" }
-            }
+            "$ref": "#/$defs/id"
           }
         }
       }
@@ -156,22 +281,50 @@
       "additionalProperties": false,
       "required": ["id", "triggerButtons", "untilPhase", "exemptTypes", "message"],
       "properties": {
-        "id": { "$ref": "#/$defs/id" },
-        "triggerButtons": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/id" } },
-        "untilPhase": { "$ref": "#/$defs/id" },
-        "exemptTypes": { "type": "array", "items": { "$ref": "#/$defs/buttonType" } },
-        "message": { "type": "string" }
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "triggerButtons": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/id"
+          }
+        },
+        "untilPhase": {
+          "$ref": "#/$defs/id"
+        },
+        "exemptTypes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/buttonType"
+          }
+        },
+        "message": {
+          "type": "string"
+        }
       }
     },
-    "buttonType": { "enum": ["action", "undo", "none", "match-control", "label"] },
+    "buttonType": {
+      "enum": ["action", "undo", "none", "match-control", "label"]
+    },
     "layer": {
       "type": "object",
       "additionalProperties": false,
       "required": ["id", "buttons"],
       "properties": {
-        "id": { "$ref": "#/$defs/id" },
-        "name": { "type": "string" },
-        "buttons": { "type": "array", "items": { "$ref": "#/$defs/button" } }
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "name": {
+          "type": "string"
+        },
+        "buttons": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/button"
+          }
+        }
       }
     },
     "button": {
@@ -179,20 +332,40 @@
       "additionalProperties": false,
       "required": ["id", "type", "gridArea", "executables"],
       "properties": {
-        "id": { "$ref": "#/$defs/id" },
-        "label": { "type": "string" },
-        "type": { "$ref": "#/$defs/buttonType" },
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "label": {
+          "type": "string"
+        },
+        "type": {
+          "$ref": "#/$defs/buttonType"
+        },
         "gridArea": {
           "type": "array",
           "minItems": 4,
           "maxItems": 4,
-          "items": { "type": "integer", "minimum": 1 },
+          "items": {
+            "type": "integer",
+            "minimum": 1
+          },
           "description": "row-start, column-start, row-end, column-end (CSS grid lines)"
         },
-        "color": { "type": "string" },
-        "textColor": { "type": "string" },
-        "legacyClass": { "type": "string" },
-        "executables": { "type": "array", "items": { "$ref": "#/$defs/executable" } }
+        "color": {
+          "type": "string"
+        },
+        "textColor": {
+          "type": "string"
+        },
+        "legacyClass": {
+          "type": "string"
+        },
+        "executables": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/executable"
+          }
+        }
       }
     },
     "executable": {
@@ -202,61 +375,125 @@
         {
           "additionalProperties": false,
           "required": ["type", "to"],
-          "properties": { "type": { "const": "layer" }, "to": { "$ref": "#/$defs/id" } }
+          "properties": {
+            "type": {
+              "const": "layer"
+            },
+            "to": {
+              "$ref": "#/$defs/id"
+            }
+          }
         },
         {
           "additionalProperties": false,
           "required": ["type", "to", "always", "conditional"],
           "properties": {
-            "type": { "const": "conditionalLayer" },
-            "to": { "$ref": "#/$defs/id" },
-            "always": { "type": "array", "items": { "$ref": "#/$defs/id" } },
-            "conditional": { "$ref": "#/$defs/conditional" }
+            "type": {
+              "const": "conditionalLayer"
+            },
+            "to": {
+              "$ref": "#/$defs/id"
+            },
+            "always": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/id"
+              }
+            },
+            "conditional": {
+              "$ref": "#/$defs/conditional"
+            }
           }
         },
         {
           "additionalProperties": false,
           "required": ["type", "name", "value"],
           "properties": {
-            "type": { "const": "setVariable" },
-            "name": { "type": "string" },
-            "value": { "type": ["string", "number", "boolean"] }
+            "type": {
+              "const": "setVariable"
+            },
+            "name": {
+              "type": "string"
+            },
+            "value": {
+              "type": ["string", "number", "boolean"]
+            }
           }
         },
         {
           "additionalProperties": false,
           "required": ["type"],
           "properties": {
-            "type": { "const": "position" },
-            "lockMs": { "type": "integer", "minimum": 0 }
+            "type": {
+              "const": "position"
+            },
+            "lockMs": {
+              "type": "integer",
+              "minimum": 0
+            }
           }
         },
         {
           "additionalProperties": false,
           "required": ["type", "position"],
           "properties": {
-            "type": { "const": "constantPosition" },
+            "type": {
+              "const": "constantPosition"
+            },
             "position": {
               "type": "object",
               "additionalProperties": false,
               "required": ["x", "y"],
-              "properties": { "x": { "type": "number" }, "y": { "type": "number" } }
+              "properties": {
+                "x": {
+                  "type": "number"
+                },
+                "y": {
+                  "type": "number"
+                }
+              }
             }
           }
         },
         {
           "additionalProperties": false,
           "required": ["type", "group"],
-          "properties": { "type": { "const": "exclusiveHighlight" }, "group": { "type": "string" } }
+          "properties": {
+            "type": {
+              "const": "exclusiveHighlight"
+            },
+            "group": {
+              "type": "string"
+            }
+          }
         },
-        { "additionalProperties": false, "properties": { "type": { "const": "clearHighlight" } } },
-        { "additionalProperties": false, "properties": { "type": { "const": "hide" } } },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "type": {
+              "const": "clearHighlight"
+            }
+          }
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "type": {
+              "const": "hide"
+            }
+          }
+        },
         {
           "additionalProperties": false,
           "required": ["type", "count"],
           "properties": {
-            "type": { "const": "multiplier" },
-            "count": { "type": "integer", "minimum": 2 }
+            "type": {
+              "const": "multiplier"
+            },
+            "count": {
+              "type": "integer",
+              "minimum": 2
+            }
           }
         },
         {
@@ -278,7 +515,9 @@
                 ]
               }
             },
-            "args": { "type": "array" }
+            "args": {
+              "type": "array"
+            }
           }
         }
       ]
