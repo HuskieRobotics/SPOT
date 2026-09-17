@@ -33,7 +33,9 @@ are open design choices.
   pipeline.
 - **F-3** `finalActionOccurrence` reverses the action array in place, corrupting later
   transformers' view of the queue.
-- **F-4** The QR id enumeration (8 bits) covers 237 ids in the 2026 config; a few composite ids
+- **F-4** (**evidenced by real data**, see document 17: 32 distinct ids in the 2026mnwi export are
+  absent from the config, including `activeShift3*`, un-prefixed `teleop*`, `autoAttemptL1`, and
+  TBA `_None` values) The QR id enumeration (8 bits) covers 237 ids in the 2026 config; a few composite ids
   that can occur are not in the catalog (e.g. `autoAttemptL1`, `autoFallL1`,
   `teleopTransitionAttemptClimb`, `activeShift1AttemptClimb`, and `teleop*` ids when the
   shift button is never pressed). Encoding such an id yields `NaN` bits and a corrupt QR
@@ -109,6 +111,10 @@ are open design choices.
 - **D-6** Decide whether to restore Simulate Match and Auto Pick List (requires
   `standardDeviation` and `averageScores.total` in the pipeline).
 - **D-7** Normalize robot ids to a single type across TBA/FMS/manual sources.
+- **D-7a** Missing-value representation: legacy output mixes `NaN` (empty averages), `null`
+  (weighted averages with no counts), `"N/A"` (team `ratio` divide-by-zero default), and
+  `undefined`. The oracle golden files record these per path; the rewrite should pick one
+  representation (recommend `null`) and modules should treat it as "No Data".
 - **D-8** Consider replacing the marker-based transformer bundling with ES modules and
   explicit registration, while keeping the drop-in-file extension model.
 - **D-9** Offline strategy: keep the service worker approach or move to an app-shell with
@@ -133,6 +139,9 @@ are open design choices.
 | D-9 offline | Keep IndexedDB buffering and QR; QR is emergency-only but real (some venues have no connectivity); batch upload when coverage returns [A-25]; add unsynced list BL-93 | 05 |
 | D-10 stack/transport | Next.js, Tailwind, MongoDB preferred [A-4]; 2–3 s latency fine, so polling or SSE [A-50]; EC2 bare Node + nginx + Atlas, GCP easy path [A-48, A-43] | 02, 10, 15 |
 | Data migration | One-time migration acceptable; old seasons may be left behind [A-2] | 03 |
+| `countActions(all)` unknown ids | Keep today's behavior (count ids absent from the config); the oracle harness reports unknown ids found in the 2025 export (decided 2026-09-17) | 09, 17 |
+| Manual data hooks | Revised [A-13]: they also support offline analysis because `/analysis/api/manual` is a precached pipeline input; keep the property that every pipeline input is cacheable (document 18) | 03, 18 |
+| Offline operation | Elevated to a first-class requirement with its own document and tests (OF-1 to OF-9, T-8) | 18 |
 | Duplicate scouting | Never two scouters on one robot at once; re-scout replaces earlier data [A-29] | 06 RT-14a |
 | Admins | 2–3 concurrent admins; start rule configurable [A-28, BL-33, BL-34] | 06 RT-14b |
 | Google sign-in, checklist, FMS, AMI/Glitch/Render | Dropped [A-7, A-9, A-10, A-44] | 01, 07, 10 |

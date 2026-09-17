@@ -81,6 +81,9 @@ spinners, `flag.png`, `gear.svg`, `menu-button.svg`, TBA tutorial videos, OPR ke
 
 ## Offline model
 
+See document 18 for the consolidated, testable offline requirements (OF-1 to OF-9) and the
+categorized precache list. The notes below describe the current implementation.
+
 - **AR-11** The scouting page and analysis page register `/sw.js`. The service worker
   pre-caches an explicit list of scouting, analysis, qrscanner, config, icon, and external
   (CDN) URLs on install (cache name `scouting-cache-v1`).

@@ -75,6 +75,10 @@ Not used.
 
     These are primarily used by different parts of the server talking to itself.
 
+    _Revised 2026-09-17:_ they also support offline functionality; `/analysis/api/manual` is one
+    of the aggregated data routes the service worker precaches so the analysis pipeline can
+    run without a server connection. Captured in document 18.
+
 14. **Filter Teams** rating bands (Rating1–4 thresholds, OPR ranges 0–100/101–150/151–250/250+)
     are hard-coded for 2026. Should these be configurable?
 

@@ -34,6 +34,14 @@ and the code disagree, the code wins and the discrepancy is called out.
 | 14 | [14-clarifying-questions.md](14-clarifying-questions.md) | Questions for the SPOT maintainers whose answers will refine this specification (scope, features in use, game-specific constants, operations, security, data semantics, doc discrepancies) |
 | 15 | [15-rewrite-technology-direction.md](15-rewrite-technology-direction.md) | Proposed rewrite stack (Next.js, Tailwind, shadcn/tweakcn) and analysis of replacing Socket.IO with SSE, with the spec changes each choice would trigger |
 | 16 | [16-github-issue-backlog.md](16-github-issue-backlog.md) | The 41 open GitHub issues classified as core / next / covered / drop for the rewrite, with backlog requirement ids `BL-<issue>` |
+| 17 | [17-rewrite-plan-and-next-steps.md](17-rewrite-plan-and-next-steps.md) | Repository/branch strategy, Phase 0 preparation (behavioral oracle, synthetic data, schema v2, scaffold), phased build order, working practices, and immediate next steps |
+| 18 | [18-offline-requirements.md](18-offline-requirements.md) | Offline operation as a first-class requirement: the three offline situations, what the service worker must cache (including generated bundles and data endpoints), OF-1 to OF-9 |
+
+## Behavioral oracle
+
+`tools/oracle/` holds the legacy-pipeline golden outputs the rewrite must reproduce (2025 from
+`v4.2.0`, 2026 from `HEAD`), the recorded TBA fixtures, and the harness that regenerates them.
+See `tools/oracle/README.md` and document 17.
 
 ## Requirement identifiers
 

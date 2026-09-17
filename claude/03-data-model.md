@@ -132,7 +132,9 @@ Before transformers run, the client:
 
 **[A-34]** The TBA score-breakdown mapping (DM-11) must be configurable per season (which keys
 to import and how to name them); today it imports every `auto*`/`endGame*` key by convention.
-**[A-13]** The `manual/*.json` hooks exist only for server self-calls and need not survive.
+**[A-13, revised 2026-09-17]** The `manual/*.json` hooks serve the server self-calls **and**
+offline operation: `/analysis/api/manual` is precached so the pipeline can run without the
+server (document 18). Any replacement must keep every pipeline input cacheable.
 **BL-195** The dataset should be able to carry a third top-level collection, `scouters`.
 
 Well-known derived paths produced by the default pipeline and consumed by modules/CSV:

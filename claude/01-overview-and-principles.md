@@ -43,7 +43,8 @@ Operational roles inside one team:
   customize the scouting interface and analysis pipeline through JSON (or an equally
   accessible format). The extension model is the feature that differentiates SPOT.
 - **P3. Offline-capable for core features** (scouting and analysis) once the app has been
-  loaded online at least once.
+  loaded online at least once. This is a defining feature and a major source of complexity;
+  document 18 states it as testable requirements OF-1 to OF-9.
 - **P4. Extensibility by drop-in files**: transformers, analysis modules, and scouting
   executables are discovered from folders and compiled into client bundles at request time.
   **[A-5, A-49]** The mechanism may change, but runtime discovery of drop-in files is

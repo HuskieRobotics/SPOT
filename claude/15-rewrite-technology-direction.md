@@ -180,7 +180,8 @@ spec should not make sub-second push a hard requirement.
   edit, QR scanner, and setup pages are all stateful, DOM-heavy, and offline-sensitive; they
   should be `"use client"` components with minimal server rendering. Next.js contributes
   routing, API routes, TypeScript, and the build pipeline rather than SSR.
-- **PWA/offline.** The hand-written service worker with a hard-coded precache list
+- **PWA/offline.** See document 18 for the full requirement set (OF-1 to OF-9); the summary
+  here is the implementation consequence. The hand-written service worker with a hard-coded precache list
   (document 02, AR-11) cannot survive hashed build assets. Use an injected-manifest approach
   (Serwist or Workbox `injectManifest`) for the app shell, and keep explicit runtime caching
   rules for `/api/...dataset` (network-first) and config endpoints (stale-while-revalidate).
