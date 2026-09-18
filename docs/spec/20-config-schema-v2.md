@@ -37,7 +37,7 @@ and the "students without programming experience" principle) and `"version": 2`.
 | CS-11 | **One spelling per option**: `finalActionOccurrence`, `cycle.startAction/endAction`, `actionTime.actionId`. The converter rewrites the v1 spellings and warns.                                                                                                                                                                                                                                                        | 09 catalog, guide typos       |
 | CS-12 | **TBA enrichment is configuration** (`enrichment.tba.scoreBreakdown {enabled, prefixes}` and `componentOprs[]`), replacing `TBA_OPR_STRINGS` in `config.json` and the hard-coded `auto`/`endGame` prefix scan.                                                                                                                                                                                                        | AN-7, AN-8, A-14              |
 | CS-13 | **Module options are closed schemas per built-in module**; `HeatmapScatterPlot.coordinateTransform` (`none`/`foldHalfField`) makes the 2026 half-field folding explicit; `filterTeams.ratingBands` replaces the hard-coded Filter Teams bands.                                                                                                                                                                        | AN-19, AN-21, F-12, A-33      |
-| CS-14 | **QR ids are indexes into the derived known-id list**; the converter widens `id` to 16 bits because the 2026 set has 504 ids (v1 had 8 bits and 195 catalog ids).                                                                                                                                                                                                                                                     | DM-12, qr.json                |
+| CS-14 | **QR ids are indexes into the derived known-id list**; the converter widens `id` to 16 bits because the 2026 set has 504 ids (v1 had 8 bits and 195 catalog ids). Because the index depends on the configuration, the payload header carries a 16-bit fingerprint of the derived list and the scanner refuses a mismatch (DM-15a, decided 2026-09-17).                                                                | DM-12, qr.json                |
 | CS-15 | **No settings file in v2.** Server settings and secrets are environment variables (`.env.example`); event selection is data. The planned "settings document" from document 17 is therefore not a JSON file and needs no schema.                                                                                                                                                                                       | NF-9, A-40, R-32              |
 
 Things the schema deliberately does **not** do yet (Phase 1 decisions, document 17 §2.3):
@@ -243,8 +243,9 @@ belong to the enrichment step.
   variants the catalog listed but no button produced. Keep or delete by hand.
 - **`legacyClass`** can be removed from the active config once the colors are confirmed on the
   new grid.
-- **Schema for extensions** (`extensions/` runtime folder, document 15): built-in names are
-  closed; extension transformers/modules/executables are open. When the loader exists, it
-  should register each extension's option schema so they get the same strictness.
+- **Schema for extensions**: settled 2026-09-17 (ADR 0005). Extensions are registered at build
+  time and each one **must** declare a JSON Schema for its options, so extension options are
+  validated as strictly as built-in ones. Until the registry exists, extension names remain
+  open in the pipeline and module schemas.
 - Editor integration: `"$schema"` is a relative path, which VS Code resolves; if the schemas are
   ever published, switch to the `$id` URLs.

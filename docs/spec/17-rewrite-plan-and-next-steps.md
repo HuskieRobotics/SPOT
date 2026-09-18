@@ -235,16 +235,16 @@ fixed, which is why Phase 0 items 4 and 5 come first.
 
 Last updated 2026-09-17. Phase 0 items are numbered as in section 2.
 
-| #   | Phase 0 item                       | Status                                                                                                                                                                   |
-| --- | ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| 1   | Fixtures and the behavioral oracle | **Done.** 2025 golden output from tag `v4.2.0` and 2026 from v5 commit `902db06`, with TBA fixtures for both, in `tools/oracle/`.                                        |
-| 2   | Synthetic TMP generator            | Not started. Unblocked now that the v2 schema exists; required by T-4 and answer 45.                                                                                     |
-| 3   | Close the five open decisions      | **3 of 5.** Composite ids (document 20 §2.1), security model (ADR 0004) and extension mechanism (ADR 0005) are settled. Open: start rules (BL-34), manual schedule.      |
-| 4   | Configuration schema v2            | **Done.** PR #304, merged 2026-09-17: four JSON Schemas, types, Ajv validator, derived known ids, v1 → v2 converter, active 2026 config, 2025 example (document 20).     |
-| 5   | Data model v2 and migration        | Not started. **The last item blocking Phase 1.** Must include the `phase`/`segment` fields, the `scouters` collection keyed by student ID, and the per-event event code. |
-| 6   | Scaffold with CI                   | **Done.** Commit `df772fa` on `v6`: Next.js, Tailwind, shadcn, Vitest, Playwright, GitHub Actions, no Docker.                                                            |
-| 7   | Architecture decision records      | **Done.** `docs/adr/` holds five records: transport, hosting, configuration storage, authentication and privacy, extension model.                                        |
-| 8   | Work tracking                      | Not started. No `v6` label, milestone or board.                                                                                                                          |
+| #   | Phase 0 item                       | Status                                                                                                                                                                                           |
+| --- | ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| 1   | Fixtures and the behavioral oracle | **Done.** 2025 golden output from tag `v4.2.0` and 2026 from v5 commit `902db06`, with TBA fixtures for both, in `tools/oracle/`.                                                                |
+| 2   | Synthetic TMP generator            | Not started. Unblocked now that the v2 schema exists; required by T-4 and answer 45.                                                                                                             |
+| 3   | Close the five open decisions      | **Done, 5 of 5.** Composite ids (document 20 §2.1), security model (ADR 0004), extension mechanism (ADR 0005), start rules (ADR 0006) and the manual schedule (kept, D-4) are all settled.       |
+| 4   | Configuration schema v2            | **Done.** PR #304, merged 2026-09-17: four JSON Schemas, types, Ajv validator, derived known ids, v1 → v2 converter, active 2026 config, 2025 example (document 20).                             |
+| 5   | Data model v2 and migration        | Not started, and now **fully specified**: `phase`/`segment` on actions, `scouters` keyed by student ID, event code, `tenantId`, `null` for missing values, Number robot ids, 2025 and 2026 only. |
+| 6   | Scaffold with CI                   | **Done.** Commit `df772fa` on `v6`: Next.js, Tailwind, shadcn, Vitest, Playwright, GitHub Actions, no Docker.                                                                                    |
+| 7   | Architecture decision records      | **Done.** `docs/adr/` holds six records: transport, hosting, configuration storage, authentication and privacy, extension model, scouter sessions and match start.                               |
+| 8   | Work tracking                      | Not started. No `v6` label, milestone or board.                                                                                                                                                  |
 
 Recommended order from here:
 
@@ -256,8 +256,9 @@ Recommended order from here:
 3. **Work tracking** (item 8) alongside the above. It matters more than usual because students
    pick up phases 1 and 3.
 
-Start rules (BL-34) and the manual schedule block Phase 2, not Phase 1, so they can wait until
-the scouting slice starts.
+Every Phase 0 decision is now closed. The manual schedule is kept, so Phase 2 carries a
+schedule editor and Phase 4 carries no removal work; the schedule and the current match are
+persisted rather than held in memory, which restarts needed regardless.
 
 ### 5.1 The two blocking decisions, as settled on 2026-09-17
 
@@ -282,3 +283,20 @@ export work offline, and leaves the pipeline with one execution environment.
 
 Both decisions feed step 5 directly: the data model needs the `scouters` collection, the event
 code on the event document, and no scouter fields in public projections.
+
+**Scouter sessions and match start** ([ADR 0006](../adr/0006-scouter-sessions-and-match-start.md),
+decided 2026-09-17). Sessions are keyed by student ID rather than by connection, which is the
+root cause of a scouter appearing twice in the admin view after a reconnect (F-20 to F-23). A
+disconnected scouter keeps their robot, comes back to the same assignment, and survives a page
+reload; disconnected entries stay visible to admins instead of being pruned. Match start offers
+admin force-start scoped to the current match, a configurable quorum defaulting to six, and the
+issue-34 "someone else started" rule, off by default. Reconnection gets its own test suite
+(T-6a).
+
+**Data model choices** (decided 2026-09-17, recorded against document 03). A missing value is
+`null` everywhere, so modules render one thing as "No Data" (DM-1b). `robotNumber` is the FRC
+team number, a Number on every path (DM-1a). Every document carries `tenantId` from day one so
+a hosted instance never has to migrate live scouting data (DM-7f). The migration covers the
+2025 and 2026 seasons only and is verified by re-running the oracle against migrated data
+(DM-7g). The QR payload gains a 16-bit configuration fingerprint so a code generated before a
+configuration edit is refused rather than silently decoded wrong (DM-15a).

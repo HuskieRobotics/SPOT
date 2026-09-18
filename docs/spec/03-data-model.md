@@ -11,7 +11,7 @@
   "clientVersion": String,    // config.VERSION at time of scouting (e.g. "1.0")
   "scouterId": String,        // v5: firstName+lastName concatenated, or "qrcode" for scanned TMPs
                               // v6: the scouter's student ID (SEC-6); names live in `scouters`
-  "robotNumber": Number,      // FRC team number scouted
+  "robotNumber": Number,      // FRC team number scouted (e.g. 3061); always a Number in v6 (DM-1a)
   "matchNumber": Number,      // SPOT linear match number (see "Match numbering")
   "eventNumber": ObjectId,    // _id of the events document (stored as ObjectId; clients send hex string)
   "matchId": String,          // "<matchNumber>-<robotNumber>-<scouterId>-<matchId_rand>"
@@ -23,6 +23,14 @@
 }
 ```
 
+- **DM-1a** **[decided 2026-09-17]** `robotNumber` is the FRC team number and is stored and
+  compared as a **Number** everywhere. TBA returns strings and FMS returns numbers, so both are
+  normalized on ingest; nothing may rely on `==` coercion (resolves D-7, F-14's root cause).
+- **DM-1b** **[decided 2026-09-17]** A missing value is **`null`**, everywhere, in every
+  pipeline output and every stored document. Legacy mixes `NaN`, `null`, `"N/A"` and
+  `undefined`; modules render `null` as "No Data" (resolves D-7a). The oracle golden files
+  record the legacy mixture, so this is a deliberate divergence to note per defect when the
+  engine lands.
 - **DM-1** `matchId` is the client-side uniqueness key (IndexedDB key path, sync de-dup).
   `matchId_rand` is the server-side de-dup key for QR submissions.
 - **DM-2** QR-decoded TMPs use `scouterId = "qrcode"`, so the socket sync also checks whether
@@ -81,6 +89,21 @@ per-action `_id`s (BL-31).
   (SEC-7), so the identifier cannot come from a server-side sequence. The student ID satisfies
   this by construction.
 - **DM-7e** This collection also satisfies the dataset hook BL-195 (per-scouter accuracy).
+
+### Tenant scoping (reserved)
+
+- **DM-7f** **[decided 2026-09-17]** Every document that belongs to a team's data set carries a
+  `tenantId` from the start, even though v6 ships single-tenant with a single value. Reserving
+  the field now avoids migrating live scouting data later, which is the expensive moment to
+  discover it is missing (BL-197). Indexes include it as the leading key so a future hosted
+  instance does not need them rebuilt.
+
+### Migration scope
+
+- **DM-7g** **[decided 2026-09-17]** The v5 to v6 migration covers the **2025 and 2026 seasons
+  only**. Earlier seasons are left on v5 (permitted by answer 2). Both migrated seasons are
+  what the behavioral oracle baselines against, so the migration is verified by re-running the
+  oracle against migrated data rather than by inspection.
 
 ## Match numbering and match objects
 
@@ -189,6 +212,15 @@ Bit layout (all big-endian binary strings, packed into bytes then base64):
 
 - **DM-15** Header is exactly 200 bits; the decoder slices `bits[0:200]` then reads actions
   until an action whose first 8 bits are all ones.
+- **DM-15a** **[decided 2026-09-17]** The v6 header adds a **16-bit configuration fingerprint**,
+  a truncated hash of the derived known-action-id list. An action id is an index into that list
+  (document 20 CS-14), so editing the configuration reshuffles it and a code generated before
+  the edit would decode to the wrong action. The scanner compares the fingerprint and refuses a
+  mismatch with a clear message rather than importing wrong data. Cost is two bytes once per
+  payload: a 60-action match is about 385 bytes, so this is well under one percent.
+- **DM-15b** If payload size becomes tight, `ts` is the place to save: match time remaining
+  needs 18 bits, not the 32 the legacy layout uses, which is 14 bits back on **every** action.
+  That is a `qr.json` setting, not a schema change.
 - **DM-16** The decoder reconstructs `timestamp = Date.now()`, `scouterId = "qrcode"`,
   `matchId = "<match>-<robot>-qrcode-<rand>"`, `eventNumber` as the concatenation of the three
   hex chunks, and `matchNumber`/`robotNumber` as strings.

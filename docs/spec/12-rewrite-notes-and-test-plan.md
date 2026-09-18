@@ -71,6 +71,22 @@ are open design choices.
   ids, A-Stop detection, and the half-field coordinate transform in `HeatmapScatterPlot`.
   These violate principle P1 and should move into configuration.
 
+- **F-20** The scouter registry is keyed by **connection**, not identity: every socket
+  connection pushes a new `Scouter` whose `timestamp` is the admin UI key, and nothing looks
+  for an existing entry. A reconnecting scouter therefore appears **twice** in the admin view
+  until the stale entry is pruned 60 s after its disconnect. Reported by the maintainer as a
+  recurring problem at events.
+- **F-21** `assignScouters` removes a robot from the pool only when a **connected** SCOUTING
+  scouter holds it. A scouter who drops mid-match releases their robot, so it can be handed to
+  someone else, which violates RT-14a (never two scouters on one robot) and means the original
+  scouter may be reassigned a different robot when they come back.
+- **F-22** The "someone is already scouting" start trigger does not filter on `connected`
+  either, so a stale SCOUTING entry keeps auto-starting every waiting scouter for that match
+  until pruning removes it.
+- **F-23** Client scouting state (`ScoutingSync.state`) is in memory only; just the name is in
+  `localStorage`. A page reload or a device restart drops the scouter back to sign-in with no
+  way to resume the match they were scouting.
+
 ## Security concerns (all resolved 2026-09-17; see ADR 0004 and 0005)
 
 - **S-1** Everything that reads or writes scouting data is unauthenticated except the admin
@@ -140,14 +156,19 @@ Rationale in [ADR 0004](../adr/0004-authentication-and-privacy.md).
   platform's public interface.
 - **D-2** Where game-specific behavior currently lives in code (F-19), define configuration
   hooks: phase/shift model, lock rules, alliance-relative buttons, field-map transforms.
-- **D-3** Choose a stable, config-independent id encoding for QR payloads.
+- **D-3** Choose a stable, config-independent id encoding for QR payloads. **Resolved
+  2026-09-17:** the id stays a compact index into the derived known-id list and the payload
+  header carries a 16-bit configuration fingerprint the scanner checks (DM-15a).
 - **D-4** Persist the manual schedule and current match (database or file) so restarts and
-  multi-instance deployments work.
+  multi-instance deployments work. **Resolved 2026-09-17:** the manual schedule is **kept** and
+  both it and the current match are persisted in MongoDB. An event with no TBA presence is the
+  schedule equivalent of an event with no connectivity, and both must work.
 - **D-5** Replace server self-HTTP calls with direct function calls; run the pipeline in one
   shared implementation for both browser and CSV.
 - **D-6** Decide whether to restore Simulate Match and Auto Pick List (requires
   `standardDeviation` and `averageScores.total` in the pipeline).
-- **D-7** Normalize robot ids to a single type across TBA/FMS/manual sources.
+- **D-7** Normalize robot ids to a single type across TBA/FMS/manual sources. **Resolved
+  2026-09-17:** `robotNumber` is the FRC team number and is a **Number** everywhere (DM-1a).
 - **D-7a** Missing-value representation: legacy output mixes `NaN` (empty averages), `null`
   (weighted averages with no counts), `"N/A"` (team `ratio` divide-by-zero default), and
   `undefined`. The oracle golden files record these per path; the rewrite should pick one
@@ -182,6 +203,14 @@ Rationale in [ADR 0004](../adr/0004-authentication-and-privacy.md).
 | Manual data hooks                                 | Revised [A-13]: they also support offline analysis because `/analysis/api/manual` is a precached pipeline input; keep the property that every pipeline input is cacheable (document 18) | 03, 18           |
 | Offline operation                                 | Elevated to a first-class requirement with its own document and tests (OF-1 to OF-9, T-8)                                                                                               | 18               |
 | Duplicate scouting                                | Never two scouters on one robot at once; re-scout replaces earlier data [A-29]                                                                                                          | 06 RT-14a        |
+| Manual schedule                                   | **Decided 2026-09-17:** kept, and persisted with the current match. An event with no TBA presence matters as much as an event with no connectivity (D-4)                                |
+| Missing values                                    | **Decided 2026-09-17:** `null` everywhere; modules render "No Data" (D-7a, DM-1b)                                                                                                       |
+| Migration scope                                   | **Decided 2026-09-17:** 2025 and 2026 seasons only; verified by re-running the oracle against migrated data (DM-7g)                                                                     |
+| Tenant scoping                                    | **Decided 2026-09-17:** reserve `tenantId` on every document now to avoid migrating live data later (DM-7f, BL-197)                                                                     |
+| Robot id type                                     | **Decided 2026-09-17:** FRC team number, stored and compared as a Number (D-7, DM-1a)                                                                                                   |
+| QR id stability                                   | **Decided 2026-09-17:** 16-bit configuration fingerprint in the payload header; the scanner refuses a mismatch (D-3, DM-15a)                                                            |
+| Start rules                                       | **Decided 2026-09-17:** admin force-start (scoped to the current match) plus a configurable quorum, default six; "someone else started" defaults off (RT-12a, ADR 0006)                 |
+| Scouter sessions                                  | **Decided 2026-09-17:** registry keyed by student ID, one entry per scouter, assignment retained across a disconnect, state survives a reload (RT-24..30, ADR 0006)                     |
 | Admins                                            | 2–3 concurrent admins; start rule configurable [A-28, BL-33, BL-34]                                                                                                                     | 06 RT-14b        |
 | Google sign-in, checklist, FMS, AMI/Glitch/Render | Dropped [A-7, A-9, A-10, A-44]                                                                                                                                                          | 01, 07, 10       |
 | Flagging                                          | Manual flag = re-scout needed; analysis warns; auto-flag later [A-12, BL-208]                                                                                                           | 07, 08           |
@@ -253,8 +282,13 @@ that a new feature can be verified not to break existing behavior. Requirements:
   de-duplication on sync and QR submission, flag/delete, event-scoped datasets, and setup
   validation, with TBA/FMS calls stubbed.
 - **T-6** Realtime tests drive the scouter session protocol (document 06, or its SSE
-  replacement from document 15) with simulated clients: sign-in, assignment, six-waiting
+  replacement from document 15) with simulated clients: sign-in, assignment, quorum
   auto-start, admin force-start, kick, disconnect pruning, and resync after reconnect.
+- **T-6a** Reconnection tests are their own suite because this is where events go wrong
+  (F-20 to F-23, RT-24 to RT-30): a scouter who drops and returns keeps **one** registry entry
+  and the **same** robot; their robot is never offered to anyone else while they are away; a
+  page reload resumes the same assignment; a scouter who was scouting comes back scouting; a
+  stale entry never triggers a start; and buffered performances survive the round trip.
 - **T-7** End-to-end browser tests (for example Playwright, mobile viewport) cover the
   critical user journeys once each: scout a full match and submit online; scout offline and
   produce a QR code, then scan it on the scanner page; admin selects a match and assigns
