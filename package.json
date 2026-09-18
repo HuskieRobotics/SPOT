@@ -14,7 +14,8 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "oracle": "bash tools/oracle/run-all.sh",
-    "config:convert": "tsx scripts/convert-config.ts"
+    "config:convert": "tsx scripts/convert-config.ts",
+    "migrate": "tsx scripts/migrate-data.ts"
   },
   "dependencies": {
     "@base-ui/react": "^1.8.0",

@@ -41,6 +41,7 @@ requirements they produce are folded into the documents below.
 | 18  | [18-offline-requirements.md](18-offline-requirements.md)                         | Offline operation as a first-class requirement: the three offline situations, what the service worker must cache (including generated bundles and data endpoints), OF-1 to OF-9                                                                      |
 | 19  | [19-model-fit-guide.md](19-model-fit-guide.md)                                   | Which Claude model (Opus vs Fable 5.1) suits which kind of rewrite work, by phase and work item                                                                                                                                                      |
 | 20  | [20-config-schema-v2.md](20-config-schema-v2.md)                                 | Configuration schema v2 (JSON Schema, decisions CS-1..15), the v1 → v2 converter mapping, and the T-3 tests                                                                                                                                          |
+| 21  | [21-data-model-v2.md](21-data-model-v2.md)                                       | Data model v2 (stored documents, DV-1 to DV-11), placing an action in the match, and the v5 to v6 migration with its results on the real exports                                                                                                     |
 
 ## Behavioral oracle
 

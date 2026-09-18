@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://spot.team3061.org/schema/v2/team-match-performance.schema.json",
+  "title": "SPOT team match performance (data model v2)",
+  "description": "One robot's performance in one match, as stored. See docs/spec/21-data-model-v2.md.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "_id",
+    "tenantId",
+    "eventId",
+    "matchNumber",
+    "robotNumber",
+    "scouterId",
+    "source",
+    "clientVersion",
+    "submittedAt",
+    "matchKey",
+    "nonce",
+    "coverage",
+    "superseded",
+    "flag",
+    "notes",
+    "tags",
+    "actions"
+  ],
+  "properties": {
+    "_id": { "$ref": "#/$defs/objectId" },
+    "tenantId": { "type": "string", "minLength": 1 },
+    "eventId": { "$ref": "#/$defs/objectId" },
+    "matchNumber": { "type": "integer", "minimum": 1 },
+    "robotNumber": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "FRC team number; always a number, never a string (DM-1a)."
+    },
+    "scouterId": {
+      "type": ["string", "null"],
+      "description": "Student ID (SEC-6); null when no signed-in scouter produced the record."
+    },
+    "source": { "enum": ["app", "qr", "import"] },
+    "clientVersion": { "type": "string" },
+    "submittedAt": { "type": "integer", "minimum": 0 },
+    "matchKey": { "type": "string", "minLength": 1 },
+    "nonce": { "type": "string", "minLength": 1 },
+    "coverage": { "enum": ["full", "partial"] },
+    "superseded": { "type": "boolean" },
+    "flag": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["flagged", "reason", "source", "at"],
+      "properties": {
+        "flagged": { "type": "boolean" },
+        "reason": { "type": ["string", "null"] },
+        "source": { "enum": ["human", "machine", null] },
+        "at": { "type": ["integer", "null"] }
+      }
+    },
+    "notes": { "type": ["string", "null"] },
+    "tags": { "type": "array", "items": { "type": "string" } },
+    "actions": { "type": "array", "items": { "$ref": "#/$defs/action" } }
+  },
+  "$defs": {
+    "objectId": { "type": "string", "pattern": "^[0-9a-f]{24}$" },
+    "action": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "ts", "phase", "segment", "segmentKind", "segmentIndex"],
+      "description": "A button press. No per-action _id (BL-31). The period lives in the placement fields, not in the id (docs/spec/20 §2.1).",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Button id with no period prefix."
+        },
+        "ts": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Milliseconds of match time REMAINING (DM-3)."
+        },
+        "phase": { "type": ["string", "null"] },
+        "segment": { "type": ["string", "null"] },
+        "segmentKind": { "type": ["string", "null"] },
+        "segmentIndex": { "type": ["integer", "null"], "minimum": 1 },
+        "other": { "type": "object" }
+      }
+    }
+  }
+}

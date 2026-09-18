@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://spot.team3061.org/schema/v2/event.schema.json",
+  "title": "SPOT event (data model v2)",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["_id", "tenantId", "code", "tbaKey", "label", "eventCode", "eventCodeRotatedAt"],
+  "properties": {
+    "_id": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{24}$"
+    },
+    "tenantId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "code": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9]+_[A-Za-z0-9_-]+$",
+      "description": "<TBA event key>_<label> (DM-6)."
+    },
+    "tbaKey": {
+      "type": "string",
+      "minLength": 1
+    },
+    "label": {
+      "type": "string",
+      "minLength": 1
+    },
+    "eventCode": {
+      "type": ["string", "null"],
+      "description": "Gates writes (SEC-2). Never included in a public response (SEC-3)."
+    },
+    "eventCodeRotatedAt": {
+      "type": ["integer", "null"]
+    }
+  }
+}

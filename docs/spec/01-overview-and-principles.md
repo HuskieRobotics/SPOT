@@ -73,7 +73,7 @@ Operational roles inside one team:
   deletion, and "NOT SCOUTED" placeholders per match derived from TBA.
 - Setup: first-run wizard writes `config/config.json` after validating MongoDB and TBA key;
   event-code management; demo mode; zone-button swap; OPR key list; server restart.
-- Deployment: local Node, Docker, Google Cloud Run script (config persisted in a GCS bucket);
+- Deployment: local Node, Google Cloud Run script (config persisted in a GCS bucket);
   historical guides for Glitch, AWS AMI, Render.
 
 ## Glossary

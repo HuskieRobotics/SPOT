@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://spot.team3061.org/schema/v2/scouter.schema.json",
+  "title": "SPOT scouter (data model v2)",
+  "description": "Keyed by student ID so a reconnect resumes one session (SEC-6, RT-24).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["_id", "tenantId", "displayName", "aliases", "legacy", "createdAt"],
+  "properties": {
+    "_id": { "type": "string", "minLength": 1 },
+    "tenantId": { "type": "string", "minLength": 1 },
+    "displayName": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Shown to admins only; never in a public view (SEC-8)."
+    },
+    "aliases": { "type": "array", "items": { "type": "string" } },
+    "legacy": { "type": "boolean" },
+    "createdAt": { "type": "integer", "minimum": 0 }
+  }
+}
