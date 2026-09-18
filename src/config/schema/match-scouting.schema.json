@@ -184,13 +184,13 @@
           "description": "Sub-periods inside this phase (for example a transition period, then repeating shifts)."
         }
       },
-      "description": "A period of the match selected by the clock. The current phase is the one with the largest startMs that is <= the time remaining."
+      "description": "A period of the match selected by the clock. The clock counts down, so a phase begins when the time remaining reaches its startMs; the active phase is the most recent one to have begun, i.e. the smallest startMs that is still >= the time remaining."
     },
     "segment": {
       "type": "object",
       "additionalProperties": false,
       "required": ["id", "startMs"],
-      "description": "A sub-period of a phase. The active segment is the one with the largest startMs that is <= the time remaining, within the current phase. Id prefix precedence for a recorded action: selected kind prefix + repeat index, else the segment prefix, else the phase prefix.",
+      "description": "A sub-period of a phase. The active segment is the most recent one to have begun within the current phase, by the same rule as phases. Id prefix precedence for a recorded action: selected kind prefix + repeat index, else the segment prefix, else the phase prefix.",
       "properties": {
         "id": {
           "$ref": "#/$defs/id"

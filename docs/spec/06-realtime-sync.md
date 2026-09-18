@@ -158,6 +158,14 @@ badly (F-20 to F-23). These requirements replace the connection-keyed registry.
   `https://frc-api.firstinspires.org/v3.0/{year}/schedule/{code}?tournamentLevel=practice`
   with basic auth and format practice matches; else `[]`.
 - **RT-23** Warns on startup if `TBA_API_KEY` is missing.
+- **RT-23a** **[A-9, decided 2026-09-17]** The FIRST (FRC Events) API practice-match fallback
+  is **dropped** in v6: it is not used, and it only ever covered practice matches. The
+  automatic schedule source is The Blue Alliance, and the **manual schedule** is the fallback
+  for an event with no TBA presence (D-4, kept for exactly this reason). Two sources, one
+  automatic and one human, with nothing in between to keep working.
+- **RT-23b** Robot numbers therefore arrive from two places, TBA and the manual schedule, and
+  both are normalized to a number on ingest (DM-1a). The v5 string-versus-number mismatch
+  between TBA and the FIRST API disappears with the fallback.
 
 ## Demo mode summary (across the system)
 

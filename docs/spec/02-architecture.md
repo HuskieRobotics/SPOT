@@ -164,6 +164,12 @@ categorized precache list. The notes below describe the current implementation.
 - **NF-10** **[A-47]** Keep the SPOT name and logo; fonts and color palette may change.
 - **NF-11** **[A-26]** Scale target: about 6 concurrent scouters plus 1–2 admins, ~450 TMPs per
   event, ~6 events per database, a new database each season.
+- **NF-12** **[decided 2026-09-17]** v6 targets **Node 24** and nothing older. School
+  computers have Node 24 installed and nothing else, and students have to be able to develop on
+  them, so the floor is set by the classroom rather than by the server. Enforced by
+  `package.json` `engines` and `.nvmrc`, used by CI, and assumed by both deployment recipes
+  (ADR 0002). No feature may require a newer runtime without changing this requirement, because
+  that would lock students out of their own project.
 - **NF-8** (rewrite requirement, added 2026-09-16) The rewrite MUST ship an automated test
   suite that verifies existing features so new features can be merged without repeating the
   manual System Test Plan by hand. The current code base has no tests (`npm test` is a

@@ -51,9 +51,10 @@ export interface Layer {
 }
 
 /**
- * A period of the match selected by the clock: auto, teleop, endgame. The current phase is the
- * one with the largest `startMs` that is <= the time remaining. Phases are the unit analysis
- * filters on, which is why endgame is a phase and not a flag inside teleop.
+ * A period of the match selected by the clock: auto, teleop, endgame. The clock counts down, so
+ * a phase begins when the time remaining reaches its `startMs`, and the active phase is the most
+ * recent one to have begun. Phases are the unit analysis filters on, which is why endgame is a
+ * phase and not a flag inside teleop.
  */
 export interface Phase {
   id: string;
@@ -83,8 +84,8 @@ export interface SegmentKind {
 }
 
 /**
- * A sub-period of a phase. The active segment is the one with the largest `startMs` that is
- * <= the time remaining, within the current phase.
+ * A sub-period of a phase. The active segment is the most recent one to have begun within the
+ * current phase, by the same countdown rule as phases.
  *
  * Prefix precedence for a recorded action id: the selected kind's prefix plus the repeat index,
  * else the segment `prefix`, else the phase `prefix`.
