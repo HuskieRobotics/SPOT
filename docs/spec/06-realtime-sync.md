@@ -103,6 +103,28 @@ badly (F-20 to F-23). These requirements replace the connection-keyed registry.
 - **RT-30** Every rule that counts or filters scouters MUST state whether it includes
   disconnected ones. Quorum and start triggers count connected scouters only (F-22); robot
   retention (RT-25) and the admin view (RT-29) deliberately include the disconnected.
+- **RT-31** **[decided 2026-09-17]** An admin MUST be able to **release** an assigned scouter's
+  robot and have someone else take it. This is the dead-phone case: the scouter is not coming
+  back and their robot would otherwise go unscouted, because assignments are retained (RT-25).
+  Release is always explicit. The system MUST NOT reclaim an assignment on its own, since a
+  scouter on a flaky connection has to keep their place.
+- **RT-32** On release the robot re-enters the pool and is assigned by the normal algorithm, or
+  the admin names the replacement. The admin view MUST make an assignment held by a
+  disconnected scouter obvious, because that is the cue to release it (RT-29).
+- **RT-33** A released scouter who reconnects MUST NOT resume the released assignment. They
+  return to WAITING and are assigned like anyone else. This is what keeps RT-14a true across a
+  replacement: the robot has exactly one holder at any moment.
+- **RT-34** Release after the match has started is allowed, but the replacement joins late and
+  their performance covers only the remainder of the match. It MUST be marked as partial so
+  analysis and the edit page can tell (flag metadata, BL-208), rather than silently appearing
+  to be a full scouting record.
+- **RT-35** **[proposed 2026-09-17, confirm]** If both the released scouter and their
+  replacement submit for the same robot and match, the record from whoever **held the
+  assignment at the end of the match** wins. The other is retained and marked superseded, and
+  an admin can promote it. The winner MUST NOT be chosen by submission time: today
+  `removeDuplicates` keeps the latest timestamp, so an abandoned device that syncs hours later
+  would overwrite a complete record with a partial one. Deliberate re-scouting is unaffected
+  and still replaces the earlier record (RT-14a).
 
 ## Admin-driven actions (HTTP, document 07)
 

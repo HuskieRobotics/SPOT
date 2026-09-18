@@ -26,6 +26,11 @@ mode; a two-panel body: **Scouters** and **Matches**.
   or disconnected scouters are removed after 15 s; cards for scouters no longer in the
   registry are removed.
 - **AD-4a** **BL-116** Disconnect must be an explicit, labelled control on the card.
+- **AD-4b** **[decided 2026-09-17, RT-31/RT-32]** A scouter card MUST show whether the scouter
+  is connected and which robot they hold, and MUST offer **Release robot** so an admin can hand
+  an abandoned assignment to someone else. A disconnected scouter holding a robot is the case
+  this exists for, so the card has to make that state obvious rather than hiding it behind a
+  status colour.
 - **AD-5** Clicking a scouter card opens "Do you want to Disconnect <id>?" with Yes/No; Yes
   calls `GET /admin/api/disconnectScouter/<id>` and shows "Scouter <id> Disconnected!".
 - **AD-6** "Assign Scouters" button calls `GET /admin/api/enterMatch` (force-start; see RT-15).

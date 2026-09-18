@@ -42,6 +42,12 @@ match, robot and status.
 **Disconnected scouters stay visible** to admins, marked as such, instead of vanishing on a
 timeout. The timeout existed only because entries were keyed by connection.
 
+**An admin can release an assignment and hand the robot to someone else.** Retaining an
+assignment is right for a flaky connection and wrong for a dead phone, and only a person can
+tell those apart, so release is an explicit admin action and never automatic. A released
+scouter who comes back does not get the robot back; they return to waiting. That is what keeps
+one holder per robot true across a replacement.
+
 **Three start rules, all explicit.** Admin force-start, scoped to the scouters on the current
 match. A configurable quorum, counting connected waiting scouters, defaulting to six so
 today's behavior is preserved. And start-on-first-scouter, the issue 34 behavior, configurable
@@ -59,6 +65,13 @@ count connected scouters only. Robot retention and the admin view include the di
 - Two scouters cannot share a device by reloading the page, because the session is tied to the
   identity that signed in. Switching users becomes an explicit sign-out.
 - Retaining assignments means an abandoned robot stays unscouted until an admin releases it.
-  The admin view has to make that visible, which is why disconnected entries persist.
+  The admin view has to make that visible, which is why disconnected entries persist and why a
+  card shows the robot a scouter holds.
+- A replacement after the match has started can only cover the remainder, so that performance
+  is marked partial rather than passing as a complete record.
+- Two records can now exist for one robot and match: the abandoned one and the replacement's.
+  The winner is whoever held the assignment at the end of the match, not whoever submitted
+  last. Resolving by submission time would let a device that syncs hours later overwrite a
+  complete record with a partial one, because `removeDuplicates` keeps the latest timestamp.
 - Reconnection gets its own test suite (T-6a) rather than a line item, because every one of
   these defects is a race that only shows up under real connection loss.

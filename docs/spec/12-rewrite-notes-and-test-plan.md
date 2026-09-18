@@ -210,6 +210,7 @@ Rationale in [ADR 0004](../adr/0004-authentication-and-privacy.md).
 | Robot id type                                     | **Decided 2026-09-17:** FRC team number, stored and compared as a Number (D-7, DM-1a)                                                                                                   |
 | QR id stability                                   | **Decided 2026-09-17:** 16-bit configuration fingerprint in the payload header; the scanner refuses a mismatch (D-3, DM-15a)                                                            |
 | Start rules                                       | **Decided 2026-09-17:** admin force-start (scoped to the current match) plus a configurable quorum, default six; "someone else started" defaults off (RT-12a, ADR 0006)                 |
+| Replacing a dropped scouter                       | **Decided 2026-09-17:** admins release an assignment explicitly; a released scouter never resumes it; a mid-match replacement is marked partial (RT-31..35)                             |
 | Scouter sessions                                  | **Decided 2026-09-17:** registry keyed by student ID, one entry per scouter, assignment retained across a disconnect, state survives a reload (RT-24..30, ADR 0006)                     |
 | Admins                                            | 2–3 concurrent admins; start rule configurable [A-28, BL-33, BL-34]                                                                                                                     | 06 RT-14b        |
 | Google sign-in, checklist, FMS, AMI/Glitch/Render | Dropped [A-7, A-9, A-10, A-44]                                                                                                                                                          | 01, 07, 10       |
@@ -288,7 +289,11 @@ that a new feature can be verified not to break existing behavior. Requirements:
   (F-20 to F-23, RT-24 to RT-30): a scouter who drops and returns keeps **one** registry entry
   and the **same** robot; their robot is never offered to anyone else while they are away; a
   page reload resumes the same assignment; a scouter who was scouting comes back scouting; a
-  stale entry never triggers a start; and buffered performances survive the round trip.
+  stale entry never triggers a start; and buffered performances survive the round trip. Also
+  the replacement path (RT-31 to RT-35): an admin releases a disconnected scouter's robot
+  before the match, someone else takes it, and the original scouter reconnecting does **not**
+  get it back; and a late submission from the released scouter does not overwrite the
+  replacement's record.
 - **T-7** End-to-end browser tests (for example Playwright, mobile viewport) cover the
   critical user journeys once each: scout a full match and submit online; scout offline and
   produce a QR code, then scan it on the scanner page; admin selects a match and assigns
