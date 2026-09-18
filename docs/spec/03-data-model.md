@@ -1,5 +1,9 @@
 # 03 — Data Model
 
+> **v6.** This document describes what SPOT v5 stores. The v6 documents, the reasons they
+> differ, and the migration are in [21-data-model-v2.md](21-data-model-v2.md); the DM-\*
+> requirements below still apply unless that document says otherwise.
+
 ## MongoDB collections
 
 ### `teamMatchPerformances` (model `TeamMatchPerformance`)

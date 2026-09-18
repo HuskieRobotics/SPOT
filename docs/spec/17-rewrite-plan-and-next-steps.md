@@ -235,26 +235,27 @@ fixed, which is why Phase 0 items 4 and 5 come first.
 
 Last updated 2026-09-17. Phase 0 items are numbered as in section 2.
 
-| #   | Phase 0 item                       | Status                                                                                                                                                                                           |
-| --- | ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| 1   | Fixtures and the behavioral oracle | **Done.** 2025 golden output from tag `v4.2.0` and 2026 from v5 commit `902db06`, with TBA fixtures for both, in `tools/oracle/`.                                                                |
-| 2   | Synthetic TMP generator            | Not started. Unblocked now that the v2 schema exists; required by T-4 and answer 45.                                                                                                             |
-| 3   | Close the five open decisions      | **Done, 5 of 5.** Composite ids (document 20 §2.1), security model (ADR 0004), extension mechanism (ADR 0005), start rules (ADR 0006) and the manual schedule (kept, D-4) are all settled.       |
-| 4   | Configuration schema v2            | **Done.** PR #304, merged 2026-09-17: four JSON Schemas, types, Ajv validator, derived known ids, v1 → v2 converter, active 2026 config, 2025 example (document 20).                             |
-| 5   | Data model v2 and migration        | Not started, and now **fully specified**: `phase`/`segment` on actions, `scouters` keyed by student ID, event code, `tenantId`, `null` for missing values, Number robot ids, 2025 and 2026 only. |
-| 6   | Scaffold with CI                   | **Done.** Commit `df772fa` on `v6`: Next.js, Tailwind, shadcn, Vitest, Playwright, GitHub Actions, no Docker.                                                                                    |
-| 7   | Architecture decision records      | **Done.** `docs/adr/` holds six records: transport, hosting, configuration storage, authentication and privacy, extension model, scouter sessions and match start.                               |
-| 8   | Work tracking                      | Not started. No `v6` label, milestone or board.                                                                                                                                                  |
+| #   | Phase 0 item                       | Status                                                                                                                                                                                                                                                      |
+| --- | ---------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | Fixtures and the behavioral oracle | **Done.** 2025 golden output from tag `v4.2.0` and 2026 from v5 commit `902db06`, with TBA fixtures for both, in `tools/oracle/`.                                                                                                                           |
+| 2   | Synthetic TMP generator            | Not started. The last Phase 0 item Phase 1 waits on; required by T-4 and answer 45.                                                                                                                                                                         |
+| 3   | Close the five open decisions      | **Done, 5 of 5.** Composite ids (document 20 §2.1), security model (ADR 0004), extension mechanism (ADR 0005), start rules (ADR 0006) and the manual schedule (kept, D-4) are all settled.                                                                  |
+| 4   | Configuration schema v2            | **Done.** PR #304, merged 2026-09-17: four JSON Schemas, types, Ajv validator, derived known ids, v1 → v2 converter, active 2026 config, 2025 example (document 20).                                                                                        |
+| 5   | Data model v2 and migration        | **Done.** Document 21: three document schemas, the placement logic, and the v5 to v6 migration with a CLI. Both real season exports migrate with no invalid documents and no unexplained action ids, and the duplicates it marks reconcile with the oracle. |
+| 6   | Scaffold with CI                   | **Done.** Commit `df772fa` on `v6`: Next.js, Tailwind, shadcn, Vitest, Playwright, GitHub Actions, no Docker.                                                                                                                                               |
+| 7   | Architecture decision records      | **Done.** `docs/adr/` holds six records: transport, hosting, configuration storage, authentication and privacy, extension model, scouter sessions and match start.                                                                                          |
+| 8   | Work tracking                      | Not started. No `v6` label, milestone or board.                                                                                                                                                                                                             |
 
 Recommended order from here:
 
-1. **Data model v2 and the migration script** (item 5). This is the only remaining item Phase 1
-   waits on, and the decisions it needed are now made: `phase`/`segment` fields on actions
-   (document 20 §2.1), the `scouters` collection keyed by student ID, and the per-event event
-   code (SEC-2, SEC-6).
-2. **Synthetic generator** (item 2), so Phase 1 starts with real and synthetic coverage.
-3. **Work tracking** (item 8) alongside the above. It matters more than usual because students
-   pick up phases 1 and 3.
+1. **Synthetic generator** (item 2), so Phase 1 starts with real and synthetic coverage. It is
+   the last item Phase 1 waits on: given a `match-scouting.json` it produces rule-respecting
+   action queues for N teams x M matches from a seed, and both the v2 configuration and the
+   placement logic it needs now exist.
+2. **Work tracking** (item 8) alongside it. It matters more than usual because students pick up
+   phases 1 and 3.
+3. **Phase 1 can begin.** The configuration schema, the data model and the migration are in
+   place, so the pipeline engine has a fixed contract to build against.
 
 Every Phase 0 decision is now closed. The manual schedule is kept, so Phase 2 carries a
 schedule editor and Phase 4 carries no removal work; the schedule and the current match are
