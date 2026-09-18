@@ -47,6 +47,18 @@ enter a match, and receives TMPs.
   equals the current match. If any scouter (connected or not) is SCOUTING the current match,
   emit `enterMatch` to all of W. Else if `|W| >= 6`, emit `enterMatch` to all of W.
 - **RT-13** Start rule (demo): emit `enterMatch` to every W immediately.
+- **RT-12a** **[decided 2026-09-17, ADR 0006]** The rewrite offers exactly three start rules:
+  - **Admin force-start**, always available, and scoped to the scouters assigned to the current
+    match rather than broadcast to everyone connected as in RT-15.
+  - **Quorum start**, configurable, counting only connected WAITING scouters on the current
+    match. Default six, which reproduces today's behavior; a team with fewer scouters can lower
+    it instead of relying on force-start every match.
+  - **Start on first scouter**, the RT-12 behavior where one person pressing Start pulls in
+    everyone waiting. Configurable and **off by default**: it is the behavior reported in
+    issue 34, and F-22 shows a stale entry can trigger it.
+
+  A disconnected scouter never counts toward the quorum and never triggers a start.
+
 - **RT-14** Robot numbers from TBA are strings; from FMS are numbers; the client compares with
   `==`. Assignment uses `Set` insertion order, which follows the schedule order red 1-3 then
   blue 1-3.
@@ -62,6 +74,64 @@ enter a match, and receives TMPs.
   admin-only force-start is better is undecided; make the start rule configurable.
 - **RT-14c** **[A-50]** A 2–3 s notification delay is acceptable, so short polling is a
   valid transport for this protocol (document 15).
+
+## Scouter identity, sessions and reconnection (decided 2026-09-17, ADR 0006)
+
+Dropping and reconnecting is the single most common failure at an event, and v5 handles it
+badly (F-20 to F-23). These requirements replace the connection-keyed registry.
+
+- **RT-24** The registry MUST be keyed by **scouter identity** (the student ID of SEC-6), not
+  by socket or connection time. A reconnecting scouter resumes their existing entry. One person
+  MUST NEVER occupy two rows in the admin view.
+- **RT-25** A scouter's assignment MUST be retained while they are disconnected. Their robot is
+  not returned to the pool and MUST NOT be offered to anyone else, so the never-two-scouters
+  rule (RT-14a) holds across a disconnect and the scouter returns to the robot they were on.
+  An admin MAY release an assignment explicitly when someone is not coming back.
+- **RT-26** Session state MUST survive a page reload and a device restart, not just a socket
+  blip. The client persists enough to resume: identity, match, robot and status. Today only the
+  name is persisted (F-23).
+- **RT-27** On reconnect a scouter returns to the status they left: SCOUTING resumes the same
+  match and robot; WAITING returns to waiting. Reconnection MUST NOT re-prompt the assignment
+  modal for an assignment the scouter already accepted.
+- **RT-28** Buffered performances MUST survive the round trip. Reconnection triggers the
+  existing sync exchange (RT-20), and nothing in the buffer is dropped because the socket
+  changed.
+- **RT-29** A disconnected scouter MUST remain visible to admins, marked as disconnected,
+  rather than disappearing after a timeout. Entries persist for the event; an admin can remove
+  one. This replaces the 60 s pruning of RT-4, which exists only because entries are keyed by
+  connection.
+- **RT-30** Every rule that counts or filters scouters MUST state whether it includes
+  disconnected ones. Quorum and start triggers count connected scouters only (F-22); robot
+  retention (RT-25) and the admin view (RT-29) deliberately include the disconnected.
+- **RT-31** **[decided 2026-09-17]** An admin MUST be able to **release** an assigned scouter's
+  robot and have someone else take it. This is the dead-phone case: the scouter is not coming
+  back and their robot would otherwise go unscouted, because assignments are retained (RT-25).
+  Release is always explicit. The system MUST NOT reclaim an assignment on its own, since a
+  scouter on a flaky connection has to keep their place.
+- **RT-32** On release the robot re-enters the pool and is assigned by the normal algorithm, or
+  the admin names the replacement. The admin view MUST make an assignment held by a
+  disconnected scouter obvious, because that is the cue to release it (RT-29).
+- **RT-33** A released scouter who reconnects MUST NOT resume the released assignment. They
+  return to WAITING and are assigned like anyone else. This is what keeps RT-14a true across a
+  replacement: the robot has exactly one holder at any moment.
+- **RT-34** Release after the match has started is allowed, but the replacement joins late and
+  their performance covers only the remainder of the match. It MUST be marked as partial so
+  analysis and the edit page can tell (flag metadata, BL-208), rather than silently appearing
+  to be a full scouting record.
+- **RT-35** **[decided 2026-09-17]** If both the released scouter and their replacement submit
+  for the same robot and match, the record from whoever **held the assignment at the end of the
+  match** wins. The other is retained and marked superseded, and an admin can promote it. The
+  winner MUST NOT be chosen by submission time: today `removeDuplicates` keeps the latest
+  timestamp, so an abandoned device that syncs hours later would overwrite a complete record
+  with a partial one. Deliberate re-scouting is unaffected and still replaces the earlier
+  record (RT-14a).
+- **RT-36** **[decided 2026-09-17]** A performance produced by a replacement MUST be flagged
+  automatically for review, using the flag metadata of BL-208 with a machine source and a
+  reason naming the replacement. Coverage is in doubt, so a human decides whether to re-scout
+  it from video. This applies when the replacement happened **mid-match** (RT-34, partial
+  coverage) and when **two records** exist for the robot and match (RT-35). A release before
+  the match starts that produces a single, complete record is not flagged: that is a clean
+  substitution, not a coverage problem.
 
 ## Admin-driven actions (HTTP, document 07)
 

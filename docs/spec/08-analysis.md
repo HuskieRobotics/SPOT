@@ -101,7 +101,7 @@ was largely qualitative; expected to return for a typical game.
   teams sorted descending (bubble sort). The `SingleDisplay` module implements the same
   comparison for `aggrMethod: "percentChanceOfWinning"`.
 
-## CSV export (`GET /analysis/api/csv`, server side)
+## CSV export (v5: `GET /analysis/api/csv`, server side; v6: client-side, ADR 0005)
 
 - **AN-25** Re-runs the pipeline on the server (dataset fetched from its own endpoint **plus**
   the same TMPs queried again from MongoDB, so every TMP is duplicated before transformers;
@@ -113,7 +113,12 @@ was largely qualitative; expected to return for a typical game.
 - **NOTE** No header quoting/escaping; team numbers are the object keys of `dataset.teams`.
 - **AN-26a** **[A-11]** The CSV is an escape hatch for ad-hoc analysis in Google Sheets;
   column names and specific values are not relied upon. **BL-232** Generate it client-side
-  from the already-computed dataset so the pipeline runs in one place.
+  from the already-computed dataset so the pipeline runs in one place. **[decided 2026-09-17]**
+  This is the v6 behavior: the browser builds the file from the dataset it already has, which
+  removes the duplicate query (F-7) and the server-side `eval` (S-5), and lets the export work
+  offline (ADR 0005).
+- **AN-26b** **[SEC-8]** Neither the CSV nor any public analysis view may include scouter
+  information: no name, no id, no initials.
 
 ## Demo label
 

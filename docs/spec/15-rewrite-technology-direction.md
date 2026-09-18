@@ -147,7 +147,11 @@ start`. Docker adds complexity for student developers and is hard to install on 
 
 ## Part 2 — Implications of Next.js
 
-- **Extension model decision [A-5, A-49].** Runtime discovery of drop-in files is preferred and
+- **Extension model decision [A-5, A-49]. Settled 2026-09-17 in favour of option (a), the
+  build-time registry (ADR 0005): an extension is custom code, whoever writes one has
+  programming expertise, and requiring one import line plus a rebuild is acceptable. Every
+  extension must declare a JSON Schema for its options. The original analysis follows.**
+  Runtime discovery of drop-in files is preferred and
   the model must stay usable by students without programming experience. In Next.js this
   means option (b) below for custom code: a route handler that reads `extensions/{transformers,
 modules,executables}/` at runtime and serves them as plain scripts registered on a small

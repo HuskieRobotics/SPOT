@@ -181,7 +181,7 @@ Do these before writing application code. Each one removes a class of rework lat
    - keep or drop the manual schedule (A-8);
    - security model: adopt R-32 and the per-event scouting join code, or a lighter variant;
    - extension mechanism details (runtime-served `extensions/` folder, document 15).
-4. **Done 2026-09-17 (document 20).** **Write the configuration schema v2 as JSON Schema** before any UI: `match-scouting`,
+4. **Write the configuration schema v2 as JSON Schema** before any UI (**done**, see section 5): `match-scouting`,
    `analysis-pipeline`, `analysis-modules`, `qr`, and the new settings document. Include
    `knownActionIds`, `pauseMs`, explicit colors, configurable shift/A-Stop/filter bands, and
    the TBA enrichment mapping. Write a converter from the 2026 config and validate the
@@ -231,14 +231,72 @@ fixed, which is why Phase 0 items 4 and 5 come first.
 - **Time-box the stack decision.** If SSE proves awkward in the first week of phase 2, fall
   back to polling (answer 50 allows it) rather than adding a custom server.
 
-## 5. Immediate next steps (this week)
+## 5. Status and next steps
 
-1. Request `mongoexport` JSON of one 2026 event **and one 2025 event**, record the TBA
-   fixtures for both; the 2025 baseline is `v4.2.0` (section 2.1).
-2. Decide the five open items in section 2.3 and record them in document 12.
-3. Create the `v6` branch, move the spec to `docs/spec/`, add `CLAUDE.md`, and land the
-   scaffold PR with CI.
-4. Start the oracle: legacy pipeline run against the fixtures, golden outputs committed.
-5. ~~Draft the JSON Schema for `match-scouting.json` v2 and convert the 2026 config as the
-   first test.~~ Done: all four schemas, converter, tests, and the converted 2026 config as
-   the active `config/*.json` (document 20).
+Last updated 2026-09-17. Phase 0 items are numbered as in section 2.
+
+| #   | Phase 0 item                       | Status                                                                                                                                                                                           |
+| --- | ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| 1   | Fixtures and the behavioral oracle | **Done.** 2025 golden output from tag `v4.2.0` and 2026 from v5 commit `902db06`, with TBA fixtures for both, in `tools/oracle/`.                                                                |
+| 2   | Synthetic TMP generator            | Not started. Unblocked now that the v2 schema exists; required by T-4 and answer 45.                                                                                                             |
+| 3   | Close the five open decisions      | **Done, 5 of 5.** Composite ids (document 20 §2.1), security model (ADR 0004), extension mechanism (ADR 0005), start rules (ADR 0006) and the manual schedule (kept, D-4) are all settled.       |
+| 4   | Configuration schema v2            | **Done.** PR #304, merged 2026-09-17: four JSON Schemas, types, Ajv validator, derived known ids, v1 → v2 converter, active 2026 config, 2025 example (document 20).                             |
+| 5   | Data model v2 and migration        | Not started, and now **fully specified**: `phase`/`segment` on actions, `scouters` keyed by student ID, event code, `tenantId`, `null` for missing values, Number robot ids, 2025 and 2026 only. |
+| 6   | Scaffold with CI                   | **Done.** Commit `df772fa` on `v6`: Next.js, Tailwind, shadcn, Vitest, Playwright, GitHub Actions, no Docker.                                                                                    |
+| 7   | Architecture decision records      | **Done.** `docs/adr/` holds six records: transport, hosting, configuration storage, authentication and privacy, extension model, scouter sessions and match start.                               |
+| 8   | Work tracking                      | Not started. No `v6` label, milestone or board.                                                                                                                                                  |
+
+Recommended order from here:
+
+1. **Data model v2 and the migration script** (item 5). This is the only remaining item Phase 1
+   waits on, and the decisions it needed are now made: `phase`/`segment` fields on actions
+   (document 20 §2.1), the `scouters` collection keyed by student ID, and the per-event event
+   code (SEC-2, SEC-6).
+2. **Synthetic generator** (item 2), so Phase 1 starts with real and synthetic coverage.
+3. **Work tracking** (item 8) alongside the above. It matters more than usual because students
+   pick up phases 1 and 3.
+
+Every Phase 0 decision is now closed. The manual schedule is kept, so Phase 2 carries a
+schedule editor and Phase 4 carries no removal work; the schedule and the current match are
+persisted rather than held in memory, which restarts needed regardless.
+
+### 5.1 The two blocking decisions, as settled on 2026-09-17
+
+**Security and privacy** (SEC-1 to SEC-10 in document 12, rationale in
+[ADR 0004](../adr/0004-authentication-and-privacy.md)). Reads are public by choice, because
+Team 3061 is an open alliance team. Writes carry a per-event event code so a public server
+cannot be polluted. Admin actions, which include flagging, deleting, the scanner's undo,
+restart, demo mode, the schedule and settings, sit behind one shared password from the
+environment. Scouters are identified by student ID, with a `scouters` record mapping the id to
+a full name that only admins see; public views carry no scouter information at all. Credentials
+are checked when data reaches the server, not while scouting, so a multi-day offline event
+keeps working.
+
+**Extension model** ([ADR 0005](../adr/0005-extension-model.md)). An extension is custom code,
+meaning a transformer, module or executable, not a configuration edit. Whoever writes one has
+programming expertise, so extensions are registered at build time: write the file, add one
+import line, rebuild. No runtime folder scan, no public runtime API, no upload path, and
+installing one needs filesystem access to the host. Every extension must declare a JSON Schema
+for its options, so extension options are validated as strictly as built-in ones. CSV export
+moves to the browser, which removes the duplicate query and the server-side `eval`, lets the
+export work offline, and leaves the pipeline with one execution environment.
+
+Both decisions feed step 5 directly: the data model needs the `scouters` collection, the event
+code on the event document, and no scouter fields in public projections.
+
+**Scouter sessions and match start** ([ADR 0006](../adr/0006-scouter-sessions-and-match-start.md),
+decided 2026-09-17). Sessions are keyed by student ID rather than by connection, which is the
+root cause of a scouter appearing twice in the admin view after a reconnect (F-20 to F-23). A
+disconnected scouter keeps their robot, comes back to the same assignment, and survives a page
+reload; disconnected entries stay visible to admins instead of being pruned. Match start offers
+admin force-start scoped to the current match, a configurable quorum defaulting to six, and the
+issue-34 "someone else started" rule, off by default. Reconnection gets its own test suite
+(T-6a).
+
+**Data model choices** (decided 2026-09-17, recorded against document 03). A missing value is
+`null` everywhere, so modules render one thing as "No Data" (DM-1b). `robotNumber` is the FRC
+team number, a Number on every path (DM-1a). Every document carries `tenantId` from day one so
+a hosted instance never has to migrate live scouting data (DM-7f). The migration covers the
+2025 and 2026 seasons only and is verified by re-running the oracle against migrated data
+(DM-7g). The QR payload gains a 16-bit configuration fingerprint so a code generated before a
+configuration edit is refused rather than silently decoded wrong (DM-15a).
