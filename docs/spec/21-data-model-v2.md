@@ -29,6 +29,7 @@ Types are in `src/data/types.ts`, validation in `src/data/validate.ts`, placemen
 | DV-9  | **Events carry `tbaKey` and `label` split out**, plus the write-gating `eventCode`.                                                                                                                                                                                    | DM-6, SEC-2/3           |
 | DV-10 | **Missing means `null`**, everywhere.                                                                                                                                                                                                                                  | DM-1b, D-7a             |
 | DV-11 | **Renames for plain meaning**: `timestamp` → `submittedAt`, `eventNumber` → `eventId`, `matchId` → `matchKey`, `matchId_rand` → `nonce`, `actionQueue` → `actions`.                                                                                                    | —                       |
+| DV-12 | **`EVENT_NUMBER` becomes `activeEventId`.** It was never a number, and which kind of identifier it holds is not the reader's problem. The admin UI selects an event by its `code`, which is what a person recognizes.                                                  | CF-4, DM-7              |
 
 Deliberate redundancy: the placement could be recomputed from `ts` and the season's
 configuration, but the configuration is edited between seasons and sometimes within one, so
@@ -122,11 +123,36 @@ Two findings the report surfaces rather than silently fixing:
 | `tests/unit/data-schema.test.ts` | Documents validate; a string team number, a per-action `_id`, a missing placement field, a missing tenant and an unknown source are all refused with a path and a message.               |
 | `tests/unit/migrate.test.ts`     | Both real exports migrate to valid documents; 2026 has no unexplained ids; superseded records reconcile with the oracle golden report; QR records, v5 flags and underscored event codes. |
 
-## 5. Still to build
+## 5. Naming the active event
+
+v5 stored the active event in `config.json` as `EVENT_NUMBER`, an ObjectId hex string. The name
+says "number", the value is not a number, and the fact that it is an ObjectId is an
+implementation detail the reader should never have to know. v5 already hid this in the setup
+UI, which presents the event **code** and converts (CF-4).
+
+v6 has no `config.json` (ADR 0003), so the active event is a field in the settings document:
+
+```jsonc
+{ "activeEventId": "69a5ac455b39b683634e795e" }
+```
+
+- **DV-12a** The settings field is `activeEventId` and holds the event's `_id`. Documents
+  reference `eventId` (DV-11), so there is exactly one notion of event identity in the data.
+- **DV-12b** Every user-facing surface selects and displays an event by its `code`
+  (`2026mnwi_official`), never by its id. Nothing in the UI shows an ObjectId.
+
+Considered and rejected: making `code` the primary key of events and dropping ObjectIds there
+entirely, so a performance would read `eventId: "2026mnwi_official"`. It reads better, and the
+migration could rewrite the references since it already rewrites every document. It was
+rejected because an event code is editable by an admin, so a typo correction would orphan every
+performance that referenced it. Identity that a person can retype is identity that can break.
+
+## 6. Still to build
 
 - **Persistence.** No MongoDB driver yet: the application's database layer lands with Phase 1,
   and these schemas become the collection validators then.
 - **Indexes**, with `tenantId` leading so a hosted instance does not need them rebuilt.
 - **The schedule and the current match** must be persisted too (D-4, manual schedule kept).
+- **The settings document**, whose first field is `activeEventId` (DV-12a).
 - **A driver-backed runner** for the migration, once there is a database layer. The transform
   and the report are the parts worth testing, and they exist now.

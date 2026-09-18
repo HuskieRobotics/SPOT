@@ -76,31 +76,54 @@ Operational roles inside one team:
 - Deployment: local Node, Docker, Google Cloud Run script (config persisted in a GCS bucket);
   historical guides for Glitch, AWS AMI, Render.
 
+## Demo mode (a product requirement, not a debug switch)
+
+Demo mode lets a team evaluate SPOT with **zero installation effort**: open a hosted instance,
+scout a pretend match alone, and look at the analysis. That is the whole reason it exists, and
+it is why v6 keeps it. v5 implements it as `DEMO: true` in `config.json`; the behavior is
+tabulated in document 06.
+
+- **DM-MODE-1** v6 MUST keep demo mode, with the evaluation path above working end to end on a
+  public instance: land, sign in, scout a match, submit, see the result in analysis.
+- **DM-MODE-2** A single scouter MUST be able to scout alone. Demo mode enters the match
+  immediately rather than waiting for a quorum or an admin (RT-13, RT-12a).
+- **DM-MODE-3** Demo mode MUST be a property of a **deployment**, set from the environment at
+  start-up, and MUST NOT be toggleable at runtime. In v5 it lives in the config file and
+  disables admin authentication, so a runtime toggle on a production instance would switch off
+  authentication for the real event (SEC-4, S-1).
+- **DM-MODE-4** Demo data MUST be isolated from real scouting data and MUST be disposable: a
+  demo instance carries its own tenant (DV-8) or its own event, and an admin can reset it. v5
+  writes performances in demo mode and refuses deletes, so demo data accumulates with no way
+  to clear it.
+- **DM-MODE-5** Every page MUST show that it is a demo, as v5 does.
+- **DM-MODE-6** Destructive and outward-facing actions stay refused in demo mode, and the
+  refusal MUST say why rather than failing silently.
+
 ## Glossary
 
-| Term                              | Meaning                                                                                                                                                                                  |
-| --------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **TMP / TeamMatchPerformance**    | One scouter's record of one robot in one match: metadata plus an action queue.                                                                                                           |
-| **Action**                        | `{ id, ts, other? }` — a button id (possibly prefixed with the match phase/shift), the match time remaining in milliseconds when pressed, and optional extra data (e.g. field position). |
-| **Action queue**                  | Ordered list of actions in a TMP. Temporary actions (`temp: true`) exist only client-side and are stripped on submit.                                                                    |
-| **Action id**                     | String identifier for a button; at runtime the recorded id is `<phasePrefix><buttonId>` (see document 05).                                                                               |
-| **Layer**                         | One screen of buttons in the scouting grid. Layers are switched by time transitions or by executables.                                                                                   |
-| **Executable**                    | A named client-side behavior attached to a button (`layer`, `position`, `setVariable`, …) with `execute` and `reverse` (undo) hooks.                                                     |
-| **Variable**                      | Named client-side state in the scouting UI (`variables` in `match-scouting.json`), used for conditional layer rendering and the undo guard.                                              |
-| **Transformer / DataTransformer** | A named function `(dataset, outputPath, options) => dataset` of type `tmp` or `team`, run in order from `analysis-pipeline.json`.                                                        |
-| **Dataset**                       | `{ tmps: TMP[], teams: { [teamNumber]: object } }`; transformers add paths to tmps and teams.                                                                                            |
-| **Module**                        | A frontend analysis widget class (`Stats`, `Bar`, `Pie`, …) configured in `analysis-modules.json`.                                                                                       |
-| **Path**                          | Dot-separated key path (`averageScores.total`) resolved with `getPath` / created with `setPath`.                                                                                         |
-| **Event code**                    | Human string `<tbaEventKey>_<label>` stored in the `events` collection; each has an ObjectId.                                                                                            |
-| **EVENT_NUMBER**                  | In `config.json`, the ObjectId hex string of the active event; every TMP stores it as `eventNumber`. (Legacy v4 stored an integer.)                                                      |
-| **TBA**                           | The Blue Alliance API v3 (matches, teams, score breakdowns, component OPRs).                                                                                                             |
-| **FMS / FRC API**                 | FIRST Events API (used only for practice-match schedules).                                                                                                                               |
-| **OPR / COPR**                    | Offensive Power Rating and TBA component OPRs (`/event/{key}/coprs`), keyed by human strings configured in `TBA_OPR_STRINGS`.                                                            |
-| **Match string**                  | TBA match key, e.g. `2026mnwi_qm12`; manual schedule uses `2023temp_qN`; FMS practice uses `<eventKey>_pmN`.                                                                             |
-| **Access code**                   | Single shared secret (`secrets.ACCESS_CODE`) sent as the `Authorization` header for admin/edit/setup/schedule pages.                                                                     |
-| **Demo mode**                     | `DEMO: true` — disables auth on admin pages, prevents deletes and sync writes, auto-enters matches immediately.                                                                          |
-| **Scouter status**                | `NEW(0)`, `WAITING(1)`, `SCOUTING(2)`, `COMPLETE(3)`, `DISCONNECTED_BY_ADMIN(4)`.                                                                                                        |
-| **Shift**                         | 2026-game concept: teleop alternates 25 s "active"/"inactive" shifts; the client prefixes action ids with `activeShift1`, `inactiveShift2`, etc.                                         |
+| Term                              | Meaning                                                                                                                                                                                                            |
+| --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **TMP / TeamMatchPerformance**    | One scouter's record of one robot in one match: metadata plus an action queue.                                                                                                                                     |
+| **Action**                        | `{ id, ts, other? }` — a button id (possibly prefixed with the match phase/shift), the match time remaining in milliseconds when pressed, and optional extra data (e.g. field position).                           |
+| **Action queue**                  | Ordered list of actions in a TMP. Temporary actions (`temp: true`) exist only client-side and are stripped on submit.                                                                                              |
+| **Action id**                     | String identifier for a button; at runtime the recorded id is `<phasePrefix><buttonId>` (see document 05).                                                                                                         |
+| **Layer**                         | One screen of buttons in the scouting grid. Layers are switched by time transitions or by executables.                                                                                                             |
+| **Executable**                    | A named client-side behavior attached to a button (`layer`, `position`, `setVariable`, …) with `execute` and `reverse` (undo) hooks.                                                                               |
+| **Variable**                      | Named client-side state in the scouting UI (`variables` in `match-scouting.json`), used for conditional layer rendering and the undo guard.                                                                        |
+| **Transformer / DataTransformer** | A named function `(dataset, outputPath, options) => dataset` of type `tmp` or `team`, run in order from `analysis-pipeline.json`.                                                                                  |
+| **Dataset**                       | `{ tmps: TMP[], teams: { [teamNumber]: object } }`; transformers add paths to tmps and teams.                                                                                                                      |
+| **Module**                        | A frontend analysis widget class (`Stats`, `Bar`, `Pie`, …) configured in `analysis-modules.json`.                                                                                                                 |
+| **Path**                          | Dot-separated key path (`averageScores.total`) resolved with `getPath` / created with `setPath`.                                                                                                                   |
+| **Event code**                    | Human string `<tbaEventKey>_<label>` stored in the `events` collection; each has an ObjectId.                                                                                                                      |
+| **EVENT_NUMBER**                  | (v5) In `config.json`, the ObjectId hex string of the active event; v6 renames it `activeEventId` and selects by event code (document 21 §5); every TMP stores it as `eventNumber`. (Legacy v4 stored an integer.) |
+| **TBA**                           | The Blue Alliance API v3 (matches, teams, score breakdowns, component OPRs).                                                                                                                                       |
+| **FMS / FRC API**                 | FIRST Events API (used only for practice-match schedules).                                                                                                                                                         |
+| **OPR / COPR**                    | Offensive Power Rating and TBA component OPRs (`/event/{key}/coprs`), keyed by human strings configured in `TBA_OPR_STRINGS`.                                                                                      |
+| **Match string**                  | TBA match key, e.g. `2026mnwi_qm12`; manual schedule uses `2023temp_qN`; FMS practice uses `<eventKey>_pmN`.                                                                                                       |
+| **Access code**                   | Single shared secret (`secrets.ACCESS_CODE`) sent as the `Authorization` header for admin/edit/setup/schedule pages.                                                                                               |
+| **Demo mode**                     | `DEMO: true` — disables auth on admin pages, prevents deletes and sync writes, auto-enters matches immediately.                                                                                                    |
+| **Scouter status**                | `NEW(0)`, `WAITING(1)`, `SCOUTING(2)`, `COMPLETE(3)`, `DISCONNECTED_BY_ADMIN(4)`.                                                                                                                                  |
+| **Shift**                         | 2026-game concept: teleop alternates 25 s "active"/"inactive" shifts; the client prefixes action ids with `activeShift1`, `inactiveShift2`, etc.                                                                   |
 
 ## Page map (routes mounted by the server)
 
