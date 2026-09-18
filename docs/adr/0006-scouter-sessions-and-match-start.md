@@ -73,5 +73,9 @@ count connected scouters only. Robot retention and the admin view include the di
   The winner is whoever held the assignment at the end of the match, not whoever submitted
   last. Resolving by submission time would let a device that syncs hours later overwrite a
   complete record with a partial one, because `removeDuplicates` keeps the latest timestamp.
+- Whenever a replacement produces the record, it is auto-flagged for review, so coverage that
+  is in doubt is decided by a person and can be re-scouted from video rather than quietly
+  entering the analysis. This is the first machine-sourced flag, which is why the flag metadata
+  of BL-208 carries a source as well as a reason.
 - Reconnection gets its own test suite (T-6a) rather than a line item, because every one of
   these defects is a race that only shows up under real connection loss.

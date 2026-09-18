@@ -118,13 +118,20 @@ badly (F-20 to F-23). These requirements replace the connection-keyed registry.
   their performance covers only the remainder of the match. It MUST be marked as partial so
   analysis and the edit page can tell (flag metadata, BL-208), rather than silently appearing
   to be a full scouting record.
-- **RT-35** **[proposed 2026-09-17, confirm]** If both the released scouter and their
-  replacement submit for the same robot and match, the record from whoever **held the
-  assignment at the end of the match** wins. The other is retained and marked superseded, and
-  an admin can promote it. The winner MUST NOT be chosen by submission time: today
-  `removeDuplicates` keeps the latest timestamp, so an abandoned device that syncs hours later
-  would overwrite a complete record with a partial one. Deliberate re-scouting is unaffected
-  and still replaces the earlier record (RT-14a).
+- **RT-35** **[decided 2026-09-17]** If both the released scouter and their replacement submit
+  for the same robot and match, the record from whoever **held the assignment at the end of the
+  match** wins. The other is retained and marked superseded, and an admin can promote it. The
+  winner MUST NOT be chosen by submission time: today `removeDuplicates` keeps the latest
+  timestamp, so an abandoned device that syncs hours later would overwrite a complete record
+  with a partial one. Deliberate re-scouting is unaffected and still replaces the earlier
+  record (RT-14a).
+- **RT-36** **[decided 2026-09-17]** A performance produced by a replacement MUST be flagged
+  automatically for review, using the flag metadata of BL-208 with a machine source and a
+  reason naming the replacement. Coverage is in doubt, so a human decides whether to re-scout
+  it from video. This applies when the replacement happened **mid-match** (RT-34, partial
+  coverage) and when **two records** exist for the robot and match (RT-35). A release before
+  the match starts that produces a single, complete record is not flagged: that is a clean
+  substitution, not a coverage problem.
 
 ## Admin-driven actions (HTTP, document 07)
 

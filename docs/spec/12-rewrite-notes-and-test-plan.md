@@ -292,8 +292,8 @@ that a new feature can be verified not to break existing behavior. Requirements:
   stale entry never triggers a start; and buffered performances survive the round trip. Also
   the replacement path (RT-31 to RT-35): an admin releases a disconnected scouter's robot
   before the match, someone else takes it, and the original scouter reconnecting does **not**
-  get it back; and a late submission from the released scouter does not overwrite the
-  replacement's record.
+  get it back; a late submission from the released scouter does not overwrite the
+  replacement's record; and the resulting performance comes back auto-flagged (RT-36).
 - **T-7** End-to-end browser tests (for example Playwright, mobile viewport) cover the
   critical user journeys once each: scout a full match and submit online; scout offline and
   produce a QR code, then scan it on the scanner page; admin selects a match and assigns
