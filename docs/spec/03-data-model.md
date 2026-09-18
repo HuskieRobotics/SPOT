@@ -9,7 +9,8 @@
   "_id": ObjectId,
   "timestamp": Number,        // Date.now() at submission (client clock)
   "clientVersion": String,    // config.VERSION at time of scouting (e.g. "1.0")
-  "scouterId": String,        // firstName+lastName concatenated, or "qrcode" for scanned TMPs
+  "scouterId": String,        // v5: firstName+lastName concatenated, or "qrcode" for scanned TMPs
+                              // v6: the scouter's student ID (SEC-6); names live in `scouters`
   "robotNumber": Number,      // FRC team number scouted
   "matchNumber": Number,      // SPOT linear match number (see "Match numbering")
   "eventNumber": ObjectId,    // _id of the events document (stored as ObjectId; clients send hex string)
@@ -41,16 +42,45 @@ is acceptable; the rewrite may restructure this schema. Reserve fields for backl
 `notes` (BL-35), `tags` (BL-193), `flag: { flagged, reason, source }` (BL-208), and omit
 per-action `_id`s (BL-31).
 
+- **DM-5a** **[decided 2026-09-17]** Each action also carries the `phase` and `segment` it was
+  recorded in; the legacy composite id stays derivable as prefix + id (document 20 §2.1). The
+  migration splits existing ids such as `teleopTransitionStoring` using the same derivation.
+
 ### `events` (model `Event`)
 
 ```jsonc
 { "_id": ObjectId, "code": String }   // e.g. "2026mnwi_official"
+// v6 adds the write-gating event code (SEC-2/SEC-3):
+// { ..., "eventCode": String, "eventCodeRotatedAt": Number }
 ```
 
 - **DM-6** Event codes are `<TBA event key>_<label>`; the TBA key is recovered with
   `code.split("_")[0]` wherever an event-scoped TBA call is needed.
 - **DM-7** `config.EVENT_NUMBER` holds the hex `_id` of the active event. All new TMPs carry it;
   the default dataset endpoint filters by it.
+- **DM-7a** **[decided 2026-09-17]** The event document also holds the per-event **event code**
+  that gates writes (SEC-2). It is shown to admins, rotatable, and never included in a public
+  read response (SEC-3).
+
+### `scouters` (v6, required by SEC-6)
+
+```jsonc
+{
+  "_id": String,            // student ID, as entered at sign-in; also the TMP `scouterId`
+  "displayName": String,    // full name, shown to admins only (SEC-8)
+  "aliases": [String],      // ids merged into this record by an admin
+  "createdOffline": Boolean // record was created on a device before it reached the server
+}
+```
+
+- **DM-7b** Performances reference the id only. The display name is resolved at read time, so
+  merging or correcting a record never rewrites stored performances (SEC-6).
+- **DM-7c** Public read responses MUST project every scouter field out (SEC-8). This is a
+  read-path filter, not a flag on the document.
+- **DM-7d** A record may be created on a device at a fully offline event and synced later
+  (SEC-7), so the identifier cannot come from a server-side sequence. The student ID satisfies
+  this by construction.
+- **DM-7e** This collection also satisfies the dataset hook BL-195 (per-scouter accuracy).
 
 ## Match numbering and match objects
 

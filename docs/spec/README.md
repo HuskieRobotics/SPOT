@@ -14,6 +14,9 @@ code. Every document is derived from the actual source in `src/` and `config/`, 
 attached Configuration Guide, Quickstart, Usage Guide, and System Test Plan. Where the docs
 and the code disagree, the code wins and the discrepancy is called out.
 
+Architecture decisions and their rationale live in [`docs/adr/`](../adr/README.md); the
+requirements they produce are folded into the documents below.
+
 ## How to read these documents
 
 | #   | File                                                                             | What it covers                                                                                                                                                                                                                                       |

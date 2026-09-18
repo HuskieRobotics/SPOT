@@ -235,69 +235,50 @@ fixed, which is why Phase 0 items 4 and 5 come first.
 
 Last updated 2026-09-17. Phase 0 items are numbered as in section 2.
 
-| #   | Phase 0 item                       | Status                                                                                                                                                               |
-| --- | ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 1   | Fixtures and the behavioral oracle | **Done.** 2025 golden output from tag `v4.2.0` and 2026 from v5 commit `902db06`, with TBA fixtures for both, in `tools/oracle/`.                                    |
-| 2   | Synthetic TMP generator            | Not started. Unblocked now that the v2 schema exists; required by T-4 and answer 45.                                                                                 |
-| 3   | Close the five open decisions      | **1 of 5.** Composite ids resolved (phase/segment fields, document 20 §2.1). Open: start rules (BL-34), manual schedule, security model, extension mechanism.        |
-| 4   | Configuration schema v2            | **Done.** PR #304, merged 2026-09-17: four JSON Schemas, types, Ajv validator, derived known ids, v1 → v2 converter, active 2026 config, 2025 example (document 20). |
-| 5   | Data model v2 and migration        | Not started. **The last item blocking Phase 1.** Must include the `phase`/`segment` fields and the split of legacy composite ids.                                    |
-| 6   | Scaffold with CI                   | **Done.** Commit `df772fa` on `v6`: Next.js, Tailwind, shadcn, Vitest, Playwright, GitHub Actions, no Docker.                                                        |
-| 7   | Architecture decision records      | Not started. `docs/adr/` does not exist yet.                                                                                                                         |
-| 8   | Work tracking                      | Not started. No `v6` label, milestone or board.                                                                                                                      |
+| #   | Phase 0 item                       | Status                                                                                                                                                                   |
+| --- | ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| 1   | Fixtures and the behavioral oracle | **Done.** 2025 golden output from tag `v4.2.0` and 2026 from v5 commit `902db06`, with TBA fixtures for both, in `tools/oracle/`.                                        |
+| 2   | Synthetic TMP generator            | Not started. Unblocked now that the v2 schema exists; required by T-4 and answer 45.                                                                                     |
+| 3   | Close the five open decisions      | **3 of 5.** Composite ids (document 20 §2.1), security model (ADR 0004) and extension mechanism (ADR 0005) are settled. Open: start rules (BL-34), manual schedule.      |
+| 4   | Configuration schema v2            | **Done.** PR #304, merged 2026-09-17: four JSON Schemas, types, Ajv validator, derived known ids, v1 → v2 converter, active 2026 config, 2025 example (document 20).     |
+| 5   | Data model v2 and migration        | Not started. **The last item blocking Phase 1.** Must include the `phase`/`segment` fields, the `scouters` collection keyed by student ID, and the per-event event code. |
+| 6   | Scaffold with CI                   | **Done.** Commit `df772fa` on `v6`: Next.js, Tailwind, shadcn, Vitest, Playwright, GitHub Actions, no Docker.                                                            |
+| 7   | Architecture decision records      | **Done.** `docs/adr/` holds five records: transport, hosting, configuration storage, authentication and privacy, extension model.                                        |
+| 8   | Work tracking                      | Not started. No `v6` label, milestone or board.                                                                                                                          |
 
 Recommended order from here:
 
-1. **Settle the security model and the extension mechanism** (section 2 item 3). Both reach
-   into the data model and the engine, so deciding them after step 5 means rework. Section 5.1
-   lists exactly what each one has to answer.
-2. **Data model v2 and the migration script** (item 5). This is what Phase 1 waits on.
-3. **Synthetic generator** (item 2), so Phase 1 starts with real and synthetic coverage.
-4. **Decision records and work tracking** (items 7 and 8) alongside the above. These matter
-   more than usual because students pick up phases 1 and 3.
+1. **Data model v2 and the migration script** (item 5). This is the only remaining item Phase 1
+   waits on, and the decisions it needed are now made: `phase`/`segment` fields on actions
+   (document 20 §2.1), the `scouters` collection keyed by student ID, and the per-event event
+   code (SEC-2, SEC-6).
+2. **Synthetic generator** (item 2), so Phase 1 starts with real and synthetic coverage.
+3. **Work tracking** (item 8) alongside the above. It matters more than usual because students
+   pick up phases 1 and 3.
 
 Start rules (BL-34) and the manual schedule block Phase 2, not Phase 1, so they can wait until
 the scouting slice starts.
 
-### 5.1 What the two blocking decisions have to answer
+### 5.1 The two blocking decisions, as settled on 2026-09-17
 
-**Security model** (S-1 to S-4, R-32, answers 30 to 32). Already settled: secrets come from
-environment variables, the browser never supplies a database URL, and admin is distinguished
-from other roles. Still open:
+**Security and privacy** (SEC-1 to SEC-10 in document 12, rationale in
+[ADR 0004](../adr/0004-authentication-and-privacy.md)). Reads are public by choice, because
+Team 3061 is an open alliance team. Writes carry a per-event event code so a public server
+cannot be polluted. Admin actions, which include flagging, deleting, the scanner's undo,
+restart, demo mode, the schedule and settings, sit behind one shared password from the
+environment. Scouters are identified by student ID, with a `scouters` record mapping the id to
+a full name that only admins see; public views carry no scouter information at all. Credentials
+are checked when data reaches the server, not while scouting, so a multi-day offline event
+keeps working.
 
-- **Is the dataset world-readable?** Reading scouting data is unauthenticated today. R-32 puts
-  reads behind a per-event join code. This is an operational question as much as a security
-  one, because alliance partners and other teams are sometimes shown the dashboard at an event.
-- **What does a scouter present?** A per-event join code, an identity, or both. Today a scouter
-  types a free-text name and the server trusts it.
-- **How long does a session last, and does it survive offline?** Tablets sleep between matches
-  and may be offline for a whole event (document 18), so any token must outlive that and must
-  not require a round trip to keep working.
-- **One shared admin password or accounts?** R-32 assumes a single environment-provided
-  password. Confirm, because accounts change the data model.
-- **Which writes are gated.** Match submission, QR scanning, edit and delete, restart, and
-  demo mode each need a role.
+**Extension model** ([ADR 0005](../adr/0005-extension-model.md)). An extension is custom code,
+meaning a transformer, module or executable, not a configuration edit. Whoever writes one has
+programming expertise, so extensions are registered at build time: write the file, add one
+import line, rebuild. No runtime folder scan, no public runtime API, no upload path, and
+installing one needs filesystem access to the host. Every extension must declare a JSON Schema
+for its options, so extension options are validated as strictly as built-in ones. CSV export
+moves to the browser, which removes the duplicate query and the server-side `eval`, lets the
+export work offline, and leaves the pipeline with one execution environment.
 
-Data-model consequences to fix before step 5: whether join codes and the admin password are
-stored (hashed) or environment-only, whether a `scouters` collection exists, and whether
-documents carry tenant/event scoping (document 16 reserves this hook).
-
-**Extension mechanism** (A-5, A-49, document 15 part 2). The decision is build-time registry
-versus runtime folder scan, and it is really three questions:
-
-- **Rebuild or drop-in?** A build-time registry means adding one import line and running
-  `next build`, which is not acceptable mid-event on a bare-Node EC2 box. A runtime scan keeps
-  "drop a file in a folder" but puts a stable public runtime API on us forever.
-- **Do extensions run on the server?** Transformers run in the browser for the dashboard and on
-  the server for CSV export. Runtime-loading them server-side re-creates the `eval` path this
-  rewrite removes (S-5). Client-only extensions avoid that and cost a CSV limitation.
-- **Who installs one?** Filesystem access on the host, or an upload in the admin UI. An upload
-  is arbitrary code execution and cannot be decided separately from the security model.
-
-Also decide whether an extension declares a JSON Schema for its options, so extension options
-get the same strict validation built-ins now have (document 20, open items), and what happens
-when an extension targets an older runtime API.
-
-A defensible answer to both: ship Phase 1 with built-ins only and closed option schemas, keep
-configuration as the customization path (principle P4), and revisit the loader in Phase 5 once
-a real extension is wanted. Record whichever way it goes as an ADR.
+Both decisions feed step 5 directly: the data model needs the `scouters` collection, the event
+code on the event document, and no scouter fields in public projections.

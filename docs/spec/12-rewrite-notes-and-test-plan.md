@@ -71,22 +71,59 @@ are open design choices.
   ids, A-Stop detection, and the half-field coordinate transform in `HeatmapScatterPlot`.
   These violate principle P1 and should move into configuration.
 
-## Security concerns (decide)
+## Security concerns (all resolved 2026-09-17; see ADR 0004 and 0005)
 
 - **S-1** Everything that reads or writes scouting data is unauthenticated except the admin
   registry/match endpoints and config. **[A-30, A-31]** The server is public and some
   authentication is wanted; at minimum admin must be distinguished from other roles as today.
-  Recommendation: an admin password (env-provided, R-32) for admin/edit/setup/schedule, plus a
-  per-event **scouting join code** shown on the admin page that scouters enter once; read APIs
-  behind the same join code so the dataset is not world-readable.
+  **Resolved:** reads stay public by choice (SEC-1); writes need the event code (SEC-2);
+  admin actions need the admin password (SEC-4).
 - **S-2** The access code is a single shared password compared in plain text and echoed back
-  by `/setup/api/config` along with all other secrets.
+  by `/setup/api/config` along with all other secrets. **Resolved:** one shared admin password
+  from the environment, never echoed by any endpoint (SEC-4, ADR 0003).
 - **S-3** `/setup/api/events` and `/createEventCode` accept an arbitrary MongoDB URL from the
   client and connect to it (SSRF-like). `/setup/api/config` connects to the submitted URL
   before checking anything else once a config exists (it does check the access code first).
+  **Resolved:** the browser never supplies a database URL; `MONGODB_URI` is environment-only
+  (ADR 0003).
 - **S-4** `/admin/restart` lets anyone with the code kill the process; `/qrscanner/api/undo`
-  lets anyone delete the last QR submission.
-- **S-5** `eval` of a server-generated bundle in the CSV route.
+  lets anyone delete the last QR submission. **Resolved:** both are admin actions (SEC-5).
+- **S-5** `eval` of a server-generated bundle in the CSV route. **Resolved:** CSV is generated
+  in the browser from the already-computed dataset (SEC-9, ADR 0005, BL-232), which also fixes
+  F-7.
+
+## Security and privacy model (decided 2026-09-17)
+
+Rationale in [ADR 0004](../adr/0004-authentication-and-privacy.md).
+
+- **SEC-1** Reading scouting data MUST NOT require authentication. Team 3061 is an open
+  alliance team; the dataset is meant to be shared, including with other teams at an event.
+- **SEC-2** Writing scouting data (match submission and QR-scan submission) MUST require a
+  **per-event event code**. The scouter enters it once and the device retains it; it is
+  attached to submissions. Its purpose is to keep strangers from polluting the database.
+- **SEC-3** The event code MUST be visible to an admin, MUST be rotatable, MUST be stored with
+  the event, and MUST NOT appear in any public read response.
+- **SEC-4** Admin actions MUST require a single shared admin password supplied in the
+  environment (`SPOT_ADMIN_PASSWORD`). No endpoint may echo it. Per-user accounts are out of
+  scope.
+- **SEC-5** Admin-only actions: flagging, editing and deleting performances; the QR scanner's
+  undo; restart; demo mode; the match schedule; settings. Scouting and submitting are never
+  admin actions.
+- **SEC-6** Scouters MUST be identified by **student ID**, stored on the performance. A
+  `scouters` record maps the id to a full name, holds aliases, and supports an admin merge of
+  two records. The display name MUST be resolved at read time so a merge never rewrites
+  history.
+- **SEC-7** Sign-in SHOULD present a roster pick-list rather than a free-text box, cached for
+  offline use, with a path to add a scouter who is not on it. A new scouter record's
+  identifier MUST be creatable on the device so sign-in works at a fully offline event.
+- **SEC-8** Public views MUST NOT expose scouter information: no name, no id, no initials.
+  Admin views show full names. The read path filters these fields rather than the documents
+  carrying a flag.
+- **SEC-9** Credentials MUST be verified when data reaches the server, never as a condition of
+  scouting, so an offline device keeps working. Neither the event code nor an admin session may
+  expire during an event; assume an event lasts several days and may be entirely offline.
+- **SEC-10** Unauthenticated reads mean there is no per-identity rate limiting on the read
+  path. Accepted: the failure mode is load, not disclosure.
 
 ## Dead or vestigial code (safe to drop or restore deliberately)
 
@@ -130,6 +167,8 @@ are open design choices.
 | ------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
 | D-1 config compatibility                          | JSON (or equally accessible) config is required for non-programmers; archived configs not required; documented pipeline structure and best practices should be preserved [A-1, A-3]     | 01 P2, 04 CF-12a |
 | D-2 game constants in code                        | Move shifts, A-Stop boundary, field orientation, heatmap fold, position lock, filter bands, TBA enrichment mapping into config [A-17, A-18, A-19, A-20, A-21, A-14, A-34]               | 04, 05, 08, 09   |
+| Extension model                                   | **Decided 2026-09-17:** build-time registry, one import line plus a rebuild; option schema required for every extension; installing needs host filesystem access (ADR 0005)             | 15 part 2        |
+| CSV export                                        | **Decided 2026-09-17:** generated in the browser from the computed dataset (ADR 0005, BL-232); fixes F-7 and S-5                                                                        | 08 AN-25/26      |
 | D-3 QR id encoding                                | Replace catalog layer with derived ids [A-23]; composite ids stay compatible [A-22]; actions also carry `phase`/`segment` (doc 20 §2.1)                                                 | 04 CF-9/9a       |
 | D-4 persistence of schedule/match                 | Manual schedule low priority; if kept, must match Usage Guide incl. row locks [A-8]                                                                                                     | 07 AD-25a        |
 | D-5 self-HTTP and one pipeline                    | Confirmed; CSV client-side [A-11, BL-232]                                                                                                                                               | 08 AN-26a        |
@@ -150,7 +189,7 @@ are open design choices.
 | Units                                             | Milliseconds only [A-40]; `startAction`/`endAction` only [A-41]                                                                                                                         | 04               |
 | Accessibility / branding                          | Accessibility required, no localization [A-46]; keep name and logo, palette free [A-47]                                                                                                 | 02 NF-9/10       |
 | Testing data                                      | Real past-season dump can be provided, but a synthetic generator is required for preseason verification [A-45]                                                                          | T-4 below        |
-| Security                                          | Public server; some auth wanted; admin must be distinguished from other roles at minimum [A-30, A-31]                                                                                   | S-1/S-2          |
+| Security                                          | **Decided 2026-09-17:** public reads, event code for writes, one shared admin password, student-id scouters, no scouter data in public views (SEC-1..10, ADR 0004)                      | S-1/S-2          |
 
 **R-32 Recommendation for a secure yet easy first-run workflow [A-32]:** do not accept a
 database URL from the browser. Provide `MONGODB_URI` and `SPOT_ADMIN_PASSWORD` (or an
