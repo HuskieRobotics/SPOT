@@ -238,7 +238,7 @@ Last updated 2026-09-17. Phase 0 items are numbered as in section 2.
 | #   | Phase 0 item                       | Status                                                                                                                                                                                                                                                      |
 | --- | ---------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | 1   | Fixtures and the behavioral oracle | **Done.** 2025 golden output from tag `v4.2.0` and 2026 from v5 commit `902db06`, with TBA fixtures for both, in `tools/oracle/`.                                                                                                                           |
-| 2   | Synthetic TMP generator            | Not started. The last Phase 0 item Phase 1 waits on; required by T-4 and answer 45.                                                                                                                                                                         |
+| 2   | Synthetic TMP generator            | **Done.** Document 22: a headless model of the scouting rules driven by `match-scouting.json`, reproducible from a seed, validated against the data model, and renderable to the v5 shape for the oracle.                                                   |
 | 3   | Close the five open decisions      | **Done, 5 of 5.** Composite ids (document 20 §2.1), security model (ADR 0004), extension mechanism (ADR 0005), start rules (ADR 0006) and the manual schedule (kept, D-4) are all settled.                                                                  |
 | 4   | Configuration schema v2            | **Done.** PR #304, merged 2026-09-17: four JSON Schemas, types, Ajv validator, derived known ids, v1 → v2 converter, active 2026 config, 2025 example (document 20).                                                                                        |
 | 5   | Data model v2 and migration        | **Done.** Document 21: three document schemas, the placement logic, and the v5 to v6 migration with a CLI. Both real season exports migrate with no invalid documents and no unexplained action ids, and the duplicates it marks reconcile with the oracle. |
@@ -248,14 +248,14 @@ Last updated 2026-09-17. Phase 0 items are numbered as in section 2.
 
 Recommended order from here:
 
-1. **Synthetic generator** (item 2), so Phase 1 starts with real and synthetic coverage. It is
-   the last item Phase 1 waits on: given a `match-scouting.json` it produces rule-respecting
-   action queues for N teams x M matches from a seed, and both the v2 configuration and the
-   placement logic it needs now exist.
-2. **Work tracking** (item 8) alongside it. It matters more than usual because students pick up
-   phases 1 and 3.
-3. **Phase 1 can begin.** The configuration schema, the data model and the migration are in
-   place, so the pipeline engine has a fixed contract to build against.
+1. **Phase 1 can begin.** Every item it waited on is done: the configuration schema
+   (document 20), the data model and migration (document 21), the synthetic generator
+   (document 22) and the behavioral oracle. The engine has a fixed contract to build against
+   and two independent datasets, real and synthetic, to check itself against.
+2. **Work tracking** (item 8), the last open Phase 0 item alongside the manual-schedule
+   decision. It matters more than usual because students pick up phases 1 and 3.
+3. **Golden pipeline expectations** land with the engine: the generated dataset and its seed
+   become the fixture T-4 asks for, so a transformer change shows up as a diff.
 
 Every Phase 0 decision is now closed. The manual schedule is kept, so Phase 2 carries a
 schedule editor and Phase 4 carries no removal work; the schedule and the current match are

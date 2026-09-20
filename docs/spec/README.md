@@ -42,6 +42,7 @@ requirements they produce are folded into the documents below.
 | 19  | [19-model-fit-guide.md](19-model-fit-guide.md)                                   | Which Claude model (Opus vs Fable 5.1) suits which kind of rewrite work, by phase and work item                                                                                                                                                      |
 | 20  | [20-config-schema-v2.md](20-config-schema-v2.md)                                 | Configuration schema v2 (JSON Schema, decisions CS-1..15), the v1 → v2 converter mapping, and the T-3 tests                                                                                                                                          |
 | 21  | [21-data-model-v2.md](21-data-model-v2.md)                                       | Data model v2 (stored documents, DV-1 to DV-11), placing an action in the match, and the v5 to v6 migration with its results on the real exports                                                                                                     |
+| 22  | [22-synthetic-data.md](22-synthetic-data.md)                                     | Synthetic scouting data: a headless model of the scouting rules driven by the configuration, its guarantees (SY-1 to SY-7), and the CLI                                                                                                              |
 
 ## Behavioral oracle
 
