@@ -12,10 +12,17 @@
     {
       "type": "chrome",
       "request": "launch",
-      "name": "SPOT Client",
+      "name": "SPOT Client Chrome",
       "url": "http://localhost:8080",
       "webRoot": "${workspaceFolder}/src/analysis/public",
       "outputCapture": "std"
+    },
+    {
+      "type": "firefox",
+      "request": "launch",
+      "name": "SPOT Client Firefox",
+      "url": "http://localhost:8080",
+      "webRoot": "${workspaceFolder}/src/analysis/public"
     }
   ]
 }

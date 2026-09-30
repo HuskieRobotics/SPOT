@@ -1,0 +1,132 @@
+[{
+  "_id": {
+    "$oid": "68bf4404906f900a12f7c6cc"
+  },
+  "code": "2025mndu2_official"
+},
+{
+  "_id": {
+    "$oid": "68bf4411906f900a12f7c6cd"
+  },
+  "code": "2025ilch_official"
+},
+{
+  "_id": {
+    "$oid": "68bf44a4906f900a12f7c6ce"
+  },
+  "code": "2025cur_official"
+},
+{
+  "_id": {
+    "$oid": "68bf44ae906f900a12f7c6cf"
+  },
+  "code": "2023ilch_training"
+},
+{
+  "_id": {
+    "$oid": "68bf44bb906f900a12f7c6d0"
+  },
+  "code": "2023mose_training"
+},
+{
+  "_id": {
+    "$oid": "68bf44c5906f900a12f7c6d1"
+  },
+  "code": "2023arc_training"
+},
+{
+  "_id": {
+    "$oid": "68bf44d3906f900a12f7c6d2"
+  },
+  "code": "2023rr_testing"
+},
+{
+  "_id": {
+    "$oid": "68bf4504906f900a12f7c6d3"
+  },
+  "code": "2024ksla_training"
+},
+{
+  "_id": {
+    "$oid": "68bf4528906f900a12f7c6d4"
+  },
+  "code": "2024ilch_training"
+},
+{
+  "_id": {
+    "$oid": "68bf4537906f900a12f7c6d5"
+  },
+  "code": "2024joh_training"
+},
+{
+  "_id": {
+    "$oid": "68bf4542906f900a12f7c6d6"
+  },
+  "code": "2024rr_testing"
+},
+{
+  "_id": {
+    "$oid": "68bf454d906f900a12f7c6d7"
+  },
+  "code": "2024witw_training"
+},
+{
+  "_id": {
+    "$oid": "68bf455c906f900a12f7c6d8"
+  },
+  "code": "2025ilch_testing"
+},
+{
+  "_id": {
+    "$oid": "68bf4568906f900a12f7c6d9"
+  },
+  "code": "2025mndu2_testing"
+},
+{
+  "_id": {
+    "$oid": "68bf4575906f900a12f7c6da"
+  },
+  "code": "2025week0_training"
+},
+{
+  "_id": {
+    "$oid": "68e6e0acab3d5b333fff6d53"
+  },
+  "code": "2025ilch_training"
+},
+{
+  "_id": {
+    "$oid": "68e6e17cab3d5b333fff6d54"
+  },
+  "code": "2025ilch_offical"
+},
+{
+  "_id": {
+    "$oid": "68fcd79dc8f656bad110115d"
+  },
+  "code": "2025iltrr_official"
+},
+{
+  "_id": {
+    "$oid": "691e69c022da37c0b39d9c0b"
+  },
+  "code": "2025cur_something"
+},
+{
+  "_id": {
+    "$oid": "6950645c8b2cbcd2f68bdfa7"
+  },
+  "code": "2025iltrr_testing4"
+},
+{
+  "_id": {
+    "$oid": "696e56877ef9db087378eca4"
+  },
+  "code": "2025cur_testingData"
+},
+{
+  "_id": {
+    "$oid": "6977f3161d9e4702919b0d80"
+  },
+  "code": "2025cur_26testData"
+}]
