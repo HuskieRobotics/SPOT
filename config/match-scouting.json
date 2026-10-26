@@ -47,7 +47,7 @@
         {
           "id": "score",
           "displayText": "Score",
-          "gridArea": ["3", "3", "4", "3"],
+          "gridArea": ["1", "4", "1", "7"],
           "class": "lightCoral",
           "type": "action",
           "executables": []
@@ -55,7 +55,7 @@
         {
           "id": "pass",
           "displayText": "Pass",
-          "gridArea": ["6", "1", "7", "3"],
+          "gridArea": ["2", "2", "2", "2"],
           "class": "lightCoral",
           "type": "action",
           "executables": []
@@ -63,7 +63,7 @@
         {
           "id": "collect",
           "displayText": "Collect",
-          "gridArea": ["4", "8", "6", "10"],
+          "gridArea": ["3", "3", "3", "3"],
           "class": "lightCoral",
           "type": "action",
           "executables": []
