@@ -1,11 +1,15 @@
 {
   "timing": {
-    "totalTime": 153000,
+    "totalTime": 15000,
     "timeTransitions": {
-      "152999": { "layer": 1, "displayText": "Teleop", "variables": {} },
-      "135000": {
-        "layer": 2,
+      "3000": {
+        "layer": 1,
         "displayText": "Teleop",
+        "variables": {}
+      },
+      "2999": {
+        "layer": 4,
+        "displayText": "Endgame",
         "variables": {}
       }
     }
@@ -45,9 +49,17 @@
       ],
       [
         {
+          "id": "startGame",
+          "displayText": "Start",
+          "gridArea": ["1", "4", "2", "7"],
+          "class": "silver timer",
+          "type": "match-control",
+          "executables": []
+        },
+        {
           "id": "score",
           "displayText": "Score",
-          "gridArea": ["1", "4", "1", "7"],
+          "gridArea": ["3", "3", "3", "8"],
           "class": "lightCoral",
           "type": "action",
           "executables": []
@@ -55,15 +67,133 @@
         {
           "id": "pass",
           "displayText": "Pass",
-          "gridArea": ["2", "2", "2", "2"],
+          "gridArea": ["4", "3", "4", "8"],
+          "class": "lightCoral",
+          "type": "action",
+          "executables": [{ "type": "layer", "args": [1, 2] }]
+        },
+        {
+          "id": "collect",
+          "displayText": "Collect",
+          "gridArea": ["5", "3", "5", "8"],
+          "class": "lightCoral",
+          "type": "action",
+          "executables": [{ "type": "layer", "args": [1, 3] }]
+        }
+      ],
+      [
+        {
+          "id": "startGame",
+          "displayText": "Start",
+          "gridArea": ["1", "4", "2", "7"],
+          "class": "silver timer",
+          "type": "match-control",
+          "executables": []
+        },
+        {
+          "id": "pass1",
+          "displayText": "Pass1",
+          "gridArea": ["3", "3", "3", "8"],
+          "class": "lightCoral",
+          "type": "action",
+          "executables": [{ "type": "layer", "args": [1, 1] }]
+        },
+        {
+          "id": "pass2",
+          "displayText": "Pass2",
+          "gridArea": ["4", "3", "4", "8"],
+          "class": "lightCoral",
+          "type": "action",
+          "executables": [{ "type": "layer", "args": [1, 1] }]
+        },
+        {
+          "id": "pass3",
+          "displayText": "Pass3",
+          "gridArea": ["5", "3", "5", "8"],
+          "class": "lightCoral",
+          "type": "action",
+          "executables": [{ "type": "layer", "args": [1, 1] }]
+        },
+        {
+          "id": "pass4",
+          "displayText": "Pass4",
+          "gridArea": ["6", "3", "6", "8"],
+          "class": "lightCoral",
+          "type": "action",
+          "executables": [{ "type": "layer", "args": [1, 1] }]
+        }
+      ],
+      [
+        {
+          "id": "startGame",
+          "displayText": "Start",
+          "gridArea": ["1", "4", "2", "7"],
+          "class": "silver timer",
+          "type": "match-control",
+          "executables": []
+        },
+        {
+          "id": "collect1",
+          "displayText": "Collect1",
+          "gridArea": ["3", "3", "3", "8"],
+          "class": "lightCoral",
+          "type": "action",
+          "executables": [{ "type": "layer", "args": [0, 1] }]
+        },
+        {
+          "id": "collect2",
+          "displayText": "Collect2",
+          "gridArea": ["4", "3", "4", "8"],
+          "class": "lightCoral",
+          "type": "action",
+          "executables": [{ "type": "layer", "args": [0, 1] }]
+        },
+        {
+          "id": "collect3",
+          "displayText": "Collect3",
+          "gridArea": ["5", "3", "5", "8"],
+          "class": "lightCoral",
+          "type": "action",
+          "executables": [{ "type": "layer", "args": [0, 1] }]
+        },
+        {
+          "id": "collect4",
+          "displayText": "Collect4",
+          "gridArea": ["6", "3", "6", "8"],
+          "class": "lightCoral",
+          "type": "action",
+          "executables": [{ "type": "layer", "args": [0, 1] }]
+        }
+      ],
+      [
+        {
+          "id": "startGame",
+          "displayText": "Start",
+          "gridArea": ["1", "4", "2", "7"],
+          "class": "silver timer",
+          "type": "match-control",
+          "executables": []
+        },
+        {
+          "id": "climb",
+          "displayText": "Climb",
+          "gridArea": ["3", "3", "3", "8"],
           "class": "lightCoral",
           "type": "action",
           "executables": []
         },
         {
-          "id": "collect",
-          "displayText": "Collect",
-          "gridArea": ["3", "3", "3", "3"],
+          "id": "park",
+          "displayText": "Park",
+          "gridArea": ["4", "3", "4", "8"],
+          "class": "lightCoral",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "field",
+          "displayText": "Field",
+          "gridArea": ["5", "3", "5", "8"],
           "class": "lightCoral",
           "type": "action",
           "executables": []
