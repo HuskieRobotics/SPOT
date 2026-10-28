@@ -1,0 +1,55 @@
+[
+  {
+    "type": "tmp",
+    "name": "countActions",
+    "outputPath": "counts",
+    "options": {
+      "all": true
+    }
+  },
+  {
+    "type": "tmp",
+    "name": "sum",
+    "outputPath": "counts.pass1Amount",
+    "options": {
+      "addends": ["counts.pass1"]
+    }
+  },
+  {
+    "type": "tmp",
+    "name": "sum",
+    "outputPath": "counts.pass2Amount",
+    "options": {
+      "addends": ["counts.pass2"]
+    }
+  },
+  {
+    "type": "tmp",
+    "name": "sum",
+    "outputPath": "counts.pass3Amount",
+    "options": {
+      "addends": ["counts.pass3"]
+    }
+  },
+  {
+    "type": "tmp",
+    "name": "sum",
+    "outputPath": "counts.pass4Amount",
+    "options": {
+      "addends": ["counts.pass4"]
+    }
+  },
+  {
+    "type": "tmp",
+    "name": "sum",
+    "outputPath": "counts.totalPassAmount",
+    "options": {
+      "addends": [
+        "counts.pass1",
+        "counts.pass2",
+        "counts.pass3",
+        "counts.pass4"
+      ]
+    }
+  }
+]
