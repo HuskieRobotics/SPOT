@@ -1,0 +1,29 @@
+[
+  {
+    "view": "team",
+    "module": "PerformanceTimePlot",
+    "name": "Performance By Each Match",
+    "position": "main",
+    "options": {
+      "trackedStats": ["counts.scoreAmount"]
+    }
+  },
+  {
+    "view": "team",
+    "module": "Pie",
+    "name": "Pre-Loads",
+    "position": "main",
+    "options": {
+      "slices": [
+        {
+          "name": "Pre-Loaded",
+          "path": "counts.allPreload"
+        },
+        {
+          "name": "Pre-Load None",
+          "path": "counts.allNone"
+        }
+      ]
+    }
+  }
+]

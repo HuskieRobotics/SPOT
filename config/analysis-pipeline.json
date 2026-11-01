@@ -10,6 +10,14 @@
   {
     "type": "tmp",
     "name": "sum",
+    "outputPath": "counts.scoreAmount",
+    "options": {
+      "addends": ["counts.score"]
+    }
+  },
+  {
+    "type": "tmp",
+    "name": "sum",
     "outputPath": "counts.pass1Amount",
     "options": {
       "addends": ["counts.pass1"]
