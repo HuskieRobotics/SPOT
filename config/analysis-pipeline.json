@@ -51,5 +51,98 @@
         "counts.pass4"
       ]
     }
+  },
+  {
+    "type": "tmp",
+    "name": "sum",
+    "outputPath": "counts.collect1Amount",
+    "options": {
+      "addends": ["counts.collect1"]
+    }
+  },
+  {
+    "type": "tmp",
+    "name": "sum",
+    "outputPath": "counts.collect2Amount",
+    "options": {
+      "addends": ["counts.collect2"]
+    }
+  },
+  {
+    "type": "tmp",
+    "name": "sum",
+    "outputPath": "counts.collect3Amount",
+    "options": {
+      "addends": ["counts.collect3"]
+    }
+  },
+  {
+    "type": "tmp",
+    "name": "sum",
+    "outputPath": "counts.collect4Amount",
+    "options": {
+      "addends": ["counts.collect4"]
+    }
+  },
+  {
+    "type": "tmp",
+    "name": "sum",
+    "outputPath": "counts.totalCollectAmount",
+    "options": {
+      "addends": [
+        "counts.collect1",
+        "counts.collect2",
+        "counts.collect3",
+        "counts.collect4"
+      ]
+    }
+  },
+  {
+    "type": "team",
+    "name": "countActions",
+    "outputPath": "counts",
+    "options": {
+      "all": true
+    }
+  },
+  {
+    "type": "team",
+    "name": "sum",
+    "outputPath": "counts.allPreload",
+    "options": {
+      "addends": ["counts.preload"]
+    }
+  },
+  {
+    "type": "team",
+    "name": "sum",
+    "outputPath": "counts.allNone",
+    "options": {
+      "addends": ["counts.none"]
+    }
+  },
+  {
+    "type": "team",
+    "name": "sum",
+    "outputPath": "counts.allClimb",
+    "options": {
+      "addends": ["counts.climb"]
+    }
+  },
+  {
+    "type": "team",
+    "name": "sum",
+    "outputPath": "counts.allPark",
+    "options": {
+      "addends": ["counts.park"]
+    }
+  },
+  {
+    "type": "team",
+    "name": "sum",
+    "outputPath": "counts.allField",
+    "options": {
+      "addends": ["counts.field"]
+    }
   }
 ]
