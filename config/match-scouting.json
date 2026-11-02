@@ -2,14 +2,15 @@
   "timing": {
     "totalTime": 15000,
     "timeTransitions": {
-      "3000": {
+      "14999": {
         "layer": 1,
-        "displayText": "",
+        "displayText": "Auto",
         "variables": {}
       },
-      "2999": {
+
+      "7000": {
         "layer": 4,
-        "displayText": "",
+        "displayText": "Endgame",
         "variables": {}
       }
     }
@@ -23,24 +24,24 @@
     "layers": [
       [
         {
-          "id": "",
-          "displayText": "",
+          "id": "startGame",
+          "displayText": "Start",
           "gridArea": ["2", "1", "4", "10"],
           "class": "silver timer",
           "type": "match-control",
-          "executables": [{ "type": "layer", "args": [0, 1] }]
+          "executables": [{ "type": "startButton", "args": [0, 1] }]
         },
         {
-          "id": "",
-          "displayText": "",
+          "id": "preloadTrue",
+          "displayText": "Preload True",
           "gridArea": ["4", "1", "6", "5"],
           "class": "lightCoral",
           "type": "action",
           "executables": []
         },
         {
-          "id": "",
-          "displayText": "",
+          "id": "preloadFalse",
+          "displayText": "Preload False",
           "gridArea": ["4", "6", "6", "10"],
           "class": "gray",
           "type": "action",
@@ -57,12 +58,28 @@
           "executables": []
         },
         {
-          "id": "",
-          "displayText": "",
-          "gridArea": ["3", "3", "3", "8"],
+          "id": "isScoring",
+          "displayText": "Scoring",
+          "gridArea": ["2", "4", "3", "7"],
           "class": "lightCoral",
           "type": "action",
           "executables": []
+        },
+        {
+          "id": "isCollecting",
+          "displayText": "Collecting",
+          "gridArea": ["3", "4", "4", "7"],
+          "class": "lightCoral",
+          "type": "action",
+          "executables": [{ "type": "layer", "args": [1, 2] }]
+        },
+        {
+          "id": "isPassing",
+          "displayText": "Passing",
+          "gridArea": ["4", "4", "5", "7"],
+          "class": "lightCoral",
+          "type": "action",
+          "executables": [{ "type": "layer", "args": [1, 3] }]
         }
       ],
       [
@@ -75,12 +92,36 @@
           "executables": []
         },
         {
-          "id": "",
-          "displayText": "",
-          "gridArea": [],
-          "class": "",
-          "type": "",
-          "executables": [{ "type": "layer", "args": [1, 1] }]
+          "id": "isCollect1",
+          "displayText": "Collect 1",
+          "gridArea": ["2", "4", "3", "7"],
+          "class": "lightCoral",
+          "type": "action",
+          "executables": [{ "type": "layer", "args": [2, 1] }]
+        },
+        {
+          "id": "isCollect2",
+          "displayText": "Collect 2",
+          "gridArea": ["3", "4", "4", "7"],
+          "class": "lightCoral",
+          "type": "action",
+          "executables": [{ "type": "layer", "args": [2, 1] }]
+        },
+        {
+          "id": "isCollect3",
+          "displayText": "Collect 3",
+          "gridArea": ["4", "4", "5", "7"],
+          "class": "lightCoral",
+          "type": "action",
+          "executables": [{ "type": "layer", "args": [2, 1] }]
+        },
+        {
+          "id": "isCollect4",
+          "displayText": "Collect 4",
+          "gridArea": ["5", "4", "6", "7"],
+          "class": "lightCoral",
+          "type": "action",
+          "executables": [{ "type": "layer", "args": [2, 1] }]
         }
       ],
       [
@@ -93,12 +134,62 @@
           "executables": []
         },
         {
-          "id": "",
-          "displayText": "",
-          "gridArea": [],
-          "class": "",
-          "type": "",
-          "executables": [{ "type": "layer", "args": [0, 1] }]
+          "id": "isPass1",
+          "displayText": "Pass 1",
+          "gridArea": ["2", "4", "3", "7"],
+          "class": "lightCoral",
+          "type": "action",
+          "executables": [{ "type": "layer", "args": [3, 1] }]
+        },
+        {
+          "id": "isPass2",
+          "displayText": "Pass 2",
+          "gridArea": ["3", "4", "4", "7"],
+          "class": "lightCoral",
+          "type": "action",
+          "executables": [{ "type": "layer", "args": [3, 1] }]
+        },
+        {
+          "id": "isPass3",
+          "displayText": "Pass 3",
+          "gridArea": ["4", "4", "5", "7"],
+          "class": "lightCoral",
+          "type": "action",
+          "executables": [{ "type": "layer", "args": [3, 1] }]
+        }
+      ],
+      [
+        {
+          "id": "startGame",
+          "displayText": "Start",
+          "gridArea": ["1", "4", "2", "7"],
+          "class": "silver timer",
+          "type": "match-control",
+          "executables": []
+        },
+        {
+          "id": "isClimbing",
+          "displayText": "Climbing",
+          "gridArea": ["2", "4", "3", "7"],
+          "class": "lightCoral",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "isParked",
+          "displayText": "Parked",
+          "gridArea": ["3", "4", "4", "7"],
+          "class": "lightCoral",
+          "type": "action",
+          "executables": []
+        },
+        {
+          "id": "isField",
+          "displayText": "Field",
+          "gridArea": ["4", "4", "5", "7"],
+          "class": "lightCoral",
+          "type": "action",
+          "executables": []
         }
       ],
       [
