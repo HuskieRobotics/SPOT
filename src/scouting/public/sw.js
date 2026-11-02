@@ -143,7 +143,10 @@ self.addEventListener("fetch", (event) => {
             }
             return networkResponse;
           })
-          .catch((e) => console.log(e, "Error fetching:", event.request.url));
+          .catch((e) => {
+            console.log(e, "Error fetching:", event.request.url);
+            return response || Response.error();
+          });
 
         return response || fetchPromise;
       });
