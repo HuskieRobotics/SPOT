@@ -12,7 +12,114 @@
     "name": "sum",
     "outputPath": "counts.scoreAmount",
     "options": {
-      "addends": []
+      "addends": [
+        "counts.autoisScoring",
+        "counts.endgameisScoring"
+      ]
+    }
+  },
+  {
+    "type": "tmp",
+    "name": "sum",
+    "outputPath": "counts.pass1",
+    "options": {
+      "addends": ["counts.autoisPass1", "counts.endgameisPass1"]
+    }
+  },
+  {
+    "type": "tmp",
+    "name": "sum",
+    "outputPath": "counts.pass2",
+    "options": {
+      "addends": ["counts.autoisPass2", "counts.endgameisPass2"]
+    }
+  },
+  {
+    "type": "tmp",
+    "name": "sum",
+    "outputPath": "counts.pass3",
+    "options": {
+      "addends": ["counts.autoisPass3", "counts.endgameisPass3"]
+    }
+  },
+  {
+    "type": "tmp",
+    "name": "sum",
+    "outputPath": "counts.pass4",
+    "options": {
+      "addends": ["counts.autoisPass4", "counts.endgameisPass4"]
+    }
+  },
+  {
+    "type": "tmp",
+    "name": "sum",
+    "outputPath": "counts.passes",
+    "options": {
+      "addends": ["counts.pass1", "counts.pass2", "counts.pass3", "counts.pass4"]
+    }
+  },
+  {
+    "type": "tmp",
+    "name": "sum",
+    "outputPath": "counts.collect1",
+    "options": {
+      "addends": ["counts.autoisCollect1", "counts.endgameisCollect1"]
+    }
+  },
+  {
+    "type": "tmp",
+    "name": "sum",
+    "outputPath": "counts.collect2",
+    "options": {
+      "addends": ["counts.autoisCollect2", "counts.endgameisCollect2"]
+    }
+  },
+  {
+    "type": "tmp",
+    "name": "sum",
+    "outputPath": "counts.collect3",
+    "options": {
+      "addends": ["counts.autoisCollect3", "counts.endgameisCollect3"]
+    }
+  },
+  {
+    "type": "tmp",
+    "name": "sum",
+    "outputPath": "counts.collect4",
+    "options": {
+      "addends": ["counts.autoisCollect4", "counts.endgameisCollect4"]
+    }
+  },
+  {
+    "type": "tmp",
+    "name": "sum",
+    "outputPath": "counts.collections",
+    "options": {
+      "addends": ["counts.collect1", "counts.collect2", "counts.collect3", "counts.collect4"]
+    }
+  },
+  {
+    "type": "tmp",
+    "name": "sum",
+    "outputPath": "counts.climbing",
+    "options": {
+      "addends": ["counts.autoisClimbing", "counts.endgameisClimbing"]
+    }
+  },
+  {
+    "type": "tmp",
+    "name": "sum",
+    "outputPath": "counts.parked",
+    "options": {
+      "addends": ["counts.autoisParked", "counts.endgameisParked"]
+    }
+  },
+  {
+    "type": "tmp",
+    "name": "sum",
+    "outputPath": "counts.field",
+    "options": {
+      "addends": ["counts.autoisField", "counts.endgameisField"]
     }
   },
   {
@@ -24,11 +131,115 @@
     }
   },
   {
-    "type": "",
-    "name": "",
-    "outputPath": "",
+    "type": "team",
+    "name": "sum",
+    "outputPath": "counts.scoreAmount",
     "options": {
-      "addends": []
+      "addends": ["counts.autoisScoring", "counts.endgameisScoring"]
+    }
+  },
+  {
+    "type": "team",
+    "name": "sum",
+    "outputPath": "counts.pass1",
+    "options": {
+      "addends": ["counts.autoisPass1", "counts.endgameisPass1"]
+    }
+  },
+  {
+    "type": "team",
+    "name": "sum",
+    "outputPath": "counts.pass2",
+    "options": {
+      "addends": ["counts.autoisPass2", "counts.endgameisPass2"]
+    }
+  },
+  {
+    "type": "team",
+    "name": "sum",
+    "outputPath": "counts.pass3",
+    "options": {
+      "addends": ["counts.autoisPass3", "counts.endgameisPass3"]
+    }
+  },
+  {
+    "type": "team",
+    "name": "sum",
+    "outputPath": "counts.pass4",
+    "options": {
+      "addends": ["counts.autoisPass4", "counts.endgameisPass4"]
+    }
+  },
+  {
+    "type": "team",
+    "name": "sum",
+    "outputPath": "counts.passes",
+    "options": {
+      "addends": ["counts.pass1", "counts.pass2", "counts.pass3", "counts.pass4"]
+    }
+  },
+  {
+    "type": "team",
+    "name": "sum",
+    "outputPath": "counts.collect1",
+    "options": {
+      "addends": ["counts.autoisCollect1", "counts.endgameisCollect1"]
+    }
+  },
+  {
+    "type": "team",
+    "name": "sum",
+    "outputPath": "counts.collect2",
+    "options": {
+      "addends": ["counts.autoisCollect2", "counts.endgameisCollect2"]
+    }
+  },
+  {
+    "type": "team",
+    "name": "sum",
+    "outputPath": "counts.collect3",
+    "options": {
+      "addends": ["counts.autoisCollect3", "counts.endgameisCollect3"]
+    }
+  },
+  {
+    "type": "team",
+    "name": "sum",
+    "outputPath": "counts.collect4",
+    "options": {
+      "addends": ["counts.autoisCollect4", "counts.endgameisCollect4"]
+    }
+  },
+  {
+    "type": "team",
+    "name": "sum",
+    "outputPath": "counts.collections",
+    "options": {
+      "addends": ["counts.collect1", "counts.collect2", "counts.collect3", "counts.collect4"]
+    }
+  },
+  {
+    "type": "team",
+    "name": "sum",
+    "outputPath": "counts.climbing",
+    "options": {
+      "addends": ["counts.autoisClimbing", "counts.endgameisClimbing"]
+    }
+  },
+  {
+    "type": "team",
+    "name": "sum",
+    "outputPath": "counts.parked",
+    "options": {
+      "addends": ["counts.autoisParked", "counts.endgameisParked"]
+    }
+  },
+  {
+    "type": "team",
+    "name": "sum",
+    "outputPath": "counts.field",
+    "options": {
+      "addends": ["counts.autoisField", "counts.endgameisField"]
     }
   }
 ]
