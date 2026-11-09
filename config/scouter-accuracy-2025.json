@@ -1,0 +1,27 @@
+{
+  "version": 1,
+  "game": "2025 Reefscape",
+  "actions": {
+    "leave": 3,
+    "autol1": 3,
+    "autol2": 4,
+    "autol3": 6,
+    "autol4": 7,
+    "autoScoreProcessor": 6,
+    "autoScoreNet": 4,
+    "teleopl1": 2,
+    "teleopl2": 3,
+    "teleopl3": 4,
+    "teleopl4": 5,
+    "teleopScoreProcessor": 6,
+    "teleopScoreNet": 4,
+    "park": 2,
+    "shallow": 6,
+    "deep": 12
+  },
+  "defaultPoints": 0,
+  "notes": {
+    "defaultPoints": "Pickup, miss, drop, rating, reef-position, and transition actions are observations and do not directly add official points.",
+    "preload": "Preloaded coral is worth points only when scored, so preloadCoral is zero by itself."
+  }
+}

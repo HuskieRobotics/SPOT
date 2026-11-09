@@ -194,6 +194,22 @@ video {
   margin: 0 auto;
 }
 
+#scoring-actions-container {
+  display: grid;
+  gap: 10px;
+}
+
+.scoring-action-row {
+  align-items: center;
+  display: flex;
+  gap: 16px;
+  justify-content: space-between;
+}
+
+.scoring-action-points {
+  max-width: 140px;
+}
+
 .setting-image {
   max-width: 50%;
   height: 50%;

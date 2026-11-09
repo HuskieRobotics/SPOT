@@ -3,6 +3,8 @@ const { Router } = require("express");
 const mongoose = require("mongoose");
 const chalk = require("chalk");
 const axios = require("axios");
+const path = require("path");
+const defaultScoringConfig = require("../../../config/scouter-accuracy-2025.json");
 let router = Router();
 
 let REQUIRE_ACCESS_CODE;
@@ -136,6 +138,40 @@ router.get("/config", async (req, res) => {
     }
   } else {
     res.send({});
+  }
+});
+
+router.get("/scoring-actions", (req, res) => {
+  try {
+    const scoutingConfig = JSON.parse(
+      fs.readFileSync(
+        path.resolve(__dirname, "../../../config/match-scouting.json"),
+      ),
+    );
+    const actions = [];
+    const seen = new Set();
+    for (const layer of scoutingConfig.layout?.layers || []) {
+      for (const button of layer) {
+        if (
+          button.type === "action" &&
+          button.id &&
+          !seen.has(button.id)
+        ) {
+          seen.add(button.id);
+          actions.push({
+            id: button.id,
+            displayText: button.displayText || button.id,
+            defaultPoints:
+              defaultScoringConfig.actions[button.id] ??
+              defaultScoringConfig.defaultPoints,
+          });
+        }
+      }
+    }
+    res.json(actions);
+  } catch (error) {
+    console.error("Error reading scouting actions:", error);
+    res.status(500).json({ error: "Failed to read scouting actions" });
   }
 });
 

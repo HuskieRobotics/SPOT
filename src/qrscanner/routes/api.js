@@ -1,8 +1,24 @@
 const { Router } = require("express");
 const { TeamMatchPerformance } = require("../../lib/db");
+const ScoutingSync = require("../../scouting/scouting-sync")();
+const config = require("../../../config/config.json");
 
 const router = Router();
 let previousMatchIDRand;
+
+async function addAccuracyMetadata(data) {
+  const match = (await ScoutingSync.getMatches()).find(
+    (candidate) => candidate.number == data.matchNumber,
+  );
+  return {
+    ...data,
+    matchKey: data.matchKey || match?.match_string || null,
+    scoringVersion:
+      data.scoringVersion || config.SCOUTING_ACCURACY?.version || 1,
+    scoringRules:
+      data.scoringRules || config.SCOUTING_ACCURACY?.actions || {},
+  };
+}
 
 router.post("/teamMatchPerformance", async (req, res) => {
   try {
@@ -24,17 +40,9 @@ router.post("/teamMatchPerformance", async (req, res) => {
 
   let teamMatchPerformance;
   try {
+    const data = await addAccuracyMetadata(req.body);
     teamMatchPerformance = new TeamMatchPerformance({
-      timestamp: req.body.timestamp,
-      clientVersion: req.body.clientVersion,
-      scouterId: req.body.scouterId,
-      robotNumber: req.body.robotNumber,
-      matchNumber: req.body.matchNumber,
-      eventNumber: req.body.eventNumber,
-      matchId: req.body.matchId,
-      matchId_rand: req.body.matchId_rand,
-      flagged: req.body.flagged,
-      actionQueue: req.body.actionQueue,
+      ...data,
     });
   } catch (err) {
     console.log(err);
@@ -97,17 +105,9 @@ router.post("/sync", async (req, res) => {
 
       if (!exists) {
         try {
-          const teamMatchPerformance = new TeamMatchPerformance({
-            timestamp: syncTmp.timestamp,
-            clientVersion: syncTmp.clientVersion,
-            scouterId: syncTmp.scouterId,
-            robotNumber: syncTmp.robotNumber,
-            matchNumber: syncTmp.matchNumber,
-            eventNumber: syncTmp.eventNumber,
-            matchId: syncTmp.matchId,
-            matchId_rand: syncTmp.matchId_rand,
-            actionQueue: syncTmp.actionQueue,
-          });
+          const teamMatchPerformance = new TeamMatchPerformance(
+            await addAccuracyMetadata(syncTmp),
+          );
           await teamMatchPerformance.save();
         } catch (err) {
           console.log(err);
