@@ -1,0 +1,21 @@
+
+{
+  "secrets": {
+    "ACCESS_CODE": "SPOT",
+    "DATABASE_URL": "mongodb+srv://admin:wpI9rs9S25WMfxkD@cluster0.fqykfv1.mongodb.net/2026RebuiltDev?retryWrites=true&w=majority",
+    "TBA_API_KEY": "ge74wQGn5jLAAJmOEeB2Xj40GG688GQRmIervHyExtq7kloCwqajRgYOdOxbrWTs"
+  },
+  "VERSION": "1.0",
+  "TBA_EVENT_KEY": "2026mnwi",
+  "EVENT_NUMBER": "69bb19d3a2133621d3f1a15d",
+  "SWAP_ZONE_BUTTON_LOCATIONS": true,
+  "TBA_OPR_STRINGS": {
+    "string_1": "Hub Total Fuel Count",
+    "string_2": "minorFoulCount",
+    "string_3": "majorFoulCount",
+    "string_4": "Hub Auto Fuel Count",
+    "string_5": "Hub Teleop Fuel Count",
+    "string_6": "Hub Uncounted"
+  },
+  "DEMO": false
+}

@@ -22,7 +22,12 @@ files are loaded. `*.template.json` files are documentation templates. `stuff.js
   "EVENT_NUMBER": "69a5ac…",        // ObjectId hex of the active events document
   "DEMO": false,                    // demo mode
   "SWAP_ZONE_BUTTON_LOCATIONS": false, // swap AZone/OAZone grid positions and rotate field map
-  "TBA_OPR_STRINGS": { "string_1": "Hub Total Fuel Count", "string_2": "minorFoulCount", ... }
+  "TBA_OPR_STRINGS": { "string_1": "Hub Total Fuel Count", "string_2": "minorFoulCount", ... },
+  "SCOUTING_ACCURACY": {
+    "version": 1,
+    "eventCode": "2025ilch_official",
+    "actions": { "autol4": 7, "teleopl4": 5, "deep": 12 }
+  }
 }
 ```
 
@@ -36,6 +41,10 @@ files are loaded. `*.template.json` files are documentation templates. `stuff.js
   `Hub Uncounted`.
 - **CF-4** `EVENT_NUMBER` is presented in the setup UI as the event **code** string and converted
   to/from ObjectId by the setup API.
+- **CF-5** `SCOUTING_ACCURACY.actions` maps action button IDs from `match-scouting.json` to
+  point values. The default map is `scouter-accuracy-2025.json` for 2025 Reefscape and
+  compares predicted alliance totals with TBA final alliance scores. Each TMP stores the
+  scoring version and action snapshot used to calculate it.
 
 ## `match-scouting.json` (scouting UI)
 

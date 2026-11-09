@@ -108,6 +108,42 @@ function renderOPRKeyInputs(oprStringsValue) {
       container.appendChild(createOPRKeyInput(value));
     });
   }
+
+  function renderScoringActions(actions, savedConfig) {
+    const container = document.getElementById("scoring-actions-container");
+    if (!container) return;
+    container.innerHTML = "";
+    const savedActions = savedConfig?.actions || {};
+    for (const action of actions) {
+      const label = document.createElement("label");
+      label.className = "scoring-action-row";
+      label.textContent = action.displayText;
+      const input = document.createElement("input");
+      input.className = "input scoring-action-points";
+      input.type = "number";
+      input.step = "any";
+      input.min = "0";
+      input.dataset.actionId = action.id;
+      input.value =
+        savedActions[action.id] === undefined
+          ? action.defaultPoints ?? ""
+          : savedActions[action.id];
+      label.appendChild(input);
+      container.appendChild(label);
+    }
+  }
+
+  function buildScoringConfig() {
+    const actions = {};
+    document
+      .querySelectorAll(".scoring-action-points")
+      .forEach((input) => {
+        if (input.value !== "") {
+          actions[input.dataset.actionId] = Number(input.value);
+        }
+      });
+    return actions;
+  }
 }
 
 (async () => {
@@ -184,8 +220,16 @@ async function constructApp(accessCode) {
     } else {
       renderOPRKeyInputs(DEFAULT_OPR_STRINGS);
     }
+    const scoringActions = await fetch("./api/scoring-actions").then((res) =>
+      res.json(),
+    );
+    renderScoringActions(scoringActions, config.SCOUTING_ACCURACY);
   } else {
     renderOPRKeyInputs(DEFAULT_OPR_STRINGS);
+    const scoringActions = await fetch("./api/scoring-actions").then((res) =>
+      res.json(),
+    );
+    renderScoringActions(scoringActions, {});
   }
 
   document.querySelector("#setup-container").classList.add("visible");
@@ -362,6 +406,11 @@ document.querySelector("#submit").addEventListener("click", async () => {
   ).checked;
 
   config.TBA_OPR_STRINGS = buildOPRStringsObject();
+  config.SCOUTING_ACCURACY = {
+    version: Date.now(),
+    eventCode: config.EVENT_NUMBER || "",
+    actions: buildScoringConfig(),
+  };
 
   let res = await (
     await fetch("./api/config", {

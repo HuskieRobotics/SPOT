@@ -78,6 +78,10 @@
         <i class="fas fa-edit"></i>
         <div>Edit Data</div>
       </a>
+      <a id="accuracy-link" href="#accuracy-view">
+        <i class="fas fa-chart-line"></i>
+        <div>Scouter Accuracy</div>
+      </a>
       <a id="server-restart">
         <i class="fas fa-rotate-right"></i>
         <div>Restart Server</div>
@@ -85,15 +89,46 @@
     </div>
 
     <div id="admin-panel">
-      <div id="scouters">
+      <div id="dashboard-tabs" role="tablist" aria-label="Admin dashboard views">
+        <button id="matches-tab" class="dashboard-tab active" type="button" role="tab">
+          Matches
+        </button>
+        <button id="accuracy-tab" class="dashboard-tab" type="button" role="tab">
+          Scouter Accuracy
+        </button>
+      </div>
+      <div id="matches-view" class="dashboard-view">
+        <div id="scouters">
         <div id="scouter-list"></div>
         <input type="button" id="start-scouting" value="Assign Scouters" />
         <div class="title">Scouters</div>
         <div class="demo-label">Demo</div>
+        </div>
+        <div id="matches">
+          <div class="title">Matches</div>
+          <div id="match-list"></div>
+        </div>
       </div>
-      <div id="matches">
-        <div class="title">Matches</div>
-        <div id="match-list"></div>
+      <div id="accuracy-view" class="dashboard-view" hidden>
+        <section id="accuracy">
+          <div class="title">Scouter Accuracy</div>
+          <div id="accuracy-status">Loading accuracy data...</div>
+          <div class="accuracy-table-wrapper">
+            <table id="accuracy-list">
+              <thead>
+                <tr>
+                  <th>Scouter</th>
+                  <th>Accuracy</th>
+                  <th>Matches</th>
+                  <th>Average attributed error</th>
+                  <th>Signed bias</th>
+                  <th>Confidence</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </section>
       </div>
     </div>
     <script src="./js/ui-elements.js"></script>

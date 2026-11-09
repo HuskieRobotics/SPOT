@@ -99,6 +99,7 @@ body {
     0.3s visibility,
     opacity;
   visibility: hidden;
+  overflow-y: auto;
   grid-area: 1 / 2 / 2 / 3;
 }
 
@@ -117,6 +118,27 @@ body {
   transition:
     visibility 0s 0s,
     opacity 0.3s 0s;
+}
+
+#dashboard-tabs {
+  display: flex;
+  gap: 10px;
+  margin: 10px 0 20px;
+}
+
+.dashboard-tab {
+  background: var(--bg-alt);
+  border: 2px solid var(--text);
+  border-radius: 8px;
+  color: var(--text);
+  cursor: pointer;
+  font: 1.15em "Cairo";
+  padding: 10px 22px;
+}
+
+.dashboard-tab.active {
+  background: var(--accent);
+  color: var(--bg-alt);
 }
 
 #scouters {
@@ -399,4 +421,62 @@ body {
   #matches .match {
     padding: 8px 6px;
   }
+}
+#accuracy {
+  padding: 20px;
+  border: 2px solid var(--text);
+  border-radius: 10px;
+  position: relative;
+  margin-top: 32px;
+  min-height: 300px;
+}
+
+#accuracy-status {
+  color: var(--placeholder);
+  margin-bottom: 10px;
+}
+
+.accuracy-table-wrapper {
+  overflow-x: auto;
+}
+
+#accuracy-list {
+  border-collapse: collapse;
+  min-width: 760px;
+  width: 100%;
+}
+
+#accuracy-list th,
+#accuracy-list td {
+  border-bottom: 1px solid var(--text);
+  padding: 16px 14px;
+  text-align: left;
+}
+
+#accuracy-list th {
+  background-color: var(--accent);
+  color: var(--bg-alt);
+  font-size: 1.1em;
+  position: sticky;
+  top: 0;
+}
+
+#accuracy-list td {
+  background-color: var(--bg-alt);
+  color: var(--text);
+  font-size: 1.15em;
+}
+
+#accuracy-list .accuracy-score {
+  font-weight: bold;
+}
+
+.confidence-high {
+  color: var(--success, #16803c) !important;
+  font-weight: bold;
+}
+
+.confidence-medium {
+  color: var(--accent-alt) !important;
+  font-weight: bold;
 }

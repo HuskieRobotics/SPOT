@@ -5,6 +5,10 @@ const config = require("../../../config/config.json");
 const { TeamMatchPerformance, Event } = require("../../lib/db");
 let axios = require("axios");
 const DEMO = config.DEMO;
+const {
+  calculateScouterAccuracy,
+  DEFAULT_SCORING_CONFIG,
+} = require("../../analysis/scouterAccuracy");
 
 router.use((req, res, next) => {
   if (!ScoutingSync.initialized) {
@@ -46,6 +50,75 @@ router.get("/scouters", (req, res) => {
 
 router.get("/data", async (req, res) => {
   res.json(await TeamMatchPerformance.find());
+});
+
+router.get("/accuracy", async (req, res) => {
+  if (!DEMO && req.headers.authorization !== config.secrets.ACCESS_CODE) {
+    return res.status(401).json({ error: "Not Authorized" });
+  }
+
+  try {
+    const records = await TeamMatchPerformance.find({
+      eventNumber: config.EVENT_NUMBER,
+    }).lean();
+    const tbaMatches = await axios
+      .get(
+        `https://www.thebluealliance.com/api/v3/event/${config.TBA_EVENT_KEY}/matches`,
+        {
+          headers: { "X-TBA-Auth-Key": config.secrets.TBA_API_KEY },
+        },
+      )
+      .then((response) => response.data);
+
+    const configuredScoring =
+      config.SCOUTING_ACCURACY || DEFAULT_SCORING_CONFIG;
+    const matchNumberToKey = new Map();
+    const levels = ["qm", "ef", "qf", "sf", "f"];
+    const counts = Object.fromEntries(
+      levels.map((level) => [
+        level,
+        tbaMatches.filter((match) => match.comp_level === level).length,
+      ]),
+    );
+    const offsets = {};
+    for (const [index, level] of levels.entries()) {
+      offsets[level] = levels
+        .slice(0, index)
+        .reduce((total, previous) => total + counts[previous], 0);
+    }
+    for (const match of tbaMatches) {
+      matchNumberToKey.set(
+        match.match_number + offsets[match.comp_level],
+        match.key,
+      );
+    }
+
+    const enrichedRecords = records.map((record) => ({
+      ...record,
+      matchKey:
+        record.matchKey ||
+        matchNumberToKey.get(Number(record.matchNumber)) ||
+        null,
+    }));
+
+    const accuracy = calculateScouterAccuracy(
+      enrichedRecords,
+      tbaMatches,
+      configuredScoring,
+    );
+    res.json({
+      ...accuracy,
+      diagnostics: {
+        recordsConsidered: records.length,
+        recordsMatchedToTba: enrichedRecords.filter((record) => record.matchKey)
+          .length,
+        configuredEvent: config.TBA_EVENT_KEY,
+      },
+    });
+  } catch (error) {
+    console.error("Error calculating scouter accuracy:", error);
+    res.status(500).json({ error: "Failed to calculate scouter accuracy" });
+  }
 });
 
 router.get("/enterMatch", async (req, res) => {

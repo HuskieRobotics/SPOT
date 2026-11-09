@@ -2,243 +2,168 @@
   {
     "view": "team",
     "module": "PerformanceTimePlot",
-    "name": "Robot Action Counts Each Match",
+    "name": "Performance By Each Match",
     "position": "main",
     "options": {
       "trackedStats": [
-        "counts.shooting",
-        "counts.passing",
-        "counts.storing",
-        "counts.defense"
+        "scores.auto",
+        "scores.teleop",
+        "scores.endgame",
+        "scores.total"
       ]
     }
   },
   {
     "view": "team",
-    "module": "RadarChart",
-    "name": "Ratings By Time Intervals",
+    "module": "Pie",
+    "name": "Coral Pickup Distribution",
     "position": "main",
     "options": {
-      "sections": [
+      "slices": [
+        { "name": "Ground", "path": "counts.groundPickupCoral" },
         {
-          "name": "Auto"
-        },
-        {
-          "name": "Transition"
-        },
-        {
-          "name": "Active 1"
-        },
-        {
-          "name": "Active 2"
-        },
-        {
-          "name": "Inactive 1"
-        },
-        {
-          "name": "Inactive 2"
-        },
-        {
-          "name": "Endgame"
-        },
-        {
-          "name": "Auto"
-        }
-      ],
-      "lines": [
-        {
-          "name": "Shooting",
-          "times": [
-            {
-              "name": "Auto",
-              "path": "averageScores.autoShootingRating"
-            },
-            {
-              "name": "Transition",
-              "path": "averageScores.teleopTransitionShootingRating"
-            },
-            {
-              "name": "Active 1",
-              "path": "averageScores.activeShift1ShootingRating"
-            },
-            {
-              "name": "Active 2",
-              "path": "averageScores.activeShift2ShootingRating"
-            },
-            { "name": "Inactive 1", "path": "none" },
-            { "name": "Inactive 2", "path": "none" },
-            {
-              "name": "Endgame",
-              "path": "averageScores.endgameShootingRating"
-            },
-            {
-              "name": "Auto",
-              "path": "averageScores.autoShootingRating"
-            }
-          ]
-        },
-        {
-          "name": "Collecting",
-          "times": [
-            {
-              "name": "Auto",
-              "path": "none"
-            },
-            {
-              "name": "Transition",
-              "path": "averageScores.teleopTransitionStoringRating"
-            },
-            {
-              "name": "Active 1",
-              "path": "averageScores.activeShift1StoringRating"
-            },
-            {
-              "name": "Active 2",
-              "path": "averageScores.activeShift2StoringRating"
-            },
-            {
-              "name": "Inactive 1",
-              "path": "averageScores.inactiveShift1StoringRating"
-            },
-            {
-              "name": "Inactive 2",
-              "path": "averageScores.inactiveShift2StoringRating"
-            },
-            {
-              "name": "Endgame",
-              "path": "averageScores.endgameStoringRating"
-            },
-            {
-              "name": "Auto",
-              "path": "none"
-            }
-          ]
-        },
-        {
-          "name": "Passing",
-          "times": [
-            {
-              "name": "Auto",
-              "path": "averageScores.autoPassingRating"
-            },
-            {
-              "name": "Transition",
-              "path": "averageScores.teleopTransitionPassingRating"
-            },
-            {
-              "name": "Active 1",
-              "path": "averageScores.activeShift1PassingRating"
-            },
-            {
-              "name": "Active 2",
-              "path": "averageScores.activeShift2PassingRating"
-            },
-            {
-              "name": "Inactive 1",
-              "path": "averageScores.inactiveShift1PassingRating"
-            },
-
-            {
-              "name": "Inactive 2",
-              "path": "averageScores.inactiveShift2PassingRating"
-            },
-            {
-              "name": "Endgame",
-              "path": "averageScores.endgamePassingRating"
-            },
-            {
-              "name": "Auto",
-              "path": "averageScores.autoPassingRating"
-            }
-          ]
-        },
-        {
-          "name": "Defense",
-          "times": [
-            { "name": "Auto", "path": "none" },
-            {
-              "name": "Transition",
-              "path": "averageScores.teleopTransitionDefenseRating"
-            },
-            {
-              "name": "Active 1",
-              "path": "averageScores.activeShift1DefenseRating"
-            },
-            {
-              "name": "Active 2",
-              "path": "averageScores.activeShift2DefenseRating"
-            },
-            {
-              "name": "Inactive 1",
-              "path": "averageScores.inactiveShift1DefenseRating"
-            },
-
-            {
-              "name": "Inactive 2",
-              "path": "averageScores.inactiveShift2DefenseRating"
-            },
-            {
-              "name": "Endgame",
-              "path": "averageScores.endgameDefenseRating"
-            },
-            { "name": "Auto", "path": "none" }
-          ]
+          "name": "Station",
+          "path": "counts.stationPickupCoral"
         }
       ]
     }
   },
-
   {
     "view": "team",
-    "module": "HeatmapScatterPlot",
-    "name": "Teleop Shooting Heatmap",
+    "module": "Pie",
+    "name": "Algae Pickup Distribution",
     "position": "main",
     "options": {
-      "coordinatePath": "other.pos",
-      "aggregatedActionsPath": "aggregatedActions",
-      "actionGroups": [
+      "slices": [
         {
-          "name": "Teleop Start Shooting",
-          "actions": [
-            "teleopTransitionStartShooting",
-            "activeShift1StartShooting",
-            "activeShift2StartShooting",
-            "endgameStartShooting"
-          ]
+          "name": "Ground",
+          "path": "counts.groundPickupAlgae"
+        },
+        {
+          "name": "Reef",
+          "path": "counts.reefPickupAlgae"
         }
-      ],
-      "actionLabels": {
-        "teleopTransitionStartShooting": "Transition",
-        "activeShift1StartShooting": "Active 1",
-        "activeShift2StartShooting": "Active 2",
-        "endgameStartShooting": "Endgame"
-      },
-      "imgPath": "img/half-field.svg"
+      ]
+    }
+  },
+  {
+    "view": "team",
+    "module": "Pie",
+    "name": "Teleop Algae Scored Distribution",
+    "position": "main",
+    "options": {
+      "slices": [
+        {
+          "name": "Net",
+          "path": "counts.teleopScoreNet"
+        },
+        {
+          "name": "Processor",
+          "path": "counts.teleopScoreProcessor"
+        }
+      ]
+    }
+  },
+  {
+    "view": "team",
+    "module": "Pie",
+    "name": "Auto Algae Scored Distribution",
+    "position": "main",
+    "options": {
+      "slices": [
+        {
+          "name": "Net",
+          "path": "counts.autoScoreNet"
+        },
+        {
+          "name": "Processor",
+          "path": "counts.autoScoreProcessor"
+        }
+      ]
     }
   },
   {
     "view": "team",
     "module": "Bar",
-    "name": "Attempted Climb Level",
+    "name": "Coral Reef Placement",
     "position": "main",
     "options": {
       "bars": [
+        {
+          "name": "Miss",
+          "path": "counts.missCoral"
+        },
+        {
+          "name": "Level 1",
+          "path": "counts.scoreL1"
+        },
+        {
+          "name": "Level 2",
+          "path": "counts.scoreL2"
+        },
+        {
+          "name": "Level 3",
+          "path": "counts.scoreL3"
+        },
+        {
+          "name": "Level 4",
+          "path": "counts.scoreL4"
+        }
+      ]
+    }
+  },
+  {
+    "view": "team",
+    "module": "Bar",
+    "name": "Auto Coral Reef Placement",
+    "position": "main",
+    "options": {
+      "bars": [
+        {
+          "name": "Miss",
+          "path": "counts.autoMissCoral"
+        },
+        {
+          "name": "Level 1",
+          "path": "counts.autol1"
+        },
+        {
+          "name": "Level 2",
+          "path": "counts.autol2"
+        },
+        {
+          "name": "Level 3",
+          "path": "counts.autol3"
+        },
+        {
+          "name": "Level 4",
+          "path": "counts.autol4"
+        }
+      ]
+    }
+  },
+  {
+    "view": "team",
+    "module": "Bar",
+    "name": "Barge",
+    "position": "main",
+    "options": {
+      "bars": [
+        {
+          "name": "Park",
+          "path": "counts.park"
+        },
         {
           "name": "Fall",
-          "path": "counts.endgameFall"
+          "path": "counts.bargeFall"
         },
         {
-          "name": "L1",
-          "path": "counts.endgameAttemptL1"
-        },
-
-        {
-          "name": "L2",
-          "path": "counts.endgameAttemptL2"
+          "name": "Deep Cage",
+          "path": "counts.deep"
         },
         {
-          "name": "L3",
-          "path": "counts.endgameAttemptL3"
+          "name": "Shallow Cage",
+          "path": "counts.shallow"
         }
       ]
     }
@@ -246,21 +171,33 @@
   {
     "view": "team",
     "module": "Bar",
-    "name": "TBA Climb Levels",
+    "name": "Auto Pickup Distribution",
     "position": "main",
     "options": {
       "bars": [
         {
-          "name": "L1",
-          "path": "counts.endGameTowerRobot_Level1"
+          "name": "Algae Left",
+          "path": "counts.autoAlgaeLeft"
         },
         {
-          "name": "L2",
-          "path": "counts.endGameTowerRobot_Level2"
+          "name": "Algae Center",
+          "path": "counts.autoAlgaeCenter"
         },
         {
-          "name": "L3",
-          "path": "counts.endGameTowerRobot_Level3"
+          "name": "Algae Right",
+          "path": "counts.autoAlgaeRight"
+        },
+        {
+          "name": "Coral Left",
+          "path": "counts.autoCoralLeft"
+        },
+        {
+          "name": "Coral Center",
+          "path": "counts.autoCoralCenter"
+        },
+        {
+          "name": "Coral Right",
+          "path": "counts.autoCoralRight"
         }
       ]
     }
@@ -273,39 +210,12 @@
     "options": {
       "slices": [
         {
-          "name": "Pre-Loaded Fuel",
-          "path": "counts.preloadFuel"
+          "name": "Pre-Loaded Coral",
+          "path": "counts.preloadCoral"
         },
         {
           "name": "Pre-Load None",
           "path": "counts.preloadNone"
-        }
-      ]
-    }
-  },
-  {
-    "view": "team",
-    "module": "Pie",
-    "name": "Average Action Times",
-    "position": "main",
-    "options": {
-      "unit": "s",
-      "slices": [
-        {
-          "name": "Shooting",
-          "path": "cycles.shootingTime.averageTimeSeconds"
-        },
-        {
-          "name": "Passing",
-          "path": "cycles.passingTime.averageTimeSeconds"
-        },
-        {
-          "name": "Collecting",
-          "path": "cycles.storingTime.averageTimeSeconds"
-        },
-        {
-          "name": "Defense",
-          "path": "cycles.defenseTime.averageTimeSeconds"
         }
       ]
     }
@@ -318,80 +228,24 @@
     "options": {
       "list": [
         {
-          "name": "Fuel OPR",
-          "path": "opr.Hub Total Fuel Count",
+          "name": "Algae Accuracy",
+          "path": "algaeAccuracy",
+          "multiplier": 100,
           "decimals": 2,
-          "sort": 1
+          "sort": 1,
+          "unit": "%"
         },
         {
-          "name": "Auto Fuel OPR",
-          "path": "opr.Hub Auto Fuel Count",
+          "name": "Coral Accuracy",
+          "path": "coralAccuracy",
+          "multiplier": 100,
           "decimals": 2,
-          "sort": 1
+          "sort": 1,
+          "unit": "%"
         },
         {
-          "name": "Minor Foul OPR",
-          "path": "opr.minorFoulCount",
-          "decimals": 2,
-          "sort": -1
-        },
-        {
-          "name": "Major Foul OPR",
-          "path": "opr.majorFoulCount",
-          "decimals": 2,
-          "sort": -1
-        },
-        {
-          "name": "A-Stop Count",
-          "path": "counts.autoaStop",
-          "decimals": 2,
-          "sort": -1
-        },
-        {
-          "name": "Disabled Count",
-          "path": "disabledCounts",
-          "decimals": 2,
-          "sort": -1
-        },
-        {
-          "name": "Average Passing Rating",
-          "path": "averageScores.passingRating",
-          "decimals": 2,
-          "sort": 1
-        },
-        {
-          "name": "Average Defense Rating",
-          "path": "averageScores.defenseRating",
-          "decimals": 2,
-          "sort": 1
-        },
-        {
-          "name": "Average Shooting Rating",
-          "path": "averageScores.shootingRating",
-          "decimals": 2,
-          "sort": 1
-        },
-        {
-          "name": "Average Collecting Rating",
-          "path": "averageScores.storingRating",
-          "decimals": 2,
-          "sort": 1
-        },
-        {
-          "name": "Average Auto Shooting Rating",
-          "path": "averageScores.autoShootingRating",
-          "decimals": 2,
-          "sort": 1
-        },
-        {
-          "name": "Average Auto Passing Rating",
-          "path": "averageScores.autoPassingRating",
-          "decimals": 2,
-          "sort": 1
-        },
-        {
-          "name": "Average Auto Shooting Time",
-          "path": "cycles.autoShootingTime.averageTime",
+          "name": "Average Cycle Time",
+          "path": "timePerGamePiece",
           "multiplier": 0.001,
           "decimals": 2,
           "hideIfValue": 0,
@@ -399,21 +253,146 @@
           "unit": "s"
         },
         {
-          "name": "Average Teleop Shooting Time",
-          "path": "cycles.shootingTime.averageTime",
+          "name": "Algae Time to Score",
+          "path": "cycles.algae.averageTime",
           "multiplier": 0.001,
           "decimals": 2,
           "hideIfValue": 0,
           "sort": -1,
           "unit": "s"
+        },
+        {
+          "name": "Coral Time to Score",
+          "path": "cycles.coral.averageTime",
+          "multiplier": 0.001,
+          "decimals": 2,
+          "hideIfValue": 0,
+          "sort": -1,
+          "unit": "s"
+        },
+        {
+          "name": "Average Time to Climb",
+          "path": "cycles.endgame.averageTimeComplete",
+          "multiplier": 0.001,
+          "decimals": 2,
+          "hideIfValue": 0,
+          "sort": -1,
+          "unit": "s"
+        },
+        {
+          "name": "Average Auto Points",
+          "path": "averageScores.auto",
+          "decimals": 2,
+          "sort": 1
+        },
+        {
+          "name": "Average Teleop Points",
+          "path": "averageScores.teleop",
+          "decimals": 2,
+          "sort": 1
+        },
+        {
+          "name": "Average Barge Points",
+          "path": "averageScores.endgame",
+          "decimals": 2,
+          "sort": 1
+        },
+        {
+          "name": "Average Algae Points",
+          "path": "averageScores.algae",
+          "decimals": 2,
+          "sort": 1
+        },
+        {
+          "name": "Average Coral Points",
+          "path": "averageScores.coral",
+          "decimals": 2,
+          "sort": 1
+        },
+        {
+          "name": "Average Points",
+          "path": "averageScores.total",
+          "decimals": 2,
+          "sort": 1
+        },
+        {
+          "name": "Average Coral Misses",
+          "path": "averages.missCoral",
+          "decimals": 2,
+          "sort": -1
+        },
+        {
+          "name": "Average Algae Misses",
+          "path": "averages.missAlgae",
+          "decimals": 2,
+          "sort": -1
+        },
+        {
+          "name": "Average Coral Drops",
+          "path": "averages.dropCoral",
+          "decimals": 2,
+          "sort": -1
+        },
+        {
+          "name": "Average Algae Drops",
+          "path": "averages.dropAlgae",
+          "decimals": 2,
+          "sort": -1
+        },
+        {
+          "name": "Leave",
+          "path": "averages.leave",
+          "multiplier": 100,
+          "decimals": 2,
+          "sort": 1,
+          "unit": "%"
+        },
+        {
+          "name": "Total Brokens",
+          "path": "counts.broken",
+          "decimals": 0,
+          "sort": -1
+        },
+        {
+          "name": "Total A-Stops",
+          "path": "counts.aStop",
+          "decimals": 0,
+          "sort": -1
         }
       ]
+    }
+  },
+
+  {
+    "view": "match",
+    "module": "SingleDisplay",
+    "name": "Alliance Score",
+    "position": "main",
+    "options": {
+      "path": "averageScores.total",
+      "aggrMethod": "sum",
+      "decimals": 2
     }
   },
   {
     "view": "match",
     "module": "ColumnDisplay",
-    "name": "Auto Climb Points",
+    "name": "Average Cycle Time",
+    "position": "main",
+    "options": {
+      "path": "timePerGamePiece",
+      "multiplier": 0.001,
+      "decimals": 2,
+      "hideIfValue": 0,
+      "sort": -1,
+      "unit": "s"
+    }
+  },
+
+  {
+    "view": "match",
+    "module": "ColumnDisplay",
+    "name": "Auto Points",
     "position": "main",
     "options": {
       "path": "averageScores.auto",
@@ -435,10 +414,10 @@
   {
     "view": "match",
     "module": "ColumnDisplay",
-    "name": "Endgame Points",
+    "name": "Barge Points",
     "position": "main",
     "options": {
-      "path": "averageScores.endgame",
+      "path": "avgEndgamePoints",
       "sort": 1,
       "decimals": 2
     }
@@ -457,7 +436,7 @@
   {
     "view": "match",
     "module": "Stats",
-    "position": "main",
+    "position": "side",
     "name": "Alliance Stats",
     "options": {
       "list": [
@@ -474,8 +453,8 @@
           "aggrMethod": "sum"
         },
         {
-          "name": "Expected Endgame Points",
-          "path": "averageScores.endgame",
+          "name": "Expected Barge Points",
+          "path": "avgEndgamePoints",
           "decimals": 2,
           "aggrMethod": "sum"
         },

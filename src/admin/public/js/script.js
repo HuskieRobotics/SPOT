@@ -132,6 +132,8 @@ async function constructApp(accessCode) {
 
   await updateMatches(accessCode);
   setInterval(() => updateMatches(accessCode), 2500);
+  await updateAccuracy(accessCode);
+  setInterval(() => updateAccuracy(accessCode), 15000);
 
   document.querySelector("#start-scouting").addEventListener("click", () => {
     fetch("/admin/api/enterMatch", {
@@ -152,8 +154,83 @@ async function constructApp(accessCode) {
     } else {
       document.querySelector("#menu").classList.add("expanded");
     }
+
     menuExpanded = !menuExpanded;
   });
+
+  const setDashboardTab = (tab) => {
+    const showAccuracy = tab === "accuracy";
+    document.querySelector("#matches-view").hidden = showAccuracy;
+    document.querySelector("#accuracy-view").hidden = !showAccuracy;
+    document.querySelector("#matches-tab").classList.toggle("active", !showAccuracy);
+    document.querySelector("#accuracy-tab").classList.toggle("active", showAccuracy);
+  };
+  document.querySelector("#matches-tab").addEventListener("click", () => {
+    setDashboardTab("matches");
+  });
+  document.querySelector("#accuracy-tab").addEventListener("click", () => {
+    setDashboardTab("accuracy");
+  });
+  document.querySelector("#accuracy-link").addEventListener("click", (event) => {
+    event.preventDefault();
+    setDashboardTab("accuracy");
+  });
+}
+
+async function updateAccuracy(accessCode) {
+  const status = document.querySelector("#accuracy-status");
+  const list = document.querySelector("#accuracy-list tbody");
+  try {
+    const response = await fetch("./api/accuracy", {
+      headers: { Authorization: accessCode },
+    });
+    const result = await response.json();
+    if (!response.ok) throw new Error(result.error || "Request failed");
+    list.innerHTML = "";
+
+    if (!result.scouters?.length) {
+      const emptyRow = document.createElement("tr");
+      const emptyCell = document.createElement("td");
+      emptyCell.colSpan = 6;
+      emptyCell.textContent =
+        `Reports: ${result.diagnostics?.recordsConsidered || 0}; ` +
+        `matched to TBA: ${result.diagnostics?.recordsMatchedToTba || 0}. ` +
+        "All three robots must be scouted and have an official TBA score.";
+      emptyRow.appendChild(emptyCell);
+      list.appendChild(emptyRow);
+      status.textContent =
+        "No completed alliance results yet.";
+      return;
+    }
+
+    status.textContent = `${result.matches.length} completed alliance results`;
+    for (const scouter of result.scouters) {
+      const row = document.createElement("tr");
+      const accuracy =
+        scouter.accuracy === null
+          ? "Insufficient data"
+          : `${scouter.accuracy.toFixed(1)}%`;
+      [
+        scouter.scouterId,
+        accuracy,
+        scouter.matches,
+        scouter.averageAttributedError.toFixed(1),
+        scouter.signedBias.toFixed(1),
+        scouter.confidence,
+      ].forEach((value, index) => {
+        const cell = document.createElement("td");
+        cell.textContent = value;
+        if (index === 1) cell.className = "accuracy-score";
+        if (index === 5) cell.className = `confidence-${scouter.confidence}`;
+        row.appendChild(cell);
+      });
+      list.appendChild(row);
+    }
+  } catch (error) {
+    status.textContent = `Unable to load accuracy: ${error.message}`;
+    list.innerHTML = "";
+    console.error(error);
+  }
 }
 
 async function checkMigration() {

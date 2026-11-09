@@ -362,7 +362,7 @@
   {
     "type": "team",
     "name": "aggregateArray",
-    "outputPath": "s.endgame.all",
+    "outputPath": "cycles.endgame.all",
     "options": {
       "path": "cycles.endgame.all"
     }

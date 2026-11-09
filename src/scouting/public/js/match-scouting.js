@@ -742,7 +742,13 @@ let previousLayers = [];
         scouterId: ScoutingSync.state.scouterId, // from scouting-sync.js
         robotNumber: Number(ScoutingSync.state.robotNumber), // from scouting-sync.js
         matchNumber: Number(ScoutingSync.state.matchNumber),
+        matchKey:
+          ScoutingSync.matches.find(
+            (match) => match.number == ScoutingSync.state.matchNumber,
+          )?.match_string || null,
         eventNumber: config.EVENT_NUMBER,
+        scoringVersion: config.SCOUTING_ACCURACY?.version || 1,
+        scoringRules: config.SCOUTING_ACCURACY?.actions || {},
         actionQueue: filteredActionQueue,
         flagged: false,
       };
