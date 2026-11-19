@@ -15,6 +15,7 @@
 import type { Button, Executable, Layer, MatchScoutingConfig, Segment } from "@/config/types";
 import { deriveKnownActionIds } from "@/config/knownActionIds";
 import { compositeActionId, placeAt, type Placement } from "@/data/phase";
+import { teamNumber, teamSuffix, type TeamKey } from "@/data/team";
 import {
   DEFAULT_TENANT,
   NOT_FLAGGED,
@@ -29,8 +30,13 @@ export interface GenerateOptions {
   config: MatchScoutingConfig;
   /** Same seed, same data. */
   seed: string | number;
-  /** Team numbers to scout. Defaults to 48 plausible numbers. */
-  teams?: number[];
+  /** Team keys to scout. Defaults to 48 plausible numbers. */
+  teams?: TeamKey[];
+  /**
+   * Also field this many "B" robots ("1741B"), as off-season events do (BL-308). Default 0,
+   * because the v5 shape cannot store them and the legacy oracle run needs that shape.
+   */
+  bTeams?: number;
   /** Number of matches to play. */
   matches: number;
   /** Robots scouted per match; six is a full field. */
@@ -65,11 +71,11 @@ export interface GeneratedDataset {
   report: GenerateReport;
 }
 
-const DEFAULT_TEAMS = [
+const DEFAULT_TEAMS: TeamKey[] = [
   1741, 1816, 2052, 2090, 2175, 2226, 2338, 2450, 2500, 2530, 2574, 2638, 2823, 2846, 2883, 2951,
   3026, 3061, 3102, 3130, 3184, 3277, 3298, 3352, 3630, 3691, 3749, 3840, 4009, 4215, 4230, 4239,
   4536, 4607, 4628, 4780, 4818, 4901, 5172, 5464, 5653, 5690, 6317, 6574, 7021, 7538, 8122, 9998,
-];
+].map(String);
 
 const OID_CHARS = "0123456789abcdef";
 
@@ -352,7 +358,8 @@ export function generate(options: GenerateOptions): GeneratedDataset {
     config,
     seed,
     matches,
-    teams = DEFAULT_TEAMS,
+    teams: firstRobots = DEFAULT_TEAMS,
+    bTeams = 0,
     robotsPerMatch = 6,
     tenantId = DEFAULT_TENANT,
     eventCode = "2026syn_synthetic",
@@ -360,6 +367,7 @@ export function generate(options: GenerateOptions): GeneratedDataset {
     now = 1_772_800_000_000,
   } = options;
 
+  const teams = [...firstRobots, ...firstRobots.slice(0, bTeams).map((t) => `${t}B`)];
   const random = new Random(seed);
   const eventId = options.eventId ?? objectId(random);
   const scouterIds =
@@ -391,7 +399,7 @@ export function generate(options: GenerateOptions): GeneratedDataset {
 
   for (let matchNumber = 1; matchNumber <= matches; matchNumber++) {
     const lineup = random.shuffle(teams).slice(0, robotsPerMatch);
-    lineup.forEach((robotNumber, slot) => {
+    lineup.forEach((team, slot) => {
       const scouterId = scouterIds[slot % scouterIds.length];
       const { actions } = simulateMatch(
         config,
@@ -409,12 +417,12 @@ export function generate(options: GenerateOptions): GeneratedDataset {
         tenantId,
         eventId,
         matchNumber,
-        robotNumber,
+        team,
         scouterId,
         source: "app",
         clientVersion: "6.0.0-synthetic",
         submittedAt: now + matchNumber * 6 * 60_000 + slot * 1000,
-        matchKey: `${matchNumber}-${robotNumber}-${scouterId}-${nonce}`,
+        matchKey: `${matchNumber}-${team}-${scouterId}-${nonce}`,
         nonce,
         coverage: "full",
         superseded: false,
@@ -470,6 +478,14 @@ export interface LegacyPerformance {
   actionQueue: { id: string; ts: number; other?: Record<string, unknown> }[];
 }
 
+/** v5 typed `robotNumber` as a Number, so it has no way to store a "B" robot (BL-308). */
+function legacyRobotNumber(team: TeamKey): number {
+  if (teamSuffix(team)) {
+    throw new Error(`team ${team} has a suffix, which the v5 shape cannot store (BL-308)`);
+  }
+  return teamNumber(team);
+}
+
 export function toLegacyPerformance(
   config: MatchScoutingConfig,
   performance: TeamMatchPerformance,
@@ -479,7 +495,7 @@ export function toLegacyPerformance(
     timestamp: performance.submittedAt,
     clientVersion: performance.clientVersion,
     scouterId: performance.scouterId ?? "qrcode",
-    robotNumber: performance.robotNumber,
+    robotNumber: legacyRobotNumber(performance.team),
     matchNumber: performance.matchNumber,
     eventNumber: performance.eventId,
     matchId: performance.matchKey,

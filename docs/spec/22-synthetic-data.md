@@ -38,7 +38,9 @@ is that the same input produces the same output and that every code path is exer
   it renders to is one the configuration can derive. The generator asserts this itself and the
   CLI exits non-zero if it ever fails, because a drifted walk makes a worthless fixture.
 - **SY-5** Timestamps are inside the match and never increase within a performance.
-- **SY-6** Each match has a full lineup of distinct robots.
+- **SY-6** Each match has a full lineup of distinct robots. `--b-teams n` adds `n` second
+  robots (`1741B`, …), as off-season events field them (BL-308); they cannot be rendered in the
+  v5 shape, so `--legacy` refuses them.
 - **SY-7** The walk is paced so a match plays out to the end. The remaining presses are spread
   over the remaining time, so the late phases get their share of actions instead of the match
   trailing off in the middle.
@@ -47,7 +49,7 @@ is that the same input produces the same output and that every code path is exer
 
 ```sh
 npm run generate -- --config config/match-scouting.json --out <dir> \
-                    [--seed preseason] [--matches 80] [--robots 6] [--legacy]
+                    [--seed preseason] [--matches 80] [--robots 6] [--b-teams 0] [--legacy]
 ```
 
 It writes the three v6 collections plus `report.json`. With `--legacy` it also writes the v5

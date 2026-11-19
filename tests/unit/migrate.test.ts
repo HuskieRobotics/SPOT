@@ -9,6 +9,7 @@ import { join } from "node:path";
 import { migrate, scouterKey, type V5Event, type V5Performance } from "@/migrate/v5-to-v6";
 import { validateDocument } from "@/data/validate";
 import { DEFAULT_TENANT } from "@/data/types";
+import { isTeamKey } from "@/data/team";
 import type { MatchScoutingConfig } from "@/config/types";
 
 const root = process.cwd();
@@ -73,10 +74,9 @@ describe.each([
     }
   });
 
-  it("stores team numbers as numbers and drops per-action ids", () => {
+  it("DM-1a: stores team keys as strings and drops per-action ids", () => {
     for (const p of result.performances) {
-      expect(typeof p.robotNumber).toBe("number");
-      expect(Number.isFinite(p.robotNumber)).toBe(true);
+      expect(isTeamKey(p.team)).toBe(true);
       expect(typeof p.matchNumber).toBe("number");
       for (const a of p.actions) expect(a).not.toHaveProperty("_id");
     }
@@ -199,7 +199,7 @@ describe("migration edge cases", () => {
     );
     expect(performances[0].source).toBe("qr");
     expect(performances[0].scouterId).toBeNull();
-    expect(performances[0].robotNumber).toBe(3061);
+    expect(performances[0].team).toBe("3061");
     expect(performances[0].submittedAt).toBe(1772809355374);
   });
 

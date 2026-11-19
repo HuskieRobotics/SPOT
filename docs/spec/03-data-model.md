@@ -15,7 +15,7 @@
   "clientVersion": String,    // config.VERSION at time of scouting (e.g. "1.0")
   "scouterId": String,        // v5: firstName+lastName concatenated, or "qrcode" for scanned TMPs
                               // v6: the scouter's student ID (SEC-6); names live in `scouters`
-  "robotNumber": Number,      // FRC team number scouted (e.g. 3061); always a Number in v6 (DM-1a)
+  "robotNumber": Number,      // FRC team number scouted (e.g. 3061); v6: `team`, a String key such as "3061" or "2338B" (DM-1a)
   "matchNumber": Number,      // SPOT linear match number (see "Match numbering")
   "eventNumber": ObjectId,    // _id of the events document (stored as ObjectId; clients send hex string)
   "matchId": String,          // "<matchNumber>-<robotNumber>-<scouterId>-<matchId_rand>"
@@ -27,9 +27,16 @@
 }
 ```
 
-- **DM-1a** **[decided 2026-09-17]** `robotNumber` is the FRC team number and is stored and
-  compared as a **Number** everywhere. TBA returns strings and FMS returns numbers, so both are
-  normalized on ingest; nothing may rely on `==` coercion (resolves D-7, F-14's root cause).
+- **DM-1a** **[decided 2026-09-17, revised 2026-11-19 for BL-308]** A robot is identified by
+  its **team key**, a **String** on every path: the FRC team number, plus an optional capital
+  letter for a team's second robot at an off-season event (`"3061"`, `"2338B"`; pattern
+  `^[1-9][0-9]{0,4}[A-Z]?$`). It is The Blue Alliance's `team_key` without the `frc` prefix.
+  v6 renames the field from `robotNumber` to `team`. TBA keys, FIRST API numbers and manual
+  schedule entries are all normalized on ingest by one function (`toTeamKey` in
+  `src/data/team.ts`), keys are compared as strings, and lists sort by number then suffix;
+  nothing may rely on `==` coercion (resolves D-7, F-14's root cause). The first decision was
+  a Number, which cannot represent `2338B`; v5 typed the field as a Number too, and a B team
+  at an off-season event broke the analysis page until its data was deleted (issue #308).
 - **DM-1b** **[decided 2026-09-17]** A missing value is **`null`**, everywhere, in every
   pipeline output and every stored document. Legacy mixes `NaN`, `null`, `"N/A"` and
   `undefined`; modules render `null` as "No Data" (resolves D-7a). The oracle golden files
@@ -222,6 +229,10 @@ Bit layout (all big-endian binary strings, packed into bytes then base64):
   the edit would decode to the wrong action. The scanner compares the fingerprint and refuses a
   mismatch with a clear message rather than importing wrong data. Cost is two bytes once per
   payload: a 60-action match is about 385 bytes, so this is well under one percent.
+- **DM-15c** **[decided 2026-11-19, BL-308]** The v6 header encodes the team key as its
+  number in 16 bits followed by its suffix in 8 bits (the letter's ASCII code, `0` for none),
+  replacing the 16-bit `robotNumber`. One byte per payload buys B robots; team numbers above
+  65535 cannot be encoded, which the encoder refuses explicitly.
 - **DM-15b** If payload size becomes tight, `ts` is the place to save: match time remaining
   needs 18 bits, not the 32 the legacy layout uses, which is 14 bits back on **every** action.
   That is a `qr.json` setting, not a schema change.
