@@ -260,7 +260,7 @@
           "then": {
             "properties": {
               "options": {
-                "$ref": "#/$defs/options/pathOnly"
+                "$ref": "#/$defs/options/average"
               }
             },
             "required": ["options"]
@@ -277,7 +277,7 @@
           "then": {
             "properties": {
               "options": {
-                "$ref": "#/$defs/options/pathOnly"
+                "$ref": "#/$defs/options/average"
               }
             },
             "required": ["options"]
@@ -710,10 +710,15 @@
         "required": ["arrayPath", "valuePath"],
         "properties": {
           "arrayPath": {
-            "$ref": "#/$defs/path"
+            "$ref": "#/$defs/path",
+            "description": "Path to the list to average over."
           },
           "valuePath": {
-            "$ref": "#/$defs/path"
+            "$ref": "#/$defs/path",
+            "description": "Path to the number on each item of the list. Items with no value are skipped."
+          },
+          "ifNone": {
+            "description": "Value to write when there is nothing to average (the team never did it), exactly as given. Leave it out to write null (\"No Data\"), which keeps the team out of rankings; set the worst value, such as the full match time for a cycle time, to rank such a team last."
           }
         }
       },
@@ -722,7 +727,8 @@
         "additionalProperties": false,
         "properties": {
           "weight": {
-            "type": "number"
+            "type": "number",
+            "description": "Multiply the number of matches by this (default 1)."
           }
         }
       },
@@ -857,6 +863,20 @@
           },
           "ratings": {
             "$ref": "#/$defs/idList"
+          }
+        }
+      },
+      "average": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["path"],
+        "properties": {
+          "path": {
+            "$ref": "#/$defs/path",
+            "description": "Path to a number, or an object of numbers, on each match. Matches with no value are skipped."
+          },
+          "ifNone": {
+            "description": "Value to write when there is nothing to average (the team never did it), exactly as given. Leave it out to write null (\"No Data\"), which keeps the team out of rankings; set the worst value, such as the full match time for a cycle time, to rank such a team last."
           }
         }
       }

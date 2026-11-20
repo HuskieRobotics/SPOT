@@ -335,7 +335,8 @@ export function legacyToV6(
 
 /**
  * Fill in the output of an entry the engine cannot run, from the golden file. A `removeDuplicates`
- * entry keeps the performances legacy kept; any other entry gets its legacy output at its path.
+ * entry keeps the performances legacy kept, in legacy's order; any other entry gets its legacy
+ * output at its path.
  */
 function feedFromGolden(
   dataset: Dataset,
@@ -345,8 +346,13 @@ function feedFromGolden(
   rules: readonly DivergenceRule[],
 ): Dataset {
   if (entry.type === "tmp" && entry.name === "removeDuplicates") {
-    const kept = new Set(golden.tmps.map((t) => String(t._id)));
-    return { ...dataset, tmps: dataset.tmps.filter((t) => kept.has(t._id)) };
+    // Legacy kept the latest scout of each team and match, in the position of the first scout of
+    // that match; reproduce both which performances it kept and their order.
+    const position = new Map(golden.tmps.map((t, i) => [String(t._id), i]));
+    const tmps = dataset.tmps
+      .filter((t) => position.has(t._id))
+      .sort((a, b) => position.get(a._id)! - position.get(b._id)!);
+    return { ...dataset, tmps };
   }
   const fill = (target: Record<string, unknown>, source: Record<string, unknown> | undefined) => {
     if (!source) return;

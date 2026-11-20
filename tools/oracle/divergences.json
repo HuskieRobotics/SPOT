@@ -43,9 +43,18 @@
     {
       "id": "counts-nonaction-buttons-2025",
       "cites": "docs/spec/09 countActions (decided 2026-11-19, #311)",
-      "why": "v5 started countActions(all) at 0 for every button in the layout, including buttons that never record an action: match control (startGame), undo, layer navigation (Reef) and autoScoreCoral, a 2025 button of type none. Their counts were always 0. v6 lists action buttons only.",
+      "why": "v5 started countActions(all) at 0 for every button in the layout, including buttons that never record an action: match control (startGame), undo, layer navigation (Reef) and autoScoreCoral, a 2025 button of type none. Their counts were always 0. v6 lists action buttons only. The same zeros reached the team averages of those counts (averages.*).",
       "sets": ["2025ilch_official-v4.2.0", "2025syn_synthetic-v4.2.0"],
-      "paths": ["counts.startGame", "counts.undo", "counts.Reef", "counts.autoScoreCoral"],
+      "paths": [
+        "counts.startGame",
+        "counts.undo",
+        "counts.Reef",
+        "counts.autoScoreCoral",
+        "averages.startGame",
+        "averages.undo",
+        "averages.Reef",
+        "averages.autoScoreCoral"
+      ],
       "legacy": [0],
       "v6": "(absent)"
     }
