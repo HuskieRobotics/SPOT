@@ -302,9 +302,9 @@ describe("countActions", () => {
       { registry, context: { config: config2025 } },
     );
     expect(problems.map((p) => p.message)).toEqual([
-      'Invalid options: options: unknown property "phase"',
+      'Invalid options: options: unknown property "phase"; did you mean "phases"?',
       "Invalid options: options.by: must be one of: phase, segment",
-      'Invalid options: options: missing required property "all"; options: missing required property "ids"',
+      'Invalid options: options: needs one of these properties: "all", "ids"',
     ]);
   });
 });

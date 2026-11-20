@@ -57,6 +57,7 @@ npm run test:e2e     # playwright (expects a built app; see playwright.config.ts
 npm run oracle -- <v4.2.0-worktree> <v5-worktree>   # regenerate golden outputs
 npm run oracle:compare -- [set ...] [--entries]       # v6 engine vs golden outputs
 npm run config:convert -- config/v1 <out dir> [--opr-strings '<json>']   # v1 -> v2 config converter
+npm run config:check -- [dir] [--json]                # check a season's four config files (default config/)
 ```
 
 CI (`.github/workflows/ci.yml`) runs lint, typecheck, unit tests, build, and e2e on every PR.

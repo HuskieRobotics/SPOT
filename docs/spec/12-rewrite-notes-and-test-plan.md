@@ -312,6 +312,8 @@ that a new feature can be verified not to break existing behavior. Requirements:
   year configuration in `config/` and assert they parse, reference only known executables,
   transformers, and modules, and that every id referenced by the pipeline and modules exists
   in the corresponding `match-scouting.json` catalog (this would have caught F-4).
+  `npm run config:check` (#317, docs/spec/20 §4) runs these checks for students, and
+  `tests/unit/config-check.test.ts` runs it on every converted season.
 - **T-4** Golden-dataset regression tests run the full pipeline on a fixed set of recorded
   TMPs (real or synthetic, checked into the repo). **[A-45]** A real past-season dump can be
   provided, but because features must be verified before any matches of a new season exist,

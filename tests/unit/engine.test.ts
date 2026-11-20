@@ -190,10 +190,10 @@ describe("ADR 0005 / CS-10: the registry", () => {
 
   it("validates options against the declared schema, including built-in $refs", () => {
     expect(registry.validateOptions(actionCount, { scale: 2 })).toEqual([]);
-    expect(registry.validateOptions(actionCount, { scal: 2 })).toEqual([
-      { path: "(root)", message: 'unknown property "scal"' },
+    expect(registry.validateOptions(actionCount, { scal: 2 })).toMatchObject([
+      { path: "(root)", message: 'unknown property "scal"; did you mean "scale"?' },
     ]);
-    expect(registry.validateOptions(teamTotal, {})).toEqual([
+    expect(registry.validateOptions(teamTotal, {})).toMatchObject([
       { path: "(root)", message: 'missing required property "path"' },
     ]);
   });
