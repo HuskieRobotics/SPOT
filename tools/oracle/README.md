@@ -105,6 +105,10 @@ has, such as an action's period), optionally the sets and output paths it applie
 requirement or defect behind it (DM-1b's `null`, for example). A `rename` rule instead reads a
 legacy key under v6's name (v4.2.0's `cycle` wrote `pickup` where v5 and v6 write `starts`).
 
+A set with recorded TBA responses (`tbaDir` in `sets.ts`, 2026mnwi) is enriched from them as
+the page would be from live ones (#315); the others run without TBA data, so no score-breakdown
+actions are added and component OPRs are null.
+
 v6 never analyzes a superseded performance (docs/spec/09 TR-5). The migration marks superseded
 exactly the re-scouts v5's `removeDuplicates` dropped, so the 2026 sets compare the same 413
 performances. v4.2.0 had no `removeDuplicates` and counted the 2025 re-scouts twice, so the 2025

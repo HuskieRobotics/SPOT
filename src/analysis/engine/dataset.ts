@@ -53,6 +53,12 @@ export type TeamData = Record<string, unknown>;
 export interface Dataset {
   tmps: AnalysisPerformance[];
   teams: Record<TeamKey, TeamData>;
+  /**
+   * Action ids the dataset can hold besides the configuration's buttons: the TBA score-breakdown
+   * ids reported anywhere at the event (#315). `countActions(all)` starts them at 0 too, so a
+   * count means "how often" even in a match without that result.
+   */
+  extraActionIds?: readonly string[];
 }
 
 /**

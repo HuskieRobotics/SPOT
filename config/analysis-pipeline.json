@@ -5,7 +5,22 @@
     "tba": {
       "scoreBreakdown": {
         "enabled": true,
-        "prefixes": ["auto", "endGame"]
+        "prefixes": [
+          {
+            "prefix": "auto",
+            "phase": "auto"
+          },
+          {
+            "prefix": "endGame",
+            "phase": "endgame"
+          }
+        ],
+        "knownIds": [
+          "autoTowerRobot_Level1",
+          "endGameTowerRobot_Level1",
+          "endGameTowerRobot_Level2",
+          "endGameTowerRobot_Level3"
+        ]
       },
       "componentOprs": ["Hub Total Fuel Count", "minorFoulCount", "majorFoulCount"]
     }

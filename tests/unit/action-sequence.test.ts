@@ -353,7 +353,7 @@ describe("converter (#314)", () => {
       },
       { type: "tmp", name: "actionTimeFilter", outputPath: "f" },
     ]);
-    expect(warnings).toHaveLength(4);
+    expect(warnings.filter((w) => w.startsWith("pipeline["))).toHaveLength(4);
     expect(legacyRatingValues(["RatingDefense12", "noDigits"])).toEqual({
       ratings: { RatingDefense12: 12 },
       unread: ["noDigits"],

@@ -154,7 +154,16 @@ export interface AnalysisPipelineConfig {
   version: 2;
   enrichment: {
     tba: {
-      scoreBreakdown: { enabled: boolean; prefixes: string[] };
+      /**
+       * Breakdown keys starting with a prefix and ending with the robot's slot become actions in
+       * that prefix's phase (decided 2026-11-20, #315).
+       */
+      scoreBreakdown: {
+        enabled: boolean;
+        prefixes: { prefix: string; phase: string }[];
+        /** Ids that start at 0 in `countActions(all)`, besides those TBA reports at the event. */
+        knownIds?: string[];
+      };
       componentOprs: string[];
     };
   };

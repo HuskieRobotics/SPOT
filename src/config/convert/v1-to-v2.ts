@@ -511,6 +511,37 @@ export function legacyRatingValues(ids: readonly string[]): {
   return { ratings, unread };
 }
 
+/**
+ * v5 scanned the score breakdown for keys starting with "auto" and "endGame". v2 names the phase
+ * each prefix's actions belong to (decided 2026-11-20, #315): the converted configuration's
+ * "auto" phase, and its "endgame" phase or else its last phase.
+ */
+function scoreBreakdownPrefixes(
+  opts: ConvertOptions,
+  warnings: string[],
+): { prefix: string; phase: string }[] {
+  if (!opts.matchScouting) {
+    warnings.push(
+      'enrichment: score-breakdown phases defaulted to "auto" and "endgame"; check them against match-scouting.json (or pass the v1 match-scouting configuration)',
+    );
+    return [
+      { prefix: "auto", phase: "auto" },
+      { prefix: "endGame", phase: "endgame" },
+    ];
+  }
+  const ids = convertMatchScouting(opts.matchScouting, opts).config.timing.phases.map((p) => p.id);
+  const auto = ids.includes("auto") ? "auto" : ids[0];
+  const endgame = ids.includes("endgame") ? "endgame" : ids[ids.length - 1];
+  if (endgame !== "endgame")
+    warnings.push(
+      `enrichment: no endgame phase; endGame score-breakdown actions go in "${endgame}"`,
+    );
+  return [
+    { prefix: "auto", phase: auto },
+    { prefix: "endGame", phase: endgame },
+  ];
+}
+
 export function convertAnalysisPipeline(
   v1: V1PipelineEntry[],
   opts: ConvertOptions = {},
@@ -599,12 +630,20 @@ export function convertAnalysisPipeline(
   const oprs = Array.isArray(opts.oprStrings)
     ? opts.oprStrings
     : Object.values(opts.oprStrings ?? {});
+  const prefixes = scoreBreakdownPrefixes(opts, warnings);
+  // v5's 2026 layout listed score-breakdown ids ("<key>_<value>") in a hidden layer so
+  // countActions(all) started them at 0; carry them over as knownIds (#315).
+  const knownIds = opts.matchScouting
+    ? legacyCountIds(opts.matchScouting).filter(
+        (id) => id.includes("_") && prefixes.some((p) => id.startsWith(p.prefix)),
+      )
+    : [];
   const config: AnalysisPipelineConfig = {
     $schema: `${opts.schemaBase ?? "../src/config/schema"}/analysis-pipeline.schema.json`,
     version: 2,
     enrichment: {
       tba: {
-        scoreBreakdown: { enabled: opts.enrichment ?? true, prefixes: ["auto", "endGame"] },
+        scoreBreakdown: { enabled: opts.enrichment ?? true, prefixes, knownIds },
         componentOprs: oprs.filter(Boolean),
       },
     },

@@ -72,7 +72,16 @@ const minimalMatchScouting = (): MatchScoutingConfig => ({
 const minimalPipeline = (): AnalysisPipelineConfig => ({
   version: 2,
   enrichment: {
-    tba: { scoreBreakdown: { enabled: true, prefixes: ["auto", "endGame"] }, componentOprs: [] },
+    tba: {
+      scoreBreakdown: {
+        enabled: true,
+        prefixes: [
+          { prefix: "auto", phase: "auto" },
+          { prefix: "endGame", phase: "endgame" },
+        ],
+      },
+      componentOprs: [],
+    },
   },
   pipeline: [
     { type: "tmp", name: "countActions", outputPath: "counts", options: { all: true } },

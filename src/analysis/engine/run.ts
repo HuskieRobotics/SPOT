@@ -151,6 +151,8 @@ export function runPipeline(
   const { runnable, problems } = checkPipeline(entries, registry);
   const ran: number[] = [];
   let current = dataset;
+  // One context object for the whole run, so transformers can cache per run.
+  context = { ...context, extraActionIds: context.extraActionIds ?? dataset.extraActionIds ?? [] };
 
   for (const { index, entry, transformer, options } of runnable) {
     const base = {

@@ -85,6 +85,33 @@
       ],
       "legacy": ["(absent)"],
       "v6": "(any)"
+    },
+    {
+      "id": "tba-ids-start-at-zero-2026",
+      "cites": "DM-11 (decided 2026-11-20, #315)",
+      "why": "v6 starts every score-breakdown id at 0: the configured knownIds and every id TBA reports at the event. v5 started only the ids its hidden layout layer listed, which left out the _None results, so a match or team without one had no count.",
+      "sets": ["2026mnwi_official-v5"],
+      "paths": ["counts.autoTowerRobot_None", "counts.endGameTowerRobot_None"],
+      "legacy": ["(absent)"],
+      "v6": 0
+    },
+    {
+      "id": "tba-none-average-2026",
+      "cites": "DM-11, TR-12 (#315)",
+      "why": "With every match counted, 0 when the result did not happen, a team's average is how often it happened. v5 had no count in those matches, so it averaged only the matches with the result (always 1), and only when the team's first match had one.",
+      "sets": ["2026mnwi_official-v5"],
+      "paths": ["averages.autoTowerRobot_None", "averages.endGameTowerRobot_None"],
+      "legacy": [1, "(absent)"],
+      "v6": "(any)"
+    },
+    {
+      "id": "opr-without-tba",
+      "cites": "DM-13, DM-1b (#315)",
+      "why": "Without TBA data, v6 still writes each configured component OPR, as null (No Data). The synthetic sets ran v5 with enrichment off, which wrote nothing.",
+      "sets": ["2026syn_synthetic-v5"],
+      "paths": ["opr.*"],
+      "legacy": ["(absent)"],
+      "v6": null
     }
   ]
 }

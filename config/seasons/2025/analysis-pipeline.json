@@ -5,7 +5,17 @@
     "tba": {
       "scoreBreakdown": {
         "enabled": true,
-        "prefixes": ["auto", "endGame"]
+        "prefixes": [
+          {
+            "prefix": "auto",
+            "phase": "auto"
+          },
+          {
+            "prefix": "endGame",
+            "phase": "teleop"
+          }
+        ],
+        "knownIds": []
       },
       "componentOprs": []
     }
