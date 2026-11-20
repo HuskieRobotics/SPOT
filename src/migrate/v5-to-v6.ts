@@ -272,7 +272,9 @@ export function migrate(
   let supersededPerformances = 0;
   for (const list of byRobotMatch.values()) {
     if (list.length < 2) continue;
-    const winner = list.reduce((a, b) => (b.submittedAt >= a.submittedAt ? b : a));
+    // Strictly later wins, so on a tie the first in export order is kept, as v5's did (a record
+    // synced twice with identical content, 2026).
+    const winner = list.reduce((a, b) => (b.submittedAt > a.submittedAt ? b : a));
     for (const p of list) {
       if (p !== winner) {
         p.superseded = true;

@@ -32,7 +32,14 @@ describe("divergence rules", () => {
       expect(rule.id).toMatch(/^[a-z0-9-]+$/);
       expect(rule.cites.length).toBeGreaterThan(0);
       expect(rule.why.length).toBeGreaterThan(20);
-      expect(rule.legacy.length).toBeGreaterThan(0);
+      // Either a value rule (legacy values and the v6 value) or a key rename limited to paths.
+      if (rule.rename) {
+        expect(rule.legacy).toBeUndefined();
+        expect(rule.paths?.length).toBeGreaterThan(0);
+      } else {
+        expect(rule.legacy?.length).toBeGreaterThan(0);
+        expect(rule).toHaveProperty("v6");
+      }
     }
   });
 
@@ -156,6 +163,32 @@ describe("compareDatasets", () => {
     });
     expect(c.differenceCount).toBe(0);
   });
+
+  it("renames a legacy key, and accepts any v6 value where a rule says (any) (#314)", () => {
+    const { v6, legacy } = build();
+    Object.assign(v6.tmps[0], { c: { all: [{ starts: { id: "p", phase: "auto" } }] } });
+    Object.assign(legacy.tmps[0], { c: { all: [{ pickup: { id: "p" } }] } });
+    const extra: DivergenceRule[] = [
+      {
+        id: "key",
+        cites: "test",
+        why: "legacy named the key differently",
+        paths: ["c.*.*.pickup.**"],
+        rename: { from: "pickup", to: "starts" },
+      },
+      {
+        id: "field",
+        cites: "test",
+        why: "v6 adds a field legacy lacked",
+        paths: ["**.starts.phase"],
+        legacy: ["(absent)"],
+        v6: "(any)",
+      },
+    ];
+    const c = compareDatasets(legacy, v6, { set: "s", pipeline, rules: [...rules, ...extra] });
+    expect(c.differenceCount).toBe(0);
+    expect(c.accepted).toEqual({ key: 1, field: 1 });
+  });
 });
 
 describe.each(goldenSets.map((s) => [s.name, s] as const))("golden set %s", (name, set) => {
@@ -164,13 +197,14 @@ describe.each(goldenSets.map((s) => [s.name, s] as const))("golden set %s", (nam
     readFileSync(join(process.cwd(), "tools", "oracle", "golden", name, "report.json"), "utf8"),
   ) as { tmpCount: number; derivedTmpCount: number; teamCount: number };
 
-  it("migrates every legacy performance and team, keeping ids and team keys", () => {
+  it("analyzes exactly the performances legacy did, keeping ids and team keys", () => {
+    // The migration marks superseded exactly the re-scouts v5's removeDuplicates dropped, and v6
+    // leaves them out (RT-14a). The 2025 sets feed them in, as v4.2.0 counted them (sets.ts).
     expect(comparison.tmps.missingInV6).toEqual([]);
+    expect(comparison.tmps.extraInV6).toEqual([]);
+    expect(comparison.tmps.v6).toBe(report.derivedTmpCount);
     expect(comparison.teams.missingInV6).toEqual([]);
     expect(comparison.teams.extraInV6).toEqual([]);
-    expect(comparison.tmps.v6).toBe(report.tmpCount);
-    // The only extra performances are the re-scouts legacy removeDuplicates dropped.
-    expect(comparison.tmps.extraInV6).toHaveLength(report.tmpCount - report.derivedTmpCount);
   });
 
   it("checks every pipeline entry before running", () => {

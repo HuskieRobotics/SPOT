@@ -81,7 +81,8 @@ What it does beyond renaming fields:
   spaces and lowercasing, keeping the most common spelling as the display name and reporting
   every merge for an admin to check;
 - marks historic duplicates `superseded`, keeping the latest submission, which is what the v5
-  pipeline's `removeDuplicates` did. Who "finished the match" (RT-35) is not knowable from old
+  pipeline's `removeDuplicates` did (on a tie, the first in export order, as v5 kept it: 2026 has
+  one record synced twice with identical content). Who "finished the match" (RT-35) is not knowable from old
   data, so the migration reproduces the old outcome rather than inventing one.
 
 ### Results on the real exports

@@ -100,8 +100,15 @@ npm run oracle:compare -- --feed                # each transformer on its own
 ```
 
 Expected differences live in `divergences.json`, never in the golden files. Each rule names
-the legacy values it accepts, the value v6 must produce instead, optionally the sets and output
-paths it applies to, and the requirement or defect behind it (DM-1b's `null`, for example).
+the legacy values it accepts, the value v6 must produce instead (`"(any)"` for a field only v6
+has, such as an action's period), optionally the sets and output paths it applies to, and the
+requirement or defect behind it (DM-1b's `null`, for example). A `rename` rule instead reads a
+legacy key under v6's name (v4.2.0's `cycle` wrote `pickup` where v5 and v6 write `starts`).
+
+v6 never analyzes a superseded performance (docs/spec/09 TR-5). The migration marks superseded
+exactly the re-scouts v5's `removeDuplicates` dropped, so the 2026 sets compare the same 413
+performances. v4.2.0 had no `removeDuplicates` and counted the 2025 re-scouts twice, so the 2025
+sets feed them in (`includeSuperseded` in `sets.ts`).
 
 `--feed` fills each entry the engine cannot run yet with its golden output, converted to v6
 form by the divergence rules, so the entries after it see the inputs legacy gave them. Each

@@ -493,14 +493,42 @@ export function inferSumAverageCountPaths(
   return matches.sort((a, b) => a.n - b.n).map((m) => m.path);
 }
 
+/**
+ * The value of each rating id, as v5's `zoneActionRatingGroupings` read it: the digits at the end
+ * of the id (decided 2026-11-20 to write the values out). Ids without digits are listed in `unread`.
+ */
+export function legacyRatingValues(ids: readonly string[]): {
+  ratings: Record<string, number>;
+  unread: string[];
+} {
+  const ratings: Record<string, number> = {};
+  const unread: string[] = [];
+  for (const id of ids) {
+    const m = String(id).match(/(\d+)$/);
+    if (m) ratings[id] = Number(m[1]);
+    else unread.push(id);
+  }
+  return { ratings, unread };
+}
+
 export function convertAnalysisPipeline(
   v1: V1PipelineEntry[],
   opts: ConvertOptions = {},
 ): ConvertResult<AnalysisPipelineConfig> {
   const warnings: string[] = [];
-  const pipeline: PipelineEntry[] = v1.map((e, i) => {
+  const pipeline: PipelineEntry[] = v1.flatMap((e, i): PipelineEntry[] => {
     const where = `pipeline[${i}] ${e.type}/${e.name} -> ${e.outputPath}`;
     let name = e.name;
+    if (name === "removeDuplicates") {
+      warnings.push(
+        `${where}: dropped; analysis never sees a performance a re-scout replaced (RT-14a)`,
+      );
+      return [];
+    }
+    if (name === "countHybrid" && e.type === "team") {
+      warnings.push(`${where}: dropped; v1's team countHybrid did nothing`);
+      return [];
+    }
     const options: Record<string, unknown> = { ...(e.options ?? {}) };
     if (name === "finalActionOccurence") {
       name = "finalActionOccurrence";
@@ -538,6 +566,19 @@ export function convertAnalysisPipeline(
         },
       );
     }
+    if (name === "zoneActionRatingGroupings" && Array.isArray(options.ratings)) {
+      const { ratings, unread } = legacyRatingValues(options.ratings as string[]);
+      options.ratings = ratings;
+      warnings.push(
+        `${where}: wrote out the value of each rating id (v1 read the digits at the end of the id)`,
+      );
+      if (unread.length)
+        warnings.push(`${where}: no digits at the end of ${unread.join(", ")}; add their values`);
+    }
+    if (name === "actionTimeFilter" && "default" in options) {
+      delete options.default;
+      warnings.push(`${where}: dropped "default", which v1 never applied`);
+    }
     if (name === "actionTime" && "path" in options && !("actionId" in options)) {
       options.actionId = options.path;
       delete options.path;
@@ -550,12 +591,9 @@ export function convertAnalysisPipeline(
       }
     }
     const out: PipelineEntry = { type: e.type as "tmp" | "team", name, outputPath: e.outputPath };
-    if (
-      Object.keys(options).length ||
-      !["removeDuplicates", "countMatches", "actionTimeFilter"].includes(name)
-    )
+    if (Object.keys(options).length || !["countMatches", "actionTimeFilter"].includes(name))
       out.options = options;
-    return out;
+    return [out];
   });
 
   const oprs = Array.isArray(opts.oprStrings)

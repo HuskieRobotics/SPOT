@@ -489,23 +489,6 @@
           "if": {
             "properties": {
               "name": {
-                "const": "removeDuplicates"
-              }
-            }
-          },
-          "then": {
-            "properties": {
-              "options": {
-                "type": "object",
-                "additionalProperties": false
-              }
-            }
-          }
-        },
-        {
-          "if": {
-            "properties": {
-              "name": {
                 "const": "zoneActionRatingGroupings"
               }
             }
@@ -745,9 +728,21 @@
               {
                 "$ref": "#/$defs/idList"
               }
-            ]
+            ],
+            "description": "Button id, or a list of them: the time of the first action with any of these ids is written."
           },
-          "default": {}
+          "default": {
+            "description": "Value to write when no such action was recorded. Default: null."
+          },
+          "phases": {
+            "$ref": "#/$defs/periodFilter/properties/phases"
+          },
+          "segments": {
+            "$ref": "#/$defs/periodFilter/properties/segments"
+          },
+          "kinds": {
+            "$ref": "#/$defs/periodFilter/properties/kinds"
+          }
         }
       },
       "actionTimeFilter": {
@@ -755,12 +750,22 @@
         "additionalProperties": false,
         "properties": {
           "timeMin": {
-            "type": "number"
+            "type": "number",
+            "description": "Keep actions recorded with at least this much match time remaining (ms). Default: 0."
           },
           "timeMax": {
-            "type": "number"
+            "type": "number",
+            "description": "Keep actions recorded with at most this much match time remaining (ms). Default: the match length."
           },
-          "default": {}
+          "phases": {
+            "$ref": "#/$defs/periodFilter/properties/phases"
+          },
+          "segments": {
+            "$ref": "#/$defs/periodFilter/properties/segments"
+          },
+          "kinds": {
+            "$ref": "#/$defs/periodFilter/properties/kinds"
+          }
         }
       },
       "finalActionOccurrence": {
@@ -769,11 +774,24 @@
         "required": ["ids"],
         "properties": {
           "ids": {
-            "$ref": "#/$defs/idList"
+            "$ref": "#/$defs/idList",
+            "description": "The last action with any of these button ids is written."
           },
-          "default": {},
+          "default": {
+            "description": "Value to write when no such action was recorded. Default: null."
+          },
           "actionArrayPath": {
-            "$ref": "#/$defs/path"
+            "$ref": "#/$defs/path",
+            "description": "Path to the list of actions to search. Default: actions."
+          },
+          "phases": {
+            "$ref": "#/$defs/periodFilter/properties/phases"
+          },
+          "segments": {
+            "$ref": "#/$defs/periodFilter/properties/segments"
+          },
+          "kinds": {
+            "$ref": "#/$defs/periodFilter/properties/kinds"
           }
         }
       },
@@ -794,33 +812,59 @@
       },
       "cycle": {
         "type": "object",
+        "description": "Period filters: pairing always runs over the whole match; a filter keeps the cycles that start or end in the period (TR-13).",
         "additionalProperties": false,
         "required": ["startAction", "endAction"],
         "properties": {
           "startAction": {
-            "$ref": "#/$defs/idList"
+            "$ref": "#/$defs/idList",
+            "description": "Button ids that start a cycle, such as a pickup."
           },
           "endAction": {
-            "$ref": "#/$defs/idList"
+            "$ref": "#/$defs/idList",
+            "description": "Button ids that end a cycle, such as a score."
           },
           "misses": {
-            "$ref": "#/$defs/idList"
+            "$ref": "#/$defs/idList",
+            "description": "Button ids that end a cycle without success; such cycles are left out of allComplete."
+          },
+          "phases": {
+            "$ref": "#/$defs/periodFilter/properties/phases"
+          },
+          "segments": {
+            "$ref": "#/$defs/periodFilter/properties/segments"
+          },
+          "kinds": {
+            "$ref": "#/$defs/periodFilter/properties/kinds"
           }
         }
       },
       "countHybrid": {
         "type": "object",
+        "description": "Period filters: pairing always runs over the whole match; a filter counts a placement when it or its pickup is in the period (TR-13).",
         "additionalProperties": false,
         "required": ["pickup", "hybrid"],
         "properties": {
           "pickup": {
-            "$ref": "#/$defs/idList"
+            "$ref": "#/$defs/idList",
+            "description": "Button ids that pick up a game piece; the result has one count per id."
           },
           "hybrid": {
-            "$ref": "#/$defs/idList"
+            "$ref": "#/$defs/idList",
+            "description": "Button ids that place a game piece; each is counted under the piece last picked up."
           },
           "actionArrayPath": {
-            "$ref": "#/$defs/path"
+            "$ref": "#/$defs/path",
+            "description": "Path to the list of actions to walk. Default: actions."
+          },
+          "phases": {
+            "$ref": "#/$defs/periodFilter/properties/phases"
+          },
+          "segments": {
+            "$ref": "#/$defs/periodFilter/properties/segments"
+          },
+          "kinds": {
+            "$ref": "#/$defs/periodFilter/properties/kinds"
           }
         }
       },
@@ -852,17 +896,34 @@
       },
       "zoneActionRatingGroupings": {
         "type": "object",
+        "description": "Period filters: pairing always runs over the whole match; a filter keeps the triples whose zone or rating is in the period (TR-13).",
         "additionalProperties": false,
         "required": ["zones", "actions", "ratings"],
         "properties": {
           "zones": {
-            "$ref": "#/$defs/idList"
+            "$ref": "#/$defs/idList",
+            "description": "Zone button ids. Each becomes a key of the output, so \"list\" and \"counts\" cannot be used."
           },
           "actions": {
-            "$ref": "#/$defs/idList"
+            "$ref": "#/$defs/idList",
+            "description": "Action button ids, each paired with the zone pressed before it."
           },
           "ratings": {
-            "$ref": "#/$defs/idList"
+            "type": "object",
+            "minProperties": 1,
+            "additionalProperties": {
+              "type": "number"
+            },
+            "description": "{ ratingButtonId: value }: the rating buttons and the value each one stands for, such as { \"RatingPassing3\": 3 }."
+          },
+          "phases": {
+            "$ref": "#/$defs/periodFilter/properties/phases"
+          },
+          "segments": {
+            "$ref": "#/$defs/periodFilter/properties/segments"
+          },
+          "kinds": {
+            "$ref": "#/$defs/periodFilter/properties/kinds"
           }
         }
       },
