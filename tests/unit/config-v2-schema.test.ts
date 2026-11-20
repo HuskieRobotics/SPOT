@@ -137,7 +137,9 @@ describe("v2 configuration schemas", () => {
     );
     const r = validateConfig("qr", { ...minimalQr(), version: 1 });
     expect(r.ok).toBe(false);
-    expect(r.issues).toContainEqual({ path: "version", message: "must be 2" });
+    expect(r.issues).toContainEqual(
+      expect.objectContaining({ path: "version", message: "must be 2" }),
+    );
   });
 
   it("rejects seconds where milliseconds are required", () => {
@@ -152,7 +154,12 @@ describe("v2 configuration schemas", () => {
     const c = minimalMatchScouting() as unknown as Record<string, unknown>;
     (c.rules as Record<string, unknown>).positionLock = 1000;
     const r = validateConfig("match-scouting", c);
-    expect(r.issues).toContainEqual({ path: "rules", message: 'unknown property "positionLock"' });
+    expect(r.issues).toContainEqual(
+      expect.objectContaining({
+        path: "rules",
+        message: 'unknown property "positionLock"',
+      }),
+    );
   });
 
   it("validates built-in transformer options strictly", () => {
@@ -160,17 +167,21 @@ describe("v2 configuration schemas", () => {
     p.pipeline[0].options = { all: true, actionArrayPaths: "x" };
     const r = validateConfig("analysis-pipeline", p);
     expect(r.ok).toBe(false);
-    expect(r.issues).toContainEqual({
-      path: "pipeline.0.options",
-      message: 'unknown property "actionArrayPaths"',
-    });
+    expect(r.issues).toContainEqual(
+      expect.objectContaining({
+        path: "pipeline.0.options",
+        message: 'unknown property "actionArrayPaths"; did you mean "actionArrayPath"?',
+      }),
+    );
 
     const missing = minimalPipeline();
     missing.pipeline[1].options = {};
-    expect(validateConfig("analysis-pipeline", missing).issues).toContainEqual({
-      path: "pipeline.1.options",
-      message: 'missing required property "path"',
-    });
+    expect(validateConfig("analysis-pipeline", missing).issues).toContainEqual(
+      expect.objectContaining({
+        path: "pipeline.1.options",
+        message: 'missing required property "path"',
+      }),
+    );
   });
 
   it("accepts extension transformers and modules with any options", () => {
@@ -207,10 +218,12 @@ describe("v2 configuration schemas", () => {
     const bad = minimalMatchScouting() as unknown as Record<string, unknown>;
     const phases = (bad.timing as { phases: Record<string, unknown>[] }).phases;
     phases[1].segments = [{ id: "shift", startMs: 120000, maxIndex: 4 }];
-    expect(validateConfig("match-scouting", bad).issues).toContainEqual({
-      path: "timing.phases.1.segments.0",
-      message: 'unknown property "maxIndex"',
-    });
+    expect(validateConfig("match-scouting", bad).issues).toContainEqual(
+      expect.objectContaining({
+        path: "timing.phases.1.segments.0",
+        message: 'unknown property "maxIndex"',
+      }),
+    );
   });
 
   it("validates executables by type and accepts custom executables", () => {
@@ -230,9 +243,11 @@ describe("v2 configuration schemas", () => {
     m.modules[0].options = { list: [{ name: "Avg", path: "avgScore", decimal: 2 }] };
     const r = validateConfig("analysis-modules", m);
     expect(r.ok).toBe(false);
-    expect(r.issues).toContainEqual({
-      path: "modules.0.options.list.0",
-      message: 'unknown property "decimal"',
-    });
+    expect(r.issues).toContainEqual(
+      expect.objectContaining({
+        path: "modules.0.options.list.0",
+        message: 'unknown property "decimal"; did you mean "decimals"?',
+      }),
+    );
   });
 });

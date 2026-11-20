@@ -10,7 +10,15 @@ The four files here drive the v6 application:
 | `qr.json`                | `src/config/schema/qr.schema.json`                | docs/spec/03, 20     |
 
 Each file starts with `"$schema"` pointing at its schema, so VS Code validates and
-autocompletes while you edit. `npm test` validates them too (`tests/unit/config-active.test.ts`).
+autocompletes while you edit. To check all four files and the references between them, run:
+
+```sh
+npm run config:check                          # this folder
+npm run config:check -- config/seasons/2025   # another season
+```
+
+Each finding gives the file and line, where in words, what is wrong, and what to try
+(docs/spec/20 §4). `npm test` validates the files too (`tests/unit/config-active.test.ts`).
 
 They were produced from the 2026 REBUILT legacy files in `config/v1/` by the converter:
 

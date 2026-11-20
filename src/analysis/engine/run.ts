@@ -11,6 +11,7 @@
  * `Infinity` or `undefined` (DM-1b).
  */
 import type { PipelineEntry } from "@/config/types";
+import { suggest } from "@/lib/suggest";
 import type { Dataset } from "./dataset";
 import { setPath } from "./path";
 import type { Transformer, TransformerContext, TransformerRegistry } from "./registry";
@@ -57,32 +58,7 @@ function message(error: unknown): string {
   return error instanceof Error ? error.message : String(error);
 }
 
-/** Closest registered name, for "did you mean" (edit distance, case-insensitive). */
-export function suggest(name: string, candidates: readonly string[]): string | null {
-  const distance = (a: string, b: string): number => {
-    const row = Array.from({ length: b.length + 1 }, (_, i) => i);
-    for (let i = 1; i <= a.length; i++) {
-      let previous = row[0];
-      row[0] = i;
-      for (let j = 1; j <= b.length; j++) {
-        const current = row[j];
-        row[j] = Math.min(row[j] + 1, row[j - 1] + 1, previous + (a[i - 1] === b[j - 1] ? 0 : 1));
-        previous = current;
-      }
-    }
-    return row[b.length];
-  };
-  let best: string | null = null;
-  let bestDistance = Infinity;
-  for (const c of candidates) {
-    const d = distance(name.toLowerCase(), c.toLowerCase());
-    if (d < bestDistance) {
-      best = c;
-      bestDistance = d;
-    }
-  }
-  return best !== null && bestDistance <= Math.max(2, Math.floor(name.length / 3)) ? best : null;
-}
+export { suggest };
 
 interface Checked {
   index: number;
@@ -96,6 +72,20 @@ export const RETIRED_TRANSFORMERS: Readonly<Record<string, string>> = {
   removeDuplicates:
     "It is no longer needed: analysis never sees a performance that a re-scout replaced (RT-14a). Remove this entry.",
 };
+
+/** What to try when no transformer has this type and name; "" when nothing comes to mind. */
+export function unknownTransformerHint(
+  type: PipelineEntry["type"],
+  name: string,
+  registry: TransformerRegistry,
+): string {
+  if (Object.hasOwn(RETIRED_TRANSFORMERS, name)) return RETIRED_TRANSFORMERS[name];
+  const other = type === "tmp" ? "team" : "tmp";
+  if (registry.get(other, name))
+    return `There is a ${other} transformer with that name; check "type".`;
+  const near = suggest(name, registry.names(type));
+  return near ? `Did you mean "${near}"?` : "";
+}
 
 /** Check every entry without running anything. Used by the runner and by `config:check`. */
 export function checkPipeline(
@@ -114,18 +104,10 @@ export function checkPipeline(
     };
     const transformer = registry.get(entry.type, entry.name);
     if (!transformer) {
-      const other = entry.type === "tmp" ? "team" : "tmp";
-      const hint = Object.hasOwn(RETIRED_TRANSFORMERS, entry.name)
-        ? ` ${RETIRED_TRANSFORMERS[entry.name]}`
-        : registry.get(other, entry.name)
-          ? ` There is a ${other} transformer with that name; check "type".`
-          : (() => {
-              const s = suggest(entry.name, registry.names(entry.type));
-              return s ? ` Did you mean "${s}"?` : "";
-            })();
+      const hint = unknownTransformerHint(entry.type, entry.name, registry);
       problems.push({
         ...base,
-        message: `There is no ${entry.type} transformer named "${entry.name}".${hint}`,
+        message: `There is no ${entry.type} transformer named "${entry.name}".${hint ? ` ${hint}` : ""}`,
       });
       return;
     }

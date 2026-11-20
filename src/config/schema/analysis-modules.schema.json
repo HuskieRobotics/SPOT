@@ -41,6 +41,11 @@
       "pattern": "^\\S(.*\\S)?$",
       "description": "Dot-separated object path (no leading/trailing whitespace)."
     },
+    "actionId": {
+      "type": "string",
+      "minLength": 1,
+      "description": "A button id from match-scouting.json (or an id from its extraActionIds). config:check reports an id that is neither."
+    },
     "stat": {
       "type": "object",
       "additionalProperties": false,
@@ -166,12 +171,13 @@
                       "required": ["name", "actions"],
                       "properties": {
                         "name": { "type": "string" },
-                        "actions": { "type": "array", "items": { "type": "string" } }
+                        "actions": { "type": "array", "items": { "$ref": "#/$defs/actionId" } }
                       }
                     }
                   },
                   "actionLabels": {
                     "type": "object",
+                    "propertyNames": { "$ref": "#/$defs/actionId" },
                     "additionalProperties": { "type": "string" }
                   },
                   "imgPath": { "type": "string" },

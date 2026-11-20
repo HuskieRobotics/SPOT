@@ -284,7 +284,80 @@ distinguished by button, not by time. A 2025-style season that wanted endgame an
 a third phase at 30000 ms; giving that phase a prefix would change the recorded ids, so for
 existing data the prefix stays empty.
 
-## 4. Tests (T-3)
+## 4. Checking a configuration: `npm run config:check` (#317, gate K-2)
+
+```sh
+npm run config:check                           # the active configuration in config/
+npm run config:check -- config/seasons/2025    # another season's folder
+npm run config:check -- <folder> --json        # the report as JSON, for tools
+```
+
+The exit code is 1 when there are errors; warnings alone exit 0. Each finding starts with
+`file:line:column`, which VS Code's terminal opens on a click, then says where in the file's own
+terms (`entry 6 (tmp actionTime → actionTimes.attemptClimb) › options.actionId`,
+`layer "layer-3" › button "undo" › gridArea`), what is wrong, and what to try. The check is
+`src/config/check/`, pure TypeScript with no file access, so a page can run it too;
+`scripts/config-check.ts` reads the folder.
+
+- **CC-1 Reading.** A missing file or a JSON syntax error is reported with its line and a hint
+  for the usual mistakes: a comma after the last item, a comment, single quotes, a missing comma,
+  a file that ends too early. A v1 file is told to run the converter.
+- **CC-2 Schema messages.** Every file is validated against its schema, with messages in plain
+  words: an unknown property suggests the property meant (`unknown property "mises"; did you
+mean "misses"?`), unless the object already has it; a value that fails every alternative of an
+  `anyOf` is reported against the alternative it was meant for (an executable with
+  `"type": "layer"` gets the `layer` messages, not one per executable type); a list of required
+  alternatives reads `needs one of these properties: "all", "ids"`; patterns are described
+  (`must not be empty or start or end with a space`). An option written beside `options` in a
+  pipeline entry is told to move inside it (F-25). These messages come from `src/lib/json-schema.ts`,
+  so stored-document validation and the registry's option checks read the same way.
+- **CC-3 Within match-scouting.json.** Errors: a layer, button, phase or toggle button that a
+  reference names does not exist (initialLayer, phase and segment layers, executable `to`,
+  `always` and `conditional` buttons, lock trigger buttons and `untilPhase`, alliance-relative
+  buttons, kind toggle buttons); duplicate layer, phase, segment or kind ids; phases or segments
+  out of match order, a phase after `timing.totalMs`, a segment outside its phase, a repeat that
+  starts after its phase ends. Warnings: a `gridArea` past the grid or with an end at or before
+  its start (the browser still draws it, so the hint gives the corrected value); two buttons in
+  one cell of a layer, unless one is shown only for some value of a variable (2023's cones and
+  cubes); the same button id twice in a layer; a layer nothing opens; a `conditional` variable
+  nothing sets; an executable type that is not built in.
+- **CC-4 Transformers.** An unknown name gets "did you mean", "check type", or the retired
+  transformer's replacement (TR-10); an extension's options are checked against its own schema
+  (TR-14); a schema that does not compile is reported as a code bug.
+- **CC-5 Ids that options name.** An option whose schema uses `$defs/actionId` (or
+  `actionIdList`) names button ids, and one using the period filters names phase, segment or kind
+  ids; the check walks each option alongside its schema, so a new built-in, or an extension using
+  `pipelineDef("actionIdList")`, is covered without changing the check. A button id must be an
+  action button, an `extraActionIds` entry, a listed `knownIds` entry, or an id TBA enrichment
+  produces from a configured prefix. An unknown id gets "did you mean"; a v5 id that put the
+  period in front of the button is explained as that button in that period, with the v6 way to
+  write it (CS-16); a path is told its button id; a button that is not an action is named as such.
+  A period id must exist (`preMatch` is always a phase id). A `by` grouping whose keys collide is
+  reported on the entry. Module action ids (HeatmapScatterPlot) are checked the same way, and a
+  module that is not built in is a warning until extension modules exist.
+- **CC-6 Enrichment.** Each score-breakdown prefix's `phase` must exist. Warnings: enrichment
+  enabled with no prefixes, or with no `knownIds` (a count of a result nobody achieved at an
+  event would be No Data instead of 0, DM-11b), and a known id that no prefix produces.
+- **CC-7 QR.** `actionSchema` has exactly one `id` and one `ts`; `id` has the bits to number every
+  id the scouting screen can record (the derived list, until the Phase 2 encoding), and `ts` the
+  bits to hold a match's length in milliseconds.
+- **CC-8 Order of checks.** A check that compares two files runs only when both passed their
+  schema, so one typo does not bury the report; the report lists what was skipped. A pipeline or
+  modules file with some bad entries is still checked entry by entry.
+
+Still to come in #317: warnings from running the pipeline on generated data (a path no earlier
+entry produces, a module path the pipeline never writes, an output that is null or zero for every
+team, and a ranking fed by a `ratio` without `divByZero` or an average without `ifNone`).
+
+**Run on the real configurations (2026-11-20).** The archived 2025 set has no errors and three
+warnings: two buttons with `gridArea [5,2,5,5]`, and no `knownIds`. The active 2026 set has 16 errors, all
+options that still use v5 ids (14 in the pipeline, among them the `attemptClimb` entry of §2.2,
+and 2 in the heatmap module; #320 translates them), and four warnings for buttons whose `gridArea`
+reaches column line 14 of an 11-column grid. Converted older seasons show real defects too: 2023 ended its cone and cube cycles
+with paths (`counts.hybrid.conePickupGrid`) instead of button ids, so those cycles never ended,
+and 2024v2 has two `autoNoteWing` buttons in one layer.
+
+## 5. Tests (T-3)
 
 | Test file                             | Guarantees                                                                                                                                                                                                                                                                                                                                                                |
 | ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -292,6 +365,7 @@ existing data the prefix stays empty.
 | `tests/unit/config-convert.test.ts`   | Every archived season set in `config/v1` (2022, 2023, 2023v1, 2024, 2024v2, 2025, 2025v2, 2025 at v4.2.0, 2026) converts to valid v2 with resolvable layer references; the converted 2026 config derives every action id the 2026 oracle found in real data except the TBA `_None` ids (which are enrichment output, not scouting ids); catalog removed; renames applied. |
 | `tests/unit/config-active.test.ts`    | `config/*.json` validate; they equal the converter output (drift check, delete when hand-editing starts); the derived id count fits the QR id field.                                                                                                                                                                                                                      |
 | `tests/unit/config-v1.test.ts`        | Converter inputs still parse (unchanged).                                                                                                                                                                                                                                                                                                                                 |
+| `tests/unit/config-check.test.ts`     | Each class of config:check finding (CC-1 to CC-8) on a small change to the 2025 or 2026 configuration; the 2025 set has no errors; the 2026 set reports the `attemptClimb` entry; every converted v1 season gives a report whose findings all have a line and read without `undefined`; the CLI exits 0 with warnings only and 1 with errors.                             |
 
 Oracle cross-check result: of the 32 ids the v5 pipeline could not explain for 2026mnwi
 (document 17 §2.2), 30 are derivable from the v2 config with no catalog (`activeShift3*`,
@@ -299,7 +373,7 @@ Oracle cross-check result: of the 32 ids the v5 pipeline could not explain for 2
 remaining, `autoTowerRobot_None` and `endGameTowerRobot_None`, are synthetic TBA actions and
 belong to the enrichment step.
 
-## 5. Open items carried forward
+## 6. Open items carried forward
 
 - **Shift and endgame constants** were copied from the 2026 client (25 s shifts, endgame at
   30 s); a future season must set them by hand in the teleop phase's `shift` segment and in the

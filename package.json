@@ -15,6 +15,7 @@
     "format:check": "prettier --check .",
     "oracle": "bash tools/oracle/run-all.sh",
     "oracle:compare": "tsx scripts/oracle-compare.ts",
+    "config:check": "tsx scripts/config-check.ts",
     "config:convert": "tsx scripts/convert-config.ts",
     "migrate": "tsx scripts/migrate-data.ts",
     "generate": "tsx scripts/generate-data.ts"

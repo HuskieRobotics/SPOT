@@ -109,6 +109,17 @@
         "type": "string"
       }
     },
+    "actionId": {
+      "type": "string",
+      "minLength": 1,
+      "description": "A button id from match-scouting.json, an id from its extraActionIds, or a TBA score-breakdown id such as endGameTowerRobot_Level3. config:check reports an id that is none of these."
+    },
+    "actionIdList": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/actionId"
+      }
+    },
     "entry": {
       "type": "object",
       "additionalProperties": false,
@@ -533,7 +544,7 @@
             "description": "Count every action. Every action button starts at 0; ids the configuration does not know are counted too."
           },
           "ids": {
-            "$ref": "#/$defs/idList",
+            "$ref": "#/$defs/actionIdList",
             "description": "Count only these button ids, each starting at 0."
           },
           "actionArrayPath": {
@@ -742,10 +753,10 @@
           "actionId": {
             "anyOf": [
               {
-                "type": "string"
+                "$ref": "#/$defs/actionId"
               },
               {
-                "$ref": "#/$defs/idList"
+                "$ref": "#/$defs/actionIdList"
               }
             ],
             "description": "Button id, or a list of them: the time of the first action with any of these ids is written."
@@ -793,7 +804,7 @@
         "required": ["ids"],
         "properties": {
           "ids": {
-            "$ref": "#/$defs/idList",
+            "$ref": "#/$defs/actionIdList",
             "description": "The last action with any of these button ids is written."
           },
           "default": {
@@ -836,15 +847,15 @@
         "required": ["startAction", "endAction"],
         "properties": {
           "startAction": {
-            "$ref": "#/$defs/idList",
+            "$ref": "#/$defs/actionIdList",
             "description": "Button ids that start a cycle, such as a pickup."
           },
           "endAction": {
-            "$ref": "#/$defs/idList",
+            "$ref": "#/$defs/actionIdList",
             "description": "Button ids that end a cycle, such as a score."
           },
           "misses": {
-            "$ref": "#/$defs/idList",
+            "$ref": "#/$defs/actionIdList",
             "description": "Button ids that end a cycle without success; such cycles are left out of allComplete."
           },
           "phases": {
@@ -865,11 +876,11 @@
         "required": ["pickup", "hybrid"],
         "properties": {
           "pickup": {
-            "$ref": "#/$defs/idList",
+            "$ref": "#/$defs/actionIdList",
             "description": "Button ids that pick up a game piece; the result has one count per id."
           },
           "hybrid": {
-            "$ref": "#/$defs/idList",
+            "$ref": "#/$defs/actionIdList",
             "description": "Button ids that place a game piece; each is counted under the piece last picked up."
           },
           "actionArrayPath": {
@@ -920,11 +931,11 @@
         "required": ["zones", "actions", "ratings"],
         "properties": {
           "zones": {
-            "$ref": "#/$defs/idList",
+            "$ref": "#/$defs/actionIdList",
             "description": "Zone button ids. Each becomes a key of the output, so \"list\" and \"counts\" cannot be used."
           },
           "actions": {
-            "$ref": "#/$defs/idList",
+            "$ref": "#/$defs/actionIdList",
             "description": "Action button ids, each paired with the zone pressed before it."
           },
           "ratings": {
@@ -933,7 +944,10 @@
             "additionalProperties": {
               "type": "number"
             },
-            "description": "{ ratingButtonId: value }: the rating buttons and the value each one stands for, such as { \"RatingPassing3\": 3 }."
+            "description": "{ ratingButtonId: value }: the rating buttons and the value each one stands for, such as { \"RatingPassing3\": 3 }.",
+            "propertyNames": {
+              "$ref": "#/$defs/actionId"
+            }
           },
           "phases": {
             "$ref": "#/$defs/periodFilter/properties/phases"

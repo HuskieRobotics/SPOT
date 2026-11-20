@@ -92,10 +92,12 @@ describe("document schemas", () => {
 
   it("DM-1a: refuses a team that arrived as a number", () => {
     const p = { ...performance(), team: 3061 };
-    expect(validateDocument("team-match-performance", p).issues).toContainEqual({
-      path: "team",
-      message: "must be string",
-    });
+    expect(validateDocument("team-match-performance", p).issues).toContainEqual(
+      expect.objectContaining({
+        path: "team",
+        message: "must be string",
+      }),
+    );
   });
 
   it("BL-308: accepts a B robot and refuses keys that are not team keys", () => {
@@ -111,19 +113,23 @@ describe("document schemas", () => {
   it("refuses a per-action _id, which v5 stored and v6 does not", () => {
     const p = performance();
     (p.actions[0] as unknown as Record<string, unknown>)._id = oid("d");
-    expect(validateDocument("team-match-performance", p).issues).toContainEqual({
-      path: "actions.0",
-      message: 'unknown property "_id"',
-    });
+    expect(validateDocument("team-match-performance", p).issues).toContainEqual(
+      expect.objectContaining({
+        path: "actions.0",
+        message: 'unknown property "_id"',
+      }),
+    );
   });
 
   it("requires the placement fields, even when they are null", () => {
     const p = performance();
     delete (p.actions[0] as unknown as Record<string, unknown>).phase;
-    expect(validateDocument("team-match-performance", p).issues).toContainEqual({
-      path: "actions.0",
-      message: 'missing required property "phase"',
-    });
+    expect(validateDocument("team-match-performance", p).issues).toContainEqual(
+      expect.objectContaining({
+        path: "actions.0",
+        message: 'missing required property "phase"',
+      }),
+    );
   });
 
   it("requires a tenant on every document", () => {
@@ -133,10 +139,12 @@ describe("document schemas", () => {
       ["scouter", scouter()],
     ] as unknown as [DocumentKind, Record<string, unknown>][]) {
       delete doc.tenantId;
-      expect(validateDocument(kind, doc).issues).toContainEqual({
-        path: "(root)",
-        message: 'missing required property "tenantId"',
-      });
+      expect(validateDocument(kind, doc).issues).toContainEqual(
+        expect.objectContaining({
+          path: "(root)",
+          message: 'missing required property "tenantId"',
+        }),
+      );
     }
   });
 

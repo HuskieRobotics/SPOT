@@ -98,10 +98,10 @@ describe("ADR 0005: the example extension", () => {
     expect(problems.map((p) => [p.index, p.message])).toEqual([
       [
         0,
-        'Invalid options: options: missing required property "path"; options: unknown property "pth"',
+        'Invalid options: options: missing required property "path"; options: unknown property "pth"; did you mean "path"?',
       ],
       [1, "Invalid options: options.ifNone: must be number"],
-      [2, 'Invalid options: options.path: must match pattern "^\\S(.*\\S)?$"'],
+      [2, "Invalid options: options.path: must not be empty or start or end with a space"],
     ]);
   });
 
@@ -189,7 +189,9 @@ describe("TR-14: rules for extension transformers", () => {
     "%s: schema compiles, rejects an unknown option, and has a summary",
     (_, t) => {
       const issues = registry.validateOptions(t, { notAnOption: 1 });
-      expect(issues).toContainEqual({ path: "(root)", message: 'unknown property "notAnOption"' });
+      expect(issues).toContainEqual(
+        expect.objectContaining({ path: "(root)", message: 'unknown property "notAnOption"' }),
+      );
       expect(t.summary.trim().length).toBeGreaterThan(0);
     },
   );

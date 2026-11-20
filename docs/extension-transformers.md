@@ -38,7 +38,9 @@ Every `run` also receives the entry's `options`, already checked against your sc
    them when the configuration is checked. Reuse the pipeline schema's definitions where they
    fit, so your options are checked exactly like the built-ins':
    - `pipelineDef("path")`: a dotted path such as `counts.l4`;
-   - `pipelineDef("idList")`: a list of button ids;
+   - `pipelineDef("actionIdList")`: a list of button ids (`pipelineDef("actionId")` for one).
+     `npm run config:check` then checks that each id exists in `match-scouting.json`, as it does
+     for the built-ins;
    - `pipelineDef("periodFilter/properties/phases")`, `…/segments` and `…/kinds`: the period
      filters (docs/spec/20 §2.2). In `run`, `passesFilter(action, options)` from
      `../transformers/periods` keeps the actions in those periods.
