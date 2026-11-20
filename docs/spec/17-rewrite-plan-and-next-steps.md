@@ -296,6 +296,9 @@ Recommended order from here, toward gate K (section 3.1), seven weeks away on 20
    there today. Golden pipeline expectations land with the engine: it runs over the migrated
    real and synthetic inputs and must reproduce the legacy output, except where a defect in
    document 12 is deliberately fixed (DM-1b's `null` for missing values is the first).
+   The engine is v6-native: it sees button ids plus each action's period, not composite ids
+   (CS-16, document 20 §2.2, decided 2026-11-19). Phase 1 work is tracked as issues on the
+   "v6 Phase 1" milestone.
 2. **K-2 to K-5**, in that order, on top of the engine.
 3. **Then gate W** (about 2027-02-20): phase 2, the core of phase 3, and the event-critical part
    of phase 4, about six weeks after kickoff.
