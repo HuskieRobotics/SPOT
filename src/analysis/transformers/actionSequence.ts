@@ -5,8 +5,13 @@
  *
  * Rules:
  * - Actions are matched by button id (CS-16). Every one of these transformers also takes the
- *   period filters `phases`, `segments` and `kinds` (docs/spec/20 §2.2), applied before anything
- *   else, so "shooting cycles in auto" is `cycle` with `phases: ["auto"]`.
+ *   period filters `phases`, `segments` and `kinds` (docs/spec/20 §2.2).
+ * - Transformers that look at one action at a time filter the actions first.
+ * - Transformers that pair actions (`cycle`, `countHybrid`, `zoneActionRatingGroupings`) pair
+ *   over the whole match first, then keep a pair whose first or last action is in the period
+ *   (decided 2026-11-20). Filtering first would break pairs at a boundary: in 2026 a team starts
+ *   shooting before the hub activates, and a scouter may press stop just after it deactivates.
+ *   A pair that crosses a boundary is kept by a filter for either period.
  * - `ts` is match time remaining in milliseconds (DM-3), so a later action has a smaller `ts`.
  * - Actions written into an output are copies; stored actions are never changed (F-3, TR-7).
  * - v5's `removeDuplicates` is retired: analysis never sees a superseded performance (TR-5).
@@ -14,7 +19,7 @@
 import type { Action } from "@/data/types";
 import { getPath } from "../engine/path";
 import { builtInOptions, defineTransformer, type Transformer } from "../engine/registry";
-import { passesFilter, type PeriodFilter } from "./periods";
+import { hasPeriodFilter, passesFilter, type PeriodFilter } from "./periods";
 
 /** An action as found in a list; lists built by other entries may lack the period fields. */
 type ActionLike = Pick<Action, "id" | "ts"> & Partial<Action>;
@@ -22,12 +27,16 @@ type ActionLike = Pick<Action, "id" | "ts"> & Partial<Action>;
 const orDefault = (value: unknown) => (value === undefined ? null : structuredClone(value));
 const copy = <T>(value: T): T => structuredClone(value);
 
-/** The actions at `path` that pass the period filter, in recorded order. */
-function actionsAt(target: Record<string, unknown>, path: string, filter: PeriodFilter) {
+/** The actions at `path`, in recorded order; with a filter, only those that pass it. */
+function actionsAt(target: Record<string, unknown>, path: string, filter: PeriodFilter = {}) {
   const list = getPath(target, path);
   if (!Array.isArray(list)) throw new Error(`"${path}" is not a list of actions`);
   return (list as ActionLike[]).filter((action) => passesFilter(action, filter));
 }
+
+/** Whether a pair, from its first to its last action, starts or ends in the filtered periods. */
+const keepsPair = (first: ActionLike, last: ActionLike, filter: PeriodFilter) =>
+  !hasPeriodFilter(filter) || passesFilter(first, filter) || passesFilter(last, filter);
 
 /** Mean of the numbers, added left to right as v5 did; null when there are none. */
 function mean(values: readonly number[]): number | null {
@@ -97,7 +106,7 @@ export const finalActionOccurrence = defineTransformer<
 /**
  * Pair each start action with the first unused end action (or miss) recorded after it (A-38):
  * a start with no end after it ends the search, and an end with no start before it is never
- * used. `timeDifferential` is the time between the two in ms. `allComplete` leaves out cycles
+ * used. A period filter keeps the cycles that start or end in the period. `timeDifferential` is the time between the two in ms. `allComplete` leaves out cycles
  * that ended in a miss. The averages are null when there are no cycles.
  */
 export const cycle = defineTransformer<
@@ -110,13 +119,14 @@ export const cycle = defineTransformer<
   optionsSchema: builtInOptions("cycle"),
   run: (tmp, options) => {
     const misses = options.misses ?? [];
-    const actions = actionsAt(tmp, "actions", options);
+    const actions = actionsAt(tmp, "actions");
     let endings = actions.filter((a) => options.endAction.includes(a.id) || misses.includes(a.id));
     const all: { starts: ActionLike; ending: ActionLike; timeDifferential: number }[] = [];
     for (const start of actions.filter((a) => options.startAction.includes(a.id))) {
       endings = endings.filter((e) => e.ts < start.ts);
       const ending = endings.shift();
       if (!ending) break;
+      if (!keepsPair(start, ending, options)) continue;
       all.push({
         starts: copy(start),
         ending: copy(ending),
@@ -138,8 +148,9 @@ export const cycle = defineTransformer<
 /**
  * Count placements (`hybrid` ids) by the game piece last picked up (`pickup` ids): the result has
  * one count per pickup id, starting at 0. A placement before any pickup, such as a preloaded
- * piece, is not counted (v5 counted it under "" and produced NaN). v5's team variant did nothing
- * and is not carried over.
+ * piece, is not counted (v5 counted it under "" and produced NaN). A period filter counts a
+ * placement when it or its pickup is in the period. v5's team variant did nothing and is not
+ * carried over.
  */
 export const countHybrid = defineTransformer<
   { pickup: string[]; hybrid: string[]; actionArrayPath?: string } & PeriodFilter
@@ -152,10 +163,11 @@ export const countHybrid = defineTransformer<
   run: (tmp, options) => {
     const placements: Record<string, number> = {};
     for (const id of options.pickup) placements[id] = 0;
-    let held: string | null = null;
-    for (const action of actionsAt(tmp, options.actionArrayPath ?? "actions", options)) {
-      if (options.pickup.includes(action.id)) held = action.id;
-      if (options.hybrid.includes(action.id) && held !== null) placements[held] += 1;
+    let held: ActionLike | null = null;
+    for (const action of actionsAt(tmp, options.actionArrayPath ?? "actions")) {
+      if (options.pickup.includes(action.id)) held = action;
+      if (options.hybrid.includes(action.id) && held && keepsPair(held, action, options))
+        placements[held.id] += 1;
     }
     return placements;
   },
@@ -164,8 +176,9 @@ export const countHybrid = defineTransformer<
 /**
  * Group zone, action and rating presses into triples (2026): each zone press is paired with the
  * first unused action recorded after it, and that action with the first unused rating after it;
- * the walk stops at the first zone or action that has nothing after it. A rating's value comes
- * from the `ratings` map (decided 2026-11-20; v5 read the digit at the end of the id).
+ * the walk stops at the first zone or action that has nothing after it. A period filter keeps
+ * the triples whose zone or rating is in the period. A rating's value comes from the `ratings`
+ * map (decided 2026-11-20; v5 read the digit at the end of the id).
  *
  * Output: `list` of `{ zone, action, rating }`, `counts[zone][action][rating]`, and, for each
  * zone, `[zone][action]` = the mean rating.
@@ -183,7 +196,7 @@ export const zoneActionRatingGroupings = defineTransformer<
     if (reserved.length > 0) {
       throw new Error(`a zone cannot be named "${reserved[0]}": that key holds other output`);
     }
-    const recorded = actionsAt(tmp, "actions", options);
+    const recorded = actionsAt(tmp, "actions");
     let actions = recorded.filter((a) => options.actions.includes(a.id));
     let ratings = recorded.filter((a) => Object.hasOwn(options.ratings, a.id));
     const list: { zone: string; action: string; rating: number }[] = [];
@@ -196,6 +209,7 @@ export const zoneActionRatingGroupings = defineTransformer<
       ratings = ratings.filter((r) => r.ts < action.ts);
       const rating = ratings.shift();
       if (!rating) break;
+      if (!keepsPair(zone, rating, options)) continue;
       const value = options.ratings[rating.id];
       list.push({ zone: zone.id, action: action.id, rating: value });
       const byAction = (counts[zone.id] ??= {});

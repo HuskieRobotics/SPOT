@@ -198,15 +198,32 @@ describe("cycle (A-38 pairing)", () => {
     });
   });
 
-  it("period filters apply to starts and ends alike", () => {
+  it("pairs over the whole match, then a filter keeps cycles that start or end in the period", () => {
+    // 2026: shooting that starts before the hub activates, a stop pressed just after it
+    // deactivates, and shooting wholly inside an inactive shift.
+    const shift = (kind: string, segmentIndex: number) => ({
+      segment: "shift",
+      segmentKind: kind,
+      segmentIndex,
+    });
     const actions = [
-      act("pickup", 150000, "auto"),
-      act("score", 140000, "teleop"),
-      act("pickup", 130000, "teleop"),
-      act("score", 125000, "teleop"),
+      act("pickup", 108000, "teleop", shift("inactive", 1)),
+      act("score", 103000, "teleop", shift("active", 2)),
+      act("pickup", 84000, "teleop", shift("active", 2)),
+      act("score", 78000, "teleop", shift("inactive", 3)),
+      act("pickup", 70000, "teleop", shift("inactive", 3)),
+      act("score", 66000, "teleop", shift("inactive", 3)),
+      act("pickup", 50000, "teleop", shift("active", 4)),
+      act("score", 45000, "teleop", shift("active", 4)),
     ];
-    expect(times(out(actions, "cycle", { ...options, phases: ["teleop"] }))).toEqual([5000]);
-    expect(times(out(actions, "cycle", { ...options, phases: ["auto"] }))).toEqual([]);
+    expect(times(out(actions, "cycle", { ...options, kinds: ["active"] }))).toEqual([
+      5000, 6000, 5000,
+    ]);
+    // Filtering first would have paired the start at 84000 with the stop at 45000 (39 s).
+    expect(times(out(actions, "cycle", { ...options, kinds: ["inactive"] }))).toEqual([
+      5000, 6000, 4000,
+    ]);
+    expect(times(out(actions, "cycle", options))).toEqual([5000, 6000, 4000, 5000]);
   });
 });
 
@@ -220,6 +237,19 @@ describe("countHybrid", () => {
         options,
       ),
     ).toEqual({ cone: 2, cube: 0 });
+  });
+  it("a filter counts a placement when it or its pickup is in the period", () => {
+    const actions = [act("cone", 150, "auto"), act("low", 140, "teleop"), act("low", 130)];
+    expect(out(actions, "countHybrid", { ...options, phases: ["auto"] })).toEqual({
+      cone: 2,
+      cube: 0,
+    });
+    expect(
+      out([act("cube", 150, "auto"), act("low", 140, "auto"), act("low", 130)], "countHybrid", {
+        ...options,
+        phases: ["teleop"],
+      }),
+    ).toEqual({ cone: 0, cube: 1 });
   });
 });
 
@@ -252,6 +282,22 @@ describe("zoneActionRatingGroupings", () => {
       AZone: { Passing: 3 },
       NeutralZone: { Defense: 1 },
     });
+  });
+
+  it("a filter keeps the triples whose zone or rating is in the period", () => {
+    const actions = [
+      act("AZone", 100, "teleop"),
+      act("Passing", 95, "teleop"),
+      act("RatingPassing2", 90, "endgame"),
+      act("NeutralZone", 80, "endgame"),
+      act("Defense", 75, "endgame"),
+      act("RatingDefense1", 70, "endgame"),
+    ];
+    const triples = (phases: string[]) =>
+      (out(actions, "zoneActionRatingGroupings", { ...options, phases }) as { list: unknown[] })
+        .list;
+    expect(triples(["teleop"])).toEqual([{ zone: "AZone", action: "Passing", rating: 2 }]);
+    expect(triples(["endgame"])).toHaveLength(2);
   });
 
   it("ratings are an explicit map; a zone cannot be named list or counts", () => {

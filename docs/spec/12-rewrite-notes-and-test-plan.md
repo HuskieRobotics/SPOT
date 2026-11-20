@@ -102,6 +102,26 @@ authors wrote. The value is deliberate: a team that never scores should rank las
 on time per game piece, and should count at the bottom when rankings are combined to judge
 competitiveness, predict matches or pick alliance partners, rather than drop out as "No Data".
 
+- **F-26** The 2026 pipeline's id lists leave out shooting during inactive shifts, but not
+  consistently. `cycle.shootingTime` leaves out `StartShooting` in inactive shifts (195 presses
+  in the 2026mnwi export) yet counts `StopShooting` there as an end. `zoneActionRatingGroupings`
+  leaves out `StopShooting` and the shooting ratings in inactive shifts. A cycle that started
+  in an inactive shift was lost, and its stop went unused.
+
+**Decided 2026-11-20 (F-26, #314):** shooting in an inactive shift counts. In 2026 fuel was
+scored only after it worked its way through the hub, which takes time, so teams started shooting
+before their hub became active and stopped a little before it became inactive. A scouter cannot
+tell whether fuel will score when the timing is tight, so a `StartShooting` press is taken to mean
+the scouter expected that fuel to score. The near-boundary data is also fuzzy: of 1,171 teleop
+and endgame shooting cycles, 212 (18%) cross a period boundary, and 80 of the 90 that run from
+active into inactive stop within 10 s after the switch. Two rules follow:
+
+- The 2026 translation (#320) uses `StartShooting`, `StopShooting` and the shooting ratings in
+  every period, and records the difference from v5 as a divergence citing F-26.
+- Transformers that pair actions pair over the whole match, then a period filter keeps a pair
+  that starts or ends in the period (document 09 TR-13). Filtering first would break such pairs
+  or match a start with a stop from a later shift.
+
 ## Security concerns (all resolved 2026-09-17; see ADR 0004 and 0005)
 
 - **S-1** Everything that reads or writes scouting data is unauthenticated except the admin

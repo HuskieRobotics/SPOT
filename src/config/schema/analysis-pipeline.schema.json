@@ -812,6 +812,7 @@
       },
       "cycle": {
         "type": "object",
+        "description": "Period filters: pairing always runs over the whole match; a filter keeps the cycles that start or end in the period (TR-13).",
         "additionalProperties": false,
         "required": ["startAction", "endAction"],
         "properties": {
@@ -840,6 +841,7 @@
       },
       "countHybrid": {
         "type": "object",
+        "description": "Period filters: pairing always runs over the whole match; a filter counts a placement when it or its pickup is in the period (TR-13).",
         "additionalProperties": false,
         "required": ["pickup", "hybrid"],
         "properties": {
@@ -894,6 +896,7 @@
       },
       "zoneActionRatingGroupings": {
         "type": "object",
+        "description": "Period filters: pairing always runs over the whole match; a filter keeps the triples whose zone or rating is in the period (TR-13).",
         "additionalProperties": false,
         "required": ["zones", "actions", "ratings"],
         "properties": {
