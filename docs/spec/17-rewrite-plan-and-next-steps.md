@@ -68,8 +68,9 @@ Do these before writing application code. Each one removes a class of rework lat
      payload had the device been offline (document 12, F-4, now evidenced). `knownActionIds`
      must therefore be derived (phase × button) rather than enumerated by hand, or the id
      encoding must not depend on an enumeration.
-   - 2025 output contains 27 `"N/A"` strings from the `timePerGamePiece` divide-by-zero typo
-     and 96 `NaN` averages (teams without a value); 2026 contains 715 `NaN` rating averages
+   - 2025 output contains 27 `"N/A"` strings from team `ratio` divide-by-zero handling (24 from
+     the falsy `divByZero || "N/A"`, F-24, and 3 from the misplaced `timePerGamePiece` option,
+     F-25; corrected 2026-11-19) and 96 `NaN` averages (teams without a value); 2026 contains 715 `NaN` rating averages
      (phase/metric combinations with no ratings) and 21 `undefined`s. The rewrite must decide
      how missing values are represented (document 12) and the golden files record the legacy
      representation.
@@ -143,7 +144,8 @@ Do these before writing application code. Each one removes a class of rework lat
         `timePerGamePiece` entry places `divByZero: 150000` **outside** `options` (the
         Configuration Guide reproduces the same typo), so teams with no scored game pieces get
         the string `"N/A"` at that path; the oracle captures this as-is and the rewrite's
-        config validation (T-3) should flag unknown top-level keys.
+        config validation (T-3) should flag unknown top-level keys. The accuracy ratios lose
+        their configured `0` the same way (F-24, F-25 and the v6 decision in document 12).
         Renames only (`cycle` option names) and cosmetic changes (`standardDeviation` logging,
         `aggregateArray` comment) carry no semantic difference. New in 2026 and absent from the
         2025 pipeline: `removeDuplicates`, `averageTime`, `deepAverage`, `multiply`, `sumAverage`,

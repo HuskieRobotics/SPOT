@@ -23,9 +23,18 @@
       "v6": null
     },
     {
-      "id": "divbyzero-misplaced-2025",
-      "cites": "CS-11, docs/spec/17 §2 item 1",
-      "why": "The 2025 pipeline put divByZero: 150000 beside options instead of inside them, so v5 ignored it and wrote \"N/A\". The v1 → v2 converter moves it into options, so v6 writes the value the configuration asked for.",
+      "id": "ratio-falsy-divbyzero-2025",
+      "cites": "F-24",
+      "why": "The 2025 accuracy ratios configure divByZero: 0, but v5's team ratio wrote divByZero || \"N/A\", so 0 became \"N/A\". v6 writes the configured 0, which ranks a team that never scored last.",
+      "sets": ["2025ilch_official-v4.2.0", "2025syn_synthetic-v4.2.0"],
+      "paths": ["algaeAccuracy", "coralAccuracy"],
+      "legacy": ["N/A"],
+      "v6": 0
+    },
+    {
+      "id": "ratio-misplaced-divbyzero-2025",
+      "cites": "F-25, CS-11",
+      "why": "The 2025 pipeline put divByZero: 150000 beside options instead of inside them, so v5 ignored it and wrote \"N/A\". The v1 → v2 converter moves it into options, so v6 writes the full-match time the configuration asked for.",
       "sets": ["2025ilch_official-v4.2.0", "2025syn_synthetic-v4.2.0"],
       "paths": ["timePerGamePiece"],
       "legacy": ["N/A"],

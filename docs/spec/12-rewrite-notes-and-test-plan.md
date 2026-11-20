@@ -86,6 +86,21 @@ are open design choices.
 - **F-23** Client scouting state (`ScoutingSync.state`) is in memory only; just the name is in
   `localStorage`. A page reload or a device restart drops the scouter back to sign-in with no
   way to resume the match they were scouting.
+- **F-24** The team variant of `ratio` writes `options.divByZero || "N/A"` when the denominator
+  is zero, so a configured `divByZero: 0` (any falsy value) becomes `"N/A"`. The 2022, 2024v2 and
+  2025 accuracy ratios all configure 0 and never got it: 24 of the 27 `"N/A"` values in the real
+  2025 golden output come from this (21 `algaeAccuracy`, 3 `coralAccuracy`). The tmp variant
+  writes the value as configured. Found 2026-11-19.
+- **F-25** The time-per-game-piece ratios of 2022 (`timePerBall`), 2024v2 (`timePerNote`) and
+  2025 (`timePerGamePiece`) put `divByZero: 150000` beside `options` instead of inside, so v5
+  ignored it and wrote `"N/A"` (the other 3 of the 27 in 2025). The Configuration Guide shows
+  the same placement. The v1 → v2 converter moves it into `options` (CS-11).
+
+**Decided 2026-11-19 (F-24, F-25):** v6's `ratio` writes `divByZero` exactly as configured,
+including `0`, and `null` when it is not set (DM-1b). Converted past seasons keep what their
+authors wrote. The value is deliberate: a team that never scores should rank last on accuracy and
+on time per game piece, and should count at the bottom when rankings are combined to judge
+competitiveness, predict matches or pick alliance partners, rather than drop out as "No Data".
 
 ## Security concerns (all resolved 2026-09-17; see ADR 0004 and 0005)
 
