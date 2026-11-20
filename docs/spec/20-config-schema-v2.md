@@ -252,8 +252,11 @@ npm run config:convert -- config/v1 <out dir> [--match-scouting f] [--pipeline f
 
 The CLI writes the four files, prints every warning, validates the outputs, and exits 1 if any
 is invalid. The active `config/*.json` were produced with the 2026 OPR strings fixture (see
-`config/README.md`), and `config/seasons/2025/` holds the converted `2025v2` set as a
-typical-season example and as an oracle input (`config/seasons/README.md`).
+`config/README.md`), and `config/seasons/2025/` holds the converted 2025 set as a
+typical-season example and as an oracle input (`config/seasons/README.md`). Its pipeline comes
+from `analysis-pipeline-2025-v4.2.0.json`, the pipeline tag `v4.2.0` shipped and the one that
+produced the 2025 golden output; `2025v2`'s pipeline, recreated in February 2026, differs from it
+(found 2026-11-19, #310).
 
 Converting 2025 is the useful counterpoint to 2026. It produces **no warnings** for
 `match-scouting`: there is no catalog layer to remove and no client constant to guess. The
@@ -266,12 +269,12 @@ existing data the prefix stays empty.
 
 ## 4. Tests (T-3)
 
-| Test file                             | Guarantees                                                                                                                                                                                                                                                                                                                                                |
-| ------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `tests/unit/config-v2-schema.test.ts` | Schemas compile in Ajv strict mode; minimal documents validate; v1 documents, wrong `version`, seconds, unknown properties, unknown transformer/module options and bad executables are rejected with path + message; extension transformers/modules/executables pass.                                                                                     |
-| `tests/unit/config-convert.test.ts`   | Every archived season set in `config/v1` (2022, 2023, 2023v1, 2024, 2024v2, 2025, 2025v2, 2026) converts to valid v2 with resolvable layer references; the converted 2026 config derives every action id the 2026 oracle found in real data except the TBA `_None` ids (which are enrichment output, not scouting ids); catalog removed; renames applied. |
-| `tests/unit/config-active.test.ts`    | `config/*.json` validate; they equal the converter output (drift check, delete when hand-editing starts); the derived id count fits the QR id field.                                                                                                                                                                                                      |
-| `tests/unit/config-v1.test.ts`        | Converter inputs still parse (unchanged).                                                                                                                                                                                                                                                                                                                 |
+| Test file                             | Guarantees                                                                                                                                                                                                                                                                                                                                                                |
+| ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `tests/unit/config-v2-schema.test.ts` | Schemas compile in Ajv strict mode; minimal documents validate; v1 documents, wrong `version`, seconds, unknown properties, unknown transformer/module options and bad executables are rejected with path + message; extension transformers/modules/executables pass.                                                                                                     |
+| `tests/unit/config-convert.test.ts`   | Every archived season set in `config/v1` (2022, 2023, 2023v1, 2024, 2024v2, 2025, 2025v2, 2025 at v4.2.0, 2026) converts to valid v2 with resolvable layer references; the converted 2026 config derives every action id the 2026 oracle found in real data except the TBA `_None` ids (which are enrichment output, not scouting ids); catalog removed; renames applied. |
+| `tests/unit/config-active.test.ts`    | `config/*.json` validate; they equal the converter output (drift check, delete when hand-editing starts); the derived id count fits the QR id field.                                                                                                                                                                                                                      |
+| `tests/unit/config-v1.test.ts`        | Converter inputs still parse (unchanged).                                                                                                                                                                                                                                                                                                                                 |
 
 Oracle cross-check result: of the 32 ids the v5 pipeline could not explain for 2026mnwi
 (document 17 §2.2), 30 are derivable from the v2 config with no catalog (`activeShift3*`,

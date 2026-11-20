@@ -52,7 +52,8 @@ const sets: Record<string, ConfigSet> = {
     dir: ["config", "seasons", "2025"],
     sources: {
       "match-scouting": "match-scouting2025v2.json",
-      "analysis-pipeline": "analysis-pipeline-2025v2.json",
+      // The pipeline v4.2.0 shipped, which produced the 2025 golden output (#310).
+      "analysis-pipeline": "analysis-pipeline-2025-v4.2.0.json",
       "analysis-modules": "analysis-modules-2025v2.json",
       qr: "qr.json",
     },

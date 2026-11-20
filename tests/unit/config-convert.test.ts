@@ -68,6 +68,12 @@ const sets: { name: string; ms: string; pipeline?: string; modules: string }[] =
     modules: "analysis-modules-2025v2.json",
   },
   {
+    name: "2025 at v4.2.0",
+    ms: "match-scouting2025v2.json",
+    pipeline: "analysis-pipeline-2025-v4.2.0.json",
+    modules: "analysis-modules-2025v2.json",
+  },
+  {
     name: "2026",
     ms: "match-scouting.json",
     pipeline: "analysis-pipeline.json",

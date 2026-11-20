@@ -9,8 +9,13 @@ for two purposes:
 The format is documented in `docs/spec/04-configuration.md`. The un-suffixed files
 (`match-scouting.json`, `analysis-pipeline.json`, `analysis-modules.json`, `qr.json`,
 `analysis-transformers.json`) are the 2026 REBUILT configuration; suffixed files are archived
-seasons (2022 Rapid React, 2023 Charged Up, 2024 Crescendo, 2025 Reefscape). `2025v2` is the
-post-season cleanup of 2025 and the default at tag `v4.2.0` (used by the behavioral oracle).
+seasons (2022 Rapid React, 2023 Charged Up, 2024 Crescendo, 2025 Reefscape). `2025v2` was
+re-created from the 2025 season in February 2026 (#243). Its match-scouting, modules and QR
+files equal the defaults at tag `v4.2.0`, but its pipeline does not: v4.2.0 shipped
+`analysis-pipeline-2025-v4.2.0.json` (46 entries, copied from the tag), which is the pipeline
+that produced the 2025 golden output of the behavioral oracle. `2025v2`'s pipeline (50 entries)
+differs in its drop and miss counts and writes one output to `s.endgame.all`, an apparent typo for
+`cycles.endgame.all`.
 
 `manual-teams.json` / `manual-tmps.json` are the (empty) hand-entered-data hooks from
 `src/analysis/manual/`. `configInfo.md` is a pre-split description of the button schema.
