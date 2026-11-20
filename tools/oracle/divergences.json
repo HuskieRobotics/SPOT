@@ -1,5 +1,5 @@
 {
-  "description": "Expected differences between the legacy golden output and the v6 engine. The golden files are never edited; a difference is accepted only when a rule below matches it, and every rule cites the requirement or defect that makes v6 differ. Read by tools/oracle/compare.ts. 'legacy' lists the golden values (as written by run.js), 'v6' is the value v6 must produce instead (\"(absent)\" when v6 has no value at that path), and 'paths' (optional) limits a rule to output paths matching these patterns, where * matches one path segment and ** any number.",
+  "description": "Expected differences between the legacy golden output and the v6 engine. The golden files are never edited; a difference is accepted only when a rule below matches it, and every rule cites the requirement or defect that makes v6 differ. Read by tools/oracle/compare.ts. 'legacy' lists the golden values (as written by run.js), 'v6' is the value v6 must produce instead (\"(absent)\" when v6 has no value at that path, \"(any)\" for any value), and 'paths' (optional) limits a rule to output paths matching these patterns, where * matches one path segment and ** any number. A rule with 'rename' instead reads a legacy key under a new name: in a legacy path matching 'paths', the key 'from' is compared as 'to'.",
   "rules": [
     {
       "id": "missing-nan",
@@ -57,6 +57,34 @@
       ],
       "legacy": [0],
       "v6": "(absent)"
+    },
+    {
+      "id": "cycle-start-key-2025",
+      "cites": "docs/spec/09 cycle (#314)",
+      "why": "v4.2.0's cycle called each cycle's first action 'pickup'. v5 renamed it 'starts' along with the options (pickups to startAction), and v6 keeps v5's name.",
+      "sets": ["2025ilch_official-v4.2.0", "2025syn_synthetic-v4.2.0"],
+      "paths": ["cycles.*.*.*.pickup.**"],
+      "rename": {
+        "from": "pickup",
+        "to": "starts"
+      }
+    },
+    {
+      "id": "action-period-fields",
+      "cites": "CS-16, DV-1",
+      "why": "v6 actions carry the period they were recorded in. An action copied into an output, such as the start and end of a cycle, carries those fields too; legacy actions had only an id and a time.",
+      "paths": [
+        "**.starts.phase",
+        "**.starts.segment",
+        "**.starts.segmentKind",
+        "**.starts.segmentIndex",
+        "**.ending.phase",
+        "**.ending.segment",
+        "**.ending.segmentKind",
+        "**.ending.segmentIndex"
+      ],
+      "legacy": ["(absent)"],
+      "v6": "(any)"
     }
   ]
 }

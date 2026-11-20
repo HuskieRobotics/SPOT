@@ -92,6 +92,12 @@ interface Checked {
 }
 
 /** Check every entry without running anything. Used by the runner and by `config:check`. */
+/** Transformers v6 no longer has, and what replaced them; checked before "did you mean". */
+export const RETIRED_TRANSFORMERS: Readonly<Record<string, string>> = {
+  removeDuplicates:
+    "It is no longer needed: analysis never sees a performance that a re-scout replaced (RT-14a). Remove this entry.",
+};
+
 export function checkPipeline(
   entries: readonly PipelineEntry[],
   registry: TransformerRegistry,
@@ -109,12 +115,14 @@ export function checkPipeline(
     const transformer = registry.get(entry.type, entry.name);
     if (!transformer) {
       const other = entry.type === "tmp" ? "team" : "tmp";
-      const hint = registry.get(other, entry.name)
-        ? ` There is a ${other} transformer with that name; check "type".`
-        : (() => {
-            const s = suggest(entry.name, registry.names(entry.type));
-            return s ? ` Did you mean "${s}"?` : "";
-          })();
+      const hint = Object.hasOwn(RETIRED_TRANSFORMERS, entry.name)
+        ? ` ${RETIRED_TRANSFORMERS[entry.name]}`
+        : registry.get(other, entry.name)
+          ? ` There is a ${other} transformer with that name; check "type".`
+          : (() => {
+              const s = suggest(entry.name, registry.names(entry.type));
+              return s ? ` Did you mean "${s}"?` : "";
+            })();
       problems.push({
         ...base,
         message: `There is no ${entry.type} transformer named "${entry.name}".${hint}`,

@@ -95,9 +95,9 @@ describe("TR-4 / SEC-8: the dataset", () => {
       for (const a of tmp.actions) expect(a).not.toHaveProperty("_id");
   });
 
-  it("orders performances by submission time, then id", () => {
-    const keys = dataset.tmps.map((t) => [t.submittedAt, t._id] as const);
-    const sorted = [...keys].sort((a, b) => a[0] - b[0] || a[1].localeCompare(b[1]));
+  it("TR-6: orders performances by match, then submission time, then id", () => {
+    const keys = dataset.tmps.map((t) => [t.matchNumber, t.submittedAt, t._id] as const);
+    const sorted = [...keys].sort((a, b) => a[0] - b[0] || a[1] - b[1] || a[2].localeCompare(b[2]));
     expect(keys).toEqual(sorted);
     const shuffled = buildDataset([...generated.performances].reverse());
     expect(shuffled.tmps.map((t) => t._id)).toEqual(dataset.tmps.map((t) => t._id));

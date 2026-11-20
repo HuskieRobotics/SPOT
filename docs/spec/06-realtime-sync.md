@@ -69,6 +69,13 @@ enter a match, and receives TMPs.
   time (today the pool refills and allows duplicates once all six robots are taken; the
   rewrite must not). Re-scouting a match later is required, and the newer TMP replaces the
   earlier one for that robot/match in analysis.
+  **[decided 2026-11-20, #314]** The server applies the replacement when a record arrives: the
+  earlier record for that team and match is marked `superseded` (DV-7), and analysis never sees
+  a superseded record (document 09 TR-5). "Newer" means the later `submittedAt`, the time the
+  scouter submitted, not when the server received it, so a device that syncs late cannot
+  replace a re-scout made after it. The exception is two records from a release and a
+  replacement, which RT-35 decides by who held the assignment. An admin can promote a
+  superseded record (RT-35). Built in Phase 2; its test is named after RT-14a.
 - **RT-14b** **[A-28, BL-34]** Admin duties are shared by 2–3 students, so multiple concurrent
   admin sessions must work (BL-33). Whether auto-start on six waiting scouters or
   admin-only force-start is better is undecided; make the start rule configurable.

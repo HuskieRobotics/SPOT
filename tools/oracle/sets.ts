@@ -16,6 +16,12 @@ export interface GoldenSet {
   configDir: string;
   /** Recorded TBA responses, for sets produced with enrichment on (#315). */
   tbaDir?: string;
+  /**
+   * Feed superseded performances to the engine too. v6 never analyzes them (RT-14a, RT-35), but
+   * v4.2.0 had no `removeDuplicates` and counted the 2025 re-scouts twice, so its golden output
+   * can only be reproduced from the same input.
+   */
+  includeSuperseded?: boolean;
 }
 
 export const goldenSets: readonly GoldenSet[] = [
@@ -25,6 +31,7 @@ export const goldenSets: readonly GoldenSet[] = [
     performances: "tools/oracle/fixtures/db/2025Reefscape.teamMatchPerformances.json",
     events: "tools/oracle/fixtures/db/2025Reefscape.events.json",
     configDir: "config/seasons/2025",
+    includeSuperseded: true,
   },
   {
     name: "2025syn_synthetic-v4.2.0",
@@ -32,6 +39,7 @@ export const goldenSets: readonly GoldenSet[] = [
     performances: "tools/oracle/fixtures/synthetic/2025syn.teamMatchPerformances.json",
     events: "tools/oracle/fixtures/synthetic/2025syn.events.json",
     configDir: "config/seasons/2025",
+    includeSuperseded: true,
   },
   {
     name: "2026mnwi_official-v5",

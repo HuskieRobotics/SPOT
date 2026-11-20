@@ -78,18 +78,22 @@ function deepFreeze<T>(value: T): T {
 }
 
 /**
- * Order performances deterministically: by submission time, then by id.
+ * Order performances by match, then by submission time, then by id (TR-6, decided 2026-11-20).
  *
- * Order matters to entries that concatenate across performances (`aggregateArray`) and to
- * choosing between duplicates. v5 ordered by timestamp then `matchId`; v6 cannot use `matchKey`
- * because it is not public, and on the real exports the two orders agree (the one timestamp tie,
- * in 2026, is a record synced twice with identical content).
+ * Order matters to entries that join lists across a team's performances (`aggregateArray`): a
+ * team's cycles read in match order. A match scouted later from video takes its place among the
+ * team's matches instead of going to the end (v5 used submission order, except that a re-scout
+ * took the place of the first scout).
  */
 export function comparePerformances(
-  a: Pick<AnalysisPerformanceFields, "submittedAt" | "_id">,
-  b: Pick<AnalysisPerformanceFields, "submittedAt" | "_id">,
+  a: Pick<AnalysisPerformanceFields, "matchNumber" | "submittedAt" | "_id">,
+  b: Pick<AnalysisPerformanceFields, "matchNumber" | "submittedAt" | "_id">,
 ): number {
-  return a.submittedAt - b.submittedAt || (a._id < b._id ? -1 : a._id > b._id ? 1 : 0);
+  return (
+    a.matchNumber - b.matchNumber ||
+    a.submittedAt - b.submittedAt ||
+    (a._id < b._id ? -1 : a._id > b._id ? 1 : 0)
+  );
 }
 
 export interface BuildDatasetOptions {
@@ -98,10 +102,17 @@ export interface BuildDatasetOptions {
    * stored-like data, such as TBA score-breakdown actions (docs/spec/08 AN-7).
    */
   prepare?: (tmps: AnalysisPerformanceFields[]) => void;
+  /**
+   * Keep superseded performances. Analysis never sees them (RT-14a, RT-35); only the oracle sets
+   * this, to reproduce v4.2.0, which had no `removeDuplicates` and counted re-scouts twice.
+   */
+  includeSuperseded?: boolean;
 }
 
 /**
- * Build the dataset the pipeline runs on. The input is not modified. Stored fields are frozen,
+ * Build the dataset the pipeline runs on. The input is not modified. A superseded performance (a
+ * re-scout replaced it, RT-14a, or it lost to the replacement scouter's, RT-35) is left out, so
+ * no pipeline can count a match twice; v5 needed a `removeDuplicates` entry for this. Stored fields are frozen,
  * so an entry that tries to change them (v5's `finalActionOccurrence` reversed the action list
  * in place, F-3) fails loudly instead of corrupting later entries.
  */
@@ -109,7 +120,10 @@ export function buildDataset(
   performances: readonly (TeamMatchPerformance | AnalysisPerformanceFields)[],
   options: BuildDatasetOptions = {},
 ): Dataset {
-  const projected = performances.map(toAnalysisPerformance).sort(comparePerformances);
+  const projected = performances
+    .filter((p) => options.includeSuperseded || !p.superseded)
+    .map(toAnalysisPerformance)
+    .sort(comparePerformances);
   options.prepare?.(projected);
 
   const tmps: AnalysisPerformance[] = projected.map((p) => {

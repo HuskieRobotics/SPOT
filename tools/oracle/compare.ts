@@ -52,8 +52,12 @@ export interface DivergenceRule {
   id: string;
   cites: string;
   why: string;
-  legacy: unknown[];
-  v6: unknown;
+  /** Golden values the rule accepts ("(absent)" when legacy has no value there). */
+  legacy?: unknown[];
+  /** The value v6 must produce instead; "(any)" accepts whatever v6 writes. */
+  v6?: unknown;
+  /** A key legacy named differently: in a legacy path matching `paths`, `from` is read as `to`. */
+  rename?: { from: string; to: string };
   sets?: string[];
   paths?: string[];
 }
@@ -74,6 +78,12 @@ export function pathMatches(pattern: string, path: string): boolean {
   return match(0, 0);
 }
 
+const ANY = "(any)";
+
+const appliesTo = (r: DivergenceRule, set: string, path: string) =>
+  (!r.sets || r.sets.includes(set)) &&
+  (!r.paths || r.paths.some((pattern) => pathMatches(pattern, path)));
+
 function acceptingRule(
   rules: readonly DivergenceRule[],
   set: string,
@@ -83,11 +93,28 @@ function acceptingRule(
 ): DivergenceRule | undefined {
   return rules.find(
     (r) =>
-      (!r.sets || r.sets.includes(set)) &&
-      (!r.paths || r.paths.some((pattern) => pathMatches(pattern, path))) &&
+      r.legacy !== undefined &&
+      appliesTo(r, set, path) &&
       r.legacy.some((value) => Object.is(value, legacy)) &&
-      Object.is(r.v6, v6),
+      (r.v6 === ANY || Object.is(r.v6, v6)),
   );
+}
+
+/** The legacy path with every applicable rename rule applied, and the ids of those rules. */
+function renamed(
+  rules: readonly DivergenceRule[],
+  set: string,
+  path: string,
+): { path: string; applied: string[] } {
+  const applied: string[] = [];
+  let parts = path.split(".");
+  for (const r of rules) {
+    if (!r.rename || !appliesTo(r, set, path)) continue;
+    const { from, to } = r.rename;
+    parts = parts.map((p) => (p === from ? to : p));
+    applied.push(r.id);
+  }
+  return { path: parts.join("."), applied };
 }
 
 // ---------------------------------------------------------------- flattening
@@ -213,7 +240,9 @@ export function compareDatasets(
       if (differences.length < keep)
         differences.push({ scope, id, path, legacy: legacyValue, v6: v6Value });
     };
-    for (const [legacyPath, legacyValue] of legacyLeaves) {
+    for (const [original, legacyValue] of legacyLeaves) {
+      const { path: legacyPath, applied } = renamed(rules, options.set, original);
+      for (const id of applied) accepted[id] = (accepted[id] ?? 0) + 1;
       const path = options.mapLegacyPath ? options.mapLegacyPath(scope, legacyPath) : legacyPath;
       if (path === null) continue;
       seen.add(path);
@@ -318,15 +347,17 @@ export function legacyToV6(
   if (typeof value === "object" && value !== null) {
     const out: Record<string, unknown> = {};
     for (const [key, child] of Object.entries(value)) {
-      const converted = legacyToV6(child, `${path}.${key}`, set, rules);
-      if (converted !== undefined) out[key] = converted;
+      const childPath = renamed(rules, set, `${path}.${key}`).path;
+      const converted = legacyToV6(child, childPath, set, rules);
+      if (converted !== undefined) out[childPath.slice(childPath.lastIndexOf(".") + 1)] = converted;
     }
     return out;
   }
   const rule = rules.find(
     (r) =>
-      (!r.sets || r.sets.includes(set)) &&
-      (!r.paths || r.paths.some((pattern) => pathMatches(pattern, path))) &&
+      r.legacy !== undefined &&
+      r.v6 !== ANY &&
+      appliesTo(r, set, path) &&
       r.legacy.some((v) => Object.is(v, value)),
   );
   if (rule) return rule.v6 === ABSENT ? undefined : structuredClone(rule.v6);
@@ -334,9 +365,8 @@ export function legacyToV6(
 }
 
 /**
- * Fill in the output of an entry the engine cannot run, from the golden file. A `removeDuplicates`
- * entry keeps the performances legacy kept, in legacy's order; any other entry gets its legacy
- * output at its path.
+ * Fill in the output of an entry the engine cannot run, from the golden file: the entry gets its
+ * legacy output at its path.
  */
 function feedFromGolden(
   dataset: Dataset,
@@ -345,15 +375,6 @@ function feedFromGolden(
   set: string,
   rules: readonly DivergenceRule[],
 ): Dataset {
-  if (entry.type === "tmp" && entry.name === "removeDuplicates") {
-    // Legacy kept the latest scout of each team and match, in the position of the first scout of
-    // that match; reproduce both which performances it kept and their order.
-    const position = new Map(golden.tmps.map((t, i) => [String(t._id), i]));
-    const tmps = dataset.tmps
-      .filter((t) => position.has(t._id))
-      .sort((a, b) => position.get(a._id)! - position.get(b._id)!);
-    return { ...dataset, tmps };
-  }
   const fill = (target: Record<string, unknown>, source: Record<string, unknown> | undefined) => {
     if (!source) return;
     const value = getPath(source, entry.outputPath, undefined);
@@ -398,7 +419,7 @@ export function runGoldenSet(
   if (!event) throw new Error(`${set.name}: event ${set.event} is not in ${set.events}`);
   const performances = migrated.performances.filter((p) => p.eventId === event._id);
 
-  let dataset = buildDataset(performances);
+  let dataset = buildDataset(performances, { includeSuperseded: set.includeSuperseded });
   const context = { config };
   if (!feed) {
     const result = runPipeline(dataset, pipeline.pipeline, { registry, context });
