@@ -364,8 +364,9 @@ Analysis
 - Bubble graph: data visible; all axis options selectable; values plausible.
 - (If restored) Simulate Match: predictions roughly match actual results.
 - Side stats: no absurd cycle times or percentages.
-- Offline analysis: clear site data, load the page several times online, disconnect, reload —
-  all features except event switching still work.
+- Offline analysis: clear site data, load the page online and view two events, disconnect,
+  reload — all features work for both events (OF-3); an event not viewed while online shows
+  the offline notice.
 
 Demo
 

@@ -60,9 +60,13 @@ Any replacement must preserve "every input the pipeline needs is a cacheable req
   The user MUST be able to see what is pending and trigger a retry or a QR code per entry
   (BL-93).
 - **OF-3** After one online load of the analysis page, the dashboard MUST render from the last
-  cached dataset, configuration, team list, and TBA data, with all modules functional. Event
-  switching and refreshing TBA data are allowed to fail gracefully with a visible "offline,
-  showing data from <time>" indicator.
+  cached dataset, configuration, team list, and TBA data, with all modules functional. Each
+  event's dataset, team list, and TBA data are cached under that event whenever it is viewed
+  online, so every event viewed on the device while online MUST also open offline (decided
+  2026-11-20; v5 kept only the last dataset). Opening an event never viewed on the device,
+  and refreshing TBA data, are allowed to fail gracefully. Whenever the dashboard shows cached
+  data it MUST say so with a visible "offline, showing data from <time>" indicator for the
+  event shown.
 - **OF-4** The QR scanner page MUST work offline: scanned TMPs are cached locally and synced
   when the page next loads online, with de-duplication.
 - **OF-5** Every input a page needs at startup MUST be a cacheable request (or bundled):
@@ -82,7 +86,8 @@ Any replacement must preserve "every input the pipeline needs is a cacheable req
   page's "unregister service worker" escape hatch (or an equivalent "reset app data" control
   in the scouting settings menu) MUST remain available.
 - **OF-9** Offline behavior is part of the automated suite (T-8): load online, go offline in
-  the browser harness, reload, and assert OF-1, OF-3, and OF-4.
+  the browser harness, reload, and assert OF-1, OF-3 (including switching to an event viewed
+  earlier while online), and OF-4.
 
 ## Implications for the technology direction (document 15)
 
