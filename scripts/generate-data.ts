@@ -4,7 +4,8 @@
  *
  * Usage:
  *   npm run generate -- --config config/match-scouting.json --out <dir>
- *                       [--seed preseason] [--matches 80] [--robots 6] [--b-teams 0] [--legacy]
+ *                       [--seed preseason] [--matches 80] [--robots 6] [--b-teams 0]
+ *                       [--event-code 2026syn_synthetic] [--legacy]
  *
  * Writes the v6 collections, plus the v5 shape with --legacy so generated data can be fed to
  * the behavioral oracle. Validates everything it writes. Design: docs/spec/22-synthetic-data.md.
@@ -26,7 +27,7 @@ const configFile = flag("config");
 const outDir = flag("out");
 if (!configFile || !outDir) {
   console.error(
-    "usage: generate-data --config <file> --out <dir> [--seed s] [--matches n] [--robots n] [--b-teams n] [--legacy]",
+    "usage: generate-data --config <file> --out <dir> [--seed s] [--matches n] [--robots n] [--b-teams n] [--event-code c] [--legacy]",
   );
   process.exit(2);
 }
@@ -40,6 +41,7 @@ const dataset = generate({
   matches: Number(flag("matches") ?? 80),
   robotsPerMatch: Number(flag("robots") ?? 6),
   bTeams: Number(flag("b-teams") ?? 0),
+  eventCode: flag("event-code"),
 });
 
 mkdirSync(outDir, { recursive: true });

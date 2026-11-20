@@ -1,5 +1,5 @@
 {
-  "checkout": "/private/tmp/claude-501/-Users-geoff-GitHub-SPOT/498cb687-7cbc-4b23-b955-2fae4a5f1393/scratchpad/spot-v4.2.0",
+  "checkout": "spot-v4.2.0",
   "checkoutCommit": "d82bfaa",
   "eventCode": "2025ilch_official",
   "eventId": "68bf4411906f900a12f7c6cd",
@@ -134,7 +134,6 @@
       "name": "weightedSum"
     }
   ],
-  "pipelineMs": 60,
   "pipelineEntries": 46,
   "teamCount": 42,
   "derivedTmpCount": 407,

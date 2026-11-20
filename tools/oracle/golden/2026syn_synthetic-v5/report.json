@@ -1,0 +1,933 @@
+{
+  "checkout": "spot-v5",
+  "checkoutCommit": "902db06",
+  "eventCode": "2026syn_synthetic",
+  "eventId": "1c1cdb39e9c8fe0eab626e97",
+  "tmpCount": 360,
+  "enrich": false,
+  "unknownActionIds": [
+    {
+      "id": "teleopBroken",
+      "count": 340
+    },
+    {
+      "id": "teleopAttemptL1",
+      "count": 242
+    },
+    {
+      "id": "endgamefall",
+      "count": 185
+    },
+    {
+      "id": "teleopAttemptL3",
+      "count": 182
+    },
+    {
+      "id": "teleopAttemptL2",
+      "count": 173
+    },
+    {
+      "id": "teleopfall",
+      "count": 163
+    },
+    {
+      "id": "teleopStartShooting",
+      "count": 157
+    },
+    {
+      "id": "teleopPassing",
+      "count": 133
+    },
+    {
+      "id": "teleopStoring",
+      "count": 129
+    },
+    {
+      "id": "teleopStopShooting",
+      "count": 123
+    },
+    {
+      "id": "autoAttemptL1",
+      "count": 96
+    },
+    {
+      "id": "autoFallL1",
+      "count": 92
+    },
+    {
+      "id": "teleopdisabled",
+      "count": 88
+    },
+    {
+      "id": "teleopAttemptClimb",
+      "count": 85
+    },
+    {
+      "id": "teleopAZone",
+      "count": 80
+    },
+    {
+      "id": "teleopNeutralZone",
+      "count": 78
+    },
+    {
+      "id": "teleopOAZone",
+      "count": 74
+    },
+    {
+      "id": "teleopFallL1",
+      "count": 57
+    },
+    {
+      "id": "teleopDefense",
+      "count": 56
+    },
+    {
+      "id": "teleopRatingShooting2",
+      "count": 45
+    },
+    {
+      "id": "activeShift4AttemptL3",
+      "count": 44
+    },
+    {
+      "id": "teleopRatingPassing3",
+      "count": 41
+    },
+    {
+      "id": "activeShift4AttemptL2",
+      "count": 41
+    },
+    {
+      "id": "activeShift4AttemptL1",
+      "count": 40
+    },
+    {
+      "id": "teleopRatingShooting1",
+      "count": 39
+    },
+    {
+      "id": "activeShift4Broken",
+      "count": 38
+    },
+    {
+      "id": "inactiveShift3Broken",
+      "count": 37
+    },
+    {
+      "id": "inactiveShift4Broken",
+      "count": 36
+    },
+    {
+      "id": "activeShift3Broken",
+      "count": 36
+    },
+    {
+      "id": "inactiveShift4AttemptL3",
+      "count": 35
+    },
+    {
+      "id": "teleopRatingShooting4",
+      "count": 33
+    },
+    {
+      "id": "activeShift3AttemptL1",
+      "count": 32
+    },
+    {
+      "id": "teleopRatingPassing1",
+      "count": 31
+    },
+    {
+      "id": "activeShift3AttemptL2",
+      "count": 31
+    },
+    {
+      "id": "activeShift4fall",
+      "count": 31
+    },
+    {
+      "id": "inactiveShift4AttemptL1",
+      "count": 30
+    },
+    {
+      "id": "activeShift3AttemptL3",
+      "count": 28
+    },
+    {
+      "id": "activeShift3fall",
+      "count": 27
+    },
+    {
+      "id": "endgameAttemptClimb",
+      "count": 27
+    },
+    {
+      "id": "teleopRatingStoring3",
+      "count": 26
+    },
+    {
+      "id": "inactiveShift4AttemptL2",
+      "count": 26
+    },
+    {
+      "id": "teleopCollectDepot",
+      "count": 24
+    },
+    {
+      "id": "inactiveShift4fall",
+      "count": 24
+    },
+    {
+      "id": "teleopRatingDefense1",
+      "count": 23
+    },
+    {
+      "id": "teleopRatingStoring4",
+      "count": 23
+    },
+    {
+      "id": "inactiveShift3AttemptL3",
+      "count": 23
+    },
+    {
+      "id": "teleopRatingShooting3",
+      "count": 22
+    },
+    {
+      "id": "teleopRatingPassing2",
+      "count": 22
+    },
+    {
+      "id": "inactiveShift3AttemptL2",
+      "count": 22
+    },
+    {
+      "id": "teleopRatingPassing4",
+      "count": 21
+    },
+    {
+      "id": "inactiveShift3StopShooting",
+      "count": 21
+    },
+    {
+      "id": "endgamedisabled",
+      "count": 21
+    },
+    {
+      "id": "teleopRatingStoring1",
+      "count": 20
+    },
+    {
+      "id": "teleopRatingDefense3",
+      "count": 20
+    },
+    {
+      "id": "teleopTransitionFallL1",
+      "count": 20
+    },
+    {
+      "id": "inactiveShift4OAZone",
+      "count": 20
+    },
+    {
+      "id": "inactiveShift2disabled",
+      "count": 20
+    },
+    {
+      "id": "inactiveShift3disabled",
+      "count": 20
+    },
+    {
+      "id": "teleopCollectOutpost",
+      "count": 19
+    },
+    {
+      "id": "inactiveShift3Storing",
+      "count": 19
+    },
+    {
+      "id": "activeShift2AttemptClimb",
+      "count": 19
+    },
+    {
+      "id": "inactiveShift3AZone",
+      "count": 19
+    },
+    {
+      "id": "inactiveShift3fall",
+      "count": 19
+    },
+    {
+      "id": "inactiveShift3OAZone",
+      "count": 18
+    },
+    {
+      "id": "teleopCollectNeutral",
+      "count": 18
+    },
+    {
+      "id": "inactiveShift4AZone",
+      "count": 17
+    },
+    {
+      "id": "inactiveShift3Defense",
+      "count": 17
+    },
+    {
+      "id": "activeShift2disabled",
+      "count": 16
+    },
+    {
+      "id": "activeShift1AttemptClimb",
+      "count": 16
+    },
+    {
+      "id": "activeShift2fall",
+      "count": 16
+    },
+    {
+      "id": "inactiveShift4NeutralZone",
+      "count": 15
+    },
+    {
+      "id": "inactiveShift3AttemptL1",
+      "count": 15
+    },
+    {
+      "id": "activeShift4StopShooting",
+      "count": 15
+    },
+    {
+      "id": "inactiveShift4AttemptClimb",
+      "count": 14
+    },
+    {
+      "id": "inactiveShift4StartShooting",
+      "count": 14
+    },
+    {
+      "id": "activeShift3StopShooting",
+      "count": 14
+    },
+    {
+      "id": "activeShift3AttemptClimb",
+      "count": 14
+    },
+    {
+      "id": "inactiveShift2fall",
+      "count": 14
+    },
+    {
+      "id": "teleopRatingDefense2",
+      "count": 13
+    },
+    {
+      "id": "activeShift3OAZone",
+      "count": 13
+    },
+    {
+      "id": "activeShift4OAZone",
+      "count": 13
+    },
+    {
+      "id": "teleopRatingStoring2",
+      "count": 12
+    },
+    {
+      "id": "activeShift3Defense",
+      "count": 12
+    },
+    {
+      "id": "inactiveShift3Passing",
+      "count": 12
+    },
+    {
+      "id": "endgameFallL1",
+      "count": 12
+    },
+    {
+      "id": "teleopTransitionCollectNeutral",
+      "count": 12
+    },
+    {
+      "id": "activeShift3disabled",
+      "count": 12
+    },
+    {
+      "id": "teleopRatingDefense4",
+      "count": 12
+    },
+    {
+      "id": "inactiveShift4Defense",
+      "count": 11
+    },
+    {
+      "id": "inactiveShift4Passing",
+      "count": 11
+    },
+    {
+      "id": "inactiveShift4Storing",
+      "count": 11
+    },
+    {
+      "id": "inactiveShift4StopShooting",
+      "count": 11
+    },
+    {
+      "id": "inactiveShift1AttemptClimb",
+      "count": 11
+    },
+    {
+      "id": "inactiveShift3AttemptClimb",
+      "count": 11
+    },
+    {
+      "id": "inactiveShift3NeutralZone",
+      "count": 11
+    },
+    {
+      "id": "inactiveShift4disabled",
+      "count": 11
+    },
+    {
+      "id": "teleopTransitionCollectOutpost",
+      "count": 11
+    },
+    {
+      "id": "activeShift3Storing",
+      "count": 10
+    },
+    {
+      "id": "inactiveShift3StartShooting",
+      "count": 10
+    },
+    {
+      "id": "activeShift4AttemptClimb",
+      "count": 9
+    },
+    {
+      "id": "activeShift4disabled",
+      "count": 9
+    },
+    {
+      "id": "teleopTransitionAttemptClimb",
+      "count": 9
+    },
+    {
+      "id": "activeShift4Passing",
+      "count": 9
+    },
+    {
+      "id": "activeShift4Storing",
+      "count": 8
+    },
+    {
+      "id": "inactiveShift2AttemptClimb",
+      "count": 8
+    },
+    {
+      "id": "inactiveShift1disabled",
+      "count": 8
+    },
+    {
+      "id": "activeShift3Passing",
+      "count": 8
+    },
+    {
+      "id": "activeShift3StartShooting",
+      "count": 8
+    },
+    {
+      "id": "activeShift3AZone",
+      "count": 7
+    },
+    {
+      "id": "activeShift4StartShooting",
+      "count": 7
+    },
+    {
+      "id": "inactiveShift3RatingStoring3",
+      "count": 7
+    },
+    {
+      "id": "inactiveShift3RatingDefense4",
+      "count": 7
+    },
+    {
+      "id": "inactiveShift4RatingShooting4",
+      "count": 7
+    },
+    {
+      "id": "inactiveShift3RatingDefense2",
+      "count": 7
+    },
+    {
+      "id": "inactiveShift3RatingStoring1",
+      "count": 7
+    },
+    {
+      "id": "activeShift3RatingDefense4",
+      "count": 7
+    },
+    {
+      "id": "teleopTransitionCollectDepot",
+      "count": 7
+    },
+    {
+      "id": "activeShift4Defense",
+      "count": 6
+    },
+    {
+      "id": "inactiveShift3RatingShooting2",
+      "count": 6
+    },
+    {
+      "id": "activeShift4AZone",
+      "count": 6
+    },
+    {
+      "id": "inactiveShift4RatingDefense3",
+      "count": 5
+    },
+    {
+      "id": "activeShift3RatingShooting2",
+      "count": 5
+    },
+    {
+      "id": "inactiveShift3RatingPassing4",
+      "count": 5
+    },
+    {
+      "id": "activeShift3NeutralZone",
+      "count": 5
+    },
+    {
+      "id": "endgameaStop",
+      "count": 5
+    },
+    {
+      "id": "inactiveShift4RatingPassing4",
+      "count": 5
+    },
+    {
+      "id": "inactiveShift3RatingDefense1",
+      "count": 5
+    },
+    {
+      "id": "activeShift4RatingShooting4",
+      "count": 5
+    },
+    {
+      "id": "activeShift3RatingShooting4",
+      "count": 5
+    },
+    {
+      "id": "inactiveShift4RatingDefense2",
+      "count": 5
+    },
+    {
+      "id": "activeShift3RatingDefense1",
+      "count": 4
+    },
+    {
+      "id": "activeShift4RatingDefense3",
+      "count": 4
+    },
+    {
+      "id": "activeShift4NeutralZone",
+      "count": 4
+    },
+    {
+      "id": "inactiveShift3RatingShooting4",
+      "count": 4
+    },
+    {
+      "id": "inactiveShift3RatingStoring4",
+      "count": 4
+    },
+    {
+      "id": "inactiveShift3RatingShooting3",
+      "count": 4
+    },
+    {
+      "id": "activeShift4RatingStoring1",
+      "count": 4
+    },
+    {
+      "id": "activeShift3RatingStoring1",
+      "count": 4
+    },
+    {
+      "id": "activeShift4RatingShooting1",
+      "count": 4
+    },
+    {
+      "id": "inactiveShift4RatingShooting1",
+      "count": 4
+    },
+    {
+      "id": "activeShift3RatingDefense3",
+      "count": 3
+    },
+    {
+      "id": "activeShift4RatingStoring3",
+      "count": 3
+    },
+    {
+      "id": "inactiveShift3RatingPassing3",
+      "count": 3
+    },
+    {
+      "id": "endgameCollectOutpost",
+      "count": 3
+    },
+    {
+      "id": "inactiveShift4RatingShooting3",
+      "count": 3
+    },
+    {
+      "id": "inactiveShift4RatingStoring3",
+      "count": 3
+    },
+    {
+      "id": "activeShift3RatingShooting3",
+      "count": 3
+    },
+    {
+      "id": "inactiveShift4RatingStoring2",
+      "count": 3
+    },
+    {
+      "id": "inactiveShift3RatingStoring2",
+      "count": 3
+    },
+    {
+      "id": "activeShift3RatingDefense2",
+      "count": 3
+    },
+    {
+      "id": "activeShift3RatingPassing1",
+      "count": 3
+    },
+    {
+      "id": "inactiveShift3RatingShooting1",
+      "count": 3
+    },
+    {
+      "id": "activeShift3RatingPassing4",
+      "count": 3
+    },
+    {
+      "id": "inactiveShift4RatingDefense1",
+      "count": 3
+    },
+    {
+      "id": "activeShift3RatingStoring4",
+      "count": 2
+    },
+    {
+      "id": "activeShift4RatingDefense1",
+      "count": 2
+    },
+    {
+      "id": "inactiveShift3RatingDefense3",
+      "count": 2
+    },
+    {
+      "id": "activeShift3RatingStoring2",
+      "count": 2
+    },
+    {
+      "id": "inactiveShift1fall",
+      "count": 2
+    },
+    {
+      "id": "inactiveShift4RatingShooting2",
+      "count": 2
+    },
+    {
+      "id": "inactiveShift3RatingPassing2",
+      "count": 2
+    },
+    {
+      "id": "activeShift4RatingPassing2",
+      "count": 2
+    },
+    {
+      "id": "inactiveShift4RatingStoring4",
+      "count": 2
+    },
+    {
+      "id": "activeShift3RatingPassing2",
+      "count": 2
+    },
+    {
+      "id": "endgameCollectDepot",
+      "count": 2
+    },
+    {
+      "id": "inactiveShift4RatingPassing1",
+      "count": 2
+    },
+    {
+      "id": "inactiveShift4RatingDefense4",
+      "count": 2
+    },
+    {
+      "id": "activeShift3RatingShooting1",
+      "count": 2
+    },
+    {
+      "id": "activeShift4RatingStoring2",
+      "count": 2
+    },
+    {
+      "id": "activeShift3RatingStoring3",
+      "count": 2
+    },
+    {
+      "id": "activeShift1disabled",
+      "count": 1
+    },
+    {
+      "id": "inactiveShift4RatingPassing2",
+      "count": 1
+    },
+    {
+      "id": "activeShift4RatingShooting3",
+      "count": 1
+    },
+    {
+      "id": "inactiveShift4RatingStoring1",
+      "count": 1
+    },
+    {
+      "id": "activeShift4RatingPassing1",
+      "count": 1
+    },
+    {
+      "id": "activeShift3RatingPassing3",
+      "count": 1
+    },
+    {
+      "id": "inactiveShift4RatingPassing3",
+      "count": 1
+    },
+    {
+      "id": "endgameCollectNeutral",
+      "count": 1
+    },
+    {
+      "id": "inactiveShift3RatingPassing1",
+      "count": 1
+    },
+    {
+      "id": "activeShift4RatingPassing3",
+      "count": 1
+    },
+    {
+      "id": "activeShift4RatingPassing4",
+      "count": 1
+    },
+    {
+      "id": "activeShift4RatingStoring4",
+      "count": 1
+    },
+    {
+      "id": "activeShift4RatingDefense2",
+      "count": 1
+    }
+  ],
+  "transformerErrors": [],
+  "registry": [
+    {
+      "file": "actionTime.js",
+      "type": "tmp",
+      "name": "actionTime"
+    },
+    {
+      "file": "actionTimeFilter.js",
+      "type": "tmp",
+      "name": "actionTimeFilter"
+    },
+    {
+      "file": "aggregateArray.js",
+      "type": "team",
+      "name": "aggregateArray"
+    },
+    {
+      "file": "average.js",
+      "type": "team",
+      "name": "average"
+    },
+    {
+      "file": "averageArray.js",
+      "type": "tmp",
+      "name": "averageArray"
+    },
+    {
+      "file": "averageArray.js",
+      "type": "team",
+      "name": "averageArray"
+    },
+    {
+      "file": "averageTime.js",
+      "type": "team",
+      "name": "averageTime"
+    },
+    {
+      "file": "countActions.js",
+      "type": "tmp",
+      "name": "countActions"
+    },
+    {
+      "file": "countActions.js",
+      "type": "team",
+      "name": "countActions"
+    },
+    {
+      "file": "countHybrid.js",
+      "type": "tmp",
+      "name": "countHybrid"
+    },
+    {
+      "file": "countHybrid.js",
+      "type": "team",
+      "name": "countHybrid"
+    },
+    {
+      "file": "countMatches.js",
+      "type": "team",
+      "name": "countMatches"
+    },
+    {
+      "file": "cycle.js",
+      "type": "tmp",
+      "name": "cycle"
+    },
+    {
+      "file": "deepAverage.js",
+      "type": "team",
+      "name": "deepAverage"
+    },
+    {
+      "file": "finalActionOccurrence.js",
+      "type": "tmp",
+      "name": "finalActionOccurrence"
+    },
+    {
+      "file": "map.js",
+      "type": "tmp",
+      "name": "map"
+    },
+    {
+      "file": "multiply.js",
+      "type": "tmp",
+      "name": "multiply"
+    },
+    {
+      "file": "multiply.js",
+      "type": "team",
+      "name": "multiply"
+    },
+    {
+      "file": "ratio.js",
+      "type": "tmp",
+      "name": "ratio"
+    },
+    {
+      "file": "ratio.js",
+      "type": "team",
+      "name": "ratio"
+    },
+    {
+      "file": "removeDuplicates.js",
+      "type": "tmp",
+      "name": "removeDuplicates"
+    },
+    {
+      "file": "standardDeviation.js",
+      "type": "team",
+      "name": "standardDeviation"
+    },
+    {
+      "file": "subtract.js",
+      "type": "tmp",
+      "name": "subtract"
+    },
+    {
+      "file": "subtract.js",
+      "type": "team",
+      "name": "subtract"
+    },
+    {
+      "file": "sum.js",
+      "type": "tmp",
+      "name": "sum"
+    },
+    {
+      "file": "sum.js",
+      "type": "team",
+      "name": "sum"
+    },
+    {
+      "file": "sumAverage.js",
+      "type": "tmp",
+      "name": "sumAverage"
+    },
+    {
+      "file": "sumAverage.js",
+      "type": "team",
+      "name": "sumAverage"
+    },
+    {
+      "file": "template.js",
+      "type": "tmp",
+      "name": "name"
+    },
+    {
+      "file": "template.js",
+      "type": "team",
+      "name": "name"
+    },
+    {
+      "file": "threshold.js",
+      "type": "team",
+      "name": "threshold"
+    },
+    {
+      "file": "weightedSum.js",
+      "type": "tmp",
+      "name": "weightedSum"
+    },
+    {
+      "file": "weightedSumAverage.js",
+      "type": "tmp",
+      "name": "weightedSumAverage"
+    },
+    {
+      "file": "weightedSumAverage.js",
+      "type": "team",
+      "name": "weightedSumAverage"
+    },
+    {
+      "file": "zoneActionRatingGroupings.js",
+      "type": "tmp",
+      "name": "zoneActionRatingGroupings"
+    }
+  ],
+  "pipelineEntries": 74,
+  "teamCount": 48,
+  "derivedTmpCount": 360,
+  "sampleTeamPaths": [
+    "aggregatedActions",
+    "averageScores",
+    "averageTimes",
+    "averages",
+    "counts",
+    "cycles",
+    "disabledCounts",
+    "zoneActionRatingAverages"
+  ]
+}

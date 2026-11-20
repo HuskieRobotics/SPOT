@@ -212,8 +212,10 @@ try {
 } catch {
   /* not a git checkout */
 }
+// Only the folder name and commit: an absolute path or a timing would change the golden report
+// on every regeneration even when the output is identical.
 const report = {
-  checkout,
+  checkout: path.basename(path.resolve(checkout)),
   checkoutCommit,
   eventCode,
   eventId,
@@ -359,7 +361,7 @@ pipelineConfig.forEach((tf, index) => {
     });
   }
 });
-report.pipelineMs = Date.now() - t0;
+const pipelineMs = Date.now() - t0;
 report.pipelineEntries = pipelineConfig.length;
 
 // manual hooks (src/analysis/manual/*.json) — mirror the merge; both ship empty
@@ -407,7 +409,7 @@ fs.writeFileSync(path.join(outDir, "report.json"), JSON.stringify(report, null, 
 
 console.log(`oracle: ${eventCode} @ ${path.basename(checkout)} -> ${outDir}`);
 console.log(
-  `  tmps=${tmps.length} (derived ${report.derivedTmpCount}) teams=${report.teamCount} pipeline=${pipelineConfig.length} entries in ${report.pipelineMs}ms enrich=${enrich}`,
+  `  tmps=${tmps.length} (derived ${report.derivedTmpCount}) teams=${report.teamCount} pipeline=${pipelineConfig.length} entries in ${pipelineMs}ms enrich=${enrich}`,
 );
 console.log(
   `  unknown action ids: ${report.unknownActionIds.length}${
