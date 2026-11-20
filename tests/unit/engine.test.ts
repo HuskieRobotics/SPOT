@@ -198,8 +198,15 @@ describe("ADR 0005 / CS-10: the registry", () => {
     ]);
   });
 
-  it("starts with no built-ins until #311 to #315 add them", () => {
-    expect(createRegistry().names("tmp")).toEqual([]);
+  it("built-in transformers use the pipeline schema for their options (ADR 0005)", () => {
+    const builtIns = createRegistry();
+    for (const type of ["tmp", "team"] as const) {
+      for (const name of builtIns.names(type)) {
+        const schema = builtIns.get(type, name)?.optionsSchema as { $ref?: string };
+        expect(schema.$ref).toMatch(/analysis-pipeline\.schema\.json#\/\$defs\/options\/\w+$/);
+      }
+    }
+    expect(builtIns.names("tmp")).toContain("countActions");
   });
 });
 
