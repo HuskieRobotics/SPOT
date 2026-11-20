@@ -11,15 +11,16 @@ MongoDB). It is not yet usable at events.
 - The current production app (v5, Express/EJS) is on `main` until cutover and on the `v5`
   branch afterwards. Its documentation links are in that branch's README.
 - The full requirements specification for the rewrite is in [`docs/spec/`](docs/spec/README.md).
-- The legacy behavioral oracle (golden analysis output for 2025 and 2026 real data) is in
+- The legacy behavioral oracle (golden analysis output for 2025 and 2026 real data, plus synthetic sets for both seasons) is in
   [`tools/oracle/`](tools/oracle/README.md).
 - Legacy v1 configuration files (2022–2026) are in [`config/v1/`](config/v1/README.md).
 
 ## Status
 
-Phase 0 (preparation) — see `docs/spec/17-rewrite-plan-and-next-steps.md`. This scaffold
-provides the app skeleton, test tooling, and CI so that every later pull
-request is verified automatically (`docs/spec/02-architecture.md`, NF-8).
+Phase 0 (preparation) is complete; Phase 1 (core engine) is next. Live status is in
+`docs/spec/17-rewrite-plan-and-next-steps.md` §5, and work is tracked by the "v6 Phase N"
+milestones on GitHub. The app skeleton, test tooling, and CI verify every pull request
+automatically (`docs/spec/02-architecture.md`, NF-8).
 
 ## Getting started (developers)
 
