@@ -24,6 +24,8 @@ SPOT is an open source project and we love to receive contributions from our com
 
 We'd love to see your analysis transformers and modules added to SPOT so that it can help the entire FIRST community! If you think your transformer and module could help the analysis process for other teams, please feel free to add it to the repository. We're willing to include almost any transformer or module as long as it follows the following guidelines:
 
+> **SPOT v6:** a transformer is a TypeScript file in `src/analysis/extensions/` plus one export line, with a JSON Schema for its options. [Writing an extension transformer](../docs/extension-transformers.md) walks through it. The module notes below still describe v5; they will be revised when v6's modules are built.
+
 - **Documented well** - Transformers can be hard to understand! Make sure they're well documented so that anyone can understand what's going on within the transformer code.
 - **Stay in their own files** - Transformers and modules shouldn't need to modify the core SPOT code or any other modules, and should be limited to their specific file alone.
 - **Limited in scope** - Transformers should NOT modify or delete existing paths in the dataset. They should only create new ones.
@@ -37,7 +39,7 @@ We'd love to see your analysis transformers and modules added to SPOT so that it
 - **Follow transformer/module required configurations** - Make sure to follow the general conventions and structure of existing transformers and modules.
   - Transformer configurations need:
     - `type` - Type of transformer, either `tmp` for Team Match Performances (one team's performance and actions in one match) or `team` (an entire team's data).
-    - `name` - The name of the transformer file.
+    - `name` - The name the transformer is registered under (in v5, the name of its file).
     - `outputPath` - Where the transformer outputs its data.
     - `options` - The options configuration object that your transformer takes in.
   - Module configurations need:

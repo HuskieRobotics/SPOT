@@ -72,6 +72,21 @@
   match a start with an end from a later shift (F-26). Actions written into an output are
   copies, so the stored list is never changed (F-3). A value that cannot be found is `default`
   where the transformer has one, else `null`.
+- **TR-14** Extension transformers (ADR 0005, #316; guide in `docs/extension-transformers.md`):
+  an extension is a file in `src/analysis/extensions/` plus one line,
+  `export { name } from "./name";`, in that folder's `index.ts`, kept alphabetical. Everything
+  exported there is registered beside the built-ins. The rules are checked when the registry is
+  created or by the unit tests, so a broken extension fails CI rather than an event:
+  its name must be one a pipeline entry can use and must not be a built-in transformer's name,
+  for either entry type, because the pipeline schema checks a built-in's options by name alone;
+  its options schema must compile in Ajv strict mode and reject an option it does not know, as
+  every built-in's does (CS-10); and, like all analysis code, it runs in the browser and fetches
+  nothing (ADR 0005). The pipeline schema accepts any options for a name it does not know; the
+  registry then checks them against the extension's schema, so `config:check` and the dashboard
+  report a misspelled extension option exactly as they report a built-in one. A schema that does
+  not compile is reported as a bug in the transformer's code, and only entries using it are
+  skipped (TR-10). `src/analysis/extensions/examples/median.ts` is a worked example that is not
+  registered.
 
 ## Transformer reference
 

@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://spot.team3061.org/schema/v2/analysis-pipeline.schema.json",
   "title": "SPOT analysis-pipeline configuration (v2)",
-  "description": "Ordered list of transformer instances plus TBA enrichment settings. Built-in transformer options are validated strictly (unknown keys are errors); extension transformers accept any options. See docs/spec/09 and docs/spec/20.",
+  "description": "Ordered list of transformer instances plus TBA enrichment settings. Built-in transformer options are validated strictly (unknown keys are errors). An extension transformer's options are not checked here, because its name is not known here; the transformer registry checks them against the extension's own schema (docs/spec/09 TR-14). See docs/spec/09 and docs/spec/20.",
   "type": "object",
   "additionalProperties": false,
   "required": ["version", "enrichment", "pipeline"],
