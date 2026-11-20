@@ -1022,7 +1022,7 @@
       "name": "aggregateArray",
       "outputPath": "aggregatedActions",
       "options": {
-        "path": "actionQueue"
+        "path": "actions"
       }
     },
     {

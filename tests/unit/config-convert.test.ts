@@ -228,6 +228,16 @@ describe("converted analysis-pipeline configurations", () => {
     expect(warnings.some((w) => w.includes("moved into options"))).toBe(true);
   });
 
+  it("reads v6's actions where v1 read actionQueue (docs/spec/21 DV-11)", () => {
+    const { config, warnings } = convertAnalysisPipeline(
+      v1("analysis-pipeline.json") as V1PipelineEntry[],
+    );
+    const aggregate = config.pipeline.find((e) => e.outputPath === "aggregatedActions")!;
+    expect(aggregate.options).toEqual({ path: "actions" });
+    expect(JSON.stringify(config)).not.toContain("actionQueue");
+    expect(warnings.some((w) => w.includes('now reads "actions"'))).toBe(true);
+  });
+
   it("carries TBA OPR strings into enrichment", () => {
     const { config } = convertAnalysisPipeline(v1("analysis-pipeline.json") as V1PipelineEntry[], {
       oprStrings: { string_1: "Hub Total Fuel Count", string_2: "minorFoulCount" },

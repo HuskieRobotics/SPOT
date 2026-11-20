@@ -33,6 +33,30 @@ function isContainer(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null;
 }
 
+/**
+ * Called for every `getPath` while `observePathReads` runs, with what was read: `value` is
+ * `undefined` when the path is missing.
+ */
+export type PathReadObserver = (target: unknown, path: string, value: unknown) => void;
+
+let observer: PathReadObserver | null = null;
+
+/**
+ * Run `fn`, calling `onRead` for every path any transformer reads (with `getPath` or `hasPath`).
+ * config:check uses this to find a path that no earlier entry writes (#317): transformers read
+ * whatever their options name, extensions included, so watching the reads needs no list of which
+ * option is read from where. Synchronous and scoped, so nothing else observes the reads.
+ */
+export function observePathReads<T>(onRead: PathReadObserver, fn: () => T): T {
+  const previous = observer;
+  observer = onRead;
+  try {
+    return fn();
+  } finally {
+    observer = previous;
+  }
+}
+
 export function getPath(obj: unknown, path: string): unknown;
 export function getPath<D>(obj: unknown, path: string, ifMissing: D): unknown;
 // Rest parameters rather than a default value: a default parameter would also apply when a caller
@@ -46,6 +70,7 @@ export function getPath(obj: unknown, path: string, ...ifMissing: [] | [unknown]
     }
     current = current[key];
   }
+  observer?.(obj, path, current);
   if (current !== undefined) return current;
   if (ifMissing.length === 0) throw new PathError(`path "${path}" does not exist`);
   return ifMissing[0];

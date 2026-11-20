@@ -44,6 +44,17 @@ is that the same input produces the same output and that every code path is exer
 - **SY-7** The walk is paced so a match plays out to the end. The remaining presses are spread
   over the remaining time, so the late phases get their share of actions instead of the match
   trailing off in the middle.
+- **SY-8** Idle robots (`idleTeams`) play at least every sixth match and record nothing, like a
+  robot that is broken or never moves. config:check fields one to see what a team that never did
+  anything gets, and which rankings it drops out of (#317, docs/spec/20 §4 CC-12).
+- **SY-9** When nothing on screen can be pressed while the clock runs, the walk waits for the
+  next phase or segment, which may open a layer. 2022's auto begins 10 ms after the start button,
+  and without this the walk stopped on the start layer and recorded nothing (#317). The committed
+  2025 and 2026 inputs never reach this case, so they are unchanged.
+- **SY-10** `generateTba` builds TBA responses for generated matches: a score breakdown that
+  gives each robot one of the values its configured `knownIds` name, or `"None"` (always
+  `"None"` for an idle robot), and a value for each configured component OPR (0 for an idle
+  robot). With it, entries that count enrichment results have data before any real event.
 
 ## 3. Using it
 
@@ -87,6 +98,9 @@ golden output have to land together. The 183 unknown ids are composite ids the v
 explains but v5's hand-written enumeration never listed (F-4, document 17 §2); the legacy
 pipeline counts them anyway, so they are part of the expected output. Phase 1 runs the v6 engine
 over the same inputs, migrated to the v6 shape exactly as the real exports are, and compares.
+
+config:check (docs/spec/20 §4) generates 120 matches with seed `config:check` and one idle robot
+(team 9999), plus TBA responses when enrichment is configured, and runs the pipeline on them.
 
 ## 4. What is still missing
 

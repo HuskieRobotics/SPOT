@@ -7,6 +7,10 @@ import { describe, expect, it } from "vitest";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { generate, toLegacyPerformance } from "@/generate/synthetic";
+import { generateTba } from "@/generate/synthetic-tba";
+import { buildEnrichedDataset } from "@/analysis/enrichment/tba";
+import { convertAnalysisPipeline, convertMatchScouting } from "@/config/convert/v1-to-v2";
+import type { AnalysisPipelineConfig } from "@/config/types";
 import { Random } from "@/generate/random";
 import { deriveKnownActionIds } from "@/config/knownActionIds";
 import { compositeActionId, placeAt } from "@/data/phase";
@@ -189,5 +193,79 @@ describe("BL-308: B robots", () => {
   it("refuses to render a B robot in the v5 shape, which cannot store one", () => {
     const b = dataset.performances.find((p) => p.team.endsWith("B"))!;
     expect(() => toLegacyPerformance(config, b)).toThrow(/BL-308/);
+  });
+});
+
+describe("#317: what config:check needs from the generator", () => {
+  it("fields idle robots, which play at least every sixth match and record nothing", () => {
+    const { performances } = generate({
+      config: config2025,
+      seed: "idle",
+      matches: 30,
+      idleTeams: ["9999"],
+    });
+    const idle = performances.filter((p) => p.team === "9999");
+    const matches = new Set(idle.map((p) => p.matchNumber));
+    for (let m = 1; m <= 30; m += 6) expect(matches.has(m)).toBe(true);
+    expect(idle.every((p) => p.actions.length === 0)).toBe(true);
+    expect(performances.filter((p) => p.team !== "9999").every((p) => p.actions.length > 0)).toBe(
+      true,
+    );
+  });
+
+  it("waits for the next phase when nothing on screen can be pressed (2022's auto starts 10 ms in)", () => {
+    const v1 = JSON.parse(
+      readFileSync(join(process.cwd(), "config", "v1", "match-scouting-2022.json"), "utf8"),
+    );
+    const config = convertMatchScouting(v1, {}).config;
+    const { report } = generate({ config, seed: "2022", matches: 4 });
+    expect(Object.keys(report.actionsByPhase).sort()).toEqual(["auto", "teleop"]);
+  });
+
+  it("makes TBA responses from the configured known ids, with None for an idle robot", () => {
+    const v1 = JSON.parse(
+      readFileSync(join(process.cwd(), "config", "v1", "analysis-pipeline.json"), "utf8"),
+    );
+    const v1ms = JSON.parse(
+      readFileSync(join(process.cwd(), "config", "v1", "match-scouting.json"), "utf8"),
+    );
+    const pipeline: AnalysisPipelineConfig = convertAnalysisPipeline(v1, {
+      matchScouting: v1ms,
+      oprStrings: ["Hub Total Fuel Count"],
+    }).config;
+    const enrichment = pipeline.enrichment.tba;
+    const { performances } = generate({
+      config: config2026,
+      seed: "tba",
+      matches: 12,
+      idleTeams: ["9999"],
+    });
+    const tba = generateTba(performances, { enrichment, seed: "tba", idleTeams: ["9999"] });
+    expect(tba.matches).toHaveLength(12);
+    expect(Object.keys(tba.matches[0].score_breakdown!.red).sort()).toEqual([
+      "autoTowerRobot1",
+      "autoTowerRobot2",
+      "autoTowerRobot3",
+      "endGameTowerRobot1",
+      "endGameTowerRobot2",
+      "endGameTowerRobot3",
+    ]);
+    expect(tba.coprs["Hub Total Fuel Count"].frc9999).toBe(0);
+
+    const dataset = buildEnrichedDataset(performances, enrichment, tba);
+    const added = dataset.tmps.flatMap((t) =>
+      t.actions.filter((a) => a.id.startsWith("endGameTowerRobot_")).map((a) => [t.team, a]),
+    );
+    const ids = new Set(added.map(([, a]) => (a as { id: string }).id));
+    expect([...ids].sort()).toEqual([
+      "endGameTowerRobot_Level1",
+      "endGameTowerRobot_Level2",
+      "endGameTowerRobot_Level3",
+      "endGameTowerRobot_None",
+    ]);
+    for (const [team, a] of added) {
+      expect((a as { phase: string }).phase).toBe("endgame");
+      if (team === "9999") expect((a as { id: string }).id).toBe("endGameTowerRobot_None");
+    }
   });
 });

@@ -250,6 +250,7 @@ a composite id was simply the button id.
 | executables `{type, args}`                                                                        | typed objects; layer indexes → `layer-N` ids; `climbHighlight` → `exclusiveHighlight`; `flashBorder`/`example` dropped            | unknown types kept as custom `{type, args}`                                                  |
 | empty button ids                                                                                  | `"<type>-<layer>-<index>"`                                                                                                        |                                                                                              |
 | pipeline `finalActionOccurence`, `cycle.pickups/scores`, `actionTime.path`, top-level `divByZero` | `finalActionOccurrence`, `startAction/endAction`, `actionId`, `options.divByZero`                                                 | each rename warns                                                                            |
+| a path option `actionQueue` (`aggregateArray`)                                                    | `actions` (docs/spec/21 DV-11)                                                                                                    | warns (#317)                                                                                 |
 | `sumAverage` groups without `countPaths`                                                          | `countPaths` written out from v5's name inference over the v1 button ids (needs the v1 match-scouting file)                       | warns per group (A-39)                                                                       |
 | pipeline `removeDuplicates`; team `countHybrid`                                                   | dropped: analysis never sees a superseded performance (RT-14a, docs/spec/09 TR-5); v1's team `countHybrid` did nothing            | warns per entry (#314)                                                                       |
 | `zoneActionRatingGroupings.ratings` as a list of ids                                              | a map `{ id: value }`, the value read from the digits at the end of each id as v5 did                                             | warns; ids without digits are listed (#314)                                                  |
@@ -343,29 +344,102 @@ mean "misses"?`), unless the object already has it; a value that fails every alt
   bits to hold a match's length in milliseconds.
 - **CC-8 Order of checks.** A check that compares two files runs only when both passed their
   schema, so one typo does not bury the report; the report lists what was skipped. A pipeline or
-  modules file with some bad entries is still checked entry by entry.
+  modules file with some bad entries is still checked entry by entry. The pipeline runs on
+  generated matches last (CC-9 to CC-12), without the entries the schema rejected, and needs a
+  valid match-scouting.json; what follows from an entry or module with a finding is not
+  reported again.
 
-Still to come in #317: warnings from running the pipeline on generated data (a path no earlier
-entry produces, a module path the pipeline never writes, an output that is null or zero for every
-team, and a ranking fed by a `ratio` without `divByZero` or an average without `ifNone`).
+- **CC-9 Paths the pipeline reads.** The pipeline runs on 120 generated matches (document 22),
+  with one more robot whose scouts record nothing in any match, and with synthetic TBA data
+  built from `knownIds` and `componentOprs`. Every path a transformer reads is watched
+  (`observePathReads`, docs/spec/09 TR-3), so an extension is checked like a built-in without a
+  list of which option is read from where. Error: a path that no earlier entry writes on any
+  performance or team, one finding per option. The hint names the entry that writes it later
+  (entries run in order), a value of the other kind (a value of each match read by a team entry,
+  or the reverse), v5's `actionQueue` (DV-11), a path that ends in a v5 id (CS-16), or the path
+  probably meant: a sibling with a similar name, else the same last part elsewhere
+  (`"averages" has no "missCoral", but there is a team value "counts.missCoral"`). Error: an
+  entry that throws on the generated matches, with how many performances or teams and the first.
+- **CC-10 Paths modules show.** The modules schema says what each module path is: `$defs/path` a
+  team value, `$defs/performancePath` a value of each match (PerformanceTimePlot), and
+  `$defs/itemPath` a path inside each item of a list another option names (HeatmapScatterPlot's
+  `coordinatePath`); RadarChart's `"none"` is not a path. Error: a path the pipeline never writes,
+  so the module would always show No Data, with CC-9's hints. `percentChanceOfWinning` reads
+  `averageScores.total` and `standardDeviation` (AN-23, AN-24), which are checked too; `manual.*`
+  is manual data (DM-14) and is not. Warning: a list none of whose items has the item path, so a
+  heatmap would be empty.
+- **CC-11 Values empty for everyone.** Warning: a value that is 0, null, false or empty for every
+  performance or every team (the robot that never did anything aside). It is reported once, at the
+  entry where it starts: a value computed from empty inputs follows from that entry, and anything
+  that follows from a finding already reported is not reported at all. It is reported when the
+  entry's whole output is empty, or when a later entry or a module reads the empty value; a count of
+  every button is 0 for buttons a phase does not show, which is normal until something reads it.
+  The hint says where the generated matches recorded the buttons the entry names, against its
+  period filters or the list it counts (`"autol4" was recorded only in phases "auto" and "teleop",
+never in "preMatch"`).
+- **CC-12 Rankings.** A ranking is a module path with `sort` 1 or -1 (MO-4), or a value win
+  probability reads. Warning: the robot that never did anything gets null there, so a real team
+  that never did it drops out of the ranking instead of ranking last (F-24, TR-12). The finding is
+  on the entry nearest the ranking whose transformer takes `ifNone`, `divByZero` or `default` and
+  leaves it unset; `null` set on purpose is respected. The hint gives the worst value for the
+  ranking's direction: a low one such as 0 when higher is better, a high one such as the match
+  length when lower is better, and says to leave it unset only when "never did it" means "unknown".
+  When no entry on the way takes such an option, the warning is on the module.
 
-**Run on the real configurations (2026-11-20).** The archived 2025 set has no errors and three
-warnings: two buttons with `gridArea [5,2,5,5]`, and no `knownIds`. The active 2026 set has 16 errors, all
-options that still use v5 ids (14 in the pipeline, among them the `attemptClimb` entry of §2.2,
-and 2 in the heatmap module; #320 translates them), and four warnings for buttons whose `gridArea`
-reaches column line 14 of an 11-column grid. Converted older seasons show real defects too: 2023 ended its cone and cube cycles
-with paths (`counts.hybrid.conePickupGrid`) instead of button ids, so those cycles never ended,
-and 2024v2 has two `autoNoteWing` buttons in one layer.
+The generated matches show likely mistakes, not proof: the walk presses buttons at random within
+the rules, at about the rate real scouts did (a median of 22 actions per match in 2025 and 2026).
+With 40 matches, rare buttons in short windows (2023's auto placements, counted from a 15 s
+`actionTimeFilter`) went unpressed and gave false CC-11 warnings; with 120 there are none in any
+archived season, and the check takes about 0.2 s. The report ends with what it ran on ("Ran the
+pipeline on 120 generated matches (720 performances of 49 teams, one of which never did
+anything)"). `checkConfiguration(sources, { generated: false })` runs CC-1 to CC-8 only.
+
+**Run on the real configurations (2026-11-20).** The archived 2025 files have no errors and three
+warnings: two buttons with `gridArea [5,2,5,5]`, and no `knownIds`. Run on generated matches, they
+show six errors that v4.2.0 shipped. Four "Team Stats" lines read `averages.missCoral`,
+`missAlgae`, `dropCoral` and `dropAlgae`, which were never written: `averages` averages each
+match's counts, and those totals exist only per team. The "Barge Points" column and "Expected
+Barge Points" read `avgEndgamePoints`, which the original 2025 pipeline wrote and v4.2.0's did
+not. The v4.2.0 golden output has none of these values, so all six showed No Data at every
+event. There are also three ranking warnings: the endgame, algae and coral cycle times rank
+teams with no `ifNone`. At 2025ilch, 5 of 42 teams never completed a coral cycle and dropped out
+of that ranking. The archived files stay as converted, because they are an oracle input that a
+drift test pins to the converter (`config/seasons/README.md`).
+
+The active 2026 set has 16 errors and four warnings in its files. All 16 errors are options that
+still use v5 ids (14 in the pipeline, among them the `attemptClimb` entry of §2.2, and 2 in the
+heatmap module), and #320 translates them. The four warnings are buttons whose `gridArea` reaches
+column line 14 of an 11-column grid. Run on generated matches, the set shows 69 more errors and
+three warnings:
+
+- 55 errors are pipeline options that read paths ending in v5 ids (`counts.autoStopShooting`).
+- 14 errors are module paths. Six end in v5 ids. One is `opr.Hub Auto Fuel Count`, which the 2026
+  OPR strings never included. Eight read `averageScores.auto`, `teleop`, `endgame` and `total`,
+  which 2026 never computed; they are in the match view, which was disabled that season.
+- The three warnings are rankings without `ifNone`: shooting and auto shooting cycle times, and
+  the averaged ratings.
+
+Running the converted older seasons also found real defects:
+
+- 2022 and 2023 rank teams by times (tarmac crossing, climb start, cycle times) with no `ifNone`.
+- 2023 weighted platform pickups that its `countHybrid` never counted.
+- 2024v2's "Team Stats" and "Accuracy" column show `accuracy`, a value of each match, where a
+  team value belongs.
+- The converter still wrote v5's `actionQueue` as a path (2022, 2023, 2026); it now writes
+  `actions` (DV-11).
+- The generator stalled on 2022, whose auto begins 10 ms after the start button; it now waits for
+  the next phase (document 22 SY-9).
 
 ## 5. Tests (T-3)
 
-| Test file                             | Guarantees                                                                                                                                                                                                                                                                                                                                                                |
-| ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `tests/unit/config-v2-schema.test.ts` | Schemas compile in Ajv strict mode; minimal documents validate; v1 documents, wrong `version`, seconds, unknown properties, unknown transformer/module options and bad executables are rejected with path + message; extension transformers/modules/executables pass.                                                                                                     |
-| `tests/unit/config-convert.test.ts`   | Every archived season set in `config/v1` (2022, 2023, 2023v1, 2024, 2024v2, 2025, 2025v2, 2025 at v4.2.0, 2026) converts to valid v2 with resolvable layer references; the converted 2026 config derives every action id the 2026 oracle found in real data except the TBA `_None` ids (which are enrichment output, not scouting ids); catalog removed; renames applied. |
-| `tests/unit/config-active.test.ts`    | `config/*.json` validate; they equal the converter output (drift check, delete when hand-editing starts); the derived id count fits the QR id field.                                                                                                                                                                                                                      |
-| `tests/unit/config-v1.test.ts`        | Converter inputs still parse (unchanged).                                                                                                                                                                                                                                                                                                                                 |
-| `tests/unit/config-check.test.ts`     | Each class of config:check finding (CC-1 to CC-8) on a small change to the 2025 or 2026 configuration; the 2025 set has no errors; the 2026 set reports the `attemptClimb` entry; every converted v1 season gives a report whose findings all have a line and read without `undefined`; the CLI exits 0 with warnings only and 1 with errors.                             |
+| Test file                                   | Guarantees                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| ------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `tests/unit/config-v2-schema.test.ts`       | Schemas compile in Ajv strict mode; minimal documents validate; v1 documents, wrong `version`, seconds, unknown properties, unknown transformer/module options and bad executables are rejected with path + message; extension transformers/modules/executables pass.                                                                                                                                                                                                               |
+| `tests/unit/config-convert.test.ts`         | Every archived season set in `config/v1` (2022, 2023, 2023v1, 2024, 2024v2, 2025, 2025v2, 2025 at v4.2.0, 2026) converts to valid v2 with resolvable layer references; the converted 2026 config derives every action id the 2026 oracle found in real data except the TBA `_None` ids (which are enrichment output, not scouting ids); catalog removed; renames applied.                                                                                                           |
+| `tests/unit/config-active.test.ts`          | `config/*.json` validate; they equal the converter output (drift check, delete when hand-editing starts); the derived id count fits the QR id field.                                                                                                                                                                                                                                                                                                                                |
+| `tests/unit/config-v1.test.ts`              | Converter inputs still parse (unchanged).                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+| `tests/unit/config-check.test.ts`           | Each class of config:check finding in the files (CC-1 to CC-8) on a small change to the 2025 or 2026 configuration; the 2025 files have no errors, and run on generated matches show the six module paths and three rankings v4.2.0 shipped; the 2026 set reports the `attemptClimb` entry; every converted v1 season gives a report whose findings all have a line and read without `undefined`, and the real defects above; the CLI exits 0 with warnings only and 1 with errors. |
+| `tests/unit/config-check-generated.test.ts` | CC-9 to CC-12 on small changes to 2025 (2026 for v5 paths and the heatmap): a typo, an entry run too early, a value of the wrong kind, `actionQueue`, an entry that fails; module paths of each kind, RadarChart `"none"`, win probability; an empty value reported once where it starts, and only when used; a ranking without `ifNone` or `divByZero`, and that a worst value or `null` on purpose silences it.                                                                   |
 
 Oracle cross-check result: of the 32 ids the v5 pipeline could not explain for 2026mnwi
 (document 17 §2.2), 30 are derivable from the v2 config with no catalog (`activeShift3*`,

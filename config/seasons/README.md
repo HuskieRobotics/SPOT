@@ -25,3 +25,9 @@ npx prettier --write "config/seasons/**/*.json"
 
 `tests/unit/config-active.test.ts` validates each set and checks it still equals the converter
 output, so these files cannot drift away from the converter.
+
+`npm run config:check -- config/seasons/2025` reports six errors in `analysis-modules.json` and
+three warnings about rankings. They are what v4.2.0 shipped (docs/spec/20 §4): four "Team Stats"
+lines and the "Barge Points" values read paths the pipeline never wrote, so they always showed
+No Data. They stay here because these files must equal the converter output; when you copy 2025
+as a starting point, fix them.

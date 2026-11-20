@@ -615,6 +615,13 @@ export function convertAnalysisPipeline(
       delete options.path;
       warnings.push(`${where}: actionTime option "path" renamed to "actionId"`);
     }
+    // v6 stores the recorded actions as `actions` (docs/spec/21 DV-11); v1 paths name `actionQueue`.
+    for (const [k, v] of Object.entries(options)) {
+      if (typeof v === "string" && /^actionQueue(\.|$)/.test(v)) {
+        options[k] = `actions${v.slice("actionQueue".length)}`;
+        warnings.push(`${where}: option "${k}" now reads "actions" (v5 called it actionQueue)`);
+      }
+    }
     for (const k of Object.keys(e)) {
       if (!["type", "name", "outputPath", "options"].includes(k)) {
         options[k] = e[k];

@@ -29,6 +29,8 @@ export interface CheckReport {
   warnings: number;
   /** Checks that could not run, and why ("fix the errors in match-scouting.json first"). */
   skipped: string[];
+  /** The generated matches the pipeline ran on (CC-9 to CC-12), when it ran. */
+  generated?: { matches: number; performances: number; teams: number };
 }
 
 export const CONFIG_FILES: readonly ConfigKind[] = [
@@ -127,6 +129,12 @@ export function formatReport(report: CheckReport, dir: string): string {
   }
   for (const s of report.skipped) lines.push(`Skipped: ${s}`);
   if (report.skipped.length > 0) lines.push("");
+  if (report.generated) {
+    const g = report.generated;
+    lines.push(
+      `Ran the pipeline on ${g.matches} generated matches (${g.performances} performances of ${g.teams} teams, one of which never did anything).`,
+    );
+  }
   const count = (n: number, word: string) => `${n} ${word}${n === 1 ? "" : "s"}`;
   lines.push(
     report.errors > 0

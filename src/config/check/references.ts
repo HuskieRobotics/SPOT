@@ -4,12 +4,21 @@
  * (`$defs/periodFilter/properties/phases`, `…/segments`, `…/kinds`) is a period id. The schema
  * says which options hold ids, so a new built-in or an extension that reuses these definitions
  * (`pipelineDef("actionIdList")`) is checked without changing config:check.
+ *
+ * Module options also name paths: `$defs/path` is a team value, `$defs/performancePath` a value
+ * of each match, and `$defs/itemPath` a path inside each item of a list (analysis-modules schema).
+ * Pipeline paths are found by watching what the pipeline reads instead (`observePathReads`).
  */
 import analysisModulesSchema from "../schema/analysis-modules.schema.json";
 import analysisPipelineSchema from "../schema/analysis-pipeline.schema.json";
 import type { Key } from "./json";
 
-export type ReferenceKind = "action" | "phase" | "segment" | "kind";
+export type PeriodKind = "phase" | "segment" | "kind";
+export type PathKind = "path" | "performancePath" | "itemPath";
+export type ReferenceKind = "action" | PeriodKind | PathKind;
+
+export const isPeriod = (kind: ReferenceKind): kind is PeriodKind =>
+  kind === "phase" || kind === "segment" || kind === "kind";
 
 export interface Reference {
   kind: ReferenceKind;
@@ -25,7 +34,9 @@ const ROOTS: Record<string, Schema> = {
   [analysisModulesSchema.$id]: analysisModulesSchema as Schema,
 };
 
-const PERIODS: Record<string, ReferenceKind> = {
+const PATHS: readonly string[] = ["path", "performancePath", "itemPath"];
+
+const PERIODS: Record<string, PeriodKind> = {
   "periodFilter/properties/phases": "phase",
   "periodFilter/properties/segments": "segment",
   "periodFilter/properties/kinds": "kind",
@@ -65,8 +76,13 @@ export function findReferences(
     const node = s as Schema;
     if (typeof node.$ref === "string") {
       const name = definition(node.$ref);
+      const modules = node.$ref.startsWith("#")
+        ? r === modulesRoot
+        : node.$ref.startsWith(analysisModulesSchema.$id);
       if (name === "actionId") {
         if (typeof v === "string") add({ kind: "action", id: v, keys: at });
+      } else if (modules && PATHS.includes(name)) {
+        if (typeof v === "string") add({ kind: name as PathKind, id: v, keys: at });
       } else if (PERIODS[name]) {
         if (Array.isArray(v)) {
           v.forEach((id, i) => {
@@ -80,7 +96,10 @@ export function findReferences(
     }
     for (const combinator of ["allOf", "anyOf", "oneOf"]) {
       const branches = node[combinator];
-      if (Array.isArray(branches)) for (const b of branches) walk(v, b, at, r, depth + 1);
+      if (!Array.isArray(branches)) continue;
+      // A value that is one alternative's constant ("none" for a RadarChart path) took that one.
+      if (combinator !== "allOf" && branches.some((b) => (b as Schema)?.const === v)) continue;
+      for (const b of branches) walk(v, b, at, r, depth + 1);
     }
     if (Array.isArray(v)) {
       if (node.items) v.forEach((item, i) => walk(item, node.items, [...at, i], r, depth + 1));
@@ -136,4 +155,24 @@ export function builtInExecutables(executableSchema: unknown): string[] {
   return anyOf
     .map((b) => ((b.properties as Schema)?.type as Schema | undefined)?.const)
     .filter((t): t is string => typeof t === "string");
+}
+
+/**
+ * The option names a transformer's options schema accepts, following `$ref` and `allOf`; used to
+ * tell whether it takes `ifNone`, `divByZero` or `default` (#317).
+ */
+export function optionNames(schema: unknown, root: Schema = (schema ?? {}) as Schema): string[] {
+  const names = new Set<string>();
+  const walk = (s: unknown, r: Schema, depth: number): void => {
+    if (s === null || typeof s !== "object" || depth > 20) return;
+    const node = s as Schema;
+    if (typeof node.$ref === "string") {
+      const target = resolve(node.$ref, r);
+      if (target) walk(target.schema, target.root, depth + 1);
+    }
+    for (const name of Object.keys((node.properties ?? {}) as Schema)) names.add(name);
+    if (Array.isArray(node.allOf)) for (const b of node.allOf) walk(b, r, depth + 1);
+  };
+  walk(schema, root, 0);
+  return [...names];
 }

@@ -18,7 +18,11 @@ npm run config:check -- config/seasons/2025   # another season
 ```
 
 Each finding gives the file and line, where in words, what is wrong, and what to try
-(docs/spec/20 §4). `npm test` validates the files too (`tests/unit/config-active.test.ts`).
+(docs/spec/20 §4). It also runs the pipeline on 120 generated matches, so it reports a path no
+entry writes, a module path the pipeline never writes, a value that is empty for every team, and
+a ranking that a team that never did anything drops out of. Errors make it exit with 1; look at
+each warning, and either fix it or know why it stays. `npm test` validates the files too
+(`tests/unit/config-active.test.ts`).
 
 They were produced from the 2026 REBUILT legacy files in `config/v1/` by the converter:
 
