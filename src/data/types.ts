@@ -6,6 +6,8 @@
  * docs/spec/06 (RT-24 to RT-36).
  */
 
+import type { TeamKey } from "./team";
+
 /** 24-character hexadecimal MongoDB ObjectId, as it travels outside the driver. */
 export type ObjectIdHex = string;
 
@@ -62,8 +64,8 @@ export interface TeamMatchPerformance {
   tenantId: TenantId;
   eventId: ObjectIdHex;
   matchNumber: number;
-  /** FRC team number, always a Number (DM-1a). */
-  robotNumber: number;
+  /** Team key such as "3061" or "2338B"; always a string (DM-1a, BL-308). */
+  team: TeamKey;
   /** Student ID (SEC-6). Null when the record did not come from a signed-in scouter. */
   scouterId: string | null;
   source: PerformanceSource;

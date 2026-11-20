@@ -7,13 +7,14 @@
  *
  * What it has to do, beyond renaming fields:
  *  - split each action's composite id into a button id plus where it happened (docs/spec/20 §2.1);
- *  - normalize `robotNumber` to a number (DM-1a);
+ *  - turn `robotNumber` into a string team key (DM-1a, BL-308);
  *  - turn free-text scouter names into `scouters` records (SEC-6), merging spelling variants;
  *  - add `tenantId` everywhere (DM-7f) and the v6 hook fields (notes, tags, flag metadata);
  *  - drop per-action `_id`s (BL-31).
  */
 import type { MatchScoutingConfig } from "@/config/types";
 import { placeAt, splitActionId, type Placement } from "@/data/phase";
+import { toTeamKey, type TeamKey } from "@/data/team";
 import {
   DEFAULT_TENANT,
   NOT_FLAGGED,
@@ -65,6 +66,16 @@ export function num(value: V5Value): number {
   if (value.$numberLong !== undefined) return Number(value.$numberLong);
   if (value.$numberInt !== undefined) return Number(value.$numberInt);
   return Number.NaN;
+}
+
+/**
+ * v5 stored `robotNumber` as a Number, so every legacy value is a plain team number. A value
+ * that is not a team key is kept as text so validation reports it instead of hiding it.
+ */
+export function teamKeyFromV5(value: V5Value): TeamKey {
+  const raw = typeof value === "object" ? (value.$numberLong ?? value.$numberInt) : value;
+  const n = typeof raw === "string" && /^\d+$/.test(raw.trim()) ? Number(raw) : raw;
+  return toTeamKey(n) ?? String(raw);
 }
 
 // ---------------------------------------------------------------- scouters
@@ -228,7 +239,7 @@ export function migrate(
       tenantId,
       eventId: hex(p.eventNumber),
       matchNumber: num(p.matchNumber),
-      robotNumber: num(p.robotNumber),
+      team: teamKeyFromV5(p.robotNumber),
       scouterId,
       source: isQr ? "qr" : "app",
       clientVersion: p.clientVersion ?? "",
@@ -253,7 +264,7 @@ export function migrate(
   // because who "finished the match" (RT-35) is not knowable from old data.
   const byRobotMatch = new Map<string, TeamMatchPerformance[]>();
   for (const p of performances) {
-    const key = `${p.eventId}:${p.matchNumber}:${p.robotNumber}`;
+    const key = `${p.eventId}:${p.matchNumber}:${p.team}`;
     const list = byRobotMatch.get(key) ?? [];
     list.push(p);
     byRobotMatch.set(key, list);

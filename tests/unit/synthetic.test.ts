@@ -111,9 +111,9 @@ describe.each([
   });
 
   it("gives every match a full lineup of distinct robots", () => {
-    const byMatch = new Map<number, number[]>();
+    const byMatch = new Map<number, string[]>();
     for (const p of dataset.performances) {
-      byMatch.set(p.matchNumber, [...(byMatch.get(p.matchNumber) ?? []), p.robotNumber]);
+      byMatch.set(p.matchNumber, [...(byMatch.get(p.matchNumber) ?? []), p.team]);
     }
     for (const robots of byMatch.values()) {
       expect(robots).toHaveLength(6);
@@ -171,5 +171,23 @@ describe("2025 coverage, a season with no segments and no prefixes", () => {
       const legacy = toLegacyPerformance(config2025, p);
       expect(legacy.actionQueue.map((a) => a.id)).toEqual(p.actions.map((a) => a.id));
     }
+  });
+});
+
+describe("BL-308: B robots", () => {
+  const config = config2026;
+  const dataset = generate({ config, seed: "b-teams", matches: 40, bTeams: 4 });
+
+  it("fields suffixed robots that validate as team keys", () => {
+    const teams = new Set(dataset.performances.map((p) => p.team));
+    expect([...teams].some((t) => t.endsWith("B"))).toBe(true);
+    for (const p of dataset.performances) {
+      expect(validateDocument("team-match-performance", p).issues).toEqual([]);
+    }
+  });
+
+  it("refuses to render a B robot in the v5 shape, which cannot store one", () => {
+    const b = dataset.performances.find((p) => p.team.endsWith("B"))!;
+    expect(() => toLegacyPerformance(config, b)).toThrow(/BL-308/);
   });
 });

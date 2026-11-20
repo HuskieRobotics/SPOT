@@ -168,7 +168,9 @@ Rationale in [ADR 0004](../adr/0004-authentication-and-privacy.md).
 - **D-6** Decide whether to restore Simulate Match and Auto Pick List (requires
   `standardDeviation` and `averageScores.total` in the pipeline).
 - **D-7** Normalize robot ids to a single type across TBA/FMS/manual sources. **Resolved
-  2026-09-17:** `robotNumber` is the FRC team number and is a **Number** everywhere (DM-1a).
+  2026-09-17, revised 2026-11-19:** a robot is a **string team key** everywhere (`"3061"`,
+  `"2338B"`), in a field named `team` (DM-1a). The first resolution chose a Number, which
+  cannot hold the "B" robots off-season events field (BL-308).
 - **D-7a** Missing-value representation: legacy output mixes `NaN` (empty averages), `null`
   (weighted averages with no counts), `"N/A"` (team `ratio` divide-by-zero default), and
   `undefined`. The oracle golden files record these per path; the rewrite should pick one
@@ -207,7 +209,7 @@ Rationale in [ADR 0004](../adr/0004-authentication-and-privacy.md).
 | Missing values                                    | **Decided 2026-09-17:** `null` everywhere; modules render "No Data" (D-7a, DM-1b)                                                                                                       |
 | Migration scope                                   | **Decided 2026-09-17:** 2025 and 2026 seasons only; verified by re-running the oracle against migrated data (DM-7g)                                                                     |
 | Tenant scoping                                    | **Decided 2026-09-17:** reserve `tenantId` on every document now to avoid migrating live data later (DM-7f, BL-197)                                                                     |
-| Robot id type                                     | **Decided 2026-09-17:** FRC team number, stored and compared as a Number (D-7, DM-1a)                                                                                                   |
+| Robot id type                                     | **Decided 2026-09-17, revised 2026-11-19:** a string team key such as `"3061"` or `"2338B"`, stored and compared as a string (D-7, DM-1a, BL-308)                                       |
 | QR id stability                                   | **Decided 2026-09-17:** 16-bit configuration fingerprint in the payload header; the scanner refuses a mismatch (D-3, DM-15a)                                                            |
 | Demo mode                                         | **Captured 2026-09-17:** kept as a product requirement (zero-install evaluation), deployment-level only, with isolated and resettable data (DM-MODE-1..6, document 01)                  |
 | Schedule sources                                  | **Decided 2026-09-17:** TBA only, with the manual schedule as the fallback for events with no TBA presence; the FIRST API practice fallback is dropped (RT-23a, A-9)                    |

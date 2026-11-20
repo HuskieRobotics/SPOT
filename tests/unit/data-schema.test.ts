@@ -24,7 +24,7 @@ const performance = (): TeamMatchPerformance => ({
   tenantId: DEFAULT_TENANT,
   eventId: oid("b"),
   matchNumber: 12,
-  robotNumber: 3061,
+  team: "3061",
   scouterId: "123456",
   source: "app",
   clientVersion: "1.0",
@@ -90,12 +90,22 @@ describe("document schemas", () => {
     expect(validateDocument("scouter", scouter()).issues).toEqual([]);
   });
 
-  it("refuses a team number that arrived as a string", () => {
-    const p = { ...performance(), robotNumber: "3061" };
+  it("DM-1a: refuses a team that arrived as a number", () => {
+    const p = { ...performance(), team: 3061 };
     expect(validateDocument("team-match-performance", p).issues).toContainEqual({
-      path: "robotNumber",
-      message: "must be integer",
+      path: "team",
+      message: "must be string",
     });
+  });
+
+  it("BL-308: accepts a B robot and refuses keys that are not team keys", () => {
+    expect(
+      validateDocument("team-match-performance", { ...performance(), team: "2338B" }).issues,
+    ).toEqual([]);
+    for (const team of ["frc3061", "03061", "2338b", "2338BB", ""]) {
+      const issues = validateDocument("team-match-performance", { ...performance(), team }).issues;
+      expect(issues.map((i) => i.path)).toContain("team");
+    }
   });
 
   it("refuses a per-action _id, which v5 stored and v6 does not", () => {

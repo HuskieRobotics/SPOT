@@ -12,15 +12,20 @@ It has no dependencies and needs no database or server.
 ```
 tools/oracle/
   run.js                     harness
-  run-all.sh                 regenerates both seasons (needs a v4.2.0 worktree, see below)
+  run-all.sh                 regenerates every golden set (needs v4.2.0 and v5 worktrees, see below)
   fixtures/
     db/                      mongoexport (extended JSON) of teamMatchPerformances and events
       2025Reefscape.*.json     2025 database (migrated to ObjectId event numbers)
       2026Rebuilt.*.json       2026 database
     tba/<eventKey>/          recorded TBA v3 responses: matches.json, teams.json, coprs.json
+    synthetic/               generated TMPs in the v5 shape (docs/spec/22), one set per season
+      2025syn.*.json           from config/seasons/2025, seed oracle-2025, 60 matches
+      2026syn.*.json           from config/, seed oracle-2026, 60 matches
   golden/
     2025ilch_official-v4.2.0/  teams.json, tmps.json, report.json
     2026mnwi_official-v5/      teams.json, tmps.json, report.json
+    2025syn_synthetic-v4.2.0/  the same, for the synthetic 2025 set
+    2026syn_synthetic-v5/      the same, for the synthetic 2026 set
 ```
 
 ## Seasons
@@ -29,6 +34,13 @@ tools/oracle/
 | ---------------- | ------------------- | ------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
 | 2025 (REEFSCAPE) | `2025ilch_official` | tag `v4.2.0` (post-season release; transformer logic identical to the in-season code, ObjectId schema)             | `v4.2.0` defaults (`match-scouting.json`, `analysis-pipeline.json`) | off (did not exist in 2025)                                                                       |
 | 2026 (REBUILT)   | `2026mnwi_official` | legacy v5 code (`main` at commit `902db06`, v5.2.x; on the `v6` branch the legacy tree is gone, so use a worktree) | that checkout's `config/`                                           | on: TBA score-breakdown synthetic actions + component OPRs (`fixtures/opr-strings/2026mnwi.json`) |
+
+Synthetic sets extend the oracle beyond the two real events (doc 17 §2 item 2, T-4). They run
+through the same checkouts with enrichment off, since a generated event has no TBA data. The
+2026 synthetic report lists 183 unknown action ids: the generator produces every id the v2
+configuration can explain, and v5's hand-written enumeration missed many of them (the real
+2026 export already showed 32). Legacy `countActions(all)` still counts them, so they are in the
+golden output.
 
 ## Regenerating
 
@@ -54,8 +66,12 @@ node tools/oracle/run.js --checkout /path/to/spot-v5 \
   --out tools/oracle/golden/2026mnwi_official-v5
 ```
 
-Or `./tools/oracle/run-all.sh /path/to/spot-v4.2.0 /path/to/spot-v5`. `report.json` records the
-checkout commit (`checkoutCommit`).
+Or `./tools/oracle/run-all.sh /path/to/spot-v4.2.0 /path/to/spot-v5`, which also regenerates the
+synthetic inputs from their seeds and runs them. `report.json` records the checkout's folder name
+and commit (`checkoutCommit`), but no absolute path or timing, so a regeneration that changes
+nothing leaves the files unchanged. `tests/unit/oracle-golden.test.ts` fails if the generator no
+longer reproduces the committed synthetic inputs; after a deliberate generator change, rerun
+`run-all.sh` so inputs and golden output move together.
 
 ## Output conventions
 

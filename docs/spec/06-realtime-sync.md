@@ -163,8 +163,9 @@ badly (F-20 to F-23). These requirements replace the connection-keyed registry.
   automatic schedule source is The Blue Alliance, and the **manual schedule** is the fallback
   for an event with no TBA presence (D-4, kept for exactly this reason). Two sources, one
   automatic and one human, with nothing in between to keep working.
-- **RT-23b** Robot numbers therefore arrive from two places, TBA and the manual schedule, and
-  both are normalized to a number on ingest (DM-1a). The v5 string-versus-number mismatch
+- **RT-23b** Robot ids therefore arrive from two places, TBA (`frc2338B`) and the manual
+  schedule (typed by an admin), and both are normalized to a string team key on ingest (DM-1a),
+  which keeps a "B" robot at an off-season event (BL-308). The v5 string-versus-number mismatch
   between TBA and the FIRST API disappears with the fallback.
 
 ## Demo mode summary (across the system)

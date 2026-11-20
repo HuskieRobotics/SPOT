@@ -10,7 +10,7 @@
     "tenantId",
     "eventId",
     "matchNumber",
-    "robotNumber",
+    "team",
     "scouterId",
     "source",
     "clientVersion",
@@ -29,10 +29,10 @@
     "tenantId": { "type": "string", "minLength": 1 },
     "eventId": { "$ref": "#/$defs/objectId" },
     "matchNumber": { "type": "integer", "minimum": 1 },
-    "robotNumber": {
-      "type": "integer",
-      "minimum": 1,
-      "description": "FRC team number; always a number, never a string (DM-1a)."
+    "team": {
+      "type": "string",
+      "pattern": "^[1-9][0-9]{0,4}[A-Z]?$",
+      "description": "Team key: the FRC team number as a string, with a capital-letter suffix for a team's second robot at an off-season event (\"3061\", \"2338B\"). Always a string, never a number (DM-1a, BL-308)."
     },
     "scouterId": {
       "type": ["string", "null"],

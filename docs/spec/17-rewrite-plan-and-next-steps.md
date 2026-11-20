@@ -213,8 +213,46 @@ Do these before writing application code. Each one removes a class of rework lat
 | 5. Hardening and backlog core | BL-93, BL-54, BL-116, BL-33, BL-7, BL-43, accessibility pass, docs (Quickstart, Configuration Guide, Usage Guide rewritten from this spec)                                                                      | Configure the 2027 game from the schema alone after kickoff                                                               |
 | 6. Cutover                    | Parallel run at an off-season event or scrimmage with the v5 app; compare datasets; tag `v5.2.0-final`; merge `v6` to `main`                                                                                    | First 2027 event scouted on v6                                                                                            |
 
-Phases 1 and 3 can proceed in parallel with phase 2 once the config schema and data model are
-fixed, which is why Phase 0 items 4 and 5 come first.
+Phases 1 and 3 could proceed in parallel with phase 2 once the config schema and data model are
+fixed, which is why Phase 0 items 4 and 5 come first. With one developer (section 4), they are
+instead built in order, with the pieces the two date gates below need pulled forward.
+
+### 3.1 Date gates for the 2027 season (decided 2026-11-19)
+
+v6 does not have to be finished by kickoff. It has to meet two gates, and the phases are cut
+to fit them rather than the other way round. v5 stays on `main` throughout, so missing a gate
+delays v6, not scouting.
+
+**Gate K: configurable at kickoff, 2027-01-09** (the BIOCORE reveal). Within days of the reveal,
+students without programming experience start writing the four JSON files for the new game.
+They must be able to tell whether an edit is right **before any 2027 match has been played**,
+so the gate is about authoring and previewing a configuration, not about running an event.
+
+| Id  | Ready means                                                                                                                                                                                                                                                                                                                                         | From               |
+| --- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ |
+| K-1 | Phase 1 complete: the engine runs any valid pipeline and reproduces the oracle on the real and synthetic sets.                                                                                                                                                                                                                                      | Phase 1            |
+| K-2 | `npm run config:check` validates all four files and the references between them (every action id the pipeline or a module names exists in `match-scouting.json` or is a pipeline output; the QR id enumeration fits its 8 bits), with messages a student can act on: file, location, what is wrong, what to try. Editor autocomplete already works. | Phase 1 (T-3)      |
+| K-3 | Configuration preview without an event: generate synthetic matches from the new `match-scouting.json`, run the new pipeline over them, and show each team's output. This is the synthetic generator's main job in 2027.                                                                                                                             | Phase 1, doc 22    |
+| K-4 | Configuration Guide for v2, written for students, with the 2026 configuration as the worked example (from documents 04, 13 and 20).                                                                                                                                                                                                                 | Phase 5, pulled in |
+| K-5 | Scouting-screen preview: a page that renders `match-scouting.json` as the scouting grid, with layers, phases and segments on the timer, every button type, and undo, standalone with no server or sessions. It is the first piece of phase 2, so nothing is thrown away.                                                                            | Phase 2, pulled in |
+
+Built in that order; K-5 is the first to slip, because K-2 to K-4 already let a student write
+and check a configuration. At kickoff the 2026 files move to `config/seasons/2026/` and the
+drift test in `config-active.test.ts` is deleted (`config/README.md`).
+
+**Gate W: testable at Week 0, about 2027-02-20.** FIRST had not published the 2027 Week 0 date
+on 2026-11-19; confirm it and adjust. The aim is to scout real matches on v6 beside v5, which is
+phase 6's parallel run brought forward as a test. Deployed on a staging EC2 instance by about
+2027-02-13, so there is a week for a dry run with students acting as scouters.
+
+| Id  | Ready means                                                                                                                                                                                                | From             |
+| --- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
+| W-1 | Phase 2 complete: scouting client, sessions and assignment, sync, the offline path with QR, admin match selection, schedule from TBA and manual.                                                           | Phase 2          |
+| W-2 | Phase 3 core: team view with the modules the 2027 configuration uses, event switching, search. Compare, Filter Teams, CSV, Simulate Match and Auto Pick can follow.                                        | Phase 3, partial |
+| W-3 | From phase 4: the EC2 recipe, the QR scanner, and the edit page's flag and delete. Settings come from environment variables; the settings UI, the Cloud Run recipe and the real-dump migration can follow. | Phase 4, partial |
+
+After Week 0, the rest of phases 3 and 4, then phase 5, then cutover (phase 6) once v6 has
+scouted an event in parallel with v5 without losing data.
 
 ## 4. Working practices that keep it efficient
 
@@ -226,40 +264,44 @@ fixed, which is why Phase 0 items 4 and 5 come first.
 - **Keep the oracle honest.** When the rewrite deliberately diverges from legacy output
   (fixing F-1 to F-19), update the expected fixture in the same PR with a note citing the
   defect id.
-- **Students first.** Assign phase 1 (pure TypeScript, heavily tested) and phase 3 modules to
-  students; keep the session service and auth to whoever owns operations.
+- **One phase at a time** (decided 2026-11-19). Students are unlikely to build any phase before
+  the end of 2026; at most they review and give feedback. The maintainer builds the phases in
+  order, each finished to its exit criterion before the next begins, rather than running
+  phases in parallel; the exceptions are the pieces the date gates pull forward (section 3.1). Pure TypeScript with heavy tests (phase 1) and the phase 3 modules remain
+  the best places for students to join later.
 - **Time-box the stack decision.** If SSE proves awkward in the first week of phase 2, fall
   back to polling (answer 50 allows it) rather than adding a custom server.
 
 ## 5. Status and next steps
 
-Last updated 2026-09-17. Phase 0 items are numbered as in section 2.
+Last updated 2026-11-19. **Phase 0 is complete.** Items are numbered as in section 2.
 
-| #   | Phase 0 item                       | Status                                                                                                                                                                                                                                                      |
-| --- | ---------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 1   | Fixtures and the behavioral oracle | **Done.** 2025 golden output from tag `v4.2.0` and 2026 from v5 commit `902db06`, with TBA fixtures for both, in `tools/oracle/`.                                                                                                                           |
-| 2   | Synthetic TMP generator            | **Done.** Document 22: a headless model of the scouting rules driven by `match-scouting.json`, reproducible from a seed, validated against the data model, and renderable to the v5 shape for the oracle.                                                   |
-| 3   | Close the five open decisions      | **Done, 5 of 5.** Composite ids (document 20 §2.1), security model (ADR 0004), extension mechanism (ADR 0005), start rules (ADR 0006) and the manual schedule (kept, D-4) are all settled.                                                                  |
-| 4   | Configuration schema v2            | **Done.** PR #304, merged 2026-09-17: four JSON Schemas, types, Ajv validator, derived known ids, v1 → v2 converter, active 2026 config, 2025 example (document 20).                                                                                        |
-| 5   | Data model v2 and migration        | **Done.** Document 21: three document schemas, the placement logic, and the v5 to v6 migration with a CLI. Both real season exports migrate with no invalid documents and no unexplained action ids, and the duplicates it marks reconcile with the oracle. |
-| 6   | Scaffold with CI                   | **Done.** Commit `df772fa` on `v6`: Next.js, Tailwind, shadcn, Vitest, Playwright, GitHub Actions, no Docker.                                                                                                                                               |
-| 7   | Architecture decision records      | **Done.** `docs/adr/` holds six records: transport, hosting, configuration storage, authentication and privacy, extension model, scouter sessions and match start.                                                                                          |
-| 8   | Work tracking                      | Not started. No `v6` label, milestone or board.                                                                                                                                                                                                             |
+| #   | Phase 0 item                       | Status                                                                                                                                                                                                                                                                                                                                   |
+| --- | ---------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | Fixtures and the behavioral oracle | **Done.** 2025 golden output from tag `v4.2.0` and 2026 from v5 commit `902db06`, with TBA fixtures for both, in `tools/oracle/`.                                                                                                                                                                                                        |
+| 2   | Synthetic TMP generator            | **Done.** Document 22: a headless model of the scouting rules driven by `match-scouting.json`, reproducible from a seed, validated against the data model. Generated sets for both seasons have been run through the legacy pipelines (2026-11-19), so the oracle has synthetic golden output beside the real events (document 22 §3.1). |
+| 3   | Close the five open decisions      | **Done, 5 of 5.** Composite ids (document 20 §2.1), security model (ADR 0004), extension mechanism (ADR 0005), start rules (ADR 0006) and the manual schedule (kept, D-4) are all settled.                                                                                                                                               |
+| 4   | Configuration schema v2            | **Done.** PR #304: four JSON Schemas, types, Ajv validator, derived known ids, v1 → v2 converter, active 2026 config, 2025 example (document 20).                                                                                                                                                                                        |
+| 5   | Data model v2 and migration        | **Done.** Document 21: three document schemas, the placement logic, and the v5 to v6 migration with a CLI. Revised 2026-11-19 for issue #308: a robot is a string team key (`"2338B"`), not a number (DM-1a, BL-308).                                                                                                                    |
+| 6   | Scaffold with CI                   | **Done.** Commit `df772fa`: Next.js, Tailwind, shadcn, Vitest, Playwright, GitHub Actions, no Docker. Completed 2026-11-19 with the MongoDB driver and an in-memory MongoDB for tests (CI caches the binary), a theme seeded from the v5 palette in tweakcn format, and `deploy/aws`, `deploy/gcp` placeholders.                         |
+| 7   | Architecture decision records      | **Done.** `docs/adr/` holds six records: transport, hosting, configuration storage, authentication and privacy, extension model, scouter sessions and match start.                                                                                                                                                                       |
+| 8   | Work tracking                      | **Done** (2026-11-19). Labels `v6`, `v6-later` and `v6-superseded` classify every open issue as document 16 does; milestones "v6 Phase 1" to "v6 Phase 6" carry the in-scope issues by the phase table in section 3. No project board: with one developer, the labels and milestones are enough.                                         |
 
-Recommended order from here:
+Recommended order from here, toward gate K (section 3.1), seven weeks away on 2026-11-19:
 
-1. **Phase 1 can begin.** Every item it waited on is done: the configuration schema
-   (document 20), the data model and migration (document 21), the synthetic generator
-   (document 22) and the behavioral oracle. The engine has a fixed contract to build against
-   and two independent datasets, real and synthetic, to check itself against.
-2. **Work tracking** (item 8), the last open Phase 0 item alongside the manual-schedule
-   decision. It matters more than usual because students pick up phases 1 and 3.
-3. **Golden pipeline expectations** land with the engine: the generated dataset and its seed
-   become the fixture T-4 asks for, so a transformer change shows up as a diff.
+1. **Phase 1, the core engine (K-1).** Every item it waited on is done: the configuration
+   schema (document 20), the data model and migration (document 21), the synthetic generator
+   (document 22) and the behavioral oracle, now with four golden sets (two real events, two
+   synthetic). Start by breaking the phase into issues on its milestone, since only BL-31 is
+   there today. Golden pipeline expectations land with the engine: it runs over the migrated
+   real and synthetic inputs and must reproduce the legacy output, except where a defect in
+   document 12 is deliberately fixed (DM-1b's `null` for missing values is the first).
+2. **K-2 to K-5**, in that order, on top of the engine.
+3. **Then gate W** (about 2027-02-20): phase 2, the core of phase 3, and the event-critical part
+   of phase 4, about six weeks after kickoff.
 
-Every Phase 0 decision is now closed. The manual schedule is kept, so Phase 2 carries a
-schedule editor and Phase 4 carries no removal work; the schedule and the current match are
-persisted rather than held in memory, which restarts needed regardless.
+Section 2 assumed about 15 weeks to kickoff and a team of students; the gates replace that
+assumption.
 
 ### 5.1 The two blocking decisions, as settled on 2026-09-17
 
@@ -295,8 +337,9 @@ issue-34 "someone else started" rule, off by default. Reconnection gets its own 
 (T-6a).
 
 **Data model choices** (decided 2026-09-17, recorded against document 03). A missing value is
-`null` everywhere, so modules render one thing as "No Data" (DM-1b). `robotNumber` is the FRC
-team number, a Number on every path (DM-1a). Every document carries `tenantId` from day one so
+`null` everywhere, so modules render one thing as "No Data" (DM-1b). A robot was to be the FRC
+team number as a Number on every path (DM-1a); revised 2026-11-19 to a string team key named
+`team`, so the "B" robots of off-season events fit (`"2338B"`, BL-308). Every document carries `tenantId` from day one so
 a hosted instance never has to migrate live scouting data (DM-7f). The migration covers the
 2025 and 2026 seasons only and is verified by re-running the oracle against migrated data
 (DM-7g). The QR payload gains a 16-bit configuration fingerprint so a code generated before a

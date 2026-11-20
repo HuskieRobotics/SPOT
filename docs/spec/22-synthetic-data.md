@@ -38,7 +38,9 @@ is that the same input produces the same output and that every code path is exer
   it renders to is one the configuration can derive. The generator asserts this itself and the
   CLI exits non-zero if it ever fails, because a drifted walk makes a worthless fixture.
 - **SY-5** Timestamps are inside the match and never increase within a performance.
-- **SY-6** Each match has a full lineup of distinct robots.
+- **SY-6** Each match has a full lineup of distinct robots. `--b-teams n` adds `n` second
+  robots (`1741B`, …), as off-season events field them (BL-308); they cannot be rendered in the
+  v5 shape, so `--legacy` refuses them.
 - **SY-7** The walk is paced so a match plays out to the end. The remaining presses are spread
   over the remaining time, so the late phases get their share of actions instead of the match
   trailing off in the middle.
@@ -47,7 +49,7 @@ is that the same input produces the same output and that every code path is exer
 
 ```sh
 npm run generate -- --config config/match-scouting.json --out <dir> \
-                    [--seed preseason] [--matches 80] [--robots 6] [--legacy]
+                    [--seed preseason] [--matches 80] [--robots 6] [--b-teams 0] [--legacy]
 ```
 
 It writes the three v6 collections plus `report.json`. With `--legacy` it also writes the v5
@@ -68,11 +70,28 @@ The 2025 configuration works too, which is the useful check that the generator i
 configuration rather than by 2026 assumptions: no segments, no prefixes, two phases, and the
 raw button ids that season recorded.
 
+### 3.1 Synthetic oracle sets
+
+The legacy pipelines have been run over generated data (2026-11-19), so the oracle no longer
+rests on two real events alone. One set per season, sixty matches of six robots, fixed seeds:
+
+| Set                 | Configuration                  | Seed          | Legacy checkout | TMPs | Teams | Unknown ids |
+| ------------------- | ------------------------------ | ------------- | --------------- | ---- | ----- | ----------- |
+| `2025syn_synthetic` | `config/seasons/2025`          | `oracle-2025` | `v4.2.0`        | 360  | 48    | 0           |
+| `2026syn_synthetic` | `config/` (the 2026 v2 config) | `oracle-2026` | v5 (`902db06`)  | 360  | 48    | 183         |
+
+Inputs are in `tools/oracle/fixtures/synthetic/` (v5 shape) and output in
+`tools/oracle/golden/<set>-<checkout>/`; `tools/oracle/run-all.sh` regenerates both. A unit test
+fails if the generator no longer reproduces the committed inputs, so a generator change and its
+golden output have to land together. The 183 unknown ids are composite ids the v2 configuration
+explains but v5's hand-written enumeration never listed (F-4, document 17 §2); the legacy
+pipeline counts them anyway, so they are part of the expected output. Phase 1 runs the v6 engine
+over the same inputs, migrated to the v6 shape exactly as the real exports are, and compares.
+
 ## 4. What is still missing
 
-- **Golden expectations.** T-4 also asks for stored expected pipeline output so a transformer
-  change shows up in a diff. That needs the Phase 1 engine, and the generated dataset plus its
-  seed is what those expectations will be built from.
+- **v6 engine expectations.** The legacy golden output above is the target; the engine that
+  must reproduce it is Phase 1.
 - **Realistic behavior.** If a future test needs plausible robots rather than random ones, the
   place to add it is a weighting layer over button choice, not a rewrite: the walk already
   respects the rules.

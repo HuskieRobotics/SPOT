@@ -1,5 +1,5 @@
 {
-  "checkout": "/private/tmp/claude-501/-Users-geoff-GitHub-SPOT/498cb687-7cbc-4b23-b955-2fae4a5f1393/scratchpad/spot-v5",
+  "checkout": "spot-v5",
   "checkoutCommit": "902db06",
   "eventCode": "2026mnwi_official",
   "eventId": "69a5ac455b39b683634e795e",
@@ -313,7 +313,6 @@
       "name": "zoneActionRatingGroupings"
     }
   ],
-  "pipelineMs": 611,
   "pipelineEntries": 74,
   "teamCount": 48,
   "derivedTmpCount": 413,

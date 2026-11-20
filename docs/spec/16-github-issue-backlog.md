@@ -1,7 +1,7 @@
 # 16 — GitHub Issue Backlog as Feature Candidates
 
 Source: the 41 open issues on `HuskieRobotics/SPOT` as of 2026-09-17, read in full including
-comments. Each issue is classified for the rewrite as one of:
+comments, plus #308 (opened 2026-10-24). Each issue is classified for the rewrite as one of:
 
 - **core** — should be a requirement of the rewrite itself (either it is a defect the rewrite
   naturally fixes, or a small feature that is cheaper to build in than to retrofit);
@@ -65,11 +65,12 @@ Backlog requirement ids are `BL-<issue number>` so they can be traced to GitHub.
 
 ## F. Platform, hosting, and telemetry
 
-| Issue | Summary                                                                                                                    | Class              | Requirement                                                                                                                                                          |
-| ----- | -------------------------------------------------------------------------------------------------------------------------- | ------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| #197  | **Hosted SPOT for other teams**: multi-tenant instance with per-team databases and, later, per-team uploaded JSON configs. | next (design hook) | **BL-197** Configuration and data access SHOULD be scoped by a tenant/team key from day one (even if only one tenant exists) so multi-tenancy is an additive change. |
-| #91   | Opt-in anonymous usage tracking configured in setup.                                                                       | next               | **BL-91** Setup wizard SHOULD include an opt-in telemetry toggle; off by default.                                                                                    |
-| #79   | AWS AMI local MongoDB not starting.                                                                                        | drop               | AMI path retired (answer 44); MongoDB Atlas on all clouds (answer 48).                                                                                               |
+| Issue | Summary                                                                                                                                                                              | Class              | Requirement                                                                                                                                                                            |
+| ----- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| #197  | **Hosted SPOT for other teams**: multi-tenant instance with per-team databases and, later, per-team uploaded JSON configs.                                                           | next (design hook) | **BL-197** Configuration and data access SHOULD be scoped by a tenant/team key from day one (even if only one tenant exists) so multi-tenancy is an additive change.                   |
+| #91   | Opt-in anonymous usage tracking configured in setup.                                                                                                                                 | next               | **BL-91** Setup wizard SHOULD include an opt-in telemetry toggle; off by default.                                                                                                      |
+| #308  | **"B" teams** such as `2338B` at off-season events (Roboteer Rumble, 2026): v5 typed `robotNumber` as a Number, the analysis page broke on the path, and the data had to be deleted. | core               | **BL-308** A robot MUST be identified by a string team key that allows a one-letter suffix, on every path including the QR payload (DM-1a, DM-15c). Done in the data model 2026-11-19. |
+| #79   | AWS AMI local MongoDB not starting.                                                                                                                                                  | drop               | AMI path retired (answer 44); MongoDB Atlas on all clouds (answer 48).                                                                                                                 |
 
 ## G. Code hygiene (superseded by the rewrite)
 
@@ -82,6 +83,6 @@ Backlog requirement ids are `BL-<issue number>` so they can be traced to GitHub.
 ## Suggested inclusion in the rewrite scope
 
 Core for the rewrite: BL-298, BL-230, BL-93, BL-60, BL-54, BL-34, BL-43, BL-7, BL-299,
-BL-31, BL-116, BL-33. Design hooks to leave in place: BL-195 (`scouters` dataset), BL-208
+BL-31, BL-116, BL-33, BL-308. Design hooks to leave in place: BL-195 (`scouters` dataset), BL-208
 (flag metadata), BL-35/BL-193 (notes and tags on TMP), BL-221 (pit scouting document),
 BL-197 (tenant scoping), BL-91 (telemetry toggle). Everything else is post-rewrite.
