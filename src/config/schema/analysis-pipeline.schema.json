@@ -7,8 +7,12 @@
   "additionalProperties": false,
   "required": ["version", "enrichment", "pipeline"],
   "properties": {
-    "$schema": { "type": "string" },
-    "version": { "const": 2 },
+    "$schema": {
+      "type": "string"
+    },
+    "version": {
+      "const": 2
+    },
     "enrichment": {
       "type": "object",
       "additionalProperties": false,
@@ -24,24 +28,35 @@
               "additionalProperties": false,
               "required": ["enabled", "prefixes"],
               "properties": {
-                "enabled": { "type": "boolean" },
+                "enabled": {
+                  "type": "boolean"
+                },
                 "prefixes": {
                   "type": "array",
-                  "items": { "type": "string" },
+                  "items": {
+                    "type": "string"
+                  },
                   "description": "Score-breakdown keys starting with one of these and ending with the robot slot become synthetic actions '<key minus slot>_<value>'."
                 }
               }
             },
             "componentOprs": {
               "type": "array",
-              "items": { "type": "string" },
+              "items": {
+                "type": "string"
+              },
               "description": "TBA component-OPR names attached to each team as opr.<name>."
             }
           }
         }
       }
     },
-    "pipeline": { "type": "array", "items": { "$ref": "#/$defs/entry" } }
+    "pipeline": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/entry"
+      }
+    }
   },
   "$defs": {
     "path": {
@@ -50,182 +65,457 @@
       "pattern": "^\\S(.*\\S)?$",
       "description": "Dot-separated object path (no leading/trailing whitespace)."
     },
-    "pathList": { "type": "array", "items": { "$ref": "#/$defs/path" } },
+    "pathList": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/path"
+      }
+    },
     "pathOrNumberList": {
       "type": "array",
-      "items": { "anyOf": [{ "$ref": "#/$defs/path" }, { "type": "number" }] }
+      "items": {
+        "anyOf": [
+          {
+            "$ref": "#/$defs/path"
+          },
+          {
+            "type": "number"
+          }
+        ]
+      }
     },
-    "idList": { "type": "array", "items": { "type": "string" } },
+    "idList": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
     "entry": {
       "type": "object",
       "additionalProperties": false,
       "required": ["type", "name", "outputPath"],
       "properties": {
-        "type": { "enum": ["tmp", "team"] },
-        "name": { "type": "string", "pattern": "^[A-Za-z][A-Za-z0-9_]*$" },
-        "outputPath": { "$ref": "#/$defs/path" },
-        "options": { "type": "object" },
-        "comment": { "type": "string" }
+        "type": {
+          "enum": ["tmp", "team"]
+        },
+        "name": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_]*$"
+        },
+        "outputPath": {
+          "$ref": "#/$defs/path"
+        },
+        "options": {
+          "type": "object"
+        },
+        "comment": {
+          "type": "string"
+        }
       },
       "allOf": [
         {
-          "if": { "properties": { "name": { "const": "countActions" } } },
+          "if": {
+            "properties": {
+              "name": {
+                "const": "countActions"
+              }
+            }
+          },
           "then": {
-            "properties": { "options": { "$ref": "#/$defs/options/countActions" } },
+            "properties": {
+              "options": {
+                "$ref": "#/$defs/options/countActions"
+              }
+            },
             "required": ["options"]
           }
         },
         {
-          "if": { "properties": { "name": { "const": "sum" } } },
+          "if": {
+            "properties": {
+              "name": {
+                "const": "sum"
+              }
+            }
+          },
           "then": {
-            "properties": { "options": { "$ref": "#/$defs/options/sum" } },
+            "properties": {
+              "options": {
+                "$ref": "#/$defs/options/sum"
+              }
+            },
             "required": ["options"]
           }
         },
         {
-          "if": { "properties": { "name": { "const": "subtract" } } },
+          "if": {
+            "properties": {
+              "name": {
+                "const": "subtract"
+              }
+            }
+          },
           "then": {
-            "properties": { "options": { "$ref": "#/$defs/options/subtract" } },
+            "properties": {
+              "options": {
+                "$ref": "#/$defs/options/subtract"
+              }
+            },
             "required": ["options"]
           }
         },
         {
-          "if": { "properties": { "name": { "const": "multiply" } } },
+          "if": {
+            "properties": {
+              "name": {
+                "const": "multiply"
+              }
+            }
+          },
           "then": {
-            "properties": { "options": { "$ref": "#/$defs/options/multiply" } },
+            "properties": {
+              "options": {
+                "$ref": "#/$defs/options/multiply"
+              }
+            },
             "required": ["options"]
           }
         },
         {
-          "if": { "properties": { "name": { "const": "ratio" } } },
+          "if": {
+            "properties": {
+              "name": {
+                "const": "ratio"
+              }
+            }
+          },
           "then": {
-            "properties": { "options": { "$ref": "#/$defs/options/ratio" } },
+            "properties": {
+              "options": {
+                "$ref": "#/$defs/options/ratio"
+              }
+            },
             "required": ["options"]
           }
         },
         {
-          "if": { "properties": { "name": { "const": "weightedSum" } } },
+          "if": {
+            "properties": {
+              "name": {
+                "const": "weightedSum"
+              }
+            }
+          },
           "then": {
-            "properties": { "options": { "$ref": "#/$defs/options/weightedSum" } },
+            "properties": {
+              "options": {
+                "$ref": "#/$defs/options/weightedSum"
+              }
+            },
             "required": ["options"]
           }
         },
         {
-          "if": { "properties": { "name": { "const": "weightedSumAverage" } } },
+          "if": {
+            "properties": {
+              "name": {
+                "const": "weightedSumAverage"
+              }
+            }
+          },
           "then": {
-            "properties": { "options": { "$ref": "#/$defs/options/weightedSumAverage" } },
+            "properties": {
+              "options": {
+                "$ref": "#/$defs/options/weightedSumAverage"
+              }
+            },
             "required": ["options"]
           }
         },
         {
-          "if": { "properties": { "name": { "const": "sumAverage" } } },
+          "if": {
+            "properties": {
+              "name": {
+                "const": "sumAverage"
+              }
+            }
+          },
           "then": {
-            "properties": { "options": { "$ref": "#/$defs/options/sumAverage" } },
+            "properties": {
+              "options": {
+                "$ref": "#/$defs/options/sumAverage"
+              }
+            },
             "required": ["options"]
           }
         },
         {
-          "if": { "properties": { "name": { "const": "average" } } },
+          "if": {
+            "properties": {
+              "name": {
+                "const": "average"
+              }
+            }
+          },
           "then": {
-            "properties": { "options": { "$ref": "#/$defs/options/pathOnly" } },
+            "properties": {
+              "options": {
+                "$ref": "#/$defs/options/pathOnly"
+              }
+            },
             "required": ["options"]
           }
         },
         {
-          "if": { "properties": { "name": { "const": "averageTime" } } },
+          "if": {
+            "properties": {
+              "name": {
+                "const": "averageTime"
+              }
+            }
+          },
           "then": {
-            "properties": { "options": { "$ref": "#/$defs/options/pathOnly" } },
+            "properties": {
+              "options": {
+                "$ref": "#/$defs/options/pathOnly"
+              }
+            },
             "required": ["options"]
           }
         },
         {
-          "if": { "properties": { "name": { "const": "deepAverage" } } },
+          "if": {
+            "properties": {
+              "name": {
+                "const": "deepAverage"
+              }
+            }
+          },
           "then": {
-            "properties": { "options": { "$ref": "#/$defs/options/pathOnly" } },
+            "properties": {
+              "options": {
+                "$ref": "#/$defs/options/pathOnly"
+              }
+            },
             "required": ["options"]
           }
         },
         {
-          "if": { "properties": { "name": { "const": "aggregateArray" } } },
+          "if": {
+            "properties": {
+              "name": {
+                "const": "aggregateArray"
+              }
+            }
+          },
           "then": {
-            "properties": { "options": { "$ref": "#/$defs/options/pathOnly" } },
+            "properties": {
+              "options": {
+                "$ref": "#/$defs/options/pathOnly"
+              }
+            },
             "required": ["options"]
           }
         },
         {
-          "if": { "properties": { "name": { "const": "standardDeviation" } } },
+          "if": {
+            "properties": {
+              "name": {
+                "const": "standardDeviation"
+              }
+            }
+          },
           "then": {
-            "properties": { "options": { "$ref": "#/$defs/options/pathOnly" } },
+            "properties": {
+              "options": {
+                "$ref": "#/$defs/options/pathOnly"
+              }
+            },
             "required": ["options"]
           }
         },
         {
-          "if": { "properties": { "name": { "const": "averageArray" } } },
+          "if": {
+            "properties": {
+              "name": {
+                "const": "averageArray"
+              }
+            }
+          },
           "then": {
-            "properties": { "options": { "$ref": "#/$defs/options/averageArray" } },
+            "properties": {
+              "options": {
+                "$ref": "#/$defs/options/averageArray"
+              }
+            },
             "required": ["options"]
           }
         },
         {
-          "if": { "properties": { "name": { "const": "countMatches" } } },
-          "then": { "properties": { "options": { "$ref": "#/$defs/options/countMatches" } } }
+          "if": {
+            "properties": {
+              "name": {
+                "const": "countMatches"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "options": {
+                "$ref": "#/$defs/options/countMatches"
+              }
+            }
+          }
         },
         {
-          "if": { "properties": { "name": { "const": "actionTime" } } },
+          "if": {
+            "properties": {
+              "name": {
+                "const": "actionTime"
+              }
+            }
+          },
           "then": {
-            "properties": { "options": { "$ref": "#/$defs/options/actionTime" } },
+            "properties": {
+              "options": {
+                "$ref": "#/$defs/options/actionTime"
+              }
+            },
             "required": ["options"]
           }
         },
         {
-          "if": { "properties": { "name": { "const": "actionTimeFilter" } } },
-          "then": { "properties": { "options": { "$ref": "#/$defs/options/actionTimeFilter" } } }
+          "if": {
+            "properties": {
+              "name": {
+                "const": "actionTimeFilter"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "options": {
+                "$ref": "#/$defs/options/actionTimeFilter"
+              }
+            }
+          }
         },
         {
-          "if": { "properties": { "name": { "const": "finalActionOccurrence" } } },
+          "if": {
+            "properties": {
+              "name": {
+                "const": "finalActionOccurrence"
+              }
+            }
+          },
           "then": {
-            "properties": { "options": { "$ref": "#/$defs/options/finalActionOccurrence" } },
+            "properties": {
+              "options": {
+                "$ref": "#/$defs/options/finalActionOccurrence"
+              }
+            },
             "required": ["options"]
           }
         },
         {
-          "if": { "properties": { "name": { "const": "map" } } },
+          "if": {
+            "properties": {
+              "name": {
+                "const": "map"
+              }
+            }
+          },
           "then": {
-            "properties": { "options": { "$ref": "#/$defs/options/map" } },
+            "properties": {
+              "options": {
+                "$ref": "#/$defs/options/map"
+              }
+            },
             "required": ["options"]
           }
         },
         {
-          "if": { "properties": { "name": { "const": "cycle" } } },
+          "if": {
+            "properties": {
+              "name": {
+                "const": "cycle"
+              }
+            }
+          },
           "then": {
-            "properties": { "options": { "$ref": "#/$defs/options/cycle" } },
+            "properties": {
+              "options": {
+                "$ref": "#/$defs/options/cycle"
+              }
+            },
             "required": ["options"]
           }
         },
         {
-          "if": { "properties": { "name": { "const": "countHybrid" } } },
+          "if": {
+            "properties": {
+              "name": {
+                "const": "countHybrid"
+              }
+            }
+          },
           "then": {
-            "properties": { "options": { "$ref": "#/$defs/options/countHybrid" } },
+            "properties": {
+              "options": {
+                "$ref": "#/$defs/options/countHybrid"
+              }
+            },
             "required": ["options"]
           }
         },
         {
-          "if": { "properties": { "name": { "const": "threshold" } } },
+          "if": {
+            "properties": {
+              "name": {
+                "const": "threshold"
+              }
+            }
+          },
           "then": {
-            "properties": { "options": { "$ref": "#/$defs/options/threshold" } },
+            "properties": {
+              "options": {
+                "$ref": "#/$defs/options/threshold"
+              }
+            },
             "required": ["options"]
           }
         },
         {
-          "if": { "properties": { "name": { "const": "removeDuplicates" } } },
+          "if": {
+            "properties": {
+              "name": {
+                "const": "removeDuplicates"
+              }
+            }
+          },
           "then": {
-            "properties": { "options": { "type": "object", "additionalProperties": false } }
+            "properties": {
+              "options": {
+                "type": "object",
+                "additionalProperties": false
+              }
+            }
           }
         },
         {
-          "if": { "properties": { "name": { "const": "zoneActionRatingGroupings" } } },
+          "if": {
+            "properties": {
+              "name": {
+                "const": "zoneActionRatingGroupings"
+              }
+            }
+          },
           "then": {
-            "properties": { "options": { "$ref": "#/$defs/options/zoneActionRatingGroupings" } },
+            "properties": {
+              "options": {
+                "$ref": "#/$defs/options/zoneActionRatingGroupings"
+              }
+            },
             "required": ["options"]
           }
         }
@@ -236,25 +526,62 @@
         "type": "object",
         "additionalProperties": false,
         "properties": {
-          "all": { "type": "boolean" },
-          "ids": { "$ref": "#/$defs/idList" },
-          "actionArrayPath": { "$ref": "#/$defs/path" }
+          "all": {
+            "type": "boolean",
+            "description": "Count every action. Every action button starts at 0; ids the configuration does not know are counted too."
+          },
+          "ids": {
+            "$ref": "#/$defs/idList",
+            "description": "Count only these button ids, each starting at 0."
+          },
+          "actionArrayPath": {
+            "$ref": "#/$defs/path",
+            "description": "Path to the list of actions to count. Default: actions."
+          },
+          "phases": {
+            "$ref": "#/$defs/periodFilter/properties/phases"
+          },
+          "segments": {
+            "$ref": "#/$defs/periodFilter/properties/segments"
+          },
+          "kinds": {
+            "$ref": "#/$defs/periodFilter/properties/kinds"
+          },
+          "by": {
+            "enum": ["phase", "segment"],
+            "description": "Split the counts by period: by phase (auto, teleop, endgame, preMatch) or by the most specific period (transition, active1, ...)."
+          }
         },
-        "anyOf": [{ "required": ["all"] }, { "required": ["ids"] }]
+        "anyOf": [
+          {
+            "required": ["all"]
+          },
+          {
+            "required": ["ids"]
+          }
+        ]
       },
       "sum": {
         "type": "object",
         "additionalProperties": false,
         "required": ["addends"],
-        "properties": { "addends": { "$ref": "#/$defs/pathList" } }
+        "properties": {
+          "addends": {
+            "$ref": "#/$defs/pathList"
+          }
+        }
       },
       "subtract": {
         "type": "object",
         "additionalProperties": false,
         "required": ["minuend", "subtrahend"],
         "properties": {
-          "minuend": { "$ref": "#/$defs/path" },
-          "subtrahend": { "$ref": "#/$defs/path" }
+          "minuend": {
+            "$ref": "#/$defs/path"
+          },
+          "subtrahend": {
+            "$ref": "#/$defs/path"
+          }
         }
       },
       "multiply": {
@@ -266,17 +593,25 @@
             "type": "array",
             "items": {
               "anyOf": [
-                { "$ref": "#/$defs/path" },
+                {
+                  "$ref": "#/$defs/path"
+                },
                 {
                   "type": "object",
                   "additionalProperties": false,
                   "required": ["path"],
-                  "properties": { "path": { "$ref": "#/$defs/path" } }
+                  "properties": {
+                    "path": {
+                      "$ref": "#/$defs/path"
+                    }
+                  }
                 }
               ]
             }
           },
-          "weight": { "type": "number" }
+          "weight": {
+            "type": "number"
+          }
         }
       },
       "ratio": {
@@ -284,8 +619,12 @@
         "additionalProperties": false,
         "required": ["numerator", "denominator"],
         "properties": {
-          "numerator": { "$ref": "#/$defs/pathOrNumberList" },
-          "denominator": { "$ref": "#/$defs/pathOrNumberList" },
+          "numerator": {
+            "$ref": "#/$defs/pathOrNumberList"
+          },
+          "denominator": {
+            "$ref": "#/$defs/pathOrNumberList"
+          },
           "divByZero": {}
         }
       },
@@ -294,17 +633,36 @@
         "additionalProperties": false,
         "required": ["weightedPaths"],
         "properties": {
-          "weightedPaths": { "type": "object", "additionalProperties": { "type": "number" } }
+          "weightedPaths": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "number"
+            }
+          }
         }
       },
       "weightedSumAverage": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
-          "weightedPaths": { "type": "object", "additionalProperties": { "type": "number" } },
-          "path": { "$ref": "#/$defs/path" }
+          "weightedPaths": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "number"
+            }
+          },
+          "path": {
+            "$ref": "#/$defs/path"
+          }
         },
-        "anyOf": [{ "required": ["weightedPaths"] }, { "required": ["path"] }]
+        "anyOf": [
+          {
+            "required": ["weightedPaths"]
+          },
+          {
+            "required": ["path"]
+          }
+        ]
       },
       "sumAverage": {
         "type": "object",
@@ -318,8 +676,12 @@
               "additionalProperties": false,
               "required": ["averagePath"],
               "properties": {
-                "averagePath": { "$ref": "#/$defs/path" },
-                "countPaths": { "$ref": "#/$defs/pathList" }
+                "averagePath": {
+                  "$ref": "#/$defs/path"
+                },
+                "countPaths": {
+                  "$ref": "#/$defs/pathList"
+                }
               }
             }
           }
@@ -329,28 +691,49 @@
         "type": "object",
         "additionalProperties": false,
         "required": ["path"],
-        "properties": { "path": { "$ref": "#/$defs/path" } }
+        "properties": {
+          "path": {
+            "$ref": "#/$defs/path"
+          }
+        }
       },
       "averageArray": {
         "type": "object",
         "additionalProperties": false,
         "required": ["arrayPath", "valuePath"],
         "properties": {
-          "arrayPath": { "$ref": "#/$defs/path" },
-          "valuePath": { "$ref": "#/$defs/path" }
+          "arrayPath": {
+            "$ref": "#/$defs/path"
+          },
+          "valuePath": {
+            "$ref": "#/$defs/path"
+          }
         }
       },
       "countMatches": {
         "type": "object",
         "additionalProperties": false,
-        "properties": { "weight": { "type": "number" } }
+        "properties": {
+          "weight": {
+            "type": "number"
+          }
+        }
       },
       "actionTime": {
         "type": "object",
         "additionalProperties": false,
         "required": ["actionId"],
         "properties": {
-          "actionId": { "anyOf": [{ "type": "string" }, { "$ref": "#/$defs/idList" }] },
+          "actionId": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/$defs/idList"
+              }
+            ]
+          },
           "default": {}
         }
       },
@@ -358,8 +741,12 @@
         "type": "object",
         "additionalProperties": false,
         "properties": {
-          "timeMin": { "type": "number" },
-          "timeMax": { "type": "number" },
+          "timeMin": {
+            "type": "number"
+          },
+          "timeMax": {
+            "type": "number"
+          },
           "default": {}
         }
       },
@@ -368,25 +755,42 @@
         "additionalProperties": false,
         "required": ["ids"],
         "properties": {
-          "ids": { "$ref": "#/$defs/idList" },
+          "ids": {
+            "$ref": "#/$defs/idList"
+          },
           "default": {},
-          "actionArrayPath": { "$ref": "#/$defs/path" }
+          "actionArrayPath": {
+            "$ref": "#/$defs/path"
+          }
         }
       },
       "map": {
         "type": "object",
         "additionalProperties": false,
         "required": ["path", "map"],
-        "properties": { "path": { "$ref": "#/$defs/path" }, "map": { "type": "object" } }
+        "properties": {
+          "path": {
+            "$ref": "#/$defs/path"
+          },
+          "map": {
+            "type": "object"
+          }
+        }
       },
       "cycle": {
         "type": "object",
         "additionalProperties": false,
         "required": ["startAction", "endAction"],
         "properties": {
-          "startAction": { "$ref": "#/$defs/idList" },
-          "endAction": { "$ref": "#/$defs/idList" },
-          "misses": { "$ref": "#/$defs/idList" }
+          "startAction": {
+            "$ref": "#/$defs/idList"
+          },
+          "endAction": {
+            "$ref": "#/$defs/idList"
+          },
+          "misses": {
+            "$ref": "#/$defs/idList"
+          }
         }
       },
       "countHybrid": {
@@ -394,9 +798,15 @@
         "additionalProperties": false,
         "required": ["pickup", "hybrid"],
         "properties": {
-          "pickup": { "$ref": "#/$defs/idList" },
-          "hybrid": { "$ref": "#/$defs/idList" },
-          "actionArrayPath": { "$ref": "#/$defs/path" }
+          "pickup": {
+            "$ref": "#/$defs/idList"
+          },
+          "hybrid": {
+            "$ref": "#/$defs/idList"
+          },
+          "actionArrayPath": {
+            "$ref": "#/$defs/path"
+          }
         }
       },
       "threshold": {
@@ -404,10 +814,21 @@
         "additionalProperties": false,
         "required": ["paths"],
         "properties": {
-          "paths": { "type": "object", "additionalProperties": { "type": "string" } },
-          "threshold": { "type": "number" },
-          "separator": { "type": "string" },
-          "none": { "type": "string" }
+          "paths": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "threshold": {
+            "type": "number"
+          },
+          "separator": {
+            "type": "string"
+          },
+          "none": {
+            "type": "string"
+          }
         }
       },
       "zoneActionRatingGroupings": {
@@ -415,9 +836,33 @@
         "additionalProperties": false,
         "required": ["zones", "actions", "ratings"],
         "properties": {
-          "zones": { "$ref": "#/$defs/idList" },
-          "actions": { "$ref": "#/$defs/idList" },
-          "ratings": { "$ref": "#/$defs/idList" }
+          "zones": {
+            "$ref": "#/$defs/idList"
+          },
+          "actions": {
+            "$ref": "#/$defs/idList"
+          },
+          "ratings": {
+            "$ref": "#/$defs/idList"
+          }
+        }
+      }
+    },
+    "periodFilter": {
+      "description": "Count or select only actions recorded in these periods (CS-16). An action must pass every filter given; within one filter, any listed id matches.",
+      "type": "object",
+      "properties": {
+        "phases": {
+          "$ref": "#/$defs/idList",
+          "description": "Phase ids from match-scouting.json, or \"preMatch\" for actions recorded before the match started."
+        },
+        "segments": {
+          "$ref": "#/$defs/idList",
+          "description": "Segment ids from match-scouting.json, such as \"transition\" or \"shift\"."
+        },
+        "kinds": {
+          "$ref": "#/$defs/idList",
+          "description": "Segment kind ids, such as \"active\" or \"inactive\": the kind the scouter selected, or a kind the configuration fixes for a whole period (#326)."
         }
       }
     }

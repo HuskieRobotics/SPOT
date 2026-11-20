@@ -202,10 +202,22 @@ a composite id was simply the button id.
 1. The pipeline sees actions as stored (document 21, DV-1): `id` is the button id, and the
    period is data (`phase`, `segment`, `segmentKind`, `segmentIndex`). v6 field names are used
    throughout (`team`, `submittedAt`, `actions`).
-2. Per-period analysis is expressed with transformer options: filters (count only actions in
-   these phases or segments) and grouping (count by phase, or by segment, giving paths such as
-   `counts.teleop.StopShooting`). The exact option names and output shapes are designed with
-   the engine in Phase 1 and validated by the pipeline schema.
+2. Per-period analysis is expressed with transformer options (named 2026-11-19, #311):
+   - **Filters**, on every transformer that picks actions by id: `phases`, `segments`,
+     `kinds`, each a list of configuration ids. An action must pass every filter given;
+     within one filter, any listed id matches. `"preMatch"` selects actions recorded before the
+     match started. `kinds` matches an action's **effective kind** (decided 2026-11-19, built
+     in #326): the kind the scouter selected, else a kind the configuration fixes for the
+     action's segment or phase. In 2026 the hub is active for both alliances in auto, the
+     transition and endgame, so those periods are configured `"kind": "active"` and
+     `kinds: ["active"]` means "while our hub was active", in one entry.
+   - **Grouping**, on `countActions`: `by: "phase"` gives one count object per phase
+     (`counts.auto.l4`, `counts.teleop.l4`, `counts.preMatch.l4`), the usual need.
+     `by: "segment"` gives the most specific period: the selected kind or else the segment,
+     followed by the repeat index when the segment repeats (`counts.active1.StopShooting`,
+     `counts.shift3.…` while no kind is selected, `counts.transition.…`), and the phase id
+     outside any segment. Keys come from configuration ids, never prefixes; ids that would give
+     two periods one key are an error, and `preMatch` is reserved.
 3. Composite ids survive in three places only: the v5 → v6 migration, which splits them; the
    legacy export (`toLegacyPerformance`), which rebuilds them for the legacy pipeline; and the
    2026 oracle comparison.
