@@ -135,13 +135,11 @@ size: whether a value varies between teams, has the right unit and ends up where
 expects it. Magnitudes are not realistic; 2025's "Leave" exceeds 100% because the walk can press
 the leave button more than once a match.
 
-**A page, or the terminal? (recommendation, to be confirmed on #318)**
-The terminal preview is enough until the
-Phase 3 team view (gate W-2). That view already has to render every module from a dataset,
-client-side, with the same engine (ADR 0005). The generator and the preview are pure TypeScript,
-so the cheapest page is a "generated event" option in that view, which shows the real modules
-with nothing new to maintain. A separate page before kickoff would be thrown away when the team
-view arrives.
+**Decided 2026-11-20 (#318): the terminal preview is enough.** No preview page is built before
+kickoff. If a page is wanted later, the cheapest one is a "generated event" option in the Phase 3
+team view (gate W-2): that view renders every module from a dataset in the browser with the same
+engine (ADR 0005), and the generator and the preview are pure TypeScript, so it would show the
+real modules with nothing new to maintain.
 
 ## 4. What is still missing
 
