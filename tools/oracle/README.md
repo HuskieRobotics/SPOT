@@ -86,6 +86,26 @@ longer reproduces the committed synthetic inputs; after a deliberate generator c
   (`unknownActionIds`). Current `countActions(all)` counts such ids; the 2025-era code
   ignored them (decision: the rewrite keeps current behavior).
 
+## Comparing the v6 engine (#310)
+
+`tools/oracle/compare.ts` migrates a set's legacy input to v6 documents, runs the v6 engine with
+the set's v2 configuration (`sets.ts`), and compares every derived value with the golden files,
+leaf by leaf. Stored fields are not compared. Each difference is attributed to the pipeline entry
+whose `outputPath` covers it.
+
+```sh
+npm run oracle:compare                          # every set
+npm run oracle:compare -- 2025ilch_official-v4.2.0 --entries --diffs 20
+```
+
+Expected differences live in `divergences.json`, never in the golden files. Each rule names
+the legacy values it accepts, the value v6 must produce instead, optionally the sets and output
+paths it applies to, and the requirement or defect behind it (DM-1b's `null`, for example).
+
+`tests/unit/oracle-compare.test.ts` checks every set's structure. For the 2025 sets it also acts
+as a ratchet: any entry that runs without problems must match. The 2026 sets join the ratchet when
+their composite-id paths are translated (#320, CS-16).
+
 ## What the rewrite must match
 
 - 2025: `teams.json` and derived `tmps.json` exactly, except at paths affected by

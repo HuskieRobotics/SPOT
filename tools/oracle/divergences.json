@@ -1,0 +1,44 @@
+{
+  "description": "Expected differences between the legacy golden output and the v6 engine. The golden files are never edited; a difference is accepted only when a rule below matches it, and every rule cites the requirement or defect that makes v6 differ. Read by tools/oracle/compare.ts. 'legacy' lists the golden values (as written by run.js), 'v6' is the value v6 must produce instead, and 'paths' (optional) limits a rule to output paths matching these patterns, where * matches one path segment and ** any number.",
+  "rules": [
+    {
+      "id": "missing-nan",
+      "cites": "DM-1b, D-7a",
+      "why": "A missing value is null in v6. v5 wrote NaN, mostly for averages over no values.",
+      "legacy": ["__NaN__"],
+      "v6": null
+    },
+    {
+      "id": "missing-undefined",
+      "cites": "DM-1b, D-7a",
+      "why": "A missing value is null in v6. v5 wrote undefined, for example an OPR a team does not have.",
+      "legacy": ["__undefined__"],
+      "v6": null
+    },
+    {
+      "id": "missing-infinity",
+      "cites": "DM-1b, D-7a",
+      "why": "A missing value is null in v6. v5 could produce Infinity from a division by zero.",
+      "legacy": ["__Infinity__", "__-Infinity__"],
+      "v6": null
+    },
+    {
+      "id": "ratio-falsy-divbyzero-2025",
+      "cites": "F-24",
+      "why": "The 2025 accuracy ratios configure divByZero: 0, but v5's team ratio wrote divByZero || \"N/A\", so 0 became \"N/A\". v6 writes the configured 0, which ranks a team that never scored last.",
+      "sets": ["2025ilch_official-v4.2.0", "2025syn_synthetic-v4.2.0"],
+      "paths": ["algaeAccuracy", "coralAccuracy"],
+      "legacy": ["N/A"],
+      "v6": 0
+    },
+    {
+      "id": "ratio-misplaced-divbyzero-2025",
+      "cites": "F-25, CS-11",
+      "why": "The 2025 pipeline put divByZero: 150000 beside options instead of inside them, so v5 ignored it and wrote \"N/A\". The v1 → v2 converter moves it into options, so v6 writes the full-match time the configuration asked for.",
+      "sets": ["2025ilch_official-v4.2.0", "2025syn_synthetic-v4.2.0"],
+      "paths": ["timePerGamePiece"],
+      "legacy": ["N/A"],
+      "v6": 150000
+    }
+  ]
+}

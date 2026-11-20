@@ -27,9 +27,11 @@ Do not re-ask the questions in `14-clarifying-questions.md`; they are answered.
 - The legacy code is reference, not a template. Read `main` (or the `v5` branch) to answer
   "what did it do"; never port a file line by line.
 - The behavioral oracle in `tools/oracle/` is the acceptance target for the analysis
-  pipeline: 2025 golden output from tag `v4.2.0`, 2026 from the legacy v5 code (`main` commit `902db06`). When the rewrite
-  deliberately diverges (fixing a defect listed in doc 12), update the expected fixture in
-  the same PR and cite the defect id.
+  pipeline: 2025 golden output from tag `v4.2.0`, 2026 from the legacy v5 code (`main` commit `902db06`), plus
+  synthetic sets for both seasons. When the rewrite deliberately diverges (fixing a defect
+  listed in doc 12), add a rule to `tools/oracle/divergences.json` in the same PR, citing the
+  defect id; the golden files are never edited. `npm run oracle:compare` shows where the engine
+  stands.
 - Configuration (JSON) is the platform's public interface and must stay usable by students
   without programming experience. Legacy v1 configs are in `config/v1/` for the converter
   and validation tests.
@@ -50,6 +52,7 @@ npm test             # vitest (unit, config validation, oracle fixture checks)
 npm run build && npm start
 npm run test:e2e     # playwright (expects a built app; see playwright.config.ts)
 npm run oracle -- <v4.2.0-worktree> <v5-worktree>   # regenerate golden outputs
+npm run oracle:compare -- [set ...] [--entries]       # v6 engine vs golden outputs
 npm run config:convert -- config/v1 <out dir> [--opr-strings '<json>']   # v1 -> v2 config converter
 ```
 

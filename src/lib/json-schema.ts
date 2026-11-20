@@ -35,6 +35,37 @@ function describe(e: ErrorObject): ValidationIssue {
   return { path, message };
 }
 
+/**
+ * Turn Ajv's errors into plain-words issues: the anyOf/if-then fan-out is dropped, duplicates are
+ * removed, and the specific messages are kept.
+ */
+export function toIssues(errors: ErrorObject[] | null | undefined): ValidationIssue[] {
+  const seen = new Set<string>();
+  const issues: ValidationIssue[] = [];
+  for (const e of errors ?? []) {
+    if (e.keyword === "if" || e.keyword === "anyOf" || e.keyword === "not") continue;
+    const issue = describe(e);
+    const key = `${issue.path}::${issue.message}`;
+    if (!seen.has(key)) {
+      seen.add(key);
+      issues.push(issue);
+    }
+  }
+  return issues;
+}
+
+/** The Ajv settings every SPOT schema is compiled with. */
+export function createAjv(): Ajv2020 {
+  const ajv = new Ajv2020({
+    allErrors: true,
+    strict: true,
+    strictRequired: false,
+    allowUnionTypes: true,
+  });
+  addFormats(ajv);
+  return ajv;
+}
+
 export interface SchemaSet<K extends string> {
   getValidator(kind: K): ValidateFunction;
   validate(kind: K, data: unknown): ValidationResult;
@@ -46,15 +77,7 @@ export function createSchemaSet<K extends string>(schemas: Record<K, unknown>): 
   const compiled = new Map<K, ValidateFunction>();
 
   const getAjv = () => {
-    if (!ajv) {
-      ajv = new Ajv2020({
-        allErrors: true,
-        strict: true,
-        strictRequired: false,
-        allowUnionTypes: true,
-      });
-      addFormats(ajv);
-    }
+    if (!ajv) ajv = createAjv();
     return ajv;
   };
 
@@ -70,18 +93,7 @@ export function createSchemaSet<K extends string>(schemas: Record<K, unknown>): 
   const validate = (kind: K, data: unknown): ValidationResult => {
     const fn = getValidator(kind);
     if (fn(data) as boolean) return { ok: true, issues: [] };
-    // Deduplicate the anyOf/if-then fan-out; keep the specific messages.
-    const seen = new Set<string>();
-    const issues: ValidationIssue[] = [];
-    for (const e of fn.errors ?? []) {
-      if (e.keyword === "if" || e.keyword === "anyOf" || e.keyword === "not") continue;
-      const issue = describe(e);
-      const key = `${issue.path}::${issue.message}`;
-      if (!seen.has(key)) {
-        seen.add(key);
-        issues.push(issue);
-      }
-    }
+    const issues = toIssues(fn.errors);
     if (issues.length === 0)
       issues.push({ path: "(root)", message: getAjv().errorsText(fn.errors) });
     return { ok: false, issues };
