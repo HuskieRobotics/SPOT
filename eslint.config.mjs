@@ -12,8 +12,10 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
-    // Standalone Node scripts and legacy fixtures are not part of the app bundle.
-    "tools/**",
+    // The legacy oracle harness (plain Node, CommonJS) and its fixtures; the TypeScript under
+    // tools/ is linted like everything else.
+    "tools/**/*.js",
+    "tools/**/*.json",
     "config/v1/**",
     "playwright-report/**",
     "test-results/**",

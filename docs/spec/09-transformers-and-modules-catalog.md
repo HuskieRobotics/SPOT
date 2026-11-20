@@ -17,6 +17,31 @@
 - **TR-4** `tmp` transformers iterate `dataset.tmps`; `team` transformers iterate
   `Object.entries(dataset.teams)` and select `dataset.tmps.filter(t => t.robotNumber == team)`.
 
+### v6 engine (`src/analysis/engine`, #310)
+
+- **TR-5** The dataset is `{ tmps, teams }`. Each tmp is the stored performance projected to its
+  public fields (`_id`, `eventId`, `matchNumber`, `team`, `source`, `clientVersion`,
+  `submittedAt`, `coverage`, `superseded`, `flag`, `notes`, `tags`, `actions`): no scouter id and
+  no `matchKey`, which embeds it (SEC-8). Actions are as stored, a button id plus the period
+  (CS-16). `teams` has one object per team key (DM-1a), compared with `===`, never `==`.
+- **TR-6** Performances are ordered by `submittedAt`, then `_id`. On the real exports this is the
+  legacy order (timestamp, then `matchId`).
+- **TR-7** Stored fields are frozen and cannot be replaced or deleted; entries only add outputs.
+  An in-place change such as v5's `finalActionOccurrence` reversal (F-3) throws.
+- **TR-8** `getPath` keeps TR-3, with two changes: a `null` part-way along a path counts as
+  missing (v5 threw even when given a default), and a `null` leaf is returned as `null`.
+  `setPath` refuses to write through an existing non-object value (v5 silently replaced a falsy
+  one with `{}` and ignored a truthy one).
+- **TR-9** Transformers are registered by entry type and name, in one of three shapes: per
+  performance (`tmp`), per team (`team`, given the team's performances in dataset order), or
+  over the whole dataset (`removeDuplicates`). Each declares a JSON Schema for its options
+  (ADR 0005); built-ins reference `$defs/options` in the pipeline schema.
+- **TR-10** Before running, every entry is checked; an unknown transformer (with a "did you mean"
+  suggestion) or invalid options is reported and only that entry is skipped. While running, a
+  failure is reported per entry with the count of failing performances or teams and the first
+  one, and everything else still runs. Every written value is normalized so NaN, ±Infinity and
+  undefined become `null` (DM-1b).
+
 ## Transformer reference
 
 | name                        | types            | options                                                                                                                                                      | Output at `outputPath`                                                                                                                                                                                                                                                                                                                  |
