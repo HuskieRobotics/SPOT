@@ -3,9 +3,16 @@
  * (ADR 0005). Issues #311 to #315 add them.
  */
 import { TransformerRegistry, type Transformer } from "../engine/registry";
+import { arithmeticTransformers } from "./arithmetic";
 import { countActionsTeam, countActionsTmp } from "./countActions";
+import { lookupTransformers } from "./lookup";
 
-export const builtInTransformers: readonly Transformer[] = [countActionsTmp, countActionsTeam];
+export const builtInTransformers: readonly Transformer[] = [
+  ...arithmeticTransformers,
+  countActionsTeam,
+  countActionsTmp,
+  ...lookupTransformers,
+];
 
 /** A registry holding every built-in transformer. */
 export function createRegistry(extra: readonly Transformer[] = []): TransformerRegistry {

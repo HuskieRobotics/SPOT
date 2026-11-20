@@ -97,7 +97,9 @@ describe("v1 -> v2 converter on every archived season", () => {
     });
     if (s.pipeline) {
       it(`${s.name} analysis-pipeline converts to a valid v2 document`, () => {
-        const { config } = convertAnalysisPipeline(v1(s.pipeline!) as V1PipelineEntry[]);
+        const { config } = convertAnalysisPipeline(v1(s.pipeline!) as V1PipelineEntry[], {
+          matchScouting: v1(s.ms) as V1MatchScouting,
+        });
         const r = validateConfig("analysis-pipeline", config);
         expect(r.issues).toEqual([]);
       });

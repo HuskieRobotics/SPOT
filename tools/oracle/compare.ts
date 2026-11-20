@@ -15,7 +15,10 @@ import type { AnalysisPipelineConfig, MatchScoutingConfig } from "../../src/conf
 import {
   ANALYSIS_PERFORMANCE_FIELDS,
   buildDataset,
+  checkPipeline,
+  getPath,
   runPipeline,
+  setPath,
   type Dataset,
   type PipelineProblem,
   type TransformerRegistry,
@@ -295,10 +298,83 @@ export interface SetRun {
   ran: number[];
 }
 
-/** Migrate a golden set's legacy input and run the v6 engine over it. */
+export interface Golden {
+  tmps: Record<string, unknown>[];
+  teams: Record<string, Record<string, unknown>>;
+}
+
+/**
+ * A legacy golden value in v6 form, so it can stand in for an entry the engine cannot run yet:
+ * NaN, undefined and Infinity become null (DM-1b), and a value a divergence rule covers becomes
+ * the value v6 produces instead. Returns undefined when v6 has no value there.
+ */
+export function legacyToV6(
+  value: unknown,
+  path: string,
+  set: string,
+  rules: readonly DivergenceRule[],
+): unknown {
+  if (Array.isArray(value)) return value.map((v, i) => legacyToV6(v, `${path}.${i}`, set, rules));
+  if (typeof value === "object" && value !== null) {
+    const out: Record<string, unknown> = {};
+    for (const [key, child] of Object.entries(value)) {
+      const converted = legacyToV6(child, `${path}.${key}`, set, rules);
+      if (converted !== undefined) out[key] = converted;
+    }
+    return out;
+  }
+  const rule = rules.find(
+    (r) =>
+      (!r.sets || r.sets.includes(set)) &&
+      (!r.paths || r.paths.some((pattern) => pathMatches(pattern, path))) &&
+      r.legacy.some((v) => Object.is(v, value)),
+  );
+  if (rule) return rule.v6 === ABSENT ? undefined : structuredClone(rule.v6);
+  return value;
+}
+
+/**
+ * Fill in the output of an entry the engine cannot run, from the golden file. A `removeDuplicates`
+ * entry keeps the performances legacy kept; any other entry gets its legacy output at its path.
+ */
+function feedFromGolden(
+  dataset: Dataset,
+  entry: AnalysisPipelineConfig["pipeline"][number],
+  golden: Golden,
+  set: string,
+  rules: readonly DivergenceRule[],
+): Dataset {
+  if (entry.type === "tmp" && entry.name === "removeDuplicates") {
+    const kept = new Set(golden.tmps.map((t) => String(t._id)));
+    return { ...dataset, tmps: dataset.tmps.filter((t) => kept.has(t._id)) };
+  }
+  const fill = (target: Record<string, unknown>, source: Record<string, unknown> | undefined) => {
+    if (!source) return;
+    const value = getPath(source, entry.outputPath, undefined);
+    if (value === undefined) return;
+    const converted = legacyToV6(value, entry.outputPath, set, rules);
+    if (converted !== undefined) setPath(target, entry.outputPath, converted);
+  };
+  if (entry.type === "tmp") {
+    const byId = new Map(golden.tmps.map((t) => [String(t._id), t]));
+    for (const tmp of dataset.tmps) fill(tmp, byId.get(tmp._id));
+  } else {
+    for (const [team, data] of Object.entries(dataset.teams)) fill(data, golden.teams[team]);
+  }
+  return dataset;
+}
+
+/**
+ * Migrate a golden set's legacy input and run the v6 engine over it.
+ *
+ * With `feed`, every entry the engine cannot run yet gets its output from the golden file
+ * instead, so the entries after it are checked on the inputs legacy gave them. That checks each
+ * transformer against v5 on its own, whatever order the transformers are written in.
+ */
 export function runGoldenSet(
   set: GoldenSet,
   registry: TransformerRegistry = createRegistry(),
+  feed?: { golden: Golden; rules: readonly DivergenceRule[] },
 ): SetRun {
   const config = read(join(set.configDir, "match-scouting.json")) as MatchScoutingConfig;
   const pipeline = read(join(set.configDir, "analysis-pipeline.json")) as AnalysisPipelineConfig;
@@ -316,12 +392,36 @@ export function runGoldenSet(
   if (!event) throw new Error(`${set.name}: event ${set.event} is not in ${set.events}`);
   const performances = migrated.performances.filter((p) => p.eventId === event._id);
 
-  const dataset = buildDataset(performances);
-  const result = runPipeline(dataset, pipeline.pipeline, { registry, context: { config } });
-  return { config, pipeline, dataset: result.dataset, problems: result.problems, ran: result.ran };
+  let dataset = buildDataset(performances);
+  const context = { config };
+  if (!feed) {
+    const result = runPipeline(dataset, pipeline.pipeline, { registry, context });
+    return {
+      config,
+      pipeline,
+      dataset: result.dataset,
+      problems: result.problems,
+      ran: result.ran,
+    };
+  }
+
+  const problems: PipelineProblem[] = [];
+  const ran: number[] = [];
+  pipeline.pipeline.forEach((entry, index) => {
+    const { runnable } = checkPipeline([entry], registry);
+    const result = runPipeline(dataset, [entry], { registry, context });
+    problems.push(...result.problems.map((p) => ({ ...p, index })));
+    if (runnable.length > 0) {
+      ran.push(index);
+      dataset = result.dataset;
+    } else {
+      dataset = feedFromGolden(dataset, entry, feed.golden, set.name, feed.rules);
+    }
+  });
+  return { config, pipeline, dataset, problems, ran };
 }
 
-export function loadGolden(set: GoldenSet) {
+export function loadGolden(set: GoldenSet): Golden {
   const dir = join("tools", "oracle", "golden", set.name);
   return {
     tmps: read(join(dir, "tmps.json")) as Record<string, unknown>[],
@@ -333,15 +433,19 @@ export function compareGoldenSet(
   set: GoldenSet,
   options: Pick<CompareOptions, "keep" | "mapLegacyPath" | "rules"> & {
     registry?: TransformerRegistry;
+    /** Fill entries the engine cannot run yet from the golden file (see runGoldenSet). */
+    feed?: boolean;
   } = {},
 ): Comparison {
-  const run = runGoldenSet(set, options.registry);
-  return compareDatasets(loadGolden(set), run.dataset, {
+  const golden = loadGolden(set);
+  const rules = options.rules ?? loadDivergences();
+  const run = runGoldenSet(set, options.registry, options.feed ? { golden, rules } : undefined);
+  return compareDatasets(golden, run.dataset, {
     set: set.name,
     pipeline: run.pipeline.pipeline,
     problems: run.problems,
     ran: run.ran,
-    rules: options.rules,
+    rules,
     mapLegacyPath: options.mapLegacyPath,
     keep: options.keep,
   });

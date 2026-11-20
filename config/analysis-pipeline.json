@@ -363,22 +363,58 @@
       "options": {
         "groups": [
           {
-            "averagePath": "scores.teleopTransitionDefenseRating"
+            "averagePath": "scores.teleopTransitionDefenseRating",
+            "countPaths": [
+              "counts.teleopTransitionRatingDefense1",
+              "counts.teleopTransitionRatingDefense2",
+              "counts.teleopTransitionRatingDefense3",
+              "counts.teleopTransitionRatingDefense4"
+            ]
           },
           {
-            "averagePath": "scores.activeShift1DefenseRating"
+            "averagePath": "scores.activeShift1DefenseRating",
+            "countPaths": [
+              "counts.activeShift1RatingDefense1",
+              "counts.activeShift1RatingDefense2",
+              "counts.activeShift1RatingDefense3",
+              "counts.activeShift1RatingDefense4"
+            ]
           },
           {
-            "averagePath": "scores.activeShift2DefenseRating"
+            "averagePath": "scores.activeShift2DefenseRating",
+            "countPaths": [
+              "counts.activeShift2RatingDefense1",
+              "counts.activeShift2RatingDefense2",
+              "counts.activeShift2RatingDefense3",
+              "counts.activeShift2RatingDefense4"
+            ]
           },
           {
-            "averagePath": "scores.inactiveShift1DefenseRating"
+            "averagePath": "scores.inactiveShift1DefenseRating",
+            "countPaths": [
+              "counts.inactiveShift1RatingDefense1",
+              "counts.inactiveShift1RatingDefense2",
+              "counts.inactiveShift1RatingDefense3",
+              "counts.inactiveShift1RatingDefense4"
+            ]
           },
           {
-            "averagePath": "scores.inactiveShift2DefenseRating"
+            "averagePath": "scores.inactiveShift2DefenseRating",
+            "countPaths": [
+              "counts.inactiveShift2RatingDefense1",
+              "counts.inactiveShift2RatingDefense2",
+              "counts.inactiveShift2RatingDefense3",
+              "counts.inactiveShift2RatingDefense4"
+            ]
           },
           {
-            "averagePath": "scores.endgameDefenseRating"
+            "averagePath": "scores.endgameDefenseRating",
+            "countPaths": [
+              "counts.endgameRatingDefense1",
+              "counts.endgameRatingDefense2",
+              "counts.endgameRatingDefense3",
+              "counts.endgameRatingDefense4"
+            ]
           }
         ]
       }
@@ -468,22 +504,58 @@
       "options": {
         "groups": [
           {
-            "averagePath": "scores.teleopTransitionPassingRating"
+            "averagePath": "scores.teleopTransitionPassingRating",
+            "countPaths": [
+              "counts.teleopTransitionRatingPassing1",
+              "counts.teleopTransitionRatingPassing2",
+              "counts.teleopTransitionRatingPassing3",
+              "counts.teleopTransitionRatingPassing4"
+            ]
           },
           {
-            "averagePath": "scores.activeShift1PassingRating"
+            "averagePath": "scores.activeShift1PassingRating",
+            "countPaths": [
+              "counts.activeShift1RatingPassing1",
+              "counts.activeShift1RatingPassing2",
+              "counts.activeShift1RatingPassing3",
+              "counts.activeShift1RatingPassing4"
+            ]
           },
           {
-            "averagePath": "scores.activeShift2PassingRating"
+            "averagePath": "scores.activeShift2PassingRating",
+            "countPaths": [
+              "counts.activeShift2RatingPassing1",
+              "counts.activeShift2RatingPassing2",
+              "counts.activeShift2RatingPassing3",
+              "counts.activeShift2RatingPassing4"
+            ]
           },
           {
-            "averagePath": "scores.inactiveShift1PassingRating"
+            "averagePath": "scores.inactiveShift1PassingRating",
+            "countPaths": [
+              "counts.inactiveShift1RatingPassing1",
+              "counts.inactiveShift1RatingPassing2",
+              "counts.inactiveShift1RatingPassing3",
+              "counts.inactiveShift1RatingPassing4"
+            ]
           },
           {
-            "averagePath": "scores.inactiveShift2PassingRating"
+            "averagePath": "scores.inactiveShift2PassingRating",
+            "countPaths": [
+              "counts.inactiveShift2RatingPassing1",
+              "counts.inactiveShift2RatingPassing2",
+              "counts.inactiveShift2RatingPassing3",
+              "counts.inactiveShift2RatingPassing4"
+            ]
           },
           {
-            "averagePath": "scores.endgamePassingRating"
+            "averagePath": "scores.endgamePassingRating",
+            "countPaths": [
+              "counts.endgameRatingPassing1",
+              "counts.endgameRatingPassing2",
+              "counts.endgameRatingPassing3",
+              "counts.endgameRatingPassing4"
+            ]
           }
         ]
       }
@@ -573,22 +645,58 @@
       "options": {
         "groups": [
           {
-            "averagePath": "scores.teleopTransitionStoringRating"
+            "averagePath": "scores.teleopTransitionStoringRating",
+            "countPaths": [
+              "counts.teleopTransitionRatingStoring1",
+              "counts.teleopTransitionRatingStoring2",
+              "counts.teleopTransitionRatingStoring3",
+              "counts.teleopTransitionRatingStoring4"
+            ]
           },
           {
-            "averagePath": "scores.activeShift1StoringRating"
+            "averagePath": "scores.activeShift1StoringRating",
+            "countPaths": [
+              "counts.activeShift1RatingStoring1",
+              "counts.activeShift1RatingStoring2",
+              "counts.activeShift1RatingStoring3",
+              "counts.activeShift1RatingStoring4"
+            ]
           },
           {
-            "averagePath": "scores.activeShift2StoringRating"
+            "averagePath": "scores.activeShift2StoringRating",
+            "countPaths": [
+              "counts.activeShift2RatingStoring1",
+              "counts.activeShift2RatingStoring2",
+              "counts.activeShift2RatingStoring3",
+              "counts.activeShift2RatingStoring4"
+            ]
           },
           {
-            "averagePath": "scores.inactiveShift1StoringRating"
+            "averagePath": "scores.inactiveShift1StoringRating",
+            "countPaths": [
+              "counts.inactiveShift1RatingStoring1",
+              "counts.inactiveShift1RatingStoring2",
+              "counts.inactiveShift1RatingStoring3",
+              "counts.inactiveShift1RatingStoring4"
+            ]
           },
           {
-            "averagePath": "scores.inactiveShift2StoringRating"
+            "averagePath": "scores.inactiveShift2StoringRating",
+            "countPaths": [
+              "counts.inactiveShift2RatingStoring1",
+              "counts.inactiveShift2RatingStoring2",
+              "counts.inactiveShift2RatingStoring3",
+              "counts.inactiveShift2RatingStoring4"
+            ]
           },
           {
-            "averagePath": "scores.endgameStoringRating"
+            "averagePath": "scores.endgameStoringRating",
+            "countPaths": [
+              "counts.endgameRatingStoring1",
+              "counts.endgameRatingStoring2",
+              "counts.endgameRatingStoring3",
+              "counts.endgameRatingStoring4"
+            ]
           }
         ]
       }
@@ -678,22 +786,58 @@
       "options": {
         "groups": [
           {
-            "averagePath": "scores.teleopTransitionShootingRating"
+            "averagePath": "scores.teleopTransitionShootingRating",
+            "countPaths": [
+              "counts.teleopTransitionRatingShooting1",
+              "counts.teleopTransitionRatingShooting2",
+              "counts.teleopTransitionRatingShooting3",
+              "counts.teleopTransitionRatingShooting4"
+            ]
           },
           {
-            "averagePath": "scores.activeShift1ShootingRating"
+            "averagePath": "scores.activeShift1ShootingRating",
+            "countPaths": [
+              "counts.activeShift1RatingShooting1",
+              "counts.activeShift1RatingShooting2",
+              "counts.activeShift1RatingShooting3",
+              "counts.activeShift1RatingShooting4"
+            ]
           },
           {
-            "averagePath": "scores.activeShift2ShootingRating"
+            "averagePath": "scores.activeShift2ShootingRating",
+            "countPaths": [
+              "counts.activeShift2RatingShooting1",
+              "counts.activeShift2RatingShooting2",
+              "counts.activeShift2RatingShooting3",
+              "counts.activeShift2RatingShooting4"
+            ]
           },
           {
-            "averagePath": "scores.inactiveShift1ShootingRating"
+            "averagePath": "scores.inactiveShift1ShootingRating",
+            "countPaths": [
+              "counts.inactiveShift1RatingShooting1",
+              "counts.inactiveShift1RatingShooting2",
+              "counts.inactiveShift1RatingShooting3",
+              "counts.inactiveShift1RatingShooting4"
+            ]
           },
           {
-            "averagePath": "scores.inactiveShift2ShootingRating"
+            "averagePath": "scores.inactiveShift2ShootingRating",
+            "countPaths": [
+              "counts.inactiveShift2RatingShooting1",
+              "counts.inactiveShift2RatingShooting2",
+              "counts.inactiveShift2RatingShooting3",
+              "counts.inactiveShift2RatingShooting4"
+            ]
           },
           {
-            "averagePath": "scores.endgameShootingRating"
+            "averagePath": "scores.endgameShootingRating",
+            "countPaths": [
+              "counts.endgameRatingShooting1",
+              "counts.endgameRatingShooting2",
+              "counts.endgameRatingShooting3",
+              "counts.endgameRatingShooting4"
+            ]
           }
         ]
       }

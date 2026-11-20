@@ -57,7 +57,13 @@ mkdirSync(outDir, { recursive: true });
 let failed = false;
 const results: [ConfigKind, { config: unknown; warnings: string[] }][] = [
   ["match-scouting", convertMatchScouting(read(files["match-scouting"]), opts)],
-  ["analysis-pipeline", convertAnalysisPipeline(read(files["analysis-pipeline"]), opts)],
+  [
+    "analysis-pipeline",
+    convertAnalysisPipeline(read(files["analysis-pipeline"]), {
+      ...opts,
+      matchScouting: read(files["match-scouting"]),
+    }),
+  ],
   ["analysis-modules", convertAnalysisModules(read(files["analysis-modules"]), opts)],
   ["qr", convertQr(read(files.qr), opts)],
 ];

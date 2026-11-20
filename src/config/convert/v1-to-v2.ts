@@ -78,6 +78,11 @@ export interface ConvertOptions {
   enrichment?: boolean;
   /** Relative path used for the `$schema` property of generated files. */
   schemaBase?: string;
+  /**
+   * The season's v1 match-scouting configuration. The pipeline converter needs it to write out
+   * `sumAverage.countPaths`, which v5 inferred at run time from the ids `countActions` produced.
+   */
+  matchScouting?: V1MatchScouting;
 }
 
 export interface ConvertResult<T> {
@@ -462,6 +467,32 @@ export function convertMatchScouting(
 
 // ---------------------------------------------------------------------------- analysis-pipeline
 
+/** The ids v5's `countActions(all)` started at 0: every button id in every layer, in order. */
+export function legacyCountIds(v1: V1MatchScouting): string[] {
+  const ids = v1.layout.layers.flat().map((b) => b.id);
+  return [...new Set(ids.filter((id): id is string => typeof id === "string" && id !== ""))];
+}
+
+/**
+ * The count paths v5's `sumAverage` inferred for a group (A-39, decided 2026-11-20 to write them
+ * out instead): `scores.<period><Metric>Rating` is weighted by `counts.<period>Rating<Metric><N>`,
+ * ordered by N. Uses v5's own pattern so the result is what v5 computed.
+ */
+export function inferSumAverageCountPaths(
+  averagePath: string,
+  countIds: readonly string[],
+): string[] {
+  if (!averagePath.startsWith("scores.") || !averagePath.endsWith("Rating")) return [];
+  const base = averagePath.slice("scores.".length);
+  const matches: { n: number; path: string }[] = [];
+  for (const id of countIds) {
+    const m = id.match(/^(.*)Rating(.+?)(\d+)$/);
+    if (m && `${m[1]}${m[2]}Rating` === base)
+      matches.push({ n: Number(m[3]), path: `counts.${id}` });
+  }
+  return matches.sort((a, b) => a.n - b.n).map((m) => m.path);
+}
+
 export function convertAnalysisPipeline(
   v1: V1PipelineEntry[],
   opts: ConvertOptions = {},
@@ -486,6 +517,26 @@ export function convertAnalysisPipeline(
       }
       if ("pickups" in (e.options ?? {}) || "scores" in (e.options ?? {}))
         warnings.push(`${where}: cycle options renamed pickups/scores -> startAction/endAction`);
+    }
+    if (name === "sumAverage" && Array.isArray(options.groups)) {
+      const countIds = opts.matchScouting ? legacyCountIds(opts.matchScouting) : [];
+      options.groups = (options.groups as { averagePath: string; countPaths?: string[] }[]).map(
+        (group) => {
+          if (group.countPaths) return group;
+          const countPaths = inferSumAverageCountPaths(group.averagePath, countIds);
+          if (countPaths.length === 0) {
+            warnings.push(
+              `${where}: could not work out countPaths for ${group.averagePath}; add them by hand` +
+                (opts.matchScouting ? "" : " (or pass the v1 match-scouting configuration)"),
+            );
+            return group;
+          }
+          warnings.push(
+            `${where}: wrote out countPaths for ${group.averagePath} (v1 inferred them from id names)`,
+          );
+          return { ...group, countPaths };
+        },
+      );
     }
     if (name === "actionTime" && "path" in options && !("actionId" in options)) {
       options.actionId = options.path;
