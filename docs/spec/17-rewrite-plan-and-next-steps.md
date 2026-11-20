@@ -237,8 +237,9 @@ so the gate is about authoring and previewing a configuration, not about running
 | K-3 | Configuration preview without an event: generate synthetic matches from the new `match-scouting.json`, run the new pipeline over them, and show each team's output. This is the synthetic generator's main job in 2027.                                                                                                                             | Phase 1, doc 22    |
 | K-4 | Configuration Guide for v2, written for students, with the 2026 configuration as the worked example (from documents 04, 13 and 20).                                                                                                                                                                                                                 | Phase 5, pulled in |
 | K-5 | Scouting-screen preview: a page that renders `match-scouting.json` as the scouting grid, with layers, phases and segments on the timer, every button type, and undo, standalone with no server or sessions. It is the first piece of phase 2, so nothing is thrown away.                                                                            | Phase 2, pulled in |
+| K-6 | New-game checklist: everything students must do for a new game after kickoff, in order, each with the file, how to check it, and when it can be done (some items wait for TBA to publish the game's score-breakdown fields). Collected in #333 as the work goes; written alongside K-4 and linked from it.                                          | Phase 5, pulled in |
 
-Built in that order; K-5 is the first to slip, because K-2 to K-4 already let a student write
+K-6 is written with K-4. Built in that order; K-5 is the first to slip, because K-2 to K-4 already let a student write
 and check a configuration. At kickoff the 2026 files move to `config/seasons/2026/` and the
 drift test in `config-active.test.ts` is deleted (`config/README.md`).
 
@@ -258,6 +259,9 @@ scouted an event in parallel with v5 without losing data.
 
 ## 4. Working practices that keep it efficient
 
+- **Per-season work goes on the new-game checklist (#333, K-6).** A change that adds something
+  students must do for each new game (a configuration value to fill in, a constant to verify,
+  data to wait for) adds a line to #333 in the same PR, so the checklist is complete at kickoff.
 - **Spec-driven pull requests.** PR description lists requirement ids implemented and tests
   added; reviewers check the spec, not the old code.
 - **Legacy code is reference, not template.** Read `v5` to answer "what did it do", never
