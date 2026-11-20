@@ -4,17 +4,17 @@
  *
  * - Structure, all sets: every legacy performance and team is present in v6 (migration keeps ids
  *   and team keys), and the only extra performances are the ones legacy removeDuplicates dropped.
- * - The ratchet, 2025 sets: an entry that runs without problems must match the golden output,
- *   after the accepted divergences. Entries that cannot run yet (no transformer) are fed from the
- *   golden file, so each transformer is checked against v5 the moment it lands, on the inputs
- *   legacy gave it, whatever order #311 to #314 arrive in.
- *   The 2026 sets join the ratchet in #320, once their paths are translated (CS-16).
+ * - Acceptance, 2025 sets (#319, gate K-1): every entry runs and matches the golden output, after
+ *   the reviewed divergences, each of which must accept exactly the values counted below.
+ *   The 2026 sets join in #320, once their paths are translated (CS-16).
  */
 import { describe, expect, it } from "vitest";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { buildDataset, type Dataset } from "@/analysis/engine";
 import { generate } from "@/generate/synthetic";
+import { TransformerRegistry } from "@/analysis/engine";
+import { builtInTransformers } from "@/analysis/transformers";
 import type { MatchScoutingConfig, PipelineEntry } from "@/config/types";
 import {
   compareDatasets,
@@ -191,8 +191,13 @@ describe("compareDatasets", () => {
   });
 });
 
-describe.each(goldenSets.map((s) => [s.name, s] as const))("golden set %s", (name, set) => {
-  const comparison = compareGoldenSet(set, { keep: 20 });
+/** Each golden set compared once, unfed: every entry runs on v6's own outputs. */
+const comparisons = new Map(
+  goldenSets.map((set) => [set.name, compareGoldenSet(set, { keep: 20 })]),
+);
+
+describe.each(goldenSets.map((s) => [s.name, s] as const))("golden set %s", (name) => {
+  const comparison = comparisons.get(name)!;
   const report = JSON.parse(
     readFileSync(join(process.cwd(), "tools", "oracle", "golden", name, "report.json"), "utf8"),
   ) as { tmpCount: number; derivedTmpCount: number; teamCount: number };
@@ -207,22 +212,80 @@ describe.each(goldenSets.map((s) => [s.name, s] as const))("golden set %s", (nam
     expect(comparison.teams.extraInV6).toEqual([]);
   });
 
-  it("checks every pipeline entry before running", () => {
-    for (const p of comparison.problems.filter((p) => p.stage === "check")) {
-      expect(p.message).toMatch(/^There is no (tmp|team) transformer named /);
+  it("runs every pipeline entry", () => {
+    expect(comparison.problems.map((p) => p.message)).toEqual([]);
+  });
+});
+
+/**
+ * #319 (gate K-1): the engine reproduces the 2025 golden output, nothing fed from it, and the
+ * only differences are the reviewed divergences (tools/oracle/README.md), each accepting exactly
+ * the values counted here. A change in any count is a change in behavior to look at.
+ */
+describe("#319: oracle acceptance, 2025", () => {
+  const accepted2025 = {
+    "2025ilch_official-v4.2.0": {
+      "missing-nan": 1635,
+      "ratio-falsy-divbyzero-2025": 24,
+      "ratio-misplaced-divbyzero-2025": 3,
+      "counts-nonaction-buttons-2025": 1964,
+      "cycle-start-key-2025": 17648,
+      "action-period-fields": 70592,
+    },
+    "2025syn_synthetic-v4.2.0": {
+      "missing-nan": 1345,
+      "ratio-falsy-divbyzero-2025": 1,
+      "counts-nonaction-buttons-2025": 1824,
+      "cycle-start-key-2025": 4068,
+      "action-period-fields": 16272,
+    },
+  };
+
+  it.each(Object.keys(accepted2025))("%s matches the golden output entry by entry", (name) => {
+    const c = comparisons.get(name)!;
+    expect(c.entries).toHaveLength(46);
+    expect(c.entries.filter((e) => e.status !== "match")).toEqual([]);
+    expect(c.differenceCount).toBe(0);
+    expect(c.accepted).toEqual(accepted2025[name as keyof typeof accepted2025]);
+  });
+
+  it('the ratio rules excuse exactly the 27 "N/A" values docs/spec/12 counts (F-24, F-25)', () => {
+    const c = comparisons.get("2025ilch_official-v4.2.0")!;
+    expect(c.acceptedPaths["ratio-falsy-divbyzero-2025"]).toEqual({
+      algaeAccuracy: 21,
+      coralAccuracy: 3,
+    });
+    expect(c.acceptedPaths["ratio-misplaced-divbyzero-2025"]).toEqual({ timePerGamePiece: 3 });
+  });
+
+  it("NaN is accepted only where there was nothing to average: cycle times (DM-1b)", () => {
+    for (const name of Object.keys(accepted2025)) {
+      const paths = Object.keys(comparisons.get(name)!.acceptedPaths["missing-nan"]);
+      expect(
+        paths.every((p) => /^cycles\.(algae|coral|endgame)\.averageTime(Complete)?$/.test(p)),
+      ).toBe(true);
     }
   });
 
-  if (name.startsWith("2025")) {
-    it("ratchet: every entry that runs cleanly matches the golden output", () => {
-      // Entries the engine cannot run yet are fed from the golden file, so an entry is judged
-      // on the inputs legacy gave it, not on a gap another issue will fill.
-      const fed = compareGoldenSet(set, { keep: 20, feed: true });
-      const failedToRun = new Set(fed.problems.map((p) => p.index));
-      const differing = fed.entries
-        .filter((e) => e.status === "differs" && !failedToRun.has(e.index))
-        .map((e) => `${e.index + 1} ${e.type} ${e.name} → ${e.outputPath}: ${e.differences}`);
-      expect(differing).toEqual([]);
-    });
-  }
+  it("feed mode stands in for a transformer the engine does not have", () => {
+    // Used while a season's transformers are written (#320): an entry that cannot run takes its
+    // golden output, converted to v6 form, and the entries after it are judged on that.
+    const set = goldenSets.find((s) => s.name === "2025syn_synthetic-v4.2.0")!;
+    const registry = new TransformerRegistry(builtInTransformers.filter((t) => t.name !== "cycle"));
+    const fed = compareGoldenSet(set, { keep: 20, registry, feed: true });
+    const notRun = fed.entries.filter((e) => e.status === "not-run").map((e) => e.name);
+    expect(notRun).toEqual(["cycle", "cycle", "cycle"]);
+    expect(fed.entries.filter((e) => e.status === "differs")).toEqual([]);
+  });
+});
+
+describe("divergence rules in use", () => {
+  it("every rule is applied by some golden set", () => {
+    const applied = new Set([...comparisons.values()].flatMap((c) => Object.keys(c.accepted)));
+    expect(
+      loadDivergences()
+        .filter((r) => !applied.has(r.id))
+        .map((r) => r.id),
+    ).toEqual([]);
+  });
 });
