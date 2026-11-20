@@ -3,11 +3,12 @@
  * Compare the v6 analysis engine with the legacy golden output (#310, T-4).
  *
  * Usage:
- *   npm run oracle:compare -- [set ...] [--entries] [--diffs 20] [--json out.json]
+ *   npm run oracle:compare -- [set ...] [--feed] [--entries] [--diffs 20] [--json out.json]
  *
  * With no set names, compares every set in tools/oracle/sets.ts. Prints, per set: how many
  * pipeline entries ran and match, performance and team coverage, accepted divergences, and the
- * first differences. --entries lists every pipeline entry's status. Exit code 1 when anything
+ * first differences. --entries lists every pipeline entry's status. --feed fills entries the engine
+ * cannot run yet from the golden file, so each transformer is checked on its own. Exit code 1 when anything
  * differs, so it can gate work in progress.
  */
 import { writeFileSync } from "node:fs";
@@ -34,7 +35,10 @@ const results: Comparison[] = [];
 let failing = false;
 
 for (const set of sets) {
-  const c = compareGoldenSet(set, { keep: Math.max(showDiffs, 200) });
+  const c = compareGoldenSet(set, {
+    keep: Math.max(showDiffs, 200),
+    feed: argv.includes("--feed"),
+  });
   results.push(c);
   const counts = { match: 0, differs: 0, "not-run": 0 };
   for (const e of c.entries) counts[e.status]++;

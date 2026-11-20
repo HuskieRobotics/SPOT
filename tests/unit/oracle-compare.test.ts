@@ -5,8 +5,9 @@
  * - Structure, all sets: every legacy performance and team is present in v6 (migration keeps ids
  *   and team keys), and the only extra performances are the ones legacy removeDuplicates dropped.
  * - The ratchet, 2025 sets: an entry that runs without problems must match the golden output,
- *   after the accepted divergences. Entries that cannot run yet (no transformer) are reported,
- *   not failed, so #311 to #314 are checked against v5 the moment each transformer lands.
+ *   after the accepted divergences. Entries that cannot run yet (no transformer) are fed from the
+ *   golden file, so each transformer is checked against v5 the moment it lands, on the inputs
+ *   legacy gave it, whatever order #311 to #314 arrive in.
  *   The 2026 sets join the ratchet in #320, once their paths are translated (CS-16).
  */
 import { describe, expect, it } from "vitest";
@@ -180,8 +181,11 @@ describe.each(goldenSets.map((s) => [s.name, s] as const))("golden set %s", (nam
 
   if (name.startsWith("2025")) {
     it("ratchet: every entry that runs cleanly matches the golden output", () => {
-      const failedToRun = new Set(comparison.problems.map((p) => p.index));
-      const differing = comparison.entries
+      // Entries the engine cannot run yet are fed from the golden file, so an entry is judged
+      // on the inputs legacy gave it, not on a gap another issue will fill.
+      const fed = compareGoldenSet(set, { keep: 20, feed: true });
+      const failedToRun = new Set(fed.problems.map((p) => p.index));
+      const differing = fed.entries
         .filter((e) => e.status === "differs" && !failedToRun.has(e.index))
         .map((e) => `${e.index + 1} ${e.type} ${e.name} → ${e.outputPath}: ${e.differences}`);
       expect(differing).toEqual([]);

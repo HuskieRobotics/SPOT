@@ -96,14 +96,20 @@ whose `outputPath` covers it.
 ```sh
 npm run oracle:compare                          # every set
 npm run oracle:compare -- 2025ilch_official-v4.2.0 --entries --diffs 20
+npm run oracle:compare -- --feed                # each transformer on its own
 ```
 
 Expected differences live in `divergences.json`, never in the golden files. Each rule names
 the legacy values it accepts, the value v6 must produce instead, optionally the sets and output
 paths it applies to, and the requirement or defect behind it (DM-1b's `null`, for example).
 
+`--feed` fills each entry the engine cannot run yet with its golden output, converted to v6
+form by the divergence rules, so the entries after it see the inputs legacy gave them. Each
+transformer is then checked against v5 on its own, whatever order the transformers are written
+in.
+
 `tests/unit/oracle-compare.test.ts` checks every set's structure. For the 2025 sets it also acts
-as a ratchet: any entry that runs without problems must match. The 2026 sets join the ratchet when
+as a ratchet, in fed mode: any entry that runs without problems must match. The 2026 sets join the ratchet when
 their composite-id paths are translated (#320, CS-16).
 
 ## What the rewrite must match
