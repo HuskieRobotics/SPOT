@@ -191,6 +191,24 @@ Before transformers run, the client:
 - **DM-12** Creates an empty team object for every distinct `robotNumber` in the TMPs.
 - **DM-13** Sets `teams[t].opr.<oprString>` for each configured `TBA_OPR_STRINGS` value from the
   COPR response (`{ "<copr name>": { "frc3061": value } }`).
+  **v6 (decided 2026-11-20, #315; `src/analysis/enrichment/tba.ts`):**
+
+- **DM-11a** The prefixes are configuration (CS-12), and each names the phase its actions belong
+  to (`{ "prefix": "endGame", "phase": "endgame" }`), so period filters and grouping treat them
+  like recorded actions. `ts` stays 0, because TBA gives no time. Every key with a prefix and
+  the robot's slot is used, not only the first; the 2025 and 2026 breakdowns have one per
+  prefix and slot, so the results agree. Team keys are matched with `toTeamKey`, so `frc2338B`
+  finds the B robot (BL-308). Only qualification matches are read.
+- **DM-11b** `countActions(all)` starts the configured `knownIds` and every score-breakdown id TBA
+  reports anywhere at the event at 0, so a count means "how often" in every match and a team
+  average is a rate. v5 got the same effect for 2026 from ids listed in a hidden layout layer
+  (F-4), which missed the `_None` results. Without TBA data nothing is started at 0: an unknown
+  result is No Data, not "did not happen".
+- **DM-13a** Component OPRs come from `enrichment.tba.componentOprs`, are matched by team key,
+  and are `null` when TBA has none or there is no TBA data (DM-1b).
+- **DM-11c** Enrichment is a pure function of the stored performances, the configuration and TBA
+  responses the page fetched (or cached, OF-3); it fetches nothing itself (ADR 0005).
+
 - **DM-14** After transformers, appends `manual.tmps` (with `manual: true`) and sets
   `teams[t].manual.<path>` from `manual.teams` (both currently empty JSON files).
 

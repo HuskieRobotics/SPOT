@@ -21,7 +21,8 @@
 - **AN-7** For each TMP, locate the robot's alliance and slot (1–3) in the TBA qualification
   match with the same `match_number`, then append synthetic actions for the `auto*<slot>` and
   `endGame*<slot>` score-breakdown keys (`id = "<key minus slot>_<value>"`, `ts = 0`). Missing
-  breakdowns are skipped.
+  breakdowns are skipped. v6: the prefixes, their phases and the ids started at 0 are configuration;
+  see document 03 DM-11a to DM-11c and DM-13a (#315).
 - **AN-8** Merge QR-cached TMPs from `localStorage.teamMatchPerformances`.
 - **AN-9** Create `teams[robotNumber] = {}` for every TMP; attach `opr.<name>` for each
   configured OPR string from the COPR map.

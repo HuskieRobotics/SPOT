@@ -8,7 +8,8 @@
  * - `all: true` counts every action, including ids the configuration does not know (decision
  *   of 2026-09-17, docs/spec/17 §2), and starts every action button of the configuration at 0
  *   so paths such as `counts.l4` exist even when nothing was pressed. Undo, navigation and
- *   match-control buttons record nothing and are not listed (v5 listed them as 0).
+ *   match-control buttons record nothing and are not listed (v5 listed them as 0). The TBA
+ *   score-breakdown ids reported at the event start at 0 too (`Dataset.extraActionIds`, #315).
  * - `ids` counts only the listed ids, each starting at 0.
  * - `phases`, `segments`, `kinds` count only actions recorded in those periods.
  * - `by: "phase" | "segment"` splits the counts by period (see periods.ts for the keys); every
@@ -40,9 +41,15 @@ function seed(ids: readonly string[]): Counts {
 }
 
 /** A reusable counter: seeded once per entry, then fed one performance at a time. */
-function counter(options: CountActionsOptions, config: MatchScoutingConfig) {
+function counter(
+  options: CountActionsOptions,
+  config: MatchScoutingConfig,
+  extraActionIds: readonly string[],
+) {
   const countAll = options.all === true;
-  const ids = countAll ? actionButtonIds(config) : (options.ids ?? []);
+  const ids = countAll
+    ? [...new Set([...actionButtonIds(config), ...extraActionIds])]
+    : (options.ids ?? []);
   const wanted = countAll ? null : new Set(ids);
   const keys = options.by ? groupKeys(config, options.by, options) : [];
   const arrayPath = options.actionArrayPath ?? "actions";
@@ -79,14 +86,15 @@ function counter(options: CountActionsOptions, config: MatchScoutingConfig) {
 
 const summary = "Count actions by button id, optionally only in some periods or split by period";
 
-// The counter depends only on the options and the configuration, which are fixed for an entry,
-// so build it once per entry rather than once per performance.
+// The counter depends only on the options and the context (configuration and extra ids), which
+// are fixed for an entry during a run, so build it once per entry rather than once per performance.
 const counters = new WeakMap<object, WeakMap<object, ReturnType<typeof counter>>>();
 function counterFor(options: CountActionsOptions, context: TransformerContext) {
-  let byConfig = counters.get(options);
-  if (!byConfig) counters.set(options, (byConfig = new WeakMap()));
-  let c = byConfig.get(context.config);
-  if (!c) byConfig.set(context.config, (c = counter(options, context.config)));
+  let byContext = counters.get(options);
+  if (!byContext) counters.set(options, (byContext = new WeakMap()));
+  let c = byContext.get(context);
+  if (!c)
+    byContext.set(context, (c = counter(options, context.config, context.extraActionIds ?? [])));
   return c;
 }
 

@@ -14,7 +14,6 @@ import { assertValid } from "../../src/config/validate";
 import type { AnalysisPipelineConfig, MatchScoutingConfig } from "../../src/config/types";
 import {
   ANALYSIS_PERFORMANCE_FIELDS,
-  buildDataset,
   checkPipeline,
   getPath,
   runPipeline,
@@ -24,6 +23,7 @@ import {
   type TransformerRegistry,
 } from "../../src/analysis/engine";
 import { createRegistry } from "../../src/analysis/transformers";
+import { buildEnrichedDataset, type TbaEventData } from "../../src/analysis/enrichment/tba";
 import type { GoldenSet } from "./sets";
 
 // Paths are relative to the repository root; tests and npm scripts run from there.
@@ -419,7 +419,17 @@ export function runGoldenSet(
   if (!event) throw new Error(`${set.name}: event ${set.event} is not in ${set.events}`);
   const performances = migrated.performances.filter((p) => p.eventId === event._id);
 
-  let dataset = buildDataset(performances, { includeSuperseded: set.includeSuperseded });
+  // Recorded TBA responses stand in for what the page fetches (#315); without them, as for an
+  // event TBA does not know, no score-breakdown actions are added and component OPRs are null.
+  const tba: TbaEventData | null = set.tbaDir
+    ? {
+        matches: read(join(set.tbaDir, "matches.json")) as TbaEventData["matches"],
+        coprs: read(join(set.tbaDir, "coprs.json")) as TbaEventData["coprs"],
+      }
+    : null;
+  let dataset = buildEnrichedDataset(performances, pipeline.enrichment.tba, tba, {
+    includeSuperseded: set.includeSuperseded,
+  });
   const context = { config };
   if (!feed) {
     const result = runPipeline(dataset, pipeline.pipeline, { registry, context });

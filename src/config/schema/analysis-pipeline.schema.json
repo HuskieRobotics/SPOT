@@ -29,14 +29,33 @@
               "required": ["enabled", "prefixes"],
               "properties": {
                 "enabled": {
-                  "type": "boolean"
+                  "type": "boolean",
+                  "description": "Add actions from each match's TBA score breakdown."
                 },
                 "prefixes": {
                   "type": "array",
                   "items": {
-                    "type": "string"
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": ["prefix", "phase"],
+                    "properties": {
+                      "prefix": {
+                        "type": "string",
+                        "minLength": 1,
+                        "description": "Score-breakdown keys starting with this, such as \"endGame\"."
+                      },
+                      "phase": {
+                        "type": "string",
+                        "minLength": 1,
+                        "description": "Phase id from match-scouting.json that the actions belong to, such as \"endgame\"."
+                      }
+                    }
                   },
-                  "description": "Score-breakdown keys starting with one of these and ending with the robot slot become synthetic actions '<key minus slot>_<value>'."
+                  "description": "Each score-breakdown key that starts with a prefix and ends with the robot's slot (1-3) becomes an action \"<key without the slot>_<value>\" in that prefix's phase, such as endGameTowerRobot_Level2."
+                },
+                "knownIds": {
+                  "$ref": "#/$defs/idList",
+                  "description": "Score-breakdown action ids that countActions(all) starts at 0 in every match, such as \"endGameTowerRobot_Level3\", so a module shows 0 rather than No Data at an event where nobody did it. Ids TBA reports anywhere at the event start at 0 without being listed here."
                 }
               }
             },
@@ -45,7 +64,7 @@
               "items": {
                 "type": "string"
               },
-              "description": "TBA component-OPR names attached to each team as opr.<name>."
+              "description": "TBA component-OPR names, attached to each team as opr.<name> (null when TBA has none)."
             }
           }
         }
