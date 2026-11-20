@@ -3,11 +3,13 @@
  * (ADR 0005). Issues #311 to #315 add them.
  */
 import { TransformerRegistry, type Transformer } from "../engine/registry";
+import { aggregationTransformers } from "./aggregation";
 import { arithmeticTransformers } from "./arithmetic";
 import { countActionsTeam, countActionsTmp } from "./countActions";
 import { lookupTransformers } from "./lookup";
 
 export const builtInTransformers: readonly Transformer[] = [
+  ...aggregationTransformers,
   ...arithmeticTransformers,
   countActionsTeam,
   countActionsTmp,
