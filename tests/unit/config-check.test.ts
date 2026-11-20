@@ -3,11 +3,15 @@
  * change to a real configuration (2025 for a phases-only game, 2026 for segments), then the done-
  * when items: the 2026 configuration reports the attemptClimb entry (docs/spec/20 §2.2), and every
  * archived v1 season that converts gives a readable report.
+ *
+ * The checks of the files themselves (CC-1 to CC-8) are tested without running the pipeline on
+ * generated matches; the checks that need it (CC-9 to CC-12) are in config-check-generated.test.ts.
  */
 import { describe, expect, it } from "vitest";
 import { execFileSync } from "node:child_process";
-import { readFileSync } from "node:fs";
-import { join } from "node:path";
+import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join, relative } from "node:path";
 import { median } from "@/analysis/extensions/examples/median";
 import { createRegistry, extensionTransformers } from "@/analysis/transformers";
 import { checkConfiguration, formatReport, type CheckReport, type Finding } from "@/config/check";
@@ -53,15 +57,18 @@ const sources = (d: Docs): Record<ConfigKind, string> => ({
   qr: JSON.stringify(d.qr, null, 2),
 });
 
+/** The checks of the files themselves, without running the pipeline (CC-1 to CC-8). */
+const filesOnly = { generated: false } as const;
 const baseline = checkConfiguration(sources(season2025));
+const baselineFiles = checkConfiguration(sources(season2025), filesOnly);
 const sameFinding = (a: Finding, b: Finding) => a.where === b.where && a.message === b.message;
 
 /** Check a changed copy of a configuration; return only what the change added. */
 function check(mutate: (d: Docs) => void, base: Docs = season2025, registry = createRegistry()) {
   const d = structuredClone(base);
   mutate(d);
-  const report = checkConfiguration(sources(d), { registry });
-  const before = base === season2025 ? baseline : checkConfiguration(sources(base));
+  const report = checkConfiguration(sources(d), { registry, ...filesOnly });
+  const before = base === season2025 ? baselineFiles : checkConfiguration(sources(base), filesOnly);
   return report.findings.filter((f) => !before.findings.some((b) => sameFinding(b, f)));
 }
 
@@ -74,20 +81,45 @@ const brief = (f: Finding) => ({
 });
 
 describe("T-3: the archived 2025 configuration", () => {
-  it("has no errors; its warnings are real (two gridAreas, no knownIds)", () => {
-    expect(baseline.errors).toBe(0);
-    expect(baseline.findings.map((f) => [f.severity, f.where])).toEqual([
+  it("has no errors in its files; their warnings are real (two gridAreas, no knownIds)", () => {
+    expect(baselineFiles.errors).toBe(0);
+    expect(baselineFiles.findings.map((f) => [f.severity, f.where])).toEqual([
       ["warning", 'layer "layer-4" › button "autoMissProcessor" › gridArea'],
       ["warning", 'layer "layer-8" › button "teleopMissProcessor" › gridArea'],
       ["warning", "enrichment.tba.scoreBreakdown.enabled"],
     ]);
+  });
+
+  it("run on generated matches, shows what v4.2.0 shipped: modules reading values never written, and rankings that drop teams", () => {
+    expect(baseline.findings.map((f) => [f.severity, f.where])).toEqual([
+      ["warning", 'layer "layer-4" › button "autoMissProcessor" › gridArea'],
+      ["warning", 'layer "layer-8" › button "teleopMissProcessor" › gridArea'],
+      ["warning", "enrichment.tba.scoreBreakdown.enabled"],
+      ["warning", "entry 33 (team averageArray → cycles.endgame.averageTimeComplete)"],
+      ["warning", "entry 36 (team averageArray → cycles.algae.averageTime)"],
+      ["warning", "entry 40 (team averageArray → cycles.coral.averageTime)"],
+      ["error", 'module 11 (team Stats "Team Stats") › options.list › item 13 › path'],
+      ["error", 'module 11 (team Stats "Team Stats") › options.list › item 14 › path'],
+      ["error", 'module 11 (team Stats "Team Stats") › options.list › item 15 › path'],
+      ["error", 'module 11 (team Stats "Team Stats") › options.list › item 16 › path'],
+      ["error", 'module 16 (match ColumnDisplay "Barge Points") › options.path'],
+      ["error", 'module 18 (match Stats "Alliance Stats") › options.list › item 3 › path'],
+    ]);
+    // "Missed Coral" read the average of a value only the team total had; the v4.2.0 golden output
+    // has no averages.missCoral and no avgEndgamePoints either.
+    expect(baseline.findings.find((f) => f.where.endsWith("item 13 › path"))).toMatchObject({
+      message:
+        'analysis-pipeline.json never writes the team value "averages.missCoral", so this module would always show No Data.',
+      hint: '"averages" has no "missCoral", but there is a team value "counts.missCoral".',
+    });
+    expect(baseline.generated).toEqual({ matches: 120, performances: 720, teams: 49 });
   });
 });
 
 describe("reading the files", () => {
   it("says where a JSON syntax error is, with a hint for the usual mistakes", () => {
     const text = '{\n  "version": 2,\n  "actionSchema": [],\n}\n';
-    const r = checkConfiguration({ ...sources(season2025), qr: text });
+    const r = checkConfiguration({ ...sources(season2025), qr: text }, filesOnly);
     expect(r.findings.filter((f) => f.file === "qr")).toEqual([
       expect.objectContaining({
         severity: "error",
@@ -119,14 +151,16 @@ describe("reading the files", () => {
   it("reports a missing file, and a v1 file with the command that converts it", () => {
     const rest: Partial<Record<ConfigKind, string>> = sources(season2025);
     delete rest.qr;
-    expect(checkConfiguration(rest).findings.find((f) => f.file === "qr")).toMatchObject({
-      message: "qr.json is missing.",
-      hint: expect.stringMatching(/^A season's configuration has four files/),
-    });
-    const r = checkConfiguration({
-      ...sources(season2025),
-      qr: readText("config", "v1", "qr.json"),
-    });
+    expect(checkConfiguration(rest, filesOnly).findings.find((f) => f.file === "qr")).toMatchObject(
+      {
+        message: "qr.json is missing.",
+        hint: expect.stringMatching(/^A season's configuration has four files/),
+      },
+    );
+    const r = checkConfiguration(
+      { ...sources(season2025), qr: readText("config", "v1", "qr.json") },
+      filesOnly,
+    );
     expect(r.findings.find((f) => f.file === "qr")?.hint).toMatch(/npm run config:convert/);
   });
 
@@ -245,7 +279,7 @@ describe("transformers (TR-10, TR-14)", () => {
 
 describe("ids that options name", () => {
   it("done when: the 2026 configuration reports the attemptClimb entry (docs/spec/20 §2.2)", () => {
-    const r = checkConfiguration(sources(season2026));
+    const r = checkConfiguration(sources(season2026), filesOnly);
     const f = r.findings.find((x) => x.where.includes("actionTimes.attemptClimb"));
     expect(f && brief(f)).toEqual({
       severity: "error",
@@ -263,7 +297,7 @@ describe("ids that options name", () => {
   });
 
   it("explains a v5 id that put the period in front of the button (CS-16)", () => {
-    const r = checkConfiguration(sources(season2026));
+    const r = checkConfiguration(sources(season2026), filesOnly);
     const f = r.findings.find(
       (x) => x.where === "entry 8 (tmp cycle → cycle.shootingTime) › options.startAction",
     );
@@ -399,8 +433,9 @@ describe("TBA enrichment (#315)", () => {
           },
         },
       }),
+      filesOnly,
     );
-    expect(r.warnings).toBe(baseline.warnings - 1);
+    expect(r.warnings).toBe(baselineFiles.warnings - 1);
   });
 });
 
@@ -595,7 +630,9 @@ describe("a check that compares files waits for both to be valid", () => {
     expect(r.skipped).toEqual([
       "checks within match-scouting.json, and of the ids other files name: fix the errors in match-scouting.json first.",
       "the QR id field: fix the errors in match-scouting.json first.",
+      "running the pipeline on generated matches: fix the errors in match-scouting.json and analysis-pipeline.json first.",
     ]);
+    expect(r.generated).toBeUndefined();
   });
 });
 
@@ -629,7 +666,7 @@ describe("the report", () => {
   it("prints file:line:column, where, what, what to try, and a total", () => {
     const d = structuredClone(season2025);
     (d.pipeline.pipeline[9].options as Record<string, unknown>).startAction = ["barg"];
-    const text = formatReport(checkConfiguration(sources(d)), "config/seasons/2025/");
+    const text = formatReport(checkConfiguration(sources(d), filesOnly), "config/seasons/2025/");
     expect(text).toMatch(
       /^config\/seasons\/2025\/analysis-pipeline\.json:\d+:\d+ {2}error {2}entry 10 \(tmp cycle → cycles\.endgame\) › options\.startAction\n {4}"barg" is not a button id in match-scouting\.json\.\n {4}Did you mean "barge"\?$/m,
     );
@@ -704,7 +741,9 @@ describe("done when: every archived v1 season that converts gives a readable rep
   it("finds real defects in old seasons", () => {
     // 2023 ended cycles with paths, so its cycle times were always empty.
     expect(
-      reports["2023"].findings.filter((f) => f.severity === "error").map((f) => f.hint),
+      reports["2023"].findings
+        .filter((f) => f.severity === "error" && /not button ids/.test(f.message))
+        .map((f) => f.hint),
     ).toEqual([
       '4 of them are paths; a button id is the last part, such as "conePickupGrid".',
       '4 of them are paths; a button id is the last part, such as "cubePickupGrid".',
@@ -712,6 +751,22 @@ describe("done when: every archived v1 season that converts gives a readable rep
     ]);
     expect(reports["2024v2"].findings.map((f) => f.message)).toContain(
       'This layer has two buttons with the id "autoNoteWing".',
+    );
+    // Run on generated matches: 2023 scored platform pickups that its countHybrid never counted,
+    // and 2024v2 showed a value of each match ("accuracy") where a team value belongs.
+    expect(
+      reports["2023"].findings.find(
+        (f) => f.where === "entry 14 (tmp weightedSum → scores.auto) › options.weightedPaths",
+      )?.message,
+    ).toBe(
+      '2 paths are written by no earlier entry, so this entry finds nothing there on any performance: "autoCounts.hybrid.conePickupPlatform", "autoCounts.hybrid.cubePickupPlatform".',
+    );
+    expect(
+      reports["2024v2"].findings.find(
+        (f) => f.where === 'module 2 (team Stats "Team Stats") › options.list › item 2 › path',
+      )?.hint,
+    ).toBe(
+      '"accuracy" is a value of each match (entry 16 (tmp ratio → accuracy) writes it), and team entries and modules read the team\'s values. Combine it per team first, with a team entry such as average whose "path" is "accuracy".',
     );
   });
 });
@@ -730,11 +785,26 @@ describe("npm run config:check", () => {
   };
 
   it("exits 0 with warnings only, and 1 with errors", () => {
-    const ok = run("config/seasons/2025");
-    expect(ok.code).toBe(0);
-    expect(ok.out.trim().split("\n").pop()).toBe(
-      "✓ No errors in config/seasons/2025/, but 3 warnings to look at.",
+    // The archived 2025 set without the module lines that read values v4.2.0 never wrote.
+    const dir = mkdtempSync(join(tmpdir(), "spot-config-check-"));
+    const d = structuredClone(season2025);
+    const stats = d.modules.modules[10].options as { list: { path: string }[] };
+    stats.list = stats.list.filter((s) => !/^averages\.(miss|drop)/.test(s.path));
+    d.modules.modules = d.modules.modules.filter(
+      (m) => !JSON.stringify(m).includes("avgEndgamePoints"),
     );
+    for (const [kind, text] of Object.entries(sources(d)))
+      writeFileSync(join(dir, `${kind}.json`), text);
+    try {
+      const ok = run(dir);
+      expect(ok.code).toBe(0);
+      expect(ok.out.trim().split("\n").slice(-2)).toEqual([
+        "Ran the pipeline on 120 generated matches (720 performances of 49 teams, one of which never did anything).",
+        `✓ No errors in ${relative(root, dir)}/, but 6 warnings to look at.`,
+      ]);
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
     expect(run("config").code).toBe(1);
   }, 30000);
 });

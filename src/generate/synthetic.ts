@@ -37,6 +37,12 @@ export interface GenerateOptions {
    * because the v5 shape cannot store them and the legacy oracle run needs that shape.
    */
   bTeams?: number;
+  /**
+   * Robots whose scouts record nothing in any match: a robot that is broken or never moves.
+   * Each plays at least every sixth match. config:check fields one to see what a team that never
+   * did anything gets (#317). Default none.
+   */
+  idleTeams?: TeamKey[];
   /** Number of matches to play. */
   matches: number;
   /** Robots scouted per match; six is a full field. */
@@ -219,6 +225,45 @@ function engageLocks(config: MatchScoutingConfig, state: SimState, buttonId: str
   }
 }
 
+/**
+ * Entering a phase or a segment switches the layer and applies the phase's variables, the same
+ * way the client does. Without this the walk never reaches a layer that only a phase change
+ * opens, such as the 2026 shift layer with its active/inactive toggles.
+ */
+function enter(config: MatchScoutingConfig, state: SimState, placement: Placement): void {
+  if (placement.phase !== state.enteredPhase) {
+    state.enteredPhase = placement.phase;
+    state.enteredSegment = null;
+    const phase = config.timing.phases.find((p) => p.id === placement.phase);
+    if (phase) {
+      if (phase.layer && layerById(config, phase.layer)) {
+        state.layerId = phase.layer;
+        state.visible = null;
+      }
+      Object.assign(state.variables, phase.variables ?? {});
+    }
+  }
+  if (placement.segment !== state.enteredSegment) {
+    state.enteredSegment = placement.segment;
+    const segment = segmentOf(config, placement);
+    if (segment?.layer && layerById(config, segment.layer)) {
+      state.layerId = segment.layer;
+      state.visible = null;
+    }
+  }
+}
+
+/** The time remaining when the next phase or segment begins, or null when none is left. */
+function nextBoundary(config: MatchScoutingConfig, ts: number): number | null {
+  let next: number | null = null;
+  for (const phase of config.timing.phases) {
+    for (const start of [phase.startMs, ...(phase.segments ?? []).map((s) => s.startMs)]) {
+      if (start < ts && (next === null || start > next)) next = start;
+    }
+  }
+  return next;
+}
+
 interface SimResult {
   actions: Action[];
 }
@@ -251,7 +296,16 @@ function simulateMatch(
 
   while (remainingSteps-- > 0 && ts >= 0) {
     const options = availableButtons(config, state, started);
-    if (options.length === 0) break;
+    if (options.length === 0) {
+      // Nothing on screen can be pressed, but the clock keeps running: wait for the next phase or
+      // segment, which may open a layer. 2022's auto begins 10 ms after the start button, which
+      // leaves only the start layer on screen until then.
+      const next = started ? nextBoundary(config, ts) : null;
+      if (next === null) break;
+      ts = next;
+      enter(config, state, placeAt(config, ts));
+      continue;
+    }
 
     // Favour recording actions; navigate and undo sometimes.
     // A shift toggle is worth pressing whenever the current segment has kinds and none is
@@ -289,29 +343,7 @@ function simulateMatch(
       state.lockExempt = new Set();
     }
 
-    // Entering a phase or a segment switches the layer and applies the phase's variables, the
-    // same way the client does. Without this the walk never reaches a layer that only a phase
-    // change opens, such as the 2026 shift layer with its active/inactive toggles.
-    if (placement.phase !== state.enteredPhase) {
-      state.enteredPhase = placement.phase;
-      state.enteredSegment = null;
-      const phase = config.timing.phases.find((p) => p.id === placement.phase);
-      if (phase) {
-        if (phase.layer && layerById(config, phase.layer)) {
-          state.layerId = phase.layer;
-          state.visible = null;
-        }
-        Object.assign(state.variables, phase.variables ?? {});
-      }
-    }
-    if (placement.segment !== state.enteredSegment) {
-      state.enteredSegment = placement.segment;
-      const segment = segmentOf(config, placement);
-      if (segment?.layer && layerById(config, segment.layer)) {
-        state.layerId = segment.layer;
-        state.visible = null;
-      }
-    }
+    enter(config, state, placement);
 
     if (button.type === "undo") {
       if (actions.length > minQueue) actions.pop();
@@ -360,6 +392,7 @@ export function generate(options: GenerateOptions): GeneratedDataset {
     matches,
     teams: firstRobots = DEFAULT_TEAMS,
     bTeams = 0,
+    idleTeams = [],
     robotsPerMatch = 6,
     tenantId = DEFAULT_TENANT,
     eventCode = "2026syn_synthetic",
@@ -367,7 +400,8 @@ export function generate(options: GenerateOptions): GeneratedDataset {
     now = 1_772_800_000_000,
   } = options;
 
-  const teams = [...firstRobots, ...firstRobots.slice(0, bTeams).map((t) => `${t}B`)];
+  const teams = [...firstRobots, ...firstRobots.slice(0, bTeams).map((t) => `${t}B`), ...idleTeams];
+  const idle = new Set(idleTeams);
   const random = new Random(seed);
   const eventId = options.eventId ?? objectId(random);
   const scouterIds =
@@ -399,13 +433,17 @@ export function generate(options: GenerateOptions): GeneratedDataset {
 
   for (let matchNumber = 1; matchNumber <= matches; matchNumber++) {
     const lineup = random.shuffle(teams).slice(0, robotsPerMatch);
+    // An idle robot plays at least every sixth match, so it is never left out by chance.
+    idleTeams.forEach((team, j) => {
+      if ((matchNumber - 1 + j) % 6 === 0 && !lineup.includes(team)) {
+        lineup[(robotsPerMatch - 1 - j + robotsPerMatch * 6) % robotsPerMatch] = team;
+      }
+    });
     lineup.forEach((team, slot) => {
       const scouterId = scouterIds[slot % scouterIds.length];
-      const { actions } = simulateMatch(
-        config,
-        random,
-        random.int(actionsPerMatch.min, actionsPerMatch.max),
-      );
+      const { actions } = idle.has(team)
+        ? { actions: [] }
+        : simulateMatch(config, random, random.int(actionsPerMatch.min, actionsPerMatch.max));
       const nonce = random.token();
       for (const a of actions) {
         actionCount++;

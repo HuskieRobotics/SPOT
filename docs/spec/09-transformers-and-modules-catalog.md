@@ -38,7 +38,10 @@
 - **TR-8** `getPath` keeps TR-3, with two changes: a `null` part-way along a path counts as
   missing (v5 threw even when given a default), and a `null` leaf is returned as `null`.
   `setPath` refuses to write through an existing non-object value (v5 silently replaced a falsy
-  one with `{}` and ignored a truthy one).
+  one with `{}` and ignored a truthy one). `observePathReads(onRead, fn)` reports every path read
+  while `fn` runs, with the value found, and `runPipeline` takes `beforeEntry` and `afterEntry`
+  callbacks; config:check uses both to find a path no earlier entry writes, so extensions need
+  not declare what they read (#317, docs/spec/20 §4 CC-9).
 - **TR-9** Transformers are registered by entry type and name, in one of three shapes: per
   performance (`tmp`), per team (`team`, given the team's performances in dataset order), or
   over the whole dataset (no built-in uses it since `removeDuplicates` was retired; it remains

@@ -17,6 +17,7 @@ import {
   getPath,
   hasPath,
   normalizeMissing,
+  observePathReads,
   PathError,
   runPipeline,
   setPath,
@@ -327,5 +328,68 @@ describe("AN-10: running a pipeline", () => {
   it("suggest finds near misses only", () => {
     expect(suggest("countAction", ["countActions", "sum"])).toBe("countActions");
     expect(suggest("zzz", ["countActions", "sum"])).toBeNull();
+  });
+
+  it("calls beforeEntry and afterEntry around each entry that runs (config:check, #317)", () => {
+    const calls: string[] = [];
+    runPipeline(
+      buildDataset(generated.performances),
+      [
+        entry({ type: "tmp", name: "actionCount", outputPath: "a" }),
+        entry({ type: "tmp", name: "actionCuont", outputPath: "b" }),
+        entry({ type: "team", name: "teamTotal", outputPath: "c", options: { path: "a" } }),
+      ],
+      {
+        registry,
+        context,
+        beforeEntry: (i, d) => calls.push(`before ${i} ${hasPath(d.tmps[0], "a")}`),
+        afterEntry: (i, d) => calls.push(`after ${i} ${hasPath(d.tmps[0], "a")}`),
+      },
+    );
+    expect(calls).toEqual(["before 0 false", "after 0 true", "before 2 true", "after 2 true"]);
+  });
+});
+
+describe("#317: watching what the pipeline reads", () => {
+  it("reports each getPath and hasPath with the value found, only while observing", () => {
+    const seen: [unknown, string, unknown][] = [];
+    const obj = { a: { b: 1, n: null } };
+    const result = observePathReads(
+      (target, path, value) => seen.push([target, path, value]),
+      () => {
+        getPath(obj, "a.b");
+        getPath(obj, "a.n");
+        getPath(obj, "a.missing", 0);
+        hasPath(obj, "x");
+        return "done";
+      },
+    );
+    getPath(obj, "a.b");
+    expect(result).toBe("done");
+    expect(seen).toEqual([
+      [obj, "a.b", 1],
+      [obj, "a.n", null],
+      [obj, "a.missing", undefined],
+      [obj, "x", undefined],
+    ]);
+  });
+
+  it("stops observing when the work throws, and restores an outer observer", () => {
+    const outer: string[] = [];
+    const inner: string[] = [];
+    observePathReads(
+      (_, path) => outer.push(path),
+      () => {
+        expect(() =>
+          observePathReads(
+            (_, path) => inner.push(path),
+            () => getPath({}, "missing"),
+          ),
+        ).toThrow(PathError);
+        getPath({ x: 1 }, "x");
+      },
+    );
+    expect(inner).toEqual(["missing"]);
+    expect(outer).toEqual(["x"]);
   });
 });

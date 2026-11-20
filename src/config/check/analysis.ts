@@ -11,6 +11,7 @@ import { keysFromPointer, type Key } from "./json";
 import {
   builtInModules,
   findReferences,
+  isPeriod,
   moduleOptionsSchema,
   modulesRoot,
   type Reference,
@@ -94,7 +95,6 @@ export class ActionCatalog {
   hint(ids: readonly string[], filters = true): string {
     const parts: string[] = [];
     // Buttons whose v5 ids cover the same periods are described together.
-    const byPeriods = new Map<string, { buttons: string[]; periods: string[] }>();
     const periodsOf = new Map<string, string[]>();
     const paths: [string, string][] = [];
     for (const id of ids) {
@@ -128,21 +128,9 @@ export class ActionCatalog {
             : `${paths.length === ids.length ? "They are" : `${paths.length} of them are`} paths; a button id is the last part, such as "${id}".`,
       );
     }
-    for (const [button, periods] of periodsOf) {
-      const key = periods.join("|");
-      const group = byPeriods.get(key) ?? { buttons: [], periods };
-      group.buttons.push(button);
-      byPeriods.set(key, group);
-    }
-    for (const { buttons, periods } of byPeriods.values()) {
-      const one = buttons.length === 1 && periods.length === 1;
-      parts.push(
-        one
-          ? `It is v5's id for button "${buttons[0]}" in ${periods[0]}.`
-          : `They are v5's ids for button${buttons.length === 1 ? "" : "s"} ${listed(buttons)}${buttons.length === 1 ? "" : " each"} in ${listed(periods, false)}.`,
-      );
-    }
-    if (byPeriods.size > 0) {
+    const composites = this.describeComposites(periodsOf, "It is", "They are");
+    parts.push(...composites);
+    if (composites.length > 0) {
       parts.push(
         filters
           ? 'v6 records the button id and the period separately: name the button, and choose periods with "phases", "segments" or "kinds" (docs/spec/20 §2.2).'
@@ -151,16 +139,59 @@ export class ActionCatalog {
     }
     return parts.join(" ");
   }
+
+  /**
+   * What to try for paths that end in a v5 id (`counts.autoStopShooting`), or "" when none does:
+   * v6 counts a button once, with its period beside it.
+   */
+  pathHint(paths: readonly string[]): string {
+    const periodsOf = new Map<string, string[]>();
+    for (const path of paths) {
+      const c = this.composite(path.split(".").pop() ?? path);
+      if (c) periodsOf.set(c.button, [...(periodsOf.get(c.button) ?? []), c.period]);
+    }
+    const one = paths.length === 1;
+    const composites = this.describeComposites(
+      periodsOf,
+      one ? "Its last part is" : "Their last parts are",
+      one ? "Its last part is" : "Their last parts are",
+    );
+    if (composites.length === 0) return "";
+    return [
+      ...composites,
+      'v6 counts a button under its own id and records the period beside it: count it per period with a countActions entry that has "phases", "segments" or "by", then read the button id from that output (docs/spec/20 §2.2).',
+    ].join(" ");
+  }
+
+  /** One sentence per group of buttons whose v5 ids cover the same periods. */
+  private describeComposites(
+    periodsOf: ReadonlyMap<string, string[]>,
+    one: string,
+    many: string,
+  ): string[] {
+    const byPeriods = new Map<string, { buttons: string[]; periods: string[] }>();
+    for (const [button, periods] of periodsOf) {
+      const key = periods.join("|");
+      const group = byPeriods.get(key) ?? { buttons: [], periods };
+      group.buttons.push(button);
+      byPeriods.set(key, group);
+    }
+    return [...byPeriods.values()].map(({ buttons, periods }) =>
+      buttons.length === 1 && periods.length === 1
+        ? `${one} v5's id for button "${buttons[0]}" in ${periods[0]}.`
+        : `${many} v5's ids for button${buttons.length === 1 ? "" : "s"} ${listed(buttons)}${buttons.length === 1 ? "" : " each"} in ${listed(periods, false)}.`,
+    );
+  }
 }
 
 /** "a", "b" and "c"; quoted unless `quote` is false. */
-function listed(items: readonly string[], quote = true): string {
+export function listed(items: readonly string[], quote = true): string {
   const q = items.map((i) => (quote ? `"${i}"` : i));
   return q.length <= 1 ? q.join("") : `${q.slice(0, -1).join(", ")} and ${q[q.length - 1]}`;
 }
 
 /** The first few ids, and how many more. */
-function someOf(ids: readonly string[], shown = 5): string {
+export function someOf(ids: readonly string[], shown = 5): string {
   const head = quoted(ids.slice(0, shown));
   return ids.length > shown ? `${head} and ${ids.length - shown} more` : head;
 }
@@ -225,7 +256,7 @@ function reportPeriods(
   ];
   const valid = { phase: phases, segment: segments, kind: kinds };
   for (const r of refs) {
-    if (r.kind === "action" || valid[r.kind].includes(r.id)) continue;
+    if (!isPeriod(r.kind) || valid[r.kind].includes(r.id)) continue;
     const near = nearHint(r.id, valid[r.kind], `${r.kind} id`);
     report.error(
       file,

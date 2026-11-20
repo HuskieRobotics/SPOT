@@ -38,6 +38,9 @@ export interface RunResult {
 export interface RunOptions {
   registry: TransformerRegistry;
   context: TransformerContext;
+  /** Called before and after each entry that runs, with the dataset as it is then (config:check). */
+  beforeEntry?: (index: number, dataset: Dataset) => void;
+  afterEntry?: (index: number, dataset: Dataset) => void;
 }
 
 /** Replace NaN, ±Infinity and undefined with null, all the way down (DM-1b). */
@@ -137,7 +140,7 @@ export function checkPipeline(
 export function runPipeline(
   dataset: Dataset,
   entries: readonly PipelineEntry[],
-  { registry, context }: RunOptions,
+  { registry, context, beforeEntry, afterEntry }: RunOptions,
 ): RunResult {
   const { runnable, problems } = checkPipeline(entries, registry);
   const ran: number[] = [];
@@ -154,6 +157,7 @@ export function runPipeline(
       stage: "run" as const,
     };
     ran.push(index);
+    beforeEntry?.(index, current);
 
     if (transformer.scope === "dataset") {
       try {
@@ -161,6 +165,7 @@ export function runPipeline(
       } catch (error) {
         problems.push({ ...base, message: message(error) });
       }
+      afterEntry?.(index, current);
       continue;
     }
 
@@ -211,6 +216,7 @@ export function runPipeline(
         failed: { count: failures.count, of, first: failures.first.at },
       });
     }
+    afterEntry?.(index, current);
   }
 
   return { dataset: current, problems, ran };

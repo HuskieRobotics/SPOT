@@ -39,7 +39,19 @@
       "type": "string",
       "minLength": 1,
       "pattern": "^\\S(.*\\S)?$",
-      "description": "Dot-separated object path (no leading/trailing whitespace)."
+      "description": "Dot-separated path to a team value: what a team entry of analysis-pipeline.json writes (no leading/trailing whitespace). config:check reports a path the pipeline never writes."
+    },
+    "performancePath": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^\\S(.*\\S)?$",
+      "description": "Dot-separated path to a value of each match: what a tmp entry of analysis-pipeline.json writes."
+    },
+    "itemPath": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^\\S(.*\\S)?$",
+      "description": "Dot-separated path inside each item of the list another option names, such as other.pos on each action."
     },
     "actionId": {
       "type": "string",
@@ -140,7 +152,10 @@
                 "additionalProperties": false,
                 "required": ["trackedStats"],
                 "properties": {
-                  "trackedStats": { "type": "array", "items": { "$ref": "#/$defs/path" } }
+                  "trackedStats": {
+                    "type": "array",
+                    "items": { "$ref": "#/$defs/performancePath" }
+                  }
                 }
               }
             }
@@ -161,7 +176,7 @@
                   "imgPath"
                 ],
                 "properties": {
-                  "coordinatePath": { "$ref": "#/$defs/path" },
+                  "coordinatePath": { "$ref": "#/$defs/itemPath" },
                   "aggregatedActionsPath": { "$ref": "#/$defs/path" },
                   "actionGroups": {
                     "type": "array",
@@ -224,7 +239,10 @@
                             "required": ["name", "path"],
                             "properties": {
                               "name": { "type": "string" },
-                              "path": { "type": "string" }
+                              "path": {
+                                "anyOf": [{ "const": "none" }, { "$ref": "#/$defs/path" }],
+                                "description": "A team value, or \"none\" for 0."
+                              }
                             }
                           }
                         }

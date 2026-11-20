@@ -8,6 +8,8 @@
  *    phases, variables), and from the other files into it (the button and period ids options
  *    name, enrichment phases, the QR id field); transformer names and options against the
  *    registry, extensions included (TR-14); module names.
+ * 3. The pipeline runs on generated matches (./generated.ts): paths nothing writes, values that
+ *    are empty for everyone, rankings a team that never did anything drops out of.
  *
  * A check that compares two files runs only when both passed step 1, so one typo does not bury
  * the report; the report says which checks were skipped. Pure: the caller reads the files, so the
@@ -24,6 +26,7 @@ import type {
 } from "../types";
 import { validateConfig, type ConfigKind } from "../validate";
 import { checkModulesFile, checkPipelineFile } from "./analysis";
+import { checkOnGeneratedMatches, type GeneratedSummary } from "./generated";
 import { keysFromPointer, parseJson, type Key } from "./json";
 import { CONFIG_FILES, fileName, Reporter, type CheckReport } from "./report";
 import { checkMatchScouting } from "./scouting";
@@ -33,6 +36,8 @@ export { CONFIG_FILES, formatReport, type CheckReport, type Finding } from "./re
 export interface CheckOptions {
   /** The transformers to check pipeline entries against; the app's registry by default. */
   registry?: TransformerRegistry;
+  /** Run the pipeline on generated matches (CC-9 to CC-12); default true. */
+  generated?: boolean;
 }
 
 const ENTRY_KEYS = new Set(["type", "name", "outputPath", "options", "comment"]);
@@ -133,15 +138,9 @@ export function checkConfiguration(
   // A pipeline or modules file with some bad entries is still checked entry by entry, as long as
   // its overall shape is right.
   const pipelineDoc = docs["analysis-pipeline"] as AnalysisPipelineConfig | undefined;
+  const registry = options.registry ?? createRegistry();
   if (pipelineDoc && Array.isArray(pipelineDoc.pipeline)) {
-    checkPipelineFile({
-      pipeline: pipelineDoc,
-      badEntries,
-      enrichmentValid,
-      ms,
-      registry: options.registry ?? createRegistry(),
-      report,
-    });
+    checkPipelineFile({ pipeline: pipelineDoc, badEntries, enrichmentValid, ms, registry, report });
   }
   const modulesDoc = docs["analysis-modules"] as AnalysisModulesConfig | undefined;
   if (modulesDoc !== undefined && Array.isArray(modulesDoc?.modules)) {
@@ -158,7 +157,36 @@ export function checkConfiguration(
   if (qr && ms) checkQr(qr, ms, report);
   else if (qr && !ms) skipped.push("the QR id field: fix the errors in match-scouting.json first.");
 
-  return report.finish(sources, skipped);
+  // Last, so that what follows from a mistake already reported is not reported again.
+  let generated: GeneratedSummary | null = null;
+  if (options.generated === false) {
+    // A caller that only wants the checks above.
+  } else if (ms && pipelineDoc && Array.isArray(pipelineDoc.pipeline)) {
+    try {
+      generated = checkOnGeneratedMatches({
+        ms,
+        pipeline: pipelineDoc,
+        badEntries,
+        enrichmentValid,
+        modules: Array.isArray(modulesDoc?.modules) ? (modulesDoc ?? null) : null,
+        badModules,
+        registry,
+        report,
+      });
+    } catch (error) {
+      skipped.push(
+        `running the pipeline on generated matches failed (${error instanceof Error ? error.message : String(error)}). This is a bug in SPOT, not in the configuration; please report it.`,
+      );
+    }
+  } else if (pipelineDoc !== undefined) {
+    skipped.push(
+      "running the pipeline on generated matches: fix the errors in match-scouting.json and analysis-pipeline.json first.",
+    );
+  }
+
+  const result = report.finish(sources, skipped);
+  if (generated) result.generated = generated;
+  return result;
 }
 
 /** The QR payload must number every id the scouting screen can record, and hold a match's times. */

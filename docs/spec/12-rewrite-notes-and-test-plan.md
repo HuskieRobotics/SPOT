@@ -313,7 +313,10 @@ that a new feature can be verified not to break existing behavior. Requirements:
   transformers, and modules, and that every id referenced by the pipeline and modules exists
   in the corresponding `match-scouting.json` catalog (this would have caught F-4).
   `npm run config:check` (#317, docs/spec/20 §4) runs these checks for students, and
-  `tests/unit/config-check.test.ts` runs it on every converted season.
+  `tests/unit/config-check.test.ts` runs it on every converted season. It also runs the pipeline
+  on generated matches, which catches what the files alone cannot: a path no entry writes, a
+  module path the pipeline never writes, a value empty for everyone, and a ranking a team that
+  never did anything drops out of (`tests/unit/config-check-generated.test.ts`).
 - **T-4** Golden-dataset regression tests run the full pipeline on a fixed set of recorded
   TMPs (real or synthetic, checked into the repo). **[A-45]** A real past-season dump can be
   provided, but because features must be verified before any matches of a new season exist,
