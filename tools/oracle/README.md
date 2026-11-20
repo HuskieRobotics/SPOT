@@ -119,14 +119,44 @@ form by the divergence rules, so the entries after it see the inputs legacy gave
 transformer is then checked against v5 on its own, whatever order the transformers are written
 in.
 
-`tests/unit/oracle-compare.test.ts` checks every set's structure. For the 2025 sets it also acts
-as a ratchet, in fed mode: any entry that runs without problems must match. The 2026 sets join the ratchet when
-their composite-id paths are translated (#320, CS-16).
+`npm run oracle:compare -- <set> --divergences` lists, for each accepted rule, the output paths it
+accepted, with list positions written as `#`.
+
+`tests/unit/oracle-compare.test.ts` checks every set's structure and that every entry runs. The
+2025 sets must match the golden output entry by entry, with nothing fed, and each divergence rule
+must accept exactly the number of values recorded in the test (#319, gate K-1). A change in any
+count is a change in behavior to look at. Every rule must be applied by at least one set, so a
+rule that no longer excuses anything is removed. The 2026 sets join when their composite-id paths
+are translated (#320, CS-16).
+
+### Divergences, reviewed 2026-11-20 (#319)
+
+Each rule below was checked against the paths it accepts (`--divergences`). The 2025 counts are
+pinned by the test. The 2026 counts are what the rules accept today, while the 2026 sets still
+differ (#320).
+
+| Rule                             | Cites                      | 2025ilch | 2025syn | 2026mnwi | 2026syn | What it accepts, and why that is right                                                                                                                                       |
+| -------------------------------- | -------------------------- | -------: | ------: | -------: | ------: | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `missing-nan`                    | DM-1b, D-7a                |    1,635 |   1,345 |    2,741 |   4,228 | Only cycle times with no cycle to time: per match (`cycle.*.averageTime`) and per team (`cycles.*.averageTime`). v5 divided by zero and wrote NaN; v6 writes null (No Data). |
+| `missing-undefined`              | DM-1b, D-7a                |        – |       – |       21 |       – | The three component OPRs of the 7 teams TBA had none for. v5 wrote undefined; v6 writes null.                                                                                |
+| `ratio-falsy-divbyzero-2025`     | F-24                       |       24 |       1 |        – |       – | `algaeAccuracy` (21) and `coralAccuracy` (3) for teams that never attempted: v5 turned the configured `divByZero: 0` into "N/A". These are the 24 of F-24.                   |
+| `ratio-misplaced-divbyzero-2025` | F-25, CS-11                |        3 |       – |        – |       – | `timePerGamePiece` for the 3 teams that never scored: v5 ignored the misplaced `divByZero: 150000`. The other 3 of F-24's 27 "N/A" values.                                   |
+| `counts-nonaction-buttons-2025`  | doc 09 countActions (#311) |    1,964 |   1,824 |        – |       – | `counts` and `averages` of `startGame`, `undo`, `Reef` and `autoScoreCoral`, always 0 in v5 because those buttons never record an action. v6 counts action buttons only.     |
+| `cycle-start-key-2025`           | doc 09 cycle (#314)        |   17,648 |   4,068 |        – |       – | A rename: v4.2.0 called a cycle's first action `pickup`; v5 and v6 call it `starts`. The values themselves are compared.                                                     |
+| `action-period-fields`           | CS-16, DV-1                |   70,592 |  16,272 |        – |       – | The phase, segment, kind and segment index on the `starts` and `ending` action of each cycle. Only v6 actions carry their period.                                            |
+| `tba-ids-start-at-zero-2026`     | DM-11 (#315)               |        – |       – |       75 |       – | `counts.autoTowerRobot_None` and `counts.endGameTowerRobot_None` start at 0. v5's hidden layer never listed the `_None` results.                                             |
+| `tba-none-average-2026`          | DM-11, TR-12 (#315)        |        – |       – |       26 |       – | The team averages of those counts: how often it happened, not 1 for the matches where it did.                                                                                |
+| `opr-without-tba`                | DM-13, DM-1b (#315)        |        – |       – |        – |     144 | The component OPRs of the synthetic set, which ran without TBA data: null in v6, absent in v5.                                                                               |
+
+Removed in the review: `missing-infinity`. Legacy `ratio` guards a zero denominator, and every
+other division in v4.2.0 and v5 is an average, which gives NaN, so no golden file holds Infinity.
+The issue's other examples need no rule for 2025: F-2 (tmp `averageArray`) and F-3
+(`finalActionOccurrence`) are transformers the 2025 pipeline does not use.
 
 ## What the rewrite must match
 
-- 2025: `teams.json` and derived `tmps.json` exactly, except at paths affected by
-  `unknownActionIds` (if any) where the rewrite counts and the legacy output does not.
+- 2025: `teams.json` and derived `tmps.json` exactly, except where a reviewed divergence above
+  applies. Met (#319): both sets match all 46 entries, and the 2025 sets have no unknown ids.
 - 2026: `teams.json` and derived `tmps.json` exactly, except where a known legacy defect
   listed in `docs/spec/12-rewrite-notes-and-test-plan.md` is deliberately fixed; each such
   difference is recorded alongside the golden file.
