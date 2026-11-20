@@ -146,6 +146,11 @@ handle divide-by-zero and missing data, avoid game terminology, and put any code
 - **MO-4** Rank badges: when `sort` is set and a single team is displayed, the team's rank
   among all teams with a valid value is computed; CSS classes `top5` (≤ 5 %), `top25`, `top50`,
   else `top100`.
+- **MO-4a** (v6, #318) The value a module shows comes from `src/analysis/modules/display.ts`,
+  which config:preview uses too: `value × multiplier + addend`, No Data when the value is
+  missing, not a number, or equal to `hideIfValue`, then `decimals` and `unit`. A missing value
+  is No Data, not 0 (F-27). Ties share a rank: two teams with the best value are both #1, and the
+  next is #3. The rank is among every team at the event with a value.
 - **MO-5** Plotly modules call `getCssVar` for theme colors, use font Cairo, title size 32,
   `responsive: true`, and remove the zoom/pan mode-bar buttons.
 

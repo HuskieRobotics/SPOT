@@ -122,6 +122,14 @@ active into inactive stop within 10 s after the switch. Two rules follow:
   that starts or ends in the period (document 09 TR-13). Filtering first would break such pairs
   or match a start with a stop from a later shift.
 
+- **F-27** Modules read a missing team value as 0 (`getPath(team, path, 0)` in `Stats` and
+  `ColumnDisplay`), so a module naming a path the pipeline never wrote showed 0 for every team,
+  ranked them all, and looked like real data. The 2025 configuration v4.2.0 shipped had six such
+  values: "Average Coral Misses", "Average Algae Misses", "Average Coral Drops", "Average Algae
+  Drops", "Barge Points" and "Expected Barge Points" (docs/spec/20 §4). Found 2026-11-20 (#318).
+  **v6:** a missing value is No Data (DM-1b), config:check reports the path (CC-10), and ties
+  share a rank (document 09 MO-4).
+
 ## Security concerns (all resolved 2026-09-17; see ADR 0004 and 0005)
 
 - **S-1** Everything that reads or writes scouting data is unauthenticated except the admin

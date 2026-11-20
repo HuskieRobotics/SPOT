@@ -24,6 +24,16 @@ a ranking that a team that never did anything drops out of. Errors make it exit 
 each warning, and either fix it or know why it stays. `npm test` validates the files too
 (`tests/unit/config-active.test.ts`).
 
+To see what the pipeline computes and what each module would show, before any match is played:
+
+```sh
+npm run config:preview                              # this folder, on 80 generated matches
+npm run config:preview -- config --team 3061        # one team, as the team view shows it
+```
+
+Values marked ⚠ are 0, No Data or the same for every team; the full generated dataset is written to
+`config-preview.json` (docs/spec/22 §3.2).
+
 They were produced from the 2026 REBUILT legacy files in `config/v1/` by the converter:
 
 ```sh

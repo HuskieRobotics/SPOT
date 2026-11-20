@@ -26,7 +26,8 @@ import type {
 } from "../types";
 import { validateConfig, type ConfigKind } from "../validate";
 import { checkModulesFile, checkPipelineFile } from "./analysis";
-import { checkOnGeneratedMatches, type GeneratedSummary } from "./generated";
+import { checkOnGeneratedMatches } from "./generated";
+import type { GeneratedSummary } from "../simulate";
 import { keysFromPointer, parseJson, type Key } from "./json";
 import { CONFIG_FILES, fileName, Reporter, type CheckReport } from "./report";
 import { checkMatchScouting } from "./scouting";

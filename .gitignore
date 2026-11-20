@@ -50,3 +50,6 @@ next-env.d.ts
 # playwright
 /test-results/
 /playwright-report/
+
+# npm run config:preview writes the generated dataset here
+config-preview.json

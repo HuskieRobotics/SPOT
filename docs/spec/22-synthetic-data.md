@@ -102,6 +102,47 @@ over the same inputs, migrated to the v6 shape exactly as the real exports are, 
 config:check (docs/spec/20 §4) generates 120 matches with seed `config:check` and one idle robot
 (team 9999), plus TBA responses when enrichment is configured, and runs the pipeline on them.
 
+### 3.2 Previewing a configuration: `npm run config:preview` (#318, gate K-3)
+
+```sh
+npm run config:preview                                  # the active configuration in config/
+npm run config:preview -- config/seasons/2025           # another season
+npm run config:preview -- <folder> --team 3061          # one team, as the team view shows it
+npm run config:preview -- <folder> --all                # every value of every entry
+          [--seed preview] [--matches 80] [--out config-preview.json]
+```
+
+The preview plays a typical event (80 matches, about ten a team, seed `preview`) with one team
+that never does anything (9999), adds synthetic TBA data, runs the pipeline, and prints:
+
+- **What the modules show:** every value each module names, formatted as the module formats
+  it (multiplier, decimals, unit; document 09 MO-4a), with its minimum, median and maximum across
+  teams and what team 9999 gets. A value no entry writes reads "never written by the pipeline",
+  and a list (the actions a heatmap plots) is described by its length.
+- **What each entry writes:** one line per entry, per performance or per team: the range of a
+  number, the lengths of a list, or how many values an object holds.
+- **What looks wrong:** a value that is 0, No Data or empty for every team or performance, or
+  the same for every team, is marked ⚠ next to it, with the entry that writes it.
+
+`--team` shows one team module by module, with its rank where a module sorts; team 9999 shows
+what a team that never did anything gets. The whole generated dataset (`teams` and `tmps`) is
+written to `config-preview.json` (git-ignored). The preview needs match-scouting.json and
+analysis-pipeline.json to pass their schemas; other mistakes are config:check's job, and the
+preview ends with how many it finds.
+
+The generated matches are random within the rules, so check the shape of the output, not its
+size: whether a value varies between teams, has the right unit and ends up where a module
+expects it. Magnitudes are not realistic; 2025's "Leave" exceeds 100% because the walk can press
+the leave button more than once a match.
+
+**A page, or the terminal? (recommendation, to be confirmed on #318)**
+The terminal preview is enough until the
+Phase 3 team view (gate W-2). That view already has to render every module from a dataset,
+client-side, with the same engine (ADR 0005). The generator and the preview are pure TypeScript,
+so the cheapest page is a "generated event" option in that view, which shows the real modules
+with nothing new to maintain. A separate page before kickoff would be thrown away when the team
+view arrives.
+
 ## 4. What is still missing
 
 - **v6 engine expectations.** The legacy golden output above is the target; the engine that
