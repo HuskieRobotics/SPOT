@@ -10,7 +10,7 @@
  *   so paths such as `counts.l4` exist even when nothing was pressed. Undo, navigation and
  *   match-control buttons record nothing and are not listed (v5 listed them as 0).
  * - `ids` counts only the listed ids, each starting at 0.
- * - `phases`, `segments`, `segmentKinds` count only actions recorded in those periods.
+ * - `phases`, `segments`, `kinds` count only actions recorded in those periods.
  * - `by: "phase" | "segment"` splits the counts by period (see periods.ts for the keys); every
  *   configured period that passes the filters starts with all its ids at 0.
  * - `actionArrayPath` (default `actions`) counts a different array of actions on the

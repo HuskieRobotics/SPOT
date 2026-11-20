@@ -204,9 +204,13 @@ a composite id was simply the button id.
    throughout (`team`, `submittedAt`, `actions`).
 2. Per-period analysis is expressed with transformer options (named 2026-11-19, #311):
    - **Filters**, on every transformer that picks actions by id: `phases`, `segments`,
-     `segmentKinds`, each a list of configuration ids. An action must pass every filter given;
+     `kinds`, each a list of configuration ids. An action must pass every filter given;
      within one filter, any listed id matches. `"preMatch"` selects actions recorded before the
-     match started.
+     match started. `kinds` matches an action's **effective kind** (decided 2026-11-19, built
+     in #326): the kind the scouter selected, else a kind the configuration fixes for the
+     action's segment or phase. In 2026 the hub is active for both alliances in auto, the
+     transition and endgame, so those periods are configured `"kind": "active"` and
+     `kinds: ["active"]` means "while our hub was active", in one entry.
    - **Grouping**, on `countActions`: `by: "phase"` gives one count object per phase
      (`counts.auto.l4`, `counts.teleop.l4`, `counts.preMatch.l4`), the usual need.
      `by: "segment"` gives the most specific period: the selected kind or else the segment,

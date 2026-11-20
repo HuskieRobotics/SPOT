@@ -102,7 +102,7 @@ describe("CS-16: periods", () => {
   it("filters: every filter must pass; any listed value passes it", () => {
     const shift = { phase: "teleop", segment: "shift", segmentKind: "active", segmentIndex: 1 };
     expect(passesFilter(shift, { phases: ["auto", "teleop"] })).toBe(true);
-    expect(passesFilter(shift, { phases: ["teleop"], segmentKinds: ["inactive"] })).toBe(false);
+    expect(passesFilter(shift, { phases: ["teleop"], kinds: ["inactive"] })).toBe(false);
     expect(passesFilter({ phase: "teleop", segment: null }, { segments: ["shift"] })).toBe(false);
     expect(passesFilter({ phase: null }, { phases: [PRE_MATCH] })).toBe(true);
     expect(passesFilter({}, { phases: [PRE_MATCH] })).toBe(true); // arrays without period fields
@@ -220,7 +220,7 @@ describe("countActions", () => {
         type: "tmp",
         name: "countActions",
         outputPath: "activeShifts",
-        options: { all: true, segmentKinds: ["active"], by: "segment" },
+        options: { all: true, kinds: ["active"], by: "segment" },
       },
       {
         type: "tmp",

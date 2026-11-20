@@ -544,8 +544,8 @@
           "segments": {
             "$ref": "#/$defs/periodFilter/properties/segments"
           },
-          "segmentKinds": {
-            "$ref": "#/$defs/periodFilter/properties/segmentKinds"
+          "kinds": {
+            "$ref": "#/$defs/periodFilter/properties/kinds"
           },
           "by": {
             "enum": ["phase", "segment"],
@@ -860,9 +860,9 @@
           "$ref": "#/$defs/idList",
           "description": "Segment ids from match-scouting.json, such as \"transition\" or \"shift\"."
         },
-        "segmentKinds": {
+        "kinds": {
           "$ref": "#/$defs/idList",
-          "description": "Segment kind ids the scouter selects, such as \"active\" or \"inactive\"."
+          "description": "Segment kind ids, such as \"active\" or \"inactive\": the kind the scouter selected, or a kind the configuration fixes for a whole period (#326)."
         }
       }
     }

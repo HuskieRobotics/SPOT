@@ -8,7 +8,8 @@
  * Filters (an action must pass every filter given; within one filter, any listed value matches):
  *   phases:       phase ids, or "preMatch" for actions recorded before the match started
  *   segments:     segment ids ("transition", "shift")
- *   segmentKinds: scouter-selected kinds ("active", "inactive")
+ *   kinds:        segment kinds ("active", "inactive"); today the kind the scouter selected,
+ *                 and from #326 also a kind the configuration fixes for a whole period
  *
  * Group keys:
  *   by "phase":   the phase id, or "preMatch"
@@ -26,7 +27,7 @@ export const PRE_MATCH = "preMatch";
 export interface PeriodFilter {
   phases?: string[];
   segments?: string[];
-  segmentKinds?: string[];
+  kinds?: string[];
 }
 
 export type GroupBy = "phase" | "segment";
@@ -44,17 +45,14 @@ function periodOf(action: Partial<Period>): Period {
 }
 
 export function hasPeriodFilter(filter: PeriodFilter): boolean {
-  return Boolean(filter.phases || filter.segments || filter.segmentKinds);
+  return Boolean(filter.phases || filter.segments || filter.kinds);
 }
 
 export function passesFilter(action: Partial<Period>, filter: PeriodFilter): boolean {
   const p = periodOf(action);
   if (filter.phases && !filter.phases.includes(p.phase ?? PRE_MATCH)) return false;
   if (filter.segments && (p.segment === null || !filter.segments.includes(p.segment))) return false;
-  if (
-    filter.segmentKinds &&
-    (p.segmentKind === null || !filter.segmentKinds.includes(p.segmentKind))
-  )
+  if (filter.kinds && (p.segmentKind === null || !filter.kinds.includes(p.segmentKind)))
     return false;
   return true;
 }
