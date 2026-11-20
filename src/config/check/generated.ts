@@ -20,21 +20,23 @@
  * likely mistakes rather than proof; a value that only real matches reveal is not reported.
  */
 import {
-  buildEnrichedDataset,
-  type TbaEnrichment,
-  type TbaEventData,
-} from "@/analysis/enrichment/tba";
-import {
   observePathReads,
-  runPipeline,
   type Dataset,
   type PipelineProblem,
   type TransformerRegistry,
 } from "@/analysis/engine";
 import { PRE_MATCH } from "@/analysis/transformers/periods";
-import { generate } from "@/generate/synthetic";
-import { generateTba } from "@/generate/synthetic-tba";
 import { suggest } from "@/lib/suggest";
+import {
+  eachLeaf,
+  IDLE_TEAM,
+  NO_ENRICHMENT,
+  nothingIn,
+  simulate,
+  valueAt,
+  type GeneratedSummary,
+  type Nothing,
+} from "../simulate";
 import type { AnalysisModulesConfig, AnalysisPipelineConfig, MatchScoutingConfig } from "../types";
 import { ActionCatalog, listed, someOf } from "./analysis";
 import type { Key } from "./json";
@@ -57,18 +59,7 @@ const MODULES = "analysis-modules" as const;
  * `actionTimeFilter`) went unpressed and gave false warnings; 120 takes about 0.2 s.
  */
 export const GENERATED = { seed: "config:check", matches: 120 } as const;
-/** The robot whose scouts record nothing: a team that never did anything. */
-export const IDLE_TEAM = "9999";
-
-/** What the report says about the generated event. */
-export interface GeneratedSummary {
-  matches: number;
-  performances: number;
-  teams: number;
-}
-
 type Kind = "tmp" | "team";
-type Nothing = "0" | "null" | "empty" | "false";
 
 interface ReadStat {
   kind: Kind;
@@ -102,40 +93,6 @@ export interface GeneratedCheck {
 }
 
 // ---------------------------------------------------------------------------- small helpers
-
-/** The value at a dot path, without telling the read observer. */
-function valueAt(obj: unknown, path: string): unknown {
-  let current = obj;
-  for (const key of path === "" ? [] : path.split(".")) {
-    if (current === null || typeof current !== "object") return undefined;
-    current = (current as Record<string, unknown>)[key];
-  }
-  return current;
-}
-
-function nothingIn(v: unknown): Nothing | null {
-  if (v === null || v === undefined) return "null";
-  if (v === 0) return "0";
-  if (v === false) return "false";
-  if (v === "") return "empty";
-  if (Array.isArray(v)) return v.length === 0 ? "empty" : null;
-  if (typeof v === "object") return Object.keys(v).length === 0 ? "empty" : null;
-  return null;
-}
-
-/** Visit every leaf of a value: numbers, strings, lists, and empty objects. */
-function eachLeaf(value: unknown, suffix: string, visit: (suffix: string, v: unknown) => void) {
-  if (value !== null && typeof value === "object" && !Array.isArray(value)) {
-    const keys = Object.keys(value);
-    if (keys.length > 0) {
-      for (const k of keys) {
-        eachLeaf((value as Record<string, unknown>)[k], suffix ? `${suffix}.${k}` : k, visit);
-      }
-      return;
-    }
-  }
-  visit(suffix, value);
-}
 
 const join = (base: string, suffix: string) => (suffix ? `${base}.${suffix}` : base);
 const under = (path: string, prefix: string) => path === prefix || path.startsWith(`${prefix}.`);
@@ -229,30 +186,8 @@ interface Observed {
   summary: GeneratedSummary;
 }
 
-const OFF: TbaEnrichment = {
-  scoreBreakdown: { enabled: false, prefixes: [], knownIds: [] },
-  componentOprs: [],
-};
-
 function observe(check: GeneratedCheck): Observed {
   const { ms, pipeline, badEntries, enrichmentValid, registry } = check;
-  const generated = generate({
-    config: ms,
-    seed: GENERATED.seed,
-    matches: GENERATED.matches,
-    idleTeams: [IDLE_TEAM],
-  });
-  const enrichment = enrichmentValid ? pipeline.enrichment.tba : OFF;
-  const tba: TbaEventData | null =
-    enrichment.scoreBreakdown.enabled || enrichment.componentOprs.length > 0
-      ? generateTba(generated.performances, {
-          enrichment,
-          seed: GENERATED.seed,
-          idleTeams: [IDLE_TEAM],
-        })
-      : null;
-  const dataset = buildEnrichedDataset(generated.performances, enrichment, tba);
-
   const ran = pipeline.pipeline.map((_, i) => i).filter((i) => !badEntries.has(i));
   const entries = ran.map((i) => pipeline.pipeline[i]);
 
@@ -295,9 +230,13 @@ function observe(check: GeneratedCheck): Observed {
       }
     },
     () =>
-      runPipeline(dataset, entries, {
+      simulate({
+        ms,
+        entries,
+        enrichment: enrichmentValid ? pipeline.enrichment.tba : NO_ENRICHMENT,
         registry,
-        context: { config: ms },
+        seed: GENERATED.seed,
+        matches: GENERATED.matches,
         beforeEntry: (i, d) => {
           index(d);
           current = ran[i];
@@ -348,11 +287,7 @@ function observe(check: GeneratedCheck): Observed {
     leaves,
     writers,
     recorded,
-    summary: {
-      matches: generated.report.matches,
-      performances: result.dataset.tmps.length,
-      teams: Object.keys(result.dataset.teams).length,
-    },
+    summary: result.generated,
   };
 }
 

@@ -28,6 +28,6 @@ output, so these files cannot drift away from the converter.
 
 `npm run config:check -- config/seasons/2025` reports six errors in `analysis-modules.json` and
 three warnings about rankings. They are what v4.2.0 shipped (docs/spec/20 §4): four "Team Stats"
-lines and the "Barge Points" values read paths the pipeline never wrote, so they always showed
-No Data. They stay here because these files must equal the converter output; when you copy 2025
+lines and the "Barge Points" values read paths the pipeline never wrote, so v5 showed 0.00 for
+every team (docs/spec/12 F-27). They stay here because these files must equal the converter output; when you copy 2025
 as a starting point, fix them.

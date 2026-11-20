@@ -400,8 +400,8 @@ show six errors that v4.2.0 shipped. Four "Team Stats" lines read `averages.miss
 `missAlgae`, `dropCoral` and `dropAlgae`, which were never written: `averages` averages each
 match's counts, and those totals exist only per team. The "Barge Points" column and "Expected
 Barge Points" read `avgEndgamePoints`, which the original 2025 pipeline wrote and v4.2.0's did
-not. The v4.2.0 golden output has none of these values, so all six showed No Data at every
-event. There are also three ranking warnings: the endgame, algae and coral cycle times rank
+not. The v4.2.0 golden output has none of these values. v5 read a missing value as 0, so all
+six showed 0.00 for every team at every event, all tied for first (F-27). There are also three ranking warnings: the endgame, algae and coral cycle times rank
 teams with no `ifNone`. At 2025ilch, 5 of 42 teams never completed a coral cycle and dropped out
 of that ranking. The archived files stay as converted, because they are an oracle input that a
 drift test pins to the converter (`config/seasons/README.md`).
