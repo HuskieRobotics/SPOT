@@ -91,13 +91,13 @@ interface Checked {
   options: Record<string, unknown>;
 }
 
-/** Check every entry without running anything. Used by the runner and by `config:check`. */
 /** Transformers v6 no longer has, and what replaced them; checked before "did you mean". */
 export const RETIRED_TRANSFORMERS: Readonly<Record<string, string>> = {
   removeDuplicates:
     "It is no longer needed: analysis never sees a performance that a re-scout replaced (RT-14a). Remove this entry.",
 };
 
+/** Check every entry without running anything. Used by the runner and by `config:check`. */
 export function checkPipeline(
   entries: readonly PipelineEntry[],
   registry: TransformerRegistry,
@@ -130,7 +130,16 @@ export function checkPipeline(
       return;
     }
     const options = entry.options ?? {};
-    const issues = registry.validateOptions(transformer, options);
+    let issues;
+    try {
+      issues = registry.validateOptions(transformer, options);
+    } catch (error) {
+      problems.push({
+        ...base,
+        message: `${message(error)} This is a bug in the transformer's code, not in the configuration; entries that use it cannot run until it is fixed.`,
+      });
+      return;
+    }
     if (issues.length > 0) {
       const detail = issues
         .map((i) => `${i.path === "(root)" ? "options" : `options.${i.path}`}: ${i.message}`)

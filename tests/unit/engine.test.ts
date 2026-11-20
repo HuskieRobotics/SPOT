@@ -24,7 +24,7 @@ import {
   TransformerRegistry,
   type AnalysisPerformance,
 } from "@/analysis/engine";
-import { createRegistry } from "@/analysis/transformers";
+import { builtInTransformers, createRegistry } from "@/analysis/transformers";
 
 const config = JSON.parse(
   readFileSync(join(process.cwd(), "config", "seasons", "2025", "match-scouting.json"), "utf8"),
@@ -199,14 +199,11 @@ describe("ADR 0005 / CS-10: the registry", () => {
   });
 
   it("built-in transformers use the pipeline schema for their options (ADR 0005)", () => {
-    const builtIns = createRegistry();
-    for (const type of ["tmp", "team"] as const) {
-      for (const name of builtIns.names(type)) {
-        const schema = builtIns.get(type, name)?.optionsSchema as { $ref?: string };
-        expect(schema.$ref).toMatch(/analysis-pipeline\.schema\.json#\/\$defs\/options\/\w+$/);
-      }
+    for (const t of builtInTransformers) {
+      const schema = t.optionsSchema as { $ref?: string };
+      expect(schema.$ref).toMatch(/analysis-pipeline\.schema\.json#\/\$defs\/options\/\w+$/);
     }
-    expect(builtIns.names("tmp")).toContain("countActions");
+    expect(createRegistry().names("tmp")).toContain("countActions");
   });
 });
 
