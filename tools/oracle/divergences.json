@@ -16,13 +16,6 @@
       "v6": null
     },
     {
-      "id": "missing-infinity",
-      "cites": "DM-1b, D-7a",
-      "why": "A missing value is null in v6. v5 could produce Infinity from a division by zero.",
-      "legacy": ["__Infinity__", "__-Infinity__"],
-      "v6": null
-    },
-    {
       "id": "ratio-falsy-divbyzero-2025",
       "cites": "F-24",
       "why": "The 2025 accuracy ratios configure divByZero: 0, but v5's team ratio wrote divByZero || \"N/A\", so 0 became \"N/A\". v6 writes the configured 0, which ranks a team that never scored last.",

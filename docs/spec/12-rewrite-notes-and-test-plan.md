@@ -331,7 +331,9 @@ that a new feature can be verified not to break existing behavior. Requirements:
   the suite MUST include a **synthetic TMP generator** driven by a `match-scouting.json`
   (random but rule-respecting action queues), and golden expectations for it and compare the derived `counts`,
   `scores`, `cycles`, `averages`, and `averageScores` against stored expected output, so any
-  change to a transformer that alters results is visible in the diff.
+  change to a transformer that alters results is visible in the diff. Met for 2025 (#319): the
+  engine matches both 2025 sets entry by entry, and `tests/unit/oracle-compare.test.ts` pins how
+  many values each reviewed divergence accepts (`tools/oracle/README.md`).
 - **T-5** API/integration tests exercise every endpoint in document 11 against an ephemeral
   MongoDB (in-memory server or a container): auth status codes, demo-mode behavior, TMP
   de-duplication on sync and QR submission, flag/delete, event-scoped datasets, and setup

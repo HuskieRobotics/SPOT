@@ -174,6 +174,11 @@ export interface Comparison {
   compared: number;
   /** Accepted differences per divergence rule. */
   accepted: Record<string, number>;
+  /**
+   * The same, per output path, with list positions written as `#` (`cycles.coral.all.#.ts`):
+   * what each rule excuses, for reviewing the rules (#319).
+   */
+  acceptedPaths: Record<string, Record<string, number>>;
   /** Unaccepted differences, not attributable to any entry's outputPath when `entry` is null. */
   differences: Difference[];
   /** Number of unaccepted differences in total (differences may be truncated). */
@@ -203,6 +208,13 @@ export function compareDatasets(
   const rules = options.rules ?? loadDivergences();
   const keep = options.keep ?? 200;
   const accepted: Record<string, number> = {};
+  const acceptedPaths: Record<string, Record<string, number>> = {};
+  const accept = (rule: string, path: string) => {
+    accepted[rule] = (accepted[rule] ?? 0) + 1;
+    const shape = path.replace(/\.\d+(?=\.|$)/g, ".#");
+    const byPath = (acceptedPaths[rule] ??= {});
+    byPath[shape] = (byPath[shape] ?? 0) + 1;
+  };
   const differences: Difference[] = [];
   let differenceCount = 0;
   let compared = 0;
@@ -231,7 +243,7 @@ export function compareDatasets(
       if (Object.is(legacyValue, v6Value)) return;
       const rule = acceptingRule(rules, options.set, path, legacyValue, v6Value);
       if (rule) {
-        accepted[rule.id] = (accepted[rule.id] ?? 0) + 1;
+        accept(rule.id, path);
         return;
       }
       differenceCount++;
@@ -242,7 +254,7 @@ export function compareDatasets(
     };
     for (const [original, legacyValue] of legacyLeaves) {
       const { path: legacyPath, applied } = renamed(rules, options.set, original);
-      for (const id of applied) accepted[id] = (accepted[id] ?? 0) + 1;
+      for (const id of applied) accept(id, original);
       const path = options.mapLegacyPath ? options.mapLegacyPath(scope, legacyPath) : legacyPath;
       if (path === null) continue;
       seen.add(path);
@@ -312,6 +324,7 @@ export function compareDatasets(
     },
     compared,
     accepted,
+    acceptedPaths,
     differences,
     differenceCount,
   };
@@ -334,7 +347,7 @@ export interface Golden {
 
 /**
  * A legacy golden value in v6 form, so it can stand in for an entry the engine cannot run yet:
- * NaN, undefined and Infinity become null (DM-1b), and a value a divergence rule covers becomes
+ * NaN and undefined become null (DM-1b), and a value a divergence rule covers becomes
  * the value v6 produces instead. Returns undefined when v6 has no value there.
  */
 export function legacyToV6(

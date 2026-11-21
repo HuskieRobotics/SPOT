@@ -3,11 +3,12 @@
  * Compare the v6 analysis engine with the legacy golden output (#310, T-4).
  *
  * Usage:
- *   npm run oracle:compare -- [set ...] [--feed] [--entries] [--diffs 20] [--json out.json]
+ *   npm run oracle:compare -- [set ...] [--feed] [--entries] [--divergences] [--diffs 20] [--json out.json]
  *
  * With no set names, compares every set in tools/oracle/sets.ts. Prints, per set: how many
  * pipeline entries ran and match, performance and team coverage, accepted divergences, and the
- * first differences. --entries lists every pipeline entry's status. --feed fills entries the engine
+ * first differences. --entries lists every pipeline entry's status. --divergences lists, for each
+ * accepted divergence rule, the output paths it accepted (list positions as #). --feed fills entries the engine
  * cannot run yet from the golden file, so each transformer is checked on its own. Exit code 1 when anything
  * differs, so it can gate work in progress.
  */
@@ -64,7 +65,12 @@ for (const set of sets) {
       (c.teams.extraInV6.length ? `, extra in v6: ${c.teams.extraInV6.join(" ")}` : ""),
   );
   console.log(`  values    ${c.compared} compared, ${c.differenceCount} differ`);
-  for (const [rule, n] of Object.entries(c.accepted)) console.log(`  accepted  ${rule}: ${n}`);
+  for (const [rule, n] of Object.entries(c.accepted)) {
+    console.log(`  accepted  ${rule}: ${n}`);
+    if (!argv.includes("--divergences")) continue;
+    const paths = Object.entries(c.acceptedPaths[rule] ?? {}).sort((a, b) => b[1] - a[1]);
+    for (const [path, count] of paths) console.log(`              ${path}: ${count}`);
+  }
 
   const problems = c.problems.filter((p) => p.stage === "run" || argv.includes("--entries"));
   const unregistered = c.problems.length - problems.length;
