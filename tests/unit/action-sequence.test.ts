@@ -6,6 +6,7 @@
 import { describe, expect, it } from "vitest";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
+import { isDeepStrictEqual } from "node:util";
 import { buildDataset, runPipeline } from "@/analysis/engine";
 import { createRegistry } from "@/analysis/transformers";
 import {
@@ -15,13 +16,16 @@ import {
 } from "@/analysis/transformers/actionSequence";
 import { generate } from "@/generate/synthetic";
 import { convertAnalysisPipeline, legacyRatingValues } from "@/config/convert/v1-to-v2";
-import type { AnalysisPipelineConfig, MatchScoutingConfig, PipelineEntry } from "@/config/types";
+import type { MatchScoutingConfig, PipelineEntry } from "@/config/types";
 import type { Action, TeamMatchPerformance } from "@/data/types";
 
 const read = (...p: string[]) => JSON.parse(readFileSync(join(process.cwd(), ...p), "utf8"));
 const config = read("config", "seasons", "2025", "match-scouting.json") as MatchScoutingConfig;
 const [base] = generate({ config, seed: "sequence", matches: 1, robotsPerMatch: 1 }).performances;
 const registry = createRegistry();
+// Measured on the 2026 export (#320): see the 2026 tests at the end.
+const UNENDED_2026 = 177;
+const ZONES_2026 = { mine: 1843, legacy: 1321, same: 120 };
 
 /** An action; `ts` counts down (time remaining, DM-3). */
 const act = (id: string, ts: number, phase = "teleop", more: Partial<Action> = {}): Action => ({
@@ -142,22 +146,27 @@ describe("finalActionOccurrence", () => {
   });
 });
 
-describe("cycle (A-38 pairing)", () => {
+describe("cycle: pairing without a queue (decided 2026-11-21, F-28)", () => {
   const options = { startAction: ["pickup"], endAction: ["score"], misses: ["miss"] };
   const times = (c: unknown, key = "all") =>
     ((c as Record<string, { timeDifferential: number }[]>)[key] ?? []).map(
       (x) => x.timeDifferential,
     );
 
-  it("pairs each start with the first unused end after it", () => {
+  it("pairs each end with the open start before it", () => {
     const c = out(
       [act("score", 140000), act("pickup", 130000), act("score", 127000), act("pickup", 120000)],
       "cycle",
       options,
     ) as Record<string, unknown>;
-    // The end before any start is never used; the last start has no end after it.
+    // The end before any start is not used; the last start never got an end.
     expect(times(c)).toEqual([3000]);
-    expect(c).toMatchObject({ averageTime: 3000, cycleCount: 1, cycleCountComplete: 1 });
+    expect(c).toMatchObject({
+      averageTime: 3000,
+      cycleCount: 1,
+      cycleCountComplete: 1,
+      unendedCount: 1,
+    });
     expect(c.all).toEqual([
       {
         starts: act("pickup", 130000),
@@ -167,13 +176,60 @@ describe("cycle (A-38 pairing)", () => {
     ]);
   });
 
-  it("two starts before one end: the second waits for the next end", () => {
+  it("two starts before one end: the newer is timed, the older never got an end", () => {
     const c = out(
       [act("pickup", 100), act("pickup", 90), act("score", 80), act("score", 50)],
       "cycle",
       options,
     );
-    expect(times(c)).toEqual([20, 40]);
+    expect(times(c)).toEqual([10]);
+    expect(c).toMatchObject({ unendedCount: 1 });
+  });
+
+  it("a start left without an end does not shift the later cycles", () => {
+    // A drop nobody recorded at 100: every later cycle is 5 s. v5 paired each start with the
+    // first unused end after it, which gave 15 s for every cycle after the drop.
+    const actions = [
+      act("pickup", 100),
+      act("pickup", 90),
+      act("score", 85),
+      act("pickup", 80),
+      act("score", 75),
+      act("pickup", 70),
+      act("score", 65),
+    ];
+    for (const capacity of [1, 2]) {
+      const c = out(actions, "cycle", { ...options, capacity });
+      expect(times(c)).toEqual([5, 5, 5]);
+      expect(c).toMatchObject({ unendedCount: 1 });
+    }
+  });
+
+  it("capacity: a robot holding two pieces; each end pairs with the newest open start", () => {
+    const actions = [act("pickup", 100), act("pickup", 90), act("score", 80), act("score", 50)];
+    const c = out(actions, "cycle", { ...options, capacity: 2 });
+    // Which piece scored first can't be known; the average is the same either way: (10+50)/2.
+    expect(times(c)).toEqual([10, 50]);
+    expect(c).toMatchObject({ averageTime: 30, unendedCount: 0 });
+    // A third start while two are open drops the oldest.
+    const full = out(
+      [act("pickup", 100), ...actions.map((a) => ({ ...a, ts: a.ts - 5 }))],
+      "cycle",
+      {
+        ...options,
+        capacity: 2,
+      },
+    );
+    expect(times(full)).toEqual([10, 50]);
+    expect(full).toMatchObject({ unendedCount: 1 });
+  });
+
+  it("an end at the same time as its start does not pair (as in v5)", () => {
+    // 2025: a scouter recorded the climb and its result after the clock ran out.
+    expect(out([act("pickup", 0), act("score", 0)], "cycle", options)).toMatchObject({
+      cycleCount: 0,
+      unendedCount: 1,
+    });
   });
 
   it("a miss ends a cycle but is left out of allComplete", () => {
@@ -195,6 +251,7 @@ describe("cycle (A-38 pairing)", () => {
       averageTimeComplete: null,
       cycleCount: 0,
       cycleCountComplete: 0,
+      unendedCount: 1,
     });
   });
 
@@ -224,6 +281,14 @@ describe("cycle (A-38 pairing)", () => {
       5000, 6000, 4000,
     ]);
     expect(times(out(actions, "cycle", options))).toEqual([5000, 6000, 4000, 5000]);
+    // A start that never got an end counts in its own period.
+    const unended = [...actions, act("pickup", 30000, "endgame")];
+    expect(out(unended, "cycle", { ...options, phases: ["endgame"] })).toMatchObject({
+      unendedCount: 1,
+    });
+    expect(out(unended, "cycle", { ...options, kinds: ["active"] })).toMatchObject({
+      unendedCount: 0,
+    });
   });
 });
 
@@ -270,7 +335,7 @@ describe("zoneActionRatingGroupings", () => {
       act("AZone", 60),
       act("Passing", 55),
       act("RatingPassing4", 50),
-      act("NeutralZone", 40), // no action after it: the walk stops
+      act("NeutralZone", 40), // nothing after it
     ];
     expect(out(actions, "zoneActionRatingGroupings", options)).toEqual({
       list: [
@@ -284,7 +349,38 @@ describe("zoneActionRatingGroupings", () => {
     });
   });
 
-  it("a filter keeps the triples whose zone or rating is in the period", () => {
+  it("a zone holds until the next zone press; an unrated action shifts nothing (F-28)", () => {
+    const actions = [
+      act("Passing", 110), // before any zone press: zone unknown, left out
+      act("RatingPassing2", 108),
+      act("AZone", 100),
+      act("Passing", 95), // never rated
+      act("Defense", 75),
+      act("RatingDefense1", 70),
+      act("Passing", 65),
+      act("RatingPassing4", 60),
+      act("NeutralZone", 50),
+      act("Passing", 45),
+      act("RatingPassing2", 40),
+    ];
+    // v5 gave each zone press one action, the first unused after it: AZone/Passing/1, and the
+    // rest shifted.
+    expect(out(actions, "zoneActionRatingGroupings", options)).toEqual({
+      list: [
+        { zone: "AZone", action: "Defense", rating: 1 },
+        { zone: "AZone", action: "Passing", rating: 4 },
+        { zone: "NeutralZone", action: "Passing", rating: 2 },
+      ],
+      counts: {
+        AZone: { Defense: { 1: 1 }, Passing: { 4: 1 } },
+        NeutralZone: { Passing: { 2: 1 } },
+      },
+      AZone: { Defense: 1, Passing: 4 },
+      NeutralZone: { Passing: 2 },
+    });
+  });
+
+  it("a filter keeps the triples whose action or rating is in the period", () => {
     const actions = [
       act("AZone", 100, "teleop"),
       act("Passing", 95, "teleop"),
@@ -298,6 +394,16 @@ describe("zoneActionRatingGroupings", () => {
         .list;
     expect(triples(["teleop"])).toEqual([{ zone: "AZone", action: "Passing", rating: 2 }]);
     expect(triples(["endgame"])).toHaveLength(2);
+    // The zone is where the robot is, not an event: pressed in teleop, it holds in endgame.
+    const held = [
+      act("AZone", 100, "teleop"),
+      act("Defense", 25, "endgame"),
+      act("RatingDefense1", 20, "endgame"),
+    ];
+    const kept = (phases: string[]) =>
+      (out(held, "zoneActionRatingGroupings", { ...options, phases }) as { list: unknown[] }).list;
+    expect(kept(["teleop"])).toEqual([]);
+    expect(kept(["endgame"])).toEqual([{ zone: "AZone", action: "Defense", rating: 1 }]);
   });
 
   it("ratings are an explicit map; a zone cannot be named list or counts", () => {
@@ -362,17 +468,20 @@ describe("converter (#314)", () => {
 });
 
 /**
- * The real 2026 export, run with v5's own id lists from the converted configuration over v5's
- * own action lists (composite ids), compared with the golden output. This checks the
- * transformers' logic on 413 real performances; translating the ids to v6's button ids and
- * periods is #320.
+ * The real 2026 export, run with v5's own id lists (the v1 pipeline converted without the native
+ * rewrite, #320) over v5's own action lists (composite ids), compared with the golden output.
+ * This checks the transformers' logic on 413 real performances. Pairing differs from v5 on
+ * purpose where an action was left without its end (F-28); everywhere else it agrees.
  */
 describe("2026 export with v5's id lists", () => {
   const golden = read("tools", "oracle", "golden", "2026mnwi_official-v5", "tmps.json") as {
     actionQueue: Action[];
     [path: string]: unknown;
   }[];
-  const pipeline = (read("config", "analysis-pipeline.json") as AnalysisPipelineConfig).pipeline;
+  const { pipeline } = convertAnalysisPipeline(read("config", "v1", "analysis-pipeline.json"), {
+    matchScouting: read("config", "v1", "match-scouting.json"),
+    native: false,
+  }).config;
   const context = { config: read("config", "match-scouting.json") as MatchScoutingConfig };
   const nanToNull = (v: unknown) =>
     JSON.parse(JSON.stringify(v), (_k, x) => (x === "__NaN__" ? null : x)) as unknown;
@@ -380,18 +489,23 @@ describe("2026 export with v5's id lists", () => {
   const at = (o: Record<string, unknown>, path: string) =>
     path.split(".").reduce<unknown>((v, k) => (v as Record<string, unknown>)?.[k], o);
 
-  it("cycle: every cycle, count and average agrees", () => {
+  it("cycle: agrees wherever every start got its end (F-28 elsewhere)", () => {
     expect(entries("cycle")).toHaveLength(5);
+    let unended = 0;
     for (const entry of entries("cycle")) {
       for (const tmp of golden) {
-        const mine = cycle.run(
+        const { unendedCount, ...mine } = cycle.run(
           { actions: tmp.actionQueue } as never,
           entry.options as never,
           context,
-        );
-        expect(mine).toEqual(nanToNull(at(tmp, entry.outputPath)));
+        ) as { unendedCount: number };
+        if (unendedCount === 0) expect(mine).toEqual(nanToNull(at(tmp, entry.outputPath)));
+        else unended++;
       }
     }
+    // Performance-entry pairs with a start left without an end; they are compared through the
+    // native configuration in the oracle (oracle-compare.test.ts).
+    expect(unended).toBe(UNENDED_2026);
   });
 
   it("actionTime: agrees (v5's id never occurs, so every value is null; #320)", () => {
@@ -403,7 +517,7 @@ describe("2026 export with v5's id lists", () => {
     }
   });
 
-  it("zoneActionRatingGroupings: triples, counts and averages agree", () => {
+  it("zoneActionRatingGroupings: each action rated in a zone counts, not one per zone press", () => {
     const [entry] = entries("zoneActionRatingGroupings");
     const o = entry.options as { zones: string[]; actions: string[]; ratings: object };
     // v5 also reduced each listed composite id to its zone or action name; with button ids
@@ -415,16 +529,22 @@ describe("2026 export with v5's id lists", () => {
       actions: [...new Set(o.actions.map(action))],
       ratings: o.ratings,
     };
-    let triples = 0;
+    let mine = 0;
+    let legacy = 0;
+    let same = 0;
     for (const tmp of golden) {
       const actions = tmp.actionQueue.map((a) => ({
         ...a,
         id: o.zones.includes(a.id) ? zone(a.id) : o.actions.includes(a.id) ? action(a.id) : a.id,
       }));
-      const mine = zoneActionRatingGroupings.run({ actions } as never, options as never, context);
-      expect(mine).toEqual(at(tmp, entry.outputPath));
-      triples += (mine as { list: unknown[] }).list.length;
+      const result = zoneActionRatingGroupings.run({ actions } as never, options as never, context);
+      const v5 = at(tmp, entry.outputPath) as { list: unknown[] };
+      mine += (result as { list: unknown[] }).list.length;
+      legacy += v5.list.length;
+      if (isDeepStrictEqual(result, v5)) same++;
     }
-    expect(triples).toBeGreaterThan(500);
+    // v5 paired each zone press with one action; scouters pressed a zone when the robot moved
+    // and rated several actions there (decided 2026-11-21).
+    expect({ mine, legacy, same }).toEqual(ZONES_2026);
   });
 });

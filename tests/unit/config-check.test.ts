@@ -49,6 +49,17 @@ const load = (...dir: string[]): Docs => ({
 });
 const season2025 = load("config", "seasons", "2025");
 const season2026 = load("config");
+/** The 2026 pipeline as v5 wrote it, with composite ids: the converter without its rewrite (#320). */
+const v5Ids2026 = {
+  ...season2026,
+  pipeline: convertAnalysisPipeline(
+    JSON.parse(readText("config", "v1", "analysis-pipeline.json")),
+    {
+      matchScouting: JSON.parse(readText("config", "v1", "match-scouting.json")),
+      native: false,
+    },
+  ).config,
+};
 
 const sources = (d: Docs): Record<ConfigKind, string> => ({
   "match-scouting": JSON.stringify(d.ms, null, 2),
@@ -288,16 +299,16 @@ describe("ids that options name", () => {
       message: '"attemptClimb" is not a button id in match-scouting.json.',
       hint: 'Did you mean "AttemptClimb"?',
     });
-    // Until #320 translates it, the 2026 pipeline's errors are all v5 ids in options.
+    // In the native 2026 pipeline (#320), that is the only id no button records.
     expect(
       r.findings
-        .filter((x) => x.severity === "error")
-        .every((x) => /not (a )?button ids? in/.test(x.message)),
-    ).toBe(true);
+        .filter((x) => x.file === "analysis-pipeline" && x.severity === "error")
+        .map((x) => x.where),
+    ).toEqual([f!.where]);
   });
 
   it("explains a v5 id that put the period in front of the button (CS-16)", () => {
-    const r = checkConfiguration(sources(season2026), filesOnly);
+    const r = checkConfiguration(sources(v5Ids2026), filesOnly);
     const f = r.findings.find(
       (x) => x.where === "entry 8 (tmp cycle → cycle.shootingTime) › options.startAction",
     );

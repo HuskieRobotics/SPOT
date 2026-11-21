@@ -205,19 +205,12 @@
         "actionGroups": [
           {
             "name": "Teleop Start Shooting",
-            "actions": [
-              "teleopTransitionStartShooting",
-              "activeShift1StartShooting",
-              "activeShift2StartShooting",
-              "endgameStartShooting"
-            ]
+            "actions": ["StartShooting"],
+            "phases": ["teleop", "endgame"]
           }
         ],
         "actionLabels": {
-          "teleopTransitionStartShooting": "Transition",
-          "activeShift1StartShooting": "Active 1",
-          "activeShift2StartShooting": "Active 2",
-          "endgameStartShooting": "Endgame"
+          "StartShooting": "StartShooting"
         },
         "imgPath": "img/half-field.svg",
         "coordinateTransform": "foldHalfField"
@@ -236,15 +229,15 @@
           },
           {
             "name": "L1",
-            "path": "counts.endgameAttemptL1"
+            "path": "counts.endgame.AttemptL1"
           },
           {
             "name": "L2",
-            "path": "counts.endgameAttemptL2"
+            "path": "counts.endgame.AttemptL2"
           },
           {
             "name": "L3",
-            "path": "counts.endgameAttemptL3"
+            "path": "counts.endgame.AttemptL3"
           }
         ]
       },
@@ -258,15 +251,15 @@
         "bars": [
           {
             "name": "L1",
-            "path": "counts.endGameTowerRobot_Level1"
+            "path": "counts.endgame.endGameTowerRobot_Level1"
           },
           {
             "name": "L2",
-            "path": "counts.endGameTowerRobot_Level2"
+            "path": "counts.endgame.endGameTowerRobot_Level2"
           },
           {
             "name": "L3",
-            "path": "counts.endGameTowerRobot_Level3"
+            "path": "counts.endgame.endGameTowerRobot_Level3"
           }
         ]
       },
@@ -280,11 +273,11 @@
         "slices": [
           {
             "name": "Pre-Loaded Fuel",
-            "path": "counts.preloadFuel"
+            "path": "counts.preMatch.preloadFuel"
           },
           {
             "name": "Pre-Load None",
-            "path": "counts.preloadNone"
+            "path": "counts.preMatch.preloadNone"
           }
         ]
       },
@@ -349,7 +342,7 @@
           },
           {
             "name": "A-Stop Count",
-            "path": "counts.autoaStop",
+            "path": "counts.auto.aStop",
             "decimals": 2,
             "sort": -1
           },

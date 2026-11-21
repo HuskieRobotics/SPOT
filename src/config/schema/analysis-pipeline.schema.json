@@ -858,6 +858,11 @@
             "$ref": "#/$defs/actionIdList",
             "description": "Button ids that end a cycle without success; such cycles are left out of allComplete."
           },
+          "capacity": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "How many starts can be open at once: how many of these game pieces a robot can hold. Default 1. An end pairs with the newest open start; a start beyond the capacity drops the oldest open one."
+          },
           "phases": {
             "$ref": "#/$defs/periodFilter/properties/phases"
           },

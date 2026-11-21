@@ -117,7 +117,7 @@ and endgame shooting cycles, 212 (18%) cross a period boundary, and 80 of the 90
 active into inactive stop within 10 s after the switch. Two rules follow:
 
 - The 2026 translation (#320) uses `StartShooting`, `StopShooting` and the shooting ratings in
-  every period, and records the difference from v5 as a divergence citing F-26.
+  every period, and records the difference from v5 as a divergence citing F-26 (`cycles-2026`).
 - Transformers that pair actions pair over the whole match, then a period filter keeps a pair
   that starts or ends in the period (document 09 TR-13). Filtering first would break such pairs
   or match a start with a stop from a later shift.
@@ -129,6 +129,19 @@ active into inactive stop within 10 s after the switch. Two rules follow:
   Drops", "Barge Points" and "Expected Barge Points" (docs/spec/20 §4). Found 2026-11-20 (#318).
   **v6:** a missing value is No Data (DM-1b), config:check reports the path (CC-10), and ties
   share a rank (document 09 MO-4).
+- **F-28** Pairing queued. v5's `cycle` gave each start the first unused end after it, so a
+  start that never got its end (a drop nobody recorded, a mistaken tap, a 2026 auto `Storing`,
+  which no rating can end) took the next start's end, and every later cycle in the match moved
+  by one. `zoneActionRatingGroupings` did the same with zones, actions and ratings, and paired
+  each zone press with a single action although scouters pressed a zone when the robot moved and
+  rated several actions there. v5's own 2025 data shows it: 80 coral cycles over 30 s at
+  2025ilch, against 10 when nothing queues. Found 2026-11-21 (#320), when the native 2026
+  configuration paired over the whole match: storing cycles over 30 s went from v5's 58 to 299.
+  **v6 (decided 2026-11-21):** pairing never queues (document 09 TR-15). An end pairs with the
+  newest open start, `capacity` (default 1) bounds how many are open, `unendedCount` counts the
+  starts that never got an end, and a zone holds until the next zone press. The 2025 and 2026
+  oracle comparisons record the differences as divergences; for 2025 a test checks that every
+  performance whose cycles differ had a start left without an end.
 
 ## Security concerns (all resolved 2026-09-17; see ADR 0004 and 0005)
 
@@ -331,9 +344,11 @@ that a new feature can be verified not to break existing behavior. Requirements:
   the suite MUST include a **synthetic TMP generator** driven by a `match-scouting.json`
   (random but rule-respecting action queues), and golden expectations for it and compare the derived `counts`,
   `scores`, `cycles`, `averages`, and `averageScores` against stored expected output, so any
-  change to a transformer that alters results is visible in the diff. Met for 2025 (#319): the
-  engine matches both 2025 sets entry by entry, and `tests/unit/oracle-compare.test.ts` pins how
-  many values each reviewed divergence accepts (`tools/oracle/README.md`).
+  change to a transformer that alters results is visible in the diff. Met for 2025 (#319) and
+  2026 (#320): the engine matches all four golden sets entry by entry, 2026 through the
+  translation table generated from its configuration's prefixes, and
+  `tests/unit/oracle-compare.test.ts` pins how many values each reviewed divergence accepts
+  (`tools/oracle/README.md`).
 - **T-5** API/integration tests exercise every endpoint in document 11 against an ephemeral
   MongoDB (in-memory server or a container): auth status codes, demo-mode behavior, TMP
   de-duplication on sync and QR submission, flag/delete, event-scoped datasets, and setup

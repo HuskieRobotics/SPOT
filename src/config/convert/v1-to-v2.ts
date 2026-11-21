@@ -6,7 +6,15 @@
  * on buttons so a human can check the color mapping. Design: docs/spec/20-config-schema-v2.md.
  */
 import { LEGACY_CLASS_COLORS, LEGACY_HELPER_CLASSES } from "./legacy-colors";
-import { deriveKnownActionIds } from "../knownActionIds";
+import { actionButtonIds, deriveKnownActionIds } from "../knownActionIds";
+import {
+  countRoots,
+  nativeIds,
+  nativeModules,
+  nativePipeline,
+  usesPrefixes,
+  type NativeIds,
+} from "./native";
 import type {
   AnalysisModulesConfig,
   AnalysisPipelineConfig,
@@ -83,6 +91,18 @@ export interface ConvertOptions {
    * `sumAverage.countPaths`, which v5 inferred at run time from the ids `countActions` produced.
    */
   matchScouting?: V1MatchScouting;
+  /**
+   * The season's v1 pipeline. The modules converter needs it, with `matchScouting`, to know which
+   * paths name a count grouped by period.
+   */
+  pipeline?: V1PipelineEntry[];
+  /**
+   * Rewrite composite ids and the paths that name them into native form: button ids with period
+   * filters, counts grouped by period (CS-16, docs/spec/20 §2.2, #320). Default true; it changes
+   * nothing for a configuration without prefixes. False keeps v1's ids, for comparing v5's own
+   * id lists with the transformers.
+   */
+  native?: boolean;
 }
 
 export interface ConvertResult<T> {
@@ -547,6 +567,7 @@ export function convertAnalysisPipeline(
   opts: ConvertOptions = {},
 ): ConvertResult<AnalysisPipelineConfig> {
   const warnings: string[] = [];
+  const wheres: string[] = [];
   const pipeline: PipelineEntry[] = v1.flatMap((e, i): PipelineEntry[] => {
     const where = `pipeline[${i}] ${e.type}/${e.name} -> ${e.outputPath}`;
     let name = e.name;
@@ -631,6 +652,7 @@ export function convertAnalysisPipeline(
     const out: PipelineEntry = { type: e.type as "tmp" | "team", name, outputPath: e.outputPath };
     if (Object.keys(options).length || !["countMatches", "actionTimeFilter"].includes(name))
       out.options = options;
+    wheres.push(where);
     return [out];
   });
 
@@ -638,6 +660,8 @@ export function convertAnalysisPipeline(
     ? opts.oprStrings
     : Object.values(opts.oprStrings ?? {});
   const prefixes = scoreBreakdownPrefixes(opts, warnings);
+  const ids = nativeIdsFor(opts, prefixes);
+  const entries = ids ? nativePipeline(pipeline, ids, warnings, (i) => wheres[i]) : pipeline;
   // v5's 2026 layout listed score-breakdown ids ("<key>_<value>") in a hidden layer so
   // countActions(all) started them at 0; carry them over as knownIds (#315).
   const knownIds = opts.matchScouting
@@ -654,9 +678,22 @@ export function convertAnalysisPipeline(
         componentOprs: oprs.filter(Boolean),
       },
     },
-    pipeline,
+    pipeline: entries,
   };
   return { config, warnings };
+}
+
+/**
+ * What the native rewrite needs (#320), or null when there is nothing to rewrite: no v1
+ * match-scouting file, `native: false`, or a configuration without prefixes.
+ */
+function nativeIdsFor(
+  opts: ConvertOptions,
+  scoreBreakdown: { prefix: string; phase: string }[],
+): NativeIds | null {
+  if (opts.native === false || !opts.matchScouting) return null;
+  const ms = convertMatchScouting(opts.matchScouting, opts).config;
+  return usesPrefixes(ms) ? nativeIds(ms, scoreBreakdown, actionButtonIds(ms)) : null;
 }
 
 // ---------------------------------------------------------------------------- analysis-modules
@@ -698,10 +735,18 @@ export function convertAnalysisModules(
     }
     return out;
   });
+  // Paths into counts grouped by period, and composite ids, in native form (#320).
+  const pipeline = opts.pipeline && convertAnalysisPipeline(opts.pipeline, opts).config;
+  const ids = pipeline && nativeIdsFor(opts, pipeline.enrichment.tba.scoreBreakdown.prefixes);
+  if (!opts.pipeline && nativeIdsFor(opts, [])) {
+    warnings.push(
+      "modules: composite ids and count paths left as they are; pass the v1 pipeline to rewrite them",
+    );
+  }
   const config: AnalysisModulesConfig = {
     $schema: `${opts.schemaBase ?? "../src/config/schema"}/analysis-modules.schema.json`,
     version: 2,
-    modules,
+    modules: ids ? nativeModules(modules, ids, countRoots(pipeline.pipeline), warnings) : modules,
     filterTeams: { ratingBands: DEFAULT_RATING_BANDS },
   };
   return { config, warnings };

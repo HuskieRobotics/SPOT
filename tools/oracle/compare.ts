@@ -25,6 +25,7 @@ import {
 import { createRegistry } from "../../src/analysis/transformers";
 import { buildEnrichedDataset, type TbaEventData } from "../../src/analysis/enrichment/tba";
 import type { GoldenSet } from "./sets";
+import { translationFor } from "./translate";
 
 // Paths are relative to the repository root; tests and npm scripts run from there.
 const read = (path: string): unknown => JSON.parse(readFileSync(join(process.cwd(), path), "utf8"));
@@ -52,7 +53,10 @@ export interface DivergenceRule {
   id: string;
   cites: string;
   why: string;
-  /** Golden values the rule accepts ("(absent)" when legacy has no value there). */
+  /**
+   * Golden values the rule accepts ("(absent)" when legacy has no value there, "(any)" for any
+   * value, which a rule uses only with `paths` narrow enough to review).
+   */
   legacy?: unknown[];
   /** The value v6 must produce instead; "(any)" accepts whatever v6 writes. */
   v6?: unknown;
@@ -60,6 +64,8 @@ export interface DivergenceRule {
   rename?: { from: string; to: string };
   sets?: string[];
   paths?: string[];
+  /** Performance ids or team keys the rule is limited to. */
+  records?: string[];
 }
 
 export function loadDivergences(): DivergenceRule[] {
@@ -80,13 +86,16 @@ export function pathMatches(pattern: string, path: string): boolean {
 
 const ANY = "(any)";
 
-const appliesTo = (r: DivergenceRule, set: string, path: string) =>
+/** Whether a rule covers a value; `record` is the performance id or team key, when known. */
+const appliesTo = (r: DivergenceRule, set: string, path: string, record?: string) =>
   (!r.sets || r.sets.includes(set)) &&
+  (!r.records || (record !== undefined && r.records.includes(record))) &&
   (!r.paths || r.paths.some((pattern) => pathMatches(pattern, path)));
 
 function acceptingRule(
   rules: readonly DivergenceRule[],
   set: string,
+  record: string,
   path: string,
   legacy: unknown,
   v6: unknown,
@@ -94,8 +103,8 @@ function acceptingRule(
   return rules.find(
     (r) =>
       r.legacy !== undefined &&
-      appliesTo(r, set, path) &&
-      r.legacy.some((value) => Object.is(value, legacy)) &&
+      appliesTo(r, set, path, record) &&
+      r.legacy.some((value) => value === ANY || Object.is(value, legacy)) &&
       (r.v6 === ANY || Object.is(r.v6, v6)),
   );
 }
@@ -196,6 +205,11 @@ export interface CompareOptions {
    * of the comparison. Used for 2026, where composite ids became grouping (#320, CS-16).
    */
   mapLegacyPath?: (scope: "tmp" | "team", path: string) => string | null;
+  /**
+   * Map a legacy value to the v6 value that stands for it, at its (mapped) path: for 2026, a
+   * composite id copied into an output is the button id (#320).
+   */
+  mapLegacyValue?: (scope: "tmp" | "team", path: string, value: unknown) => unknown;
   /** Keep at most this many differences in the result (default 200). */
   keep?: number;
 }
@@ -241,7 +255,7 @@ export function compareDatasets(
     const check = (path: string, legacyValue: unknown, v6Value: unknown) => {
       compared++;
       if (Object.is(legacyValue, v6Value)) return;
-      const rule = acceptingRule(rules, options.set, path, legacyValue, v6Value);
+      const rule = acceptingRule(rules, options.set, id, path, legacyValue, v6Value);
       if (rule) {
         accept(rule.id, path);
         return;
@@ -258,7 +272,10 @@ export function compareDatasets(
       const path = options.mapLegacyPath ? options.mapLegacyPath(scope, legacyPath) : legacyPath;
       if (path === null) continue;
       seen.add(path);
-      check(path, legacyValue, v6Leaves.has(path) ? v6Leaves.get(path) : ABSENT);
+      const value = options.mapLegacyValue
+        ? options.mapLegacyValue(scope, path, legacyValue)
+        : legacyValue;
+      check(path, value, v6Leaves.has(path) ? v6Leaves.get(path) : ABSENT);
     }
     for (const [path, v6Value] of v6Leaves) {
       if (!seen.has(path)) check(path, ABSENT, v6Value);
@@ -370,6 +387,7 @@ export function legacyToV6(
     (r) =>
       r.legacy !== undefined &&
       r.v6 !== ANY &&
+      !r.legacy.includes(ANY) &&
       appliesTo(r, set, path) &&
       r.legacy.some((v) => Object.is(v, value)),
   );
@@ -481,7 +499,7 @@ export function loadGolden(set: GoldenSet): Golden {
 
 export function compareGoldenSet(
   set: GoldenSet,
-  options: Pick<CompareOptions, "keep" | "mapLegacyPath" | "rules"> & {
+  options: Pick<CompareOptions, "keep" | "mapLegacyPath" | "mapLegacyValue" | "rules"> & {
     registry?: TransformerRegistry;
     /** Fill entries the engine cannot run yet from the golden file (see runGoldenSet). */
     feed?: boolean;
@@ -490,13 +508,16 @@ export function compareGoldenSet(
   const golden = loadGolden(set);
   const rules = options.rules ?? loadDivergences();
   const run = runGoldenSet(set, options.registry, options.feed ? { golden, rules } : undefined);
+  // 2026: legacy paths and ids through the table generated from the configuration (#320).
+  const translation = translationFor(run.config, run.pipeline);
   return compareDatasets(golden, run.dataset, {
     set: set.name,
     pipeline: run.pipeline.pipeline,
     problems: run.problems,
     ran: run.ran,
     rules,
-    mapLegacyPath: options.mapLegacyPath,
+    mapLegacyPath: options.mapLegacyPath ?? translation?.mapLegacyPath,
+    mapLegacyValue: options.mapLegacyValue ?? translation?.mapLegacyValue,
     keep: options.keep,
   });
 }

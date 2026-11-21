@@ -41,6 +41,13 @@ npm run config:convert -- config/v1 config --opr-strings "$(cat tools/oracle/fix
 npx prettier --write config/*.json
 ```
 
+2026's v5 client put the period in front of each button id (`activeShift1Defense`). The
+converter rewrites those ids and paths into native form: button ids with a period filter
+(`"phases": ["teleop", "endgame"]`), and counts grouped by period, so a path names the period and
+then the button (`counts.active1.Defense`, `counts.preMatch.preloadFuel`). It derives this from
+the prefixes in `match-scouting.json`, and warns where a filter covers more periods than v5's list
+did (docs/spec/20 §2.2 item 5).
+
 Until the 2026 configuration is edited by hand for the new client, the drift test in
 `config-active.test.ts` requires these files to equal the converter output. Delete that one
 test when you start hand-editing.
