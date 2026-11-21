@@ -84,7 +84,7 @@ describe("TR-6: a team's performances are in match order", () => {
   });
 });
 
-describe("actionTime", () => {
+describe("TR-13: actionTime", () => {
   const actions = [act("leave", 150000, "auto"), act("climb", 20000), act("climb", 10000)];
   it("is the time remaining at the first matching action, else default (null)", () => {
     expect(out(actions, "actionTime", { actionId: "climb" })).toBe(20000);
@@ -97,7 +97,7 @@ describe("actionTime", () => {
   });
 });
 
-describe("actionTimeFilter", () => {
+describe("TR-13: actionTimeFilter", () => {
   const actions = [act("a", 152000, "auto"), act("b", 135000), act("c", 0)];
   it("keeps actions within the time range, inclusive, as copies", () => {
     const kept = out(actions, "actionTimeFilter", { timeMin: 135000 }) as Action[];
@@ -116,7 +116,7 @@ describe("actionTimeFilter", () => {
   });
 });
 
-describe("finalActionOccurrence", () => {
+describe("TR-13: finalActionOccurrence", () => {
   const actions = [act("park", 9000), act("onstage", 5000), act("park", 2000), act("x", 1000)];
   it("F-3: finds the last match without changing the stored actions", () => {
     const { result, tmp } = runOn(actions, [
@@ -146,7 +146,7 @@ describe("finalActionOccurrence", () => {
   });
 });
 
-describe("cycle: pairing without a queue (decided 2026-11-21, F-28)", () => {
+describe("TR-13, TR-15: cycle: pairing without a queue (F-28)", () => {
   const options = { startAction: ["pickup"], endAction: ["score"], misses: ["miss"] };
   const times = (c: unknown, key = "all") =>
     ((c as Record<string, { timeDifferential: number }[]>)[key] ?? []).map(
@@ -292,7 +292,7 @@ describe("cycle: pairing without a queue (decided 2026-11-21, F-28)", () => {
   });
 });
 
-describe("countHybrid", () => {
+describe("TR-13: countHybrid", () => {
   const options = { pickup: ["cone", "cube"], hybrid: ["low"] };
   it("counts placements under the piece last picked up; a preload is not counted", () => {
     expect(
@@ -318,7 +318,7 @@ describe("countHybrid", () => {
   });
 });
 
-describe("zoneActionRatingGroupings", () => {
+describe("TR-13, TR-15: zoneActionRatingGroupings", () => {
   const options = {
     zones: ["AZone", "NeutralZone"],
     actions: ["Passing", "Defense"],

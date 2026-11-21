@@ -56,7 +56,7 @@
 - **DM-5** Client-only fields never persisted: `baseId` (the un-prefixed button id) and
   `temp` (actions removed before submit, e.g. `startGame`, `teleopActive`).
 
-#**[A-2]** A one-time migration of existing data is acceptable, and leaving old seasons behind
+**[A-2]** A one-time migration of existing data is acceptable, and leaving old seasons behind
 is acceptable; the rewrite may restructure this schema. Reserve fields for backlog hooks:
 `notes` (BL-35), `tags` (BL-193), `flag: { flagged, reason, source }` (BL-208), and omit
 per-action `_id`s (BL-31).
@@ -210,7 +210,9 @@ Before transformers run, the client:
   responses the page fetched (or cached, OF-3); it fetches nothing itself (ADR 0005).
 
 - **DM-14** After transformers, appends `manual.tmps` (with `manual: true`) and sets
-  `teams[t].manual.<path>` from `manual.teams` (both currently empty JSON files).
+  `teams[t].manual.<path>` from `manual.teams` (both currently empty JSON files). **v6: not
+  built.** The Phase 1 engine needs no hook, and whether v6 keeps one is decided with the
+  dashboard's data loading in Phase 3 (#345).
 
 **[A-34]** The TBA score-breakdown mapping (DM-11) must be configurable per season (which keys
 to import and how to name them); today it imports every `auto*`/`endGame*` key by convention.

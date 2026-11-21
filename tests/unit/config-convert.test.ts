@@ -118,7 +118,7 @@ describe("v1 -> v2 converter on every archived season", () => {
     });
   }
 
-  it("qr converts and widens the id field", () => {
+  it("CS-14: qr converts and widens the id field", () => {
     const { config, warnings } = convertQr(v1("qr.json") as V1Qr);
     expect(validateConfig("qr", config).ok).toBe(true);
     expect(config.actionSchema).toEqual([
@@ -132,13 +132,13 @@ describe("v1 -> v2 converter on every archived season", () => {
 describe("converted 2026 match-scouting configuration", () => {
   const { config, warnings } = convertMatchScouting(v1("match-scouting.json") as V1MatchScouting);
 
-  it("drops the hidden catalog layer and keeps the 12 real layers", () => {
+  it("CS-5: drops the hidden catalog layer and keeps the 12 real layers", () => {
     expect(config.layout.layers).toHaveLength(12);
     expect(warnings.some((w) => w.includes("removed catalog layer 12"))).toBe(true);
     expect(config.layout.layers.every((l) => l.buttons.length < 20)).toBe(true);
   });
 
-  it("derives the three analysis phases in milliseconds", () => {
+  it("CS-1, CS-2: derives the three analysis phases in milliseconds", () => {
     expect(config.timing.totalMs).toBe(160000);
     expect(config.timing.phases.map((p) => [p.id, p.prefix, p.startMs])).toEqual([
       ["auto", "auto", 159999],
@@ -149,7 +149,7 @@ describe("converted 2026 match-scouting configuration", () => {
     expect(config.timing.phases[2].layer).toBeUndefined();
   });
 
-  it("folds the teleop transition and the shifts into segments of the teleop phase", () => {
+  it("CS-4: folds the teleop transition and the shifts into segments of the teleop phase", () => {
     const teleop = config.timing.phases[1];
     expect(teleop.segments?.map((s) => [s.id, s.startMs])).toEqual([
       ["transition", 140000],
@@ -205,7 +205,7 @@ describe("converted 2026 match-scouting configuration", () => {
     expect(prefixes).toHaveLength(13);
   });
 
-  it("moves the undo guard, the A-Stop lock and the alliance-relative zones into rules", () => {
+  it("CS-9: moves the undo guard, the A-Stop lock and the alliance-relative zones into rules", () => {
     expect(config.rules.undo.minQueueLength).toBe(2);
     expect(config.variables).toEqual({});
     expect(config.rules.locks).toHaveLength(1);
@@ -214,7 +214,7 @@ describe("converted 2026 match-scouting configuration", () => {
     expect(config.rules.allianceRelativeButtons).toEqual([{ own: "AZone", opposing: "OAZone" }]);
   });
 
-  it("gives every colored button an explicit color", () => {
+  it("CS-8: gives every colored button an explicit color", () => {
     const buttons = config.layout.layers.flatMap((l) => l.buttons);
     const colored = buttons.filter(
       (b) => b.legacyClass && !/^(timer|border|button-padding)$/.test(b.legacyClass),
@@ -223,7 +223,7 @@ describe("converted 2026 match-scouting configuration", () => {
     for (const b of colored) expect(b.color).toMatch(/^#[0-9a-f]{6}$/);
   });
 
-  it("explains every id the 2026 oracle found in real data except TBA synthetic ids", () => {
+  it("CS-5: explains every id the 2026 oracle found in real data except TBA synthetic ids", () => {
     const known = new Set(deriveKnownActionIds(config));
     const seen = report.unknownActionIds.map((u) => u.id);
     expect(seen.length).toBeGreaterThan(20);
@@ -239,7 +239,7 @@ describe("converted 2026 match-scouting configuration", () => {
 });
 
 describe("converted analysis-pipeline configurations", () => {
-  it("renames legacy option spellings", () => {
+  it("CS-11: renames legacy option spellings", () => {
     const { config, warnings } = convertAnalysisPipeline(
       v1("analysis-pipeline-2024v2.json") as V1PipelineEntry[],
     );
@@ -264,7 +264,7 @@ describe("converted analysis-pipeline configurations", () => {
     expect(warnings.some((w) => w.includes('now reads "actions"'))).toBe(true);
   });
 
-  it("carries TBA OPR strings into enrichment", () => {
+  it("CS-12: carries TBA OPR strings into enrichment", () => {
     const { config } = convertAnalysisPipeline(v1("analysis-pipeline.json") as V1PipelineEntry[], {
       oprStrings: { string_1: "Hub Total Fuel Count", string_2: "minorFoulCount" },
     });
@@ -278,7 +278,7 @@ describe("converted analysis-pipeline configurations", () => {
  * the native form, button ids with period filters and counts grouped by period, all derived from
  * the configuration's own prefixes.
  */
-describe("native ids and paths (#320)", () => {
+describe("CS-16: native ids and paths (#320)", () => {
   const ms2026 = convertMatchScouting(v1("match-scouting.json") as V1MatchScouting).config;
   const ids = nativeIds(ms2026, [{ prefix: "endGame", phase: "endgame" }], ["preloadFuel"]);
   const opts = {

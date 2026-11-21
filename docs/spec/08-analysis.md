@@ -29,7 +29,7 @@
 - **AN-10** Load `/config/analysis-pipeline.json`, obtain transformers via `getTransformers()`
   (from `/analysis/transformers.js`), and run each entry in order:
   `dataset = transformers[type][name].execute(dataset, outputPath, options)`.
-- **AN-11** Merge manual TMPs/teams (see DM-14). Also fetch the match list
+- **AN-11** Merge manual TMPs/teams (see DM-14; v6 decides in #345). Also fetch the match list
   (`/admin/api/matches[/<eventId>]`) for the (dormant) match view.
 
 ## Team list and team view

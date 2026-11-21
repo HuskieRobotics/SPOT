@@ -4,6 +4,13 @@ This is a worked example showing how the configuration system in document 04 exp
 real game. A rewrite can use it as an acceptance fixture: loading these files must produce
 the same scouting flow, ids, derived paths, and dashboard.
 
+**v6.** This walks through the v1 files, kept in `config/v1/`. v6's form of the same season is
+`config/*.json`, which the converter writes in native form (#320): an action keeps its button
+id and records its period, and a path names the period, then the button
+(`counts.auto.RatingPassing1` for v5's `counts.autoRatingPassing1`). So v6 must produce the same
+scouting flow and dashboard, and the same values; the 2026 oracle comparison checks the values
+through a translation table generated from the configuration's prefixes (document 20 §2.2).
+
 ## `config.json` (non-secret parts, as of this repo)
 
 `TBA_EVENT_KEY: 2026mnwi`, `EVENT_NUMBER: <ObjectId>`, `DEMO: false`, `VERSION: "1.0"`,

@@ -112,7 +112,7 @@ describe("DM-11: score-breakdown actions", () => {
   });
 });
 
-describe("buildEnrichedDataset", () => {
+describe("DM-11a to DM-13a: buildEnrichedDataset", () => {
   const performance = (team: string, id: string): TeamMatchPerformance => ({
     ...base,
     _id: id.repeat(24),
@@ -141,9 +141,9 @@ describe("buildEnrichedDataset", () => {
     expect(teams["7"].opr).toEqual({ totalPoints: null });
   });
 
-  it("countActions(all) starts knownIds and the event's ids at 0", () => {
+  it("DM-11b: countActions(all) starts knownIds and the event's ids at 0", () => {
     const dataset = buildEnrichedDataset(performances, enrichment, tba);
-    expect(dataset.extraActionIds).toEqual([
+    expect(dataset.scoreBreakdownIds).toEqual([
       "endGameRobot_DeepCage",
       ...eventScoreBreakdownIds(matches, prefixes),
     ]);
@@ -163,7 +163,7 @@ describe("buildEnrichedDataset", () => {
   it("without TBA data: no actions, no ids at 0 (unknown is No Data), OPRs null", () => {
     const dataset = buildEnrichedDataset(performances, enrichment, null);
     expect(dataset.tmps[0].actions.length).toBe(base.actions.length);
-    expect(dataset.extraActionIds).toBeUndefined();
+    expect(dataset.scoreBreakdownIds).toBeUndefined();
     expect(dataset.teams["3061"].opr).toEqual({ totalPoints: null });
   });
 
@@ -231,7 +231,7 @@ describe("2026 export: TBA-derived values agree with v5 (DM-11, DM-13)", () => {
   });
 });
 
-describe("ADR 0005: analysis code runs in the browser", () => {
+describe("TR-9, DM-11c / ADR 0005: analysis code runs in the browser", () => {
   const files = (dir: string): string[] =>
     readdirSync(dir).flatMap((name) => {
       const path = join(dir, name);

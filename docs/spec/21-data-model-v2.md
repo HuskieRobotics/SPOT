@@ -162,8 +162,11 @@ performance that referenced it. Identity that a person can retype is identity th
 
 ## 6. Still to build
 
-- **Persistence.** No MongoDB driver yet: the application's database layer lands with Phase 1,
-  and these schemas become the collection validators then.
+- **Persistence.** The MongoDB driver and an in-memory MongoDB for tests exist (document 17,
+  Phase 0 item 6), and `tests/unit/mongo.test.ts` round-trips generated documents through it.
+  The application's database layer, with these schemas as the collection validators, lands
+  with Phase 2, the first phase that stores data (gate W-1). Phase 1 needed none: the engine
+  runs on documents it is given.
 - **Indexes**, with `tenantId` leading so a hosted instance does not need them rebuilt.
 - **The schedule and the current match** must be persisted too (D-4, manual schedule kept).
 - **The settings document**, whose first field is `activeEventId` (DV-12a).

@@ -40,9 +40,10 @@ requirements they produce are folded into the documents below.
 | 17  | [17-rewrite-plan-and-next-steps.md](17-rewrite-plan-and-next-steps.md)           | Repository/branch strategy, Phase 0 preparation (behavioral oracle, synthetic data, schema v2, scaffold), phased build order, working practices, and **live status** (section 5)                                                                     |
 | 18  | [18-offline-requirements.md](18-offline-requirements.md)                         | Offline operation as a first-class requirement: the three offline situations, what the service worker must cache (including generated bundles and data endpoints), OF-1 to OF-9                                                                      |
 | 19  | [19-model-fit-guide.md](19-model-fit-guide.md)                                   | Which Claude model (Opus vs Fable 5.1) suits which kind of rewrite work, by phase and work item                                                                                                                                                      |
-| 20  | [20-config-schema-v2.md](20-config-schema-v2.md)                                 | Configuration schema v2 (JSON Schema, decisions CS-1..15), the v1 → v2 converter mapping, and the T-3 tests                                                                                                                                          |
-| 21  | [21-data-model-v2.md](21-data-model-v2.md)                                       | Data model v2 (stored documents, DV-1 to DV-11), placing an action in the match, and the v5 to v6 migration with its results on the real exports                                                                                                     |
-| 22  | [22-synthetic-data.md](22-synthetic-data.md)                                     | Synthetic scouting data: a headless model of the scouting rules driven by the configuration, its guarantees (SY-1 to SY-7), and the CLI                                                                                                              |
+| 20  | [20-config-schema-v2.md](20-config-schema-v2.md)                                 | Configuration schema v2 (JSON Schema, decisions CS-1 to CS-16), the v1 → v2 converter mapping, `config:check` (CC-1 to CC-12), and the T-3 tests                                                                                                     |
+| 21  | [21-data-model-v2.md](21-data-model-v2.md)                                       | Data model v2 (stored documents, DV-1 to DV-12), placing an action in the match, and the v5 to v6 migration with its results on the real exports                                                                                                     |
+| 22  | [22-synthetic-data.md](22-synthetic-data.md)                                     | Synthetic scouting data: a headless model of the scouting rules driven by the configuration, its guarantees (SY-1 to SY-11), the CLI, and `config:preview`                                                                                           |
+| 23  | [23-requirement-status.md](23-requirement-status.md)                             | The audit that closes each phase: every requirement the phase owns, its status and its test, and what the audit corrected (Phase 1, #330)                                                                                                            |
 
 ## Behavioral oracle
 
@@ -57,6 +58,12 @@ Requirements are numbered per document (for example `SC-12` in the scouting clie
 **MUST** are behaviors the current app exhibits and that users/configs depend on. Statements
 marked **SHOULD** are behaviors that exist but are incidental, and **NOTE** flags quirks
 a rewrite may deliberately change (collected again in document 12).
+
+A prefix belongs to one document, so an id names one requirement. The ones that are not a
+document's own topic: document 12 holds the quirks to keep (`Q-`), defects (`F-`), security
+findings (`SEC-`, `S-`), decisions (`D-`) and tests (`T-`); document 14's answers are `A-`;
+document 16's backlog items are `BL-` plus the issue number; document 17's date gates are `K-`
+and `W-`. Before adding a prefix, check that no document uses it.
 
 ## Source-of-truth map
 

@@ -146,7 +146,10 @@ export function runPipeline(
   const ran: number[] = [];
   let current = dataset;
   // One context object for the whole run, so transformers can cache per run.
-  context = { ...context, extraActionIds: context.extraActionIds ?? dataset.extraActionIds ?? [] };
+  context = {
+    ...context,
+    scoreBreakdownIds: context.scoreBreakdownIds ?? dataset.scoreBreakdownIds ?? [],
+  };
 
   for (const { index, entry, transformer, options } of runnable) {
     const base = {

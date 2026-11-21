@@ -127,7 +127,7 @@ describe("T-3: the archived 2025 configuration", () => {
   });
 });
 
-describe("reading the files", () => {
+describe("CC-1: reading the files", () => {
   it("says where a JSON syntax error is, with a hint for the usual mistakes", () => {
     const text = '{\n  "version": 2,\n  "actionSchema": [],\n}\n';
     const r = checkConfiguration({ ...sources(season2025), qr: text }, filesOnly);
@@ -184,7 +184,7 @@ describe("reading the files", () => {
   });
 });
 
-describe("schema messages a student can act on", () => {
+describe("CC-2: schema messages a student can act on", () => {
   it("names the entry, suggests the option meant, and points at its line", () => {
     const [f] = check((d) => {
       const { misses, ...rest } = d.pipeline.pipeline[9].options as Record<string, unknown>;
@@ -242,7 +242,7 @@ describe("schema messages a student can act on", () => {
   });
 });
 
-describe("transformers (TR-10, TR-14)", () => {
+describe("CC-4: transformers (TR-10, TR-14)", () => {
   it("an unknown transformer, with did-you-mean, the other type, or a retired name", () => {
     const found = check((d) => {
       d.pipeline.pipeline[1].name = "weightedSun";
@@ -288,7 +288,7 @@ describe("transformers (TR-10, TR-14)", () => {
   });
 });
 
-describe("ids that options name", () => {
+describe("CC-5: ids that options name", () => {
   it("done when: the 2026 configuration reports the attemptClimb entry (docs/spec/20 §2.2)", () => {
     const r = checkConfiguration(sources(season2026), filesOnly);
     const f = r.findings.find((x) => x.where.includes("actionTimes.attemptClimb"));
@@ -409,7 +409,7 @@ describe("ids that options name", () => {
   });
 });
 
-describe("TBA enrichment (#315)", () => {
+describe("CC-6: TBA enrichment (#315)", () => {
   it("prefix phases must exist; knownIds should be listed and start with a prefix", () => {
     const found = check((d) => {
       d.pipeline.enrichment.tba.scoreBreakdown.prefixes[1].phase = "endgame";
@@ -450,7 +450,7 @@ describe("TBA enrichment (#315)", () => {
   });
 });
 
-describe("references within match-scouting.json", () => {
+describe("CC-3: references within match-scouting.json", () => {
   it("layers, buttons, phases and variables that do not exist", () => {
     const found = check((d) => {
       d.ms.layout.initialLayer = "layer-00";
@@ -637,7 +637,7 @@ describe("references within match-scouting.json", () => {
   });
 });
 
-describe("qr.json", () => {
+describe("CC-7: qr.json", () => {
   it("the id field must number every recordable id, and ts must hold a match", () => {
     const found = check((d) => {
       d.qr.actionSchema = [
@@ -665,7 +665,7 @@ describe("qr.json", () => {
   });
 });
 
-describe("a check that compares files waits for both to be valid", () => {
+describe("CC-8: a check that compares files waits for both to be valid", () => {
   it("skips id checks while match-scouting.json has schema errors, and says so", () => {
     const d = structuredClone(season2025);
     (d.ms.timing as { totalMs: unknown }).totalMs = "153";

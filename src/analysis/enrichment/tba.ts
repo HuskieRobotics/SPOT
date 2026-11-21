@@ -167,7 +167,7 @@ export function buildEnrichedDataset(
   });
   if (tba && enabled) {
     const known = enrichment.scoreBreakdown.knownIds ?? [];
-    dataset.extraActionIds = [
+    dataset.scoreBreakdownIds = [
       ...new Set([...known, ...eventScoreBreakdownIds(tba.matches, prefixes)]),
     ];
   }

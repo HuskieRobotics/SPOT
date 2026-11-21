@@ -25,7 +25,7 @@ describe("placing an action by the clock (2026)", () => {
     expect(placeAt(config2026, 160000).phase).toBeNull();
   });
 
-  it("enters a phase exactly when the countdown reaches its startMs", () => {
+  it("DM-3: enters a phase exactly when the countdown reaches its startMs", () => {
     expect(placeAt(config2026, 159999).phase).toBe("auto");
     expect(placeAt(config2026, 150000).phase).toBe("auto");
     expect(placeAt(config2026, 140001).phase).toBe("auto");

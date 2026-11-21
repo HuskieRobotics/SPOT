@@ -9,7 +9,7 @@
  *   of 2026-09-17, docs/spec/17 §2), and starts every action button of the configuration at 0
  *   so paths such as `counts.l4` exist even when nothing was pressed. Undo, navigation and
  *   match-control buttons record nothing and are not listed (v5 listed them as 0). The TBA
- *   score-breakdown ids reported at the event start at 0 too (`Dataset.extraActionIds`, #315).
+ *   score-breakdown ids reported at the event start at 0 too (`Dataset.scoreBreakdownIds`, #315).
  * - `ids` counts only the listed ids, each starting at 0.
  * - `phases`, `segments`, `kinds` count only actions recorded in those periods.
  * - `by: "phase" | "segment" | "kind"` splits the counts by period (see periods.ts for the
@@ -44,11 +44,11 @@ function seed(ids: readonly string[]): Counts {
 function counter(
   options: CountActionsOptions,
   config: MatchScoutingConfig,
-  extraActionIds: readonly string[],
+  scoreBreakdownIds: readonly string[],
 ) {
   const countAll = options.all === true;
   const ids = countAll
-    ? [...new Set([...actionButtonIds(config), ...extraActionIds])]
+    ? [...new Set([...actionButtonIds(config), ...scoreBreakdownIds])]
     : (options.ids ?? []);
   const wanted = countAll ? null : new Set(ids);
   const keys = options.by ? groupKeys(config, options.by, options) : [];
@@ -94,7 +94,7 @@ function counterFor(options: CountActionsOptions, context: TransformerContext) {
   if (!byContext) counters.set(options, (byContext = new WeakMap()));
   let c = byContext.get(context);
   if (!c)
-    byContext.set(context, (c = counter(options, context.config, context.extraActionIds ?? [])));
+    byContext.set(context, (c = counter(options, context.config, context.scoreBreakdownIds ?? [])));
   return c;
 }
 

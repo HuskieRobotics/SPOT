@@ -48,7 +48,7 @@ const value = (...args: Parameters<typeof run>) => {
   return out;
 };
 
-describe.each(["tmp", "team"] as const)("%s arithmetic", (type) => {
+describe.each(["tmp", "team"] as const)("TR-11: %s arithmetic", (type) => {
   it("sum adds left to right; a missing path is 0; null makes the result null", () => {
     expect(
       value(
