@@ -1,0 +1,116 @@
+# SPOT Configuration Guide
+
+Every season, the game changes, and so does SPOT. You don't change SPOT's code to do that. You
+change four **configuration files**. They decide:
+
+- which buttons a scouter sees during a match, and when;
+- what SPOT calculates from what the scouters recorded;
+- what the analysis pages show about each team.
+
+This guide is for students who have never edited these files, or any code. If you can follow a
+recipe, you can follow this guide.
+
+**Start with [Your first change](tutorial.md).** In about 20 minutes you add a button to a copy
+of the 2025 configuration and see it counted on the analysis page. The rest of the guide
+explains each part in more detail.
+
+## The four files
+
+The files for the season SPOT is using right now are in the `config/` folder:
+
+| File                     | What it decides                                                                 | Chapter                                       |
+| ------------------------ | ------------------------------------------------------------------------------- | --------------------------------------------- |
+| `match-scouting.json`    | The buttons on the scouting screen, the match timing, and the rules for undoing | [Match scouting](match-scouting.md)           |
+| `analysis-pipeline.json` | The calculations SPOT runs on the recorded actions                              | [The analysis pipeline](analysis-pipeline.md) |
+| `analysis-modules.json`  | The charts and numbers the analysis pages show                                  | [Analysis modules](analysis-modules.md)       |
+| `qr.json`                | How a match is packed into a QR code when there is no network                   | [Match scouting](match-scouting.md#qrjson)    |
+
+Past seasons are kept in `config/seasons/<year>/`, so you can look at how an earlier game was
+set up. `config/seasons/2025/` is the best example of a typical game.
+
+## What you need
+
+- **Visual Studio Code** (VS Code), with the SPOT folder open.
+- **Node 24**, and `npm install` run once in the SPOT folder. Ask a mentor if `npm` is not
+  found.
+- A terminal. In VS Code, choose **Terminal → New Terminal**. Every command in this guide is
+  typed there and starts with `npm run`.
+
+## JSON in five minutes
+
+The files are written in **JSON**, a way of writing down information that both people and
+programs can read. You only need a few pieces:
+
+```json
+{
+  "label": "Defense",
+  "gridArea": [2, 4, 3, 7],
+  "executables": [],
+  "alternate": true
+}
+```
+
+- `{ ... }` is an **object**: a set of names, each with a value. The names are in double
+  quotes, followed by a colon.
+- `[ ... ]` is a **list**: values in order, separated by commas. `[]` is an empty list.
+- Text is in double quotes (`"Defense"`). Numbers are not (`25000`). `true` and `false` are
+  written without quotes.
+- Items are separated by commas, **but there is no comma after the last one**. A missing or
+  extra comma is the most common mistake; VS Code underlines it in red.
+
+Each file starts with a `"$schema"` line. It tells VS Code what the file may contain, so VS
+Code helps you while you type:
+
+- A **red squiggle** marks a mistake. Hover over it to read what is wrong.
+- **Hover** over a name, such as `"gridArea"`, to read what it means.
+- Press **Ctrl+Space** (on a Mac, also Ctrl+Space) inside an object to see which names you can
+  add.
+
+## The three steps you repeat
+
+1. **Edit** a file in VS Code and save it.
+2. **Check** the files: `npm run config:check`. It reads all four files, checks that they agree
+   with each other, and runs the calculations on 120 made-up matches. Every problem comes with
+   the file, the line, what is wrong, and what to try. See
+   [Checking and previewing](checking-and-preview.md).
+3. **Preview** the result: `npm run config:preview`. It plays 80 made-up matches with your
+   buttons and shows what each calculation produces and what each chart on the analysis pages
+   would show.
+
+You can do all of this before a single real match is played, which is the point: right after
+kickoff you can build the new game's configuration and know it works.
+
+To check or preview another folder, put it after `--`:
+
+```sh
+npm run config:check -- config/seasons/2025
+npm run config:preview -- config/seasons/2025
+```
+
+## Words this guide uses
+
+| Word            | Meaning                                                                                                                                           |
+| --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **button**      | One box on the scouting screen. Each has an **id**, such as `teleopl4`, which is how SPOT refers to it.                                           |
+| **action**      | One press of an action button, recorded with the time it happened: "scored on L4 with 87 seconds left".                                           |
+| **layer**       | One screen of buttons. Pressing a button can switch to another layer.                                                                             |
+| **phase**       | A period of the match the clock decides: auto, teleop, endgame.                                                                                   |
+| **segment**     | A smaller period inside a phase, such as 2026's shifts. Most games have none. See [Periods](periods.md).                                          |
+| **performance** | Everything one scouter recorded about one robot in one match. The files sometimes call it a **tmp** (team match performance).                     |
+| **team value**  | A number SPOT works out for a team from all of its performances, such as its average score.                                                       |
+| **path**        | Where a value lives, written with dots: `counts.teleopl4` is the value `teleopl4` inside `counts`.                                                |
+| **entry**       | One step in `analysis-pipeline.json`: one calculation, such as "add these counts together". Each uses a **transformer**, the kind of calculation. |
+| **module**      | One chart, table or number on an analysis page, set up in `analysis-modules.json`.                                                                |
+
+## Chapters
+
+1. [Your first change](tutorial.md): a hands-on walk-through.
+2. [Match scouting](match-scouting.md): buttons, layers, timing and rules (`match-scouting.json`, `qr.json`).
+3. [Periods](periods.md): phases, segments and kinds, and analyzing one period at a time.
+4. [The analysis pipeline](analysis-pipeline.md): the calculations (`analysis-pipeline.json`).
+5. [Analysis modules](analysis-modules.md): what the analysis pages show (`analysis-modules.json`).
+6. [Checking and previewing](checking-and-preview.md): `config:check` and `config:preview`, and what their messages mean.
+7. [Starting a new season](new-season.md): from kickoff to the first event.
+
+Students who can program can also add new kinds of calculations; see
+[Extension transformers](../extension-transformers.md).

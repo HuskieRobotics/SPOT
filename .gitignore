@@ -53,3 +53,6 @@ next-env.d.ts
 
 # npm run config:preview writes the generated dataset here
 config-preview.json
+
+# a student's practice copy from the Configuration Guide tutorial (docs/configuration-guide)
+/config/seasons/practice/
