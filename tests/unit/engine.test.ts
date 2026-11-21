@@ -33,7 +33,7 @@ const config = JSON.parse(
 const generated = generate({ config, seed: "engine", matches: 6, bTeams: 2 });
 const context = { config };
 
-describe("TR-3: getPath and setPath", () => {
+describe("TR-3, TR-8: getPath and setPath", () => {
   const obj = { a: { b: { c: 1, n: null, zero: 0 }, list: [{ id: "x" }] } };
 
   it("reads nested values, array indexes, and the object itself for an empty path", () => {
@@ -72,7 +72,7 @@ describe("TR-3: getPath and setPath", () => {
   });
 });
 
-describe("TR-4 / SEC-8: the dataset", () => {
+describe("TR-5, TR-7 / SEC-8: the dataset", () => {
   const dataset = buildDataset(generated.performances);
 
   it("has one performance per input and one team per team key, B robots included (DM-1a)", () => {
@@ -184,7 +184,7 @@ const entry = (
   ...e,
 });
 
-describe("ADR 0005 / CS-10: the registry", () => {
+describe("TR-9 / ADR 0005 / CS-10: the registry", () => {
   it("refuses to register the same transformer twice", () => {
     expect(() => new TransformerRegistry([actionCount, actionCount])).toThrow(/twice/);
   });
@@ -208,7 +208,7 @@ describe("ADR 0005 / CS-10: the registry", () => {
   });
 });
 
-describe("AN-10: running a pipeline", () => {
+describe("AN-10, TR-10: running a pipeline", () => {
   it("runs tmp, team and dataset entries in order", () => {
     const dataset = buildDataset(generated.performances);
     const {
@@ -301,7 +301,7 @@ describe("AN-10: running a pipeline", () => {
     );
   });
 
-  it("DM-1b: writes null where a transformer produced NaN, Infinity or undefined", () => {
+  it("DV-10, DM-1b: writes null where a transformer produced NaN, Infinity or undefined", () => {
     const { dataset } = runPipeline(
       buildDataset(generated.performances),
       [entry({ type: "team", name: "missing" })],
@@ -350,7 +350,7 @@ describe("AN-10: running a pipeline", () => {
   });
 });
 
-describe("#317: watching what the pipeline reads", () => {
+describe("TR-8 (#317): watching what the pipeline reads", () => {
   it("reports each getPath and hasPath with the value found, only while observing", () => {
     const seen: [unknown, string, unknown][] = [];
     const obj = { a: { b: 1, n: null } };

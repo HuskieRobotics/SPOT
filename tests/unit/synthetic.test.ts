@@ -27,7 +27,7 @@ const run = (config: MatchScoutingConfig, seed = "test-seed", matches = 12) =>
   generate({ config, seed, matches });
 
 describe("seeded randomness", () => {
-  it("repeats exactly for the same seed and differs for another", () => {
+  it("SY-1: repeats exactly for the same seed and differs for another", () => {
     const a = Array.from({ length: 8 }, () => new Random("alpha").next());
     const b = Array.from({ length: 8 }, () => new Random("alpha").next());
     expect(a).toEqual(b);
@@ -45,7 +45,7 @@ describe("seeded randomness", () => {
 });
 
 describe("generated data is reproducible", () => {
-  it("produces identical datasets from the same seed", () => {
+  it("SY-1: produces identical datasets from the same seed", () => {
     expect(run(config2026)).toEqual(run(config2026));
   });
 
@@ -60,18 +60,18 @@ describe.each([
 ])("generated data obeys the %s configuration", (_name, config) => {
   const dataset = run(config, "shared-seed", 16);
 
-  it("writes documents that pass the schema", () => {
+  it("SY-2: writes documents that pass the schema", () => {
     for (const p of dataset.performances)
       expect(validateDocument("team-match-performance", p).issues).toEqual([]);
     expect(validateDocument("event", dataset.event).issues).toEqual([]);
     for (const s of dataset.scouters) expect(validateDocument("scouter", s).issues).toEqual([]);
   });
 
-  it("only produces action ids the configuration can explain", () => {
+  it("SY-4: only produces action ids the configuration can explain", () => {
     expect(dataset.report.unknownActionIds).toEqual([]);
   });
 
-  it("keeps every timestamp inside the match and in order", () => {
+  it("SY-5: keeps every timestamp inside the match and in order", () => {
     for (const p of dataset.performances) {
       let previous = Number.POSITIVE_INFINITY;
       for (const a of p.actions) {
@@ -83,7 +83,7 @@ describe.each([
     }
   });
 
-  it("agrees with the clock about where each action happened", () => {
+  it("SY-4: agrees with the clock about where each action happened", () => {
     for (const p of dataset.performances) {
       for (const a of p.actions) {
         const clock = placeAt(config, a.ts);
@@ -96,7 +96,7 @@ describe.each([
     }
   });
 
-  it("records only buttons that exist and are of type action", () => {
+  it("SY-3: records only buttons that exist and are of type action", () => {
     const actionIds = new Set(
       config.layout.layers.flatMap((l) =>
         l.buttons.filter((b) => b.type === "action").map((b) => b.id),
@@ -106,7 +106,7 @@ describe.each([
       for (const a of p.actions) expect(actionIds.has(a.id)).toBe(true);
   });
 
-  it("renders back to legacy composite ids the configuration knows", () => {
+  it("SY-4: renders back to legacy composite ids the configuration knows", () => {
     const known = new Set(deriveKnownActionIds(config));
     for (const p of dataset.performances) {
       const legacy = toLegacyPerformance(config, p);
@@ -115,7 +115,7 @@ describe.each([
     }
   });
 
-  it("gives every match a full lineup of distinct robots", () => {
+  it("SY-6: gives every match a full lineup of distinct robots", () => {
     const byMatch = new Map<number, string[]>();
     for (const p of dataset.performances) {
       byMatch.set(p.matchNumber, [...(byMatch.get(p.matchNumber) ?? []), p.team]);
@@ -131,7 +131,7 @@ describe("2026 coverage, since a fixture is only useful if it exercises the seas
   const { report, performances } = run(config2026, "coverage", 40);
   const actions = performances.flatMap((p) => p.actions);
 
-  it("reaches every phase, including endgame", () => {
+  it("SY-7: reaches every phase, including endgame", () => {
     expect(Object.keys(report.actionsByPhase).sort()).toEqual(
       ["(pre-match)", "auto", "endgame", "teleop"].sort(),
     );
@@ -140,7 +140,7 @@ describe("2026 coverage, since a fixture is only useful if it exercises the seas
     }
   });
 
-  it("#326: the selected kind alternates at the clock's shift boundaries", () => {
+  it("SY-11 (#326): the selected kind alternates at the clock's shift boundaries", () => {
     // Without a later toggle press, a performance's shifts run active, inactive, active, ... or
     // the other way round from the slot the kind was selected in.
     let alternating = 0;
@@ -164,7 +164,7 @@ describe("2026 coverage, since a fixture is only useful if it exercises the seas
     expect(alternating).toBe(checked);
   });
 
-  it("#326: kindAt moves an alternating segment's kind on by one per repeat", () => {
+  it("SY-11 (#326): kindAt moves an alternating segment's kind on by one per repeat", () => {
     const shift = config2026.timing.phases[1].segments![1];
     expect([1, 2, 3, 4].map((i) => kindAt(shift, { kind: "active", index: 1 }, i))).toEqual([
       "active",
@@ -181,7 +181,7 @@ describe("2026 coverage, since a fixture is only useful if it exercises the seas
     expect(kindAt({ ...shift, alternate: false }, { kind: "active", index: 1 }, 4)).toBe("active");
   });
 
-  it("#326: the legacy export numbers a kind's shifts as v5 did, and migrates back exactly", () => {
+  it("SY-11 (#326): the legacy export numbers a kind's shifts as v5 did, and migrates back exactly", () => {
     const act = (id: string, kind: string | null, slot: number) => ({
       id,
       ts: 130000 - (slot - 1) * 25000 - 1000,
@@ -255,7 +255,7 @@ describe("2025 coverage, a season with no segments and no prefixes", () => {
   });
 });
 
-describe("BL-308: B robots", () => {
+describe("SY-6, BL-308: B robots", () => {
   const config = config2026;
   const dataset = generate({ config, seed: "b-teams", matches: 40, bTeams: 4 });
 
@@ -274,7 +274,7 @@ describe("BL-308: B robots", () => {
 });
 
 describe("#317: what config:check needs from the generator", () => {
-  it("fields idle robots, which play at least every sixth match and record nothing", () => {
+  it("SY-8: fields idle robots, which play at least every sixth match and record nothing", () => {
     const { performances } = generate({
       config: config2025,
       seed: "idle",
@@ -290,7 +290,7 @@ describe("#317: what config:check needs from the generator", () => {
     );
   });
 
-  it("waits for the next phase when nothing on screen can be pressed (2022's auto starts 10 ms in)", () => {
+  it("SY-9: waits for the next phase when nothing on screen can be pressed (2022's auto starts 10 ms in)", () => {
     const v1 = JSON.parse(
       readFileSync(join(process.cwd(), "config", "v1", "match-scouting-2022.json"), "utf8"),
     );
@@ -299,7 +299,7 @@ describe("#317: what config:check needs from the generator", () => {
     expect(Object.keys(report.actionsByPhase).sort()).toEqual(["auto", "teleop"]);
   });
 
-  it("makes TBA responses from the configured known ids, with None for an idle robot", () => {
+  it("SY-10: makes TBA responses from the configured known ids, with None for an idle robot", () => {
     const v1 = JSON.parse(
       readFileSync(join(process.cwd(), "config", "v1", "analysis-pipeline.json"), "utf8"),
     );

@@ -142,7 +142,7 @@ describe("v2 configuration schemas", () => {
     );
   });
 
-  it("rejects seconds where milliseconds are required", () => {
+  it("CS-1: rejects seconds where milliseconds are required", () => {
     const c = minimalMatchScouting();
     c.timing.totalMs = 160;
     const r = validateConfig("match-scouting", c);
@@ -162,7 +162,7 @@ describe("v2 configuration schemas", () => {
     );
   });
 
-  it("validates built-in transformer options strictly", () => {
+  it("CS-10: validates built-in transformer options strictly", () => {
     const p = minimalPipeline();
     p.pipeline[0].options = { all: true, actionArrayPaths: "x" };
     const r = validateConfig("analysis-pipeline", p);
@@ -184,7 +184,7 @@ describe("v2 configuration schemas", () => {
     );
   });
 
-  it("accepts extension transformers and modules with any options", () => {
+  it("CS-10, TR-14: accepts extension transformers and modules with any options", () => {
     const p = minimalPipeline();
     p.pipeline.push({
       type: "team",
@@ -198,7 +198,7 @@ describe("v2 configuration schemas", () => {
     expect(validateConfig("analysis-modules", m).ok).toBe(true);
   });
 
-  it("accepts phase segments with repeats and kinds, and rejects malformed ones", () => {
+  it("CS-4: accepts phase segments with repeats and kinds, and rejects malformed ones", () => {
     const c = minimalMatchScouting();
     c.timing.phases[1].segments = [
       { id: "transition", startMs: 130000, prefix: "teleopTransition" },
@@ -226,7 +226,7 @@ describe("v2 configuration schemas", () => {
     );
   });
 
-  it("validates executables by type and accepts custom executables", () => {
+  it("CS-7: validates executables by type and accepts custom executables", () => {
     const c = minimalMatchScouting();
     c.layout.layers[1].buttons[0].executables = [
       { type: "layer", to: "teleop" },
@@ -238,7 +238,7 @@ describe("v2 configuration schemas", () => {
     expect(validateConfig("match-scouting", c).ok).toBe(false);
   });
 
-  it("validates module options strictly for built-ins", () => {
+  it("CS-13: validates module options strictly for built-ins", () => {
     const m = minimalModules();
     m.modules[0].options = { list: [{ name: "Avg", path: "avgScore", decimal: 2 }] };
     const r = validateConfig("analysis-modules", m);

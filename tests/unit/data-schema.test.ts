@@ -90,7 +90,7 @@ describe("document schemas", () => {
     expect(validateDocument("scouter", scouter()).issues).toEqual([]);
   });
 
-  it("DM-1a: refuses a team that arrived as a number", () => {
+  it("DV-3, DM-1a: refuses a team that arrived as a number", () => {
     const p = { ...performance(), team: 3061 };
     expect(validateDocument("team-match-performance", p).issues).toContainEqual(
       expect.objectContaining({
@@ -110,7 +110,7 @@ describe("document schemas", () => {
     }
   });
 
-  it("refuses a per-action _id, which v5 stored and v6 does not", () => {
+  it("DV-2 (BL-31): refuses a per-action _id, which v5 stored and v6 does not", () => {
     const p = performance();
     (p.actions[0] as unknown as Record<string, unknown>)._id = oid("d");
     expect(validateDocument("team-match-performance", p).issues).toContainEqual(
@@ -121,7 +121,7 @@ describe("document schemas", () => {
     );
   });
 
-  it("requires the placement fields, even when they are null", () => {
+  it("DV-1: requires the placement fields, even when they are null", () => {
     const p = performance();
     delete (p.actions[0] as unknown as Record<string, unknown>).phase;
     expect(validateDocument("team-match-performance", p).issues).toContainEqual(
@@ -132,7 +132,17 @@ describe("document schemas", () => {
     );
   });
 
-  it("requires a tenant on every document", () => {
+  it("DV-7: requires the hook fields, so the features that fill them need no migration", () => {
+    for (const field of ["notes", "tags", "coverage", "superseded"]) {
+      const p = performance() as unknown as Record<string, unknown>;
+      delete p[field];
+      expect(validateDocument("team-match-performance", p).issues).toContainEqual(
+        expect.objectContaining({ message: `missing required property "${field}"` }),
+      );
+    }
+  });
+
+  it("DV-8: requires a tenant on every document", () => {
     for (const [kind, doc] of [
       ["team-match-performance", performance()],
       ["event", event()],
@@ -148,7 +158,7 @@ describe("document schemas", () => {
     }
   });
 
-  it("allows a performance with no scouter, for a scanned QR code", () => {
+  it("DV-4, DV-5: allows a performance with no scouter, for a scanned QR code", () => {
     expect(
       validateDocument("team-match-performance", {
         ...performance(),
@@ -158,7 +168,7 @@ describe("document schemas", () => {
     ).toBe(true);
   });
 
-  it("refuses an unknown source and an unknown flag source", () => {
+  it("DV-5, DV-6: refuses an unknown source and an unknown flag source", () => {
     expect(
       validateDocument("team-match-performance", { ...performance(), source: "socket" }).ok,
     ).toBe(false);
@@ -167,7 +177,7 @@ describe("document schemas", () => {
     expect(validateDocument("team-match-performance", p).ok).toBe(false);
   });
 
-  it("accepts the machine flag a replacement produces (RT-36)", () => {
+  it("DV-6: accepts the machine flag a replacement produces (RT-36)", () => {
     const p = performance();
     p.coverage = "partial";
     p.flag = {

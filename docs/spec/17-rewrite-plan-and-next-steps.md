@@ -259,17 +259,25 @@ scouted an event in parallel with v5 without losing data.
 
 ## 4. Working practices that keep it efficient
 
-- **Per-season work goes on the new-game checklist (#333, K-6).** A change that adds something
+- **Per-season work goes on the new-game checklist (K-6).** A change that adds something
   students must do for each new game (a configuration value to fill in, a constant to verify,
-  data to wait for) adds a line to #333 in the same PR, so the checklist is complete at kickoff.
+  data to wait for) adds a line to `docs/configuration-guide/new-game-checklist.md` in the same
+  PR, and explains it in the guide chapter it belongs to, so the checklist is complete at kickoff.
 - **Spec-driven pull requests.** PR description lists requirement ids implemented and tests
   added; reviewers check the spec, not the old code.
 - **Legacy code is reference, not template.** Read `v5` to answer "what did it do", never
   port a file line by line; the spec already extracted the behavior, and much of the old code
   is duplicated per feature.
-- **Keep the oracle honest.** When the rewrite deliberately diverges from legacy output
-  (fixing F-1 to F-19), update the expected fixture in the same PR with a note citing the
-  defect id.
+- **Keep the oracle honest.** The golden files are never edited. When the rewrite deliberately
+  diverges from legacy output (fixing a defect in document 12), the same PR adds a rule to
+  `tools/oracle/divergences.json` that cites the defect id and says which values it accepts.
+  `tests/unit/oracle-compare.test.ts` pins how many values each rule accepts, so a rule cannot
+  quietly grow (`tools/oracle/README.md`).
+- **Audit each phase before closing it.** Issues cite the requirements they touch, which checks
+  one direction only. The last issue of a phase checks the other: every requirement the phase
+  owns is built and tested or moved on purpose, decisions made along the way are in the spec
+  text, and rules that were only implied are written down. The result is recorded in
+  document 23.
 - **One phase at a time** (decided 2026-11-19). Students are unlikely to build any phase before
   the end of 2026; at most they review and give feedback. The maintainer builds the phases in
   order, each finished to its exit criterion before the next begins, rather than running
@@ -280,7 +288,8 @@ scouted an event in parallel with v5 without losing data.
 
 ## 5. Status and next steps
 
-Last updated 2026-11-19. **Phase 0 is complete.** Items are numbered as in section 2.
+Last updated 2026-11-21. **Phases 0 and 1 are complete.** Phase 0 items are numbered as in
+section 2.
 
 | #   | Phase 0 item                       | Status                                                                                                                                                                                                                                                                                                                                   |
 | --- | ---------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -293,21 +302,20 @@ Last updated 2026-11-19. **Phase 0 is complete.** Items are numbered as in secti
 | 7   | Architecture decision records      | **Done.** `docs/adr/` holds six records: transport, hosting, configuration storage, authentication and privacy, extension model, scouter sessions and match start.                                                                                                                                                                       |
 | 8   | Work tracking                      | **Done** (2026-11-19). Labels `v6`, `v6-later` and `v6-superseded` classify every open issue as document 16 does; milestones "v6 Phase 1" to "v6 Phase 6" carry the in-scope issues by the phase table in section 3. No project board: with one developer, the labels and milestones are enough.                                         |
 
-Recommended order from here, toward gate K (section 3.1), seven weeks away on 2026-11-19:
+**Phase 1, the core engine, is complete** (2026-11-21): issues #310 to #320 and #326 on the
+"v6 Phase 1" milestone. The engine reproduces all four golden sets entry by entry, apart from
+the reviewed divergences (T-4), and the audit of the design documents against what was built
+is document 23 (#330). Gate K stands at K-1 (Phase 1), K-2 (#317), K-3 (#318), K-4 (#321) and
+K-6 (#333) done, with K-5 (#322) to go.
 
-1. **Phase 1, the core engine (K-1).** Every item it waited on is done: the configuration
-   schema (document 20), the data model and migration (document 21), the synthetic generator
-   (document 22) and the behavioral oracle, now with four golden sets (two real events, two
-   synthetic). Start by breaking the phase into issues on its milestone, since only BL-31 is
-   there today. Golden pipeline expectations land with the engine: it runs over the migrated
-   real and synthetic inputs and must reproduce the legacy output, except where a defect in
-   document 12 is deliberately fixed (DM-1b's `null` for missing values is the first).
-   The engine is v6-native: it sees button ids plus each action's period, not composite ids
-   (CS-16, document 20 §2.2, decided 2026-11-19). Phase 1 work is tracked as issues on the
-   "v6 Phase 1" milestone.
-2. **K-2 to K-5**, in that order, on top of the engine.
-3. **Then gate W** (about 2027-02-20): phase 2, the core of phase 3, and the event-critical part
-   of phase 4, about six weeks after kickoff.
+Recommended order from here, seven weeks before kickoff on 2026-11-21:
+
+1. **K-5, the scouting-screen preview (#322)**, the first piece of phase 2. It is also the first
+   page that needs the configuration, so it decides how the application loads and serves the
+   four files (document 23, "Configuration loader").
+2. **Then gate W** (about 2027-02-20): the rest of phase 2, the core of phase 3, and the
+   event-critical part of phase 4, about six weeks after kickoff. Break each phase into issues
+   on its milestone when it starts, as Phase 1 was.
 
 Section 2 assumed about 15 weeks to kickoff and a team of students; the gates replace that
 assumption.

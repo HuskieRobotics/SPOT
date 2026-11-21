@@ -138,6 +138,10 @@ Not used.
 
     configs currently depend on this. New in 2026. Not sure how to make it generic moving forward.
 
+    _Decided 2026-11-19:_ the period is recorded beside the button id (`{ id, phase, segment, … }`)
+    and analysis filters and groups on it; composite ids survive only in the migration, the
+    legacy export and the 2026 oracle (document 20 CS-16, §2.2).
+
 23. **Hidden "catalog" layer** (layer 12): is this a known technique you want to keep, or would
     an explicit `knownActionIds` list in config be preferable?
 
@@ -236,6 +240,10 @@ Not used.
 
     Yes.
 
+    _Replaced 2026-11-21:_ pairing never queues. An end pairs with the newest open start, so a
+    start left without its end no longer shifts every later cycle (document 09 TR-15, document
+    12 F-28).
+
 39. **Rating averages:** `sumAverage` derives count paths by naming convention
     (`counts.<phase>Rating<Metric><N>`). Should the rewrite require explicit `countPaths`
     instead of inferring from names?
@@ -244,6 +252,10 @@ Not used.
 
     _Recommendation (2026-09-17):_ keep name-convention inference as a convenience, require
     explicit `countPaths` when inference finds nothing, and validate in the config tests (T-3).
+
+    _Decided 2026-11-20:_ `countPaths` is always explicit, with no inference, because the
+    composite-id names it relied on are gone (CS-16). The converter writes out the paths v5
+    inferred (document 09, A-39).
 
 ## G. Documentation discrepancies to resolve
 

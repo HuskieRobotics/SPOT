@@ -26,8 +26,8 @@ export type EntryType = "tmp" | "team";
 export interface TransformerContext {
   /** The season's match-scouting configuration (button ids, phases, segments). */
   config: MatchScoutingConfig;
-  /** `Dataset.extraActionIds`; `runPipeline` fills it in from the dataset. */
-  extraActionIds?: readonly string[];
+  /** `Dataset.scoreBreakdownIds`; `runPipeline` fills it in from the dataset. */
+  scoreBreakdownIds?: readonly string[];
 }
 
 export interface TeamInput {

@@ -98,7 +98,7 @@ describe.each([
   });
 });
 
-describe("2026 migration against the oracle", () => {
+describe("DM-7g: 2026 migration against the oracle", () => {
   const { report } = migrated2026;
 
   it("explains every action id in real data from the configuration alone", () => {

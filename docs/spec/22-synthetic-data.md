@@ -150,8 +150,9 @@ real modules with nothing new to maintain.
 
 ## 4. What is still missing
 
-- **v6 engine expectations.** The legacy golden output above is the target; the engine that
-  must reproduce it is Phase 1.
+The v6 engine now reproduces the synthetic golden output of both seasons entry by entry, apart
+from the reviewed divergences (#319, #320, `tests/unit/oracle-compare.test.ts`).
+
 - **Realistic behavior.** If a future test needs plausible robots rather than random ones, the
   place to add it is a weighting layer over button choice, not a rewrite: the walk already
   respects the rules.
