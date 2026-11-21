@@ -1,5 +1,8 @@
 # Active configuration (schema v2)
 
+New to these files? Read the [Configuration Guide](../docs/configuration-guide/README.md), which
+starts with a 20-minute walk-through.
+
 The four files here drive the v6 application:
 
 | File                     | Schema                                            | Spec                 |
