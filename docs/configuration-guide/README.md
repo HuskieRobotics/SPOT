@@ -63,8 +63,7 @@ Code helps you while you type:
 
 - A **red squiggle** marks a mistake. Hover over it to read what is wrong.
 - **Hover** over a name, such as `"gridArea"`, to read what it means.
-- Press **Ctrl+Space** (on a Mac, also Ctrl+Space) inside an object to see which names you can
-  add.
+- Press **Ctrl+Space** inside an object (on a Mac too) to see which names you can add.
 
 ## The three steps you repeat
 

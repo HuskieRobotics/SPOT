@@ -7,8 +7,8 @@
  * or a number changes, update the guide with it.
  */
 import { describe, expect, it } from "vitest";
-import { readFileSync } from "node:fs";
-import { join } from "node:path";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
+import { join, resolve } from "node:path";
 import { checkConfiguration } from "@/config/check";
 import { formatPreview, formatTeam, previewConfiguration } from "@/config/preview";
 import type { ConfigKind } from "@/config/validate";
@@ -140,5 +140,43 @@ describe("#321: the tutorial in docs/configuration-guide works", () => {
     expect(f?.hint).toBe('Did you mean "averages.teleopDefense"?');
     expect(guide).toContain(f!.message);
     expect(guide).toContain(f!.where);
+  });
+});
+
+describe("#321: the guide's links lead somewhere", () => {
+  const dir = join(root, "docs", "configuration-guide");
+  const pages = readdirSync(dir).filter((f) => f.endsWith(".md"));
+  /** GitHub's heading anchors: lower case, punctuation dropped, spaces to hyphens. */
+  const slug = (heading: string) =>
+    heading
+      .trim()
+      .toLowerCase()
+      .replace(/[^a-z0-9 _-]/g, "")
+      .replace(/ /g, "-");
+  const anchors = (file: string) =>
+    new Set(
+      readFileSync(file, "utf8")
+        .split("\n")
+        .filter((l) => /^#{1,6} /.test(l))
+        .map((l) => slug(l.replace(/^#+ /, ""))),
+    );
+
+  it.each(pages)("%s", (page) => {
+    const source = readFileSync(join(dir, page), "utf8");
+    const links = [...source.matchAll(/\]\(([^)\s]+)\)/g)].map((m) => m[1]);
+    expect(links.length).toBeGreaterThan(0);
+    for (const link of links.filter((l) => !/^https?:/.test(l))) {
+      const [file, anchor] = link.split("#");
+      const target = file ? resolve(dir, file) : join(dir, page);
+      expect([link, existsSync(target)]).toEqual([link, true]);
+      if (anchor) expect([link, anchors(target).has(anchor)]).toEqual([link, true]);
+    }
+  });
+
+  it("the start page lists every chapter", () => {
+    const start = readFileSync(join(dir, "README.md"), "utf8");
+    for (const page of pages.filter((p) => p !== "README.md")) {
+      expect(start).toContain(`](${page})`);
+    }
   });
 });

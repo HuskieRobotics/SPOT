@@ -10,6 +10,8 @@ MongoDB). It is not yet usable at events.
 
 - The current production app (v5, Express/EJS) is on `main` until cutover and on the `v5`
   branch afterwards. Its documentation links are in that branch's README.
+- Students configuring SPOT for a game: start with the
+  [Configuration Guide](docs/configuration-guide/README.md).
 - The full requirements specification for the rewrite is in [`docs/spec/`](docs/spec/README.md).
 - The legacy behavioral oracle (golden analysis output for 2025 and 2026 real data, plus synthetic sets for both seasons) is in
   [`tools/oracle/`](tools/oracle/README.md).

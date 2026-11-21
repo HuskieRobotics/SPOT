@@ -1,0 +1,267 @@
+# Analysis modules: `analysis-modules.json`
+
+The analysis pages show each team's numbers and charts. Each chart, table or number is a
+**module**, and `analysis-modules.json` lists them: which kind of module, where it goes, and
+which values from [the analysis pipeline](analysis-pipeline.md) it shows.
+
+```json
+{
+  "$schema": "../../../src/config/schema/analysis-modules.schema.json",
+  "version": 2,
+  "modules": [ ...modules... ],
+  "filterTeams": { "ratingBands": [ ... ] }
+}
+```
+
+The examples come from `config/seasons/2025/analysis-modules.json`.
+
+## A module
+
+```json
+    {
+      "view": "team",
+      "module": "Bar",
+      "name": "Coral Reef Placement",
+      "options": {
+        "bars": [
+          { "name": "Miss", "path": "counts.missCoral" },
+          { "name": "Level 1", "path": "counts.scoreL1" },
+          { "name": "Level 2", "path": "counts.scoreL2" },
+          { "name": "Level 3", "path": "counts.scoreL3" },
+          { "name": "Level 4", "path": "counts.scoreL4" }
+        ]
+      },
+      "position": "main"
+    },
+```
+
+| Name           | Meaning                                                                                                                                               |
+| -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `"view"`       | Which page: `"team"`, a team's page, or `"match"`, the match page that compares two alliances (turned off in 2026, expected back for a typical game). |
+| `"module"`     | Which kind of module; see [Modules](#modules).                                                                                                        |
+| `"name"`       | The title shown above it.                                                                                                                             |
+| `"position"`   | On a team's page, `"main"` (the wide left column) or `"side"` (the narrow right column).                                                              |
+| `"options"`    | What it shows; different for each kind of module.                                                                                                     |
+| `"separate"`   | Optional: `true` keeps the module on a team's page even when the team has no scouting data.                                                           |
+| `"wholeMatch"` | Optional, match page: `true` gives the module both alliances at once, for a module that compares them, such as the chance of winning.                 |
+
+Modules appear in the order they are listed.
+
+## Which values a module can show
+
+A `"path"` in a module names a **team value**: something a `"team"` entry of the pipeline wrote,
+such as `counts.scoreL4` (the team's L4 total) or `averages.teleopl4` (its L4s per match). One
+module, the Performance Time Plot, shows a **value of each match** instead, such as
+`scores.total`.
+
+`config:check` knows every value the pipeline writes, and reports a module path that nothing
+writes, with a suggestion. `config:preview` shows what each module would display.
+
+## Showing a number
+
+Stats lines, columns and single numbers share these options:
+
+| Option          | Meaning                                                                                                                                 |
+| --------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| `"multiplier"`  | Multiply the value first: `100` turns a 0.47 accuracy into 47, and `0.001` turns milliseconds into seconds.                             |
+| `"addend"`      | Then add this.                                                                                                                          |
+| `"decimals"`    | Round to this many decimal places.                                                                                                      |
+| `"unit"`        | Text after the number, such as `"%"` or `"s"`.                                                                                          |
+| `"hideIfValue"` | Show "No Data" when the value equals this, after the multiplier, such as `0` for a time that can't really be 0.                         |
+| `"sort"`        | Rank teams by this value: `1` puts higher values first, `-1` lower values first. A team's page then shows its rank, such as `#3 of 42`. |
+
+A value that is missing or No Data shows "No Data", and a team with No Data is not ranked. Teams
+with the same value share a rank.
+
+```json
+          {
+            "name": "Coral Accuracy",
+            "path": "coralAccuracy",
+            "multiplier": 100,
+            "decimals": 2,
+            "sort": 1,
+            "unit": "%"
+          },
+```
+
+This shows a team's coral accuracy as a percentage with two decimals, ranked so the most
+accurate team is #1.
+
+On the match page, `"aggrMethod"` says how to combine the three robots of an alliance:
+`"sum"` adds them (expected alliance points), and `"average"`, or leaving it out, averages
+them.
+
+## Modules
+
+### Stats: a table of numbers
+
+```json
+      "module": "Stats",
+      "options": {
+        "list": [
+          { "name": "Coral Accuracy", "path": "coralAccuracy", "multiplier": 100, "decimals": 2, "sort": 1, "unit": "%" },
+          { "name": "Total A-Stops", "path": "counts.aStop", "decimals": 0, "sort": -1 }
+        ]
+      }
+```
+
+One line per item of `"list"`: its `"name"`, its value, and its rank when it has `"sort"`. Each
+line takes the [number options](#showing-a-number). Usually in the side column.
+
+### Bar: a bar chart
+
+```json
+      "module": "Bar",
+      "options": { "bars": [{ "name": "Level 1", "path": "counts.scoreL1" }, ...] }
+```
+
+One bar per item of `"bars"`.
+
+### Pie: a pie chart
+
+```json
+      "module": "Pie",
+      "options": {
+        "slices": [
+          { "name": "Ground", "path": "counts.groundPickupCoral" },
+          { "name": "Station", "path": "counts.stationPickupCoral" }
+        ]
+      }
+```
+
+One slice per item of `"slices"`, sized by its value. Optional `"unit"` and `"decimals"` (2 if
+left out) format the numbers on the slices.
+
+### PerformanceTimePlot: a value over a team's matches
+
+```json
+      "module": "PerformanceTimePlot",
+      "options": { "trackedStats": ["scores.auto", "scores.teleop", "scores.endgame", "scores.total"] }
+```
+
+One line per value, with a point for each of the team's matches. The paths are **values of
+each match** (what a `"tmp"` entry writes), not team values. Team page only.
+
+### HeatmapScatterPlot: where on the field
+
+Shows where on the field a team's actions happened, from the spots scouters tapped (a
+`position` executable on the button, see [Match scouting](match-scouting.md#executables-what-else-a-button-does)).
+
+```json
+      "module": "HeatmapScatterPlot",
+      "options": {
+        "coordinatePath": "other.pos",
+        "aggregatedActionsPath": "aggregatedActions",
+        "actionGroups": [{ "name": "Shooting", "actions": ["StartShooting"], "phases": ["teleop", "endgame"] }],
+        "actionLabels": { "StartShooting": "Start Shooting" },
+        "imgPath": "img/field.svg",
+        "coordinateTransform": "none"
+      }
+```
+
+| Option                    | Meaning                                                                                                                                                                                 |
+| ------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `"aggregatedActionsPath"` | A team value holding every action of every match: add a team entry `{ "type": "team", "name": "aggregateArray", "outputPath": "aggregatedActions", "options": { "path": "actions" } }`. |
+| `"coordinatePath"`        | Where the spot is stored on each action: `"other.pos"`.                                                                                                                                 |
+| `"actionGroups"`          | The groups a viewer can switch between. Each names button ids, and optionally [period filters](periods.md) to keep only some periods. The heat layer shows the first group.             |
+| `"actionLabels"`          | The name to show for each button id.                                                                                                                                                    |
+| `"imgPath"`               | The field picture, inside the `public/` folder.                                                                                                                                         |
+| `"coordinateTransform"`   | `"none"`, or `"foldHalfField"` to fold both ends of the field onto one half, as 2026 did.                                                                                               |
+
+### RadarChart: several values on one spider chart
+
+```json
+      "module": "RadarChart",
+      "options": {
+        "sections": [{ "name": "Auto" }, { "name": "Teleop" }, { "name": "Endgame" }, { "name": "Auto" }],
+        "lines": [
+          {
+            "name": "Points",
+            "times": [
+              { "name": "Auto", "path": "averageScores.auto" },
+              { "name": "Teleop", "path": "averageScores.teleop" },
+              { "name": "Endgame", "path": "averageScores.endgame" },
+              { "name": "Auto", "path": "averageScores.auto" }
+            ]
+          }
+        ]
+      }
+```
+
+`"sections"` are the spokes. Each line gives a value for each spoke, by the spoke's name; use
+`"path": "none"` for a spoke the line has no value for. Repeat the first spoke at the end, as
+here, so the shape closes. Team page only.
+
+### ColumnDisplay: one column per robot (match page)
+
+```json
+      "view": "match",
+      "module": "ColumnDisplay",
+      "options": { "path": "averageScores.auto", "sort": 1, "decimals": 2 }
+```
+
+One value per robot, side by side, with each robot's rank. Takes the
+[number options](#showing-a-number), and `"string": true` to show a text value as it is.
+
+### SingleDisplay: one number for an alliance (match page)
+
+```json
+      "view": "match",
+      "module": "SingleDisplay",
+      "options": { "path": "averageScores.total", "aggrMethod": "sum", "decimals": 2 }
+```
+
+One number for the whole alliance, combined with `"aggrMethod"`. With
+`"aggrMethod": "percentChanceOfWinning"` and `"wholeMatch": true` on the module, it shows each
+alliance's chance of winning, from `averageScores.total` and `standardDeviation`.
+
+### Grid: a colored grid
+
+```json
+      "module": "Grid",
+      "options": {
+        "rows": 3,
+        "cols": 9,
+        "min": 0,
+        "max": 5,
+        "cells": [{ "x": 1, "y": 1, "path": "counts.scoreL4", "hex": "#30a2ff" }]
+      }
+```
+
+A grid of cells, each colored more strongly the larger its value is between `"min"` and
+`"max"`, such as a picture of a scoring grid.
+
+### Divider
+
+```json
+{ "view": "team", "module": "Divider", "name": "Endgame", "options": {} }
+```
+
+A heading line between groups of modules.
+
+## Filter Teams
+
+On the Filter Teams page, a user picks values (any `averageScores` value or component OPR) and
+bands, such as "rated 3 or more" or "OPR from 151 to 250", and sees the teams that match.
+`"filterTeams"` → `"ratingBands"` sets the bands they can pick:
+
+```json
+  "filterTeams": {
+    "ratingBands": [
+      { "id": "Rating4", "label": "Rating4", "kind": "exact", "value": 4 },
+      { "id": "Rating3", "label": "Rating3", "kind": "min", "value": 3 },
+      { "id": "strongOPR", "label": "Strong OPR (151-250)", "kind": "range", "min": 151, "max": 250 },
+      { "id": "negativeOPR", "label": "Negative OPR", "kind": "negative" }
+    ]
+  }
+```
+
+| `"kind"`     | A value is in the band when it is… |
+| ------------ | ---------------------------------- |
+| `"exact"`    | equal to `"value"`.                |
+| `"min"`      | at least `"value"`.                |
+| `"range"`    | between `"min"` and `"max"`.       |
+| `"negative"` | below 0.                           |
+
+The bands a converted configuration starts with are the ones SPOT has always had; change them if
+a game rates on a different scale.
