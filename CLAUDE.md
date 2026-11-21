@@ -33,8 +33,9 @@ Do not re-ask the questions in `14-clarifying-questions.md`; they are answered.
   defect id; the golden files are never edited. `npm run oracle:compare` shows where the engine
   stands.
 - If a change adds something students must do for each new game (a value to fill in, a constant
-  to verify, data to wait for), add it to the new-game checklist issue (#333, gate K-6) in the
-  same PR.
+  to verify, data to wait for), add it to the new-game checklist
+  (`docs/configuration-guide/new-game-checklist.md`, gate K-6) in the same PR, and to the
+  Configuration Guide chapter that explains it.
 - Configuration (JSON) is the platform's public interface and must stay usable by students
   without programming experience. Legacy v1 configs are in `config/v1/` for the converter
   and validation tests.

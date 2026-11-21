@@ -110,6 +110,7 @@ npm run config:preview -- config/seasons/2025
 5. [Analysis modules](analysis-modules.md): what the analysis pages show (`analysis-modules.json`).
 6. [Checking and previewing](checking-and-preview.md): `config:check` and `config:preview`, and what their messages mean.
 7. [Starting a new season](new-season.md): from kickoff to the first event.
+8. [New-game checklist](new-game-checklist.md): the same, as a list to tick off.
 
 Students who can program can also add new kinds of calculations; see
 [Extension transformers](../extension-transformers.md).

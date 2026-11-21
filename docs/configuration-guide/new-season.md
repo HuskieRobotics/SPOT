@@ -4,8 +4,7 @@ At kickoff the new game is revealed, and within days you can start writing its c
 You don't need any real matches: `config:check` and `config:preview` work on made-up ones.
 
 The full list of what a new game needs, in order and with when each item can be done, is the
-**new-game checklist** ([issue #333](https://github.com/HuskieRobotics/SPOT/issues/333) until it
-becomes a page of this guide). This chapter is the outline.
+[new-game checklist](new-game-checklist.md). This chapter tells the same path as a story.
 
 ## 1. Put last season away
 
