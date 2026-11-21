@@ -9,6 +9,7 @@ import { buildDataset, getPath, runPipeline, type Dataset } from "@/analysis/eng
 import { createRegistry } from "@/analysis/transformers";
 import {
   configuredPeriods,
+  effectiveKind,
   groupKey,
   groupKeys,
   passesFilter,
@@ -106,6 +107,40 @@ describe("CS-16: periods", () => {
     expect(passesFilter({ phase: "teleop", segment: null }, { segments: ["shift"] })).toBe(false);
     expect(passesFilter({ phase: null }, { phases: [PRE_MATCH] })).toBe(true);
     expect(passesFilter({}, { phases: [PRE_MATCH] })).toBe(true); // arrays without period fields
+  });
+
+  it("#326: a fixed kind counts where the scouter selected none; by kind groups on it", () => {
+    // 2026: the hub was active for both alliances in auto, the transition and endgame.
+    const auto = { phase: "auto", segment: null, segmentKind: null, segmentIndex: null };
+    const transition = { phase: "teleop", segment: "transition" };
+    const unselected = { phase: "teleop", segment: "shift", segmentKind: null, segmentIndex: 2 };
+    const inactive = {
+      phase: "teleop",
+      segment: "shift",
+      segmentKind: "inactive",
+      segmentIndex: 2,
+    };
+    expect(effectiveKind(auto, config2026)).toBe("active");
+    expect(effectiveKind(transition, config2026)).toBe("active");
+    expect(effectiveKind(inactive, config2026)).toBe("inactive");
+    expect(effectiveKind(unselected, config2026)).toBeNull();
+    expect(effectiveKind(auto)).toBeNull(); // without a configuration, only what was recorded
+    expect(passesFilter(auto, { kinds: ["active"] }, config2026)).toBe(true);
+    expect(
+      passesFilter({ phase: "teleop", segment: null }, { kinds: ["active"] }, config2026),
+    ).toBe(false);
+    expect(groupKeys(config2026, "kind")).toEqual([PRE_MATCH, "active", "teleop", "inactive"]);
+    expect(groupKey(auto, "kind", config2026)).toBe("active");
+    expect(groupKey(unselected, "kind", config2026)).toBe("teleop");
+    expect(groupKey({ phase: null }, "kind", config2026)).toBe(PRE_MATCH);
+    // A typical game has no kinds: grouping by kind is grouping by phase.
+    expect(groupKeys(config2025, "kind")).toEqual(groupKeys(config2025, "phase"));
+  });
+
+  it("#326: a kind id that is also a phase id cannot be told apart", () => {
+    const clash = structuredClone(config2026);
+    clash.timing.phases[0].kind = "teleop";
+    expect(() => groupKeys(clash, "kind")).toThrow(/two different periods the key "teleop"/);
   });
 
   it("refuses ids that would merge two periods under one key", () => {
@@ -220,7 +255,19 @@ describe("countActions", () => {
         type: "tmp",
         name: "countActions",
         outputPath: "activeShifts",
+        options: { all: true, segments: ["shift"], kinds: ["active"], by: "segment" },
+      },
+      {
+        type: "tmp",
+        name: "countActions",
+        outputPath: "active",
         options: { all: true, kinds: ["active"], by: "segment" },
+      },
+      {
+        type: "tmp",
+        name: "countActions",
+        outputPath: "byKind",
+        options: { all: true, by: "kind" },
       },
       {
         type: "tmp",
@@ -239,6 +286,25 @@ describe("countActions", () => {
         "active3",
         "active4",
       ]);
+      // "active" also takes in the periods the configuration fixes as active (#326).
+      expect(Object.keys(tmp.active as object)).toEqual([
+        "auto",
+        "transition",
+        "active1",
+        "active2",
+        "active3",
+        "active4",
+        "endgame",
+      ]);
+      const byKind = tmp.byKind as Record<string, Record<string, number>>;
+      expect(Object.keys(byKind)).toEqual([PRE_MATCH, "active", "teleop", "inactive"]);
+      const activeActions = tmp.actions.filter(
+        (a) =>
+          a.segmentKind === "active" ||
+          ["auto", "endgame"].includes(a.phase ?? "") ||
+          a.segment === "transition",
+      );
+      expect(sumOf(byKind.active)).toBe(activeActions.length);
       expect(sumOf(tmp.pre as Record<string, number>)).toBe(
         tmp.actions.filter((a) => a.phase === null).length,
       );
@@ -303,7 +369,7 @@ describe("countActions", () => {
     );
     expect(problems.map((p) => p.message)).toEqual([
       'Invalid options: options: unknown property "phase"; did you mean "phases"?',
-      "Invalid options: options.by: must be one of: phase, segment",
+      "Invalid options: options.by: must be one of: phase, segment, kind",
       'Invalid options: options: needs one of these properties: "all", "ids"',
     ]);
   });

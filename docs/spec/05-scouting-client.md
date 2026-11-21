@@ -112,6 +112,15 @@ four pages (`landing`, `form`, `waiting`, `match-scouting`) plus a persistent st
   - `teleopTime > time > endgameTime` → `"Active Shift N"` / `"Inactive Shift N"` if a shift
     button was pressed, else `displayText`.
   - `time <= endgameTime` → `"Endgame"`.
+
+  **v6 (decided 2026-11-20, #326):** the shift constants are configuration (a repeating `shift`
+  segment with two kinds, docs/spec/20 CS-4), and `alternate: true` makes the selected kind move
+  to the other one at each shift boundary of the **field clock**, not 25 s after the press. A late
+  press made every later v5 flip late: of 625 shift presses whose label disagrees with the rest of
+  their 25 s slot, 420 fall in the slot's first 5 s (2026mnwi). A later press of either toggle
+  selects that kind from then on. Which alliance's hub is active first could come from TBA after
+  the match, but v6 does not use it (decided 2026-11-20).
+
 - **SC-23** Recorded action id = `camelCase(displayTextWithShift)` (non-alphanumeric runs
   removed, following char upper-cased, first char lower-cased) + `button.id`. Examples:
   `auto` + `StartShooting` → `autoStartShooting`; `teleopTransition` + `AZone`;

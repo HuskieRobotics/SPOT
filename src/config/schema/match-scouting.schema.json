@@ -182,6 +182,10 @@
             "$ref": "#/$defs/segment"
           },
           "description": "Sub-periods inside this phase (for example a transition period, then repeating shifts)."
+        },
+        "kind": {
+          "$ref": "#/$defs/id",
+          "description": "A segment kind this whole phase counts as in analysis, such as \"active\" in 2026, when the hub was active for both alliances in auto and endgame. It must be one of the kinds a segment declares. The kinds filter and by: \"kind\" use it; it is a game rule, not recorded on actions (#326)."
         }
       },
       "description": "A period of the match selected by the clock. The clock counts down, so a phase begins when the time remaining reaches its startMs; the active phase is the most recent one to have begun, i.e. the smallest startMs that is still >= the time remaining."
@@ -250,6 +254,14 @@
               }
             }
           }
+        },
+        "alternate": {
+          "type": "boolean",
+          "description": "The selected kind changes to the next one at each repeat boundary of the field clock (2026 shifts: active, inactive, active, ...). The scouter picks the kind once; pressing another kind's toggle changes it from then on (#326). Needs kinds and repeat."
+        },
+        "kind": {
+          "$ref": "#/$defs/id",
+          "description": "For a segment without kinds: a kind it counts as in analysis, such as \"active\" for 2026's transition, when the hub was active for both alliances. It must be one of the kinds another segment declares. The kinds filter and by: \"kind\" use it; it is not recorded on actions (#326)."
         }
       }
     },

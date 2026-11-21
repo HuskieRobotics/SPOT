@@ -12,8 +12,8 @@
  *   score-breakdown ids reported at the event start at 0 too (`Dataset.extraActionIds`, #315).
  * - `ids` counts only the listed ids, each starting at 0.
  * - `phases`, `segments`, `kinds` count only actions recorded in those periods.
- * - `by: "phase" | "segment"` splits the counts by period (see periods.ts for the keys); every
- *   configured period that passes the filters starts with all its ids at 0.
+ * - `by: "phase" | "segment" | "kind"` splits the counts by period (see periods.ts for the
+ *   keys); every configured period that passes the filters starts with all its ids at 0.
  * - `actionArrayPath` (default `actions`) counts a different array of actions on the
  *   performance, such as one written by an earlier entry.
  */
@@ -70,10 +70,10 @@ function counter(
       const id = action.id;
       if (typeof id !== "string") continue;
       if (wanted && !wanted.has(id)) continue;
-      if (!passesFilter(action, options)) continue;
+      if (!passesFilter(action, options, config)) continue;
       let target = out as Counts;
       if (options.by) {
-        const key = groupKey(action, options.by);
+        const key = groupKey(action, options.by, config);
         const grouped = out as Record<string, Counts>;
         target = grouped[key] ??= seed(ids);
       }

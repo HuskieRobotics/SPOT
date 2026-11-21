@@ -561,8 +561,8 @@
             "$ref": "#/$defs/periodFilter/properties/kinds"
           },
           "by": {
-            "enum": ["phase", "segment"],
-            "description": "Split the counts by period: by phase (auto, teleop, endgame, preMatch) or by the most specific period (transition, active1, ...)."
+            "enum": ["phase", "segment", "kind"],
+            "description": "Split the counts by period: by phase (auto, teleop, endgame, preMatch), by the most specific period (transition, active1, ...), or by kind (active, inactive, then the phase id where no kind applies)."
           }
         },
         "anyOf": [
@@ -994,7 +994,7 @@
         },
         "kinds": {
           "$ref": "#/$defs/idList",
-          "description": "Segment kind ids, such as \"active\" or \"inactive\": the kind the scouter selected, or a kind the configuration fixes for a whole period (#326)."
+          "description": "Segment kind ids, such as \"active\" or \"inactive\": the kind the scouter selected, else a kind the configuration fixes for the action's segment or phase (#326)."
         }
       }
     }

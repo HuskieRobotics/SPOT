@@ -20,6 +20,7 @@
  * - Actions written into an output are copies; stored actions are never changed (F-3, TR-7).
  * - v5's `removeDuplicates` is retired: analysis never sees a superseded performance (TR-5).
  */
+import type { MatchScoutingConfig } from "@/config/types";
 import type { Action } from "@/data/types";
 import { getPath } from "../engine/path";
 import { builtInOptions, defineTransformer, type Transformer } from "../engine/registry";
@@ -32,15 +33,27 @@ const orDefault = (value: unknown) => (value === undefined ? null : structuredCl
 const copy = <T>(value: T): T => structuredClone(value);
 
 /** The actions at `path`, in recorded order; with a filter, only those that pass it. */
-function actionsAt(target: Record<string, unknown>, path: string, filter: PeriodFilter = {}) {
+function actionsAt(
+  target: Record<string, unknown>,
+  path: string,
+  filter: PeriodFilter = {},
+  config?: MatchScoutingConfig,
+) {
   const list = getPath(target, path);
   if (!Array.isArray(list)) throw new Error(`"${path}" is not a list of actions`);
-  return (list as ActionLike[]).filter((action) => passesFilter(action, filter));
+  return (list as ActionLike[]).filter((action) => passesFilter(action, filter, config));
 }
 
 /** Whether a pair, from its first to its last action, starts or ends in the filtered periods. */
-const keepsPair = (first: ActionLike, last: ActionLike, filter: PeriodFilter) =>
-  !hasPeriodFilter(filter) || passesFilter(first, filter) || passesFilter(last, filter);
+const keepsPair = (
+  first: ActionLike,
+  last: ActionLike,
+  filter: PeriodFilter,
+  config: MatchScoutingConfig,
+) =>
+  !hasPeriodFilter(filter) ||
+  passesFilter(first, filter, config) ||
+  passesFilter(last, filter, config);
 
 /** Mean of the numbers, added left to right as v5 did; null when there are none. */
 function mean(values: readonly number[]): number | null {
@@ -59,9 +72,9 @@ export const actionTime = defineTransformer<
   name: "actionTime",
   summary: "When an action first happened (match time remaining, in ms)",
   optionsSchema: builtInOptions("actionTime"),
-  run: (tmp, options) => {
+  run: (tmp, options, { config }) => {
     const ids = Array.isArray(options.actionId) ? options.actionId : [options.actionId];
-    const found = actionsAt(tmp, "actions", options).find((a) => ids.includes(a.id));
+    const found = actionsAt(tmp, "actions", options, config).find((a) => ids.includes(a.id));
     return found ? found.ts : orDefault(options.default);
   },
 });
@@ -82,7 +95,7 @@ export const actionTimeFilter = defineTransformer<
   run: (tmp, options, { config }) => {
     const min = options.timeMin ?? 0;
     const max = options.timeMax ?? config.timing.totalMs;
-    return actionsAt(tmp, "actions", options)
+    return actionsAt(tmp, "actions", options, config)
       .filter((a) => a.ts >= min && a.ts <= max)
       .map(copy);
   },
@@ -97,9 +110,9 @@ export const finalActionOccurrence = defineTransformer<
   name: "finalActionOccurrence",
   summary: "The last action with one of these ids",
   optionsSchema: builtInOptions("finalActionOccurrence"),
-  run: (tmp, options) => {
+  run: (tmp, options, { config }) => {
     // Searched from the end without reversing: v5 reversed the stored list in place (F-3).
-    const actions = actionsAt(tmp, options.actionArrayPath ?? "actions", options);
+    const actions = actionsAt(tmp, options.actionArrayPath ?? "actions", options, config);
     for (let i = actions.length - 1; i >= 0; i--) {
       if (options.ids.includes(actions[i].id)) return copy(actions[i]);
     }
@@ -131,7 +144,7 @@ export const cycle = defineTransformer<
   name: "cycle",
   summary: "Time from each start action to the end action that follows it",
   optionsSchema: builtInOptions("cycle"),
-  run: (tmp, options) => {
+  run: (tmp, options, { config }) => {
     const capacity = options.capacity ?? 1;
     const misses = options.misses ?? [];
     const open: ActionLike[] = [];
@@ -142,7 +155,7 @@ export const cycle = defineTransformer<
         const i = open.findLastIndex((start) => start.ts > action.ts);
         if (i >= 0) {
           const [start] = open.splice(i, 1);
-          if (keepsPair(start, action, options)) {
+          if (keepsPair(start, action, options, config)) {
             all.push({
               starts: copy(start),
               ending: copy(action),
@@ -165,7 +178,7 @@ export const cycle = defineTransformer<
       averageTimeComplete: mean(allComplete.map((c) => c.timeDifferential)),
       cycleCount: all.length,
       cycleCountComplete: allComplete.length,
-      unendedCount: unended.filter((start) => passesFilter(start, options)).length,
+      unendedCount: unended.filter((start) => passesFilter(start, options, config)).length,
     };
   },
 });
@@ -185,13 +198,13 @@ export const countHybrid = defineTransformer<
   name: "countHybrid",
   summary: "Count placements by the game piece last picked up",
   optionsSchema: builtInOptions("countHybrid"),
-  run: (tmp, options) => {
+  run: (tmp, options, { config }) => {
     const placements: Record<string, number> = {};
     for (const id of options.pickup) placements[id] = 0;
     let held: ActionLike | null = null;
     for (const action of actionsAt(tmp, options.actionArrayPath ?? "actions")) {
       if (options.pickup.includes(action.id)) held = action;
-      if (options.hybrid.includes(action.id) && held && keepsPair(held, action, options))
+      if (options.hybrid.includes(action.id) && held && keepsPair(held, action, options, config))
         placements[held.id] += 1;
     }
     return placements;
@@ -220,7 +233,7 @@ export const zoneActionRatingGroupings = defineTransformer<
   name: "zoneActionRatingGroupings",
   summary: "Group zone, action and rating presses, and average the rating per zone and action",
   optionsSchema: builtInOptions("zoneActionRatingGroupings"),
-  run: (tmp, options) => {
+  run: (tmp, options, { config }) => {
     const reserved = options.zones.filter((z) => z === "list" || z === "counts");
     if (reserved.length > 0) {
       throw new Error(`a zone cannot be named "${reserved[0]}": that key holds other output`);
@@ -236,7 +249,7 @@ export const zoneActionRatingGroupings = defineTransformer<
         if (!waiting || waiting.action.ts <= a.ts) continue;
         const { zone: z, action } = waiting;
         waiting = null;
-        if (z === null || !keepsPair(action, a, options)) continue;
+        if (z === null || !keepsPair(action, a, options, config)) continue;
         const value = options.ratings[a.id];
         list.push({ zone: z, action: action.id, rating: value });
         const byAction = (counts[z] ??= {});

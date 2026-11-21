@@ -601,6 +601,40 @@ describe("references within match-scouting.json", () => {
     });
     expect(conditional).toEqual([]);
   });
+
+  it("#326: a fixed kind must be one a segment declares; alternate needs kinds and repeat", () => {
+    const found = check((d) => {
+      d.ms.timing.phases[0].kind = "actve";
+      d.ms.timing.phases[1].segments![1].kind = "active";
+      d.ms.timing.phases[1].segments![0].alternate = true;
+    }, season2026);
+    expect(found.map((f) => [f.severity, f.where, f.message, f.hint ?? ""])).toEqual([
+      [
+        "error",
+        'phase "auto" › kind',
+        '"actve" is not a kind any segment declares, so the phase counts as no kind.',
+        'Did you mean "active"?',
+      ],
+      [
+        "error",
+        'phase "teleop" › segment "transition" › alternate',
+        '"alternate" switches the selected kind at each repeat, but this segment has no "kinds".',
+        'Remove "alternate", or give the segment "kinds" and "repeat".',
+      ],
+      [
+        "error",
+        'phase "teleop" › segment "shift" › kind',
+        "This segment has kinds the scouter selects, so it cannot also have a fixed kind.",
+        'Remove "kind"; a fixed kind is for a phase or segment without toggle buttons.',
+      ],
+    ]);
+    const typical = check((d) => {
+      d.ms.timing.phases[1].kind = "active";
+    });
+    expect(typical.map((f) => f.message)).toEqual([
+      'No segment declares kinds, so "active" means nothing here.',
+    ]);
+  });
 });
 
 describe("qr.json", () => {
