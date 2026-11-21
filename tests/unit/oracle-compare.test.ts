@@ -316,6 +316,7 @@ describe("#319: oracle acceptance, 2025", () => {
       );
       expect(tmps.size).toBeGreaterThan(0);
     },
+    60000,
   );
 
   it('the ratio rules excuse exactly the 27 "N/A" values docs/spec/12 counts (F-24, F-25)', () => {
@@ -356,7 +357,7 @@ describe("#319: oracle acceptance, 2025", () => {
 describe("#320: oracle acceptance, 2026", () => {
   const accepted2026 = {
     "2026mnwi_official-v5": {
-      "missing-nan": 2660,
+      "missing-nan": 2651,
       "missing-undefined": 21,
       "counts-nonaction-buttons": 2036,
       "counts-catalog-ids-2026": 3054,
@@ -364,22 +365,26 @@ describe("#320: oracle acceptance, 2026", () => {
       "cycle-unended-count": 2065,
       "tba-ids-start-at-zero-2026": 75,
       "tba-none-average-2026": 26,
-      "counts-every-period-2026": 264001,
-      "average-keys-2026": 46,
+      "shift-slots-2026": 128269,
+      "shift-numbering-2026": 318,
+      "counts-every-period-2026": 141919,
+      "average-keys-2026": 23,
       "cycles-2026": 26765,
-      "performance-order-2026": 1449,
+      "performance-order-2026": 1448,
     },
     "2026syn_synthetic-v5": {
-      "missing-nan": 3401,
+      "missing-nan": 3231,
       "counts-nonaction-buttons": 1824,
       "counts-catalog-ids-2026": 2736,
       "action-period-fields": 60552,
       "cycle-unended-count": 1800,
       "tba-ids-without-tba": 1824,
       "opr-without-tba": 144,
-      "counts-every-period-2026": 185053,
-      "average-keys-2026": 2244,
-      "cycles-2026": 19881,
+      "shift-slots-2026": 90287,
+      "shift-numbering-2026": 60,
+      "counts-every-period-2026": 100868,
+      "average-keys-2026": 1172,
+      "cycles-2026": 14984,
     },
   };
 
@@ -391,11 +396,60 @@ describe("#320: oracle acceptance, 2026", () => {
     expect(c.accepted).toEqual(accepted2026[name as keyof typeof accepted2026]);
   });
 
+  it.each(Object.keys(accepted2026))(
+    "%s: per-shift values differ only where v5's shift number does not fit the clock (#326)",
+    (name) => {
+      // Compare again without the shift-numbering rule: every performance whose values differ
+      // must have an action whose v5 shift number is outside the clock slots it can be in, and
+      // every team that differs must have such a performance.
+      const set = goldenSets.find((s) => s.name === name)!;
+      const rules = loadDivergences().filter((r) => r.id !== "shift-numbering-2026");
+      const strict = compareGoldenSet(set, { rules, keep: 1_000_000 });
+      const { dataset, migration } = runGoldenSet(set);
+      const flagged = new Set(migration.shiftNumbering.performances);
+      const teams = new Set(dataset.tmps.filter((t) => flagged.has(t._id)).map((t) => t.team));
+      for (const d of strict.differences) {
+        expect([d.scope, d.id, d.path, (d.scope === "tmp" ? flagged : teams).has(d.id)]).toEqual([
+          d.scope,
+          d.id,
+          d.path,
+          true,
+        ]);
+      }
+      // Not vacuous, and nothing the rule accepts escapes the check. (A few values of the three
+      // late-entry teams fall to performance-order-2026 when this rule is left out.)
+      expect(strict.differenceCount).toBeGreaterThan(0);
+      expect(strict.differenceCount).toBeLessThanOrEqual(
+        accepted2026[name as keyof typeof accepted2026]["shift-numbering-2026"],
+      );
+    },
+    60000,
+  );
+
+  it("the migration reports v5 shift numbers the clock does not fit (#326)", () => {
+    const numbering = Object.fromEntries(
+      goldenSets
+        .filter((s) => s.name.startsWith("2026"))
+        .map((s) => {
+          const n = runGoldenSet(s).migration.shiftNumbering;
+          return [s.name, [n.actions, n.disagree, n.performances.length]];
+        }),
+    );
+    // The real event: late presses, repeated toggles and labels that did not flip. The synthetic
+    // event: the generated scouter alternates at the clock, except after a late or repeated press.
+    expect(numbering).toEqual({
+      "2026mnwi_official-v5": [6479, 333, 175],
+      "2026syn_synthetic-v5": [2172, 84, 31],
+    });
+  });
+
   it("the translation table comes from the configuration's prefixes", () => {
     const set = goldenSets.find((s) => s.name === "2026mnwi_official-v5")!;
     const { config, pipeline } = runGoldenSet(set);
     const t = translationFor(config, pipeline)!;
     expect(t.mapLegacyPath("tmp", "counts.activeShift1Defense")).toBe("counts.active1.Defense");
+    // v5's second active shift is clock slot 3 or 4; the table names the first (#326).
+    expect(t.mapLegacyPath("tmp", "counts.activeShift2Defense")).toBe("counts.active3.Defense");
     expect(t.mapLegacyPath("tmp", "counts.teleopTransitionRatingStoring2")).toBe(
       "counts.transition.RatingStoring2",
     );

@@ -6,7 +6,8 @@
 import { describe, expect, it } from "vitest";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import { generate, toLegacyPerformance } from "@/generate/synthetic";
+import { generate, kindAt, legacyShiftNumbers, toLegacyPerformance } from "@/generate/synthetic";
+import { migrate, type V5Performance } from "@/migrate/v5-to-v6";
 import { generateTba } from "@/generate/synthetic-tba";
 import { buildEnrichedDataset } from "@/analysis/enrichment/tba";
 import { convertAnalysisPipeline, convertMatchScouting } from "@/config/convert/v1-to-v2";
@@ -137,6 +138,82 @@ describe("2026 coverage, since a fixture is only useful if it exercises the seas
     for (const phase of ["auto", "teleop", "endgame"]) {
       expect(report.actionsByPhase[phase]).toBeGreaterThan(0);
     }
+  });
+
+  it("#326: the selected kind alternates at the clock's shift boundaries", () => {
+    // Without a later toggle press, a performance's shifts run active, inactive, active, ... or
+    // the other way round from the slot the kind was selected in.
+    let alternating = 0;
+    let checked = 0;
+    for (const p of performances) {
+      const bySlot = new Map<number, Set<string>>();
+      for (const a of p.actions) {
+        if (a.segment !== "shift" || !a.segmentKind) continue;
+        bySlot.set(a.segmentIndex!, (bySlot.get(a.segmentIndex!) ?? new Set()).add(a.segmentKind));
+      }
+      const slots = [...bySlot].sort((a, b) => a[0] - b[0]);
+      if (slots.length < 2 || slots.some(([, k]) => k.size > 1)) continue;
+      checked++;
+      const [first, firstKinds] = slots[0];
+      const start = [...firstKinds][0];
+      const expected = (slot: number) =>
+        (slot - first) % 2 === 0 ? start : start === "active" ? "inactive" : "active";
+      if (slots.every(([slot, k]) => k.has(expected(slot)))) alternating++;
+    }
+    expect(checked).toBeGreaterThan(performances.length / 3);
+    expect(alternating).toBe(checked);
+  });
+
+  it("#326: kindAt moves an alternating segment's kind on by one per repeat", () => {
+    const shift = config2026.timing.phases[1].segments![1];
+    expect([1, 2, 3, 4].map((i) => kindAt(shift, { kind: "active", index: 1 }, i))).toEqual([
+      "active",
+      "inactive",
+      "active",
+      "inactive",
+    ]);
+    // A press in slot 3 overrides from there on.
+    expect([3, 4].map((i) => kindAt(shift, { kind: "active", index: 3 }, i))).toEqual([
+      "active",
+      "inactive",
+    ]);
+    expect(kindAt(shift, undefined, 2)).toBeNull();
+    expect(kindAt({ ...shift, alternate: false }, { kind: "active", index: 1 }, 4)).toBe("active");
+  });
+
+  it("#326: the legacy export numbers a kind's shifts as v5 did, and migrates back exactly", () => {
+    const act = (id: string, kind: string | null, slot: number) => ({
+      id,
+      ts: 130000 - (slot - 1) * 25000 - 1000,
+      phase: "teleop",
+      segment: "shift",
+      segmentKind: kind,
+      segmentIndex: slot,
+    });
+    // Selected inactive in slot 2 after an action with no kind; slot 4 has no actions.
+    const actions = [
+      act("Passing", null, 1),
+      act("Passing", "inactive", 2),
+      act("Storing", "active", 3),
+    ];
+    expect(legacyShiftNumbers(config2026, actions)).toEqual([1, 1, 1]);
+    // Selected in slot 1 with no action there: slot 1 still counts as the first active shift.
+    expect(
+      legacyShiftNumbers(config2026, [act("Passing", "inactive", 2), act("Storing", "active", 3)]),
+    ).toEqual([1, 2]);
+    // The whole generated event survives the round trip through v5 ids.
+    const legacy = performances.map((p) => toLegacyPerformance(config2026, p));
+    const back = migrate(
+      { performances: legacy as unknown as V5Performance[], events: [] },
+      { config: config2026, now: 0 },
+    );
+    back.performances.forEach((p, i) => {
+      // An action before any kind was selected had no prefix of its own in v5 (`teleop…`), so
+      // it comes back without its segment; every other action keeps its kind and clock slot.
+      expect(p.actions.map((a) => [a.segmentKind, a.segmentIndex])).toEqual(
+        performances[i].actions.map((a) => [a.segmentKind, a.segmentKind ? a.segmentIndex : null]),
+      );
+    });
   });
 
   it("uses both shift kinds and every shift index", () => {

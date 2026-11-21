@@ -139,6 +139,60 @@ describe("2026 migration against the oracle", () => {
     return migrated2026.scouters.map((s) => s._id);
   }
 
+  it("#326: a shift's index is the clock slot; the kind comes from the id", () => {
+    const config = read("config", "match-scouting.json") as MatchScoutingConfig;
+    const one = (actionQueue: { id: string; ts: number }[]) =>
+      migrate(
+        {
+          performances: [
+            {
+              _id: { $oid: "c".repeat(24) },
+              timestamp: { $numberLong: "1772809355374" },
+              clientVersion: "1.0",
+              scouterId: "Ada",
+              robotNumber: 3061,
+              matchNumber: 1,
+              eventNumber: { $oid: "d".repeat(24) },
+              matchId: "1-3061-Ada-x",
+              matchId_rand: "x",
+              actionQueue,
+            },
+          ],
+          events: [],
+        },
+        { config, now: NOW },
+      );
+    // Shifts start at 130 s and last 25 s: slot 1 is 130-105 s, slot 3 is 80-55 s.
+    const r = one([
+      { id: "activeShift1StopShooting", ts: 120000 }, // first active shift, slot 1: fits
+      { id: "activeShift2StopShooting", ts: 70000 }, // second active shift, slot 3: fits
+      { id: "activeShift2Passing", ts: 100000 }, // second active shift in slot 2: a late press
+      { id: "inactiveShift3Storing", ts: 40000 }, // a toggle pressed again, slot 4
+    ]);
+    expect(r.performances[0].actions.map((a) => [a.id, a.segmentKind, a.segmentIndex])).toEqual([
+      ["StopShooting", "active", 1],
+      ["StopShooting", "active", 3],
+      ["Passing", "active", 2],
+      ["Storing", "inactive", 4],
+    ]);
+    expect(r.report.shiftNumbering).toEqual({
+      actions: 4,
+      disagree: 2,
+      performances: ["c".repeat(24)],
+    });
+  });
+
+  it("reports how often real v5 shift numbers do not fit the clock (#326)", () => {
+    const n = migrated2026.report.shiftNumbering;
+    expect([n.actions, n.disagree, n.performances.length]).toEqual([6479, 333, 175]);
+    // A typical game has no shifts.
+    expect(migrated2025.report.shiftNumbering).toEqual({
+      actions: 0,
+      disagree: 0,
+      performances: [],
+    });
+  });
+
   it("resolves shift segments from the composite ids", () => {
     const shifts = migrated2026.performances
       .flatMap((p) => p.actions)

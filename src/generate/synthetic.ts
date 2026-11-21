@@ -100,8 +100,11 @@ interface SimState {
   variables: Record<string, string | number | boolean>;
   /** "<layer>:<button>" for buttons a `hide` executable removed. */
   hidden: Set<string>;
-  /** Selected kind per segment id, chosen by pressing a toggle button. */
-  segmentKinds: Map<string, string>;
+  /**
+   * Selected kind per segment id, chosen by pressing a toggle button, and the repeat index it was
+   * selected in: an alternating segment moves to the next kind at each later repeat (#326).
+   */
+  segmentKinds: Map<string, { kind: string; index: number | null }>;
   /** The phase and segment last entered, so a change can apply its layer and variables. */
   enteredPhase: string | null;
   enteredSegment: string | null;
@@ -205,15 +208,44 @@ function applyExecutables(
   return { multiplier, position };
 }
 
-/** A shift toggle is a `none` button named by a segment kind (SC-22). */
-function applyToggle(config: MatchScoutingConfig, state: SimState, buttonId: string): void {
+/**
+ * A shift toggle is a `none` button named by a segment kind (SC-22). It selects that kind from
+ * now on, overriding an earlier selection.
+ */
+function applyToggle(
+  config: MatchScoutingConfig,
+  state: SimState,
+  buttonId: string,
+  placement: Placement,
+): void {
   for (const phase of config.timing.phases) {
     for (const segment of phase.segments ?? []) {
       for (const kind of segment.kinds ?? []) {
-        if (kind.toggleButton === buttonId) state.segmentKinds.set(segment.id, kind.id);
+        if (kind.toggleButton !== buttonId) continue;
+        const index = placement.segment === segment.id ? placement.segmentIndex : null;
+        state.segmentKinds.set(segment.id, { kind: kind.id, index });
       }
     }
   }
+}
+
+/**
+ * The kind selected for a segment at a repeat index: the selected one, moved on by one kind per
+ * repeat since it was selected when the segment alternates (#326, decided 2026-11-20).
+ */
+export function kindAt(
+  segment: Segment,
+  selected: { kind: string; index: number | null } | undefined,
+  index: number | null,
+): string | null {
+  if (!selected) return null;
+  const kinds = segment.kinds ?? [];
+  if (!segment.alternate || kinds.length < 2 || selected.index === null || index === null) {
+    return selected.kind;
+  }
+  const from = kinds.findIndex((k) => k.id === selected.kind);
+  const steps = Math.max(0, index - selected.index);
+  return kinds[(from + steps) % kinds.length].id;
 }
 
 function engageLocks(config: MatchScoutingConfig, state: SimState, buttonId: string): void {
@@ -349,13 +381,15 @@ function simulateMatch(
       if (actions.length > minQueue) actions.pop();
       applyExecutables(config, state, button, random);
     } else if (button.type === "none") {
-      applyToggle(config, state, button.id);
+      applyToggle(config, state, button.id, placement);
       applyExecutables(config, state, button, random);
     } else {
       engageLocks(config, state, button.id);
       const { multiplier, position } = applyExecutables(config, state, button, random);
       const segment = segmentOf(config, placement);
-      const kind = segment?.kinds?.length ? (state.segmentKinds.get(segment.id) ?? null) : null;
+      const kind = segment?.kinds?.length
+        ? kindAt(segment, state.segmentKinds.get(segment.id), placement.segmentIndex)
+        : null;
       for (let i = 0; i < multiplier; i++) {
         const action: Action = {
           id: button.id,
@@ -524,10 +558,70 @@ function legacyRobotNumber(team: TeamKey): number {
   return teamNumber(team);
 }
 
+/**
+ * v5's shift numbers (#326, SC-22). v5 numbered each kind's shifts from the scouter's toggle
+ * press (`activeShift2` = the second active shift); v6 records the clock slot. Rebuilt from the
+ * kinds recorded in each slot: a slot with no recorded kind takes the next kind after the
+ * previous slot's when the segment alternates (else the same kind), and the slots before the
+ * first recorded kind are filled the same way backwards, down to the last action recorded
+ * before any kind was selected. Returns each action's number, or its own index.
+ */
+export function legacyShiftNumbers(
+  config: MatchScoutingConfig,
+  actions: readonly Action[],
+): (number | null)[] {
+  const out = actions.map((a) => a.segmentIndex);
+  for (const phase of config.timing.phases) {
+    for (const segment of phase.segments ?? []) {
+      const kinds = (segment.kinds ?? []).map((k) => k.id);
+      if (kinds.length === 0 || !segment.repeat) continue;
+      const step = (kind: string, by: number) =>
+        segment.alternate
+          ? kinds[(((kinds.indexOf(kind) + by) % kinds.length) + kinds.length) % kinds.length]
+          : kind;
+      const inSegment = actions
+        .map((a, i) => ({ a, i }))
+        .filter(({ a }) => a.phase === phase.id && a.segment === segment.id);
+      const seen = new Map<number, string[]>();
+      for (const { a } of inSegment) {
+        if (a.segmentKind === null || a.segmentIndex === null) continue;
+        const list = seen.get(a.segmentIndex) ?? [];
+        if (!list.includes(a.segmentKind)) list.push(a.segmentKind);
+        seen.set(a.segmentIndex, list);
+      }
+      if (seen.size === 0) continue;
+      const first = Math.min(...seen.keys());
+      const unselected = inSegment
+        .filter(({ a }) => a.segmentKind === null && a.segmentIndex !== null)
+        .map(({ a }) => a.segmentIndex!)
+        .filter((slot) => slot <= first);
+      const lowest = unselected.length > 0 ? Math.max(...unselected) + 1 : 1;
+      const timeline = new Map<number, string[]>(seen);
+      for (let slot = first - 1; slot >= lowest; slot--) {
+        timeline.set(slot, [step(timeline.get(slot + 1)![0], -1)]);
+      }
+      for (let slot = first + 1; slot <= segment.repeat.count; slot++) {
+        if (timeline.has(slot)) continue;
+        const before = timeline.get(slot - 1)!;
+        timeline.set(slot, [step(before[before.length - 1], 1)]);
+      }
+      const number = (kind: string, slot: number) =>
+        [...timeline].filter(([s, ks]) => s <= slot && ks.includes(kind)).length;
+      for (const { a, i } of inSegment) {
+        if (a.segmentKind !== null && a.segmentIndex !== null) {
+          out[i] = number(a.segmentKind, a.segmentIndex);
+        }
+      }
+    }
+  }
+  return out;
+}
+
 export function toLegacyPerformance(
   config: MatchScoutingConfig,
   performance: TeamMatchPerformance,
 ): LegacyPerformance {
+  const numbers = legacyShiftNumbers(config, performance.actions);
   return {
     _id: performance._id,
     timestamp: performance.submittedAt,
@@ -538,9 +632,9 @@ export function toLegacyPerformance(
     eventNumber: performance.eventId,
     matchId: performance.matchKey,
     matchId_rand: performance.nonce,
-    actionQueue: performance.actions.map((a) => {
+    actionQueue: performance.actions.map((a, i) => {
       const out: { id: string; ts: number; other?: Record<string, unknown> } = {
-        id: compositeActionId(config, a.id, a),
+        id: compositeActionId(config, a.id, { ...a, segmentIndex: numbers[i] }),
         ts: a.ts,
       };
       if (a.other) out.other = a.other;

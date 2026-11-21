@@ -12,8 +12,8 @@
  *  - add `tenantId` everywhere (DM-7f) and the v6 hook fields (notes, tags, flag metadata);
  *  - drop per-action `_id`s (BL-31).
  */
-import type { MatchScoutingConfig } from "@/config/types";
-import { placeAt, splitActionId, type Placement } from "@/data/phase";
+import type { MatchScoutingConfig, Segment } from "@/config/types";
+import { placeAt, repeatIndexAt, splitActionId, type Placement } from "@/data/phase";
 import { toTeamKey, type TeamKey } from "@/data/team";
 import {
   DEFAULT_TENANT,
@@ -101,6 +101,21 @@ export interface PlacementMismatch {
   count: number;
 }
 
+/**
+ * How v5 numbered shifts (#326, SC-22). v5's `activeShift2` was the second *active* shift, counted
+ * from the scouter's toggle press; v6 records the field clock's slot (1-4) instead. Under strict
+ * alternation of K kinds, shift n of a kind falls in slots (n-1)K+1 to nK; an action outside that
+ * window was recorded after a late or repeated toggle press.
+ */
+export interface ShiftNumbering {
+  /** Actions in an alternating segment whose v5 id carried a per-kind shift number. */
+  actions: number;
+  /** Of those, the actions whose number does not fit their clock slot. */
+  disagree: number;
+  /** The performances with at least one such action. */
+  performances: string[];
+}
+
 export interface MergedScouter {
   id: string;
   displayName: string;
@@ -116,6 +131,8 @@ export interface MigrationReport {
   unknownActionIds: CountedId[];
   /** The composite id and the clock disagreed about the phase. */
   placementMismatches: PlacementMismatch[];
+  /** v5's per-kind shift numbers against the clock slots v6 records (#326). */
+  shiftNumbering: ShiftNumbering;
   /** Records whose (event, match, robot) already had one; the latest submission wins. */
   supersededPerformances: number;
   /** Scouter records built from more than one spelling of the same name. */
@@ -162,6 +179,13 @@ interface ActionOutcome {
   action: Action;
   unknownId: string | null;
   mismatch: { fromId: string | null; fromClock: string | null } | null;
+  /** For an action in an alternating segment: whether v5's shift number fits the clock slot. */
+  shift: { fits: boolean } | null;
+}
+
+function segmentOf(config: MatchScoutingConfig, placement: Placement): Segment | undefined {
+  const phase = config.timing.phases.find((p) => p.id === placement.phase);
+  return phase?.segments?.find((s) => s.id === placement.segment);
 }
 
 function migrateAction(config: MatchScoutingConfig, v5: V5Action): ActionOutcome {
@@ -171,7 +195,22 @@ function migrateAction(config: MatchScoutingConfig, v5: V5Action): ActionOutcome
 
   // The id wins when it carried a period, because that is what the scouter's client recorded;
   // the clock fills in for configurations with no prefixes (every season before 2026).
-  const placement: Placement = split.phase === null ? clock : split;
+  let placement: Placement = split.phase === null ? clock : split;
+
+  // A repeating segment's index is the field clock's slot (#326): v5 numbered a kind's shifts
+  // per kind, from the toggle press, so its "activeShift2" could be slot 3 or slot 4. The kind
+  // still comes from the id, because that is what the scouter selected.
+  let shift: ActionOutcome["shift"] = null;
+  const segment = split.segmentIndex !== null ? segmentOf(config, split) : undefined;
+  if (segment?.repeat && split.segmentIndex !== null) {
+    const slot = repeatIndexAt(segment, ts) ?? 1;
+    placement = { ...placement, segmentIndex: slot };
+    const kinds = segment.kinds?.length ?? 0;
+    if (segment.alternate && kinds > 0 && split.segmentKind !== null) {
+      const n = split.segmentIndex;
+      shift = { fits: slot > (n - 1) * kinds && slot <= n * kinds };
+    }
+  }
 
   const action: Action = {
     id: split.baseId,
@@ -188,6 +227,7 @@ function migrateAction(config: MatchScoutingConfig, v5: V5Action): ActionOutcome
     action,
     unknownId: split.known ? null : v5.id,
     mismatch: disagrees ? { fromId: split.phase, fromClock: clock.phase } : null,
+    shift,
   };
 }
 
@@ -203,6 +243,7 @@ export function migrate(
 
   const unknown = new Map<string, number>();
   const mismatches = new Map<string, PlacementMismatch>();
+  const shiftNumbering: ShiftNumbering = { actions: 0, disagree: 0, performances: [] };
   const spellings = new Map<string, Map<string, number>>();
   let actionCount = 0;
   let qrPerformances = 0;
@@ -220,10 +261,18 @@ export function migrate(
     }
 
     const actions: Action[] = [];
+    let renumbered = false;
     for (const raw of p.actionQueue ?? []) {
       const outcome = migrateAction(config, raw);
       actions.push(outcome.action);
       actionCount++;
+      if (outcome.shift) {
+        shiftNumbering.actions++;
+        if (!outcome.shift.fits) {
+          shiftNumbering.disagree++;
+          renumbered = true;
+        }
+      }
       if (outcome.unknownId)
         unknown.set(outcome.unknownId, (unknown.get(outcome.unknownId) ?? 0) + 1);
       if (outcome.mismatch) {
@@ -234,6 +283,7 @@ export function migrate(
       }
     }
 
+    if (renumbered) shiftNumbering.performances.push(hex(p._id));
     return {
       _id: hex(p._id),
       tenantId,
@@ -307,6 +357,7 @@ export function migrate(
       scouters: scouters.length,
       unknownActionIds: [...unknown.entries()].map(([id, count]) => ({ id, count })).sort(byCount),
       placementMismatches: [...mismatches.values()].sort((a, b) => b.count - a.count),
+      shiftNumbering,
       supersededPerformances,
       mergedScouters,
       qrPerformances,

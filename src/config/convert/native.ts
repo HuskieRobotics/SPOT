@@ -43,9 +43,17 @@ export function usesPrefixes(ms: MatchScoutingConfig): boolean {
 /** A composite id split into the button and the period it was recorded in. */
 export interface CompositeId {
   button: string;
+  /** The first period it can be in (see `periods`). */
   period: Placement;
-  /** The period's key in a count grouped by segment (`auto`, `transition`, `active1`). */
+  /** That period's key in a count grouped by segment (`auto`, `transition`, `active1`). */
   key: string;
+  /**
+   * Every period it can be in. One, except in an alternating segment (#326): v5 numbered a
+   * kind's shifts per kind, so `activeShift1` (the first active shift) is clock slot 1 or 2,
+   * and `activeShift2` slot 3 or 4. v6 records the clock slot.
+   */
+  periods: Placement[];
+  keys: string[];
 }
 
 export interface NativeIds {
@@ -78,9 +86,16 @@ export function nativeIds(
         segmentKind: s.segmentKind,
         segmentIndex: s.segmentIndex,
       };
+      const periods = s.known && s.phase !== null && s.baseId !== id ? slotsOf(ms, period) : [];
       found =
-        s.known && s.phase !== null && s.baseId !== id
-          ? { button: s.baseId, period, key: groupKey(period, "segment") }
+        periods.length > 0
+          ? {
+              button: s.baseId,
+              period: periods[0],
+              key: groupKey(periods[0], "segment"),
+              periods,
+              keys: periods.map((p) => groupKey(p, "segment")),
+            }
           : null;
       cache.set(id, found);
     }
@@ -89,14 +104,40 @@ export function nativeIds(
   return { ms, scoreBreakdown, plainIds: new Set(plainIds), split };
 }
 
+/**
+ * The periods a split id can be in. In an alternating segment of K kinds, v5's shift n of a
+ * kind falls in clock slots (n-1)K+1 to nK (cut to the segment's repeats); anywhere else the id
+ * names one period.
+ */
+function slotsOf(ms: MatchScoutingConfig, period: Placement): Placement[] {
+  const segment = ms.timing.phases
+    .find((p) => p.id === period.phase)
+    ?.segments?.find((s) => s.id === period.segment);
+  const kinds = segment?.kinds?.length ?? 0;
+  const n = period.segmentIndex;
+  if (!segment?.alternate || !segment.repeat || kinds < 2 || n === null || !period.segmentKind) {
+    return [period];
+  }
+  const slots: Placement[] = [];
+  for (let slot = (n - 1) * kinds + 1; slot <= Math.min(n * kinds, segment.repeat.count); slot++) {
+    slots.push({ ...period, segmentIndex: slot });
+  }
+  return slots.length > 0 ? slots : [{ ...period, segmentIndex: segment.repeat.count }];
+}
+
 /** Where the count of a recorded id is in a count grouped by segment, or null for no id. */
 export function countSlot(ids: NativeIds, id: string): { key: string; id: string } | null {
+  return countSlots(ids, id)[0] ?? null;
+}
+
+/** Every place the count of a recorded id can be: several for a v5 shift number (#326). */
+export function countSlots(ids: NativeIds, id: string): { key: string; id: string }[] {
   const composite = ids.split(id);
-  if (composite) return { key: composite.key, id: composite.button };
+  if (composite) return composite.keys.map((key) => ({ key, id: composite.button }));
   const tba = ids.scoreBreakdown.find((p) => id.startsWith(p.prefix) && id.includes("_"));
-  if (tba) return { key: tba.phase, id };
-  if (ids.plainIds.has(id)) return { key: PRE_MATCH, id };
-  return null;
+  if (tba) return [{ key: tba.phase, id }];
+  if (ids.plainIds.has(id)) return [{ key: PRE_MATCH, id }];
+  return [];
 }
 
 /**
@@ -105,13 +146,22 @@ export function countSlot(ids: NativeIds, id: string): { key: string; id: string
  * counts; any other path, and one whose next segment is no id, is returned unchanged.
  */
 export function nativeCountPath(ids: NativeIds, roots: Iterable<string>, path: string): string {
+  return nativeCountPaths(ids, roots, path)[0];
+}
+
+/**
+ * The same, with every path a v5 shift number can be in: `counts.activeShift1Defense` is
+ * `counts.active1.Defense` and `counts.active2.Defense` (#326). A sum of them is what v5 counted.
+ */
+export function nativeCountPaths(ids: NativeIds, roots: Iterable<string>, path: string): string[] {
   const root = [...roots].sort((a, b) => b.length - a.length).find((r) => path.startsWith(`${r}.`));
-  if (root === undefined) return path;
+  if (root === undefined) return [path];
   const rest = path.slice(root.length + 1);
   const dot = rest.indexOf(".");
   const segment = dot === -1 ? rest : rest.slice(0, dot);
-  const slot = countSlot(ids, segment);
-  return slot ? `${root}.${slot.key}.${slot.id}${dot === -1 ? "" : rest.slice(dot)}` : path;
+  const slots = countSlots(ids, segment);
+  if (slots.length === 0) return [path];
+  return slots.map((s) => `${root}.${s.key}.${s.id}${dot === -1 ? "" : rest.slice(dot)}`);
 }
 
 // ---------------------------------------------------------------------------- period filters
@@ -209,7 +259,7 @@ function replaceIds(
   for (const ref of refs) {
     const composite = ids.split(ref.id);
     if (!composite) continue;
-    periods.push(composite.period);
+    periods.push(...composite.periods);
     const parent = parentOf(value, ref.keys);
     const last = ref.keys[ref.keys.length - 1];
     if (Array.isArray(parent)) {
@@ -241,13 +291,29 @@ function replaceIds(
   return periods;
 }
 
-/** Every string in `value`, values and property names, through `f`. */
-function mapStrings(value: unknown, f: (s: string) => string): unknown {
-  if (typeof value === "string") return f(value);
-  if (Array.isArray(value)) return value.map((v) => mapStrings(v, f));
+/**
+ * Every string in `value`, values and property names, through `f`, which may give several
+ * strings for one. In a list they all take its place, and a property name gives one property
+ * each, with the same value; a single value keeps the first and counts it in `narrowed`.
+ */
+function mapStrings(
+  value: unknown,
+  f: (s: string) => string[],
+  narrowed: { count: number } = { count: 0 },
+): unknown {
+  if (typeof value === "string") {
+    const out = f(value);
+    if (out.length > 1) narrowed.count++;
+    return out[0];
+  }
+  if (Array.isArray(value)) {
+    return value.flatMap((v) => (typeof v === "string" ? f(v) : [mapStrings(v, f, narrowed)]));
+  }
   if (value !== null && typeof value === "object") {
     return Object.fromEntries(
-      Object.entries(value).map(([k, v]) => [f(k), mapStrings(v, f)] as const),
+      Object.entries(value).flatMap(([k, v]) =>
+        f(k).map((name) => [name, mapStrings(v, f, narrowed)] as const),
+      ),
     );
   }
   return value;
@@ -316,7 +382,27 @@ export function nativePipeline(
       }
     }
     const roots = countRoots(out);
-    options = mapStrings(options, (s) => nativeCountPath(ids, roots, s)) as Record<string, unknown>;
+    const narrowed = { count: 0 };
+    let shifts = 0;
+    options = mapStrings(
+      options,
+      (s) => {
+        const paths = nativeCountPaths(ids, roots, s);
+        if (paths.length > 1) shifts++;
+        return paths;
+      },
+      narrowed,
+    ) as Record<string, unknown>;
+    if (shifts > narrowed.count) {
+      warnings.push(
+        `${where(i)}: v1 numbered each kind's shifts (activeShift1 was the first active shift, clock slot 1 or 2); v6 records the clock slot, so each shift number now reads every slot it can be in`,
+      );
+    }
+    if (narrowed.count > 0) {
+      warnings.push(
+        `${where(i)}: ${narrowed.count} path${narrowed.count === 1 ? "" : "s"} name a v1 shift number where one path fits; it reads only the first clock slot that shift can be in, so check it`,
+      );
+    }
     const next: PipelineEntry = { ...entry };
     if (entry.options !== undefined || Object.keys(options).length) next.options = options;
     out.push(next);
@@ -336,9 +422,17 @@ export function nativeModules(
   const rootList = [...roots];
   return modules.map((m, i) => {
     const where = `modules[${i}] ${m.module} "${m.name}"`;
-    let options = mapStrings(structuredClone(m.options), (s) =>
-      nativeCountPath(ids, rootList, s),
+    const narrowed = { count: 0 };
+    let options = mapStrings(
+      structuredClone(m.options),
+      (s) => nativeCountPaths(ids, rootList, s),
+      narrowed,
     ) as Record<string, unknown>;
+    if (narrowed.count > 0) {
+      warnings.push(
+        `${where}: ${narrowed.count} path${narrowed.count === 1 ? "" : "s"} name a v1 shift number; each reads only the first clock slot that shift can be in, so check it`,
+      );
+    }
     const schema = moduleOptionsSchema(m.module);
     const refs = schema
       ? findReferences(options, schema, [], modulesRoot).filter((r) => r.kind === "action")
@@ -367,7 +461,7 @@ function nativeHeatmap(
 ): Record<string, unknown> {
   const groups = (options.actionGroups ?? []) as { name: string; actions: string[] }[];
   const nextGroups = groups.map((g) => {
-    const periods = g.actions.flatMap((a) => ids.split(a)?.period ?? []);
+    const periods = g.actions.flatMap((a) => ids.split(a)?.periods ?? []);
     if (periods.length === 0) return g;
     const actions = unique(g.actions.map((a) => ids.split(a)?.button ?? a));
     const { filter, added } = periodFilterFor(ids.ms, periods);
