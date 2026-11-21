@@ -47,7 +47,7 @@ golden output.
 ```sh
 # one-time: detached worktrees of the 2025 and v5 code
 git worktree add --detach /path/to/spot-v4.2.0 v4.2.0
-git worktree add --detach /path/to/spot-v5 main        # legacy v5 (or the v5 branch after cutover)
+git worktree add --detach /path/to/spot-v5 902db06     # the legacy v5 code the 2026 golden sets came from
 
 # 2025
 node tools/oracle/run.js --checkout /path/to/spot-v4.2.0 \
@@ -71,7 +71,9 @@ synthetic inputs from their seeds and runs them. `report.json` records the check
 and commit (`checkoutCommit`), but no absolute path or timing, so a regeneration that changes
 nothing leaves the files unchanged. `tests/unit/oracle-golden.test.ts` fails if the generator no
 longer reproduces the committed synthetic inputs; after a deliberate generator change, rerun
-`run-all.sh` so inputs and golden output move together.
+`run-all.sh` so inputs and golden output move together. The 2026 synthetic set was last
+regenerated on 2026-11-21 (#326), when the generator began alternating shift kinds; only its
+input and golden output changed, as the 2025 input came out byte for byte the same.
 
 ## Output conventions
 
@@ -125,6 +127,9 @@ with the same functions (`src/config/convert/native.ts`), so the two cannot disa
   is under `preMatch`.
 - An action copied into an output keeps its button id: a cycle's `starts.id`
   `activeShift1StartShooting` is compared as `StartShooting`.
+- A v5 shift number names the first clock slot that shift can be in: `counts.activeShift2Defense`
+  is compared with `counts.active3.Defense`. v5 numbered a kind's shifts from the toggle press and
+  v6 records the slot (#326), so per-shift values are a reviewed divergence; totals are compared.
 
 Rule paths for 2026 are v6 paths, after this mapping. A set whose configuration has no prefixes
 (2025) is compared without a translation.
@@ -153,16 +158,18 @@ accept exactly the number of values recorded in the test (#319 for 2025, #320 fo
 K-1). A change in any count is a change in behavior to look at. Every rule must be applied by at
 least one set, so a rule that no longer excuses anything is removed. For 2025, the test also
 compares without `cycle-pairing-2025` and checks that every performance whose cycles differ had a
-start left without an end, so that rule cannot hide anything else.
+start left without an end, so that rule cannot hide anything else. For 2026 it does the same
+without `shift-numbering-2026`: every value that differs must be in a performance (or a team with
+a performance) whose v5 shift numbers do not fit the clock, as the migration reports.
 
-### Divergences, reviewed 2026-11-21 (#319, #320)
+### Divergences, reviewed 2026-11-21 (#319, #320, #326)
 
 Each rule below was checked against the paths it accepts (`--divergences`). The counts are pinned
 by the test. Rules are tried in this order; a value goes to the first rule that accepts it.
 
 | Rule                             | Cites                                   | 2025ilch | 2025syn | 2026mnwi | 2026syn | What it accepts, and why that is right                                                                                                                                                                                                                                                                                                   |
 | -------------------------------- | --------------------------------------- | -------: | ------: | -------: | ------: | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `missing-nan`                    | DM-1b, D-7a                             |    1,635 |   1,345 |    2,660 |   3,401 | Only averages over nothing: cycle times with no cycle to time, per match (`cycle.*.averageTime`) and per team (`cycles.*.averageTime`), and in 2026 the team averages of ratings no match had (`averageScores.*Rating`). v5 divided by zero and wrote NaN; v6 writes null (No Data).                                                     |
+| `missing-nan`                    | DM-1b, D-7a                             |    1,635 |   1,345 |    2,651 |   3,231 | Only averages over nothing: cycle times with no cycle to time, per match (`cycle.*.averageTime`) and per team (`cycles.*.averageTime`), and in 2026 the team averages of ratings no match had (`averageScores.*Rating`). v5 divided by zero and wrote NaN; v6 writes null (No Data).                                                     |
 | `missing-undefined`              | DM-1b, D-7a                             |        – |       – |       21 |       – | The three component OPRs of the 7 teams TBA had none for. v5 wrote undefined; v6 writes null.                                                                                                                                                                                                                                            |
 | `ratio-falsy-divbyzero-2025`     | F-24                                    |       24 |       1 |        – |       – | `algaeAccuracy` (21) and `coralAccuracy` (3) for teams that never attempted: v5 turned the configured `divByZero: 0` into "N/A". These are the 24 of F-24.                                                                                                                                                                               |
 | `ratio-misplaced-divbyzero-2025` | F-25, CS-11                             |        3 |       – |        – |       – | `timePerGamePiece` for the 3 teams that never scored: v5 ignored the misplaced `divByZero: 150000`. The other 3 of F-24's 27 "N/A" values.                                                                                                                                                                                               |
@@ -176,10 +183,12 @@ by the test. Rules are tried in this order; a value goes to the first rule that 
 | `tba-none-average-2026`          | DM-11, TR-12 (#315)                     |        – |       – |       26 |       – | The team averages of those counts: how often it happened, not 1 for the matches where it did.                                                                                                                                                                                                                                            |
 | `tba-ids-without-tba`            | DM-11, DM-1b (#315)                     |        – |       – |        – |   1,824 | The synthetic set ran without TBA data, so v6 lists no score-breakdown ids; v5's catalog started them at 0.                                                                                                                                                                                                                              |
 | `opr-without-tba`                | DM-13, DM-1b (#315)                     |        – |       – |        – |     144 | The component OPRs of the synthetic set: null in v6, absent in v5.                                                                                                                                                                                                                                                                       |
-| `counts-every-period-2026`       | CS-16, doc 09 countActions (#311, #320) |        – |       – |  264,001 | 185,053 | Counts of 0 where v5 had no key: every period starts every action button at 0 (`counts.active3.Storing`), while v5's catalog listed only some composite ids. Only 0 is accepted.                                                                                                                                                         |
-| `average-keys-2026`              | TR-12 (#313)                            |        – |       – |       46 |   2,244 | Team averages of the ids v5's catalog did not list, derived from that layer: v5 took an average's keys from the team's first match and averaged each over the matches that had it. The synthetic set presses buttons in periods real scouts rarely did, hence its count.                                                                 |
-| `cycles-2026`                    | F-26, F-28, TR-13, CS-16                |        – |       – |   26,765 |  19,881 | 2026's cycle and zone outputs, where every reason at once applies: inactive-shift shooting counts (F-26), cycles cross boundaries (TR-13), filters name whole phases, nothing queues (F-28), and a zone holds until the next zone press. `tests/unit/action-sequence.test.ts` checks the transformers against v5 with v5's own id lists. |
-| `performance-order-2026`         | TR-6                                    |        – |       – |    1,449 |       – | Teams 2290, 5822 and 5847 each had a match entered weeks later; v6 keeps match order, v5 submission order, so their joined action lists are in another order and two averages differ in the last digit.                                                                                                                                  |
+| `shift-slots-2026`               | #326, SC-22, DV-1                       |        – |       – |  128,269 |  90,287 | Per-shift counts and their team averages (`counts.active3.*` …). v6 counts a shift by the clock slot; v5 numbered a kind's shifts from the toggle press, so its `activeShift2` was slot 3 or 4. Totals over a kind's shifts are still compared.                                                                                          |
+| `shift-numbering-2026`           | #326, SC-22                             |        – |       – |      318 |      60 | Per-shift ratings, and the totals and averages built from per-shift counts, in performances where a v5 shift number does not fit its clock slot (a late or repeated toggle press, a label that did not flip). The test checks every such value against the migration report's `shiftNumbering`.                                          |
+| `counts-every-period-2026`       | CS-16, doc 09 countActions (#311, #320) |        – |       – |  141,919 | 100,868 | Counts of 0 where v5 had no key: every period starts every action button at 0 (`counts.shift3.Storing`, the third slot before a kind was selected), while v5's catalog listed only some composite ids. Only 0 is accepted. Per-shift counts are `shift-slots-2026`'s.                                                                    |
+| `average-keys-2026`              | TR-12 (#313)                            |        – |       – |       23 |   1,172 | Team averages of the ids v5's catalog did not list, derived from that layer: v5 took an average's keys from the team's first match and averaged each over the matches that had it. The synthetic set presses buttons in periods real scouts rarely did, hence its count.                                                                 |
+| `cycles-2026`                    | F-26, F-28, TR-13, CS-16                |        – |       – |   26,765 |  14,984 | 2026's cycle and zone outputs, where every reason at once applies: inactive-shift shooting counts (F-26), cycles cross boundaries (TR-13), filters name whole phases, nothing queues (F-28), and a zone holds until the next zone press. `tests/unit/action-sequence.test.ts` checks the transformers against v5 with v5's own id lists. |
+| `performance-order-2026`         | TR-6                                    |        – |       – |    1,448 |       – | Teams 2290, 5822 and 5847 each had a match entered weeks later; v6 keeps match order, v5 submission order, so their joined action lists are in another order and two averages differ in the last digit.                                                                                                                                  |
 
 Removed in the review: `missing-infinity`. Legacy `ratio` guards a zero denominator, and every
 other division in v4.2.0 and v5 is an average, which gives NaN, so no golden file holds Infinity.

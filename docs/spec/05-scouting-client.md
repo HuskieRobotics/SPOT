@@ -119,7 +119,9 @@ four pages (`landing`, `form`, `waiting`, `match-scouting`) plus a persistent st
   press made every later v5 flip late: of 625 shift presses whose label disagrees with the rest of
   their 25 s slot, 420 fall in the slot's first 5 s (2026mnwi). A later press of either toggle
   selects that kind from then on. Which alliance's hub is active first could come from TBA after
-  the match, but v6 does not use it (decided 2026-11-20).
+  the match, but v6 does not use it (decided 2026-11-20). v6 also drops the per-kind counter: an
+  action records the clock's slot (1-4) as its `segmentIndex`, so `active3` is the third 25 s
+  slot, not the third active shift (docs/spec/21 DV-1).
 
 - **SC-23** Recorded action id = `camelCase(displayTextWithShift)` (non-alphanumeric runs
   removed, following char upper-cased, first char lower-cased) + `button.id`. Examples:

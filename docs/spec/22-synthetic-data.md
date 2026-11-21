@@ -55,6 +55,12 @@ is that the same input produces the same output and that every code path is exer
   gives each robot one of the values its configured `knownIds` name, or `"None"` (always
   `"None"` for an idle robot), and a value for each configured component OPR (0 for an idle
   robot). With it, entries that count enrichment results have data before any real event.
+- **SY-11** In a segment with `alternate: true`, the generated scouter's selected kind moves to
+  the next kind at each repeat boundary of the field clock, and a later toggle press selects that
+  kind from then on (#326, docs/spec/20). With `--legacy`, shift numbers are rebuilt the way v5
+  numbered them, per kind from the selection (`activeShift2` is the second active shift), so the
+  synthetic v5 input looks like real v5 data and migrates back to the same kinds and clock slots.
+  The committed 2026 input was regenerated for this; the 2025 input is unchanged.
 
 ## 3. Using it
 
@@ -64,7 +70,8 @@ npm run generate -- --config config/match-scouting.json --out <dir> \
 ```
 
 It writes the three v6 collections plus `report.json`. With `--legacy` it also writes the v5
-shape, with composite ids rebuilt by `compositeActionId`, so generated data can be fed to the
+shape, with composite ids rebuilt by `compositeActionId` and v5's shift numbers (SY-11), so
+generated data can be fed to the
 behavioral oracle in `tools/oracle` and compared against the legacy pipeline.
 
 A run against the 2026 configuration, eighty matches, six robots each:

@@ -16,20 +16,20 @@ Types are in `src/data/types.ts`, validation in `src/data/validate.ts`, placemen
 
 ## 1. What changed from v5, and why
 
-| Id    | Change                                                                                                                                                                                                                                                                 | Source                  |
-| ----- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
-| DV-1  | **An action carries where it happened**: `phase`, `segment`, `segmentKind`, `segmentIndex` beside `id`. `id` is the button id with no period prefix. Analysis filters on `phase` instead of matching a dozen composite spellings; the v5 composite id stays derivable. | doc 20 §2.1             |
-| DV-2  | **No per-action `_id`.** v5 stored a full ObjectId on every action, which is thousands of unused ids per event.                                                                                                                                                        | BL-31                   |
-| DV-3  | **`team` is a string team key**, always: `"3061"`, or `"2338B"` for a second robot at an off-season event. Replaces `robotNumber`. v5 mixed strings from TBA with numbers from the FIRST API, compared with `==`, and could not store a B robot at all.                | DM-1a, D-7, BL-308      |
-| DV-4  | **`scouterId` is a student ID** and points at a `scouters` record, or is `null`. v5 concatenated a typed first and last name into the field.                                                                                                                           | SEC-6                   |
-| DV-5  | **`source` replaces the `"qrcode"` sentinel.** A scanned record is `source: "qr"` with no scouter, rather than a fake scouter named `qrcode`.                                                                                                                          | DM-2                    |
-| DV-6  | **Flag metadata**: `flag { flagged, reason, source, at }` rather than a bare boolean, because a rule can now flag a record and a person needs to know which rule and why.                                                                                              | BL-208, RT-36           |
-| DV-7  | **Hook fields exist from the start**: `notes`, `tags`, `coverage`, `superseded`.                                                                                                                                                                                       | BL-35, BL-193, RT-34/35 |
-| DV-8  | **`tenantId` on every document**, single-valued in v6. Reserving it now avoids migrating live scouting data when a hosted instance arrives.                                                                                                                            | DM-7f, BL-197           |
-| DV-9  | **Events carry `tbaKey` and `label` split out**, plus the write-gating `eventCode`.                                                                                                                                                                                    | DM-6, SEC-2/3           |
-| DV-10 | **Missing means `null`**, everywhere.                                                                                                                                                                                                                                  | DM-1b, D-7a             |
-| DV-11 | **Renames for plain meaning**: `timestamp` → `submittedAt`, `eventNumber` → `eventId`, `robotNumber` → `team` (DV-3), `matchId` → `matchKey`, `matchId_rand` → `nonce`, `actionQueue` → `actions`.                                                                     | —                       |
-| DV-12 | **`EVENT_NUMBER` becomes `activeEventId`.** It was never a number, and which kind of identifier it holds is not the reader's problem. The admin UI selects an event by its `code`, which is what a person recognizes.                                                  | CF-4, DM-7              |
+| Id    | Change                                                                                                                                                                                                                                                                                                                                                                                                                  | Source                  |
+| ----- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
+| DV-1  | **An action carries where it happened**: `phase`, `segment`, `segmentKind`, `segmentIndex` beside `id`. `id` is the button id with no period prefix. Analysis filters on `phase` instead of matching a dozen composite spellings; the v5 composite id stays derivable. `segmentIndex` is always the field clock's slot of a repeating segment (decided 2026-11-20, #326); v5 numbered a kind's shifts per kind instead. | doc 20 §2.1             |
+| DV-2  | **No per-action `_id`.** v5 stored a full ObjectId on every action, which is thousands of unused ids per event.                                                                                                                                                                                                                                                                                                         | BL-31                   |
+| DV-3  | **`team` is a string team key**, always: `"3061"`, or `"2338B"` for a second robot at an off-season event. Replaces `robotNumber`. v5 mixed strings from TBA with numbers from the FIRST API, compared with `==`, and could not store a B robot at all.                                                                                                                                                                 | DM-1a, D-7, BL-308      |
+| DV-4  | **`scouterId` is a student ID** and points at a `scouters` record, or is `null`. v5 concatenated a typed first and last name into the field.                                                                                                                                                                                                                                                                            | SEC-6                   |
+| DV-5  | **`source` replaces the `"qrcode"` sentinel.** A scanned record is `source: "qr"` with no scouter, rather than a fake scouter named `qrcode`.                                                                                                                                                                                                                                                                           | DM-2                    |
+| DV-6  | **Flag metadata**: `flag { flagged, reason, source, at }` rather than a bare boolean, because a rule can now flag a record and a person needs to know which rule and why.                                                                                                                                                                                                                                               | BL-208, RT-36           |
+| DV-7  | **Hook fields exist from the start**: `notes`, `tags`, `coverage`, `superseded`.                                                                                                                                                                                                                                                                                                                                        | BL-35, BL-193, RT-34/35 |
+| DV-8  | **`tenantId` on every document**, single-valued in v6. Reserving it now avoids migrating live scouting data when a hosted instance arrives.                                                                                                                                                                                                                                                                             | DM-7f, BL-197           |
+| DV-9  | **Events carry `tbaKey` and `label` split out**, plus the write-gating `eventCode`.                                                                                                                                                                                                                                                                                                                                     | DM-6, SEC-2/3           |
+| DV-10 | **Missing means `null`**, everywhere.                                                                                                                                                                                                                                                                                                                                                                                   | DM-1b, D-7a             |
+| DV-11 | **Renames for plain meaning**: `timestamp` → `submittedAt`, `eventNumber` → `eventId`, `robotNumber` → `team` (DV-3), `matchId` → `matchKey`, `matchId_rand` → `nonce`, `actionQueue` → `actions`.                                                                                                                                                                                                                      | —                       |
+| DV-12 | **`EVENT_NUMBER` becomes `activeEventId`.** It was never a number, and which kind of identifier it holds is not the reader's problem. The admin UI selects an event by its `code`, which is what a person recognizes.                                                                                                                                                                                                   | CF-4, DM-7              |
 
 Deliberate redundancy: the placement could be recomputed from `ts` and the season's
 configuration, but the configuration is edited between seasons and sometimes within one, so
@@ -53,6 +53,12 @@ Two routes reach the same answer, and the migration uses both:
   `TransitionStoring`.
 - `placeAt(config, ts)` reads it off the clock. This is the only route for seasons before 2026,
   whose ids carry no prefix.
+
+The id gives the phase, the segment and the kind; a repeating segment's index always comes from
+the clock (decided 2026-11-20, #326). v5's `activeShift2` meant the second _active_ shift,
+counted from the scouter's toggle press, so it was slot 3 in one match and slot 4 in another, and
+a late press made every later shift late. v6 records the slot, so `active3` means "active, in the
+third 25 s slot" in migrated and new data alike.
 
 `compositeActionId` is the inverse, so the v5 id can be reconstructed for the behavioral oracle
 and for `countActions` compatibility.
@@ -107,11 +113,17 @@ Three things worth knowing about that table:
 - **2025 gains phases it never had.** Its ids carry no prefix, so the clock supplies auto and
   teleop, and 2025 data becomes filterable by period for the first time.
 
-Two findings the report surfaces rather than silently fixing:
+Three findings the report surfaces rather than silently fixing:
 
 - **One action out of 10,437 disagrees with itself**: `autoRatingShooting4` was recorded with
   the auto prefix at a timestamp that is already in teleop. The recorded id wins, because that
   is what the scouter's client wrote.
+- **333 of 6,479 shift actions carry a v5 number that does not fit their clock slot**
+  (`shiftNumbering` in the report, in 175 of 435 performances). Under strict alternation shift
+  n of a kind falls in slots 2n−1 to 2n; these were recorded after a late or repeated toggle
+  press, or in a slot whose label did not flip. The kind is kept as the scouter selected it, and
+  the slot is the clock's. The 2026 oracle comparison checks that its per-shift differences come
+  only from these performances (#326).
 - **Two scouters had more than one spelling**, `FatemaMerchant` with `fatemamerchant` and
   `ishna pilgulwar` with `ishnapilgulwar`. This is exactly the problem student IDs solve going
   forward, and the migration reports each merge so an admin can confirm it.

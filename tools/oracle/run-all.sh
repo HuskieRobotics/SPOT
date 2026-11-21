@@ -2,7 +2,7 @@
 # Regenerate both golden datasets.
 # Usage: tools/oracle/run-all.sh <v4.2.0-worktree> <v5-worktree>
 #   git worktree add --detach /path/spot-v4.2.0 v4.2.0
-#   git worktree add --detach /path/spot-v5 main      # legacy v5 code (or the v5 branch/tag after cutover)
+#   git worktree add --detach /path/spot-v5 902db06   # the legacy v5 code the 2026 golden sets came from
 set -euo pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 V42="${1:?path to a v4.2.0 checkout/worktree}"

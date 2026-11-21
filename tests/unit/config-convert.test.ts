@@ -17,7 +17,13 @@ import {
   type V1PipelineEntry,
   type V1Qr,
 } from "@/config/convert/v1-to-v2";
-import { describeKeys, nativeCountPath, nativeIds, periodFilterFor } from "@/config/convert/native";
+import {
+  describeKeys,
+  nativeCountPath,
+  nativeCountPaths,
+  nativeIds,
+  periodFilterFor,
+} from "@/config/convert/native";
 import { deriveKnownActionIds, derivePrefixes } from "@/config/knownActionIds";
 import { validateConfig } from "@/config/validate";
 
@@ -284,10 +290,12 @@ describe("native ids and paths (#320)", () => {
     pipeline.config.pipeline.find((e) => e.outputPath === outputPath && e.type === type)!;
 
   it("splits a composite id into button and period, from the prefixes", () => {
+    // v5 numbered a kind's shifts (#326): the second active shift is clock slot 3 or 4.
     expect(ids.split("activeShift2StopShooting")).toMatchObject({
       button: "StopShooting",
-      key: "active2",
-      period: { phase: "teleop", segment: "shift", segmentKind: "active", segmentIndex: 2 },
+      key: "active3",
+      keys: ["active3", "active4"],
+      period: { phase: "teleop", segment: "shift", segmentKind: "active", segmentIndex: 3 },
     });
     expect(ids.split("teleopTransitionRatingStoring1")).toMatchObject({ key: "transition" });
     expect(ids.split("StopShooting")).toBeNull();
@@ -302,6 +310,10 @@ describe("native ids and paths (#320)", () => {
       "counts.preMatch.preloadFuel",
     );
     expect(nativeCountPath(ids, ["counts"], "counts.shooting")).toBe("counts.shooting");
+    expect(nativeCountPaths(ids, ["counts"], "counts.inactiveShift1Defense")).toEqual([
+      "counts.inactive1.Defense",
+      "counts.inactive2.Defense",
+    ]);
     expect(nativeCountPath(ids, ["counts"], "scores.autoRatingPassing1")).toBe(
       "scores.autoRatingPassing1",
     );
@@ -311,30 +323,50 @@ describe("native ids and paths (#320)", () => {
     const at = (...composite: string[]) =>
       periodFilterFor(
         ms2026,
-        composite.map((c) => ids.split(`${c}Passing`)!.period),
+        composite.flatMap((c) => ids.split(`${c}Passing`)!.periods),
       );
     expect(at("auto")).toEqual({ filter: { phases: ["auto"] }, added: [] });
     // "active" alone would take in auto, the transition and endgame, which are fixed as active.
     expect(at("activeShift1", "activeShift2")).toEqual({
       filter: { segments: ["shift"], kinds: ["active"] },
-      added: ["active3", "active4"],
+      added: [],
     });
     const wide = at("teleopTransition", "activeShift1", "inactiveShift2", "endgame");
     expect(wide.filter).toEqual({ phases: ["teleop", "endgame"] });
-    expect(describeKeys(wide.added)).toBe("teleop, shift1–4, inactive1, inactive3–4, active2–4");
+    expect(describeKeys(wide.added)).toBe("teleop, shift1–4, inactive1–2, active3–4");
   });
 
   it("rewrites the 2026 pipeline: grouped counts, button ids with filters", () => {
     expect(entry("counts").options).toEqual({ all: true, by: "segment" });
     expect(entry("counts", "team").options).toEqual({ all: true, by: "segment" });
+    // v1's activeShift1 and activeShift2 are every active shift: clock slots 1 to 4 (#326).
     expect((entry("counts.shooting").options as { addends: string[] }).addends).toEqual([
       "counts.auto.StopShooting",
       "counts.transition.StopShooting",
       "counts.active1.StopShooting",
       "counts.active2.StopShooting",
+      "counts.active3.StopShooting",
+      "counts.active4.StopShooting",
       "counts.inactive1.StopShooting",
       "counts.inactive2.StopShooting",
+      "counts.inactive3.StopShooting",
+      "counts.inactive4.StopShooting",
       "counts.endgame.StopShooting",
+    ]);
+    expect(
+      Object.keys(
+        (entry("scores.activeShift2DefenseRating").options as { weightedPaths: object })
+          .weightedPaths,
+      ),
+    ).toEqual([
+      "counts.active3.RatingDefense1",
+      "counts.active4.RatingDefense1",
+      "counts.active3.RatingDefense2",
+      "counts.active4.RatingDefense2",
+      "counts.active3.RatingDefense3",
+      "counts.active4.RatingDefense3",
+      "counts.active3.RatingDefense4",
+      "counts.active4.RatingDefense4",
     ]);
     expect(entry("cycle.autoShootingTime").options).toEqual({
       startAction: ["StartShooting"],
@@ -357,7 +389,7 @@ describe("native ids and paths (#320)", () => {
     // Not a composite id (the button is "AttemptClimb"): kept, so config:check reports it.
     expect(entry("actionTimes.attemptClimb").options).toEqual({ actionId: ["attemptClimb"] });
     expect(pipeline.warnings).toContain(
-      "pipeline[8] tmp/cycle -> cycle.shootingTime: composite ids replaced by button ids with phases teleop, endgame; v1 left out teleop, shift1–4, active3–4, inactive3–4, which this also includes",
+      "pipeline[8] tmp/cycle -> cycle.shootingTime: composite ids replaced by button ids with phases teleop, endgame; v1 left out teleop, shift1–4, which this also includes",
     );
   });
 

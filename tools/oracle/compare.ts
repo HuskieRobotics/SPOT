@@ -9,7 +9,12 @@
  */
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import { migrate, type V5Event, type V5Performance } from "../../src/migrate/v5-to-v6";
+import {
+  migrate,
+  type MigrationReport,
+  type V5Event,
+  type V5Performance,
+} from "../../src/migrate/v5-to-v6";
 import { assertValid } from "../../src/config/validate";
 import type { AnalysisPipelineConfig, MatchScoutingConfig } from "../../src/config/types";
 import {
@@ -355,6 +360,8 @@ export interface SetRun {
   dataset: Dataset;
   problems: PipelineProblem[];
   ran: number[];
+  /** What the migration of the legacy input found (unknown ids, v5 shift numbers, ...). */
+  migration: MigrationReport;
 }
 
 export interface Golden {
@@ -470,6 +477,7 @@ export function runGoldenSet(
       dataset: result.dataset,
       problems: result.problems,
       ran: result.ran,
+      migration: migrated.report,
     };
   }
 
@@ -486,7 +494,7 @@ export function runGoldenSet(
       dataset = feedFromGolden(dataset, entry, feed.golden, set.name, feed.rules);
     }
   });
-  return { config, pipeline, dataset, problems, ran };
+  return { config, pipeline, dataset, problems, ran, migration: migrated.report };
 }
 
 export function loadGolden(set: GoldenSet): Golden {

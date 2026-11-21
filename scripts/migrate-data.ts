@@ -93,6 +93,11 @@ if (r.placementMismatches.length)
         .map((m) => `${m.id} id=${m.fromId} clock=${m.fromClock} ×${m.count}`)
         .join(", "),
   );
+if (r.shiftNumbering.actions)
+  console.log(
+    `shift numbers: ${r.shiftNumbering.disagree} of ${r.shiftNumbering.actions} actions in ` +
+      `${r.shiftNumbering.performances.length} performances do not fit their clock slot (#326)`,
+  );
 if (r.mergedScouters.length)
   console.log(
     `merged scouter spellings: ` +

@@ -83,99 +83,63 @@
       "count": 56
     },
     {
-      "id": "teleopRatingShooting2",
-      "count": 45
+      "id": "activeShift2fall",
+      "count": 49
     },
     {
-      "id": "activeShift4AttemptL3",
-      "count": 44
+      "id": "inactiveShift2fall",
+      "count": 47
+    },
+    {
+      "id": "teleopRatingShooting2",
+      "count": 45
     },
     {
       "id": "teleopRatingPassing3",
       "count": 41
     },
     {
-      "id": "activeShift4AttemptL2",
-      "count": 41
-    },
-    {
-      "id": "activeShift4AttemptL1",
-      "count": 40
-    },
-    {
       "id": "teleopRatingShooting1",
       "count": 39
     },
     {
-      "id": "activeShift4Broken",
-      "count": 38
-    },
-    {
-      "id": "inactiveShift3Broken",
-      "count": 37
-    },
-    {
-      "id": "inactiveShift4Broken",
-      "count": 36
-    },
-    {
-      "id": "activeShift3Broken",
-      "count": 36
-    },
-    {
-      "id": "inactiveShift4AttemptL3",
-      "count": 35
+      "id": "inactiveShift1AttemptClimb",
+      "count": 33
     },
     {
       "id": "teleopRatingShooting4",
       "count": 33
     },
     {
-      "id": "activeShift3AttemptL1",
-      "count": 32
-    },
-    {
       "id": "teleopRatingPassing1",
       "count": 31
     },
     {
-      "id": "activeShift3AttemptL2",
-      "count": 31
-    },
-    {
-      "id": "activeShift4fall",
-      "count": 31
-    },
-    {
-      "id": "inactiveShift4AttemptL1",
-      "count": 30
-    },
-    {
-      "id": "activeShift3AttemptL3",
-      "count": 28
-    },
-    {
-      "id": "activeShift3fall",
-      "count": 27
+      "id": "inactiveShift2disabled",
+      "count": 29
     },
     {
       "id": "endgameAttemptClimb",
       "count": 27
     },
     {
+      "id": "activeShift1AttemptClimb",
+      "count": 26
+    },
+    {
       "id": "teleopRatingStoring3",
       "count": 26
     },
     {
-      "id": "inactiveShift4AttemptL2",
-      "count": 26
-    },
-    {
-      "id": "teleopCollectDepot",
+      "id": "inactiveShift1disabled",
       "count": 24
     },
     {
-      "id": "inactiveShift4fall",
+      "id": "activeShift2AttemptClimb",
+      "count": 24
+    },
+    {
+      "id": "teleopCollectDepot",
       "count": 24
     },
     {
@@ -187,7 +151,7 @@
       "count": 23
     },
     {
-      "id": "inactiveShift3AttemptL3",
+      "id": "activeShift2disabled",
       "count": 23
     },
     {
@@ -199,15 +163,11 @@
       "count": 22
     },
     {
-      "id": "inactiveShift3AttemptL2",
-      "count": 22
-    },
-    {
       "id": "teleopRatingPassing4",
       "count": 21
     },
     {
-      "id": "inactiveShift3StopShooting",
+      "id": "activeShift1disabled",
       "count": 21
     },
     {
@@ -227,15 +187,7 @@
       "count": 20
     },
     {
-      "id": "inactiveShift4OAZone",
-      "count": 20
-    },
-    {
-      "id": "inactiveShift2disabled",
-      "count": 20
-    },
-    {
-      "id": "inactiveShift3disabled",
+      "id": "inactiveShift1fall",
       "count": 20
     },
     {
@@ -243,103 +195,23 @@
       "count": 19
     },
     {
-      "id": "inactiveShift3Storing",
+      "id": "inactiveShift2AttemptClimb",
       "count": 19
-    },
-    {
-      "id": "activeShift2AttemptClimb",
-      "count": 19
-    },
-    {
-      "id": "inactiveShift3AZone",
-      "count": 19
-    },
-    {
-      "id": "inactiveShift3fall",
-      "count": 19
-    },
-    {
-      "id": "inactiveShift3OAZone",
-      "count": 18
     },
     {
       "id": "teleopCollectNeutral",
       "count": 18
     },
     {
-      "id": "inactiveShift4AZone",
+      "id": "activeShift1fall",
       "count": 17
-    },
-    {
-      "id": "inactiveShift3Defense",
-      "count": 17
-    },
-    {
-      "id": "activeShift2disabled",
-      "count": 16
-    },
-    {
-      "id": "activeShift1AttemptClimb",
-      "count": 16
-    },
-    {
-      "id": "activeShift2fall",
-      "count": 16
-    },
-    {
-      "id": "inactiveShift4NeutralZone",
-      "count": 15
-    },
-    {
-      "id": "inactiveShift3AttemptL1",
-      "count": 15
-    },
-    {
-      "id": "activeShift4StopShooting",
-      "count": 15
-    },
-    {
-      "id": "inactiveShift4AttemptClimb",
-      "count": 14
-    },
-    {
-      "id": "inactiveShift4StartShooting",
-      "count": 14
-    },
-    {
-      "id": "activeShift3StopShooting",
-      "count": 14
-    },
-    {
-      "id": "activeShift3AttemptClimb",
-      "count": 14
-    },
-    {
-      "id": "inactiveShift2fall",
-      "count": 14
     },
     {
       "id": "teleopRatingDefense2",
       "count": 13
     },
     {
-      "id": "activeShift3OAZone",
-      "count": 13
-    },
-    {
-      "id": "activeShift4OAZone",
-      "count": 13
-    },
-    {
       "id": "teleopRatingStoring2",
-      "count": 12
-    },
-    {
-      "id": "activeShift3Defense",
-      "count": 12
-    },
-    {
-      "id": "inactiveShift3Passing",
       "count": 12
     },
     {
@@ -351,391 +223,35 @@
       "count": 12
     },
     {
-      "id": "activeShift3disabled",
-      "count": 12
-    },
-    {
       "id": "teleopRatingDefense4",
       "count": 12
-    },
-    {
-      "id": "inactiveShift4Defense",
-      "count": 11
-    },
-    {
-      "id": "inactiveShift4Passing",
-      "count": 11
-    },
-    {
-      "id": "inactiveShift4Storing",
-      "count": 11
-    },
-    {
-      "id": "inactiveShift4StopShooting",
-      "count": 11
-    },
-    {
-      "id": "inactiveShift1AttemptClimb",
-      "count": 11
-    },
-    {
-      "id": "inactiveShift3AttemptClimb",
-      "count": 11
-    },
-    {
-      "id": "inactiveShift3NeutralZone",
-      "count": 11
-    },
-    {
-      "id": "inactiveShift4disabled",
-      "count": 11
     },
     {
       "id": "teleopTransitionCollectOutpost",
       "count": 11
     },
     {
-      "id": "activeShift3Storing",
-      "count": 10
-    },
-    {
-      "id": "inactiveShift3StartShooting",
-      "count": 10
-    },
-    {
-      "id": "activeShift4AttemptClimb",
-      "count": 9
-    },
-    {
-      "id": "activeShift4disabled",
-      "count": 9
-    },
-    {
       "id": "teleopTransitionAttemptClimb",
       "count": 9
-    },
-    {
-      "id": "activeShift4Passing",
-      "count": 9
-    },
-    {
-      "id": "activeShift4Storing",
-      "count": 8
-    },
-    {
-      "id": "inactiveShift2AttemptClimb",
-      "count": 8
-    },
-    {
-      "id": "inactiveShift1disabled",
-      "count": 8
-    },
-    {
-      "id": "activeShift3Passing",
-      "count": 8
-    },
-    {
-      "id": "activeShift3StartShooting",
-      "count": 8
-    },
-    {
-      "id": "activeShift3AZone",
-      "count": 7
-    },
-    {
-      "id": "activeShift4StartShooting",
-      "count": 7
-    },
-    {
-      "id": "inactiveShift3RatingStoring3",
-      "count": 7
-    },
-    {
-      "id": "inactiveShift3RatingDefense4",
-      "count": 7
-    },
-    {
-      "id": "inactiveShift4RatingShooting4",
-      "count": 7
-    },
-    {
-      "id": "inactiveShift3RatingDefense2",
-      "count": 7
-    },
-    {
-      "id": "inactiveShift3RatingStoring1",
-      "count": 7
-    },
-    {
-      "id": "activeShift3RatingDefense4",
-      "count": 7
     },
     {
       "id": "teleopTransitionCollectDepot",
       "count": 7
     },
     {
-      "id": "activeShift4Defense",
-      "count": 6
-    },
-    {
-      "id": "inactiveShift3RatingShooting2",
-      "count": 6
-    },
-    {
-      "id": "activeShift4AZone",
-      "count": 6
-    },
-    {
-      "id": "inactiveShift4RatingDefense3",
-      "count": 5
-    },
-    {
-      "id": "activeShift3RatingShooting2",
-      "count": 5
-    },
-    {
-      "id": "inactiveShift3RatingPassing4",
-      "count": 5
-    },
-    {
-      "id": "activeShift3NeutralZone",
-      "count": 5
-    },
-    {
       "id": "endgameaStop",
       "count": 5
-    },
-    {
-      "id": "inactiveShift4RatingPassing4",
-      "count": 5
-    },
-    {
-      "id": "inactiveShift3RatingDefense1",
-      "count": 5
-    },
-    {
-      "id": "activeShift4RatingShooting4",
-      "count": 5
-    },
-    {
-      "id": "activeShift3RatingShooting4",
-      "count": 5
-    },
-    {
-      "id": "inactiveShift4RatingDefense2",
-      "count": 5
-    },
-    {
-      "id": "activeShift3RatingDefense1",
-      "count": 4
-    },
-    {
-      "id": "activeShift4RatingDefense3",
-      "count": 4
-    },
-    {
-      "id": "activeShift4NeutralZone",
-      "count": 4
-    },
-    {
-      "id": "inactiveShift3RatingShooting4",
-      "count": 4
-    },
-    {
-      "id": "inactiveShift3RatingStoring4",
-      "count": 4
-    },
-    {
-      "id": "inactiveShift3RatingShooting3",
-      "count": 4
-    },
-    {
-      "id": "activeShift4RatingStoring1",
-      "count": 4
-    },
-    {
-      "id": "activeShift3RatingStoring1",
-      "count": 4
-    },
-    {
-      "id": "activeShift4RatingShooting1",
-      "count": 4
-    },
-    {
-      "id": "inactiveShift4RatingShooting1",
-      "count": 4
-    },
-    {
-      "id": "activeShift3RatingDefense3",
-      "count": 3
-    },
-    {
-      "id": "activeShift4RatingStoring3",
-      "count": 3
-    },
-    {
-      "id": "inactiveShift3RatingPassing3",
-      "count": 3
     },
     {
       "id": "endgameCollectOutpost",
       "count": 3
     },
     {
-      "id": "inactiveShift4RatingShooting3",
-      "count": 3
-    },
-    {
-      "id": "inactiveShift4RatingStoring3",
-      "count": 3
-    },
-    {
-      "id": "activeShift3RatingShooting3",
-      "count": 3
-    },
-    {
-      "id": "inactiveShift4RatingStoring2",
-      "count": 3
-    },
-    {
-      "id": "inactiveShift3RatingStoring2",
-      "count": 3
-    },
-    {
-      "id": "activeShift3RatingDefense2",
-      "count": 3
-    },
-    {
-      "id": "activeShift3RatingPassing1",
-      "count": 3
-    },
-    {
-      "id": "inactiveShift3RatingShooting1",
-      "count": 3
-    },
-    {
-      "id": "activeShift3RatingPassing4",
-      "count": 3
-    },
-    {
-      "id": "inactiveShift4RatingDefense1",
-      "count": 3
-    },
-    {
-      "id": "activeShift3RatingStoring4",
-      "count": 2
-    },
-    {
-      "id": "activeShift4RatingDefense1",
-      "count": 2
-    },
-    {
-      "id": "inactiveShift3RatingDefense3",
-      "count": 2
-    },
-    {
-      "id": "activeShift3RatingStoring2",
-      "count": 2
-    },
-    {
-      "id": "inactiveShift1fall",
-      "count": 2
-    },
-    {
-      "id": "inactiveShift4RatingShooting2",
-      "count": 2
-    },
-    {
-      "id": "inactiveShift3RatingPassing2",
-      "count": 2
-    },
-    {
-      "id": "activeShift4RatingPassing2",
-      "count": 2
-    },
-    {
-      "id": "inactiveShift4RatingStoring4",
-      "count": 2
-    },
-    {
-      "id": "activeShift3RatingPassing2",
-      "count": 2
-    },
-    {
       "id": "endgameCollectDepot",
       "count": 2
     },
     {
-      "id": "inactiveShift4RatingPassing1",
-      "count": 2
-    },
-    {
-      "id": "inactiveShift4RatingDefense4",
-      "count": 2
-    },
-    {
-      "id": "activeShift3RatingShooting1",
-      "count": 2
-    },
-    {
-      "id": "activeShift4RatingStoring2",
-      "count": 2
-    },
-    {
-      "id": "activeShift3RatingStoring3",
-      "count": 2
-    },
-    {
-      "id": "activeShift1disabled",
-      "count": 1
-    },
-    {
-      "id": "inactiveShift4RatingPassing2",
-      "count": 1
-    },
-    {
-      "id": "activeShift4RatingShooting3",
-      "count": 1
-    },
-    {
-      "id": "inactiveShift4RatingStoring1",
-      "count": 1
-    },
-    {
-      "id": "activeShift4RatingPassing1",
-      "count": 1
-    },
-    {
-      "id": "activeShift3RatingPassing3",
-      "count": 1
-    },
-    {
-      "id": "inactiveShift4RatingPassing3",
-      "count": 1
-    },
-    {
       "id": "endgameCollectNeutral",
-      "count": 1
-    },
-    {
-      "id": "inactiveShift3RatingPassing1",
-      "count": 1
-    },
-    {
-      "id": "activeShift4RatingPassing3",
-      "count": 1
-    },
-    {
-      "id": "activeShift4RatingPassing4",
-      "count": 1
-    },
-    {
-      "id": "activeShift4RatingStoring4",
-      "count": 1
-    },
-    {
-      "id": "activeShift4RatingDefense2",
       "count": 1
     }
   ],
