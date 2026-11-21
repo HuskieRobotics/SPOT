@@ -54,8 +54,8 @@ team's count over all its matches, if a team entry wrote one.
 
 ### No Data
 
-When a value can't be worked out, it is **No Data** (in the file, `null`): an average when
-nothing was averaged, an accuracy when nothing was attempted. The analysis pages show "No
+When a value can't be worked out, it is **No Data** (written `null` in the data): an average
+when there was nothing to average, an accuracy when nothing was attempted. The analysis pages show "No
 Data", and a ranking leaves that team out. If "never did it" should rank a team last instead,
 say so; see [Worst values](#worst-values-ranking-teams-that-never-did-something).
 
