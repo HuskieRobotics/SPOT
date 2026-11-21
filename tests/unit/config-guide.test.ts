@@ -180,3 +180,43 @@ describe("#321: the guide's links lead somewhere", () => {
     }
   });
 });
+
+describe("#333 (gate K-6): the new-game checklist covers what was collected", () => {
+  const checklist = text("docs", "configuration-guide", "new-game-checklist.md");
+
+  it.each([
+    // Season set-up
+    ["archive last season", "config/seasons/<last year>/"],
+    ["drift test", "tests/unit/config-active.test.ts"],
+    ["database and event", "A database and an event"],
+    // match-scouting.json
+    ["match length", '"totalMs"'],
+    ["field pause", '"pauseMs"'],
+    ["segments and kinds", '"alternate"'],
+    ["fixed kinds", "fixed kinds"],
+    ["layers and buttons", "Screens and buttons"],
+    ["field picture", '"fieldMap"'],
+    ["qr.json bits", "qr.json"],
+    // analysis-pipeline.json
+    ["period filters, not composite ids", "filters and grouping"],
+    ["worst values", '"divByZero"'],
+    ["ifNone", '"ifNone"'],
+    ["sumAverage countPaths", '"countPaths"'],
+    ["rating map", '"ratings"'],
+    ["cycle capacity", '"capacity"'],
+    ["match length in countMatches", "`countMatches`"],
+    ["score-breakdown prefixes", "Score-breakdown prefixes"],
+    ["knownIds", '"knownIds"'],
+    ["component OPRs", '"componentOprs"'],
+    // analysis-modules.json
+    ["module paths exist", "every path a module shows exists"],
+    ["rating bands", '"ratingBands"'],
+    // Week 0
+    ["config:check after every change", "After every change"],
+    ["config:preview", "npm run config:preview"],
+    ["scout Week 0 from the webcast", "Scout Week 0 from the webcast"],
+    ["fix before week 1", "Fix what Week 0 showed"],
+  ])("%s", (_item, phrase) => {
+    expect(checklist).toContain(phrase);
+  });
+});
