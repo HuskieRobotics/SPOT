@@ -8,8 +8,9 @@
  * Filters (an action must pass every filter given; within one filter, any listed value matches):
  *   phases:       phase ids, or "preMatch" for actions recorded before the match started
  *   segments:     segment ids ("transition", "shift")
- *   kinds:        segment kinds ("active", "inactive"); today the kind the scouter selected,
- *                 and from #326 also a kind the configuration fixes for a whole period
+ *   kinds:        the action's effective kind ("active", "inactive"): the kind the scouter
+ *                 selected, else a kind the configuration fixes for the action's segment, else
+ *                 for its phase (#326; 2026's auto, transition and endgame are "active")
  *
  * Group keys:
  *   by "phase":   the phase id, or "preMatch"
@@ -17,6 +18,11 @@
  *                 selected a kind, else the segment id, each followed by the repeat index when
  *                 the segment repeats ("active1", "shift3", "transition"); the phase id outside
  *                 any segment; "preMatch" before the match started
+ *   by "kind":    the effective kind ("active", "inactive"), else the phase id, else "preMatch"
+ *
+ * A fixed kind is a game rule, not something the scouter recorded, so it is resolved here from
+ * the configuration and never stored on actions: fixing the configuration and running the
+ * analysis again corrects every match.
  */
 import type { MatchScoutingConfig } from "@/config/types";
 import type { Action } from "@/data/types";
@@ -30,7 +36,7 @@ export interface PeriodFilter {
   kinds?: string[];
 }
 
-export type GroupBy = "phase" | "segment";
+export type GroupBy = "phase" | "segment" | "kind";
 
 /** The period fields of an action; missing fields (e.g. an array built by another entry) are null. */
 type Period = Pick<Action, "phase" | "segment" | "segmentKind" | "segmentIndex">;
@@ -48,18 +54,70 @@ export function hasPeriodFilter(filter: PeriodFilter): boolean {
   return Boolean(filter.phases || filter.segments || filter.kinds);
 }
 
-export function passesFilter(action: Partial<Period>, filter: PeriodFilter): boolean {
+/** The fixed kind of each segment and phase that has one, per configuration. */
+const fixedKinds = new WeakMap<
+  MatchScoutingConfig,
+  { phases: Map<string, string>; segments: Map<string, string> }
+>();
+
+function fixedKindsOf(config: MatchScoutingConfig) {
+  let found = fixedKinds.get(config);
+  if (!found) {
+    found = { phases: new Map(), segments: new Map() };
+    for (const phase of config.timing.phases) {
+      if (phase.kind) found.phases.set(phase.id, phase.kind);
+      for (const segment of phase.segments ?? []) {
+        if (segment.kind) found.segments.set(segment.id, segment.kind);
+      }
+    }
+    fixedKinds.set(config, found);
+  }
+  return found;
+}
+
+/**
+ * The kind an action counts as (#326): the kind the scouter selected, else the kind the
+ * configuration fixes for its segment, else for its phase, else null. Without a configuration,
+ * only the selected kind.
+ */
+export function effectiveKind(
+  action: Partial<Period>,
+  config?: MatchScoutingConfig,
+): string | null {
+  const p = periodOf(action);
+  if (p.segmentKind !== null || !config) return p.segmentKind;
+  const fixed = fixedKindsOf(config);
+  return (
+    (p.segment !== null ? fixed.segments.get(p.segment) : undefined) ??
+    (p.phase !== null ? fixed.phases.get(p.phase) : undefined) ??
+    null
+  );
+}
+
+/** Whether an action passes every filter given; `config` resolves fixed kinds for `kinds`. */
+export function passesFilter(
+  action: Partial<Period>,
+  filter: PeriodFilter,
+  config?: MatchScoutingConfig,
+): boolean {
   const p = periodOf(action);
   if (filter.phases && !filter.phases.includes(p.phase ?? PRE_MATCH)) return false;
   if (filter.segments && (p.segment === null || !filter.segments.includes(p.segment))) return false;
-  if (filter.kinds && (p.segmentKind === null || !filter.kinds.includes(p.segmentKind)))
-    return false;
+  if (filter.kinds) {
+    const kind = effectiveKind(p, config);
+    if (kind === null || !filter.kinds.includes(kind)) return false;
+  }
   return true;
 }
 
-export function groupKey(action: Partial<Period>, by: GroupBy): string {
+export function groupKey(
+  action: Partial<Period>,
+  by: GroupBy,
+  config?: MatchScoutingConfig,
+): string {
   const p = periodOf(action);
   if (p.phase === null) return PRE_MATCH;
+  if (by === "kind") return effectiveKind(p, config) ?? p.phase;
   if (by === "phase" || p.segment === null) return p.phase;
   return `${p.segmentKind ?? p.segment}${p.segmentIndex ?? ""}`;
 }
@@ -97,10 +155,15 @@ export function groupKeys(
   const keys: string[] = [];
   const owners = new Map<string, string>();
   for (const period of configuredPeriods(config)) {
-    const key = groupKey(period, by);
-    // What the key stands for at this grouping: the phase alone, or the full period in a segment.
+    const key = groupKey(period, by, config);
+    // What the key stands for at this grouping: a kind, the phase alone, or the full period.
+    const kind = by === "kind" ? effectiveKind(period, config) : null;
     const identity = JSON.stringify(
-      by === "phase" || period.segment === null ? { phase: period.phase } : period,
+      kind !== null
+        ? { kind }
+        : by !== "segment" || period.segment === null
+          ? { phase: period.phase }
+          : period,
     );
     const owner = owners.get(key);
     if (owner === undefined) owners.set(key, identity);
@@ -110,7 +173,7 @@ export function groupKeys(
           `rename one of the ids ("${PRE_MATCH}" is reserved for actions before the match)`,
       );
     }
-    if (passesFilter(period, filter) && !keys.includes(key)) keys.push(key);
+    if (passesFilter(period, filter, config) && !keys.includes(key)) keys.push(key);
   }
   return keys;
 }

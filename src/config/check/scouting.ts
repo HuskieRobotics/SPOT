@@ -278,6 +278,50 @@ export function checkMatchScouting(ms: MatchScoutingConfig, report: Reporter): v
   });
   duplicates(segmentIds, (i) => segmentKeys(ms, i), "segment");
 
+  // Fixed kinds (#326): a phase or a segment without toggles counts as one of the declared kinds.
+  const kindIds = [
+    ...new Set(
+      phases.flatMap((p) => (p.segments ?? []).flatMap((s) => s.kinds ?? []).map((k) => k.id)),
+    ),
+  ];
+  const fixedKind = (kind: string | undefined, keys: Key[], what: string) => {
+    if (kind === undefined || kindIds.includes(kind)) return;
+    report.error(
+      FILE,
+      keys,
+      kindIds.length > 0
+        ? `"${kind}" is not a kind any segment declares, so the ${what} counts as no kind.`
+        : `No segment declares kinds, so "${kind}" means nothing here.`,
+      kindIds.length > 0
+        ? nearHint(kind, kindIds, "kind id")
+        : 'A fixed "kind" names one of the kinds a segment with toggle buttons declares.',
+    );
+  };
+  phases.forEach((phase, pi) => {
+    fixedKind(phase.kind, ["timing", "phases", pi, "kind"], "phase");
+    (phase.segments ?? []).forEach((segment, si) => {
+      const sk: Key[] = ["timing", "phases", pi, "segments", si];
+      if (segment.kind !== undefined && segment.kinds?.length) {
+        report.error(
+          FILE,
+          [...sk, "kind"],
+          "This segment has kinds the scouter selects, so it cannot also have a fixed kind.",
+          'Remove "kind"; a fixed kind is for a phase or segment without toggle buttons.',
+        );
+      } else {
+        fixedKind(segment.kind, [...sk, "kind"], "segment");
+      }
+      if (segment.alternate && !(segment.kinds?.length && segment.repeat)) {
+        report.error(
+          FILE,
+          [...sk, "alternate"],
+          `"alternate" switches the selected kind at each repeat, but this segment has no ${segment.kinds?.length ? '"repeat"' : '"kinds"'}.`,
+          'Remove "alternate", or give the segment "kinds" and "repeat".',
+        );
+      }
+    });
+  });
+
   // ------------------------------------------------------------------ rules
   ms.rules.locks.forEach((lock, i) => {
     buttonRefs(lock.triggerButtons, ["rules", "locks", i, "triggerButtons"]);

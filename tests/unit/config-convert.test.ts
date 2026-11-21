@@ -166,6 +166,25 @@ describe("converted 2026 match-scouting configuration", () => {
     );
   });
 
+  it("#326: shifts alternate, and the periods outside them count as kind active", () => {
+    const [auto, teleop, endgame] = config.timing.phases;
+    const [transition, shift] = teleop.segments!;
+    expect(shift.alternate).toBe(true);
+    expect([auto.kind, transition.kind, endgame.kind, teleop.kind, shift.kind]).toEqual([
+      "active",
+      "active",
+      "active",
+      undefined,
+      undefined,
+    ]);
+    expect(warnings).toContain(
+      'periods auto, transition, endgame count as kind "active" (2026: the hub was active for both alliances outside the shifts); verify',
+    );
+    // A typical game has no shift toggles, so no kinds at all.
+    const typical = convertMatchScouting(v1("match-scouting2025v2.json") as V1MatchScouting).config;
+    expect(JSON.stringify(typical.timing)).not.toMatch(/"kind"|alternate/);
+  });
+
   it("derives one prefix per phase, segment, shift index and kind", () => {
     const prefixes = derivePrefixes(config);
     expect(prefixes).toContain("");
@@ -295,8 +314,9 @@ describe("native ids and paths (#320)", () => {
         composite.map((c) => ids.split(`${c}Passing`)!.period),
       );
     expect(at("auto")).toEqual({ filter: { phases: ["auto"] }, added: [] });
+    // "active" alone would take in auto, the transition and endgame, which are fixed as active.
     expect(at("activeShift1", "activeShift2")).toEqual({
-      filter: { kinds: ["active"] },
+      filter: { segments: ["shift"], kinds: ["active"] },
       added: ["active3", "active4"],
     });
     const wide = at("teleopTransition", "activeShift1", "inactiveShift2", "endgame");

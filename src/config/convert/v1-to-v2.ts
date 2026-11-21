@@ -373,6 +373,9 @@ export function convertMatchScouting(
         toggleButton: "teleopInactive",
       },
     ];
+    // The v5 client flipped the kind every shift after one toggle press (SC-22); v6 flips it at
+    // the field clock's shift boundaries (#326).
+    shift.alternate = true;
     phase.segments!.push(shift);
     warnings.push(
       `shift timing (${count} x ${SHIFT_INTERVAL_MS / 1000} s from ${last.ms} ms) copied from the 2026 client constants; verify`,
@@ -406,6 +409,27 @@ export function convertMatchScouting(
     });
     warnings.push(
       `added an 'endgame' phase at ${ENDGAME_START_MS} ms with no layer change (2026 client constant); verify`,
+    );
+  }
+  // 2026 rule: outside the shifts the hub was active for both alliances, so those periods count
+  // as kind "active" in analysis (#326). A game rule, not something v5 recorded: verify it.
+  const shiftPhase = teleopGroup.length > 0 ? phases.find((p) => p.segments?.length) : undefined;
+  if (shiftPhase) {
+    const fixed: string[] = [];
+    for (const p of phases) {
+      if (p !== shiftPhase) {
+        p.kind = "active";
+        fixed.push(p.id);
+      }
+      for (const segment of p.segments ?? []) {
+        if (!segment.kinds?.length) {
+          segment.kind = "active";
+          fixed.push(segment.id);
+        }
+      }
+    }
+    warnings.push(
+      `periods ${fixed.join(", ")} count as kind "active" (2026: the hub was active for both alliances outside the shifts); verify`,
     );
   }
 

@@ -135,7 +135,7 @@ export function periodFilterFor(
   if (periods.every((p) => p.segmentKind !== null)) filter.kinds = inOrder("segmentKind");
 
   const admitted = (f: PeriodFilter) =>
-    unique(all.filter((p) => passesFilter(p, f)).map((p) => groupKey(p, "segment")));
+    unique(all.filter((p) => passesFilter(p, f, ms)).map((p) => groupKey(p, "segment")));
   const same = (a: string[], b: string[]) => a.length === b.length && a.every((k, i) => k === b[i]);
   for (const field of ["phases", "segments"] as const) {
     if (!filter[field]) continue;

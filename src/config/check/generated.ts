@@ -25,7 +25,7 @@ import {
   type PipelineProblem,
   type TransformerRegistry,
 } from "@/analysis/engine";
-import { PRE_MATCH } from "@/analysis/transformers/periods";
+import { effectiveKind, PRE_MATCH } from "@/analysis/transformers/periods";
 import { suggest } from "@/lib/suggest";
 import {
   eachLeaf,
@@ -278,7 +278,8 @@ function observe(check: GeneratedCheck): Observed {
       const r = recorded.get(a.id) ?? { phases: new Set(), segments: new Set(), kinds: new Set() };
       r.phases.add(a.phase ?? PRE_MATCH);
       if (a.segment) r.segments.add(a.segment);
-      if (a.segmentKind) r.kinds.add(a.segmentKind);
+      const kind = effectiveKind(a, ms);
+      if (kind) r.kinds.add(kind);
       recorded.set(a.id, r);
     }
   }

@@ -9,7 +9,8 @@
         "label": "Auto",
         "startMs": 159999,
         "layer": "layer-1",
-        "prefix": "auto"
+        "prefix": "auto",
+        "kind": "active"
       },
       {
         "id": "teleop",
@@ -22,7 +23,8 @@
             "id": "transition",
             "label": "Teleop Transition",
             "startMs": 140000,
-            "prefix": "teleopTransition"
+            "prefix": "teleopTransition",
+            "kind": "active"
           },
           {
             "id": "shift",
@@ -46,7 +48,8 @@
                 "prefix": "inactiveShift",
                 "toggleButton": "teleopInactive"
               }
-            ]
+            ],
+            "alternate": true
           }
         ]
       },
@@ -54,7 +57,8 @@
         "id": "endgame",
         "label": "Endgame",
         "startMs": 30000,
-        "prefix": "endgame"
+        "prefix": "endgame",
+        "kind": "active"
       }
     ]
   },

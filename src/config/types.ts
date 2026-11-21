@@ -69,6 +69,11 @@ export interface Phase {
   pauseMs?: number;
   /** Sub-periods inside this phase (a transition period, then repeating shifts). */
   segments?: Segment[];
+  /**
+   * A segment kind the whole phase counts as in analysis (2026: auto is "active"), resolved by
+   * the kinds filter and `by: "kind"`, never recorded on actions (#326).
+   */
+  kind?: string;
   variables?: Record<string, string | number | boolean>;
   always?: string[];
   conditional?: Record<string, Record<string, string[]>>;
@@ -102,6 +107,13 @@ export interface Segment {
   /** The segment repeats; the 1-based index is appended to the prefix. */
   repeat?: { intervalMs: number; count: number };
   kinds?: SegmentKind[];
+  /**
+   * The selected kind moves to the next one at each repeat boundary of the field clock; the
+   * scouter picks it once, and another toggle press changes it from then on (#326).
+   */
+  alternate?: boolean;
+  /** For a segment without kinds: a kind it counts as in analysis (2026: the transition). */
+  kind?: string;
 }
 
 export interface Lock {
