@@ -14,7 +14,7 @@
  */
 import type { Button, Executable, Layer, MatchScoutingConfig, Segment } from "@/config/types";
 import { deriveKnownActionIds } from "@/config/knownActionIds";
-import { compositeActionId, placeAt, type Placement } from "@/data/phase";
+import { compositeActionId, kindAt, placeAt, type Placement } from "@/data/phase";
 import { teamNumber, teamSuffix, type TeamKey } from "@/data/team";
 import {
   DEFAULT_TENANT,
@@ -25,6 +25,9 @@ import {
   type TeamMatchPerformance,
 } from "@/data/types";
 import { Random } from "./random";
+
+/** Moved to `@/data/phase`, shared with the scouting client (#322); kept here for callers. */
+export { kindAt };
 
 export interface GenerateOptions {
   config: MatchScoutingConfig;
@@ -227,25 +230,6 @@ function applyToggle(
       }
     }
   }
-}
-
-/**
- * The kind selected for a segment at a repeat index: the selected one, moved on by one kind per
- * repeat since it was selected when the segment alternates (#326, decided 2026-11-20).
- */
-export function kindAt(
-  segment: Segment,
-  selected: { kind: string; index: number | null } | undefined,
-  index: number | null,
-): string | null {
-  if (!selected) return null;
-  const kinds = segment.kinds ?? [];
-  if (!segment.alternate || kinds.length < 2 || selected.index === null || index === null) {
-    return selected.kind;
-  }
-  const from = kinds.findIndex((k) => k.id === selected.kind);
-  const steps = Math.max(0, index - selected.index);
-  return kinds[(from + steps) % kinds.length].id;
 }
 
 function engageLocks(config: MatchScoutingConfig, state: SimState, buttonId: string): void {

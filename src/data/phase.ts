@@ -171,3 +171,23 @@ export function compositeActionId(
   }
   return `${phase.prefix}${baseId}`;
 }
+
+/**
+ * The kind selected for a segment at a repeat index: the selected one, moved on by one kind per
+ * repeat since it was selected when the segment alternates (#326, decided 2026-11-20). The
+ * generator and the scouting client both use it (#322).
+ */
+export function kindAt(
+  segment: Segment,
+  selected: { kind: string; index: number | null } | undefined,
+  index: number | null,
+): string | null {
+  if (!selected) return null;
+  const kinds = segment.kinds ?? [];
+  if (!segment.alternate || kinds.length < 2 || selected.index === null || index === null) {
+    return selected.kind;
+  }
+  const from = kinds.findIndex((k) => k.id === selected.kind);
+  const steps = Math.max(0, index - selected.index);
+  return kinds[(from + steps) % kinds.length].id;
+}

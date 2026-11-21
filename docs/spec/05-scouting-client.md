@@ -248,6 +248,59 @@ into configuration.
 - **SC-47** On `syncRequest`: run `sync()`.
 - **SC-48** `updateState` (outgoing) resolves only after the server acknowledges.
 
+## v6: the scouting rules (`src/scouting/`, #322)
+
+v6 implements the rules above for a v2 configuration (document 20) as a pure state machine:
+`src/scouting/session.ts` holds the state and what each press does, `clock.ts` the match clock,
+and `view.ts` what the screen shows. The scouting-screen preview and the Phase 2 client drive
+the same code. `tests/unit/scouting-session.test.ts` is named after the requirements here, and
+plays whole random matches of the 2022, 2023, 2025 and 2026 configurations to check that what
+they record agrees with the clock, the configuration and the data model. Where v6 differs from
+the v5 behavior above (decided 2026-11-21, #322):
+
+- **SC-2** The readout shows the id each press records, so an alliance-relative button on blue
+  shows its partner.
+- **SC-17, SC-19** The first screen is `layout.initialLayer`, and the match control shows its own
+  label until the start.
+- **SC-20, BL-298** Phase times are configuration, not v5's constants, and the clock is computed
+  from real time (NF-3). A phase with `pauseMs` holds the clock at its start for that long. When
+  a phase begins it sets its `variables` and, if it has a `layer`, shows that layer as a fresh
+  screen, filtered by its `always` and `conditional` (SC-26). A segment with a `layer` does the
+  same.
+- **SC-21** While running, the match control reads "<seconds> | <period>". The period is the
+  phase label, the segment label, or the kind, segment and slot ("Active Shift 2"), and
+  "(paused)" is added during a hold.
+- **SC-23** A press records the button id and its period (CS-16, DV-1), with `ts` never below 0.
+  A press before the match has no period and `ts` equal to `timing.totalMs`.
+- **SC-24, SC-25: undo.**
+  - The queue holds one entry per press, temp presses included. A multiplier's copies belong to
+    one press.
+  - Undo is allowed while the queue holds more entries than `rules.undo.minQueueLength`.
+  - Undo removes the last press with all its actions, closes every screen that press opened,
+    and puts back what its executables changed: variables, hidden buttons, highlights, a selected
+    kind and a lock.
+  - A screen the clock opened since the press stays, so undoing an auto press in teleop leaves
+    the teleop screen. This replaces step 4, which patched the layer history for the auto and
+    teleop layers only.
+  - Undoing the start returns to before the match.
+- **SC-27** Locks are `rules.locks`. A trigger press engages its lock unless the lock's
+  `untilPhase` has begun. The lock releases when that phase begins, when the trigger press is
+  undone, or when the start is undone.
+- **SC-28** The scouted robot's alliance and the field orientation are settings of the session.
+  - On blue, the button in each alliance-relative pair's place records its partner and shows
+    the partner's label.
+  - A flipped field swaps the pair's places and turns the field map. A tap on a turned map is
+    stored turned back, so a position always reads the same way.
+- **SC-32, SC-31a** While the map waits for a tap, no button can be pressed. The position lock
+  (`rules.positionLockMs`, or the executable's own `lockMs`) runs in real time.
+- **SC-34, SC-35** An `exclusiveHighlight` (v5's `climbHighlight`) belongs to the button id, so
+  it shows on every layer with that button: 2026's Start Shooting stays lit from auto into
+  teleop. Undo puts back the highlights from before the press, which fixes F-1.
+- **SC-37** `multiplier` records the action `count` times in one press.
+- **SC-38** An extension's executable changes nothing the session records.
+- After the clock reaches 0, presses still record with `ts` 0. The match control shows "Match
+  Complete" for 2 s, then "Submit Match".
+
 ## Backlog items affecting this page (document 16)
 
 BL-93 unsynced-matches list with per-entry retry and QR; BL-54 surface assignment changes to
