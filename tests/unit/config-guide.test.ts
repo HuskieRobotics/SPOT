@@ -211,10 +211,11 @@ describe("#333 (gate K-6): the new-game checklist covers what was collected", ()
     // analysis-modules.json
     ["module paths exist", "every path a module shows exists"],
     ["rating bands", '"ratingBands"'],
-    // Before the first event
+    // Week 0
     ["config:check after every change", "After every change"],
     ["config:preview", "npm run config:preview"],
-    ["dry run", "A dry run"],
+    ["scout Week 0 from the webcast", "Scout Week 0 from the webcast"],
+    ["fix before week 1", "Fix what Week 0 showed"],
   ])("%s", (_item, phrase) => {
     expect(checklist).toContain(phrase);
   });

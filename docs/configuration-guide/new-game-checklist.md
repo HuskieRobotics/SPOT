@@ -1,6 +1,6 @@
 # New-game checklist
 
-Everything to do for a new game, from kickoff to the first event, in order. Each item says which
+Everything to do for a new game, from kickoff to Week 0, in order. Each item says which
 file it changes, how to check it, and links to the part of this guide that explains it.
 [Starting a new season](new-season.md) is the same path told as a story; this page is the list
 to tick off.
@@ -135,11 +135,20 @@ weeks after kickoff. File: `analysis-pipeline.json`, `"enrichment"` → `"tba"`
 - [ ] _Check:_ `config:check` (its warning about empty `"knownIds"` goes away);
       `config:preview` (TBA-based counts and OPRs have values).
 
-## 6. Before the first event
+## 6. Week 0: scout real matches
+
+Week 0 events are unofficial events held about a week before the season's first official ones,
+and many stream their matches online. Scouting one from its webcast tests the configuration on
+real play, with a week left to fix what it shows.
 
 - [ ] **`npm run config:check` is clean**: no errors, and a reason for every warning left.
 - [ ] **`npm run config:preview` is plausible** for every module.
-- [ ] **A database and an event** for the season, with the event's TBA key, set up the way your
-      SPOT deployment does it.
-- [ ] **A dry run**: students scout a practice match (or a video of a real one) on tablets, and
-      the analysis pages show what they recorded.
+- [ ] **A database and an event** for the Week 0 event, with its TBA key if The Blue Alliance
+      lists it, set up the way your SPOT deployment does it.
+- [ ] **Scout Week 0 from the webcast**: students scout its matches on tablets, one robot each,
+      as they will at an event.
+      _Check:_ each team's page shows what its scouters recorded, and points per match look
+      right next to the scores on the webcast.
+- [ ] **Fix what Week 0 showed**, before week 1: buttons scouters couldn't find, needed but
+      didn't have, or pressed by mistake, and values that look wrong. Run `config:check` after
+      each fix.

@@ -72,9 +72,13 @@ The Blue Alliance publishes a new game's score-breakdown fields and component-OP
 weeks after kickoff. Then fill in `"enrichment"` → `"tba"`: the score-breakdown prefixes and the
 phase each belongs to, `"knownIds"`, and `"componentOprs"` ([TBA data](analysis-pipeline.md#tba-data)).
 
-## 7. Before the first event
+## 7. Week 0
+
+Week 0 events are unofficial events about a week before the first official ones, and many stream
+their matches online. Before Week 0:
 
 - `npm run config:check` has no errors, and you know why each warning stays.
 - `npm run config:preview` shows plausible numbers for every module.
-- Students act as scouters for a practice match or two, on a video of a real match, and the
-  analysis pages show what they recorded.
+
+Then students scout a Week 0 event's matches from its webcast, as they will at an event, and
+check that the analysis pages show what they recorded. Fix what it shows before week 1.
