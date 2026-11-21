@@ -12,6 +12,10 @@
  *   (decided 2026-11-20). Filtering first would break pairs at a boundary: in 2026 a team starts
  *   shooting before the hub activates, and a scouter may press stop just after it deactivates.
  *   A pair that crosses a boundary is kept by a filter for either period.
+ * - Pairing never queues (TR-15, decided 2026-11-21, replacing A-38): a later action pairs with
+ *   the newest open one before it, so a start that never got its end (a drop nobody recorded, a
+ *   mistaken tap) affects only its own pair. v5 gave each start the first unused end after it,
+ *   so one such start shifted every later pair in the match by one (F-28).
  * - `ts` is match time remaining in milliseconds (DM-3), so a later action has a smaller `ts`.
  * - Actions written into an output are copies; stored actions are never changed (F-3, TR-7).
  * - v5's `removeDuplicates` is retired: analysis never sees a superseded performance (TR-5).
@@ -104,13 +108,23 @@ export const finalActionOccurrence = defineTransformer<
 });
 
 /**
- * Pair each start action with the first unused end action (or miss) recorded after it (A-38):
- * a start with no end after it ends the search, and an end with no start before it is never
- * used. A period filter keeps the cycles that start or end in the period. `timeDifferential` is the time between the two in ms. `allComplete` leaves out cycles
- * that ended in a miss. The averages are null when there are no cycles.
+ * Pair each end action (or miss) with the newest open start recorded before it, strictly earlier
+ * in match time (TR-15, decided 2026-11-21, replacing A-38). At most `capacity` starts are open
+ * at once (default 1, a robot holding one game piece): a start beyond that drops the oldest open
+ * one. An end with no open start is not used. `unendedCount` counts the starts that never got an
+ * end: dropped by a later start, or still open when the match ended.
+ *
+ * A period filter keeps the cycles that start or end in the period, and counts the unended
+ * starts in it (TR-13). `timeDifferential` is the time between start and end in ms;
+ * `allComplete` leaves out cycles that ended in a miss; the averages are null with no cycles.
  */
 export const cycle = defineTransformer<
-  { startAction: string[]; endAction: string[]; misses?: string[] } & PeriodFilter
+  {
+    startAction: string[];
+    endAction: string[];
+    misses?: string[];
+    capacity?: number;
+  } & PeriodFilter
 >({
   type: "tmp",
   scope: "each",
@@ -118,21 +132,31 @@ export const cycle = defineTransformer<
   summary: "Time from each start action to the end action that follows it",
   optionsSchema: builtInOptions("cycle"),
   run: (tmp, options) => {
+    const capacity = options.capacity ?? 1;
     const misses = options.misses ?? [];
-    const actions = actionsAt(tmp, "actions");
-    let endings = actions.filter((a) => options.endAction.includes(a.id) || misses.includes(a.id));
+    const open: ActionLike[] = [];
+    const unended: ActionLike[] = [];
     const all: { starts: ActionLike; ending: ActionLike; timeDifferential: number }[] = [];
-    for (const start of actions.filter((a) => options.startAction.includes(a.id))) {
-      endings = endings.filter((e) => e.ts < start.ts);
-      const ending = endings.shift();
-      if (!ending) break;
-      if (!keepsPair(start, ending, options)) continue;
-      all.push({
-        starts: copy(start),
-        ending: copy(ending),
-        timeDifferential: start.ts - ending.ts,
-      });
+    for (const action of actionsAt(tmp, "actions")) {
+      if (options.endAction.includes(action.id) || misses.includes(action.id)) {
+        const i = open.findLastIndex((start) => start.ts > action.ts);
+        if (i >= 0) {
+          const [start] = open.splice(i, 1);
+          if (keepsPair(start, action, options)) {
+            all.push({
+              starts: copy(start),
+              ending: copy(action),
+              timeDifferential: start.ts - action.ts,
+            });
+          }
+        }
+      }
+      if (options.startAction.includes(action.id)) {
+        open.push(action);
+        if (open.length > capacity) unended.push(open.shift()!);
+      }
     }
+    unended.push(...open);
     const allComplete = all.filter((c) => !misses.includes(c.ending.id)).map(copy);
     return {
       all,
@@ -141,6 +165,7 @@ export const cycle = defineTransformer<
       averageTimeComplete: mean(allComplete.map((c) => c.timeDifferential)),
       cycleCount: all.length,
       cycleCountComplete: allComplete.length,
+      unendedCount: unended.filter((start) => passesFilter(start, options)).length,
     };
   },
 });
@@ -174,11 +199,15 @@ export const countHybrid = defineTransformer<
 });
 
 /**
- * Group zone, action and rating presses into triples (2026): each zone press is paired with the
- * first unused action recorded after it, and that action with the first unused rating after it;
- * the walk stops at the first zone or action that has nothing after it. A period filter keeps
- * the triples whose zone or rating is in the period. A rating's value comes from the `ratings`
- * map (decided 2026-11-20; v5 read the digit at the end of the id).
+ * Group zone, action and rating presses into triples (2026). A zone press says where the robot
+ * is from then on, so an action takes the zone pressed last before it, and a rating pairs with
+ * the newest action not yet rated (TR-15, decided 2026-11-21, #320). An action recorded before
+ * any zone press, or never rated, is left out; a newer action replaces one still waiting for its
+ * rating, so nothing queues (F-28). The rating must be strictly later than its action, as in v5.
+ * v5 paired each zone press with the first unused action after it, so a zone covered one action
+ * and a missed rating shifted every later triple. A period filter keeps the triples whose action
+ * or rating is in the period (TR-13). A rating's value comes from the `ratings` map (decided
+ * 2026-11-20; v5 read the digit at the end of the id).
  *
  * Output: `list` of `{ zone, action, rating }`, `counts[zone][action][rating]`, and, for each
  * zone, `[zone][action]` = the mean rating.
@@ -197,28 +226,31 @@ export const zoneActionRatingGroupings = defineTransformer<
       throw new Error(`a zone cannot be named "${reserved[0]}": that key holds other output`);
     }
     const recorded = actionsAt(tmp, "actions");
-    let actions = recorded.filter((a) => options.actions.includes(a.id));
-    let ratings = recorded.filter((a) => Object.hasOwn(options.ratings, a.id));
     const list: { zone: string; action: string; rating: number }[] = [];
     const counts: Record<string, Record<string, Record<string, number>>> = {};
     const totals = new Map<string, Map<string, { sum: number; count: number }>>();
-    for (const zone of recorded.filter((a) => options.zones.includes(a.id))) {
-      actions = actions.filter((a) => a.ts < zone.ts);
-      const action = actions.shift();
-      if (!action) break;
-      ratings = ratings.filter((r) => r.ts < action.ts);
-      const rating = ratings.shift();
-      if (!rating) break;
-      if (!keepsPair(zone, rating, options)) continue;
-      const value = options.ratings[rating.id];
-      list.push({ zone: zone.id, action: action.id, rating: value });
-      const byAction = (counts[zone.id] ??= {});
-      const byRating = (byAction[action.id] ??= {});
-      byRating[value] = (byRating[value] ?? 0) + 1;
-      const zoneTotals = totals.get(zone.id) ?? new Map<string, { sum: number; count: number }>();
-      totals.set(zone.id, zoneTotals);
-      const t = zoneTotals.get(action.id) ?? { sum: 0, count: 0 };
-      zoneTotals.set(action.id, { sum: t.sum + value, count: t.count + 1 });
+    let zone: string | null = null;
+    let waiting: { zone: string | null; action: ActionLike } | null = null;
+    for (const a of recorded) {
+      if (Object.hasOwn(options.ratings, a.id)) {
+        if (!waiting || waiting.action.ts <= a.ts) continue;
+        const { zone: z, action } = waiting;
+        waiting = null;
+        if (z === null || !keepsPair(action, a, options)) continue;
+        const value = options.ratings[a.id];
+        list.push({ zone: z, action: action.id, rating: value });
+        const byAction = (counts[z] ??= {});
+        const byRating = (byAction[action.id] ??= {});
+        byRating[value] = (byRating[value] ?? 0) + 1;
+        const zoneTotals = totals.get(z) ?? new Map<string, { sum: number; count: number }>();
+        totals.set(z, zoneTotals);
+        const t = zoneTotals.get(action.id) ?? { sum: 0, count: 0 };
+        zoneTotals.set(action.id, { sum: t.sum + value, count: t.count + 1 });
+      } else if (options.actions.includes(a.id)) {
+        waiting = { zone, action: a };
+      } else if (options.zones.includes(a.id)) {
+        zone = a.id;
+      }
     }
     const out: Record<string, unknown> = { list, counts };
     for (const [zone, byAction] of totals) {

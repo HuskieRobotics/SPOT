@@ -1,5 +1,5 @@
 {
-  "description": "Expected differences between the legacy golden output and the v6 engine. The golden files are never edited; a difference is accepted only when a rule below matches it, and every rule cites the requirement or defect that makes v6 differ. Read by tools/oracle/compare.ts. 'legacy' lists the golden values (as written by run.js), 'v6' is the value v6 must produce instead (\"(absent)\" when v6 has no value at that path, \"(any)\" for any value), and 'paths' (optional) limits a rule to output paths matching these patterns, where * matches one path segment and ** any number. A rule with 'rename' instead reads a legacy key under a new name: in a legacy path matching 'paths', the key 'from' is compared as 'to'.",
+  "description": "Expected differences between the legacy golden output and the v6 engine. The golden files are never edited; a difference is accepted only when a rule below matches it, and every rule cites the requirement or defect that makes v6 differ. Read by tools/oracle/compare.ts. 'legacy' lists the golden values (as written by run.js), 'v6' is the value v6 must produce instead (\"(absent)\" when v6 has no value at that path, \"(any)\" for any value), and 'paths' (optional) limits a rule to output paths matching these patterns, where * matches one path segment and ** any number, and 'records' (optional) to these performance ids or team keys. 'legacy' may list \"(any)\", only with paths narrow enough to review. For 2026, paths are v6 paths: legacy paths are mapped first through the translation table generated from the configuration (tools/oracle/translate.ts, #320). A rule with 'rename' instead reads a legacy key under a new name: in a legacy path matching 'paths', the key 'from' is compared as 'to'.",
   "rules": [
     {
       "id": "missing-nan",
@@ -27,17 +27,16 @@
     {
       "id": "ratio-misplaced-divbyzero-2025",
       "cites": "F-25, CS-11",
-      "why": "The 2025 pipeline put divByZero: 150000 beside options instead of inside them, so v5 ignored it and wrote \"N/A\". The v1 → v2 converter moves it into options, so v6 writes the full-match time the configuration asked for.",
+      "why": "The 2025 pipeline put divByZero: 150000 beside options instead of inside them, so v5 ignored it and wrote \"N/A\". The v1 \u2192 v2 converter moves it into options, so v6 writes the full-match time the configuration asked for.",
       "sets": ["2025ilch_official-v4.2.0", "2025syn_synthetic-v4.2.0"],
       "paths": ["timePerGamePiece"],
       "legacy": ["N/A"],
       "v6": 150000
     },
     {
-      "id": "counts-nonaction-buttons-2025",
+      "id": "counts-nonaction-buttons",
       "cites": "docs/spec/09 countActions (decided 2026-11-19, #311)",
-      "why": "v5 started countActions(all) at 0 for every button in the layout, including buttons that never record an action: match control (startGame), undo, layer navigation (Reef) and autoScoreCoral, a 2025 button of type none. Their counts were always 0. v6 lists action buttons only. The same zeros reached the team averages of those counts (averages.*).",
-      "sets": ["2025ilch_official-v4.2.0", "2025syn_synthetic-v4.2.0"],
+      "why": "v5 started countActions(all) at 0 for every button in the layout, including buttons that never record an action: match control (startGame), undo, layer navigation (2025 Reef), a 2025 button of type none (autoScoreCoral) and the 2026 shift toggles (teleopActive, teleopInactive, type none). Their counts were always 0. v6 lists action buttons only. The same zeros reached the team averages of those counts (averages.*). In 2026, counts are grouped by period, and an id without a prefix is under preMatch.",
       "paths": [
         "counts.startGame",
         "counts.undo",
@@ -46,7 +45,37 @@
         "averages.startGame",
         "averages.undo",
         "averages.Reef",
-        "averages.autoScoreCoral"
+        "averages.autoScoreCoral",
+        "counts.preMatch.startGame",
+        "counts.preMatch.undo",
+        "counts.preMatch.teleopActive",
+        "counts.preMatch.teleopInactive",
+        "averages.preMatch.startGame",
+        "averages.preMatch.undo",
+        "averages.preMatch.teleopActive",
+        "averages.preMatch.teleopInactive"
+      ],
+      "legacy": [0],
+      "v6": "(absent)"
+    },
+    {
+      "id": "counts-catalog-ids-2026",
+      "cites": "F-4, docs/spec/09 countActions (#311)",
+      "why": "v5's hidden catalog layer (F-4) listed ids no button records, and countActions(all) started them at 0. The converter keeps the ones it cannot derive as extraActionIds; six are a misspelling of the button fall (activeShift1Fall where the data holds activeShift1fall), so their counts were always 0. v6 starts the action buttons at 0, not extraActionIds.",
+      "sets": ["2026mnwi_official-v5", "2026syn_synthetic-v5"],
+      "paths": [
+        "counts.preMatch.teleopTransitionFall",
+        "counts.preMatch.activeShift1Fall",
+        "counts.preMatch.activeShift2Fall",
+        "counts.preMatch.inactiveShift1Fall",
+        "counts.preMatch.inactiveShift2Fall",
+        "counts.preMatch.endgameFall",
+        "averages.preMatch.teleopTransitionFall",
+        "averages.preMatch.activeShift1Fall",
+        "averages.preMatch.activeShift2Fall",
+        "averages.preMatch.inactiveShift1Fall",
+        "averages.preMatch.inactiveShift2Fall",
+        "averages.preMatch.endgameFall"
       ],
       "legacy": [0],
       "v6": "(absent)"
@@ -65,7 +94,7 @@
     {
       "id": "action-period-fields",
       "cites": "CS-16, DV-1",
-      "why": "v6 actions carry the period they were recorded in. An action copied into an output, such as the start and end of a cycle, carries those fields too; legacy actions had only an id and a time.",
+      "why": "v6 actions carry the period they were recorded in. An action copied into an output, such as the start and end of a cycle or a team's list of every action, carries those fields too; legacy actions had only an id and a time.",
       "paths": [
         "**.starts.phase",
         "**.starts.segment",
@@ -74,9 +103,30 @@
         "**.ending.phase",
         "**.ending.segment",
         "**.ending.segmentKind",
-        "**.ending.segmentIndex"
+        "**.ending.segmentIndex",
+        "aggregatedActions.*.phase",
+        "aggregatedActions.*.segment",
+        "aggregatedActions.*.segmentKind",
+        "aggregatedActions.*.segmentIndex"
       ],
       "legacy": ["(absent)"],
+      "v6": "(any)"
+    },
+    {
+      "id": "cycle-unended-count",
+      "cites": "F-28 (decided 2026-11-21, #320)",
+      "why": "v6's cycle also counts the starts that never got an end (unendedCount): the closest the data comes to a drop nobody recorded. v5 had no such count.",
+      "paths": ["cycles.*.unendedCount", "cycle.*.unendedCount"],
+      "legacy": ["(absent)"],
+      "v6": "(any)"
+    },
+    {
+      "id": "cycle-pairing-2025",
+      "cites": "F-28 (decided 2026-11-21, #320)",
+      "why": "v5 gave each start the first unused end after it, so a start that never got its end (a drop nobody recorded, a mistaken tap) took the next start's end and shifted every later cycle in the match. v6 pairs each end with the newest open start, one open at a time by default, so such a start affects only itself. The comparison test checks that every performance whose cycles differ had a start left without an end.",
+      "sets": ["2025ilch_official-v4.2.0", "2025syn_synthetic-v4.2.0"],
+      "paths": ["cycles.algae.**", "cycles.coral.**", "cycles.endgame.**"],
+      "legacy": ["(any)"],
       "v6": "(any)"
     },
     {
@@ -84,7 +134,7 @@
       "cites": "DM-11 (decided 2026-11-20, #315)",
       "why": "v6 starts every score-breakdown id at 0: the configured knownIds and every id TBA reports at the event. v5 started only the ids its hidden layout layer listed, which left out the _None results, so a match or team without one had no count.",
       "sets": ["2026mnwi_official-v5"],
-      "paths": ["counts.autoTowerRobot_None", "counts.endGameTowerRobot_None"],
+      "paths": ["counts.auto.autoTowerRobot_None", "counts.endgame.endGameTowerRobot_None"],
       "legacy": ["(absent)"],
       "v6": 0
     },
@@ -93,9 +143,27 @@
       "cites": "DM-11, TR-12 (#315)",
       "why": "With every match counted, 0 when the result did not happen, a team's average is how often it happened. v5 had no count in those matches, so it averaged only the matches with the result (always 1), and only when the team's first match had one.",
       "sets": ["2026mnwi_official-v5"],
-      "paths": ["averages.autoTowerRobot_None", "averages.endGameTowerRobot_None"],
+      "paths": ["averages.auto.autoTowerRobot_None", "averages.endgame.endGameTowerRobot_None"],
       "legacy": [1, "(absent)"],
       "v6": "(any)"
+    },
+    {
+      "id": "tba-ids-without-tba",
+      "cites": "DM-11, DM-1b (#315)",
+      "why": "Without TBA data, v6 lists no score-breakdown ids, so they have no count: an unknown result is No Data, not 0. The synthetic sets ran v5 with enrichment off, but its catalog layer started these ids at 0.",
+      "sets": ["2026syn_synthetic-v5"],
+      "paths": [
+        "counts.auto.autoTowerRobot_Level1",
+        "counts.endgame.endGameTowerRobot_Level1",
+        "counts.endgame.endGameTowerRobot_Level2",
+        "counts.endgame.endGameTowerRobot_Level3",
+        "averages.auto.autoTowerRobot_Level1",
+        "averages.endgame.endGameTowerRobot_Level1",
+        "averages.endgame.endGameTowerRobot_Level2",
+        "averages.endgame.endGameTowerRobot_Level3"
+      ],
+      "legacy": [0],
+      "v6": "(absent)"
     },
     {
       "id": "opr-without-tba",
@@ -105,6 +173,94 @@
       "paths": ["opr.*"],
       "legacy": ["(absent)"],
       "v6": null
+    },
+    {
+      "id": "counts-every-period-2026",
+      "cites": "CS-16, docs/spec/09 countActions (#311, #320)",
+      "why": "The native 2026 configuration counts by period (by: \"segment\"), and every period the configuration has starts every action button at 0: counts.active3.Storing is 0 when nothing was stored then. v5 started only the composite ids its catalog layer listed, which left out the third and fourth shift of each kind, teleop outside a segment, and pre-match.",
+      "sets": ["2026mnwi_official-v5", "2026syn_synthetic-v5"],
+      "paths": ["counts.*.*", "averages.*.*"],
+      "legacy": ["(absent)"],
+      "v6": 0
+    },
+    {
+      "id": "average-keys-2026",
+      "cites": "TR-12 (#313)",
+      "why": "v5's average over an object took its keys from the team's first match, and averaged each over the matches that had it. An id its catalog layer did not start at 0 therefore had no average, or an average over only the matches it occurred in. v6 averages every key over every match, each count starting at 0. The paths are exactly the ids the catalog (config/v1/match-scouting.json, its 195-id layer) did not list: four buttons in every period, the third and fourth shift of each kind, teleop outside a segment, collecting and the A-Stop outside auto, and zones, defense, climbing attempts and storing ratings in auto.",
+      "sets": ["2026mnwi_official-v5", "2026syn_synthetic-v5"],
+      "paths": [
+        "averages.*.preloadFuel",
+        "averages.*.preloadNone",
+        "averages.*.FallL1",
+        "averages.*.fall",
+        "averages.*.AttemptClimb",
+        "averages.*.disabled",
+        "averages.active3.*",
+        "averages.active4.*",
+        "averages.inactive3.*",
+        "averages.inactive4.*",
+        "averages.teleop.*",
+        "averages.transition.aStop",
+        "averages.transition.CollectOutpost",
+        "averages.transition.CollectDepot",
+        "averages.transition.CollectNeutral",
+        "averages.inactive1.aStop",
+        "averages.inactive1.CollectOutpost",
+        "averages.inactive1.CollectDepot",
+        "averages.inactive1.CollectNeutral",
+        "averages.inactive2.aStop",
+        "averages.inactive2.CollectOutpost",
+        "averages.inactive2.CollectDepot",
+        "averages.inactive2.CollectNeutral",
+        "averages.active1.aStop",
+        "averages.active1.CollectOutpost",
+        "averages.active1.CollectDepot",
+        "averages.active1.CollectNeutral",
+        "averages.active2.aStop",
+        "averages.active2.CollectOutpost",
+        "averages.active2.CollectDepot",
+        "averages.active2.CollectNeutral",
+        "averages.endgame.aStop",
+        "averages.endgame.CollectOutpost",
+        "averages.endgame.CollectDepot",
+        "averages.endgame.CollectNeutral",
+        "averages.auto.AttemptL1",
+        "averages.auto.AttemptL2",
+        "averages.auto.AttemptL3",
+        "averages.auto.AZone",
+        "averages.auto.NeutralZone",
+        "averages.auto.OAZone",
+        "averages.auto.Defense",
+        "averages.auto.RatingDefense1",
+        "averages.auto.RatingDefense2",
+        "averages.auto.RatingDefense3",
+        "averages.auto.RatingDefense4",
+        "averages.auto.RatingStoring1",
+        "averages.auto.RatingStoring2",
+        "averages.auto.RatingStoring3",
+        "averages.auto.RatingStoring4"
+      ],
+      "legacy": ["(any)"],
+      "v6": "(any)"
+    },
+    {
+      "id": "cycles-2026",
+      "cites": "F-26, F-28, TR-13, CS-16 (#314, #320)",
+      "why": "2026's v5 cycle and zone lists named one composite id per period and left some periods out. The native configuration names button ids with a period filter, so every reason a 2026 cycle differs applies at once: shooting started in an inactive shift counts (F-26); pairing runs over the whole match, so a cycle that crosses a boundary counts (TR-13); teleop outside a segment and the third shift of a kind are included; a start left without an end no longer shifts later cycles (F-28); and a zone press holds until the next one, so every rated action in a zone counts (decided 2026-11-21). Team lists and averages of these follow.",
+      "sets": ["2026mnwi_official-v5", "2026syn_synthetic-v5"],
+      "paths": ["cycle.**", "cycles.**", "zoneActionRating.**", "zoneActionRatingAverages.**"],
+      "legacy": ["(any)"],
+      "v6": "(any)"
+    },
+    {
+      "id": "performance-order-2026",
+      "cites": "TR-6",
+      "why": "A team's performances are in match order in v6. v5 kept them in the order they were submitted, and for three teams one match was entered weeks after the event (2290 match 44, 5822 match 22, 5847 match 1). Their joined list of actions is in a different order, and two of their averages differ in the last digit because the same numbers were added in a different order.",
+      "sets": ["2026mnwi_official-v5"],
+      "records": ["2290", "5822", "5847"],
+      "paths": ["aggregatedActions.**", "averageScores.*"],
+      "legacy": ["(any)"],
+      "v6": "(any)"
     }
   ]
 }

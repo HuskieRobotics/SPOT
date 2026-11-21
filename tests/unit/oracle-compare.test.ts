@@ -4,14 +4,14 @@
  *
  * - Structure, all sets: every legacy performance and team is present in v6 (migration keeps ids
  *   and team keys), and the only extra performances are the ones legacy removeDuplicates dropped.
- * - Acceptance, 2025 sets (#319, gate K-1): every entry runs and matches the golden output, after
- *   the reviewed divergences, each of which must accept exactly the values counted below.
- *   The 2026 sets join in #320, once their paths are translated (CS-16).
+ * - Acceptance, every set (#319, #320, gate K-1): every entry runs and matches the golden output,
+ *   after the reviewed divergences, each of which must accept exactly the values counted below.
+ *   2026 is compared through the translation table generated from its configuration (CS-16).
  */
 import { describe, expect, it } from "vitest";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import { buildDataset, type Dataset } from "@/analysis/engine";
+import { buildDataset, getPath, type Dataset } from "@/analysis/engine";
 import { generate } from "@/generate/synthetic";
 import { TransformerRegistry } from "@/analysis/engine";
 import { builtInTransformers } from "@/analysis/transformers";
@@ -22,9 +22,11 @@ import {
   flatten,
   loadDivergences,
   pathMatches,
+  runGoldenSet,
   type DivergenceRule,
 } from "../../tools/oracle/compare";
 import { goldenSets } from "../../tools/oracle/sets";
+import { translationFor } from "../../tools/oracle/translate";
 
 describe("divergence rules", () => {
   it("every rule cites a requirement or defect and says why", () => {
@@ -39,6 +41,12 @@ describe("divergence rules", () => {
       } else {
         expect(rule.legacy?.length).toBeGreaterThan(0);
         expect(rule).toHaveProperty("v6");
+      }
+      // A rule that accepts any legacy value is only as good as its paths: name them.
+      if (rule.legacy?.includes("(any)")) {
+        expect(rule.sets?.length).toBeGreaterThan(0);
+        expect(rule.paths?.length).toBeGreaterThan(0);
+        expect(rule.paths).not.toContain("**");
       }
     }
   });
@@ -164,6 +172,34 @@ describe("compareDatasets", () => {
     expect(c.differenceCount).toBe(0);
   });
 
+  it("maps legacy values, and limits a rule to named records (#320)", () => {
+    const { v6, legacy } = build();
+    const [a, b] = v6.tmps;
+    Object.assign(a, { first: { id: "l1" }, n: 2 });
+    Object.assign(b, { first: { id: "l1" }, n: 2 });
+    Object.assign(legacy.tmps[0], { first: { id: "autol1" }, n: 1 });
+    Object.assign(legacy.tmps[1], { first: { id: "autol1" }, n: 1 });
+    const only: DivergenceRule = {
+      id: "only",
+      cites: "test",
+      why: "one record entered late",
+      sets: ["s"],
+      records: [a._id],
+      paths: ["n"],
+      legacy: ["(any)"],
+      v6: "(any)",
+    };
+    const c = compareDatasets(legacy, v6, {
+      set: "s",
+      pipeline,
+      rules: [...rules, only],
+      mapLegacyValue: (_scope, path, value) =>
+        path.endsWith(".id") && value === "autol1" ? "l1" : value,
+    });
+    expect(c.accepted).toEqual({ only: 1 });
+    expect(c.differences.map((d) => [d.id, d.path])).toEqual([[b._id, "n"]]);
+  });
+
   it("renames a legacy key, and accepts any v6 value where a rule says (any) (#314)", () => {
     const { v6, legacy } = build();
     Object.assign(v6.tmps[0], { c: { all: [{ starts: { id: "p", phase: "auto" } }] } });
@@ -228,16 +264,20 @@ describe("#319: oracle acceptance, 2025", () => {
       "missing-nan": 1635,
       "ratio-falsy-divbyzero-2025": 24,
       "ratio-misplaced-divbyzero-2025": 3,
-      "counts-nonaction-buttons-2025": 1964,
+      "counts-nonaction-buttons": 1964,
       "cycle-start-key-2025": 17648,
-      "action-period-fields": 70592,
+      "action-period-fields": 70416,
+      "cycle-unended-count": 1221,
+      "cycle-pairing-2025": 4900,
     },
     "2025syn_synthetic-v4.2.0": {
       "missing-nan": 1345,
       "ratio-falsy-divbyzero-2025": 1,
-      "counts-nonaction-buttons-2025": 1824,
+      "counts-nonaction-buttons": 1824,
       "cycle-start-key-2025": 4068,
-      "action-period-fields": 16272,
+      "action-period-fields": 15056,
+      "cycle-unended-count": 1080,
+      "cycle-pairing-2025": 3598,
     },
   };
 
@@ -248,6 +288,35 @@ describe("#319: oracle acceptance, 2025", () => {
     expect(c.differenceCount).toBe(0);
     expect(c.accepted).toEqual(accepted2025[name as keyof typeof accepted2025]);
   });
+
+  it.each(Object.keys(accepted2025))(
+    "%s: cycles differ only where a start was left without an end (F-28)",
+    (name) => {
+      // Compare again without the pairing rule: every performance whose cycles differ must have
+      // a start that never got its end, and every team that differs must have such a performance.
+      const set = goldenSets.find((s) => s.name === name)!;
+      const rules = loadDivergences().filter((r) => r.id !== "cycle-pairing-2025");
+      const strict = compareGoldenSet(set, { rules, keep: 1_000_000 });
+      const { dataset } = runGoldenSet(set);
+      const byId = new Map(dataset.tmps.map((t) => [t._id, t as Record<string, unknown>]));
+      const tmps = new Set<string>();
+      for (const d of strict.differences.filter((d) => d.scope === "tmp")) {
+        const [, cycle] = d.path.split(".");
+        const unended = getPath(byId.get(d.id)!, `cycles.${cycle}.unendedCount`);
+        expect([d.path, unended]).toEqual([d.path, expect.any(Number)]);
+        expect(unended).toBeGreaterThan(0);
+        tmps.add(d.id);
+      }
+      const teams = new Set([...tmps].map((id) => byId.get(id)!.team));
+      for (const d of strict.differences.filter((d) => d.scope === "team")) {
+        expect(teams.has(d.id)).toBe(true);
+      }
+      expect(strict.differenceCount).toBe(
+        accepted2025[name as keyof typeof accepted2025]["cycle-pairing-2025"],
+      );
+      expect(tmps.size).toBeGreaterThan(0);
+    },
+  );
 
   it('the ratio rules excuse exactly the 27 "N/A" values docs/spec/12 counts (F-24, F-25)', () => {
     const c = comparisons.get("2025ilch_official-v4.2.0")!;
@@ -276,6 +345,96 @@ describe("#319: oracle acceptance, 2025", () => {
     const notRun = fed.entries.filter((e) => e.status === "not-run").map((e) => e.name);
     expect(notRun).toEqual(["cycle", "cycle", "cycle"]);
     expect(fed.entries.filter((e) => e.status === "differs")).toEqual([]);
+  });
+});
+
+/**
+ * #320 (gate K-1): the native 2026 configuration reproduces the 2026 golden output, through the
+ * translation table generated from its prefixes, with the reviewed divergences
+ * (tools/oracle/README.md) accepting exactly the values counted here.
+ */
+describe("#320: oracle acceptance, 2026", () => {
+  const accepted2026 = {
+    "2026mnwi_official-v5": {
+      "missing-nan": 2660,
+      "missing-undefined": 21,
+      "counts-nonaction-buttons": 2036,
+      "counts-catalog-ids-2026": 3054,
+      "action-period-fields": 134012,
+      "cycle-unended-count": 2065,
+      "tba-ids-start-at-zero-2026": 75,
+      "tba-none-average-2026": 26,
+      "counts-every-period-2026": 264001,
+      "average-keys-2026": 46,
+      "cycles-2026": 26765,
+      "performance-order-2026": 1449,
+    },
+    "2026syn_synthetic-v5": {
+      "missing-nan": 3401,
+      "counts-nonaction-buttons": 1824,
+      "counts-catalog-ids-2026": 2736,
+      "action-period-fields": 60552,
+      "cycle-unended-count": 1800,
+      "tba-ids-without-tba": 1824,
+      "opr-without-tba": 144,
+      "counts-every-period-2026": 185053,
+      "average-keys-2026": 2244,
+      "cycles-2026": 19881,
+    },
+  };
+
+  it.each(Object.keys(accepted2026))("%s matches the golden output entry by entry", (name) => {
+    const c = comparisons.get(name)!;
+    expect(c.entries).toHaveLength(73);
+    expect(c.entries.filter((e) => e.status !== "match")).toEqual([]);
+    expect(c.differenceCount).toBe(0);
+    expect(c.accepted).toEqual(accepted2026[name as keyof typeof accepted2026]);
+  });
+
+  it("the translation table comes from the configuration's prefixes", () => {
+    const set = goldenSets.find((s) => s.name === "2026mnwi_official-v5")!;
+    const { config, pipeline } = runGoldenSet(set);
+    const t = translationFor(config, pipeline)!;
+    expect(t.mapLegacyPath("tmp", "counts.activeShift1Defense")).toBe("counts.active1.Defense");
+    expect(t.mapLegacyPath("tmp", "counts.teleopTransitionRatingStoring2")).toBe(
+      "counts.transition.RatingStoring2",
+    );
+    expect(t.mapLegacyPath("team", "averages.autoPassing")).toBe("averages.auto.Passing");
+    expect(t.mapLegacyPath("tmp", "counts.endGameTowerRobot_Level3")).toBe(
+      "counts.endgame.endGameTowerRobot_Level3",
+    );
+    expect(t.mapLegacyPath("tmp", "counts.preloadFuel")).toBe("counts.preMatch.preloadFuel");
+    // Values a pipeline entry wrote, and paths outside grouped counts, stay as they are.
+    expect(t.mapLegacyPath("tmp", "counts.shooting")).toBe("counts.shooting");
+    expect(t.mapLegacyPath("tmp", "scores.activeShift1DefenseRating")).toBe(
+      "scores.activeShift1DefenseRating",
+    );
+    expect(
+      t.mapLegacyValue("tmp", "cycle.shootingTime.all.0.starts.id", "activeShift1StartShooting"),
+    ).toBe("StartShooting");
+    // 2025 recorded no composite ids: nothing to translate.
+    const s2025 = runGoldenSet(goldenSets.find((s) => s.name === "2025syn_synthetic-v4.2.0")!);
+    expect(translationFor(s2025.config, s2025.pipeline)).toBeNull();
+  });
+
+  it("NaN is accepted only where there was nothing to average (DM-1b)", () => {
+    for (const name of Object.keys(accepted2026)) {
+      const paths = Object.keys(comparisons.get(name)!.acceptedPaths["missing-nan"]);
+      expect(
+        paths.every((p) =>
+          /^(cycles?\.\w+\.averageTime(Complete|Seconds)?|averageScores\.\w+Rating)$/.test(p),
+        ),
+      ).toBe(true);
+    }
+  });
+
+  it("v5's attemptClimb never matched, so the native configuration keeps it null (#320)", () => {
+    // The configuration asks for "attemptClimb"; the button is "AttemptClimb". config:check
+    // reports it (docs/spec/20 §4); the oracle shows v6 reproduces v5's null.
+    const entry = comparisons
+      .get("2026mnwi_official-v5")!
+      .entries.find((e) => e.outputPath === "actionTimes.attemptClimb");
+    expect(entry).toMatchObject({ status: "match", differences: 0 });
   });
 });
 

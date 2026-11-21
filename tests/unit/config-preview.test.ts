@@ -167,7 +167,7 @@ describe("K-3: the 2026 preview", () => {
   const preview = previewConfiguration(season2026);
 
   it("shows TBA results and component OPRs from synthetic TBA data", () => {
-    const level3 = item(preview, "counts.endGameTowerRobot_Level3");
+    const level3 = item(preview, "counts.endgame.endGameTowerRobot_Level3");
     expect(level3).toMatchObject({ label: "L3", idle: "0" });
     expect(level3?.spread.max).toBeGreaterThan(0);
     expect(item(preview, "Fuel OPR")).toMatchObject({

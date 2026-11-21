@@ -186,7 +186,16 @@
                       "required": ["name", "actions"],
                       "properties": {
                         "name": { "type": "string" },
-                        "actions": { "type": "array", "items": { "$ref": "#/$defs/actionId" } }
+                        "actions": { "type": "array", "items": { "$ref": "#/$defs/actionId" } },
+                        "phases": {
+                          "$ref": "https://spot.team3061.org/schema/v2/analysis-pipeline.schema.json#/$defs/periodFilter/properties/phases"
+                        },
+                        "segments": {
+                          "$ref": "https://spot.team3061.org/schema/v2/analysis-pipeline.schema.json#/$defs/periodFilter/properties/segments"
+                        },
+                        "kinds": {
+                          "$ref": "https://spot.team3061.org/schema/v2/analysis-pipeline.schema.json#/$defs/periodFilter/properties/kinds"
+                        }
                       }
                     }
                   },

@@ -147,7 +147,9 @@ function locate(value: unknown, target: string, at: Key[]): { keys: Key[]; prope
 
 /**
  * The path probably meant: a sibling with a similar name ("counts.scoreL4" for "counts.scorel4"),
- * else the same last part somewhere else ("counts.missCoral" for "averages.missCoral").
+ * else a value with the same last part somewhere else ("counts.missCoral" for
+ * "averages.missCoral"). Only a value counts as somewhere else: with counts grouped by period,
+ * "counts.auto" holds a whole period's counts and is no answer for "averageScores.auto".
  */
 function nearPath(
   path: string,
@@ -164,7 +166,10 @@ function nearPath(
     siblings.map((k) => k.slice(cut + 1)),
   );
   if (near) return { path: parent ? `${parent}.${near}` : near, sibling: true };
-  const elsewhere = known.find((k) => k !== path && (k === last || k.endsWith(`.${last}`)));
+  const parents = new Set(known.map((k) => k.slice(0, Math.max(0, k.lastIndexOf(".")))));
+  const elsewhere = known.find(
+    (k) => k !== path && !parents.has(k) && (k === last || k.endsWith(`.${last}`)),
+  );
   return elsewhere ? { path: elsewhere, sibling: false } : undefined;
 }
 

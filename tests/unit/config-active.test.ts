@@ -69,7 +69,12 @@ const convert = (kind: ConfigKind, set: ConfigSet) => {
       ...set.opts,
       matchScouting: v1(set.sources["match-scouting"]),
     }).config;
-  if (kind === "analysis-modules") return convertAnalysisModules(source, set.opts).config;
+  if (kind === "analysis-modules")
+    return convertAnalysisModules(source, {
+      ...set.opts,
+      matchScouting: v1(set.sources["match-scouting"]),
+      pipeline: v1(set.sources["analysis-pipeline"]),
+    }).config;
   return convertQr(source, set.opts).config;
 };
 

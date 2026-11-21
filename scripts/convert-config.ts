@@ -64,7 +64,14 @@ const results: [ConfigKind, { config: unknown; warnings: string[] }][] = [
       matchScouting: read(files["match-scouting"]),
     }),
   ],
-  ["analysis-modules", convertAnalysisModules(read(files["analysis-modules"]), opts)],
+  [
+    "analysis-modules",
+    convertAnalysisModules(read(files["analysis-modules"]), {
+      ...opts,
+      matchScouting: read(files["match-scouting"]),
+      pipeline: read(files["analysis-pipeline"]),
+    }),
+  ],
   ["qr", convertQr(read(files.qr), opts)],
 ];
 for (const [kind, { config, warnings }] of results) {

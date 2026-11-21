@@ -17,6 +17,7 @@ import {
   type V1PipelineEntry,
   type V1Qr,
 } from "@/config/convert/v1-to-v2";
+import { describeKeys, nativeCountPath, nativeIds, periodFilterFor } from "@/config/convert/native";
 import { deriveKnownActionIds, derivePrefixes } from "@/config/knownActionIds";
 import { validateConfig } from "@/config/validate";
 
@@ -244,5 +245,150 @@ describe("converted analysis-pipeline configurations", () => {
     });
     expect(config.enrichment.tba.componentOprs).toEqual(["Hub Total Fuel Count", "minorFoulCount"]);
     expect(config.enrichment.tba.scoreBreakdown.enabled).toBe(true);
+  });
+});
+
+/**
+ * CS-16, docs/spec/20 §2.2 item 5 (#320): a configuration that recorded composite ids converts to
+ * the native form, button ids with period filters and counts grouped by period, all derived from
+ * the configuration's own prefixes.
+ */
+describe("native ids and paths (#320)", () => {
+  const ms2026 = convertMatchScouting(v1("match-scouting.json") as V1MatchScouting).config;
+  const ids = nativeIds(ms2026, [{ prefix: "endGame", phase: "endgame" }], ["preloadFuel"]);
+  const opts = {
+    matchScouting: v1("match-scouting.json") as V1MatchScouting,
+    pipeline: v1("analysis-pipeline.json") as V1PipelineEntry[],
+  };
+  const pipeline = convertAnalysisPipeline(opts.pipeline, opts);
+  const entry = (outputPath: string, type = "tmp") =>
+    pipeline.config.pipeline.find((e) => e.outputPath === outputPath && e.type === type)!;
+
+  it("splits a composite id into button and period, from the prefixes", () => {
+    expect(ids.split("activeShift2StopShooting")).toMatchObject({
+      button: "StopShooting",
+      key: "active2",
+      period: { phase: "teleop", segment: "shift", segmentKind: "active", segmentIndex: 2 },
+    });
+    expect(ids.split("teleopTransitionRatingStoring1")).toMatchObject({ key: "transition" });
+    expect(ids.split("StopShooting")).toBeNull();
+    expect(ids.split("endgameFall")).toBeNull(); // the button is "fall"
+    expect(nativeCountPath(ids, ["counts"], "counts.autoRatingPassing1")).toBe(
+      "counts.auto.RatingPassing1",
+    );
+    expect(nativeCountPath(ids, ["counts"], "counts.endGameTowerRobot_Level2")).toBe(
+      "counts.endgame.endGameTowerRobot_Level2",
+    );
+    expect(nativeCountPath(ids, ["counts"], "counts.preloadFuel")).toBe(
+      "counts.preMatch.preloadFuel",
+    );
+    expect(nativeCountPath(ids, ["counts"], "counts.shooting")).toBe("counts.shooting");
+    expect(nativeCountPath(ids, ["counts"], "scores.autoRatingPassing1")).toBe(
+      "scores.autoRatingPassing1",
+    );
+  });
+
+  it("chooses the simplest period filter, and says which periods it adds", () => {
+    const at = (...composite: string[]) =>
+      periodFilterFor(
+        ms2026,
+        composite.map((c) => ids.split(`${c}Passing`)!.period),
+      );
+    expect(at("auto")).toEqual({ filter: { phases: ["auto"] }, added: [] });
+    expect(at("activeShift1", "activeShift2")).toEqual({
+      filter: { kinds: ["active"] },
+      added: ["active3", "active4"],
+    });
+    const wide = at("teleopTransition", "activeShift1", "inactiveShift2", "endgame");
+    expect(wide.filter).toEqual({ phases: ["teleop", "endgame"] });
+    expect(describeKeys(wide.added)).toBe("teleop, shift1–4, inactive1, inactive3–4, active2–4");
+  });
+
+  it("rewrites the 2026 pipeline: grouped counts, button ids with filters", () => {
+    expect(entry("counts").options).toEqual({ all: true, by: "segment" });
+    expect(entry("counts", "team").options).toEqual({ all: true, by: "segment" });
+    expect((entry("counts.shooting").options as { addends: string[] }).addends).toEqual([
+      "counts.auto.StopShooting",
+      "counts.transition.StopShooting",
+      "counts.active1.StopShooting",
+      "counts.active2.StopShooting",
+      "counts.inactive1.StopShooting",
+      "counts.inactive2.StopShooting",
+      "counts.endgame.StopShooting",
+    ]);
+    expect(entry("cycle.autoShootingTime").options).toEqual({
+      startAction: ["StartShooting"],
+      endAction: ["StopShooting"],
+      phases: ["auto"],
+    });
+    expect(entry("cycle.defenseTime").options).toEqual({
+      startAction: ["Defense"],
+      endAction: ["RatingDefense1", "RatingDefense2", "RatingDefense3", "RatingDefense4"],
+      phases: ["teleop", "endgame"],
+    });
+    expect(entry("zoneActionRating").options).toMatchObject({
+      zones: ["AZone", "NeutralZone", "OAZone"],
+      actions: ["Defense", "Passing", "StopShooting", "Storing"],
+      phases: ["teleop", "endgame"],
+    });
+    expect(
+      Object.keys((entry("zoneActionRating").options as { ratings: object }).ratings),
+    ).toHaveLength(16);
+    // Not a composite id (the button is "AttemptClimb"): kept, so config:check reports it.
+    expect(entry("actionTimes.attemptClimb").options).toEqual({ actionId: ["attemptClimb"] });
+    expect(pipeline.warnings).toContain(
+      "pipeline[8] tmp/cycle -> cycle.shootingTime: composite ids replaced by button ids with phases teleop, endgame; v1 left out teleop, shift1–4, active3–4, inactive3–4, which this also includes",
+    );
+  });
+
+  it("rewrites the 2026 modules: count paths, and the heatmap's ids with a filter", () => {
+    const { config, warnings } = convertAnalysisModules(
+      v1("analysis-modules.json") as V1Module[],
+      opts,
+    );
+    const options = (name: string) => config.modules.find((m) => m.name === name)!.options;
+    expect(options("Pre-Loads")).toMatchObject({
+      slices: [{ path: "counts.preMatch.preloadFuel" }, { path: "counts.preMatch.preloadNone" }],
+    });
+    expect(options("TBA Climb Levels")).toMatchObject({
+      bars: [
+        { path: "counts.endgame.endGameTowerRobot_Level1" },
+        { path: "counts.endgame.endGameTowerRobot_Level2" },
+        { path: "counts.endgame.endGameTowerRobot_Level3" },
+      ],
+    });
+    expect(options("Teleop Shooting Heatmap")).toMatchObject({
+      actionGroups: [
+        {
+          name: "Teleop Start Shooting",
+          actions: ["StartShooting"],
+          phases: ["teleop", "endgame"],
+        },
+      ],
+      actionLabels: { StartShooting: "StartShooting" },
+    });
+    expect(warnings.some((w) => w.includes("one trace for StartShooting"))).toBe(true);
+    expect(validateConfig("analysis-modules", config).ok).toBe(true);
+  });
+
+  it("leaves a configuration without prefixes alone, and keeps v1 ids when asked", () => {
+    const opts2025 = {
+      matchScouting: v1("match-scouting2025v2.json") as V1MatchScouting,
+      pipeline: v1("analysis-pipeline-2025-v4.2.0.json") as V1PipelineEntry[],
+    };
+    expect(convertAnalysisPipeline(opts2025.pipeline, opts2025).config).toEqual(
+      convertAnalysisPipeline(opts2025.pipeline, { ...opts2025, native: false }).config,
+    );
+    const asV5 = convertAnalysisPipeline(opts.pipeline, { ...opts, native: false }).config;
+    expect(asV5.pipeline.find((e) => e.outputPath === "cycle.autoShootingTime")!.options).toEqual({
+      startAction: ["autoStartShooting"],
+      endAction: ["autoStopShooting"],
+    });
+    const modules = convertAnalysisModules(v1("analysis-modules.json") as V1Module[], {
+      matchScouting: opts.matchScouting,
+    });
+    expect(modules.warnings).toContain(
+      "modules: composite ids and count paths left as they are; pass the v1 pipeline to rewrite them",
+    );
   });
 });

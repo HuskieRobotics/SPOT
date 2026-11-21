@@ -17,6 +17,7 @@ import type {
   QrConfig,
 } from "@/config/types";
 import type { ConfigKind } from "@/config/validate";
+import { convertAnalysisPipeline } from "@/config/convert/v1-to-v2";
 
 interface Docs {
   ms: MatchScoutingConfig;
@@ -34,6 +35,14 @@ const load = (...dir: string[]): Docs => ({
 });
 const season2025 = load("config", "seasons", "2025");
 const season2026 = load("config");
+/** The 2026 pipeline as v5 wrote it, with composite ids: the converter without its rewrite (#320). */
+const v5Ids2026 = {
+  ...season2026,
+  pipeline: convertAnalysisPipeline(read("config", "v1", "analysis-pipeline.json"), {
+    matchScouting: read("config", "v1", "match-scouting.json"),
+    native: false,
+  }).config,
+};
 
 const sources = (d: Docs): Record<ConfigKind, string> => ({
   "match-scouting": JSON.stringify(d.ms, null, 2),
@@ -133,8 +142,8 @@ describe("CC-9: a path no earlier entry writes", () => {
     ]);
   });
 
-  it("explains a path that ends in a v5 id (2026, until #320 translates it)", () => {
-    const r = checkConfiguration(sources(season2026));
+  it("explains a path that ends in a v5 id (the 2026 pipeline as v5 wrote it)", () => {
+    const r = checkConfiguration(sources(v5Ids2026));
     const f = r.findings.find((x) => x.where.startsWith("entry 2 (tmp sum → counts.shooting)"));
     expect(f && brief(f)).toEqual([
       "error",
@@ -238,19 +247,11 @@ describe("CC-10: what modules show", () => {
   });
 
   it("a heatmap coordinate no listed action has", () => {
-    const fixed = structuredClone(season2026);
-    // The 2026 heatmap still names v5 ids (#320); with button ids it is checked.
-    const heatmap = fixed.modules.modules[2].options as {
-      coordinatePath: string;
-      actionGroups: { name: string; actions: string[] }[];
-      actionLabels: Record<string, string>;
-    };
-    heatmap.actionGroups = [{ name: "Shooting", actions: ["StartShooting"] }];
-    heatmap.actionLabels = { StartShooting: "Shooting" };
+    // The native 2026 heatmap names StartShooting in teleop and endgame (#320).
     const found = check((d) => {
       (d.modules.modules[2].options as { coordinatePath: string }).coordinatePath =
         "other.position";
-    }, fixed);
+    }, season2026);
     expect(found.map(brief)).toEqual([
       [
         "warning",
