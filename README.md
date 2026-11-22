@@ -39,8 +39,12 @@ Quality gates: `npm run lint`, `npm run typecheck`, `npm test`, `npm run build`,
 ### From VS Code's Run and Debug list
 
 `.vscode/launch.json` puts these commands in VS Code's **Run and Debug** list (Ctrl+Shift+D), so
-nobody has to remember or type them (NF-13). Choose an entry and press F5. Each one runs in a
-terminal with the debugger attached, so a breakpoint in a script or a test stops there.
+nobody has to remember or type them (NF-13). Choose an entry and press F5. Each runs with the
+debugger attached, so a breakpoint in a script or a test stops there. The three entries that
+start SPOT run Next directly and show its output in the Debug Console, because VS Code opens the
+browser only for an address printed there, not in a terminal. The others run their npm script
+in a terminal. Next runs one dev server per folder, so stop **Run SPOT** before starting
+**Debug SPOT in Chrome** or the preview; a second one exits.
 
 | Entry                                                | Notes                                                                                                                                                                                                 |
 | ---------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |

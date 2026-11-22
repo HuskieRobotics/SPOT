@@ -1,11 +1,15 @@
 {
   "version": "0.2.0",
+  // The entries that start SPOT run Next directly ("type": "node"), not in a terminal: VS Code
+  // opens the browser ("serverReadyAction") only for output it sees in the Debug Console.
   "configurations": [
     {
       "name": "Run SPOT (npm run dev)",
-      "type": "node-terminal",
+      "type": "node",
       "request": "launch",
-      "command": "npm run dev",
+      "program": "${workspaceFolder}/node_modules/next/dist/bin/next",
+      "args": ["dev"],
+      "skipFiles": ["<node_internals>/**"],
       "serverReadyAction": {
         "action": "openExternally",
         "pattern": "- Local:\\s+(https?://\\S+)",
@@ -15,9 +19,11 @@
     },
     {
       "name": "Scouting-screen preview (npm run dev)",
-      "type": "node-terminal",
+      "type": "node",
       "request": "launch",
-      "command": "npm run dev",
+      "program": "${workspaceFolder}/node_modules/next/dist/bin/next",
+      "args": ["dev"],
+      "skipFiles": ["<node_internals>/**"],
       "serverReadyAction": {
         "action": "openExternally",
         "pattern": "- Local:\\s+(https?://\\S+)",
@@ -30,6 +36,7 @@
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/node_modules/next/dist/bin/next",
+      "args": ["dev"],
       "runtimeArgs": ["--inspect"],
       "skipFiles": ["<node_internals>/**"],
       "serverReadyAction": {

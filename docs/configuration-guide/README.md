@@ -53,8 +53,11 @@ same as if you had typed it.
 
 The folder list offers `config` (the season SPOT uses), your `config/seasons/practice` copy from
 the [tutorial](tutorial.md), and `config/seasons/2025`. For any other folder or option, type
-the command. To stop SPOT, press the red square in the bar at the top of the window
-(Shift+F5).
+the command.
+
+The two entries that start SPOT show its messages in the **Debug Console** panel instead of a
+terminal. Only one SPOT can run at a time, so stop it before starting it again from another
+entry: press the red square in the bar at the top of the window (Shift+F5).
 
 The other entries in the list are for programmers; the [main README](../../README.md#from-vs-codes-run-and-debug-list)
 explains them.
