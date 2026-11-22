@@ -19,6 +19,13 @@ executable statement of those rules rather than a bag of random documents. The P
 and this generator should agree; where they disagree, one of them is wrong about the
 configuration, and that is worth finding out before an event rather than during one.
 
+Since #322 the client's rules are `src/scouting/session.ts` (document 05, "v6: the scouting
+rules"). The generator's walk came first and models fewer of them: its undo removes an action
+without putting back what the press changed. Its output is a committed fixture with golden
+output behind it, so it stays as it is. Instead, `tests/unit/scouting-session.test.ts` plays
+random matches through the session and checks what SY-2, SY-4 and SY-5 guarantee here. Both
+use `kindAt` from `src/data/phase.ts` for alternating kinds.
+
 It models the countdown and its phases and segments, the layer graph, the layer switches a
 phase or segment performs, hidden buttons, multipliers, position capture, conditional layers
 and variables, shift toggles, the undo guard, and configured locks such as A-Stop.

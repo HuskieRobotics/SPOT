@@ -331,7 +331,7 @@ that a new feature can be verified not to break existing behavior. Requirements:
     divide-by-zero, duplicate TMPs, cycles with unmatched starts/ends);
   - `getPath`/`setPath`;
   - action-id composition from phase/shift text (SC-23) and the shift state machine (SC-22);
-  - the undo rules (SC-24) and layer-history stack;
+  - the undo rules (SC-24) and layer-history stack (these three: `scouting-session`, #322);
   - QR encode/decode round-trip for every id in the catalog and rejection of unknown ids
     (document 03);
   - the robot assignment algorithm and start rules (RT-9 to RT-13), including disconnects
