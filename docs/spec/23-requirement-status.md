@@ -90,11 +90,12 @@ quotes the test's name.
 
 - **DM-14 and AN-11, the hand-entered data hooks:** v6 never decided whether to keep them.
   The engine needs no hook. Decided with the dashboard's data loading in Phase 3, #345.
-- **The configuration loader:** no requirement says how the application loads the four files.
+- **The configuration loader:** no requirement said how the application loads the four files.
   Phase 1 built validation (`src/config/validate.ts`), the checks (`src/config/check/`, which
   read nothing from disk) and the folder reader the scripts use. How pages load and serve the
-  files (bundled or fetched, cacheable per OF-5, propagated per OF-8) is decided by their first
-  user, the scouting-screen preview (#322).
+  files (bundled or fetched, cacheable per OF-5, propagated per OF-8) was left to their first
+  user, the scouting-screen preview. **Decided 2026-11-22 (#322):** document 20 CS-17,
+  `src/config/load.ts`, tested in `config-load`.
 - **#31 (BL-31):** done by DV-2. Actions carry no `_id`, and a test in `engine` checks it.
 
 ### Document 09: transformers

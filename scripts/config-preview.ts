@@ -13,9 +13,10 @@
  * Needs match-scouting.json and analysis-pipeline.json to pass their schemas; exit code 1 when
  * they do not. Other mistakes are config:check's job; the preview says how many it finds.
  */
-import { existsSync, readFileSync, writeFileSync } from "node:fs";
-import { join, relative } from "node:path";
-import { checkConfiguration, CONFIG_FILES, formatReport } from "../src/config/check";
+import { existsSync, writeFileSync } from "node:fs";
+import { relative } from "node:path";
+import { checkConfiguration, formatReport } from "../src/config/check";
+import { readConfigFolder } from "../src/config/load";
 import {
   formatPreview,
   formatTeam,
@@ -56,11 +57,7 @@ if (!Number.isInteger(matches) || matches < 1) {
   process.exit(2);
 }
 
-const sources: Partial<Record<ConfigKind, string>> = {};
-for (const kind of CONFIG_FILES) {
-  const file = join(dir, `${kind}.json`);
-  if (existsSync(file)) sources[kind] = readFileSync(file, "utf8");
-}
+const sources = readConfigFolder(dir);
 const shown = relative(process.cwd(), dir) || ".";
 const check = checkConfiguration(sources);
 

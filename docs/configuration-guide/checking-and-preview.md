@@ -1,11 +1,13 @@
 # Checking and previewing
 
-Two commands tell you whether a configuration works, before any real match is played:
+Three tools tell you whether a configuration works, before any real match is played:
 
 - `npm run config:check` finds mistakes, and says where and how to fix them.
 - `npm run config:preview` shows what the analysis would compute and show.
+- The [scouting-screen preview](#the-scouting-screen-preview), a page, draws
+  `match-scouting.json` as a scouter will see it, and lets you play a match on it.
 
-Both read the four files in `config/` unless you name another folder after `--`:
+The two commands read the four files in `config/` unless you name another folder after `--`:
 
 ```sh
 npm run config:check -- config/seasons/2025
@@ -148,3 +150,49 @@ calculation reads the wrong value. Decide which.
 
 The last line of the preview says whether `config:check` finds anything; the preview is only as
 good as the configuration, so fix errors first.
+
+## The scouting-screen preview
+
+```sh
+npm run dev
+```
+
+When it says `Ready`, open <http://localhost:3000/scouting-preview> in a web browser. It draws
+the screen from `config/match-scouting.json`. To draw another folder, add `?season=` and the
+folder's name under `config/seasons/`: <http://localhost:3000/scouting-preview?season=2025>.
+The links at the top of the page list every folder SPOT finds.
+
+The page reads the file each time it loads, so leave SPOT running, and after each save reload
+the page. To stop SPOT, click in its terminal and press Ctrl+C.
+
+If `match-scouting.json` has errors, the page lists them instead of the screen; they are the
+same messages `config:check` prints. Warnings are listed above the screen, folded; click to open
+them. The page checks only `match-scouting.json`, so run `config:check` for the other three
+files.
+
+Play a match the way a scouter would: press the buttons before the match, then the Start button,
+and the clock runs the phases and their screens. Controls above the screen:
+
+| Control                 | What it does                                                                                                                                                      |
+| ----------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Alliance**            | The scouted robot's alliance. On Blue, buttons in `"allianceRelativeButtons"` record their partner ([Rules](match-scouting.md#rules)).                            |
+| **Field**               | **Flipped** is the field seen from the other side: those buttons swap places and the field map turns around.                                                      |
+| **Speed**               | Run the clock 2, 5 or 10 times as fast.                                                                                                                           |
+| **Skip to next period** | Jump to the start of the next phase, segment or shift, or to the end of the match.                                                                                |
+| **New match**           | Start again before the match.                                                                                                                                     |
+| **Screen**              | The shape of a phone or a tablet held sideways.                                                                                                                   |
+| **Show grid**           | Number every empty cell by row and column, and show each button's id and `"gridArea"`. Use it to find where a new button goes ([Your first change](tutorial.md)). |
+
+Beside the screen (below it, on a phone), **Recorded actions** lists every action recorded so
+far, newest first, exactly as the calculations receive it: the button `id`, `ts` (the time left
+in the match, in milliseconds), and the period it was pressed in (`phase`, and for a game with
+[segments](periods.md) `segment`, `segmentKind` and `segmentIndex`). Buttons that only switch
+screens record nothing. When the match ends, press **Submit Match**: the page says how many
+actions a real match would send.
+
+What to look for:
+
+- Every layer can be reached, and each phase shows the screen you expect.
+- **Undo** goes back to the screen before the press.
+- Each button records the id and the period your pipeline expects.
+- Labels fit their buttons on a phone screen.

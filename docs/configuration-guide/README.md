@@ -10,8 +10,9 @@ change four **configuration files**. They decide:
 This guide is for students who have never edited these files, or any code. If you can follow a
 recipe, you can follow this guide.
 
-**Start with [Your first change](tutorial.md).** In about 20 minutes you add a button to a copy
-of the 2025 configuration and see it counted on the analysis page. The rest of the guide
+**Start with [Your first change](tutorial.md).** In about 25 minutes you add a button to a copy
+of the 2025 configuration, press it on the scouting screen, and see it counted on the analysis
+page. The rest of the guide
 explains each part in more detail.
 
 ## The four files
@@ -74,7 +75,9 @@ Code helps you while you type:
    [Checking and previewing](checking-and-preview.md).
 3. **Preview** the result: `npm run config:preview`. It plays 80 made-up matches with your
    buttons and shows what each calculation produces and what each chart on the analysis pages
-   would show.
+   would show. For `match-scouting.json`, also look at the screen itself in the
+   [scouting-screen preview](checking-and-preview.md#the-scouting-screen-preview), a page where
+   you play a match on your buttons.
 
 You can do all of this before a single real match is played, which is the point: right after
 kickoff you can build the new game's configuration and know it works.
@@ -108,7 +111,7 @@ npm run config:preview -- config/seasons/2025
 3. [Periods](periods.md): phases, segments and kinds, and analyzing one period at a time.
 4. [The analysis pipeline](analysis-pipeline.md): the calculations (`analysis-pipeline.json`).
 5. [Analysis modules](analysis-modules.md): what the analysis pages show (`analysis-modules.json`).
-6. [Checking and previewing](checking-and-preview.md): `config:check` and `config:preview`, and what their messages mean.
+6. [Checking and previewing](checking-and-preview.md): `config:check`, `config:preview` and the scouting-screen preview, and what their messages mean.
 7. [Starting a new season](new-season.md): from kickoff to Week 0.
 8. [New-game checklist](new-game-checklist.md): the same, as a list to tick off.
 

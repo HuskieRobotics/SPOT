@@ -9,10 +9,10 @@
  *
  * Exit code 1 when there are errors; warnings alone exit 0.
  */
-import { existsSync, readFileSync } from "node:fs";
-import { join, relative } from "node:path";
-import { checkConfiguration, CONFIG_FILES, formatReport } from "../src/config/check";
-import type { ConfigKind } from "../src/config/validate";
+import { existsSync } from "node:fs";
+import { relative } from "node:path";
+import { checkConfiguration, formatReport } from "../src/config/check";
+import { readConfigFolder } from "../src/config/load";
 
 const argv = process.argv.slice(2);
 const json = argv.includes("--json");
@@ -23,11 +23,7 @@ if (!existsSync(dir)) {
   process.exit(2);
 }
 
-const sources: Partial<Record<ConfigKind, string>> = {};
-for (const kind of CONFIG_FILES) {
-  const file = join(dir, `${kind}.json`);
-  if (existsSync(file)) sources[kind] = readFileSync(file, "utf8");
-}
+const sources = readConfigFolder(dir);
 
 const report = checkConfiguration(sources);
 if (json) console.log(JSON.stringify(report, null, 2));

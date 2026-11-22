@@ -181,7 +181,9 @@ modules,executables}/` at runtime and serves them as plain scripts registered on
   reload mechanism. Store `config.json`-equivalent settings in MongoDB (or env vars for
   secrets) and read them per request with a short cache. The four game-config JSON files
   (`match-scouting`, `analysis-pipeline`, `analysis-modules`, `qr`) can stay as files served
-  from a route handler or be stored in the database with an upload UI.
+  from a route handler or be stored in the database with an upload UI. **Decided 2026-11-22
+  (#322, document 20 CS-17):** they stay files, read from disk by the server per request and
+  never bundled; offline pages get them from a JSON route with a version stamp.
 - **Pages become client components.** The scouting SPA, admin dashboard, analysis dashboard,
   edit, QR scanner, and setup pages are all stateful, DOM-heavy, and offline-sensitive; they
   should be `"use client"` components with minimal server rendering. Next.js contributes

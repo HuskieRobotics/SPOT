@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -16,6 +17,9 @@ export default function Home() {
         Scouting Platforms On Time. Version 6 is under construction; the specification lives in{" "}
         <code className="bg-muted rounded px-1 py-0.5 text-sm">docs/spec</code>.
       </p>
+      <Link href="/scouting-preview" className="text-primary underline-offset-4 hover:underline">
+        Scouting-screen preview
+      </Link>
     </main>
   );
 }

@@ -288,7 +288,7 @@ scouted an event in parallel with v5 without losing data.
 
 ## 5. Status and next steps
 
-Last updated 2026-11-21. **Phases 0 and 1 are complete.** Phase 0 items are numbered as in
+Last updated 2026-11-22. **Phases 0 and 1 are complete, and so is gate K.** Phase 0 items are numbered as in
 section 2.
 
 | #   | Phase 0 item                       | Status                                                                                                                                                                                                                                                                                                                                   |
@@ -305,17 +305,17 @@ section 2.
 **Phase 1, the core engine, is complete** (2026-11-21): issues #310 to #320 and #326 on the
 "v6 Phase 1" milestone. The engine reproduces all four golden sets entry by entry, apart from
 the reviewed divergences (T-4), and the audit of the design documents against what was built
-is document 23 (#330). Gate K stands at K-1 (Phase 1), K-2 (#317), K-3 (#318), K-4 (#321) and
-K-6 (#333) done, with K-5 (#322) to go.
+is document 23 (#330). Gate K is met: K-1 (Phase 1), K-2 (#317), K-3 (#318), K-4 (#321),
+K-5 (#322) and K-6 (#333), seven weeks before kickoff.
 
-Recommended order from here, seven weeks before kickoff on 2026-11-21:
+**K-5, the scouting-screen preview (#322)**, is the first piece of phase 2: the scouting rules as
+a pure state machine (`src/scouting/`, document 05) and the screen's components
+(`src/components/scouting/`), which the Phase 2 client wraps. It decided how the application
+loads the four files (document 20 CS-17).
 
-1. **K-5, the scouting-screen preview (#322)**, the first piece of phase 2. It is also the first
-   page that needs the configuration, so it decides how the application loads and serves the
-   four files (document 23, "Configuration loader").
-2. **Then gate W** (about 2027-02-20): the rest of phase 2, the core of phase 3, and the
-   event-critical part of phase 4, about six weeks after kickoff. Break each phase into issues
-   on its milestone when it starts, as Phase 1 was.
+Recommended order from here: **gate W** (about 2027-02-20), the rest of phase 2, the core of
+phase 3, and the event-critical part of phase 4, about six weeks after kickoff. Break each phase
+into issues on its milestone when it starts, as Phase 1 was.
 
 Section 2 assumed about 15 weeks to kickoff and a team of students; the gates replace that
 assumption.

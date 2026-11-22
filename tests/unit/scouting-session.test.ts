@@ -29,6 +29,7 @@ import {
   type ScoutingSettings,
   type SessionState,
 } from "@/scouting/session";
+import { tapOnMap } from "@/scouting/map";
 import { clockLabel, periodLabel, readout, screenButtons } from "@/scouting/view";
 
 const read = (path: string) => JSON.parse(readFileSync(join(process.cwd(), path), "utf8"));
@@ -322,13 +323,32 @@ describe("SC-32, SC-31a: field positions", () => {
   it("reuses the last position within the lock window, and asks again after it", () => {
     const m = new Match(c2022).start().until(140000).press("groundPickup");
     m.state = placePosition(m.state, m.context, { x: 10, y: 20 }, m.now);
+    const locked = () =>
+      screenButtons(m.state, m.context, m.now)
+        .filter((b) => b.positionLocked)
+        .map((b) => b.id);
+    expect(locked()).toContain("upperHub"); // the buttons that take a position flash
+    expect(locked()).not.toContain("undo");
     m.now += 500;
     m.press("upperHub");
     expect(m.state.awaitingPosition).toBeNull();
     expect(m.actions()[1].other).toEqual({ pos: { x: 10, y: 20 } });
     m.now += 1600;
+    expect(locked()).toEqual([]);
     m.press("lowerHub");
     expect(m.state.awaitingPosition).toBe(3);
+  });
+
+  it("measures a tap against the image drawn inside the map's box", () => {
+    // A 2:1 map in a 400 × 400 box is drawn 400 × 200, 100 from the top.
+    const box = { left: 10, top: 20, width: 400, height: 400 };
+    expect(tapOnMap(box, 2, 10, 120)).toEqual({ x: 0, y: 0 });
+    expect(tapOnMap(box, 2, 210, 220)).toEqual({ x: 50, y: 50 });
+    expect(tapOnMap(box, 2, 410, 320)).toEqual({ x: 100, y: 100 });
+    // A 1:2 map in the same box is drawn 200 × 400, 100 from the left.
+    expect(tapOnMap(box, 0.5, 160, 120)).toEqual({ x: 25, y: 25 });
+    // An unknown ratio fills the box.
+    expect(tapOnMap(box, 0, 110, 120)).toEqual({ x: 25, y: 25 });
   });
 
   it("stores the position as the field reads, when the map is turned", () => {

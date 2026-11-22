@@ -301,6 +301,43 @@ the v5 behavior above (decided 2026-11-21, #322):
 - After the clock reaches 0, presses still record with `ts` 0. The match control shows "Match
   Complete" for 2 s, then "Submit Match".
 
+## v6: the scouting screen and its preview (`/scouting-preview`, #322, gate K-5)
+
+The screen is built from React components in `src/components/scouting/` that drive the rules
+above; the preview wraps them in controls, and the Phase 2 client will wrap them in sessions and
+sync. `useScoutingSession` holds the state and ticks the clock on each animation frame while the
+screen changes with time. `ScoutingScreen` is the status line, the grid, a lock's message and the
+field map. `ScoutingGrid`, `FieldMap` and `RecordedActions` are its parts.
+
+- **SC-6** The configuration is read by the server, not fetched as static files (document 20
+  CS-17).
+- **SC-14** The grid has `layout.rows` × `layout.columns` cells, and `gridArea` counts the lines
+  between them, as CSS does. A `gridArea` past the grid adds rows or columns at the edge, as it
+  did in v5; config:check warns about it. Text size follows the screen's width, and a label's
+  line breaks (`\n`) are kept.
+- **SC-16** Press feedback starts on `pointerdown` and ends 90 ms after the finger lifts.
+- **SC-1, SC-2** The status line shows the last-actions readout on the right. The preview shows
+  the layer on screen on the left, where the Phase 2 client will show the match and team.
+- **SC-27b** A locked button is disabled and drawn at 60% opacity. The lock's message is shown
+  over the middle of the screen and does not block the buttons under it.
+- **SC-32** While the position lock runs, every button with a `position` executable on the screen
+  has a `#00ffa5` ring. The map is drawn whole (`object-fit: contain`); a tap is measured in
+  percent of the drawn image, not of its box, and a flipped field turns the map 180°.
+- **SC-34** A highlighted button is drawn in v5's `#2f5f77` with a light ring, over any color.
+
+**The preview** (decided 2026-11-22). `/scouting-preview` draws the active configuration;
+`?season=2025` draws a folder under `config/seasons/`, and a page lists them all. It reads
+`match-scouting.json` on every load, so a student saves the file and reloads. While the file has
+errors (config:check's, K-2) the page lists them instead of the screen; warnings are listed above
+it, collapsed. The other three files are not checked here. Controls: alliance and field
+orientation (SC-28), speed (1×, 2×, 5×, 10×), skip to the next phase, segment or shift, a new
+match, a phone (19.5:9) or tablet (4:3) screen, and **Show grid**, which numbers every cell by
+row and column and shows each button's id and `gridArea`. Beside the screen, the actions recorded
+so far are listed newest first in the data model's shape (document 21 DV-1), and submitting says
+how many a real match would send. `tests/e2e/scouting-preview.spec.ts` plays a 2025 match to
+submission and drives 2026's A-Stop lock, field map, alliance zones and shift kinds, on the phone
+viewport first.
+
 ## Backlog items affecting this page (document 16)
 
 BL-93 unsynced-matches list with per-entry retry and QR; BL-54 surface assignment changes to

@@ -58,8 +58,11 @@ File: `match-scouting.json` ([Match scouting](match-scouting.md)).
       _Check:_ `config:check` (every button and phase a rule names exists). [Rules](match-scouting.md#rules)
 - [ ] **QR codes.** Nothing to change unless `config:check` says the season's buttons need more
       bits in `qr.json`. [qr.json](match-scouting.md#qrjson)
-- [ ] **Walk through the screens** in the scouting-screen preview, once SPOT has it: every
-      screen reachable, Undo goes back, each phase shows the right screen.
+- [ ] **Walk through the screens** in the
+      [scouting-screen preview](checking-and-preview.md#the-scouting-screen-preview)
+      (`npm run dev`, then `/scouting-preview`): play a whole match on each alliance. Every
+      screen reachable, Undo goes back, each phase shows the right screen, and each button
+      records the id and period the pipeline expects.
 
 ## 3. First two weeks: the calculations
 
