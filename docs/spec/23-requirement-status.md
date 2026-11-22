@@ -251,6 +251,7 @@ quotes the test's name.
 | -------- | ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | NF-8     | Done   | As T-1                                                                                                                                                       |
 | NF-12    | Done   | `.nvmrc` is 24, and `package.json` requires Node 24 or later                                                                                                 |
+| NF-13    | Done   | `.vscode/launch.json`: `vscode-launch`                                                                                                                       |
 | K-1      | Done   | This audit, `oracle-compare`                                                                                                                                 |
 | K-2      | Done   | #317: `config-check`, `config-check-generated`                                                                                                               |
 | K-3      | Done   | #318: `config-preview`                                                                                                                                       |

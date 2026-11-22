@@ -36,6 +36,32 @@ npm run dev        # http://localhost:3000
 Quality gates: `npm run lint`, `npm run typecheck`, `npm test`, `npm run build`,
 `npm run test:e2e` (Playwright, Chromium).
 
+### From VS Code's Run and Debug list
+
+`.vscode/launch.json` puts these commands in VS Code's **Run and Debug** list (Ctrl+Shift+D), so
+nobody has to remember or type them (NF-13). Choose an entry and press F5. Each one runs in a
+terminal with the debugger attached, so a breakpoint in a script or a test stops there.
+
+| Entry                                                | Notes                                                                                                                                                                                                 |
+| ---------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Run SPOT (npm run dev)**                           | Opens the home page in the default browser once the server is ready.                                                                                                                                  |
+| **Scouting-screen preview (npm run dev)**            | The same, opening `/scouting-preview`.                                                                                                                                                                |
+| **Debug SPOT in Chrome**                             | Starts the dev server and a Chrome window that VS Code controls, so breakpoints stop in both server and browser code (Next's debugging guide). For Edge, change `debugWithChrome` to `debugWithEdge`. |
+| **Check a season (npm run config:check)**            | Asks for the folder.                                                                                                                                                                                  |
+| **Preview a season (npm run config:preview)**        | Asks for the folder and how much to show.                                                                                                                                                             |
+| **Unit tests (npm test)**                            | All of them.                                                                                                                                                                                          |
+| **Unit tests in the open file (npm test)**           | The test file in the editor. Set a breakpoint first to step through a test.                                                                                                                           |
+| **Browser tests (npm run test:e2e)**                 | Needs `npx playwright install chromium` once, and either SPOT running (**Run SPOT**) or a build (**Build SPOT**).                                                                                     |
+| **Compare with the oracle (npm run oracle:compare)** | Every set.                                                                                                                                                                                            |
+| **Lint (npm run lint)**                              |                                                                                                                                                                                                       |
+| **Typecheck (npm run typecheck)**                    |                                                                                                                                                                                                       |
+| **Format every file (npm run format)**               |                                                                                                                                                                                                       |
+| **Build SPOT (npm run build)**                       |                                                                                                                                                                                                       |
+
+Each entry runs one npm script. None chains commands with `&&`, because Windows PowerShell 5.1,
+the default terminal on many school computers, refuses it. Commands with other arguments
+(`config:convert`, `oracle`, `migrate`, `generate`) are still typed.
+
 ## Deployment targets
 
 AWS EC2 (Team 3061) and Google Cloud (other teams). Recipes live under `deploy/`; the app is
