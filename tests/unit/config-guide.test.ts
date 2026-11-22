@@ -10,8 +10,11 @@ import { describe, expect, it } from "vitest";
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { checkConfiguration } from "@/config/check";
+import { loadMatchScouting } from "@/config/load";
 import { formatPreview, formatTeam, previewConfiguration } from "@/config/preview";
 import type { ConfigKind } from "@/config/validate";
+import { DEFAULT_SETTINGS, initialState, press, recordedActions, skip } from "@/scouting/session";
+import { screenButtons } from "@/scouting/view";
 
 const root = process.cwd();
 const text = (...p: string[]) => readFileSync(join(root, ...p), "utf8");
@@ -87,7 +90,7 @@ describe("#321: the tutorial in docs/configuration-guide works", () => {
     expect(guide).toContain("✗ 6 errors and 6 warnings in config/seasons/practice/");
   });
 
-  it("steps 4-5 and 7: the button and the module line add no finding", () => {
+  it("steps 4-5 and 8: the button and the module line add no finding", () => {
     expect(counts(practice)).toBe("6 errors and 6 warnings");
   });
 
@@ -101,7 +104,34 @@ describe("#321: the tutorial in docs/configuration-guide works", () => {
     expect(guide).toContain(f.hint!);
   });
 
-  it("steps 6-7: the preview counts the button and the module shows it", () => {
+  it("step 6: the scouting screen records the button as the guide shows (K-5)", () => {
+    expect(guide).toContain("http://localhost:3000/scouting-preview?season=practice");
+    const { config } = loadMatchScouting(practice["match-scouting"]);
+    const context = { config: config!, settings: DEFAULT_SETTINGS };
+    const at = (layer: string, button: string) => ({ layer, button });
+    let state = initialState(config!);
+    state = press(state, context, at("layer-0", "preloadCoral"), 0);
+    state = press(state, context, at("layer-0", "startGame"), 0);
+    expect(state.ts).toBe(153000); // "counts down from 153 seconds"
+    state = skip(state, context, 1000);
+    const defense = screenButtons(state, context, 1000).find((b) => b.id === "teleopDefense");
+    expect(defense).toMatchObject({ label: "Defense", gridArea: [2, 4, 3, 7] });
+    expect(guide).toContain(`\`teleopDefense [${defense!.gridArea.join(", ")}]\``);
+    state = press(state, context, at("layer-2", "teleopDefense"), 1500);
+    const recorded = recordedActions(state);
+    expect(recorded.map((a) => [a.id, a.phase, a.segment])).toEqual([
+      ["preloadCoral", null, null],
+      ["teleopDefense", "teleop", null],
+    ]);
+    expect(guide).toMatch(/2 {2}teleopDefense {2}\d+ {2}teleop {2}null/);
+    expect(guide).toContain("1  preloadCoral   153000  null    null");
+    expect(recorded[0].ts).toBe(153000);
+    // Undo takes it back: the preload and the start are the two presses undo keeps.
+    state = press(state, context, at("layer-2", "undo"), 2000);
+    expect(recordedActions(state).map((a) => a.id)).toEqual(["preloadCoral"]);
+  });
+
+  it("steps 7-8: the preview counts the button and the module shows it", () => {
     const docs = {
       ms: JSON.parse(practice["match-scouting"]),
       pipeline: JSON.parse(practice["analysis-pipeline"]),
@@ -129,7 +159,7 @@ describe("#321: the tutorial in docs/configuration-guide works", () => {
     expect(guide).toContain("Defense per Match: 0.89");
   });
 
-  it("step 8: a misspelled path is caught with a suggestion", () => {
+  it("step 9: a misspelled path is caught with a suggestion", () => {
     const typo = practice["analysis-modules"].replace(
       '"averages.teleopDefense"',
       '"averages.teleopDefence"',

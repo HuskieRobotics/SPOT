@@ -30,6 +30,8 @@ export interface ButtonView {
   highlighted: boolean;
   /** A lock keeps it from being pressed (SC-27b). */
   disabled: boolean;
+  /** It takes a position, and a press now reuses the last one instead of showing the map (SC-32). */
+  positionLocked: boolean;
 }
 
 /** The buttons on the screen shown now, in layer order (SC-14, SC-26, SC-28, SC-36). */
@@ -43,6 +45,7 @@ export function screenButtons(
   const layer = layerOf(config, screen.layer);
   if (!layer) return [];
   const byId = new Map(layer.buttons.map((b) => [b.id, b]));
+  const positionLock = state.positionLock !== null && now <= state.positionLock.until;
   return layer.buttons
     .filter((b) => isShown(state, { layer: layer.id, button: b.id }))
     .map((b) => {
@@ -63,6 +66,7 @@ export function screenButtons(
         textColor: b.textColor,
         highlighted: state.highlights.includes(b.id),
         disabled: isLocked(state, b),
+        positionLocked: positionLock && b.executables.some((e) => e.type === "position"),
       };
     });
 }

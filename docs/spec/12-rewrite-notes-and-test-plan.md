@@ -381,7 +381,9 @@ that a new feature can be verified not to break existing behavior. Requirements:
   produce a QR code, then scan it on the scanner page; admin selects a match and assigns
   scouters; analysis loads a team, the bubble graph, and Filter Teams; edit page flags and
   deletes a TMP; setup wizard saves a configuration. The manual plan below is the source of
-  these journeys.
+  these journeys. v6: `tests/e2e/scouting-preview.spec.ts` (#322) plays a match on the
+  scouting screen through submission; the online and offline submit journeys follow with the
+  Phase 2 client.
 - **T-8** Offline behavior is tested by loading the app, going offline in the browser
   harness, and asserting the scouting and analysis pages still function from cache.
 - **T-9** Test fixtures must not require live TBA or FMS credentials; all external calls are

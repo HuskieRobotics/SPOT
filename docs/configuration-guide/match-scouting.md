@@ -117,16 +117,16 @@ layer-2  teleop: pickups, drops, two scoring buttons, Barge
 }
 ```
 
-| Name            | Meaning                                                                                                                                                                              |
-| --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `"id"`          | What SPOT records when the button is pressed, and how every other file refers to it. Letters, digits, `_` and `-`; capital letters matter (`teleopl4` and `teleopL4` are different). |
-| `"type"`        | What pressing it does; see [Button types](#button-types).                                                                                                                            |
-| `"gridArea"`    | Where it goes: `[row start, column start, row end, column end]`, counting the lines between cells. See [the picture in the tutorial](tutorial.md#3-find-the-teleop-buttons).         |
-| `"executables"` | What else happens when it is pressed, such as switching screens. `[]` for nothing. See [Executables](#executables-what-else-a-button-does).                                          |
-| `"label"`       | The text on the button.                                                                                                                                                              |
-| `"color"`       | Optional background color, as a web color code (`"#ff4436"` is red) or name (`"orange"`).                                                                                            |
-| `"textColor"`   | Optional text color.                                                                                                                                                                 |
-| `"legacyClass"` | Left by the converter so someone can check the colors it picked; you may delete it.                                                                                                  |
+| Name            | Meaning                                                                                                                                                                                                                                                                                      |
+| --------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `"id"`          | What SPOT records when the button is pressed, and how every other file refers to it. Letters, digits, `_` and `-`; capital letters matter (`teleopl4` and `teleopL4` are different).                                                                                                         |
+| `"type"`        | What pressing it does; see [Button types](#button-types).                                                                                                                                                                                                                                    |
+| `"gridArea"`    | Where it goes: `[row start, column start, row end, column end]`, counting the lines between cells. See [the picture in the tutorial](tutorial.md#3-find-the-teleop-buttons), or turn on **Show grid** in the [scouting-screen preview](checking-and-preview.md#the-scouting-screen-preview). |
+| `"executables"` | What else happens when it is pressed, such as switching screens. `[]` for nothing. See [Executables](#executables-what-else-a-button-does).                                                                                                                                                  |
+| `"label"`       | The text on the button.                                                                                                                                                                                                                                                                      |
+| `"color"`       | Optional background color, as a web color code (`"#ff4436"` is red) or name (`"orange"`).                                                                                                                                                                                                    |
+| `"textColor"`   | Optional text color.                                                                                                                                                                                                                                                                         |
+| `"legacyClass"` | Left by the converter so someone can check the colors it picked; you may delete it.                                                                                                                                                                                                          |
 
 A button with the same id on several layers is the same button. 2025 has `broken`
 ("Disabled") on almost every layer, so a scouter can record a disabled robot whatever screen is

@@ -1,8 +1,9 @@
 # Your first change
 
-In this walk-through you add a **Defense** button to the scouting screen of the 2025 game, then
-add a line to the analysis page that shows how often each team played defense. You work on a
-copy of the 2025 files, so you can't break anything. It takes about 20 minutes.
+In this walk-through you add a **Defense** button to the scouting screen of the 2025 game, press
+it on the screen, then add a line to the analysis page that shows how often each team played
+defense. You work on a copy of the 2025 files, so you can't break anything. It takes about 25
+minutes.
 
 You need VS Code with the SPOT folder open, and a terminal (**Terminal → New Terminal**). See
 [What you need](README.md#what-you-need).
@@ -90,6 +91,8 @@ column line 4, and ends at row line 7 and column line 7: row 6, columns 4 to 6.
 
 For the Defense button, in row 2 and columns 4 to 6, that is `[2, 4, 3, 7]`.
 
+You don't have to draw this picture yourself: in step 6, SPOT draws it for you.
+
 ## 4. Add the button
 
 In layer-2, find the Barge button, the last button of the layer. Its end looks like this:
@@ -157,9 +160,50 @@ config/seasons/practice/match-scouting.json:353:11  error  (whole file)
 Click the location to jump to it, add the comma, save, and check again. If the button overlaps
 another one, the check says which; look at the picture in step 3 again.
 
-## 6. See it in the preview
+## 6. See it on the scouting screen
 
-The preview plays 80 made-up matches. The made-up scouters press whatever buttons are on
+SPOT can draw the screen your file describes, the way a scouter's phone will show it, and you can
+play a match on it. In the terminal, start SPOT:
+
+```sh
+npm run dev
+```
+
+When it says `Ready`, open <http://localhost:3000/scouting-preview?season=practice> in a web
+browser. The end of the address picks the folder: `?season=practice` is
+`config/seasons/practice`.
+
+1. Press **Preload Coral**, then **Start**. The clock counts down from 153 seconds, and the
+   auto screen appears.
+2. Press **Skip to next period** above the screen to jump to teleop. Your **Defense** button is
+   under the clock.
+3. Press it. Beside the screen (below it, on a phone), **Recorded actions** lists what SPOT
+   records, newest first:
+
+   ```
+   #  id             ts      phase   segment  segmentKind  segmentIndex  other
+   2  teleopDefense  134512  teleop  null     null         null
+   1  preloadCoral   153000  null    null     null         null
+   ```
+
+   `id` is the button's id, `ts` is the time left in the match in milliseconds (yours will be a
+   little different), and `phase` is the period it was pressed in. This is exactly what the
+   calculations in step 7 receive.
+
+4. Press **Undo**. The action is gone.
+5. Press **Show grid**. Every empty cell shows its row and column, and every button shows its
+   id and `gridArea`: `teleopDefense [2, 4, 3, 7]`. This is the picture from step 3.
+
+If the page lists errors instead of the screen, the file has a mistake; they are the same
+messages `config:check` prints. Fix it, save, and reload the page.
+
+Leave SPOT running while you work, and reload the page after each save to see the change. To
+stop it, click in its terminal and press Ctrl+C. The next steps need a terminal too: open a
+second one with the **+** in the terminal panel.
+
+## 7. See it counted
+
+`config:preview` plays 80 made-up matches. The made-up scouters press whatever buttons are on
 screen, including yours, and the preview shows what SPOT works out from those presses.
 
 ```sh
@@ -193,7 +237,7 @@ You didn't add any calculation. The first entry of `analysis-pipeline.json` coun
 action button (`"all": true`), so a new button is counted as soon as it exists. Entry 45
 averages all of those counts.
 
-## 7. Show it on the analysis page
+## 8. Show it on the analysis page
 
 A count only appears on an analysis page if a **module** shows it. Open
 `config/seasons/practice/analysis-modules.json` and search for `"Team Stats"`. Its `"list"` is
@@ -222,7 +266,7 @@ Add a comma after its `}`, then a line for defense:
 ```
 
 - `"name"` is what the table calls the line.
-- `"path"` is the value to show: the average count from step 6.
+- `"path"` is the value to show: the average count from step 7.
 - `"decimals"` rounds it to two decimal places.
 
 Save, check again (still 6 errors and 6 warnings), and preview without `--all`:
@@ -259,7 +303,7 @@ module 11 (team Stats "Team Stats")
 `"sort"`: `-1` ranks lower values first. Add `"sort": 1` to your defense line to rank teams that
 play more defense first.
 
-## 8. Make a mistake on purpose
+## 9. Make a mistake on purpose
 
 Change the path to `"averages.teleopDefence"` (with a c), save, and check:
 
@@ -276,6 +320,7 @@ misspelled path is caught before anyone looks at the analysis page. Change it ba
 
 - Added a button to a layer, with its place in the grid.
 - Checked that the files are still valid, and read a finding.
+- Pressed the button on the scouting screen, and saw what SPOT records.
 - Saw the new button counted, per match and per team, without writing a calculation.
 - Showed the count on a team's page, and saw a typo caught.
 

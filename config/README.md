@@ -1,7 +1,7 @@
 # Active configuration (schema v2)
 
 New to these files? Read the [Configuration Guide](../docs/configuration-guide/README.md), which
-starts with a 20-minute walk-through.
+starts with a 25-minute walk-through.
 
 The four files here drive the v6 application:
 
@@ -36,6 +36,10 @@ npm run config:preview -- config --team 3061        # one team, as the team view
 
 Values marked ⚠ are 0, No Data or the same for every team; the full generated dataset is written to
 `config-preview.json` (docs/spec/22 §3.2).
+
+To see the scouting screen this folder's `match-scouting.json` describes and play a match on it,
+run `npm run dev` and open <http://localhost:3000/scouting-preview> (`?season=2025` for a folder
+under `seasons/`). It reads the file on every load (docs/spec/20 CS-17).
 
 They were produced from the 2026 REBUILT legacy files in `config/v1/` by the converter:
 

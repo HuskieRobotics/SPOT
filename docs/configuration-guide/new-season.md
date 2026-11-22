@@ -42,9 +42,11 @@ From the game manual:
    button for all phases ([Periods](periods.md)).
 3. **Rules.** Undo's limit, the A-Stop lock (rename its phase if yours differ), the field map.
 
-Check after each screen: `npm run config:check`. The scouting-screen preview, a page that draws
-your layers as the scouter will see them, is coming; until then, sketch the grid as in
-[the tutorial](tutorial.md#3-find-the-teleop-buttons).
+Check after each screen: `npm run config:check`. Then look at it in the
+[scouting-screen preview](checking-and-preview.md#the-scouting-screen-preview), which draws your
+layers as the scouter will see them, and play a match on it. **Show grid** numbers the cells, so
+you can find each button's `"gridArea"` ([the tutorial](tutorial.md#3-find-the-teleop-buttons)
+explains the numbers).
 
 ## 4. The calculations: `analysis-pipeline.json`
 
