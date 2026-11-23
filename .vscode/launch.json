@@ -1,0 +1,146 @@
+{
+  "version": "0.2.0",
+  // The entries that start SPOT run Next directly ("type": "node"), not in a terminal: VS Code
+  // opens the browser ("serverReadyAction") only for output it sees in the Debug Console.
+  "configurations": [
+    {
+      "name": "Run SPOT (npm run dev)",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/node_modules/next/dist/bin/next",
+      "args": ["dev"],
+      "skipFiles": ["<node_internals>/**"],
+      "serverReadyAction": {
+        "action": "openExternally",
+        "pattern": "- Local:\\s+(https?://\\S+)",
+        "uriFormat": "%s"
+      },
+      "presentation": { "group": "1-run", "order": 1 }
+    },
+    {
+      "name": "Scouting-screen preview (npm run dev)",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/node_modules/next/dist/bin/next",
+      "args": ["dev"],
+      "skipFiles": ["<node_internals>/**"],
+      "serverReadyAction": {
+        "action": "openExternally",
+        "pattern": "- Local:\\s+(https?://\\S+)",
+        "uriFormat": "%s/scouting-preview"
+      },
+      "presentation": { "group": "1-run", "order": 2 }
+    },
+    {
+      "name": "Debug SPOT in Chrome",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/node_modules/next/dist/bin/next",
+      "args": ["dev"],
+      "runtimeArgs": ["--inspect"],
+      "skipFiles": ["<node_internals>/**"],
+      "serverReadyAction": {
+        "action": "debugWithChrome",
+        "killOnServerStop": true,
+        "pattern": "- Local:\\s+(https?://\\S+)",
+        "uriFormat": "%s",
+        "webRoot": "${workspaceFolder}"
+      },
+      "presentation": { "group": "1-run", "order": 3 }
+    },
+    {
+      "name": "Check a season (npm run config:check)",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "npm run config:check -- ${input:season}",
+      "presentation": { "group": "2-config", "order": 1 }
+    },
+    {
+      "name": "Preview a season (npm run config:preview)",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "npm run config:preview -- ${input:season} ${input:previewDetail}",
+      "presentation": { "group": "2-config", "order": 2 }
+    },
+    {
+      "name": "Unit tests (npm test)",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "npm test",
+      "presentation": { "group": "3-test", "order": 1 }
+    },
+    {
+      "name": "Unit tests in the open file (npm test)",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "npm test -- ${fileBasename}",
+      "presentation": { "group": "3-test", "order": 2 }
+    },
+    {
+      "name": "Browser tests (npm run test:e2e)",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "npm run test:e2e",
+      "presentation": { "group": "3-test", "order": 3 }
+    },
+    {
+      "name": "Compare with the oracle (npm run oracle:compare)",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "npm run oracle:compare",
+      "presentation": { "group": "3-test", "order": 4 }
+    },
+    {
+      "name": "Lint (npm run lint)",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "npm run lint",
+      "presentation": { "group": "4-code", "order": 1 }
+    },
+    {
+      "name": "Typecheck (npm run typecheck)",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "npm run typecheck",
+      "presentation": { "group": "4-code", "order": 2 }
+    },
+    {
+      "name": "Format every file (npm run format)",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "npm run format",
+      "presentation": { "group": "4-code", "order": 3 }
+    },
+    {
+      "name": "Build SPOT (npm run build)",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "npm run build",
+      "presentation": { "group": "4-code", "order": 4 }
+    }
+  ],
+  "inputs": [
+    {
+      "id": "season",
+      "type": "pickString",
+      "description": "Which season's files?",
+      "options": [
+        { "label": "The season SPOT uses", "value": "config" },
+        { "label": "Your copy from the tutorial", "value": "config/seasons/practice" },
+        { "label": "The example of a typical game", "value": "config/seasons/2025" }
+      ],
+      "default": "config"
+    },
+    {
+      "id": "previewDetail",
+      "type": "pickString",
+      "description": "What should the preview show?",
+      "options": [
+        { "label": "Every module and entry, in short", "value": "" },
+        { "label": "Every value of every entry", "value": "--all" },
+        { "label": "One team's page", "value": "--team 3061" }
+      ],
+      "default": ""
+    }
+  ]
+}

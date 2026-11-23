@@ -37,6 +37,31 @@ set up. `config/seasons/2025/` is the best example of a typical game.
 - A terminal. In VS Code, choose **Terminal → New Terminal**. Every command in this guide is
   typed there and starts with `npm run`.
 
+### Or pick a command from a list
+
+You can run the commands you use most without typing them. Open **Run and Debug** (the ▷ with a
+bug on the left edge of VS Code, or Ctrl+Shift+D), choose an entry from the list at the top, and
+press the green ▷ next to it (or F5). VS Code opens a terminal and runs the command there, the
+same as if you had typed it.
+
+| Entry                                         | What it does                                                                                                                                     |
+| --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Check a season (npm run config:check)**     | Asks which folder, then checks it.                                                                                                               |
+| **Preview a season (npm run config:preview)** | Asks which folder, and whether you want the short preview, every value (`--all`), or one team's page (`--team 3061`).                            |
+| **Scouting-screen preview (npm run dev)**     | Starts SPOT and, once it is ready, opens the [scouting-screen preview](checking-and-preview.md#the-scouting-screen-preview) in your web browser. |
+| **Run SPOT (npm run dev)**                    | Starts SPOT and opens its home page.                                                                                                             |
+
+The folder list offers `config` (the season SPOT uses), your `config/seasons/practice` copy from
+the [tutorial](tutorial.md), and `config/seasons/2025`. For any other folder or option, type
+the command.
+
+The two entries that start SPOT show its messages in the **Debug Console** panel instead of a
+terminal. Only one SPOT can run at a time, so stop it before starting it again from another
+entry: press the red square in the bar at the top of the window (Shift+F5).
+
+The other entries in the list are for programmers; the [main README](../../README.md#from-vs-codes-run-and-debug-list)
+explains them.
+
 ## JSON in five minutes
 
 The files are written in **JSON**, a way of writing down information that both people and

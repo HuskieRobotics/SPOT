@@ -37,6 +37,10 @@ In the terminal, type:
 npm run config:check -- config/seasons/practice
 ```
 
+(Or, without typing: in **Run and Debug**, choose **Check a season (npm run config:check)**,
+press the green ▷, and pick `config/seasons/practice`. See
+[Or pick a command from a list](README.md#or-pick-a-command-from-a-list).)
+
 It takes a few seconds, then lists what it found and ends with:
 
 ```
@@ -173,6 +177,9 @@ When it says `Ready`, open <http://localhost:3000/scouting-preview?season=practi
 browser. The end of the address picks the folder: `?season=practice` is
 `config/seasons/practice`.
 
+(Or, in **Run and Debug**, choose **Scouting-screen preview (npm run dev)**. It opens the page
+for you once SPOT is ready; click **practice** at the top of the page to pick your folder.)
+
 1. Press **Preload Coral**, then **Start**. The clock counts down from 153 seconds, and the
    auto screen appears.
 2. Press **Skip to next period** above the screen to jump to teleop. Your **Defense** button is
@@ -198,8 +205,9 @@ If the page lists errors instead of the screen, the file has a mistake; they are
 messages `config:check` prints. Fix it, save, and reload the page.
 
 Leave SPOT running while you work, and reload the page after each save to see the change. To
-stop it, click in its terminal and press Ctrl+C. The next steps need a terminal too: open a
-second one with the **+** in the terminal panel.
+stop it, click in its terminal and press Ctrl+C (or, if you started it from Run and Debug, press
+the red square at the top of the window). The next steps need a terminal too: open a second one
+with the **+** in the terminal panel.
 
 ## 7. See it counted
 

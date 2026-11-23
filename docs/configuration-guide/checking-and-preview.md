@@ -13,6 +13,9 @@ The two commands read the four files in `config/` unless you name another folder
 npm run config:check -- config/seasons/2025
 ```
 
+All three are also in VS Code's **Run and Debug** list, where you pick the folder from a list
+instead of typing it; see [Or pick a command from a list](README.md#or-pick-a-command-from-a-list).
+
 ## `config:check`
 
 ```sh

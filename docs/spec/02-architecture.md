@@ -170,6 +170,19 @@ categorized precache list. The notes below describe the current implementation.
   `package.json` `engines` and `.nvmrc`, used by CI, and assumed by both deployment recipes
   (ADR 0002). No feature may require a newer runtime without changing this requirement, because
   that would lock students out of their own project.
+- **NF-13** **[added 2026-11-22]** Students can run SPOT's commands from VS Code's **Run and
+  Debug** list as well as by typing them. `.vscode/launch.json` has an entry, named in plain
+  words with the command it runs, for each command a student uses without other arguments:
+  running SPOT, the scouting-screen preview, debugging SPOT in a browser, `config:check` and
+  `config:preview` (which ask for the season folder from a list), the unit and browser tests,
+  the oracle comparison, lint, typecheck, format and build. All run with the debugger attached.
+  The command-line tools run in a terminal, so their output and its clickable
+  `file:line:column` locations look as they do when typed; each is one npm script with nothing
+  chained (`&&`), because Windows PowerShell 5.1, the default terminal on many school computers
+  (NF-12), refuses it. The entries that start SPOT run Next directly (`next dev`, what
+  `npm run dev` runs), because VS Code opens the browser only for an address printed in the
+  Debug Console, not in a terminal (tried 2026-11-22). Checked by `vscode-launch`; the
+  Configuration Guide's README and the main README name every entry.
 - **NF-8** (rewrite requirement, added 2026-09-16) The rewrite MUST ship an automated test
   suite that verifies existing features so new features can be merged without repeating the
   manual System Test Plan by hand. The current code base has no tests (`npm test` is a
