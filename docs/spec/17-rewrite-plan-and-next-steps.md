@@ -212,7 +212,7 @@ Do these before writing application code. Each one removes a class of rework lat
 | 2. Scouting vertical slice    | Scouting client (landing, sign-in, waiting, grid, timer with hold and 2×, undo, executables, submission, IndexedDB, QR), session/assignment service (SSE or polling), admin match selection and scouter monitor | Playwright: two simulated scouters get assigned, scout, submit; data lands in MongoDB; offline path yields a scannable QR |
 | 3. Analysis dashboard         | Team view, all built-in modules on Plotly, event switching, search, Compare, Filter Teams with configurable bands, client-side CSV, Simulate Match and Auto Pick behind config flags                            | Renders the oracle dataset; screenshot and smoke tests per module                                                         |
 | 4. Operations                 | Edit page (flags, delete, unscouted), QR scanner, settings UI replacing the wizard (R-32), deploy recipes for EC2 and Cloud Run, migration script run against the real dump                                     | End-to-end suite green; deployed to a staging EC2 instance                                                                |
-| 5. Hardening and backlog core | BL-93, BL-54, BL-116, BL-33, BL-7, BL-43, accessibility pass, docs (Quickstart, Configuration Guide, Usage Guide rewritten from this spec)                                                                      | Configure the 2027 game from the schema alone after kickoff                                                               |
+| 5. Hardening and backlog core | BL-7, BL-43, accessibility pass, docs (Quickstart, Configuration Guide, Usage Guide rewritten from this spec); BL-93, BL-54, BL-116 and BL-33 moved to phase 2 (§5)                                             | Configure the 2027 game from the schema alone after kickoff                                                               |
 | 6. Cutover                    | Parallel run at an off-season event or scrimmage with the v5 app; compare datasets; tag `v5.2.0-final`; merge `v6` to `main`                                                                                    | First 2027 event scouted on v6                                                                                            |
 
 Phases 1 and 3 could proceed in parallel with phase 2 once the config schema and data model are
@@ -313,9 +313,18 @@ a pure state machine (`src/scouting/`, document 05) and the screen's components
 (`src/components/scouting/`), which the Phase 2 client wraps. It decided how the application
 loads the four files (document 20 CS-17).
 
+**Phase 2 is next**, broken into issues #351 to #364 on the "v6 Phase 2" milestone (2026-11-22),
+in build order: the database layer, the admin password and event code, scouter sessions as pure
+TypeScript, their transport, the match schedule, the roster and sign-in, the admin page, the QR
+codec, the scouting client, submission and sync, offline scouting, extension executables, the
+acceptance test of the exit criterion, and the audit. Four phase 5 backlog items moved into
+phase 2 because a phase 2 requirement already demands them: BL-93 (OF-2's pending list), BL-54
+(the session model re-assigns waiting scouters), BL-116 and BL-33 (the admin page's labelled
+controls, AD-4b, and several admins at once, RT-14b).
+
 Recommended order from here: **gate W** (about 2027-02-20), the rest of phase 2, the core of
 phase 3, and the event-critical part of phase 4, about six weeks after kickoff. Break each phase
-into issues on its milestone when it starts, as Phase 1 was.
+into issues on its milestone when it starts, as Phases 1 and 2 were.
 
 Section 2 assumed about 15 weeks to kickoff and a team of students; the gates replace that
 assumption.
