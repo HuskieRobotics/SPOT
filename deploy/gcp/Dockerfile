@@ -1,18 +1,20 @@
-FROM node:18-slim
-
+# SPOT v6 — production image (Next.js standalone output). Used by Cloud Run and docker compose.
+FROM node:22-slim AS build
 WORKDIR /app
-
-# Copy package files and install dependencies
+ENV NEXT_TELEMETRY_DISABLED=1
 COPY package.json package-lock.json ./
-RUN npm ci --omit=dev
+RUN npm ci
+COPY . .
+RUN npm run build
 
-# Copy application source and config templates
-COPY src/ ./src/
-COPY config/ ./config/
-
-# Cloud Run sets PORT automatically (default 8080)
-ENV PORT=8080
+FROM node:22-slim
+WORKDIR /app
+ENV NODE_ENV=production NEXT_TELEMETRY_DISABLED=1 PORT=8080 HOSTNAME=0.0.0.0
+COPY --from=build /app/.next/standalone ./
+COPY --from=build /app/.next/static ./.next/static
+COPY --from=build /app/public ./public
+COPY --from=build /app/presets ./presets
+# Settings come from environment variables (DATABASE_URL, ACCESS_CODE, TBA_API_KEY, ...)
+# or from a config.json mounted at /app/config/config.json.
 EXPOSE 8080
-
-# Use node directly (not nodemon) for production
-CMD ["node", "src/app.js"]
+CMD ["node", "server.js"]

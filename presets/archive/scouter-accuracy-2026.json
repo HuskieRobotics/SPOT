@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "game": "2026 Rebuilt",
+  "actions": {
+    "preloadFuel": 1,
+    "preloadNone": 0,
+    "autoTowerRobot_Level1": 15,
+    "endGameTowerRobot_Level1": 15,
+    "endGameTowerRobot_Level2": 20,
+    "endGameTowerRobot_Level3": 30
+  },
+  "defaultPoints": 0,
+  "notes": {
+    "defaultPoints": "Ratings, movement, collection, and climb-attempt buttons are observations and do not directly equal official points.",
+    "fuel": "The current 2026 scouting form rates shooting but does not count individual scored fuel. Add a count action before using this as a full official-score predictor."
+  }
+}

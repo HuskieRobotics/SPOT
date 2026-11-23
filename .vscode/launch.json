@@ -4,25 +4,24 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "SPOT Server",
+      "name": "SPOT dev server",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["start"],
+      "runtimeArgs": ["run", "dev"],
       "outputCapture": "std"
     },
     {
       "type": "chrome",
       "request": "launch",
-      "name": "SPOT Client Chrome",
-      "url": "http://localhost:8080",
-      "webRoot": "${workspaceFolder}/src/analysis/public",
-      "outputCapture": "std"
+      "name": "SPOT in Chrome",
+      "url": "http://localhost:8080"
     },
     {
-      "type": "firefox",
+      "type": "node",
       "request": "launch",
-      "name": "SPOT Client Firefox",
-      "url": "http://localhost:8080",
-      "webRoot": "${workspaceFolder}/src/analysis/public"
+      "name": "SPOT tests",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["test"],
+      "outputCapture": "std"
     }
   ]
 }

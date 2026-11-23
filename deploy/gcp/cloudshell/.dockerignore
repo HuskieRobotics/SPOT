@@ -1,4 +1,5 @@
 node_modules
+.next
 npm-debug.log*
 .git
 .github
@@ -8,8 +9,6 @@ npm-debug.log*
 config/config.json
 config/config.bak.json
 deploy/
-*.md
-LICENSE
-.gitignore
-.nvmrc
-.prettierignore
+tools/
+tests/
+claude/

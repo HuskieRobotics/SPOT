@@ -16,7 +16,8 @@ set -euo pipefail
 #   3. Run:  cd SPOT/deploy/gcp/cloudshell && chmod +x deploy.sh && ./deploy.sh
 #
 # Cloud Shell provides gcloud pre-installed and pre-authenticated.
-# After deploy, visit the Cloud Run URL → /setup to configure the app.
+# The script asks for DATABASE_URL (MongoDB Atlas), ACCESS_CODE and TBA_API_KEY and stores
+# them as Cloud Run environment variables. Everything else is configured in the app at /admin.
 # =============================================================================
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -57,7 +58,6 @@ fi
 
 REGION="${GCP_REGION:-us-central1}"
 SERVICE_NAME="${CLOUD_RUN_SERVICE:-spot}"
-CONFIG_BUCKET="${CONFIG_BUCKET:-${PROJECT_ID}-spot-config}"
 IMAGE="gcr.io/${PROJECT_ID}/${SERVICE_NAME}"
 
 echo ""
@@ -72,7 +72,7 @@ trap 'rm -f "${PROJECT_ROOT}/Dockerfile" "${PROJECT_ROOT}/.dockerignore"' EXIT
 echo ">>> Step 1: Enabling required GCP APIs..."
 gcloud services enable \
   run.googleapis.com cloudbuild.googleapis.com \
-  storage.googleapis.com artifactregistry.googleapis.com \
+  artifactregistry.googleapis.com \
   --quiet
 
 # ---------- Step 2: Wait for service accounts ----------
@@ -126,15 +126,20 @@ if ! gcloud artifacts repositories describe gcr.io --location=us --project="${PR
     --repository-format=docker --location=us --project="${PROJECT_ID}" --quiet
 fi
 
-# ---------- Step 5: Create GCS config bucket ----------
-echo ">>> Step 5: Creating config bucket..."
-if ! gsutil ls -b "gs://${CONFIG_BUCKET}" &>/dev/null; then
-  gsutil mb -l "${REGION}" "gs://${CONFIG_BUCKET}"
-  [ -d "${PROJECT_ROOT}/config" ] && {
-    gsutil -m cp "${PROJECT_ROOT}"/config/*.json "gs://${CONFIG_BUCKET}/"
-    gsutil rm "gs://${CONFIG_BUCKET}/config.json" 2>/dev/null || true
-  }
-fi
+# ---------- Step 5: Collect secrets ----------
+echo ">>> Step 5: Secrets"
+[ -n "${DATABASE_URL:-}" ] || read -r -p "MongoDB connection string (DATABASE_URL): " DATABASE_URL
+[ -n "${ACCESS_CODE:-}" ] || { read -r -s -p "Admin access code (ACCESS_CODE): " ACCESS_CODE; echo; }
+[ -n "${TBA_API_KEY:-}" ] || { read -r -s -p "The Blue Alliance API key (TBA_API_KEY): " TBA_API_KEY; echo; }
+ENV_FILE="$(mktemp)"
+trap 'rm -f "${PROJECT_ROOT}/Dockerfile" "${PROJECT_ROOT}/.dockerignore" "${ENV_FILE}"' EXIT
+{
+  [ -n "${DATABASE_URL:-}" ] && echo "DATABASE_URL: '${DATABASE_URL}'"
+  [ -n "${ACCESS_CODE:-}" ] && echo "ACCESS_CODE: '${ACCESS_CODE}'"
+  [ -n "${TBA_API_KEY:-}" ] && echo "TBA_API_KEY: '${TBA_API_KEY}'"
+  [ -n "${TBA_EVENT_KEY:-}" ] && echo "TBA_EVENT_KEY: '${TBA_EVENT_KEY}'"
+  echo "NODE_ENV: 'production'"
+} > "${ENV_FILE}"
 
 # ---------- Step 6: Build container image ----------
 echo ">>> Step 6: Building container image..."
@@ -145,8 +150,6 @@ gcloud builds submit --tag "${IMAGE}" --quiet
 
 # ---------- Step 7: Deploy to Cloud Run ----------
 echo ">>> Step 7: Deploying to Cloud Run..."
-gsutil iam ch "serviceAccount:${COMPUTE_SA}:objectAdmin" "gs://${CONFIG_BUCKET}"
-
 gcloud run deploy "${SERVICE_NAME}" \
   --image "${IMAGE}" \
   --region "${REGION}" \
@@ -158,11 +161,10 @@ gcloud run deploy "${SERVICE_NAME}" \
   --max-instances 1 \
   --memory 512Mi \
   --cpu 1 \
-  --timeout 300 \
+  --timeout 3600 \
   --execution-environment gen2 \
   --service-account "${COMPUTE_SA}" \
-  --add-volume name=config-vol,type=cloud-storage,bucket="${CONFIG_BUCKET}" \
-  --add-volume-mount volume=config-vol,mount-path=/app/config \
+  --env-vars-file "${ENV_FILE}" \
   --quiet
 
 # ---------- Done ----------
@@ -174,6 +176,6 @@ echo "=== Deployment complete! ==="
 echo "Your app is live at: ${SERVICE_URL}"
 echo ""
 echo "Next steps:"
-echo "  1. Visit ${SERVICE_URL} to open the /setup wizard"
-echo "  2. Enter your MongoDB connection string, API keys, and access code"
-echo "  3. Config will persist automatically in gs://${CONFIG_BUCKET}"
+echo "  1. Open ${SERVICE_URL}/admin and sign in with your access code"
+echo "  2. Event & settings: set the event; Projects: pick or build your season project"
+echo "  Note: --max-instances 1 is required (one process owns the live scouter registry)."

@@ -1,78 +1,118 @@
-<div align="center">
-  <img src="src/public/img/SPOTBanner.jpg" width=50% height=50%>
-</div>
+# SPOT — Scouting Platforms On Time
 
-# SPOT - Scouting Platforms On Time
+SPOT is an open-source FRC scouting platform by **Team 3061 Huskie Robotics**.
+Version 6 is a complete rebuild: everything a team used to configure by editing JSON files
+— the scouting buttons, the match timer, point values, the analysis pipeline and the
+dashboard — is now built **in the browser**, with live previews, and saved as a *project*.
 
-SPOT is an open-source modular scouting app framework for FRC developed by Team 3061, Huskie Robotics. SPOT provides a simple platform upon which a team can build a scouting app with little to no prior experience.
+| | |
+|---|---|
+| **Scouting** (`/`) | Phone-friendly scouting app. Scouters sign in, get assigned a robot, and tap buttons during the match. Works offline; falls back to a QR code. |
+| **Admin** (`/admin`) | Run the event (pick matches, watch scouters, remove phones), review/flag/delete data, scan QR codes, scouter accuracy, event settings — and the **project builder**. |
+| **Analysis** (`/analysis`) | Team pages, compare teams, filter teams, match simulation, pick list, CSV export. Browse any event with any project. |
 
-## Database Migration (SPOT v4 -> v5)
+## Projects
 
-The database schema for SPOT v5 and later is incompatible with SPOT v4 and earlier. If you don't have data from SPOT v4 or earlier, no migration is required. If you are creating a new database to use with SPOT v5 or later, which is recommended for a new FRC season, no migration is required. If you have data from SPOT v4 or earlier and you want to access it with SPOT v5 or later, migration is required. Refer to the [migration guide](https://docs.google.com/document/d/e/2PACX-1vT-4zxXgeCIOai_fIJwoPhzDs3wWO5fdo-dLJVkPmhtUIvn2NyJjXRBU67fSyDcoUWjL9kp-1UMtNiB/pub) for more information.
+A project is one season's configuration. Create one from a template (2022–2026 seasons
+are included, converted from the legacy config files) or from scratch, then edit it in the
+builder:
 
-## Features
+- **Layout** — a visual grid editor. Drag across cells to add a button; drag to move; resize
+  from the corner. Each button has a type (action, timer/start/submit, undo, navigation, label),
+  an action id, label, color, **points**, and *behaviors* (go to layer, filtered layer, set
+  variable, ask for field position, fixed position, highlight, hide, count multiple times).
+  Layers are separate screens; buttons switch between them.
+- **Timing** — match length, phases (when the clock reaches a time: rename the timer, switch
+  layer, set variables, pause the clock), 2026-style active/inactive **shifts**, the **A-Stop
+  lock**, every **timer message**, phase-prefixed action ids, position lock, field image,
+  alliance-zone buttons, 2× clock.
+- **Scoring** — points per action (exact id, or by ending so `Score` also counts
+  `autoScore`). Used for **scouter accuracy** and the *Points from scoring map* pipeline step.
+- **Pipeline** — the analysis steps (count actions, sums, ratios, weighted sums, averages,
+  cycles, ratings, …). Every step has a form; results and errors appear live on real or
+  **generated sample matches**, so you can build analysis before your first event.
+- **Dashboard** — the modules shown in analysis (stat lists with ranks, bar, donut, per-match
+  lines, field heatmap, radar, team columns, win chance, colored grid, text, headings), each
+  with a live preview.
+- **Analysis settings** — TBA score-breakdown enrichment, component OPRs (picked from TBA),
+  Filter Teams bands, which dashboard features are on.
+- **JSON** — view or paste any part; legacy `match-scouting.json`, `analysis-pipeline.json`,
+  `analysis-modules.json` and `scouter-accuracy-*.json` files are converted automatically.
 
-- An easy-to-use platform for data entry throughout matches.
-- Works on all platforms, from iOS to Android to the web.
-- An analysis page to display detailed statistics and charts about matches and teams.
-- Scores Imported from TBA for accuracy
-- Admin view for live scouter management at the competition.
-- Admins can monitor and verify incoming scouting data to ensure accuracy and consistency throughout the event.
-- Preconfigured for the 2026 REBUILT game with no additional game-specific customization required.
-- Easy deployment experience when teams run a server on Render.
-- Optimized for teams who have internet access while scouting, but also completely functional for teams with no internet access. [(workflow found here)](https://docs.google.com/document/d/e/2PACX-1vRVXPGirIs_T6EMiAWL_YhG9LXGgbZCH3n0iP5phAYMcYILqNsBTYlxgWW7vkJHRQtXqWpTP7Uwcyo8/pub).
-- Quick setup with a built-in first-run wizard to walk teams through configuring their scouting app, connecting to The Blue Alliance or FRC API, and setting up their database.
-- Completely configurable analysis and scouting view without the need for a single line of code.
-- Easy data deletion
+**▶ Preview** runs the real scouting engine on your draft layout (jump between phases, flip
+the field, switch alliance) and shows exactly which action ids would be recorded.
+**Activate** makes a project the one scouters and analysis use.
 
-SPOT is built with HTML, JS, CSS, and Node.js and operates with a MongoDB database.
+## Scouter accuracy
 
-### SPOT is designed for a wide range of teams with a wide range of expertise and requirements:
+Each scouted match's points (from the Scoring tab) are summed per alliance and compared with
+the official TBA alliance score. The difference is shared among that alliance's scouters,
+weighted by each scouter's past error. Each match stores the point map it was scored with, so
+changing points later does not silently change old results.
 
-1. A team that is new to scouting and isn't sure what information to gather or how to analyze their data. SPOT comes as a preconfigured app that can be deployed with minimal setup and will provide all the basic functionality needed by most teams.
-2. A team that has some experience with scouting and wants to collect specific data that may not be part of the default configuration but that doesn't have significant programming experience. SPOT can be configured by modifying configuration files rather than by writing code.
-3. A team that has experience with scouting and wants to perform custom analysis operations or advanced custom scouting interfaces and has some programming experience. SPOT can utilize user-provided analysis modules to extend its functionality beyond the default configuration without requiring teams to modify the base code.
-4. A team that has significant experience with scouting and significant programming expertise. SPOT is open source, documented, and designed to extensible such that teams can start from this code base and build their own custom scouting system.
+## Setup
 
-## Guiding Principles
+Requirements: Node 20+ and a MongoDB database (MongoDB Atlas free tier works).
 
-- SPOT's goal is to provide a universal scouting app platform that can function with any past or future FIRST Robotics game by just changing the configuration.
-- SPOT does not require you to write code to configure, set up, or use SPOT.
-- SPOT does not require you to be online for its most basic features (scouting, data analysis)
+```sh
+npm install
+cp .env.example .env.local      # then fill in DATABASE_URL, ACCESS_CODE, TBA_API_KEY
+npm run dev                     # http://localhost:8080
+```
 
-## Getting Started
+SPOT reads settings from **environment variables and/or `config/config.json`**
+(environment variables win). Existing v5 `config/config.json` files keep working:
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes, as well as deployed on a server (Glitch or Amazon Web Services). If you have any questions, feel free to contact us [spot@team3061.org](mailto:spot@team3061.org).
+| Setting | Env var | config.json |
+|---|---|---|
+| MongoDB URL (required) | `DATABASE_URL` or `MONGODB_URI` | `secrets.DATABASE_URL` |
+| Admin access code | `ACCESS_CODE` | `secrets.ACCESS_CODE` |
+| TBA read key | `TBA_API_KEY` | `secrets.TBA_API_KEY` |
+| Default TBA event | `TBA_EVENT_KEY` | `TBA_EVENT_KEY` |
+| Default event code | `EVENT_CODE` / `EVENT_NUMBER` | `EVENT_CODE` / `EVENT_NUMBER` |
+| Flip field orientation | `SWAP_ZONE_BUTTON_LOCATIONS` | `SWAP_ZONE_BUTTON_LOCATIONS` |
+| Component OPR names | `TBA_OPR_STRINGS` (comma list) | `TBA_OPR_STRINGS` |
+| Demo mode | `DEMO` | `DEMO` |
+| Alternate config path | `CONFIG_PATH` | — |
 
-### [Quickstart](https://docs.google.com/document/d/e/2PACX-1vQyMGqxn7CdAM1srgcaQKJGnJawiVCH-nxSbhq_hm0jYA9e2-axnV-mmqxOveJp5lX3TMohQieNe1Ft/pub)
+On first start SPOT creates the event and imports the 2025 and 2026 projects. Event,
+project and scouting settings are then changed in **Admin → Event & settings**; secrets
+only ever come from the environment or `config.json`.
 
-## Usage
+Production: `npm run build && npm start` (set `PORT`, default 3000). Deployment recipes:
+[AWS EC2 + nginx](deploy/aws/README.md) and [Google Cloud Run](deploy/gcp/deploy.sh)
+(`deploy/gcp/cloudshell/deploy.sh` runs from Cloud Shell with nothing to install).
+Run **one** instance: the live scouter registry is held in memory.
 
-This is a guide on how to use SPOT as well as its features, with a text and a video walkthrough.
+## Migrating from SPOT v5
 
-### [Usage Guide](https://docs.google.com/document/d/e/2PACX-1vTwLwWJwcn1WdrNSZLGY33f04TjXjwypreY7mTkSBck8K20i9injrl6MUOrHQLrpy9u8UvQu99XHLge/pub)
+- The database collections `teamMatchPerformances` and `events` are read as-is; existing
+  matches appear in analysis. New collections: `projects`, `settings`.
+- Old config files: create a project and use **Import files**, or start from the matching
+  season template. The hidden "catalog" layer is converted to *known action ids*; phase ×
+  button ids are now derived automatically.
+- The `/setup`, `/edit`, `/qrscanner` and `/schedule` pages are now parts of `/admin`.
+- QR codes from v6 phones carry their own id list, so any action id encodes safely
+  (v5 QR codes are not readable by v6).
 
-## Configuration
+## Development
 
-This is a guide to configuring SPOT. You can configure the buttons displayed in the scouting view as well as how data is transformed and displayed.
+```sh
+npm test         # unit + oracle tests (vitest)
+npm run lint     # TypeScript type check
+npm run build
+```
 
-### [Configuration Guide](https://docs.google.com/document/d/e/2PACX-1vRL0EauWWVXWEu9jQJ37-8SI6dSUrGMm6z2wrqwH6HYOA8FarEFugxXrZluRrI_Tpy92qqM9rypbhgr/pub)
+`tests/oracle.test.ts` replays real 2025 and 2026 event data through the pipeline engine
+and requires the output to match the legacy SPOT golden files in `tools/oracle/`.
+The requirements this rebuild follows are in [`claude/`](claude/README.md).
 
-## Contributing
-
-Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on contributing to SPOT.
-
-## Documentation
-
-Documentation of the core codebase is currently partially included in files. Check back soon for in-depth documentation later!
-
-## Authors
-
-- **Dylan Schmit** - _Initial work_ - [cyandev](https://github.com/cyandev)
-- **Nithilan Kalidoss** - _Initial work_ - [nithilan4](https://github.com/nithilan4)
-
-See also the list of [contributors](https://github.com/HuskieRobotics/SPOT/contributors) who participated in this project.
+Code map: `src/lib/scouting/engine.ts` (scouting state machine, shared by the app and the
+builder preview), `src/lib/analysis/transformers.ts` (pipeline steps + their form metadata),
+`src/lib/analysis/moduleDefs.ts` + `src/components/analysis/modules.tsx` (dashboard modules),
+`src/lib/project/legacy.ts` (v1–v5 importer), `src/app/api/**` (route handlers),
+`src/components/builder/**` (project builder).
 
 ## License
 
-This project is licensed under the Apache License 2.0 - see the [LICENSE.md](LICENSE) file for details
+See [LICENSE](LICENSE). Contributions welcome — see [CONTRIBUTING](.github/CONTRIBUTING.md).

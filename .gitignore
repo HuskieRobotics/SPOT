@@ -113,3 +113,10 @@ dist
 
 # TernJS port file
 .tern-port
+
+# Next.js
+.next/
+.next-dev/
+out/
+next-env.d.ts
+.env*.local
