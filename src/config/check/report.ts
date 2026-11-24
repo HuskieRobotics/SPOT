@@ -37,7 +37,6 @@ export const CONFIG_FILES: readonly ConfigKind[] = [
   "match-scouting",
   "analysis-pipeline",
   "analysis-modules",
-  "qr",
 ];
 
 export const fileName = (kind: ConfigKind) => `${kind}.json`;

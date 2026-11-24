@@ -22,7 +22,7 @@ document 23):
 | CF-8 (special ids)                         | `rules.locks`, `rules.allianceRelativeButtons` and each kind's `toggleButton` (CS-4, CS-9).                                                      |
 | CF-9, CF-9a (catalog layer, composite ids) | Known ids are derived (CS-5), and analysis sees button ids and periods, not composite ids (CS-16).                                               |
 | CF-9c (position lock)                      | `rules.positionLockMs` (CS-9).                                                                                                                   |
-| CF-10 (`qr.json`)                          | `actionSchema` (CS-14). The Phase 2 encoding replaces the composite-id index (document 20 §2.2).                                                 |
+| CF-10 (`qr.json`)                          | Removed (#358): the QR layout is derived from `match-scouting.json` (document 03 DM-15d, document 20 CS-14).                                     |
 | CF-11 (pipeline order)                     | Kept: entries run in order (document 09 TR-10). The pipeline runs in the browser only, CSV export included (AN-26a).                             |
 | CF-12 (transformer names)                  | Names registered at build time (document 09 TR-9, TR-14).                                                                                        |
 | CF-12a (`cycle` option names)              | Kept (CS-11).                                                                                                                                    |

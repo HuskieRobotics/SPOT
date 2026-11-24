@@ -27,7 +27,6 @@ import type {
   ModuleEntry,
   Phase,
   PipelineEntry,
-  QrConfig,
   RatingBand,
   Segment,
 } from "../types";
@@ -70,10 +69,6 @@ export interface V1Module {
   wholeMatch?: boolean;
   options: Record<string, unknown>;
 }
-export interface V1Qr {
-  ACTION_SCHEMA: { key: string; bits: number }[];
-}
-
 export interface ConvertOptions {
   /**
    * Prefix recorded ids with the phase/segment (the 2026 scheme). Default: auto-detect, which
@@ -774,27 +769,4 @@ export function convertAnalysisModules(
     filterTeams: { ratingBands: DEFAULT_RATING_BANDS },
   };
   return { config, warnings };
-}
-
-// ---------------------------------------------------------------------------- qr
-
-export function convertQr(v1: V1Qr, opts: ConvertOptions = {}): ConvertResult<QrConfig> {
-  const warnings: string[] = [];
-  const actionSchema = v1.ACTION_SCHEMA.map((f) => {
-    if (f.key === "id" && f.bits < 16) {
-      warnings.push(
-        `qr: id bits raised from ${f.bits} to 16 (ids are now an index into the derived known-action-id list)`,
-      );
-      return { key: "id" as const, bits: 16 };
-    }
-    return { key: f.key as "id" | "ts", bits: f.bits };
-  });
-  return {
-    config: {
-      $schema: `${opts.schemaBase ?? "../src/config/schema"}/qr.schema.json`,
-      version: 2,
-      actionSchema,
-    },
-    warnings,
-  };
 }

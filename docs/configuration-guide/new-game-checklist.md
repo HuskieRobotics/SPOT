@@ -14,7 +14,7 @@ run `npm run config:check` and fix every error.**
 
 ## 1. Kickoff day: set up
 
-- [ ] **Put last season away.** Copy `config/*.json` (the four files) to
+- [ ] **Put last season away.** Copy `config/*.json` (the three files) to
       `config/seasons/<last year>/`, and in each copy change the `"$schema"` line to start
       `"../../../src/config/schema/`.
       _Check:_ `npm run config:check -- config/seasons/<last year>` finds what it found in
@@ -56,8 +56,6 @@ File: `match-scouting.json` ([Match scouting](match-scouting.md)).
 - [ ] **Rules.** Undo's limit (`"minQueueLength"`), the A-Stop lock (its trigger button and the
       phase that releases it), buttons that swap sides for the blue alliance, the position lock.
       _Check:_ `config:check` (every button and phase a rule names exists). [Rules](match-scouting.md#rules)
-- [ ] **QR codes.** Nothing to change unless `config:check` says the season's buttons need more
-      bits in `qr.json`. [qr.json](match-scouting.md#qrjson)
 - [ ] **Walk through the screens** in the
       [scouting-screen preview](checking-and-preview.md#the-scouting-screen-preview)
       (`npm run dev`, then `/scouting-preview`): play a whole match on each alliance. Every

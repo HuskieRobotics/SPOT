@@ -263,6 +263,44 @@ Bit layout (all big-endian binary strings, packed into bytes then base64):
   assumption that `id` is the first field; `qr.json` must keep `id` first. `other` (position)
   data is not encoded. Ids not present in the config enumeration cannot be encoded.
 
+### v6 payload (#358, decided 2026-11-24)
+
+The v6 code replaces the layout above. It is read by `src/qr/codec.ts`; the scanner page is
+Phase 4.
+
+- **DM-15d** **The layout is derived from `match-scouting.json`; there is no `qr.json`**
+  (maintainer, 2026-11-24). An action is a **button number**, the number of the **period** it was
+  recorded in, and its **time** (CS-14 as revised by CS-16), each in the fewest bits that number
+  them: buttons are the action buttons and `extraActionIds`, sorted; periods are before the
+  match, each phase, and each segment at each repeat index with no kind or each kind; times run
+  from 0 to the match length. 2026 needs 6, 5 and 18 bits; 2025 needs 6, 2 and 18. Students set
+  nothing, and rearranging buttons on the screen changes nothing.
+- **DM-15a (revised)** The 16-bit fingerprint is taken over that layout (the sorted buttons, the
+  periods and the match length), so it changes when a button or period is added, removed or
+  renamed, and the decoder refuses a code from another configuration with a message.
+- **DM-15e** **Positions are encoded** (maintainer, 2026-11-24): a flag on every action, then x
+  and y in 7 bits each when set (whole percentages, SC-32). v5 left them out, so heatmaps lost
+  every QR-scanned match. Anything else in `other` cannot be carried, and the encoder refuses it;
+  extension executables (#362) must decide what they record.
+- **DM-15f** **Text and size.** The bits, padded to whole bytes, are written as Base45 (RFC 9285)
+  and drawn in the QR alphanumeric mode at error correction M: about 3% over raw bytes, against
+  33% for v5's base64, and text any scanner returns unchanged. One code holds at most 2260 bytes
+  (version 40); the encoder refuses a larger match and says to sync it instead. The largest real
+  2026 match, 68 actions with 8 positions, is 307 bytes: QR version 13, 69 modules a side. A 2026
+  code holds 592 actions, or 404 with positions.
+
+Header, in order: payload format 8 (1) · fingerprint 16 · client version major, minor and patch,
+8 each · event id 96 · level 1 (DV-17) · match number 10 · team number 16 and suffix 8 (DM-15c) ·
+nonce length 4 and value 63 (base 36, DV-18) · submitted at 42 (epoch ms; RT-14a needs the
+scouter's time, not the scan's) · coverage 1 (RT-34) · action count 10. Then each action: button,
+period, time, position flag, and x and y when the flag is set.
+
+- **DM-16 (v6)** A decoded performance is `source: "qr"` with `scouterId: null` (DV-5), keeps the
+  device's nonce and its `matchKey` (DV-18), so a later sync of the same record is a duplicate,
+  and keeps the submission time and coverage. The client version keeps major.minor.patch only.
+  Notes and tags are not carried; they are not recorded yet (BL-35, BL-193), and adding them
+  raises the payload format.
+
 ## Config file data contracts
 
 See document 04 for the full schema of each configuration file.

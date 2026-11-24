@@ -11,11 +11,9 @@ import {
   convertAnalysisModules,
   convertAnalysisPipeline,
   convertMatchScouting,
-  convertQr,
   type V1MatchScouting,
   type V1Module,
   type V1PipelineEntry,
-  type V1Qr,
 } from "@/config/convert/v1-to-v2";
 import {
   describeKeys,
@@ -117,16 +115,6 @@ describe("v1 -> v2 converter on every archived season", () => {
       expect(r.issues).toEqual([]);
     });
   }
-
-  it("CS-14: qr converts and widens the id field", () => {
-    const { config, warnings } = convertQr(v1("qr.json") as V1Qr);
-    expect(validateConfig("qr", config).ok).toBe(true);
-    expect(config.actionSchema).toEqual([
-      { key: "id", bits: 16 },
-      { key: "ts", bits: 32 },
-    ]);
-    expect(warnings).toHaveLength(1);
-  });
 });
 
 describe("converted 2026 match-scouting configuration", () => {

@@ -10,7 +10,7 @@ The full list of what a new game needs, in order and with when each item can be 
 
 The files in `config/` are the season SPOT is using. Before changing them for the new game:
 
-1. Copy the four files to a new folder `config/seasons/<last year>/`, such as
+1. Copy the three files to a new folder `config/seasons/<last year>/`, such as
    `config/seasons/2026/`.
 2. In each copy, change the start of the `"$schema"` line from `"../src/config/schema/` to
    `"../../../src/config/schema/`, because the copy is two folders deeper. VS Code then checks
@@ -24,7 +24,7 @@ A mentor also removes the test that keeps `config/` equal to what the converter 
 ## 2. Start from the closest game
 
 Most games look like 2025: an auto phase and a teleop phase, a few game pieces, and buttons for
-picking up, scoring and missing each. Copy the four files from `config/seasons/2025/` into
+picking up, scoring and missing each. Copy the three files from `config/seasons/2025/` into
 `config/` and change them, rather than starting from nothing. In each, change the start of the
 `"$schema"` line back from `"../../../src/config/schema/` to `"../src/config/schema/`. The 2025 files have six module
 paths that point at values the pipeline never wrote (`config:check` reports them); fix or

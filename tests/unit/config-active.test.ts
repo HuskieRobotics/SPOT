@@ -8,20 +8,19 @@
  * seasons kept as worked examples and as inputs for the behavioral oracle (docs/spec/17).
  */
 import { describe, expect, it } from "vitest";
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import {
   convertAnalysisModules,
   convertAnalysisPipeline,
   convertMatchScouting,
-  convertQr,
   type ConvertOptions,
 } from "@/config/convert/v1-to-v2";
 import { actionButtonIds, deriveKnownActionIds } from "@/config/knownActionIds";
 import { validateConfig, type ConfigKind } from "@/config/validate";
 
 const root = process.cwd();
-const kinds: ConfigKind[] = ["match-scouting", "analysis-pipeline", "analysis-modules", "qr"];
+const kinds: ConfigKind[] = ["match-scouting", "analysis-pipeline", "analysis-modules"];
 const read = (...p: string[]) => JSON.parse(readFileSync(join(root, ...p), "utf8"));
 const v1 = (f: string) => read("config", "v1", f);
 const oprStrings = read("tools", "oracle", "fixtures", "opr-strings", "2026mnwi.json") as Record<
@@ -44,7 +43,6 @@ const sets: Record<string, ConfigSet> = {
       "match-scouting": "match-scouting.json",
       "analysis-pipeline": "analysis-pipeline.json",
       "analysis-modules": "analysis-modules.json",
-      qr: "qr.json",
     },
     opts: { oprStrings, schemaBase: "../src/config/schema" },
   },
@@ -55,7 +53,6 @@ const sets: Record<string, ConfigSet> = {
       // The pipeline v4.2.0 shipped, which produced the 2025 golden output (#310).
       "analysis-pipeline": "analysis-pipeline-2025-v4.2.0.json",
       "analysis-modules": "analysis-modules-2025v2.json",
-      qr: "qr.json",
     },
     opts: { schemaBase: "../../../src/config/schema" },
   },
@@ -69,13 +66,11 @@ const convert = (kind: ConfigKind, set: ConfigSet) => {
       ...set.opts,
       matchScouting: v1(set.sources["match-scouting"]),
     }).config;
-  if (kind === "analysis-modules")
-    return convertAnalysisModules(source, {
-      ...set.opts,
-      matchScouting: v1(set.sources["match-scouting"]),
-      pipeline: v1(set.sources["analysis-pipeline"]),
-    }).config;
-  return convertQr(source, set.opts).config;
+  return convertAnalysisModules(source, {
+    ...set.opts,
+    matchScouting: v1(set.sources["match-scouting"]),
+    pipeline: v1(set.sources["analysis-pipeline"]),
+  }).config;
 };
 
 for (const [name, set] of Object.entries(sets)) {
@@ -100,12 +95,8 @@ for (const [name, set] of Object.entries(sets)) {
       }
     });
 
-    it("fits the QR id field", () => {
-      const known = deriveKnownActionIds(file("match-scouting"));
-      const idBits = (file("qr").actionSchema as { key: string; bits: number }[]).find(
-        (f) => f.key === "id",
-      )!.bits;
-      expect(known.length).toBeLessThan(2 ** idBits);
+    it("has no qr.json: the QR layout is derived (#358)", () => {
+      expect(existsSync(join(root, ...set.dir, "qr.json"))).toBe(false);
     });
   });
 }

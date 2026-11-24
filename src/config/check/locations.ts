@@ -42,8 +42,6 @@ function namerFor(kind: ConfigKind, parents: readonly Key[]): Namer | null {
     if (at.endsWith(".executables")) return (x, i) => `executable ${i + 1} (${field(x, "type")})`;
     if (at === "rules.locks") return (l) => `lock "${field(l, "id")}"`;
   }
-  if (kind === "qr" && at === "actionSchema")
-    return (f, i) => `actionSchema item ${i + 1} (${field(f, "key")})`;
   return null;
 }
 

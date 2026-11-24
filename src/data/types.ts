@@ -222,6 +222,20 @@ export interface ScouterSession {
   updatedAt: number;
 }
 
+/**
+ * A v6 performance's `matchKey` (DV-18): level and match, team, and the device's nonce, as in
+ * `q12-3061-k3j9x0a2mq7c`. It names no scouter, so a record scanned from a QR code has the same key
+ * as the copy the device syncs later.
+ */
+export function performanceKey(
+  level: MatchLevel,
+  matchNumber: number,
+  team: TeamKey,
+  nonce: string,
+): string {
+  return `${level === "playoff" ? "p" : "q"}${matchNumber}-${team}-${nonce}`;
+}
+
 export function sessionId(eventId: ObjectIdHex, scouterId: string): string {
   return `${eventId}:${scouterId}`;
 }

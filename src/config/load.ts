@@ -25,7 +25,7 @@ export interface Season {
   folder: string;
 }
 
-/** The text of each of a folder's four files; a missing file is left out. */
+/** The text of each of a folder's three files; a missing file is left out. */
 export type ConfigSources = Partial<Record<ConfigKind, string>>;
 
 /** The active season first, then the others by name. `root` is the project folder. */
@@ -46,7 +46,7 @@ export function findSeason(name: string, root: string = process.cwd()): Season |
   return listSeasons(root).find((s) => s.name === name);
 }
 
-/** Read the four files of a folder (absolute, or relative to the working directory). */
+/** Read the three files of a folder (absolute, or relative to the working directory). */
 export function readConfigFolder(folder: string): ConfigSources {
   const sources: ConfigSources = {};
   for (const kind of CONFIG_FILES) {
@@ -56,7 +56,7 @@ export function readConfigFolder(folder: string): ConfigSources {
   return sources;
 }
 
-/** Read a season's four files. */
+/** Read a season's three files. */
 export function readSeason(season: Season, root: string = process.cwd()): ConfigSources {
   return readConfigFolder(join(root, season.folder));
 }

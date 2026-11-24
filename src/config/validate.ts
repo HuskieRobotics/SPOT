@@ -6,22 +6,16 @@ import { createSchemaSet, type ValidationIssue, type ValidationResult } from "@/
 import matchScoutingSchema from "./schema/match-scouting.schema.json";
 import analysisPipelineSchema from "./schema/analysis-pipeline.schema.json";
 import analysisModulesSchema from "./schema/analysis-modules.schema.json";
-import qrSchema from "./schema/qr.schema.json";
-import type {
-  AnalysisModulesConfig,
-  AnalysisPipelineConfig,
-  MatchScoutingConfig,
-  QrConfig,
-} from "./types";
+import type { AnalysisModulesConfig, AnalysisPipelineConfig, MatchScoutingConfig } from "./types";
 
-export type ConfigKind = "match-scouting" | "analysis-pipeline" | "analysis-modules" | "qr";
+/** A season's configuration files. The QR layout is derived, so there is no qr.json (#358). */
+export type ConfigKind = "match-scouting" | "analysis-pipeline" | "analysis-modules";
 export type { ValidationIssue, ValidationResult };
 
 export const schemas = {
   "match-scouting": matchScoutingSchema,
   "analysis-pipeline": analysisPipelineSchema,
   "analysis-modules": analysisModulesSchema,
-  qr: qrSchema,
 } as const;
 
 const set = createSchemaSet<ConfigKind>(schemas);
@@ -44,7 +38,4 @@ export function isAnalysisPipelineConfig(data: unknown): data is AnalysisPipelin
 }
 export function isAnalysisModulesConfig(data: unknown): data is AnalysisModulesConfig {
   return validateConfig("analysis-modules", data).ok;
-}
-export function isQrConfig(data: unknown): data is QrConfig {
-  return validateConfig("qr", data).ok;
 }

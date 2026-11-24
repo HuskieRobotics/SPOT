@@ -270,8 +270,8 @@ Rationale in [ADR 0004](../adr/0004-authentication-and-privacy.md).
 ## Design decisions a rewrite must make
 
 - **D-1** Keep the JSON configuration formats byte-compatible (so archived year configs still
-  load) or define a versioned successor with a converter. The four config files are the
-  platform's public interface.
+  load) or define a versioned successor with a converter. The config files (three in v6:
+  `qr.json` went with #358) are the platform's public interface.
 - **D-2** Where game-specific behavior currently lives in code (F-19), define configuration
   hooks: phase/shift model, lock rules, alliance-relative buttons, field-map transforms.
 - **D-3** Choose a stable, config-independent id encoding for QR payloads. **Resolved
