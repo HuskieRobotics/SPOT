@@ -120,6 +120,7 @@ class Device {
           scouterId: this.scouterId,
           deviceId: this.deviceId,
           joinCode: code,
+          name: `Scouter ${this.scouterId}`, // adds them to the roster the first time (SEC-7)
         }),
       }),
     );
@@ -214,6 +215,17 @@ describe("T-6: devices over HTTP", () => {
     expect(s.headers.get("content-type")).toMatch(/text\/event-stream/);
     expect(s.headers.get("x-accel-buffering")).toBe("no");
     expect(await devices[0].stream!.next()).toMatchObject({ event: "state" });
+  });
+
+  it("RT-29: a device that signs in but never opens its stream takes no robot", async () => {
+    const silent = new Device("299999");
+    expect((await silent.signIn()).status).toBe(200);
+    const { snapshot } = await admin();
+    expect(snapshot?.entries.find((e) => e.scouterId === "299999")).toMatchObject({
+      connected: false,
+      team: null,
+    });
+    await admin({ action: "remove", scouterId: "299999" });
   });
 
   it("RT-16, RT-12a: the admin chooses a match, six devices are assigned, and the quorum sends them in", async () => {
@@ -340,7 +352,7 @@ describe("the runtime, directly", () => {
   it("heartbeats an idle stream (docs/spec/15, condition 1)", async () => {
     const runtime = new Runtime({ db, heartbeatMs: 10 });
     const d = new Device("300001");
-    await runtime.signIn(d.scouterId, d.deviceId, joinCode);
+    await runtime.signIn(d.scouterId, d.deviceId, joinCode, `Scouter ${d.scouterId}`);
     const abort = new AbortController();
     const r = await runtime.openStream(d.scouterId, d.deviceId, abort.signal);
     const reader = new StreamReader(r.body!);
@@ -355,7 +367,8 @@ describe("the runtime, directly", () => {
 
   it("DV-15: after a restart, scouters are disconnected and keep their robots", async () => {
     const before = new Runtime({ db });
-    for (const id of ["400001", "400002"]) await before.signIn(id, `device-${id}-0001`, joinCode);
+    for (const id of ["400001", "400002"])
+      await before.signIn(id, `device-${id}-0001`, joinCode, `Scouter ${id}`);
     await before.flush();
     const held = (await before.snapshot())!.entries.filter((e) => e.team !== null);
     const after = new Runtime({ db });
@@ -370,7 +383,7 @@ describe("the runtime, directly", () => {
     let t = 1_000_000;
     const runtime = new Runtime({ db, now: () => t });
     const d = new Device("500001");
-    await runtime.signIn(d.scouterId, d.deviceId, joinCode);
+    await runtime.signIn(d.scouterId, d.deviceId, joinCode, `Scouter ${d.scouterId}`);
     const r = await runtime.openStream(d.scouterId, d.deviceId, new AbortController().signal);
     const reader = new StreamReader(r.body!);
     await reader.next();
@@ -384,7 +397,9 @@ describe("the runtime, directly", () => {
     await updateSettings(db, { activeEventId: null }, { now: t });
     t += 10_000;
     expect(await runtime.snapshot()).toBeNull();
-    await expect(runtime.signIn("1", "device-00000001", joinCode)).rejects.toMatchObject({
+    await expect(
+      runtime.signIn("1", "device-00000001", joinCode, "Scouter One"),
+    ).rejects.toMatchObject({
       status: 409,
       code: "no-active-event",
     });

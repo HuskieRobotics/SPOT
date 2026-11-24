@@ -13,7 +13,9 @@
 import type { Db } from "mongodb";
 import { checkJoinCode, type JoinCodeCheck } from "@/auth/join-code";
 import { getDb } from "@/db/client";
+import { Refusal, refusalResponse } from "@/lib/refusal";
 import { getEvent } from "@/db/events";
+import { addScouter, getScouter } from "@/db/scouters";
 import { effectiveMatches, getSchedule, updateSchedule } from "@/db/schedules";
 import {
   assignmentCollection,
@@ -39,21 +41,6 @@ import {
 } from "./registry";
 
 type Without<T> = T extends unknown ? Omit<T, "now"> : never;
-
-/** A refusal with an HTTP status and a message a person can act on. */
-export class Refusal extends Error {
-  constructor(
-    readonly status: number,
-    readonly code: string,
-    message: string,
-  ) {
-    super(message);
-  }
-
-  response(): Response {
-    return Response.json({ error: this.code, message: this.message }, { status: this.status });
-  }
-}
 
 const NO_EVENT = new Refusal(
   409,
@@ -197,7 +184,12 @@ export class Runtime {
    * Sign in for assignment (RT-1). The join code is checked here, so a stranger cannot take
    * robots. Scouting without the server never needs this (SEC-9).
    */
-  signIn(scouterId: string, deviceId: string, joinCode: string | null): Promise<DeviceView> {
+  signIn(
+    scouterId: string,
+    deviceId: string,
+    joinCode: string | null,
+    name?: string,
+  ): Promise<{ view: DeviceView; name: string }> {
     return this.serial(async () => {
       const state = await this.required();
       const event = await getEvent(this.db, state.eventId, this.tenantId);
@@ -205,10 +197,31 @@ export class Runtime {
         ? checkJoinCode(event, joinCode)
         : { ok: false, reason: "no-code", message: NO_EVENT.message };
       if (!check.ok) throw new Refusal(403, "join-code", check.message);
+      // SEC-6: a session belongs to a scouter on the roster. "I'm not on the list" sends a name,
+      // which adds them (SEC-7); an ID already on the roster keeps its name.
+      let scouter = await getScouter(this.db, scouterId, this.tenantId);
+      if (!scouter && name)
+        scouter = (await addScouter(this.db, { id: scouterId, name, tenantId: this.tenantId }))
+          .scouter;
+      if (!scouter)
+        throw new Refusal(
+          404,
+          "not-on-roster",
+          "That student ID is not on the roster. Choose \u201cI\u2019m not on the list\u201d to add yourself.",
+        );
       // The old device first, so it never sees the new device's state.
       this.hub.signOutOtherDevices(scouterId, deviceId);
-      this.dispatch({ type: "signIn", scouterId, deviceId });
-      return deviceView(this.state!, this.state!.entries[scouterId]);
+      // Connected means a stream is open (RT-29); the device opens one after signing in.
+      this.dispatch({
+        type: "signIn",
+        scouterId,
+        deviceId,
+        connected: this.hub.isConnected(scouterId),
+      });
+      return {
+        view: deviceView(this.state!, this.state!.entries[scouterId]),
+        name: scouter.displayName,
+      };
     });
   }
 
@@ -389,12 +402,4 @@ export function resetRuntime() {
   delete store.__spotRuntime;
 }
 
-/** Turn a thrown refusal into its response; anything else is a server error. */
-export function refusalResponse(error: unknown): Response {
-  if (error instanceof Refusal) return error.response();
-  console.error(error);
-  return Response.json(
-    { error: "server", message: "Something went wrong on the server. Try again." },
-    { status: 500 },
-  );
-}
+export { Refusal, refusalResponse };

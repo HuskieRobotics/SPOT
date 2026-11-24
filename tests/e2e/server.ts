@@ -11,8 +11,9 @@ import { MongoMemoryServer } from "mongodb-memory-server";
 import { ensureCollections } from "../../src/db/collections";
 import { createEvent } from "../../src/db/events";
 import { updateSchedule } from "../../src/db/schedules";
+import { addScouter } from "../../src/db/scouters";
 import { updateSettings } from "../../src/db/settings";
-import { E2E_JOIN_CODE } from "./fixtures";
+import { E2E_JOIN_CODE, E2E_ROSTER } from "./fixtures";
 
 async function main() {
   const mongo = await MongoMemoryServer.create();
@@ -35,6 +36,7 @@ async function main() {
     })),
   });
   await updateSettings(db, { activeEventId: event._id });
+  for (const [id, name] of E2E_ROSTER) await addScouter(db, { id, name });
   await client.close();
 
   // E2E_NEXT=dev runs the same tests against `next dev` (ADR 0001's time-box asked for both).

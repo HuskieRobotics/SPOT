@@ -234,6 +234,23 @@ Rationale in [ADR 0004](../adr/0004-authentication-and-privacy.md).
   has none) and a message a scouter can act on, and the device keeps the record (SEC-9). The
   submission route that calls the check is #360. Signing in for assignment checks it too (#354), so a stranger
   cannot take robots; scouting with no server never needs it (SEC-9).
+- **SEC-6a** **[decided 2026-11-24]** The admin merge of two scouter records is built with the
+  edit page in Phase 4, where admins already correct data. Until then a scouter added twice
+  under two student IDs stays two records; nothing is lost.
+- **SEC-7a** **[decided 2026-11-24, #356]** Sign-in (`/sign-in`, the screen the scouting client
+  shows first): the join code once per device, then the scouter's name from the roster,
+  searchable, or **I'm not on the list**, which takes a student ID and a full name. The roster is
+  the `scouters` collection without records rebuilt from v5 data, whose IDs are old
+  concatenated names. The device keeps the roster it last read, so it can sign in offline; a
+  scouter added offline is kept on the device and sent with the next connection. A student ID
+  already on the roster is never renamed by a device: the server keeps the name and says whose
+  ID it is. Signing in to the registry needs a student ID on the roster, or a name to add it.
+  What the device remembers (device id, join code, roster, added scouters, who is signed in) is
+  in `localStorage`, so a reload or a restart keeps it (RT-26); sign-out keeps the join code.
+- **SEC-8a** **[decided 2026-11-24]** The roster is served only with the join code, so scouter
+  names are not a public read. Anyone with the code can see the names and student IDs on it,
+  which is what signing in by picking a name needs; per-scouter passwords are out of scope
+  (ADR 0004).
 - **SEC-3b** **[decided 2026-11-24]** The admin page shows the join code as text and as a QR
   code. Scanning it opens SPOT with the code filled in, so scouters need not type it at the start
   of an event. Typing it always works too, for a device without a camera or a scouter who
