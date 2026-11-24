@@ -1,13 +1,19 @@
 /**
- * What a device remembers across reloads and restarts (RT-26, SEC-2, SEC-7, #356): its device
- * id, the event's join code, the roster it last read, scouters added on it but not yet sent, and
- * who is signed in on it.
+ * What a device remembers across reloads and restarts (RT-26, SEC-2, SEC-7, #356, #359): its
+ * device id, the event's join code, the roster it last read, scouters added on it but not yet
+ * sent, who is signed in on it, what the server last said about them, the scouting
+ * configuration, the match being scouted, and the matches scouted but not yet sent.
  *
- * Kept in `localStorage`, which survives a reload and a browser restart. Small and read at
- * startup; the scouted matches waiting to sync go in IndexedDB instead (#360). Where storage is
- * unavailable (a private window that refuses it), the device remembers in memory only.
+ * Kept in `localStorage`, which survives a reload and a browser restart. Where storage is
+ * unavailable (a private window that refuses it), the device remembers in memory only. #360
+ * moves the scouted matches to IndexedDB, where sync keeps them.
  */
 import { normalizeJoinCode } from "@/auth/join-code";
+import { THEME_KEY } from "@/lib/theme";
+import type { MatchScoutingConfig } from "@/config/types";
+import type { ObjectIdHex } from "@/data/types";
+import type { DeviceView } from "@/sessions/registry";
+import type { ActiveMatch, FinishedMatch } from "./match";
 
 export interface KeyValue {
   getItem(key: string): string | null;
@@ -32,7 +38,26 @@ const KEYS = {
   roster: "spot.roster",
   pending: "spot.pendingScouters",
   signedIn: "spot.signedIn",
+  view: "spot.view",
+  settings: "spot.settings",
+  accepted: "spot.accepted",
+  config: "spot.config",
+  match: "spot.match",
+  matchConfig: "spot.matchConfig",
+  finished: "spot.finished",
 } as const;
+
+/** What an admin set for every device, as the stream last sent it (A-19, SC-28). */
+export interface DeviceSettings {
+  fieldFlipped: boolean;
+  eventId: ObjectIdHex | null;
+}
+
+/** The scouting configuration and its version (CS-17). */
+export interface CachedConfig {
+  version: string;
+  config: MatchScoutingConfig;
+}
 
 class MemoryStore implements KeyValue {
   private readonly map = new Map<string, string>();
@@ -159,6 +184,80 @@ export class DeviceStore {
   /** Sign-out is how a device changes hands (ADR 0006). The join code and roster stay. */
   signOut() {
     this.store.removeItem(KEYS.signedIn);
+    this.store.removeItem(KEYS.view);
+    this.store.removeItem(KEYS.accepted);
+  }
+
+  /** What the server last said about the signed-in scouter (RT-26). */
+  view(): DeviceView | null {
+    return this.read<DeviceView>(KEYS.view);
+  }
+
+  setView(view: DeviceView) {
+    this.write(KEYS.view, view);
+  }
+
+  settings(): DeviceSettings {
+    return this.read<DeviceSettings>(KEYS.settings) ?? { fieldFlipped: false, eventId: null };
+  }
+
+  setSettings(settings: DeviceSettings) {
+    this.write(KEYS.settings, settings);
+  }
+
+  /**
+   * The assignment the scouter pressed OK on, as `holdingKey` text, so a reload or a missed
+   * request never asks again (RT-27).
+   */
+  accepted(): string | null {
+    return this.read<string>(KEYS.accepted);
+  }
+
+  setAccepted(key: string) {
+    this.write(KEYS.accepted, key);
+  }
+
+  /** The scouting configuration as last loaded, for a reload without a connection (OF-1). */
+  config(): CachedConfig | null {
+    return this.read<CachedConfig>(KEYS.config);
+  }
+
+  setConfig(config: CachedConfig) {
+    this.write(KEYS.config, config);
+  }
+
+  /**
+   * The match being scouted, saved after every press so a reload resumes it (RT-26), with the
+   * configuration it began with: a configuration that changes mid-match never reaches it.
+   */
+  match(): { match: ActiveMatch; config: CachedConfig } | null {
+    const match = this.read<ActiveMatch>(KEYS.match);
+    const config = this.read<CachedConfig>(KEYS.matchConfig);
+    return match && config?.version === match.configVersion ? { match, config } : null;
+  }
+
+  setMatch(match: ActiveMatch, config?: CachedConfig) {
+    if (config) this.write(KEYS.matchConfig, config);
+    this.write(KEYS.match, match);
+  }
+
+  clearMatch() {
+    this.store.removeItem(KEYS.match);
+    this.store.removeItem(KEYS.matchConfig);
+  }
+
+  /** Matches scouted on this device and not yet sent (#360 sends them). */
+  finished(): FinishedMatch[] {
+    return this.read<FinishedMatch[]>(KEYS.finished) ?? [];
+  }
+
+  addFinished(match: FinishedMatch) {
+    this.write(KEYS.finished, [...this.finished().filter((m) => m.nonce !== match.nonce), match]);
+  }
+
+  /** Forget everything SPOT keeps on this device (OF-8). */
+  reset() {
+    for (const key of [...Object.values(KEYS), THEME_KEY]) this.store.removeItem(key);
   }
 }
 

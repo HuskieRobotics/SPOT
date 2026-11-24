@@ -3,7 +3,8 @@ import { E2E_ADMIN_PASSWORD, E2E_JOIN_CODE } from "./fixtures";
 
 // #354, ADR 0001: server-sent events reach a real browser through `next start` as they happen,
 // not buffered until the response ends, and the browser's reconnects behave as docs/spec/15
-// requires. One project only: the test changes the server's current match.
+// requires. It changes the server's current match, so it runs in its own project
+// (playwright.config.ts).
 
 const scouterId = "e2e-stream-1";
 const deviceId = "e2e-device-0001";
@@ -36,7 +37,6 @@ test("a device's stream delivers assignments as they happen, and a removal stops
   page,
   request,
 }) => {
-  test.skip(test.info().project.name !== "desktop-chromium", "changes shared server state");
   await page.goto("/");
   const signIn = await page.evaluate(
     async (body) =>

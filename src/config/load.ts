@@ -77,7 +77,7 @@ export interface LoadedMatchScouting {
 
 /**
  * A season's match-scouting.json, checked as config:check checks it, for a page that draws the
- * scouting screen. The other three files play no part in the screen and are not checked here.
+ * scouting screen. The other two files play no part in the screen and are not checked here.
  */
 export function loadMatchScouting(source: string | undefined): LoadedMatchScouting {
   const report = checkConfiguration(source === undefined ? {} : { "match-scouting": source }, {

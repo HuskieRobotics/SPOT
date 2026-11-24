@@ -1,27 +1,33 @@
 import { expect, test } from "@playwright/test";
 import { E2E_JOIN_CODE } from "./fixtures";
 
-// #356: signing in on a scouting device (SEC-2, SEC-3b, SEC-6, SEC-7, RT-26, OF-1). Each test
+// #356, #359: signing in on a scouting device (SEC-2, SEC-3b, SEC-6, SEC-7, RT-26, OF-1). Each test
 // runs in its own browser context, so it starts as a device that has never been used. Other tests
 // add scouters to the shared roster, so these look for the seeded names rather than count them.
+// A signed-in device holds its scouter's session, so each project signs in a different scouter:
+// two devices with the same scouter would sign each other out (SEC-6).
 
 test("SEC-3b, SEC-7, RT-26: the QR link fills in the join code; pick a name; a reload keeps it", async ({
   page,
 }) => {
-  await page.goto(`/?join=${E2E_JOIN_CODE.toLowerCase()}`);
-  await expect(page).toHaveURL(/\/sign-in\?join=/);
+  const [search, name] =
+    test.info().project.name === "mobile-chromium" ? ["ri", "Alex Rivera"] : ["lee", "Jordan Lee"];
+  // The old sign-in page's link still works, and the code leaves the address bar.
+  await page.goto(`/sign-in?join=${E2E_JOIN_CODE.toLowerCase()}`);
   await expect(page.getByRole("heading", { name: "Sign in to scout" })).toBeVisible();
+  await expect(page).toHaveURL(/\/$/);
   const roster = page.getByRole("list", { name: "Roster" });
   await expect(roster.getByRole("button", { name: "Zoe Park" })).toBeVisible();
 
-  await page.getByLabel("Find your name").fill("ri");
-  await expect(roster.getByRole("button")).toHaveText(["Alex Rivera"]);
-  await roster.getByRole("button", { name: "Alex Rivera" }).click();
-  await expect(page.getByText("Signed in as Alex Rivera")).toBeVisible();
+  await page.getByLabel("Find your name").fill(search);
+  await expect(roster.getByRole("button")).toHaveText([name]);
+  await roster.getByRole("button", { name }).click();
+  await expect(page.getByText(`Signed in as ${name}`)).toBeVisible();
 
   await page.reload();
-  await expect(page.getByText("Signed in as Alex Rivera")).toBeVisible();
+  await expect(page.getByText(`Signed in as ${name}`)).toBeVisible();
 
+  await page.getByRole("button", { name: "Menu" }).click();
   await page.getByRole("button", { name: "Sign out" }).click();
   await expect(roster.getByRole("button", { name: "Zoe Park" })).toBeVisible();
 });
@@ -29,7 +35,7 @@ test("SEC-3b, SEC-7, RT-26: the QR link fills in the join code; pick a name; a r
 test("SEC-2: a typed join code works, and a wrong one is refused with a message", async ({
   page,
 }) => {
-  await page.goto("/sign-in");
+  await page.goto("/");
   const code = page.getByLabel("Join code");
   await code.fill("WRONG1");
   await page.getByRole("button", { name: "Continue" }).click();
@@ -46,7 +52,7 @@ test("OF-1, SEC-7: offline, a scouter adds themselves; the next connection adds 
   context,
 }) => {
   test.skip(test.info().project.name !== "desktop-chromium", "adds to the shared roster");
-  await page.goto(`/sign-in?join=${E2E_JOIN_CODE}`);
+  await page.goto(`/?join=${E2E_JOIN_CODE}`);
   await expect(
     page.getByRole("list", { name: "Roster" }).getByRole("button", { name: "Zoe Park" }),
   ).toBeVisible();
@@ -60,6 +66,8 @@ test("OF-1, SEC-7: offline, a scouter adds themselves; the next connection adds 
   await expect(page.getByRole("status")).toContainText("No connection");
 
   await context.setOffline(false);
+  await expect(page.getByTestId("connection")).toHaveText("Connected");
+  await page.getByRole("button", { name: "Menu" }).click();
   await page.getByRole("button", { name: "Sign out" }).click();
   const roster = page.getByRole("list", { name: "Roster" });
   await expect(roster.getByRole("button", { name: "Sam Offline", exact: true })).toBeVisible();
