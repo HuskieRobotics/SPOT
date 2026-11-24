@@ -19,7 +19,7 @@ import { screenButtons } from "@/scouting/view";
 const root = process.cwd();
 const text = (...p: string[]) => readFileSync(join(root, ...p), "utf8");
 const guide = text("docs", "configuration-guide", "tutorial.md");
-const kinds: ConfigKind[] = ["match-scouting", "analysis-pipeline", "analysis-modules", "qr"];
+const kinds: ConfigKind[] = ["match-scouting", "analysis-pipeline", "analysis-modules"];
 const season2025 = Object.fromEntries(
   kinds.map((k) => [k, text("config", "seasons", "2025", `${k}.json`)]),
 ) as Record<ConfigKind, string>;
@@ -226,7 +226,6 @@ describe("#333 (gate K-6): the new-game checklist covers what was collected", ()
     ["fixed kinds", "fixed kinds"],
     ["layers and buttons", "Screens and buttons"],
     ["field picture", '"fieldMap"'],
-    ["qr.json bits", "qr.json"],
     // analysis-pipeline.json
     ["period filters, not composite ids", "filters and grouping"],
     ["worst values", '"divByZero"'],

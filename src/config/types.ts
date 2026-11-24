@@ -210,12 +210,3 @@ export interface AnalysisModulesConfig {
   modules: ModuleEntry[];
   filterTeams: { ratingBands: RatingBand[] };
 }
-
-// ---------------------------------------------------------------------------- qr
-
-export interface QrConfig {
-  $schema?: string;
-  version: 2;
-  /** Per-action bit layout; `id` is an index into the derived known-action-id list. */
-  actionSchema: { key: "id" | "ts"; bits: number }[];
-}

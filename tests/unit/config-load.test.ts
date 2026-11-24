@@ -59,11 +59,11 @@ describe("CS-17: seasons are config/ and the folders under config/seasons/", () 
     }
   });
 
-  it("reads each of a season's four files, leaving out a missing one", () => {
+  it("reads each of a season's three files, leaving out a missing one and an old qr.json", () => {
     const root = project({ "2025": ["match-scouting.json", "qr.json"] });
     const sources = readSeason(findSeason("2025", root)!, root);
-    expect(Object.keys(sources).sort()).toEqual(["match-scouting", "qr"]);
-    expect(Object.keys(readConfigFolder(join("config", "seasons", "2025")))).toHaveLength(4);
+    expect(Object.keys(sources).sort()).toEqual(["match-scouting"]);
+    expect(Object.keys(readConfigFolder(join("config", "seasons", "2025")))).toHaveLength(3);
   });
 
   it("gives each file a version that changes whenever the file does (OF-8)", () => {

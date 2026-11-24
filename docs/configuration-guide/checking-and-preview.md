@@ -7,7 +7,7 @@ Three tools tell you whether a configuration works, before any real match is pla
 - The [scouting-screen preview](#the-scouting-screen-preview), a page, draws
   `match-scouting.json` as a scouter will see it, and lets you play a match on it.
 
-The two commands read the four files in `config/` unless you name another folder after `--`:
+The two commands read the three files in `config/` unless you name another folder after `--`:
 
 ```sh
 npm run config:check -- config/seasons/2025
@@ -71,7 +71,9 @@ should be. These are the same rules VS Code underlines in red.
   so counting it is a mistake.
 - Every phase, segment and kind a filter names exists.
 - TBA enrichment names a phase that exists, and lists `knownIds`.
-- `qr.json` has enough bits for this season's buttons and match length.
+- A made-up match goes into a QR code and comes back unchanged, so scouters without a
+  connection can hand matches in. (There is no `qr.json` to set: SPOT works out the QR code
+  from `match-scouting.json`.)
 
 **The calculations work.** The check plays 120 made-up matches with your buttons and runs the
 whole pipeline on them. One made-up team, 9999, never does anything, to see how the analysis

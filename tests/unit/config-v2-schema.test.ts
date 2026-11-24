@@ -9,10 +9,9 @@ import type {
   AnalysisModulesConfig,
   AnalysisPipelineConfig,
   MatchScoutingConfig,
-  QrConfig,
 } from "@/config/types";
 
-const kinds: ConfigKind[] = ["match-scouting", "analysis-pipeline", "analysis-modules", "qr"];
+const kinds: ConfigKind[] = ["match-scouting", "analysis-pipeline", "analysis-modules"];
 
 const minimalMatchScouting = (): MatchScoutingConfig => ({
   version: 2,
@@ -103,14 +102,6 @@ const minimalModules = (): AnalysisModulesConfig => ({
   filterTeams: { ratingBands: [] },
 });
 
-const minimalQr = (): QrConfig => ({
-  version: 2,
-  actionSchema: [
-    { key: "id", bits: 16 },
-    { key: "ts", bits: 32 },
-  ],
-});
-
 describe("v2 configuration schemas", () => {
   for (const kind of kinds) {
     it(`${kind} schema compiles under Ajv strict mode`, () => {
@@ -128,14 +119,13 @@ describe("v2 configuration schemas", () => {
       issues: [],
     });
     expect(validateConfig("analysis-modules", minimalModules())).toEqual({ ok: true, issues: [] });
-    expect(validateConfig("qr", minimalQr())).toEqual({ ok: true, issues: [] });
   });
 
   it("rejects v1 documents and wrong versions", () => {
     expect(validateConfig("match-scouting", { timing: { totalTime: 160000 }, layout: {} }).ok).toBe(
       false,
     );
-    const r = validateConfig("qr", { ...minimalQr(), version: 1 });
+    const r = validateConfig("analysis-modules", { ...minimalModules(), version: 1 });
     expect(r.ok).toBe(false);
     expect(r.issues).toContainEqual(
       expect.objectContaining({ path: "version", message: "must be 2" }),

@@ -270,24 +270,17 @@ executable. The path is inside the `public/` folder: `/img/field.svg` is
 records them. A new game usually needs none; leave it `[]`. The 2026 file keeps a few from the
 old configuration it was converted from.
 
-## `qr.json`
+## QR codes
 
-When there is no network, a scouter's tablet shows the match as a QR code for the admin to
-scan. `qr.json` says how many bits each part of an action takes:
+When there is no network, a scouter's tablet shows the match as a QR code for an admin to
+scan. There is nothing to set for it: SPOT works out how to pack a match from this file, from
+its buttons, its phases and segments, and the match length. `config:check` sends made-up matches
+through a QR code and back, and tells you if something the screen records could not go in one.
 
-```json
-{
-  "$schema": "../src/config/schema/qr.schema.json",
-  "version": 2,
-  "actionSchema": [
-    { "key": "id", "bits": 16 },
-    { "key": "ts", "bits": 32 }
-  ]
-}
-```
-
-Leave it as it is. `config:check` tells you if the season's buttons ever need more bits for
-`"id"`, or a longer match more for `"ts"` (the time), and how many to use.
+A code made with one configuration cannot be read with another: if you add, remove or rename a
+button or a period during an event, scan any codes made before the change first. (Moving
+buttons around the screen is fine.) A folder that still has a `qr.json` from an older SPOT can
+delete it; nothing reads it.
 
 ## Check your work
 

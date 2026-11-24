@@ -15,7 +15,7 @@ of the 2025 configuration, press it on the scouting screen, and see it counted o
 page. The rest of the guide
 explains each part in more detail.
 
-## The four files
+## The three files
 
 The files for the season SPOT is using right now are in the `config/` folder:
 
@@ -24,7 +24,6 @@ The files for the season SPOT is using right now are in the `config/` folder:
 | `match-scouting.json`    | The buttons on the scouting screen, the match timing, and the rules for undoing | [Match scouting](match-scouting.md)           |
 | `analysis-pipeline.json` | The calculations SPOT runs on the recorded actions                              | [The analysis pipeline](analysis-pipeline.md) |
 | `analysis-modules.json`  | The charts and numbers the analysis pages show                                  | [Analysis modules](analysis-modules.md)       |
-| `qr.json`                | How a match is packed into a QR code when there is no network                   | [Match scouting](match-scouting.md#qrjson)    |
 
 Past seasons are kept in `config/seasons/<year>/`, so you can look at how an earlier game was
 set up. `config/seasons/2025/` is the best example of a typical game.
@@ -94,7 +93,7 @@ Code helps you while you type:
 ## The three steps you repeat
 
 1. **Edit** a file in VS Code and save it.
-2. **Check** the files: `npm run config:check`. It reads all four files, checks that they agree
+2. **Check** the files: `npm run config:check`. It reads all three files, checks that they agree
    with each other, and runs the calculations on 120 made-up matches. Every problem comes with
    the file, the line, what is wrong, and what to try. See
    [Checking and previewing](checking-and-preview.md).
@@ -132,7 +131,7 @@ npm run config:preview -- config/seasons/2025
 ## Chapters
 
 1. [Your first change](tutorial.md): a hands-on walk-through.
-2. [Match scouting](match-scouting.md): buttons, layers, timing and rules (`match-scouting.json`, `qr.json`).
+2. [Match scouting](match-scouting.md): buttons, layers, timing and rules (`match-scouting.json`) and [QR codes](match-scouting.md#qr-codes).
 3. [Periods](periods.md): phases, segments and kinds, and analyzing one period at a time.
 4. [The analysis pipeline](analysis-pipeline.md): the calculations (`analysis-pipeline.json`).
 5. [Analysis modules](analysis-modules.md): what the analysis pages show (`analysis-modules.json`).

@@ -17,17 +17,18 @@ import { createRegistry, extensionTransformers } from "@/analysis/transformers";
 import { checkConfiguration, formatReport, type CheckReport, type Finding } from "@/config/check";
 import { indexPositions, locate, parseJson } from "@/config/check/json";
 import { describeLocation } from "@/config/check/locations";
+import { checkQr } from "@/config/check/qr";
+import { Reporter } from "@/config/check/report";
+import { generate } from "@/generate/synthetic";
 import {
   convertAnalysisModules,
   convertAnalysisPipeline,
   convertMatchScouting,
-  convertQr,
 } from "@/config/convert/v1-to-v2";
 import type {
   AnalysisModulesConfig,
   AnalysisPipelineConfig,
   MatchScoutingConfig,
-  QrConfig,
 } from "@/config/types";
 import { validateConfig, type ConfigKind } from "@/config/validate";
 
@@ -38,14 +39,12 @@ interface Docs {
   ms: MatchScoutingConfig;
   pipeline: AnalysisPipelineConfig;
   modules: AnalysisModulesConfig;
-  qr: QrConfig;
 }
 
 const load = (...dir: string[]): Docs => ({
   ms: JSON.parse(readText(...dir, "match-scouting.json")),
   pipeline: JSON.parse(readText(...dir, "analysis-pipeline.json")),
   modules: JSON.parse(readText(...dir, "analysis-modules.json")),
-  qr: JSON.parse(readText(...dir, "qr.json")),
 });
 const season2025 = load("config", "seasons", "2025");
 const season2026 = load("config");
@@ -65,7 +64,6 @@ const sources = (d: Docs): Record<ConfigKind, string> => ({
   "match-scouting": JSON.stringify(d.ms, null, 2),
   "analysis-pipeline": JSON.stringify(d.pipeline, null, 2),
   "analysis-modules": JSON.stringify(d.modules, null, 2),
-  qr: JSON.stringify(d.qr, null, 2),
 });
 
 /** The checks of the files themselves, without running the pipeline (CC-1 to CC-8). */
@@ -129,9 +127,9 @@ describe("T-3: the archived 2025 configuration", () => {
 
 describe("CC-1: reading the files", () => {
   it("says where a JSON syntax error is, with a hint for the usual mistakes", () => {
-    const text = '{\n  "version": 2,\n  "actionSchema": [],\n}\n';
-    const r = checkConfiguration({ ...sources(season2025), qr: text }, filesOnly);
-    expect(r.findings.filter((f) => f.file === "qr")).toEqual([
+    const text = '{\n  "version": 2,\n  "modules": [],\n}\n';
+    const r = checkConfiguration({ ...sources(season2025), "analysis-modules": text }, filesOnly);
+    expect(r.findings.filter((f) => f.file === "analysis-modules")).toEqual([
       expect.objectContaining({
         severity: "error",
         where: "(whole file)",
@@ -161,18 +159,20 @@ describe("CC-1: reading the files", () => {
 
   it("reports a missing file, and a v1 file with the command that converts it", () => {
     const rest: Partial<Record<ConfigKind, string>> = sources(season2025);
-    delete rest.qr;
-    expect(checkConfiguration(rest, filesOnly).findings.find((f) => f.file === "qr")).toMatchObject(
-      {
-        message: "qr.json is missing.",
-        hint: expect.stringMatching(/^A season's configuration has four files/),
-      },
-    );
+    delete rest["analysis-modules"];
+    expect(
+      checkConfiguration(rest, filesOnly).findings.find((f) => f.file === "analysis-modules"),
+    ).toMatchObject({
+      message: "analysis-modules.json is missing.",
+      hint: expect.stringMatching(/^A season's configuration has three files/),
+    });
     const r = checkConfiguration(
-      { ...sources(season2025), qr: readText("config", "v1", "qr.json") },
+      { ...sources(season2025), "match-scouting": readText("config", "v1", "match-scouting.json") },
       filesOnly,
     );
-    expect(r.findings.find((f) => f.file === "qr")?.hint).toMatch(/npm run config:convert/);
+    expect(r.findings.find((f) => f.file === "match-scouting")?.hint).toMatch(
+      /npm run config:convert/,
+    );
   });
 
   it("finds the line of any value, also behind escaped strings", () => {
@@ -637,31 +637,26 @@ describe("CC-3: references within match-scouting.json", () => {
   });
 });
 
-describe("CC-7: qr.json", () => {
-  it("the id field must number every recordable id, and ts must hold a match", () => {
-    const found = check((d) => {
-      d.qr.actionSchema = [
-        { key: "id", bits: 4 },
-        { key: "ts", bits: 16 },
-      ];
-    });
-    expect(found.map((f) => [f.where, f.message, f.hint])).toEqual([
-      [
-        "actionSchema item 1 (id) › bits",
-        expect.stringMatching(
-          /^4 bits can number 16 ids, but match-scouting.json can record \d+\.$/,
-        ),
-        expect.stringMatching(/^Use \d bits or more\.$/),
-      ],
-      [
-        "actionSchema item 2 (ts) › bits",
-        "16 bits hold times up to 65535 ms, but a match lasts 153000 ms.",
-        "Use 18 bits or more.",
-      ],
+describe("CC-7: matches go through a QR code (#358)", () => {
+  it("every season's generated matches come back from a code unchanged", () => {
+    for (const d of [season2025, season2026]) {
+      const r = checkConfiguration(sources(d), filesOnly);
+      expect(r.findings.filter((f) => /QR code/.test(f.message))).toEqual([]);
+    }
+  });
+
+  it("a match the scouting screen records but a code cannot carry is an error", () => {
+    const report = new Reporter({});
+    const [p] = generate({ config: season2026.ms, seed: "cc-7", matches: 1 }).performances;
+    const action = { ...p.actions[0], other: { color: "red" } };
+    checkQr(season2026.ms, report, [{ ...p, actions: [action] }]);
+    expect(report.findings).toEqual([
+      expect.objectContaining({
+        severity: "error",
+        file: "match-scouting",
+        message: expect.stringMatching(/cannot be sent by QR code: .*color/),
+      }),
     ]);
-    expect(
-      check((d) => d.qr.actionSchema.push({ key: "ts", bits: 32 })).map((f) => f.message),
-    ).toEqual(['actionSchema must have exactly one "ts" field; it has 2.']);
   });
 });
 
@@ -674,7 +669,6 @@ describe("CC-8: a check that compares files waits for both to be valid", () => {
     expect(r.findings.some((f) => f.message.includes('"barg"'))).toBe(false);
     expect(r.skipped).toEqual([
       "checks within match-scouting.json, and of the ids other files name: fix the errors in match-scouting.json first.",
-      "the QR id field: fix the errors in match-scouting.json first.",
       "running the pipeline on generated matches: fix the errors in match-scouting.json and analysis-pipeline.json first.",
     ]);
     expect(r.generated).toBeUndefined();
@@ -705,7 +699,7 @@ describe("the report", () => {
         "path",
       ]),
     ).toBe('module 11 (team Stats "Team Stats") › options.list › item 3 › path');
-    expect(describeLocation("qr", season2025.qr, [])).toBe("(whole file)");
+    expect(describeLocation("analysis-modules", season2025.modules, [])).toBe("(whole file)");
   });
 
   it("prints file:line:column, where, what, what to try, and a total", () => {
@@ -768,7 +762,6 @@ describe("done when: every archived v1 season that converts gives a readable rep
         2,
       ),
       "analysis-modules": JSON.stringify(convertAnalysisModules(v1(modules), {}).config, null, 2),
-      qr: JSON.stringify(convertQr(v1("qr.json"), {}).config, null, 2),
     });
   }
 

@@ -6,7 +6,7 @@
  * the segments inside each phase (including each repeat index and each scouter-selected kind),
  * and from the empty pre-match prefix.
  *
- * The result is deterministic and ordered (stable QR index, docs/spec/03 and qr.schema.json).
+ * The result is deterministic and sorted. The QR layout numbers button ids, not these (#358).
  */
 import type { MatchScoutingConfig, Phase, Segment } from "./types";
 

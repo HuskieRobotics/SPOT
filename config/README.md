@@ -3,17 +3,16 @@
 New to these files? Read the [Configuration Guide](../docs/configuration-guide/README.md), which
 starts with a 25-minute walk-through.
 
-The four files here drive the v6 application:
+The three files here drive the v6 application:
 
 | File                     | Schema                                            | Spec                 |
 | ------------------------ | ------------------------------------------------- | -------------------- |
 | `match-scouting.json`    | `src/config/schema/match-scouting.schema.json`    | docs/spec/04, 05, 20 |
 | `analysis-pipeline.json` | `src/config/schema/analysis-pipeline.schema.json` | docs/spec/08, 09, 20 |
 | `analysis-modules.json`  | `src/config/schema/analysis-modules.schema.json`  | docs/spec/08, 09, 20 |
-| `qr.json`                | `src/config/schema/qr.schema.json`                | docs/spec/03, 20     |
 
 Each file starts with `"$schema"` pointing at its schema, so VS Code validates and
-autocompletes while you edit. To check all four files and the references between them, run:
+autocompletes while you edit. To check all three files and the references between them, run:
 
 ```sh
 npm run config:check                          # this folder

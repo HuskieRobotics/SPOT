@@ -1,12 +1,12 @@
 /**
- * config:check (#317, gate K-2; T-3): tells a student whether a season's four configuration files
+ * config:check (#317, gate K-2; T-3): tells a student whether a season's three configuration files
  * are right, before any match is played. Each finding names the file and line, says where in
  * words, what is wrong, and what to try.
  *
  * 1. Each file is read as JSON and validated against its schema (docs/spec/20).
  * 2. Checks the schemas cannot express: references inside match-scouting.json (layers, buttons,
  *    phases, variables), and from the other files into it (the button and period ids options
- *    name, enrichment phases, the QR id field); transformer names and options against the
+ *    name, enrichment phases); whether a long match fits one QR code (CC-7); transformer names and options against the
  *    registry, extensions included (TR-14); module names.
  * 3. The pipeline runs on generated matches (./generated.ts): paths nothing writes, values that
  *    are empty for everyone, rankings a team that never did anything drops out of.
@@ -17,19 +17,14 @@
  */
 import type { TransformerRegistry } from "@/analysis/engine";
 import { createRegistry } from "@/analysis/transformers";
-import { deriveKnownActionIds } from "../knownActionIds";
-import type {
-  AnalysisModulesConfig,
-  AnalysisPipelineConfig,
-  MatchScoutingConfig,
-  QrConfig,
-} from "../types";
+import type { AnalysisModulesConfig, AnalysisPipelineConfig, MatchScoutingConfig } from "../types";
 import { validateConfig, type ConfigKind } from "../validate";
 import { checkModulesFile, checkPipelineFile } from "./analysis";
 import { checkOnGeneratedMatches } from "./generated";
 import type { GeneratedSummary } from "../simulate";
 import { keysFromPointer, parseJson, type Key } from "./json";
 import { CONFIG_FILES, fileName, Reporter, type CheckReport } from "./report";
+import { checkQr } from "./qr";
 import { checkMatchScouting } from "./scouting";
 
 export { CONFIG_FILES, formatReport, type CheckReport, type Finding } from "./report";
@@ -91,7 +86,7 @@ export function checkConfiguration(
         kind,
         [],
         `${fileName(kind)} is missing.`,
-        "A season's configuration has four files: match-scouting.json, analysis-pipeline.json, analysis-modules.json and qr.json.",
+        "A season's configuration has three files: match-scouting.json, analysis-pipeline.json and analysis-modules.json.",
       );
       continue;
     }
@@ -154,9 +149,7 @@ export function checkConfiguration(
     });
   }
 
-  const qr = valid.qr ? (docs.qr as QrConfig) : null;
-  if (qr && ms) checkQr(qr, ms, report);
-  else if (qr && !ms) skipped.push("the QR id field: fix the errors in match-scouting.json first.");
+  if (ms) checkQr(ms, report);
 
   // Last, so that what follows from a mistake already reported is not reported again.
   let generated: GeneratedSummary | null = null;
@@ -188,41 +181,4 @@ export function checkConfiguration(
   const result = report.finish(sources, skipped);
   if (generated) result.generated = generated;
   return result;
-}
-
-/** The QR payload must number every id the scouting screen can record, and hold a match's times. */
-function checkQr(qr: QrConfig, ms: MatchScoutingConfig, report: Reporter): void {
-  for (const key of ["id", "ts"] as const) {
-    const at = qr.actionSchema.map((f, i) => (f.key === key ? i : -1)).filter((i) => i >= 0);
-    if (at.length !== 1) {
-      report.error(
-        "qr",
-        ["actionSchema"],
-        `actionSchema must have exactly one "${key}" field; it has ${at.length}.`,
-      );
-      continue;
-    }
-    const bits = qr.actionSchema[at[0]].bits;
-    const keys: Key[] = ["actionSchema", at[0], "bits"];
-    if (key === "id") {
-      // Until the Phase 2 encoding (CS-14 revised) the id is an index into the derived id list,
-      // which is also the larger of the two numbers to fit.
-      const ids = deriveKnownActionIds(ms).length;
-      if (ids >= 2 ** bits) {
-        report.error(
-          "qr",
-          keys,
-          `${bits} bits can number ${2 ** bits} ids, but match-scouting.json can record ${ids}.`,
-          `Use ${Math.ceil(Math.log2(ids + 1))} bits or more.`,
-        );
-      }
-    } else if (2 ** bits <= ms.timing.totalMs) {
-      report.error(
-        "qr",
-        keys,
-        `${bits} bits hold times up to ${2 ** bits - 1} ms, but a match lasts ${ms.timing.totalMs} ms.`,
-        `Use ${Math.ceil(Math.log2(ms.timing.totalMs + 1))} bits or more.`,
-      );
-    }
-  }
 }

@@ -6,8 +6,8 @@ Converted copies of past seasons, kept for two reasons:
    period and uses repeating shifts. A typical season looks like `2025/`, which has two phases,
    no prefixes and no segments. Read that one first when writing a new season's configuration.
 2. **Oracle inputs.** The behavioral oracle baselines 2025 against tag `v4.2.0` (docs/spec/17).
-   These files are converted from that tag's default configuration: `match-scouting2025v2.json`,
-   `analysis-modules-2025v2.json` and `qr.json` equal it, and its pipeline is
+   These files are converted from that tag's default configuration: `match-scouting2025v2.json`
+   and `analysis-modules-2025v2.json` equal it, and its pipeline is
    `analysis-pipeline-2025-v4.2.0.json` (see `config/v1/README.md`).
 
 They are not loaded by the application. The active configuration is `config/*.json`.
@@ -18,8 +18,7 @@ Regenerate with:
 npm run config:convert -- config/v1 config/seasons/2025 \
   --match-scouting match-scouting2025v2.json \
   --pipeline analysis-pipeline-2025-v4.2.0.json \
-  --modules analysis-modules-2025v2.json \
-  --qr qr.json
+  --modules analysis-modules-2025v2.json
 npx prettier --write "config/seasons/**/*.json"
 ```
 

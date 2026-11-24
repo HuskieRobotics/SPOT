@@ -14,7 +14,6 @@ import type {
   MatchScoutingConfig,
   ModuleEntry,
   PipelineEntry,
-  QrConfig,
 } from "@/config/types";
 import type { ConfigKind } from "@/config/validate";
 import { convertAnalysisPipeline } from "@/config/convert/v1-to-v2";
@@ -23,7 +22,6 @@ interface Docs {
   ms: MatchScoutingConfig;
   pipeline: AnalysisPipelineConfig;
   modules: AnalysisModulesConfig;
-  qr: QrConfig;
 }
 
 const read = (...p: string[]) => JSON.parse(readFileSync(join(process.cwd(), ...p), "utf8"));
@@ -31,7 +29,6 @@ const load = (...dir: string[]): Docs => ({
   ms: read(...dir, "match-scouting.json"),
   pipeline: read(...dir, "analysis-pipeline.json"),
   modules: read(...dir, "analysis-modules.json"),
-  qr: read(...dir, "qr.json"),
 });
 const season2025 = load("config", "seasons", "2025");
 const season2026 = load("config");
@@ -48,7 +45,6 @@ const sources = (d: Docs): Record<ConfigKind, string> => ({
   "match-scouting": JSON.stringify(d.ms, null, 2),
   "analysis-pipeline": JSON.stringify(d.pipeline, null, 2),
   "analysis-modules": JSON.stringify(d.modules, null, 2),
-  qr: JSON.stringify(d.qr, null, 2),
 });
 
 const same = (a: Finding, b: Finding) => a.where === b.where && a.message === b.message;
