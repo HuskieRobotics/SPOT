@@ -198,7 +198,12 @@ describe("SEC-5, SEC-5a, #120: admin requests are checked in one place", () => {
       }
     };
     scan(join(process.cwd(), "src"));
-    expect(offenders).toEqual([]);
+    expect(
+      offenders,
+      "These files declare Server Functions. src/proxy.ts does not see a Server Function as a " +
+        "route, so one would skip the admin check (doc 12, SEC-5a). Write the action as a route " +
+        "handler under src/app/api/admin/ instead.",
+    ).toEqual([]);
   });
 });
 
