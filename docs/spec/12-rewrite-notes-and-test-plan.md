@@ -234,9 +234,12 @@ Rationale in [ADR 0004](../adr/0004-authentication-and-privacy.md).
   has none) and a message a scouter can act on, and the device keeps the record (SEC-9). The
   submission route that calls the check is #360. Signing in for assignment checks it too (#354), so a stranger
   cannot take robots; scouting with no server never needs it (SEC-9).
-- **SEC-6a** **[decided 2026-11-24]** The admin merge of two scouter records is built with the
-  edit page in Phase 4, where admins already correct data. Until then a scouter added twice
-  under two student IDs stays two records; nothing is lost.
+- **SEC-6a** **[decided 2026-11-24]** An admin corrects a scouter's name on the admin page's
+  roster (#357), for a name misspelled at **I'm not on the list**. Only the `scouters` record
+  changes: performances hold the student ID, so no scouting data is rewritten, and devices show
+  the new name the next time they read the roster. The admin merge of two scouter records is
+  built with the edit page in Phase 4, where admins already correct data. Until then a scouter
+  added twice under two student IDs stays two records; nothing is lost.
 - **SEC-7a** **[decided 2026-11-24, #356]** Sign-in (`/sign-in`, the screen the scouting client
   shows first): the join code once per device, then the scouter's name from the roster,
   searchable, or **I'm not on the list**, which takes a student ID and a full name. The roster is

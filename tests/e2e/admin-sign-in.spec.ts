@@ -16,7 +16,7 @@ test("an admin page needs the admin password, and sign-out ends the session", as
   await page.getByLabel("Admin password").fill(password);
   await page.getByRole("button", { name: "Sign in" }).click();
   await expect(page).toHaveURL(/\/admin$/);
-  await expect(page.getByText("You are signed in.")).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Event" })).toBeVisible();
 
   const cookie = (await page.context().cookies()).find((c) => c.name === "spot-admin");
   expect(cookie?.httpOnly).toBe(true);

@@ -83,3 +83,34 @@ export async function rosterFor(db: Db, tenantId: TenantId = DEFAULT_TENANT) {
     .toArray();
   return scouters.map((s) => ({ id: s._id, name: s.displayName }));
 }
+
+/**
+ * Correct a scouter's name (SEC-6a): an admin fixes a name misspelled at "I'm not on the list".
+ * Only this record changes; performances hold the student ID, so no scouting data is rewritten.
+ * Null if there is no such scouter.
+ */
+export async function renameScouter(
+  db: Db,
+  id: string,
+  name: string,
+  tenantId: TenantId = DEFAULT_TENANT,
+): Promise<Scouter | null> {
+  return scouterCollection(db).findOneAndUpdate(
+    { _id: id, tenantId },
+    { $set: { displayName: normalizeName(name) } },
+    { returnDocument: "after" },
+  );
+}
+
+/** Names by student ID, for the admin page's scouter cards (SEC-8: admins only). */
+export async function namesOf(
+  db: Db,
+  ids: string[],
+  tenantId: TenantId = DEFAULT_TENANT,
+): Promise<Map<string, string>> {
+  if (ids.length === 0) return new Map();
+  const found = await scouterCollection(db)
+    .find({ tenantId, _id: { $in: ids } }, { projection: { displayName: 1 } })
+    .toArray();
+  return new Map(found.map((s) => [s._id, s.displayName]));
+}

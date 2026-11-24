@@ -18,8 +18,8 @@ import { sessionCollection } from "@/db/sessions";
 import { updateSettings } from "@/db/settings";
 import type { ScheduledMatch, SpotEvent } from "@/data/types";
 import { resetRuntime, Runtime, type AdminSnapshot } from "@/sessions/runtime";
-import type { DeviceMessage } from "@/sessions/registry";
 import { startMongo, type TestMongo } from "../support/mongo";
+import { sleep, StreamReader } from "../support/sse";
 
 const ORIGIN = "http://localhost:3000";
 const PASSWORD = "transport test password";
@@ -31,72 +31,6 @@ const matches: ScheduledMatch[] = [1, 2].map((n) => ({
   red: [`${n}01`, `${n}02`, `${n}03`],
   blue: [`${n}04`, `${n}05`, `${n}06`],
 }));
-
-interface SseEvent {
-  event: string;
-  data: DeviceMessage;
-}
-
-/** Reads a server-sent event stream as it arrives. */
-class StreamReader {
-  private buffer = "";
-  readonly raw: string[] = [];
-  private readonly events: SseEvent[] = [];
-  done = false;
-  private readonly reader: ReadableStreamDefaultReader<Uint8Array>;
-  private readonly decoder = new TextDecoder();
-
-  constructor(body: ReadableStream<Uint8Array>) {
-    this.reader = body.getReader();
-  }
-
-  private async pull(): Promise<boolean> {
-    if (this.done) return false;
-    const { value, done } = await this.reader.read();
-    if (done) {
-      this.done = true;
-      return false;
-    }
-    const text = this.decoder.decode(value);
-    this.raw.push(text);
-    this.buffer += text;
-    let i: number;
-    while ((i = this.buffer.indexOf("\n\n")) >= 0) {
-      const block = this.buffer.slice(0, i);
-      this.buffer = this.buffer.slice(i + 2);
-      const event = /^event: (.*)$/m.exec(block)?.[1];
-      const data = /^data: (.*)$/m.exec(block)?.[1];
-      if (event && data) this.events.push({ event, data: JSON.parse(data) });
-    }
-    return true;
-  }
-
-  /** The next event, waiting for it to arrive; null once the stream has ended. */
-  async next(timeoutMs = 2000): Promise<SseEvent | null> {
-    const deadline = Date.now() + timeoutMs;
-    while (this.events.length === 0) {
-      if (Date.now() > deadline) throw new Error("no event arrived");
-      if (!(await Promise.race([this.pull(), sleep(timeoutMs).then(() => true)]))) return null;
-    }
-    return this.events.shift()!;
-  }
-
-  /** Every event up to now, without waiting for more than a moment. */
-  async drain(): Promise<SseEvent[]> {
-    const out: SseEvent[] = [];
-    for (;;) {
-      try {
-        const e = await this.next(100);
-        if (!e) return out;
-        out.push(e);
-      } catch {
-        return out;
-      }
-    }
-  }
-}
-
-const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 let joinCode = "";
 
@@ -275,7 +209,8 @@ describe("T-6: devices over HTTP", () => {
     await devices[1].open();
     const first = await devices[1].stream!.next();
     expect(first).toMatchObject({ event: "state", data: { view: { team: "102", entered: true } } });
-    expect(await devices[1].kinds()).toEqual([]);
+    // Then the field orientation (A-19), and no new assignment.
+    expect(await devices[1].kinds()).toEqual(["settings"]);
   });
 
   it("a reload opens the new stream before the old one closes, and the scouter stays connected", async () => {
@@ -386,7 +321,8 @@ describe("the runtime, directly", () => {
     await runtime.signIn(d.scouterId, d.deviceId, joinCode, `Scouter ${d.scouterId}`);
     const r = await runtime.openStream(d.scouterId, d.deviceId, new AbortController().signal);
     const reader = new StreamReader(r.body!);
-    await reader.next();
+    expect(await reader.next()).toMatchObject({ event: "state" });
+    expect(await reader.next()).toMatchObject({ event: "settings" });
     const other = await createEvent(db, { tbaKey: "2026wila", label: "official" });
     await updateSettings(db, { activeEventId: other._id }, { now: t });
     t += 10_000;

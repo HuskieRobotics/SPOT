@@ -78,7 +78,12 @@ export type DeviceMessage =
   /** The robot was taken away: released, or the match changed before they started (BL-54). */
   | { kind: "unassigned"; view: DeviceView; reason: "released" | "match-changed" }
   /** The session ended; the device must sign in again (doc 15, condition 3). */
-  | { kind: "signed-out" };
+  | { kind: "signed-out" }
+  /**
+   * What an admin sets for every device (A-19, SC-28), sent by the runtime when a stream opens
+   * and when it changes. The registry itself never sends it.
+   */
+  | { kind: "settings"; fieldFlipped: boolean };
 
 export type Effect =
   | { type: "send"; to: string; message: DeviceMessage }

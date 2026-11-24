@@ -15,7 +15,7 @@ import { checkJoinCode, type JoinCodeCheck } from "@/auth/join-code";
 import { getDb } from "@/db/client";
 import { Refusal, refusalResponse } from "@/lib/refusal";
 import { getEvent } from "@/db/events";
-import { addScouter, getScouter } from "@/db/scouters";
+import { addScouter, getScouter, namesOf } from "@/db/scouters";
 import { effectiveMatches, getSchedule, updateSchedule } from "@/db/schedules";
 import {
   assignmentCollection,
@@ -34,6 +34,7 @@ import {
   deviceView,
   restore,
   type CurrentMatch,
+  type DeviceMessage,
   type DeviceView,
   type RegistryEvent,
   type RegistryState,
@@ -60,6 +61,8 @@ export interface RuntimeOptions {
 
 export interface AdminEntry {
   scouterId: string;
+  /** The scouter's name from the roster (SEC-8: admins only). */
+  name: string;
   status: DeviceView["status"];
   connected: boolean;
   matchLevel: DeviceView["matchLevel"];
@@ -70,7 +73,7 @@ export interface AdminEntry {
   entered: boolean;
 }
 
-/** What admin views poll (NF-5, RT-14c). Names are joined in by the admin page (#357). */
+/** What admin views poll (NF-5, RT-14c). */
 export interface AdminSnapshot {
   eventId: ObjectIdHex;
   match: CurrentMatch | null;
@@ -272,6 +275,8 @@ export class Runtime {
         this.heartbeatMs,
       );
       this.dispatch({ type: "connect", scouterId });
+      // After the state, what an admin set for every device (A-19, SC-28).
+      this.hub.send(scouterId, await this.settingsMessage());
       return body;
     });
     if (signal.aborted) connection?.close();
@@ -289,8 +294,8 @@ export class Runtime {
 
   // ----------------------------------------------------------------- admins
 
-  snapshot(): Promise<AdminSnapshot | null> {
-    return this.serial(async () => {
+  async snapshot(): Promise<AdminSnapshot | null> {
+    const snapshot = await this.serial(async () => {
       const state = await this.current();
       if (!state) return null;
       return {
@@ -301,9 +306,35 @@ export class Runtime {
           .sort((a, b) => a.signedInAt - b.signedInAt || a.scouterId.localeCompare(b.scouterId))
           .map((e) => {
             const view = deviceView(state, e);
-            return { scouterId: e.scouterId, connected: e.connected, ...view };
+            return { scouterId: e.scouterId, name: e.scouterId, connected: e.connected, ...view };
           }),
       };
+    });
+    if (!snapshot) return null;
+    // Outside the queue: a roster read need not hold up devices.
+    const names = await namesOf(
+      this.db,
+      snapshot.entries.map((e) => e.scouterId),
+      this.tenantId,
+    );
+    for (const e of snapshot.entries) e.name = names.get(e.scouterId) ?? e.scouterId;
+    return snapshot;
+  }
+
+  private async settingsMessage(): Promise<DeviceMessage> {
+    const settings = await getSettings(this.db, { tenantId: this.tenantId, now: this.now() });
+    return { kind: "settings", fieldFlipped: settings.fieldFlipped };
+  }
+
+  /**
+   * An admin changed the settings (#357): follow them now rather than at the next request. A new
+   * active event signs every device out (they sign in to it); new start rules apply at once; the
+   * field orientation goes to every open stream (A-19, SC-28).
+   */
+  settingsChanged(): Promise<void> {
+    return this.serial(async () => {
+      await this.current();
+      this.hub.broadcast(await this.settingsMessage());
     });
   }
 

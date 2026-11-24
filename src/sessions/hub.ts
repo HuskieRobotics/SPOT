@@ -95,6 +95,11 @@ export class Hub {
     }
   }
 
+  /** Send a message to every open stream. */
+  broadcast(message: DeviceMessage) {
+    for (const scouterId of [...this.byScouter.keys()]) this.send(scouterId, message);
+  }
+
   /** Sign out the scouter's other devices, after they signed in on `deviceId`. */
   signOutOtherDevices(scouterId: string, deviceId: string) {
     for (const c of [...(this.byScouter.get(scouterId) ?? [])])

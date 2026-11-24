@@ -45,6 +45,43 @@ mode; a two-panel body: **Scouters** and **Matches**.
   password input and Yes/No; Yes calls `GET /admin/restart` with the code; the server exits
   with code 0 (process manager restarts it); wrong code → "Wrong Access Code!".
 
+**v6 (#357, decided 2026-11-24).** The admin page at `/admin`, behind the admin password
+(SEC-5a). It replaces AD-3 to AD-7; AD-9's restart button is not carried over (a deployment
+restarts the process, docs/spec/10).
+
+- **Polling** (AD-4, RT-14c): the page reads the settings and the registry every 2.5 s, and the
+  schedule, the event list and the roster every 30 s and after each change made on it. A change
+  one admin makes shows in every admin's view within seconds (BL-33, RT-14b).
+- **Event** (DV-12a, DV-12b, SEC-3, SEC-3b): the active event by its code; **Choose an event**
+  and **Make active**, which asks first when scouters are signed in, because they are signed out
+  and sign in again to the new event; **New event** from a TBA key and a label, made active at
+  once. The join code is shown as large text and as a QR code of `<address>/?join=<code>`, drawn
+  in the browser with the `qrcode` library (OF-6), with the link under it. **Make a new join
+  code** asks first; devices that entered the old one keep their records and must enter the new
+  one to sign in or send them (SEC-9).
+- **Match** (AD-7, RT-16, DV-17): the current match and its teams; **Previous match**, **Next
+  match** (or **First match**) and **No match**; the schedule with **Choose** on each match.
+  Matches come from the schedule page's sources (AD-8a); with none, the page links there.
+- **Start match** (AD-6, RT-12a) sends in the connected scouters waiting on the current match.
+  **Quorum** (1 to 6) and **Start on first scouter** sit beside it and apply at once (RT-14b).
+- **Field orientation** (A-19, SC-28): **Normal** or **Flipped**, one setting for every device.
+  The server sends it to each device's stream when the stream opens and whenever it changes.
+- **Scouters** (AD-4, AD-4a, AD-4b, RT-29, RT-32): one card per person, in sign-in order, with
+  the name from the roster, student ID, robot and match, status, and **Connected** or
+  **Disconnected**. A disconnected scouter holding a robot of the current match gets a red
+  border and says to release the robot if they are not coming back. Cards are not removed after
+  a time, unlike AD-4's 15 s (RT-29).
+- **Release robot** opens **Give Team N to**: the next scouter waiting (the normal assignment), or
+  a connected scouter without a robot in this match (RT-32). The card's other control is
+  **Sign out** for a connected scouter and **Remove** for a disconnected one: one action for the
+  registry (docs/spec/06), labelled for the case (AD-5, BL-116). Both ask first.
+- **Roster** (SEC-6a): collapsed by default; search by name or student ID, and **Correct name**.
+  The roster is read again when the panel opens and when a scouter who just added themselves is
+  signed in.
+
+Tests: `tests/unit/admin-page.test.ts`, `tests/e2e/admin-page.spec.ts` (its own Playwright
+project, run after the others, because it drives the registry every test shares).
+
 ## Edit Data page (`/edit`)
 
 - **AD-10** Requires access code (via `/admin/api/auth`). Loads `/analysis/api/dataset`
