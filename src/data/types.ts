@@ -159,6 +159,8 @@ export interface ScheduledMatch {
   key: string;
   red: [TeamKey | null, TeamKey | null, TeamKey | null];
   blue: [TeamKey | null, TeamKey | null, TeamKey | null];
+  /** A manual row locked against accidental edits (AD-25a). */
+  locked?: boolean;
 }
 
 /** An event's matches and current match, one document per event; `_id` is the event id (DV-14). */

@@ -216,6 +216,25 @@ Decided 2026-11-24, where the requirements above left a choice:
   which keeps a "B" robot at an off-season event (BL-308). The v5 string-versus-number mismatch
   between TBA and the FIRST API disappears with the fallback.
 
+## v6: the schedule (`src/schedule/`, #355)
+
+- **RT-22a** **[decided 2026-11-24]** A qualification match keeps TBA's number, which analysis
+  joins TBA's results on (DM-11). Playoff matches continue after the last qualification, one
+  number each, in TBA's order of level, set and match. v5 added TBA's `match_number` to an
+  offset per level, but in a double-elimination playoff every semifinal match is number 1 of its
+  own set, so all 13 semifinals of 2026mnwi would have shared one number. Neither real export
+  scouted playoffs, so no data depended on v5's numbers. Tests: `tests/unit/schedule.test.ts`.
+- TBA's schedule is kept in the schedule document (DV-14). It is read again when an admin asks,
+  or when the schedule page is shown and the copy is more than five minutes old, so playoff
+  matches appear as TBA adds them. If TBA cannot be read, the last copy stays and the page says
+  why: no `TBA_API_KEY` (RT-23, also logged once), a refused key, an unknown event, or no
+  connection. Every request to TBA times out after 10 s (OF-7).
+- Team keys from TBA and from the typed schedule are normalized on the way in (RT-23b): `frc2338B`
+  and a typed `2338b` are both `2338B`.
+- When the schedule changes, the registry follows it (#354's runtime): if the current match's
+  teams were corrected, only the robots that left it are taken back from scouters who have not
+  started; if the current match left the schedule, there is no current match.
+
 ## Demo mode summary (across the system)
 
 | Behavior                             | Non-demo                                           | Demo                                                          |

@@ -435,6 +435,20 @@ describe("RT-31 to RT-36: release and replacement", () => {
 });
 
 describe("BL-54: changing the match", () => {
+  it("correcting the current match's teams takes back only the robots that left it", () => {
+    const sim = new Sim().do({ type: "setMatch", match: match(1) }).signIn("s1", "s2", "s3");
+    sim.clear().do({ type: "setMatch", match: match(1) });
+    expect(sim.effects).toEqual([]); // the same teams: nothing happens
+    sim.do({ type: "setMatch", match: match(1, ["11", "99", "13", "21", "22", "23"]) });
+    expect([sim.team("s1"), sim.team("s2"), sim.team("s3")]).toEqual(["11", "99", "13"]);
+    expect(sim.kinds("s1")).toEqual([]);
+    expect(sim.kinds("s2")).toEqual(["unassigned", "assigned"]);
+    expect(sim.state.assignments["1:12"].holders[0]).toMatchObject({
+      scouterId: "s2",
+      ended: "unassigned",
+    });
+  });
+
   it("re-assigns everyone who has not started, and tells them", () => {
     const sim = new Sim().do({ type: "setMatch", match: match(1) }).signIn("s1", "s2");
     sim.clear().do({ type: "setMatch", match: match(2, ["31", "32", "33", "41", "42", "43"]) });

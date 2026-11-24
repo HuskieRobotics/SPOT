@@ -484,8 +484,22 @@ export function apply(previous: RegistryState, event: RegistryEvent): Result {
       break;
     }
     case "setMatch": {
-      if (event.match?.number === state.match?.number && event.match !== null)
-        return { state: previous, effects: [] };
+      if (event.match !== null && event.match.number === state.match?.number) {
+        // The same match with corrected teams (an admin fixed a typo in the schedule): only the
+        // robots that left the match are taken back from those waiting; everyone else keeps
+        // theirs. Someone already scouting a robot keeps it; the admin decides about that record.
+        const kept = new Set(robotsOf(event.match).map((r) => r.team));
+        const before = robotsOf(state.match!).map((r) => r.team);
+        if (before.length === kept.size && before.every((t) => kept.has(t)))
+          return { state: previous, effects: [] };
+        for (const e of Object.values(state.entries))
+          if (e.status === "waiting" && holdsCurrent(state, e) && !kept.has(e.team!)) {
+            take(state, ch, e, "unassigned", now);
+            ch.send(e, { kind: "unassigned", view: deviceView(state, e), reason: "match-changed" });
+          }
+        state.match = event.match;
+        break;
+      }
       for (const e of Object.values(state.entries)) {
         // Someone still scouting the old match finishes it (and is free once `ready`).
         if (e.status === "scouting") continue;

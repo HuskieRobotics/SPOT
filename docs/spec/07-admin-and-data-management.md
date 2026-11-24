@@ -106,7 +106,25 @@ mode; a two-panel body: **Scouters** and **Matches**.
   has no locks and saves on every input. `tempTeams` de-dup compares numbers against objects
   and therefore never de-duplicates.
 
-**[A-9]** FMS practice-match fallback: not used; may be dropped.
+**v6 (#355, decided 2026-11-24).** The manual schedule is kept (D-4) and lives at
+`/admin/schedule`, behind the admin password (SEC-5). It replaces AD-22 to AD-25:
+
+- The page says which schedule scouters are assigned from (the typed one when it has matches,
+  otherwise TBA's, AD-8), when TBA's was last read, and why it could not be, with a button to
+  read it now.
+- **Number of matches** and **Set** grow or shrink the typed schedule; each match has six boxes,
+  red 1 to 3 then blue 1 to 3. Teams are typed as an admin reads them (`3061`, `frc3061`, `2338b`)
+  and a box may stay empty while the schedule is being typed.
+- **Save** stores the whole schedule in MongoDB, so a restart keeps it (v5 kept it in memory).
+  A team that is not a team number, a team twice in one match, or a match twice is refused with
+  the match and slot, and nothing is saved. **Use TBA's schedule instead** empties it.
+- Each row has **Lock** and **Unlock** (AD-25a): a locked row cannot be edited until unlocked, and
+  the lock is saved with the schedule.
+- The schedule's teams, once each, replace `tempTeams` (F-12); analysis reads them in Phase 3.
+
+Tests: `tests/unit/schedule.test.ts`, `tests/e2e/admin-schedule.spec.ts`.
+
+**[A-9]** FMS practice-match fallback: dropped in v6 (RT-23a).
 
 ## Checklist page (`/checklist`, not mounted) — **[A-10] dropped**
 

@@ -292,6 +292,21 @@ export class Runtime {
     });
   }
 
+  /**
+   * The schedule changed (#355): follow it. If the current match's teams were corrected, only
+   * robots that left it are taken back; if the current match left the schedule, there is none.
+   */
+  scheduleChanged(): Promise<void> {
+    return this.serial(async () => {
+      const state = await this.current();
+      if (!state) return;
+      const schedule = await getSchedule(this.db, state.eventId, this.tenantId);
+      const match = currentMatchOf(effectiveMatches(schedule), schedule.currentMatchNumber);
+      if (match === null && state.match === null) return;
+      this.dispatch({ type: "setMatch", match });
+    });
+  }
+
   /** Choose the current match by its number in the schedule, or none (RT-16). */
   setMatch(matchNumber: number | null): Promise<void> {
     return this.serial(async () => {

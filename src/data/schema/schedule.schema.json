@@ -12,21 +12,37 @@
       "pattern": "^[0-9a-f]{24}$",
       "description": "The event id: one schedule per event."
     },
-    "tenantId": { "type": "string", "minLength": 1 },
-    "eventId": { "type": "string", "pattern": "^[0-9a-f]{24}$" },
+    "tenantId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "eventId": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{24}$"
+    },
     "tba": {
       "type": ["object", "null"],
       "additionalProperties": false,
       "required": ["matches", "fetchedAt"],
       "description": "The last schedule read from The Blue Alliance (RT-22), or null if none was read.",
       "properties": {
-        "matches": { "type": "array", "items": { "$ref": "#/$defs/match" } },
-        "fetchedAt": { "type": "integer", "minimum": 0 }
+        "matches": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/match"
+          }
+        },
+        "fetchedAt": {
+          "type": "integer",
+          "minimum": 0
+        }
       }
     },
     "manual": {
       "type": "array",
-      "items": { "$ref": "#/$defs/match" },
+      "items": {
+        "$ref": "#/$defs/match"
+      },
       "description": "The schedule an admin typed. When it is not empty it is used instead of TBA's (AD-8)."
     },
     "currentMatchNumber": {
@@ -34,7 +50,10 @@
       "minimum": 1,
       "description": "The match being scouted, chosen on the admin page (RT-16)."
     },
-    "updatedAt": { "type": "integer", "minimum": 0 }
+    "updatedAt": {
+      "type": "integer",
+      "minimum": 0
+    }
   },
   "$defs": {
     "teamOrEmpty": {
@@ -46,21 +65,34 @@
       "type": "array",
       "minItems": 3,
       "maxItems": 3,
-      "items": { "$ref": "#/$defs/teamOrEmpty" }
+      "items": {
+        "$ref": "#/$defs/teamOrEmpty"
+      }
     },
     "match": {
       "type": "object",
       "additionalProperties": false,
       "required": ["number", "key", "red", "blue"],
       "properties": {
-        "number": { "type": "integer", "minimum": 1 },
+        "number": {
+          "type": "integer",
+          "minimum": 1
+        },
         "key": {
           "type": "string",
           "minLength": 1,
           "description": "TBA's match key, such as 2026mnwi_qm12, or a made-up one for a manual match."
         },
-        "red": { "$ref": "#/$defs/alliance" },
-        "blue": { "$ref": "#/$defs/alliance" }
+        "red": {
+          "$ref": "#/$defs/alliance"
+        },
+        "blue": {
+          "$ref": "#/$defs/alliance"
+        },
+        "locked": {
+          "type": "boolean",
+          "description": "A manual row an admin locked against accidental edits (AD-25a). Absent means unlocked."
+        }
       }
     }
   }
