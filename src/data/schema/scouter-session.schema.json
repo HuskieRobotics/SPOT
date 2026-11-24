@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://spot.team3061.org/schema/v2/scouter-session.schema.json",
+  "title": "SPOT scouter session (data model v2)",
+  "description": "The saved copy of one registry entry (RT-24, DV-15). The server keeps the registry in memory and writes each change here in the background, so a restart keeps who holds which robot. Whether a scouter is connected is never stored: after a restart everyone is disconnected until their device reconnects.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "_id",
+    "tenantId",
+    "eventId",
+    "scouterId",
+    "status",
+    "matchNumber",
+    "team",
+    "accepted",
+    "updatedAt"
+  ],
+  "properties": {
+    "_id": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{24}:.+$",
+      "description": "<event id>:<student id>, so one person has one entry per event (RT-24)."
+    },
+    "tenantId": { "type": "string", "minLength": 1 },
+    "eventId": { "type": "string", "pattern": "^[0-9a-f]{24}$" },
+    "scouterId": { "type": "string", "minLength": 1, "description": "Student ID (SEC-6)." },
+    "status": { "enum": ["waiting", "scouting", "complete"] },
+    "matchNumber": { "type": ["integer", "null"], "minimum": 1 },
+    "team": {
+      "type": ["string", "null"],
+      "pattern": "^[1-9][0-9]{0,4}[A-Z]?$",
+      "description": "The robot this scouter holds (RT-25), or null."
+    },
+    "accepted": {
+      "type": "boolean",
+      "description": "The scouter has seen this assignment, so a reconnect does not show it again (RT-27)."
+    },
+    "updatedAt": { "type": "integer", "minimum": 0 }
+  }
+}

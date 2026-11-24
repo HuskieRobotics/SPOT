@@ -9,6 +9,9 @@ gets there. The JSON Schemas are the source of truth:
 | `src/data/schema/team-match-performance.schema.json` | one robot, one match | `teamMatchPerformances` | `TeamMatchPerformance` |
 | `src/data/schema/event.schema.json`                  | an event             | `events`                | `SpotEvent`            |
 | `src/data/schema/scouter.schema.json`                | a person who scouts  | `scouters`              | `Scouter`              |
+| `src/data/schema/settings.schema.json`               | a tenant's settings  | `settings`              | `Settings`             |
+| `src/data/schema/schedule.schema.json`               | an event's schedule  | `schedules`             | `Schedule`             |
+| `src/data/schema/scouter-session.schema.json`        | a registry entry     | `scouterSessions`       | `ScouterSession`       |
 
 Types are in `src/data/types.ts`, validation in `src/data/validate.ts`, placement logic in
 `src/data/phase.ts`, and the migration in `src/migrate/v5-to-v6.ts` with the CLI
@@ -30,6 +33,14 @@ Types are in `src/data/types.ts`, validation in `src/data/validate.ts`, placemen
 | DV-10 | **Missing means `null`**, everywhere.                                                                                                                                                                                                                                                                                                                                                                                   | DM-1b, D-7a             |
 | DV-11 | **Renames for plain meaning**: `timestamp` → `submittedAt`, `eventNumber` → `eventId`, `robotNumber` → `team` (DV-3), `matchId` → `matchKey`, `matchId_rand` → `nonce`, `actionQueue` → `actions`.                                                                                                                                                                                                                      | —                       |
 | DV-12 | **`EVENT_NUMBER` becomes `activeEventId`.** It was never a number, and which kind of identifier it holds is not the reader's problem. The admin UI selects an event by its `code`, which is what a person recognizes.                                                                                                                                                                                                   | CF-4, DM-7              |
+
+Added in Phase 2 (#351), for what the server must keep across a restart:
+
+| Id    | Change                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              | Source                 |
+| ----- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------- |
+| DV-13 | **A settings document per tenant**, `_id` the tenant id: `activeEventId` (DV-12a), the start rules (`quorum`, default 6, and `startOnFirstScouter`, default off) and the field orientation (`fieldFlipped`). Read per request through a 2 s cache, so a change needs no restart; a tenant without one gets the defaults. Secrets are never stored here.                                                                                                                                                                                                                                                                                                                                                             | ADR 0003, RT-12a, A-19 |
+| DV-14 | **A schedule document per event**, `_id` the event id: the last schedule read from TBA, the manual schedule, and the current match. A slot not typed yet is `null`. The manual schedule is used when it is not empty.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               | D-4, AD-8, RT-16       |
+| DV-15 | **The scouter registry is saved** (decided 2026-11-24). Memory stays the only thing assignment reads; each change is written to `scouterSessions` in the background, in order per entry, retried until it succeeds, so a slow or unreachable database never delays a scouter. The server reads the entries once at startup. Connection state is not stored, so after a restart every scouter is disconnected, keeps their robot (RT-25) and returns when their device reconnects, the same path as a dropped connection. One entry per person per event, `<event id>:<student id>`; an event's entries are removed when the active event changes. The assignment history RT-35 reads is added by #353 the same way. | RT-24 to RT-35         |
 
 Deliberate redundancy: the placement could be recomputed from `ts` and the season's
 configuration, but the configuration is edited between seasons and sometimes within one, so
@@ -160,15 +171,30 @@ migration could rewrite the references since it already rewrites every document.
 rejected because an event code is editable by an admin, so a typo correction would orphan every
 performance that referenced it. Identity that a person can retype is identity that can break.
 
-## 6. Still to build
+## 6. The database layer (`src/db/`, #351)
 
-- **Persistence.** The MongoDB driver and an in-memory MongoDB for tests exist (document 17,
-  Phase 0 item 6), and `tests/unit/mongo.test.ts` round-trips generated documents through it.
-  The application's database layer, with these schemas as the collection validators, lands
-  with Phase 2, the first phase that stores data (gate W-1). Phase 1 needed none: the engine
-  runs on documents it is given.
-- **Indexes**, with `tenantId` leading so a hosted instance does not need them rebuilt.
-- **The schedule and the current match** must be persisted too (D-4, manual schedule kept).
-- **The settings document**, whose first field is `activeEventId` (DV-12a).
-- **A driver-backed runner** for the migration, once there is a database layer. The transform
-  and the report are the parts worth testing, and they exist now.
+Phase 2 is the first phase that stores data (gate W-1). Phase 1 needed no database: the engine
+runs on documents it is given.
+
+- **One connection per process** (`client.ts`), from `MONGODB_URI` only, kept on `globalThis`
+  so `next dev` reuses it. Code that reads or writes takes a `Db`, so tests pass the in-memory
+  MongoDB and only route handlers call `getDb()`.
+- **Validators.** Every collection has the schema above as a MongoDB `$jsonSchema` validator,
+  strict, so the database refuses a malformed document even if something writes around the
+  application (`collections.ts`). MongoDB lacks `$ref` and the `integer` type, so references are
+  inlined and `integer` becomes `number`: the driver stores epoch milliseconds as doubles, so only
+  the application's validator, which every write passes first, tells an integer from a fraction.
+  A keyword MongoDB lacks is an error at startup, so a schema edit cannot weaken the database's
+  check unnoticed (`mongo-schema.ts`). Updating a validator needs the database user's `dbAdmin`
+  role; without it the server warns and keeps the old validator.
+- **Indexes** lead with `tenantId` (DV-8). A performance's `nonce` is unique among the current
+  (not superseded) records of an event, because the migration keeps v5's duplicates as
+  superseded copies (§3); code that de-duplicates looks a nonce up across all records.
+- **Public reads** remove the private fields on the read path: `publicPerformances` has no
+  `scouterId` (SEC-8) and `publicEvents` no `eventCode` (SEC-3). The admin reads are separate
+  functions, so a caller states which view it serves.
+- Tests: `tests/unit/db.test.ts` (T-5).
+
+Still to build: **a driver-backed runner** for the migration, which phase 4 runs against the
+real dump (document 17 §3). The transform and the report are the parts worth testing, and they
+exist now.

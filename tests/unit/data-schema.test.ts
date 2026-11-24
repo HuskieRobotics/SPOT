@@ -5,13 +5,17 @@
 import { describe, expect, it } from "vitest";
 import {
   COLLECTIONS,
+  DOCUMENT_KINDS,
   getDocumentValidator,
   validateDocument,
   type DocumentKind,
 } from "@/data/validate";
+import { defaultSettings } from "@/db/settings";
+import { emptySchedule } from "@/db/schedules";
 import {
   DEFAULT_TENANT,
   NOT_FLAGGED,
+  sessionId,
   type Scouter,
   type SpotEvent,
   type TeamMatchPerformance,
@@ -77,7 +81,7 @@ const scouter = (): Scouter => ({
 });
 
 describe("document schemas", () => {
-  for (const kind of ["team-match-performance", "event", "scouter"] as DocumentKind[]) {
+  for (const kind of DOCUMENT_KINDS) {
     it(`${kind} compiles and names a collection`, () => {
       expect(() => getDocumentValidator(kind)).not.toThrow();
       expect(COLLECTIONS[kind]).toBeTruthy();
@@ -88,6 +92,21 @@ describe("document schemas", () => {
     expect(validateDocument("team-match-performance", performance()).issues).toEqual([]);
     expect(validateDocument("event", event()).issues).toEqual([]);
     expect(validateDocument("scouter", scouter()).issues).toEqual([]);
+    expect(validateDocument("settings", defaultSettings()).issues).toEqual([]);
+    expect(validateDocument("schedule", emptySchedule(oid("c"))).issues).toEqual([]);
+    expect(
+      validateDocument("scouter-session", {
+        _id: sessionId(oid("c"), "123456"),
+        tenantId: DEFAULT_TENANT,
+        eventId: oid("c"),
+        scouterId: "123456",
+        status: "scouting",
+        matchNumber: 12,
+        team: "2338B",
+        accepted: true,
+        updatedAt: 1772809355374,
+      }).issues,
+    ).toEqual([]);
   });
 
   it("DV-3, DM-1a: refuses a team that arrived as a number", () => {
