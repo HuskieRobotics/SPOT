@@ -154,7 +154,11 @@ Decided 2026-11-24, where the requirements above left a choice:
   every update, so a robot could change under a scouter who had already seen it.
 - **The quorum fires once per match**, when no one has been sent in yet. Afterwards a latecomer
   waits for an admin start, or for start on first scouter if it is on, so a quorum never turns
-  into issue 34's behavior.
+  into issue 34's behavior. Set the quorum to the number of scouters staffed per match, not
+  lower, or the last to arrive become latecomers. It is not capped at the robots in the match:
+  a match always has six, because a robot that is absent or disabled is still scouted, to
+  record that it was a no-show or disabled (maintainer, 2026-11-24). An empty slot exists only
+  while an admin is still typing a manual schedule.
 - **Start on first scouter** means a scouter on the current match pressing Start Match sends in
   everyone waiting on it, latecomers included, while that scouter is connected (F-22).
 - **Admin start is not standing**: it sends in the connected waiting scouters on the current
