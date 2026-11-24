@@ -45,6 +45,10 @@ Do not re-ask the questions in `14-clarifying-questions.md`; they are answered.
   serverless assumptions, one instance owns in-memory state). **No Docker**: the app runs as
   plain Node (`next build && next start`) so students can develop on school computers with
   only Node 24 installed; Cloud Run deploys from source with buildpacks.
+- Admin pages go under `src/app/admin/` and admin routes under `src/app/api/admin/`; that is
+  what `src/proxy.ts` guards (doc 12, SEC-5a). Write admin actions as route handlers, **never
+  Server Functions** (`"use server"`): proxy does not see them as routes, so they would skip the
+  admin check. `tests/unit/admin-auth.test.ts` fails on either mistake.
 
 ## Commands
 

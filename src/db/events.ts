@@ -1,9 +1,9 @@
 /**
  * Events (docs/spec/21, DM-6). The event code gates writes and never appears in a public read
- * (SEC-3). Generating and rotating it is the admin's job (#352); an event created here starts
- * without one unless the caller supplies it.
+ * (SEC-3). A new event gets a fresh code; an admin can rotate it.
  */
 import { ObjectId, type Db } from "mongodb";
+import { newEventCode } from "@/auth/event-code";
 import { assertValidDocument, COLLECTIONS } from "@/data/validate";
 import {
   DEFAULT_TENANT,
@@ -23,6 +23,7 @@ export function eventCollection(db: Db) {
 export interface NewEvent {
   tbaKey: string;
   label: string;
+  /** Omitted: a fresh code (SEC-3). `null`: none, so writes are refused until one is made. */
   eventCode?: string | null;
   tenantId?: TenantId;
   now?: number;
@@ -30,7 +31,7 @@ export interface NewEvent {
 
 /** Create an event; its code is `<TBA key>_<label>` (DM-6). Refuses a code already in use. */
 export async function createEvent(db: Db, event: NewEvent): Promise<SpotEvent> {
-  const code = event.eventCode ?? null;
+  const code = event.eventCode === undefined ? newEventCode() : event.eventCode;
   const doc: SpotEvent = {
     _id: new ObjectId().toHexString(),
     tenantId: event.tenantId ?? DEFAULT_TENANT,
@@ -43,6 +44,22 @@ export async function createEvent(db: Db, event: NewEvent): Promise<SpotEvent> {
   assertValidDocument("event", doc);
   await eventCollection(db).insertOne({ ...doc });
   return doc;
+}
+
+/**
+ * Give the event a new code (SEC-3). Devices with the old code keep scouting, and their
+ * submissions are refused until they enter the new one (SEC-9). Null if there is no such event.
+ */
+export async function rotateEventCode(
+  db: Db,
+  id: ObjectIdHex,
+  { tenantId = DEFAULT_TENANT, now = Date.now() }: { tenantId?: TenantId; now?: number } = {},
+): Promise<SpotEvent | null> {
+  return eventCollection(db).findOneAndUpdate(
+    { _id: id, tenantId },
+    { $set: { eventCode: newEventCode(), eventCodeRotatedAt: now } },
+    { returnDocument: "after" },
+  );
 }
 
 /** The whole event, event code included. For checking a submission and for admin pages. */
@@ -66,4 +83,14 @@ export async function publicEvents(
   return eventCollection(db)
     .find({ tenantId }, { projection: HIDE_PRIVATE, sort: { code: -1 } })
     .toArray() as Promise<PublicEvent[]>;
+}
+
+/** Every event with its code, for admin pages only (SEC-3, SEC-5). */
+export async function adminEvents(
+  db: Db,
+  tenantId: TenantId = DEFAULT_TENANT,
+): Promise<SpotEvent[]> {
+  return eventCollection(db)
+    .find({ tenantId }, { sort: { code: -1 } })
+    .toArray();
 }

@@ -1,5 +1,8 @@
 # 11 — API Reference
 
+The sections below describe v5. v6's routes, as they are built, are in [v6 routes](#v6-routes)
+at the end.
+
 Auth column: **code** = requires `Authorization: <ACCESS_CODE>` header (bypassed when no code
 is configured, and for admin routes when `DEMO` is true); **none** = unauthenticated.
 
@@ -120,3 +123,24 @@ is configured, and for admin routes when `DEMO` is true); **none** = unauthentic
 | TBA v3          | `/event/{key}/matches`, `/event/{key}/teams`, `/event/{key}/coprs`, `/team/frc3061` (key validation) | header `X-TBA-Auth-Key`                         |
 | FRC Events v3.0 | `/{year}/schedule/{eventCode}?tournamentLevel=practice`                                              | HTTP basic (`FMS_API_USERNAME` / `FMS_API_KEY`) |
 | Google Identity | `apis.google.com/js/platform.js`, id-token verification                                              | client id (non-functional)                      |
+
+## v6 routes
+
+Auth column: **admin** = the `spot-admin` session cookie, checked by `src/proxy.ts` for
+everything under `/admin` and `/api/admin` (SEC-4a, SEC-5a); **open** = no session needed.
+Errors are JSON `{ error, message }`, with a message a person can act on.
+
+| Method | Path                                    | Auth  | Behavior                                                                                   |
+| ------ | --------------------------------------- | ----- | ------------------------------------------------------------------------------------------ |
+| GET    | `/admin/sign-in?next=<path>`            | open  | Sign-in page; returns to `next` (a path on this site) afterwards                           |
+| GET    | `/admin`                                | admin | Admin page (#357)                                                                          |
+| GET    | `/api/admin/session`                    | open  | `{ signedIn, configured }`                                                                 |
+| POST   | `/api/admin/session` `{ password }`     | open  | 204 and the cookie; 401 wrong password (after 500 ms); 503 no `SPOT_ADMIN_PASSWORD` set    |
+| DELETE | `/api/admin/session`                    | open  | 204, cookie cleared                                                                        |
+| GET    | `/api/admin/events`                     | admin | Every event, with its event code (SEC-3)                                                   |
+| POST   | `/api/admin/events` `{ tbaKey, label }` | admin | 201 with the new event and a fresh event code; 400 not a TBA key or label; 409 code in use |
+| POST   | `/api/admin/events/:id/event-code`      | admin | Rotate the event code → `{ eventCode, eventCodeRotatedAt }`; 404                           |
+
+Without a session, an admin page redirects to the sign-in page and an admin route answers 401
+`{ error: "admin-sign-in" }`. A submission carries the event code in `X-SPOT-Event-Code`; a
+refusal is 403 `{ error: "event-code", reason, message }` (SEC-3a).

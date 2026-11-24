@@ -2,6 +2,8 @@ import { defineConfig, devices } from "@playwright/test";
 
 const port = Number(process.env.PORT || 3000);
 
+export const E2E_ADMIN_PASSWORD = "e2e-admin-password";
+
 export default defineConfig({
   testDir: "tests/e2e",
   timeout: 30_000,
@@ -24,5 +26,7 @@ export default defineConfig({
     url: `http://localhost:${port}`,
     reuseExistingServer: !process.env.CI,
     timeout: 60_000,
+    // A test-only value, not a secret: tests/e2e/admin-sign-in.spec.ts signs in with it.
+    env: { SPOT_ADMIN_PASSWORD: process.env.SPOT_ADMIN_PASSWORD ?? E2E_ADMIN_PASSWORD },
   },
 });

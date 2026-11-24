@@ -10,6 +10,8 @@ import { MongoMemoryServer } from "mongodb-memory-server";
 export interface TestMongo {
   db: Db;
   client: MongoClient;
+  /** A connection string naming `db`, for code that connects by itself (`MONGODB_URI`). */
+  uri: string;
   stop: () => Promise<void>;
 }
 
@@ -19,6 +21,7 @@ export async function startMongo(dbName = "spot-test"): Promise<TestMongo> {
   return {
     db: client.db(dbName),
     client,
+    uri: `${server.getUri().replace(/\/$/, "")}/${dbName}`,
     stop: async () => {
       await client.close();
       await server.stop();
