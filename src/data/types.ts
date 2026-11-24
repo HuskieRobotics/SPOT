@@ -193,9 +193,43 @@ export interface ScouterSession {
   team: TeamKey | null;
   /** The scouter has seen this assignment, so a reconnect does not show it again (RT-27). */
   accepted: boolean;
+  /** The scouter was sent into the match screen for this assignment (RT-12a). */
+  entered: boolean;
+  /** When they signed in; waiting scouters are assigned in this order (RT-11). */
+  signedInAt: number;
   updatedAt: number;
 }
 
 export function sessionId(eventId: ObjectIdHex, scouterId: string): string {
   return `${eventId}:${scouterId}`;
+}
+
+/** One scouter's time holding a robot (DV-16). */
+export interface Holder {
+  scouterId: string;
+  from: number;
+  /** When they stopped: released, taken back, or finished. Null while they hold it. */
+  until: number | null;
+  /**
+   * Why they stopped: an admin released the robot (RT-31), or it was taken back before they
+   * scouted it. Null while they hold it, and for whoever finished the match.
+   */
+  ended: "released" | "unassigned" | null;
+  /** They got the robot after someone had started scouting the match (RT-34). */
+  afterStart: boolean;
+}
+
+/** Who held one robot in one match, in order (DV-16), for RT-34 to RT-36. */
+export interface Assignment {
+  /** `<event id>:<match number>:<team>` (`assignmentId`). */
+  _id: string;
+  tenantId: TenantId;
+  eventId: ObjectIdHex;
+  matchNumber: number;
+  team: TeamKey;
+  holders: Holder[];
+}
+
+export function assignmentId(eventId: ObjectIdHex, matchNumber: number, team: TeamKey): string {
+  return `${eventId}:${matchNumber}:${team}`;
 }

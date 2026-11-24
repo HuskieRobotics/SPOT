@@ -46,6 +46,8 @@ const session = (eventId: string, scouterId: string, over: Partial<ScouterSessio
   matchNumber: 4,
   team: "3061",
   accepted: false,
+  entered: false,
+  signedInAt: 1772809355374,
   updatedAt: 1772809355374,
   ...over,
 });

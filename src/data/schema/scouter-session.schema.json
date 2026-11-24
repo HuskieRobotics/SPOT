@@ -14,6 +14,8 @@
     "matchNumber",
     "team",
     "accepted",
+    "entered",
+    "signedInAt",
     "updatedAt"
   ],
   "properties": {
@@ -22,11 +24,26 @@
       "pattern": "^[0-9a-f]{24}:.+$",
       "description": "<event id>:<student id>, so one person has one entry per event (RT-24)."
     },
-    "tenantId": { "type": "string", "minLength": 1 },
-    "eventId": { "type": "string", "pattern": "^[0-9a-f]{24}$" },
-    "scouterId": { "type": "string", "minLength": 1, "description": "Student ID (SEC-6)." },
-    "status": { "enum": ["waiting", "scouting", "complete"] },
-    "matchNumber": { "type": ["integer", "null"], "minimum": 1 },
+    "tenantId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "eventId": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{24}$"
+    },
+    "scouterId": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Student ID (SEC-6)."
+    },
+    "status": {
+      "enum": ["waiting", "scouting", "complete"]
+    },
+    "matchNumber": {
+      "type": ["integer", "null"],
+      "minimum": 1
+    },
     "team": {
       "type": ["string", "null"],
       "pattern": "^[1-9][0-9]{0,4}[A-Z]?$",
@@ -36,6 +53,18 @@
       "type": "boolean",
       "description": "The scouter has seen this assignment, so a reconnect does not show it again (RT-27)."
     },
-    "updatedAt": { "type": "integer", "minimum": 0 }
+    "entered": {
+      "type": "boolean",
+      "description": "The scouter was sent into the match screen for this assignment (RT-12a), so it is not sent again."
+    },
+    "signedInAt": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "When the scouter signed in; waiting scouters are assigned in this order (RT-11)."
+    },
+    "updatedAt": {
+      "type": "integer",
+      "minimum": 0
+    }
   }
 }

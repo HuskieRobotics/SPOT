@@ -104,6 +104,8 @@ describe("document schemas", () => {
         matchNumber: 12,
         team: "2338B",
         accepted: true,
+        entered: true,
+        signedInAt: 1772809355374,
         updatedAt: 1772809355374,
       }).issues,
     ).toEqual([]);
