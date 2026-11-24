@@ -86,7 +86,8 @@ export type Effect =
 
 export type RegistryEvent =
   // From devices.
-  | { type: "signIn"; scouterId: string; now: number }
+  /** `deviceId`: the device signing in, which the session then belongs to. */
+  | { type: "signIn"; scouterId: string; deviceId?: string; now: number }
   | { type: "connect"; scouterId: string; now: number }
   | { type: "disconnect"; scouterId: string; now: number }
   | { type: "accept"; scouterId: string; now: number }
@@ -417,6 +418,7 @@ export function apply(previous: RegistryState, event: RegistryEvent): Result {
           tenantId: state.tenantId,
           eventId: state.eventId,
           scouterId: event.scouterId,
+          deviceId: null,
           status: "waiting",
           matchNumber: null,
           team: null,
@@ -427,6 +429,7 @@ export function apply(previous: RegistryState, event: RegistryEvent): Result {
           connected: true,
         };
       }
+      if (event.type === "signIn" && event.deviceId !== undefined) e.deviceId = event.deviceId;
       e.connected = true;
       ch.entry(e, now);
       // RT-27: the device learns where it was, without a new assignment prompt.

@@ -1,8 +1,8 @@
 /**
  * Events for admins (SEC-3, SEC-5), behind the admin session that `src/proxy.ts` checks.
  *
- * GET  → every event, with its event code
- * POST `{ tbaKey, label }` → 201 with the new event and its fresh event code; 400; 409 in use
+ * GET  → every event, with its join code
+ * POST `{ tbaKey, label }` → 201 with the new event and its fresh join code; 400; 409 in use
  */
 import { NextResponse, type NextRequest } from "next/server";
 import { getDb } from "@/db/client";

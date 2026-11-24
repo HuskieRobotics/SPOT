@@ -67,8 +67,8 @@ const event = (): SpotEvent => ({
   code: "2026mnwi_official",
   tbaKey: "2026mnwi",
   label: "official",
-  eventCode: "HUSKIE26",
-  eventCodeRotatedAt: 1772809355374,
+  joinCode: "HUSKIE26",
+  joinCodeRotatedAt: 1772809355374,
 });
 
 const scouter = (): Scouter => ({
@@ -100,6 +100,7 @@ describe("document schemas", () => {
         tenantId: DEFAULT_TENANT,
         eventId: oid("c"),
         scouterId: "123456",
+        deviceId: "d-1",
         status: "scouting",
         matchNumber: 12,
         team: "2338B",

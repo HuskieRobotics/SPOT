@@ -432,8 +432,8 @@ export function generate(options: GenerateOptions): GeneratedDataset {
     code: eventCode,
     tbaKey: underscore === -1 ? eventCode : eventCode.slice(0, underscore),
     label: underscore === -1 ? "" : eventCode.slice(underscore + 1),
-    eventCode: null,
-    eventCodeRotatedAt: null,
+    joinCode: null,
+    joinCodeRotatedAt: null,
   };
 
   const scouters: Scouter[] = scouterIds.map((id, i) => ({

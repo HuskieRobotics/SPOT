@@ -168,8 +168,8 @@ export function migrateEvent(v5: V5Event, tenantId = DEFAULT_TENANT): SpotEvent 
     tbaKey: underscore === -1 ? code : code.slice(0, underscore),
     label: underscore === -1 ? "" : code.slice(underscore + 1),
     // Existing events have no write-gating code yet; an admin sets one when the event is next used.
-    eventCode: null,
-    eventCodeRotatedAt: null,
+    joinCode: null,
+    joinCodeRotatedAt: null,
   };
 }
 

@@ -1,8 +1,9 @@
 import { defineConfig, devices } from "@playwright/test";
+import { E2E_ADMIN_PASSWORD } from "./tests/e2e/fixtures";
 
 const port = Number(process.env.PORT || 3000);
 
-export const E2E_ADMIN_PASSWORD = "e2e-admin-password";
+export { E2E_ADMIN_PASSWORD };
 
 export default defineConfig({
   testDir: "tests/e2e",
@@ -21,11 +22,12 @@ export default defineConfig({
     { name: "desktop-chromium", use: { ...devices["Desktop Chrome"] } },
   ],
   webServer: {
-    // Expects `npm run build` to have run (CI does); locally reuses a running server.
-    command: "npm run start",
+    // Expects `npm run build` to have run (CI does); locally reuses a running server. Starts an
+    // in-memory MongoDB seeded with an active event, then `next start` (tests/e2e/server.ts).
+    command: "npx tsx tests/e2e/server.ts",
     url: `http://localhost:${port}`,
     reuseExistingServer: !process.env.CI,
-    timeout: 60_000,
+    timeout: 120_000, // the first run downloads mongod
     // A test-only value, not a secret: tests/e2e/admin-sign-in.spec.ts signs in with it.
     env: { SPOT_ADMIN_PASSWORD: process.env.SPOT_ADMIN_PASSWORD ?? E2E_ADMIN_PASSWORD },
   },

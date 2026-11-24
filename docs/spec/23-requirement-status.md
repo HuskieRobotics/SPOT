@@ -159,7 +159,7 @@ quotes the test's name.
 | DV-5, DV-6            | Done   | `data-schema`, `migrate`                                                                |
 | DV-7                  | Done   | `data-schema` (the fields exist; Phase 2 and later fill them)                           |
 | DV-8                  | Done   | `data-schema`, `migrate`                                                                |
-| DV-9                  | Done   | `migrate` ("splits an event code"). Write gating with the event code is Phase 2.        |
+| DV-9                  | Done   | `migrate` ("splits an event code"). Write gating with the join code is Phase 2.         |
 | DV-10                 | Done   | `engine` (DM-1b); rules `missing-nan`, `missing-undefined`                              |
 | DV-11                 | Done   | `migrate`, `config-convert` (`actionQueue` becomes `actions`)                           |
 | DV-12, DV-12a, DV-12b | Later  | The settings document is Phase 2, and the pages that select an event are Phases 2 and 3 |

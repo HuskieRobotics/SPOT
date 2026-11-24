@@ -95,9 +95,9 @@ export interface SpotEvent {
   /** Derived from `code`; stored so nothing has to re-split the string (DM-6). */
   tbaKey: string;
   label: string;
-  /** Per-event code that gates writes (SEC-2, DM-7a). Never sent in a public response. */
-  eventCode: string | null;
-  eventCodeRotatedAt: number | null;
+  /** Per-join code that gates writes (SEC-2, DM-7a). Never sent in a public response. */
+  joinCode: string | null;
+  joinCodeRotatedAt: number | null;
 }
 
 /**
@@ -121,7 +121,7 @@ export interface Scouter {
 export const PRIVATE_PERFORMANCE_FIELDS = ["scouterId"] as const;
 
 /** Fields of an event that must never appear in a public response (SEC-3). */
-export const PRIVATE_EVENT_FIELDS = ["eventCode"] as const;
+export const PRIVATE_EVENT_FIELDS = ["joinCode"] as const;
 
 export type PublicPerformance = Omit<
   TeamMatchPerformance,
@@ -187,6 +187,8 @@ export interface ScouterSession {
   tenantId: TenantId;
   eventId: ObjectIdHex;
   scouterId: string;
+  /** The device signed in on (docs/spec/15); the stream and actions must name it. */
+  deviceId: string | null;
   status: SessionStatus;
   matchNumber: number | null;
   /** The robot held (RT-25). */

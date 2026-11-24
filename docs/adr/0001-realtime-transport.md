@@ -32,3 +32,29 @@ transport does not need to survive horizontal scaling.
   drop connections constantly. Reconnection must not lose buffered scouting data.
 - Time-box this in phase 2. If server-sent events fight the deployment, switch to polling
   rather than building infrastructure.
+
+## Implementation (2026-11-24, #354)
+
+Server-sent events work, so the time-box closes without falling back to polling for devices.
+`tests/e2e/scouter-stream.spec.ts` shows an assignment reaching a browser within the 2 to 3 s
+allowed, through `next start` and through `next dev` (`E2E_NEXT=dev`). nginx and Cloud Run are
+tested when their recipes are built (gate W-3); if either buffers or cuts the stream in a way
+reconnecting cannot absorb, devices switch to polling then.
+
+- **Device to server:** `POST /api/scouter/sign-in` and `POST /api/scouter/action` (accept,
+  start, finish, ready, sign-out), replacing `updateState` (RT-1).
+- **Server to device:** `GET /api/scouter/stream`, with the events `state` (always first, so
+  every reconnect resynchronizes), `assigned`, `enter-match`, `unassigned` and `signed-out`. It
+  sends `retry: 3000` and a heartbeat comment every 20 s, with `Cache-Control: no-cache,
+no-transform` (so compression does not buffer it) and `X-Accel-Buffering: no` (so nginx does
+  not).
+- **Identity:** each device makes a random device id once and keeps it. Signing in binds the
+  scouter's session to it, and the stream and every action must name the same pair, so knowing a
+  student ID is not enough to act as that scouter. Signing in on another device moves the session
+  there and signs the old device out.
+- **Kick:** a signed-out device closes its stream itself, and the server answers a stream for a
+  session it no longer has with 401, which stops a browser's automatic reconnects.
+- **Admin views poll** `GET /api/admin/registry` every 2 to 3 s (NF-5). An admin stream can come
+  later if polling proves too slow.
+- **One process owns the registry** (`src/sessions/runtime.ts`, on `globalThis`), and applies
+  events one at a time.
