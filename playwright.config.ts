@@ -2,6 +2,7 @@ import { defineConfig, devices } from "@playwright/test";
 import { E2E_ADMIN_PASSWORD } from "./tests/e2e/fixtures";
 
 const port = Number(process.env.PORT || 3000);
+const ADMIN_PAGE = /admin-page\.spec\.ts/;
 
 export { E2E_ADMIN_PASSWORD };
 
@@ -18,8 +19,16 @@ export default defineConfig({
   },
   projects: [
     // Scouters primarily use personal phones (docs/spec/02, NF-1); test the mobile viewport first.
-    { name: "mobile-chromium", use: { ...devices["Pixel 7"] } },
-    { name: "desktop-chromium", use: { ...devices["Desktop Chrome"] } },
+    { name: "mobile-chromium", use: { ...devices["Pixel 7"] }, testIgnore: ADMIN_PAGE },
+    { name: "desktop-chromium", use: { ...devices["Desktop Chrome"] }, testIgnore: ADMIN_PAGE },
+    // The admin page's test drives the one registry every other test shares (the current match,
+    // who holds which robot), so it runs alone, after the others.
+    {
+      name: "admin-page",
+      use: { ...devices["Desktop Chrome"] },
+      testMatch: ADMIN_PAGE,
+      dependencies: ["mobile-chromium", "desktop-chromium"],
+    },
   ],
   webServer: {
     // Expects `npm run build` to have run (CI does); locally reuses a running server. Starts an

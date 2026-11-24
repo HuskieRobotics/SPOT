@@ -181,6 +181,9 @@ Decided 2026-11-24, where the requirements above left a choice:
   the pool, and the device, if connected, is signed out and must sign in again (doc 15,
   condition 3). The admin page (#357) labels them for the case at hand.
 - **Signing out** frees the robot the same way.
+- **The field orientation reaches devices on their streams** (#357): a `settings` message after
+  `state` when a stream opens, and to every open stream when an admin changes it. It is not part
+  of the registry, which never sends it.
 - **Who held a robot at the end of a match** (RT-35) is the last holder whose holding was not
   ended by a release or a withdrawal. Going back to an earlier match continues its history.
 

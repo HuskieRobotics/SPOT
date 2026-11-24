@@ -2,9 +2,9 @@
  * The scouter registry for admins (RT-15 to RT-18, #354), behind the admin session that
  * `src/proxy.ts` checks. Admin views poll GET every 2 to 3 s (NF-5, RT-14c).
  *
- * GET  → `{ snapshot }`: the event, current match, start rules and every entry; null if no
- *        event is active
- * POST `{ action: "set-match", matchNumber }` (a number, or null for none) — RT-16
+ * GET  → `{ snapshot }`: the event, current match, start rules and every entry with the
+ *        scouter's name; null if no event is active
+ * POST `{ action: "set-match", match }` (`{ level, number }`, or null for none) — RT-16
  *      `{ action: "start" }` — admin start (RT-12a)
  *      `{ action: "release", scouterId, to? }` — RT-31, RT-32
  *      `{ action: "remove", scouterId }` — RT-29; signs the device out
