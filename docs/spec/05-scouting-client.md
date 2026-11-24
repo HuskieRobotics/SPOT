@@ -248,6 +248,15 @@ into configuration.
 - **SC-47** On `syncRequest`: run `sync()`.
 - **SC-48** `updateState` (outgoing) resolves only after the server acknowledges.
 
+## v6: signing in (#356)
+
+v6 replaces SC-9 to SC-11 (a typed first and last name) with sign-in by student ID from a roster,
+document 12 SEC-6 to SEC-8a: the join code once per device, then a name from the roster or
+**I'm not on the list**. It works offline from the roster the device last read (OF-1). The
+screen is `src/components/scouter/sign-in-screen.tsx`, standing alone at `/sign-in` until the
+scouting client (#359) shows it before its waiting page. Asking for the match and team when
+offline (SC-10) belongs to the offline path (#361).
+
 ## v6: the scouting rules (`src/scouting/`, #322)
 
 v6 implements the rules above for a v2 configuration (document 20) as a pure state machine:

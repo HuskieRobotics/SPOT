@@ -89,7 +89,11 @@ export type Effect =
 export type RegistryEvent =
   // From devices.
   /** `deviceId`: the device signing in, which the session then belongs to. */
-  | { type: "signIn"; scouterId: string; deviceId?: string; now: number }
+  /**
+   * `connected`: whether the device already has a stream open (default true). The runtime says
+   * false when it does not, so a device that signs in but never opens its stream takes no robot.
+   */
+  | { type: "signIn"; scouterId: string; deviceId?: string; connected?: boolean; now: number }
   | { type: "connect"; scouterId: string; now: number }
   | { type: "disconnect"; scouterId: string; now: number }
   | { type: "accept"; scouterId: string; now: number }
@@ -443,7 +447,7 @@ export function apply(previous: RegistryState, event: RegistryEvent): Result {
         };
       }
       if (event.type === "signIn" && event.deviceId !== undefined) e.deviceId = event.deviceId;
-      e.connected = true;
+      e.connected = event.type === "signIn" ? (event.connected ?? true) : true;
       ch.entry(e, now);
       // RT-27: the device learns where it was, without a new assignment prompt.
       ch.send(e, { kind: "state", view: deviceView(state, e) });

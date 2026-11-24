@@ -47,7 +47,7 @@ test("a device's stream delivers assignments as they happen, and a removal stops
           body: JSON.stringify(body),
         })
       ).status,
-    { scouterId, deviceId, joinCode: E2E_JOIN_CODE.toLowerCase() },
+    { scouterId, deviceId, joinCode: E2E_JOIN_CODE.toLowerCase(), name: "Stream Tester" },
   );
   expect(signIn).toBe(200);
   await open(page);

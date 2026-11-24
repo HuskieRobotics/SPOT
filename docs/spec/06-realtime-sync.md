@@ -174,6 +174,9 @@ Decided 2026-11-24, where the requirements above left a choice:
 - **A named replacement must be connected** and hold no robot in the current match.
 - **An admin may hand a robot back** to the scouter released from it, by naming them. RT-33
   forbids resuming it on their own, not an admin's explicit choice.
+- **Connected means a stream is open** (#356). Signing in counts as connected only if the device
+  already has its stream open; otherwise the scouter is connected when it opens. A device that
+  signs in and never opens its stream, because it lost its connection, takes no robot.
 - **Disconnect and Remove are one action** for the registry: the entry goes, its robot returns to
   the pool, and the device, if connected, is signed out and must sign in again (doc 15,
   condition 3). The admin page (#357) labels them for the case at hand.

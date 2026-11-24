@@ -2,7 +2,7 @@
  * Reading what a device sends (#354). Student IDs and device IDs are short text; anything else
  * is refused with a message rather than reaching the registry.
  */
-import { Refusal } from "./runtime";
+import { Refusal } from "@/lib/refusal";
 
 const SCOUTER = /^[A-Za-z0-9._-]{1,64}$/;
 const DEVICE = /^[A-Za-z0-9_-]{8,128}$/;
@@ -22,4 +22,10 @@ export async function jsonBody(request: Request): Promise<Record<string, unknown
   if (body && typeof body === "object" && !Array.isArray(body))
     return body as Record<string, unknown>;
   throw new Refusal(400, "body", "The request must be a JSON object.");
+}
+
+export function nameFrom(value: unknown): string {
+  const name = typeof value === "string" ? value.trim().replace(/\s+/g, " ") : "";
+  if (name.length >= 2 && name.length <= 80) return name;
+  throw new Refusal(400, "name", "Type your full name, first and last.");
 }
