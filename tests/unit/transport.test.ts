@@ -97,7 +97,7 @@ class StreamReader {
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
-let eventCode = "";
+let joinCode = "";
 
 class Device {
   readonly deviceId: string;
@@ -111,14 +111,14 @@ class Device {
     this.deviceId = deviceId ?? `device-${scouterId}-0001`;
   }
 
-  async signIn(code = eventCode) {
+  async signIn(code = joinCode) {
     return signInRoute.POST(
       new Request(`${ORIGIN}/api/scouter/sign-in`, {
         method: "POST",
         body: JSON.stringify({
           scouterId: this.scouterId,
           deviceId: this.deviceId,
-          eventCode: code,
+          joinCode: code,
         }),
       }),
     );
@@ -184,7 +184,7 @@ beforeAll(async () => {
   process.env.SPOT_ADMIN_PASSWORD = PASSWORD;
   cookie = await createAdminSession();
   event = await createEvent(db, { tbaKey: "2026mnwi", label: "official" });
-  eventCode = event.eventCode!;
+  joinCode = event.joinCode!;
   await updateSchedule(db, event._id, { manual: matches });
   await updateSettings(db, { activeEventId: event._id });
   resetRuntime();
@@ -199,7 +199,7 @@ afterAll(async () => {
 describe("T-6: devices over HTTP", () => {
   const devices = Array.from({ length: 6 }, (_, i) => new Device(`20000${i + 1}`));
 
-  it("SEC-2: sign-in needs the event code, with a message to act on", async () => {
+  it("SEC-2: sign-in needs the join code, with a message to act on", async () => {
     const r = await devices[0].signIn("WRONG1");
     expect(r.status).toBe(403);
     expect((await r.json()).message).toMatch(/admin/);
@@ -336,7 +336,7 @@ describe("the runtime, directly", () => {
   it("heartbeats an idle stream (docs/spec/15, condition 1)", async () => {
     const runtime = new Runtime({ db, heartbeatMs: 10 });
     const d = new Device("300001");
-    await runtime.signIn(d.scouterId, d.deviceId, eventCode);
+    await runtime.signIn(d.scouterId, d.deviceId, joinCode);
     const abort = new AbortController();
     const r = await runtime.openStream(d.scouterId, d.deviceId, abort.signal);
     const reader = new StreamReader(r.body!);
@@ -351,7 +351,7 @@ describe("the runtime, directly", () => {
 
   it("DV-15: after a restart, scouters are disconnected and keep their robots", async () => {
     const before = new Runtime({ db });
-    for (const id of ["400001", "400002"]) await before.signIn(id, `device-${id}-0001`, eventCode);
+    for (const id of ["400001", "400002"]) await before.signIn(id, `device-${id}-0001`, joinCode);
     await before.flush();
     const held = (await before.snapshot())!.entries.filter((e) => e.team !== null);
     const after = new Runtime({ db });
@@ -366,7 +366,7 @@ describe("the runtime, directly", () => {
     let t = 1_000_000;
     const runtime = new Runtime({ db, now: () => t });
     const d = new Device("500001");
-    await runtime.signIn(d.scouterId, d.deviceId, eventCode);
+    await runtime.signIn(d.scouterId, d.deviceId, joinCode);
     const r = await runtime.openStream(d.scouterId, d.deviceId, new AbortController().signal);
     const reader = new StreamReader(r.body!);
     await reader.next();
@@ -380,7 +380,7 @@ describe("the runtime, directly", () => {
     await updateSettings(db, { activeEventId: null }, { now: t });
     t += 10_000;
     expect(await runtime.snapshot()).toBeNull();
-    await expect(runtime.signIn("1", "device-00000001", eventCode)).rejects.toMatchObject({
+    await expect(runtime.signIn("1", "device-00000001", joinCode)).rejects.toMatchObject({
       status: 409,
       code: "no-active-event",
     });

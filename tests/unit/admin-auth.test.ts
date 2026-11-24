@@ -1,6 +1,6 @@
 /**
  * Who may write (ADR 0004, #352): the admin password and its session cookie (SEC-4), the one
- * place admin requests are checked (SEC-5, #120), and the event code (SEC-2, SEC-3, SEC-9).
+ * place admin requests are checked (SEC-5, #120), and the join code (SEC-2, SEC-3, SEC-9).
  */
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { readdirSync, readFileSync, statSync } from "node:fs";
@@ -17,16 +17,16 @@ import {
   verifyAdminSession,
 } from "@/auth/admin-session";
 import {
-  checkEventCode,
-  EVENT_CODE_LENGTH,
-  eventCodeRefusal,
-  newEventCode,
-  normalizeEventCode,
-} from "@/auth/event-code";
+  checkJoinCode,
+  JOIN_CODE_LENGTH,
+  joinCodeRefusal,
+  newJoinCode,
+  normalizeJoinCode,
+} from "@/auth/join-code";
 import { config as proxyConfig, proxy } from "@/proxy";
 import * as sessionRoute from "@/app/api/admin/session/route";
 import * as eventsRoute from "@/app/api/admin/events/route";
-import * as eventCodeRoute from "@/app/api/admin/events/[id]/event-code/route";
+import * as joinCodeRoute from "@/app/api/admin/events/[id]/join-code/route";
 import { createEvent, getEvent, publicEvents } from "@/db/events";
 import type { SpotEvent } from "@/data/types";
 import { startMongo, type TestMongo } from "../support/mongo";
@@ -207,43 +207,43 @@ describe("SEC-5, SEC-5a, #120: admin requests are checked in one place", () => {
   });
 });
 
-describe("SEC-2, SEC-3, SEC-3a, SEC-9: the event code", () => {
+describe("SEC-2, SEC-3, SEC-3a, SEC-9: the join code", () => {
   it("is six characters that cannot be misread", () => {
-    const codes = new Set(Array.from({ length: 500 }, () => newEventCode()));
+    const codes = new Set(Array.from({ length: 500 }, () => newJoinCode()));
     expect(codes.size).toBeGreaterThan(495);
     for (const c of codes) {
-      expect(c).toHaveLength(EVENT_CODE_LENGTH);
+      expect(c).toHaveLength(JOIN_CODE_LENGTH);
       expect(c).toMatch(/^[A-Z2-9]+$/);
       expect(c).not.toMatch(/[01OILUV]/);
     }
   });
 
   it("accepts what a scouter types, in any case and with spaces or dashes", () => {
-    expect(normalizeEventCode(" k7q-f2m ")).toBe("K7QF2M");
-    expect(checkEventCode({ eventCode: "K7QF2M" }, "k7q f2m")).toEqual({ ok: true });
+    expect(normalizeJoinCode(" k7q-f2m ")).toBe("K7QF2M");
+    expect(checkJoinCode({ joinCode: "K7QF2M" }, "k7q f2m")).toEqual({ ok: true });
   });
 
   it("refuses a missing or wrong code, and an event with none, with a message to act on", async () => {
-    const event = { eventCode: "K7QF2M" };
+    const event = { joinCode: "K7QF2M" };
     for (const [supplied, reason] of [
       [undefined, "missing"],
       ["  ", "missing"],
       ["K7QF2N", "wrong"],
     ] as const) {
-      const check = checkEventCode(event, supplied);
+      const check = checkJoinCode(event, supplied);
       expect(check).toMatchObject({ ok: false, reason });
       if (check.ok) continue;
-      const r = eventCodeRefusal(check);
+      const r = joinCodeRefusal(check);
       expect(r.status).toBe(403);
       const body = await r.text();
       expect(body).not.toContain("K7QF2M");
       expect(JSON.parse(body).message).toMatch(/admin/);
     }
-    expect(checkEventCode({ eventCode: null }, "K7QF2M")).toMatchObject({ reason: "no-code" });
+    expect(checkJoinCode({ joinCode: null }, "K7QF2M")).toMatchObject({ reason: "no-code" });
   });
 
   it("SEC-9: a wrong code tells the scouter their matches are kept", () => {
-    const check = checkEventCode({ eventCode: "K7QF2M" }, "AAAAAA");
+    const check = checkJoinCode({ joinCode: "K7QF2M" }, "AAAAAA");
     expect(!check.ok && check.message).toMatch(/kept on this device/);
   });
 });
@@ -330,36 +330,35 @@ describe("admin routes (T-5)", () => {
     expect(created.status).toBe(201);
     const event = (await created.json()) as SpotEvent;
     expect(event.code).toBe("2026mnwi_official");
-    expect(event.eventCode).toMatch(/^[A-Z2-9]{6}$/);
+    expect(event.joinCode).toMatch(/^[A-Z2-9]{6}$/);
 
     expect((await record(await call(eventsRoute.GET, "/api/admin/events"))).status).toBe(401);
     const list = await call(eventsRoute.GET, "/api/admin/events", { cookie });
-    expect(((await list.json()) as SpotEvent[]).map((e) => e.eventCode)).toEqual([event.eventCode]);
+    expect(((await list.json()) as SpotEvent[]).map((e) => e.joinCode)).toEqual([event.joinCode]);
 
-    const rotatePath = `/api/admin/events/${event._id}/event-code`;
+    const rotatePath = `/api/admin/events/${event._id}/join-code`;
     const params = { id: event._id };
     expect(
-      (await record(await call(eventCodeRoute.POST, rotatePath, { method: "POST", params })))
-        .status,
+      (await record(await call(joinCodeRoute.POST, rotatePath, { method: "POST", params }))).status,
     ).toBe(401);
-    const rotated = await call(eventCodeRoute.POST, rotatePath, { method: "POST", params, cookie });
-    const { eventCode } = (await rotated.json()) as { eventCode: string };
-    expect(eventCode).not.toBe(event.eventCode);
-    expect((await getEvent(mongo.db, event._id))?.eventCode).toBe(eventCode);
+    const rotated = await call(joinCodeRoute.POST, rotatePath, { method: "POST", params, cookie });
+    const { joinCode } = (await rotated.json()) as { joinCode: string };
+    expect(joinCode).not.toBe(event.joinCode);
+    expect((await getEvent(mongo.db, event._id))?.joinCode).toBe(joinCode);
   });
 
   it("SEC-2: a submission with the old code is refused once the code is rotated", async () => {
     const event = await createEvent(mongo.db, { tbaKey: "2025ilch", label: "official" });
-    const old = event.eventCode!;
-    expect(checkEventCode(event, old)).toEqual({ ok: true });
-    await call(eventCodeRoute.POST, `/api/admin/events/${event._id}/event-code`, {
+    const old = event.joinCode!;
+    expect(checkJoinCode(event, old)).toEqual({ ok: true });
+    await call(joinCodeRoute.POST, `/api/admin/events/${event._id}/join-code`, {
       method: "POST",
       params: { id: event._id },
       cookie,
     });
     const now = (await getEvent(mongo.db, event._id))!;
-    expect(checkEventCode(now, old)).toMatchObject({ ok: false, reason: "wrong" });
-    expect(checkEventCode(now, now.eventCode)).toEqual({ ok: true });
+    expect(checkJoinCode(now, old)).toMatchObject({ ok: false, reason: "wrong" });
+    expect(checkJoinCode(now, now.joinCode)).toEqual({ ok: true });
   });
 
   it("refuses what is not a TBA key or a label, and an event that exists, with messages", async () => {
@@ -381,7 +380,7 @@ describe("admin routes (T-5)", () => {
 
   it("rotating an event that does not exist is 404", async () => {
     for (const id of ["0123456789abcdef01234567", "not-an-id"]) {
-      const r = await call(eventCodeRoute.POST, `/api/admin/events/${id}/event-code`, {
+      const r = await call(joinCodeRoute.POST, `/api/admin/events/${id}/join-code`, {
         method: "POST",
         params: { id },
         cookie,
@@ -390,12 +389,12 @@ describe("admin routes (T-5)", () => {
     }
   });
 
-  it("SEC-3, SEC-4: no open response contains the password or an event code", async () => {
+  it("SEC-3, SEC-4: no open response contains the password or an join code", async () => {
     const codes = (await mongo.db.collection<SpotEvent>("events").find().toArray()).map(
-      (e) => e.eventCode!,
+      (e) => e.joinCode!,
     );
     expect(codes.length).toBeGreaterThan(0);
-    for (const e of await publicEvents(mongo.db)) expect(Object.hasOwn(e, "eventCode")).toBe(false);
+    for (const e of await publicEvents(mongo.db)) expect(Object.hasOwn(e, "joinCode")).toBe(false);
     expect(bodies.length).toBeGreaterThan(5);
     for (const body of bodies) {
       expect(body).not.toContain(PASSWORD);

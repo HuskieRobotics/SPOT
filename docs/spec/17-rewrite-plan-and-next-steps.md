@@ -314,7 +314,7 @@ a pure state machine (`src/scouting/`, document 05) and the screen's components
 loads the four files (document 20 CS-17).
 
 **Phase 2 is next**, broken into issues #351 to #364 on the "v6 Phase 2" milestone (2026-11-22),
-in build order: the database layer, the admin password and event code, scouter sessions as pure
+in build order: the database layer, the admin password and join code, scouter sessions as pure
 TypeScript, their transport, the match schedule, the roster and sign-in, the admin page, the QR
 codec, the scouting client, submission and sync, offline scouting, extension executables, the
 acceptance test of the exit criterion, and the audit. Four phase 5 backlog items moved into
@@ -333,7 +333,7 @@ assumption.
 
 **Security and privacy** (SEC-1 to SEC-10 in document 12, rationale in
 [ADR 0004](../adr/0004-authentication-and-privacy.md)). Reads are public by choice, because
-Team 3061 is an open alliance team. Writes carry a per-event event code so a public server
+Team 3061 is an open alliance team. Writes carry a per-event join code so a public server
 cannot be polluted. Admin actions, which include flagging, deleting, the scanner's undo,
 restart, demo mode, the schedule and settings, sit behind one shared password from the
 environment. Scouters are identified by student ID, with a `scouters` record mapping the id to

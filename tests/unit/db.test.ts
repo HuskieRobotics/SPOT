@@ -170,7 +170,7 @@ describe("database layer", () => {
 
   describe("events", () => {
     it("round-trip, found by code", async () => {
-      const e = await createEvent(db, { tbaKey: "2026mnwi", label: "official", eventCode: "K9X4" });
+      const e = await createEvent(db, { tbaKey: "2026mnwi", label: "official", joinCode: "K9X4" });
       expect(e.code).toBe("2026mnwi_official");
       expect(await getEvent(db, e._id)).toEqual(e);
       expect(await findEventByCode(db, "2026mnwi_official")).toEqual(e);
@@ -183,10 +183,10 @@ describe("database layer", () => {
       );
     });
 
-    it("SEC-3: a public read never contains the event code", async () => {
+    it("SEC-3: a public read never contains the join code", async () => {
       const events = await publicEvents(db);
       expect(events.length).toBeGreaterThanOrEqual(2);
-      for (const e of events) expect(Object.hasOwn(e, "eventCode")).toBe(false);
+      for (const e of events) expect(Object.hasOwn(e, "joinCode")).toBe(false);
     });
   });
 

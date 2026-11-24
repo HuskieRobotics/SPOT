@@ -11,7 +11,7 @@
  * record for that event still needs them (RT-35).
  */
 import type { Db } from "mongodb";
-import { checkEventCode, type EventCodeCheck } from "@/auth/event-code";
+import { checkJoinCode, type JoinCodeCheck } from "@/auth/join-code";
 import { getDb } from "@/db/client";
 import { getEvent } from "@/db/events";
 import { effectiveMatches, getSchedule, updateSchedule } from "@/db/schedules";
@@ -192,17 +192,17 @@ export class Runtime {
   // ----------------------------------------------------------------- devices
 
   /**
-   * Sign in for assignment (RT-1). The event code is checked here, so a stranger cannot take
+   * Sign in for assignment (RT-1). The join code is checked here, so a stranger cannot take
    * robots. Scouting without the server never needs this (SEC-9).
    */
-  signIn(scouterId: string, deviceId: string, eventCode: string | null): Promise<DeviceView> {
+  signIn(scouterId: string, deviceId: string, joinCode: string | null): Promise<DeviceView> {
     return this.serial(async () => {
       const state = await this.required();
       const event = await getEvent(this.db, state.eventId, this.tenantId);
-      const check: EventCodeCheck = event
-        ? checkEventCode(event, eventCode)
+      const check: JoinCodeCheck = event
+        ? checkJoinCode(event, joinCode)
         : { ok: false, reason: "no-code", message: NO_EVENT.message };
-      if (!check.ok) throw new Refusal(403, "event-code", check.message);
+      if (!check.ok) throw new Refusal(403, "join-code", check.message);
       // The old device first, so it never sees the new device's state.
       this.hub.signOutOtherDevices(scouterId, deviceId);
       this.dispatch({ type: "signIn", scouterId, deviceId });

@@ -69,15 +69,15 @@ per-action `_id`s (BL-31).
 
 ```jsonc
 { "_id": ObjectId, "code": String }   // e.g. "2026mnwi_official"
-// v6 adds the write-gating event code (SEC-2/SEC-3):
-// { ..., "eventCode": String, "eventCodeRotatedAt": Number }
+// v6 adds the write-gating join code (SEC-2/SEC-3):
+// { ..., "joinCode": String, "joinCodeRotatedAt": Number }
 ```
 
 - **DM-6** Event codes are `<TBA event key>_<label>`; the TBA key is recovered with
   `code.split("_")[0]` wherever an event-scoped TBA call is needed.
 - **DM-7** `config.EVENT_NUMBER` holds the hex `_id` of the active event. All new TMPs carry it;
   the default dataset endpoint filters by it.
-- **DM-7a** **[decided 2026-09-17]** The event document also holds the per-event **event code**
+- **DM-7a** **[decided 2026-09-17]** The event document also holds the per-event **join code** (named the event code until 2026-11-24)
   that gates writes (SEC-2). It is shown to admins, rotatable, and never included in a public
   read response (SEC-3).
 

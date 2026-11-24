@@ -4,7 +4,7 @@
   "title": "SPOT event (data model v2)",
   "type": "object",
   "additionalProperties": false,
-  "required": ["_id", "tenantId", "code", "tbaKey", "label", "eventCode", "eventCodeRotatedAt"],
+  "required": ["_id", "tenantId", "code", "tbaKey", "label", "joinCode", "joinCodeRotatedAt"],
   "properties": {
     "_id": {
       "type": "string",
@@ -27,11 +27,11 @@
       "type": "string",
       "minLength": 1
     },
-    "eventCode": {
+    "joinCode": {
       "type": ["string", "null"],
       "description": "Gates writes (SEC-2). Never included in a public response (SEC-3)."
     },
-    "eventCodeRotatedAt": {
+    "joinCodeRotatedAt": {
       "type": ["integer", "null"]
     }
   }

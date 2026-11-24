@@ -1,9 +1,9 @@
 /**
- * Events (docs/spec/21, DM-6). The event code gates writes and never appears in a public read
+ * Events (docs/spec/21, DM-6). The join code gates writes and never appears in a public read
  * (SEC-3). A new event gets a fresh code; an admin can rotate it.
  */
 import { ObjectId, type Db } from "mongodb";
-import { newEventCode } from "@/auth/event-code";
+import { newJoinCode } from "@/auth/join-code";
 import { assertValidDocument, COLLECTIONS } from "@/data/validate";
 import {
   DEFAULT_TENANT,
@@ -24,22 +24,22 @@ export interface NewEvent {
   tbaKey: string;
   label: string;
   /** Omitted: a fresh code (SEC-3). `null`: none, so writes are refused until one is made. */
-  eventCode?: string | null;
+  joinCode?: string | null;
   tenantId?: TenantId;
   now?: number;
 }
 
 /** Create an event; its code is `<TBA key>_<label>` (DM-6). Refuses a code already in use. */
 export async function createEvent(db: Db, event: NewEvent): Promise<SpotEvent> {
-  const code = event.eventCode === undefined ? newEventCode() : event.eventCode;
+  const code = event.joinCode === undefined ? newJoinCode() : event.joinCode;
   const doc: SpotEvent = {
     _id: new ObjectId().toHexString(),
     tenantId: event.tenantId ?? DEFAULT_TENANT,
     code: `${event.tbaKey}_${event.label}`,
     tbaKey: event.tbaKey,
     label: event.label,
-    eventCode: code,
-    eventCodeRotatedAt: code === null ? null : (event.now ?? Date.now()),
+    joinCode: code,
+    joinCodeRotatedAt: code === null ? null : (event.now ?? Date.now()),
   };
   assertValidDocument("event", doc);
   await eventCollection(db).insertOne({ ...doc });
@@ -50,19 +50,19 @@ export async function createEvent(db: Db, event: NewEvent): Promise<SpotEvent> {
  * Give the event a new code (SEC-3). Devices with the old code keep scouting, and their
  * submissions are refused until they enter the new one (SEC-9). Null if there is no such event.
  */
-export async function rotateEventCode(
+export async function rotateJoinCode(
   db: Db,
   id: ObjectIdHex,
   { tenantId = DEFAULT_TENANT, now = Date.now() }: { tenantId?: TenantId; now?: number } = {},
 ): Promise<SpotEvent | null> {
   return eventCollection(db).findOneAndUpdate(
     { _id: id, tenantId },
-    { $set: { eventCode: newEventCode(), eventCodeRotatedAt: now } },
+    { $set: { joinCode: newJoinCode(), joinCodeRotatedAt: now } },
     { returnDocument: "after" },
   );
 }
 
-/** The whole event, event code included. For checking a submission and for admin pages. */
+/** The whole event, join code included. For checking a submission and for admin pages. */
 export async function getEvent(db: Db, id: ObjectIdHex, tenantId: TenantId = DEFAULT_TENANT) {
   return eventCollection(db).findOne({ _id: id, tenantId });
 }
@@ -75,7 +75,7 @@ export async function findEventByCode(
   return eventCollection(db).findOne({ code, tenantId });
 }
 
-/** Every event, for anyone: no event codes (SEC-3). Newest code first, as v5 listed them. */
+/** Every event, for anyone: no join codes (SEC-3). Newest code first, as v5 listed them. */
 export async function publicEvents(
   db: Db,
   tenantId: TenantId = DEFAULT_TENANT,

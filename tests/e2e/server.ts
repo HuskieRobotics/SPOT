@@ -3,7 +3,7 @@
  * MongoDB, seeded with one active event and a two-match schedule, then `next start` on it. Plain
  * Node, no Docker (CLAUDE.md). Expects `npm run build` to have run.
  *
- * The seed is test data, not a secret: tests/e2e names the same event code.
+ * The seed is test data, not a secret: tests/e2e names the same join code.
  */
 import { spawn } from "node:child_process";
 import { MongoClient } from "mongodb";
@@ -12,7 +12,7 @@ import { ensureCollections } from "../../src/db/collections";
 import { createEvent } from "../../src/db/events";
 import { updateSchedule } from "../../src/db/schedules";
 import { updateSettings } from "../../src/db/settings";
-import { E2E_EVENT_CODE } from "./fixtures";
+import { E2E_JOIN_CODE } from "./fixtures";
 
 async function main() {
   const mongo = await MongoMemoryServer.create();
@@ -23,7 +23,7 @@ async function main() {
   const event = await createEvent(db, {
     tbaKey: "2026mnwi",
     label: "e2e",
-    eventCode: E2E_EVENT_CODE,
+    joinCode: E2E_JOIN_CODE,
   });
   await updateSchedule(db, event._id, {
     manual: [1, 2].map((n) => ({

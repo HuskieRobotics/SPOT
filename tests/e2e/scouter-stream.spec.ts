@@ -1,5 +1,5 @@
 import { expect, test, type Page } from "@playwright/test";
-import { E2E_ADMIN_PASSWORD, E2E_EVENT_CODE } from "./fixtures";
+import { E2E_ADMIN_PASSWORD, E2E_JOIN_CODE } from "./fixtures";
 
 // #354, ADR 0001: server-sent events reach a real browser through `next start` as they happen,
 // not buffered until the response ends, and the browser's reconnects behave as docs/spec/15
@@ -47,7 +47,7 @@ test("a device's stream delivers assignments as they happen, and a removal stops
           body: JSON.stringify(body),
         })
       ).status,
-    { scouterId, deviceId, eventCode: E2E_EVENT_CODE.toLowerCase() },
+    { scouterId, deviceId, joinCode: E2E_JOIN_CODE.toLowerCase() },
   );
   expect(signIn).toBe(200);
   await open(page);

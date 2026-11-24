@@ -1,4 +1,4 @@
-# 0004 Public reads, event code for writes, one admin password, student-id scouters
+# 0004 Public reads, join code for writes, one admin password, student-id scouters
 
 Status: Accepted 2026-09-17. Sources: document 12 S-1 to S-4 and R-32, answers 30 to 32, maintainer decisions 2026-09-17.
 
@@ -19,7 +19,8 @@ anyone who finds it. And scouter names are the names of minors.
 a deliberate choice, not an oversight: the data is meant to be shared, including with
 alliance partners and other teams at an event.
 
-**Writes are gated by a per-event event code.** A scouter enters the code once, the device
+**Writes are gated by a per-event join code** (called the event code until 2026-11-24, renamed
+so it is not mistaken for an event's `code`, such as `2026mnwi_official`). A scouter enters the code once, the device
 keeps it, and it is attached to submissions. Match submission and QR-scan submission are
 gated this way. The code is shown on the admin page and can be rotated. It exists to keep
 strangers from polluting the database, not to protect the data.
@@ -38,7 +39,7 @@ device so sign-in works at a fully offline event.
 analysis view shows no scouter name, id or initials.
 
 **Sessions last well beyond a day.** A fully offline event is the worst case, so neither the
-event code nor an admin session may expire mid-event. Credentials are verified when data
+join code nor an admin session may expire mid-event. Credentials are verified when data
 syncs, not while scouting, so an offline tablet keeps working.
 
 ## Consequences
@@ -49,7 +50,7 @@ syncs, not while scouting, so an offline tablet keeps working.
   unblocks per-scouter accuracy scoring.
 - Performances reference a scouter id; the display name is resolved at read time, so a merge
   or a correction does not rewrite history.
-- The event code is a shared low-value secret. Store it with the event, compare it on the
+- The join code is a shared low-value secret. Store it with the event, compare it on the
   server, and never include it in a public read response.
 - Unauthenticated reads mean no rate limiting by identity. Accept it; the failure mode is
   load, not disclosure.

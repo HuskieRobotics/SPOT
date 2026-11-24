@@ -159,7 +159,7 @@ active into inactive stop within 10 s after the switch. Two rules follow:
 - **S-1** Everything that reads or writes scouting data is unauthenticated except the admin
   registry/match endpoints and config. **[A-30, A-31]** The server is public and some
   authentication is wanted; at minimum admin must be distinguished from other roles as today.
-  **Resolved:** reads stay public by choice (SEC-1); writes need the event code (SEC-2);
+  **Resolved:** reads stay public by choice (SEC-1); writes need the join code (SEC-2);
   admin actions need the admin password (SEC-4).
 - **S-2** The access code is a single shared password compared in plain text and echoed back
   by `/setup/api/config` along with all other secrets. **Resolved:** one shared admin password
@@ -182,9 +182,10 @@ Rationale in [ADR 0004](../adr/0004-authentication-and-privacy.md).
 - **SEC-1** Reading scouting data MUST NOT require authentication. Team 3061 is an open
   alliance team; the dataset is meant to be shared, including with other teams at an event.
 - **SEC-2** Writing scouting data (match submission and QR-scan submission) MUST require a
-  **per-event event code**. The scouter enters it once and the device retains it; it is
+  **per-event join code** (named the event code until 2026-11-24, renamed so it is not
+  mistaken for an event's `code`). The scouter enters it once and the device retains it; it is
   attached to submissions. Its purpose is to keep strangers from polluting the database.
-- **SEC-3** The event code MUST be visible to an admin, MUST be rotatable, MUST be stored with
+- **SEC-3** The join code MUST be visible to an admin, MUST be rotatable, MUST be stored with
   the event, and MUST NOT appear in any public read response.
 - **SEC-4** Admin actions MUST require a single shared admin password supplied in the
   environment (`SPOT_ADMIN_PASSWORD`). No endpoint may echo it. Per-user accounts are out of
@@ -203,7 +204,7 @@ Rationale in [ADR 0004](../adr/0004-authentication-and-privacy.md).
   Admin views show full names. The read path filters these fields rather than the documents
   carrying a flag.
 - **SEC-9** Credentials MUST be verified when data reaches the server, never as a condition of
-  scouting, so an offline device keeps working. Neither the event code nor an admin session may
+  scouting, so an offline device keeps working. Neither the join code nor an admin session may
   expire during an event; assume an event lasts several days and may be entirely offline.
 - **SEC-10** Unauthenticated reads mean there is no per-identity rate limiting on the read
   path. Accepted: the failure mode is load, not disclosure.
@@ -226,13 +227,17 @@ Rationale in [ADR 0004](../adr/0004-authentication-and-privacy.md).
   proxy does all of it. Admin actions are route handlers, never Server Functions, which proxy
   does not see as routes; a test checks that every page and route under those folders is guarded
   and that `src/` has no Server Functions.
-- **SEC-3a** An event code is six characters from an alphabet without look-alikes
+- **SEC-3a** A join code is six characters from an alphabet without look-alikes
   (`ABCDEFGHJKMNPQRSTWXYZ23456789`), made when the event is created and rotated by an admin. A
-  submission sends it in the `X-SPOT-Event-Code` header; it is compared ignoring case, spaces
+  submission sends it in the `X-SPOT-Join-Code` header; it is compared ignoring case, spaces
   and dashes. A refusal is 403 with a reason (`missing`, `wrong`, or `no-code` for an event that
   has none) and a message a scouter can act on, and the device keeps the record (SEC-9). The
   submission route that calls the check is #360. Signing in for assignment checks it too (#354), so a stranger
   cannot take robots; scouting with no server never needs it (SEC-9).
+- **SEC-3b** **[decided 2026-11-24]** The admin page shows the join code as text and as a QR
+  code. Scanning it opens SPOT with the code filled in, so scouters need not type it at the start
+  of an event. Typing it always works too, for a device without a camera or a scouter who
+  prefers to. Rotating the code changes both.
 
 ## Dead or vestigial code (safe to drop or restore deliberately)
 
@@ -318,7 +323,7 @@ Rationale in [ADR 0004](../adr/0004-authentication-and-privacy.md).
 | Units                                             | Milliseconds only [A-40]; `startAction`/`endAction` only [A-41]                                                                                                                                                                                                             | 04               |
 | Accessibility / branding                          | Accessibility required, no localization [A-46]; keep name and logo, palette free [A-47]                                                                                                                                                                                     | 02 NF-9/10       |
 | Testing data                                      | Real past-season dump can be provided, but a synthetic generator is required for preseason verification [A-45]                                                                                                                                                              | T-4 below        |
-| Security                                          | **Decided 2026-09-17:** public reads, event code for writes, one shared admin password, student-id scouters, no scouter data in public views (SEC-1..10, ADR 0004)                                                                                                          | S-1/S-2          |
+| Security                                          | **Decided 2026-09-17:** public reads, join code for writes, one shared admin password, student-id scouters, no scouter data in public views (SEC-1..10, ADR 0004)                                                                                                           | S-1/S-2          |
 
 **R-32 Recommendation for a secure yet easy first-run workflow [A-32]:** do not accept a
 database URL from the browser. Provide `MONGODB_URI` and `SPOT_ADMIN_PASSWORD` (or an
