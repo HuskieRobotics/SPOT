@@ -208,6 +208,31 @@ Rationale in [ADR 0004](../adr/0004-authentication-and-privacy.md).
 - **SEC-10** Unauthenticated reads mean there is no per-identity rate limiting on the read
   path. Accepted: the failure mode is load, not disclosure.
 
+**How v6 does it (decided 2026-11-24, #352).** Tests: `tests/unit/admin-auth.test.ts` and
+`tests/e2e/admin-sign-in.spec.ts`.
+
+- **SEC-4a** Signing in with the admin password gives a cookie, `spot-admin`. It holds only when
+  it was issued and when it expires, signed with HMAC-SHA-256 under a key derived from
+  `SPOT_ADMIN_PASSWORD` by PBKDF2 (`src/auth/admin-session.ts`). There is no second secret to set
+  up, changing the password signs every admin out, and the cookie does not reveal the password.
+  It lasts 30 days (SEC-9), is `HttpOnly` and `SameSite=Strict`, and is `Secure` when the request
+  came over HTTPS, which behind nginx means the recipe must send `X-Forwarded-Proto`. A wrong
+  password waits 500 ms before the answer. With no password set, nobody can sign in, and the
+  sign-in page says why.
+- **SEC-5a** Admin requests are checked in one place, `src/proxy.ts` (Next 16's name for
+  middleware, #120), by one rule: every admin page is under `/admin` and every admin route under
+  `/api/admin`, except the sign-in page and `/api/admin/session`. A page without a session goes
+  to the sign-in page and returns afterwards; a route gets 401. The check needs no database, so
+  proxy does all of it. Admin actions are route handlers, never Server Functions, which proxy
+  does not see as routes; a test checks that every page and route under those folders is guarded
+  and that `src/` has no Server Functions.
+- **SEC-3a** An event code is six characters from an alphabet without look-alikes
+  (`ABCDEFGHJKMNPQRSTWXYZ23456789`), made when the event is created and rotated by an admin. A
+  submission sends it in the `X-SPOT-Event-Code` header; it is compared ignoring case, spaces
+  and dashes. A refusal is 403 with a reason (`missing`, `wrong`, or `no-code` for an event that
+  has none) and a message a scouter can act on, and the device keeps the record (SEC-9). The
+  submission route that calls the check is #360.
+
 ## Dead or vestigial code (safe to drop or restore deliberately)
 
 - `src/checklist/**` (unmounted), `BubbleSheetGraph` module (empty), `flashBorder`/`example`
