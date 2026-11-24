@@ -11,9 +11,16 @@ import scouterSchema from "./schema/scouter.schema.json";
 import settingsSchema from "./schema/settings.schema.json";
 import scheduleSchema from "./schema/schedule.schema.json";
 import scouterSessionSchema from "./schema/scouter-session.schema.json";
+import assignmentSchema from "./schema/assignment.schema.json";
 
 export type DocumentKind =
-  "team-match-performance" | "event" | "scouter" | "settings" | "schedule" | "scouter-session";
+  | "team-match-performance"
+  | "event"
+  | "scouter"
+  | "settings"
+  | "schedule"
+  | "scouter-session"
+  | "assignment";
 
 export const DOCUMENT_KINDS: readonly DocumentKind[] = [
   "team-match-performance",
@@ -22,6 +29,7 @@ export const DOCUMENT_KINDS: readonly DocumentKind[] = [
   "settings",
   "schedule",
   "scouter-session",
+  "assignment",
 ];
 
 export const dataSchemas = {
@@ -31,6 +39,7 @@ export const dataSchemas = {
   settings: settingsSchema,
   schedule: scheduleSchema,
   "scouter-session": scouterSessionSchema,
+  assignment: assignmentSchema,
 } as const;
 
 /** Collection each document kind lives in. */
@@ -41,6 +50,7 @@ export const COLLECTIONS: Record<DocumentKind, string> = {
   settings: "settings",
   schedule: "schedules",
   "scouter-session": "scouterSessions",
+  assignment: "assignments",
 };
 
 const set = createSchemaSet<DocumentKind>(dataSchemas);

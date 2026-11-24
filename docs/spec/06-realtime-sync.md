@@ -140,6 +140,43 @@ badly (F-20 to F-23). These requirements replace the connection-keyed registry.
   the match starts that produces a single, complete record is not flagged: that is a clean
   substitution, not a coverage problem.
 
+## v6: the registry (`src/sessions/registry.ts`, #353)
+
+v6 implements the rules above as a pure state machine: `apply(state, event)` returns the next
+state and the effects to carry out (messages to devices, and documents to save behind the
+registry, document 21 DV-15 and DV-16). The transport (#354) holds the one state per process.
+Tests: `tests/unit/registry.test.ts`, named after these requirements, including random sequences
+of sign-ins, drops, releases and match changes that check RT-14a and RT-33 after every event.
+Decided 2026-11-24, where the requirements above left a choice:
+
+- **An assignment holds steady** (replaces the NOTE above). A waiting scouter keeps their robot
+  until the match changes or an admin releases it; later sign-ins move no one. v5 re-assigned on
+  every update, so a robot could change under a scouter who had already seen it.
+- **The quorum fires once per match**, when no one has been sent in yet. Afterwards a latecomer
+  waits for an admin start, or for start on first scouter if it is on, so a quorum never turns
+  into issue 34's behavior.
+- **Start on first scouter** means a scouter on the current match pressing Start Match sends in
+  everyone waiting on it, latecomers included, while that scouter is connected (F-22).
+- **Admin start is not standing**: it sends in the connected waiting scouters on the current
+  match at that moment. Someone who connects later waits for the next start.
+- **A finished scouter keeps their robot until the match changes**, so it is not handed to
+  someone else after it was scouted. Someone still scouting when the admin moves to the next
+  match finishes the old one, then is assigned in the new one when back on the waiting page.
+- **Changing the match** takes the robot back from everyone assigned but not started, and tells
+  them (BL-54).
+- **A replacement joins at once when the match is under way** (someone on it has pressed Start
+  Match): an admin chose the replacement, which is not issue 34. Its record covers only part of
+  the match (RT-34), which the history records as `afterStart`.
+- **A named replacement must be connected** and hold no robot in the current match.
+- **An admin may hand a robot back** to the scouter released from it, by naming them. RT-33
+  forbids resuming it on their own, not an admin's explicit choice.
+- **Disconnect and Remove are one action** for the registry: the entry goes, its robot returns to
+  the pool, and the device, if connected, is signed out and must sign in again (doc 15,
+  condition 3). The admin page (#357) labels them for the case at hand.
+- **Signing out** frees the robot the same way.
+- **Who held a robot at the end of a match** (RT-35) is the last holder whose holding was not
+  ended by a release or a withdrawal. Going back to an earlier match continues its history.
+
 ## Admin-driven actions (HTTP, document 07)
 
 - **RT-15 `GET /admin/api/enterMatch`** — for every scouter: if WAITING set status SCOUTING via
