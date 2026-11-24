@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://spot.team3061.org/schema/v2/settings.schema.json",
+  "title": "SPOT settings (data model v2)",
+  "description": "What an admin changes at an event, one document per tenant (ADR 0003, DV-13). Secrets are environment variables, never stored here.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["_id", "tenantId", "activeEventId", "startRules", "fieldFlipped", "updatedAt"],
+  "properties": {
+    "_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "The tenant id: one settings document per tenant."
+    },
+    "tenantId": { "type": "string", "minLength": 1 },
+    "activeEventId": {
+      "type": ["string", "null"],
+      "pattern": "^[0-9a-f]{24}$",
+      "description": "The event being scouted (DV-12a). Shown and chosen by its code, never this id (DV-12b)."
+    },
+    "startRules": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["quorum", "startOnFirstScouter"],
+      "description": "When waiting scouters enter a match without an admin starting it (RT-12a, ADR 0006).",
+      "properties": {
+        "quorum": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 6,
+          "description": "Connected waiting scouters on the current match that start it. Default 6."
+        },
+        "startOnFirstScouter": {
+          "type": "boolean",
+          "description": "One scouter starting pulls in everyone waiting (issue 34). Default off."
+        }
+      }
+    },
+    "fieldFlipped": {
+      "type": "boolean",
+      "description": "The field orientation (A-19, SC-28): true swaps the alliance-relative buttons' places and turns the field map, for when the blue alliance is on the scouters' left."
+    },
+    "updatedAt": { "type": "integer", "minimum": 0 }
+  }
+}

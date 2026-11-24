@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://spot.team3061.org/schema/v2/schedule.schema.json",
+  "title": "SPOT match schedule (data model v2)",
+  "description": "An event's matches and its current match, one document per event (DV-14, D-4). Stored so a restart keeps them.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["_id", "tenantId", "eventId", "tba", "manual", "currentMatchNumber", "updatedAt"],
+  "properties": {
+    "_id": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{24}$",
+      "description": "The event id: one schedule per event."
+    },
+    "tenantId": { "type": "string", "minLength": 1 },
+    "eventId": { "type": "string", "pattern": "^[0-9a-f]{24}$" },
+    "tba": {
+      "type": ["object", "null"],
+      "additionalProperties": false,
+      "required": ["matches", "fetchedAt"],
+      "description": "The last schedule read from The Blue Alliance (RT-22), or null if none was read.",
+      "properties": {
+        "matches": { "type": "array", "items": { "$ref": "#/$defs/match" } },
+        "fetchedAt": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "manual": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/match" },
+      "description": "The schedule an admin typed. When it is not empty it is used instead of TBA's (AD-8)."
+    },
+    "currentMatchNumber": {
+      "type": ["integer", "null"],
+      "minimum": 1,
+      "description": "The match being scouted, chosen on the admin page (RT-16)."
+    },
+    "updatedAt": { "type": "integer", "minimum": 0 }
+  },
+  "$defs": {
+    "teamOrEmpty": {
+      "type": ["string", "null"],
+      "pattern": "^[1-9][0-9]{0,4}[A-Z]?$",
+      "description": "A team key (DM-1a), or null for a slot not filled in yet."
+    },
+    "alliance": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 3,
+      "items": { "$ref": "#/$defs/teamOrEmpty" }
+    },
+    "match": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["number", "key", "red", "blue"],
+      "properties": {
+        "number": { "type": "integer", "minimum": 1 },
+        "key": {
+          "type": "string",
+          "minLength": 1,
+          "description": "TBA's match key, such as 2026mnwi_qm12, or a made-up one for a manual match."
+        },
+        "red": { "$ref": "#/$defs/alliance" },
+        "blue": { "$ref": "#/$defs/alliance" }
+      }
+    }
+  }
+}

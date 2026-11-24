@@ -119,3 +119,83 @@ export interface Scouter {
 
 /** Fields that must never appear in a public response (SEC-8). */
 export const PRIVATE_PERFORMANCE_FIELDS = ["scouterId"] as const;
+
+/** Fields of an event that must never appear in a public response (SEC-3). */
+export const PRIVATE_EVENT_FIELDS = ["eventCode"] as const;
+
+export type PublicPerformance = Omit<
+  TeamMatchPerformance,
+  (typeof PRIVATE_PERFORMANCE_FIELDS)[number]
+>;
+export type PublicEvent = Omit<SpotEvent, (typeof PRIVATE_EVENT_FIELDS)[number]>;
+
+/** When waiting scouters enter a match without an admin starting it (RT-12a, ADR 0006). */
+export interface StartRules {
+  /** Connected waiting scouters on the current match that start it, 1 to 6. */
+  quorum: number;
+  /** One scouter starting pulls in everyone waiting (issue 34). Off by default. */
+  startOnFirstScouter: boolean;
+}
+
+/**
+ * What an admin changes at an event, one document per tenant (ADR 0003, DV-13). `_id` is the
+ * tenant id. Secrets are environment variables and never stored here.
+ */
+export interface Settings {
+  _id: TenantId;
+  tenantId: TenantId;
+  /** The event being scouted (DV-12a); chosen and shown by its code (DV-12b). */
+  activeEventId: ObjectIdHex | null;
+  startRules: StartRules;
+  /** Field orientation (A-19, SC-28): swaps alliance-relative buttons and turns the map. */
+  fieldFlipped: boolean;
+  updatedAt: number;
+}
+
+/** One match of a schedule. A slot not filled in yet is null (a manual schedule being typed). */
+export interface ScheduledMatch {
+  number: number;
+  /** TBA's match key (`2026mnwi_qm12`), or a made-up one for a manual match. */
+  key: string;
+  red: [TeamKey | null, TeamKey | null, TeamKey | null];
+  blue: [TeamKey | null, TeamKey | null, TeamKey | null];
+}
+
+/** An event's matches and current match, one document per event; `_id` is the event id (DV-14). */
+export interface Schedule {
+  _id: ObjectIdHex;
+  tenantId: TenantId;
+  eventId: ObjectIdHex;
+  /** The last schedule read from TBA (RT-22), or null. */
+  tba: { matches: ScheduledMatch[]; fetchedAt: number } | null;
+  /** Typed by an admin; when not empty it is used instead of TBA's (AD-8). */
+  manual: ScheduledMatch[];
+  currentMatchNumber: number | null;
+  updatedAt: number;
+}
+
+export type SessionStatus = "waiting" | "scouting" | "complete";
+
+/**
+ * The saved copy of one registry entry (RT-24, DV-15). The registry is in memory and this is
+ * written behind it, so a restart keeps who holds which robot. Connection state is never
+ * stored: after a restart every scouter is disconnected until their device reconnects.
+ */
+export interface ScouterSession {
+  /** `<event id>:<student id>` (`sessionId`). */
+  _id: string;
+  tenantId: TenantId;
+  eventId: ObjectIdHex;
+  scouterId: string;
+  status: SessionStatus;
+  matchNumber: number | null;
+  /** The robot held (RT-25). */
+  team: TeamKey | null;
+  /** The scouter has seen this assignment, so a reconnect does not show it again (RT-27). */
+  accepted: boolean;
+  updatedAt: number;
+}
+
+export function sessionId(eventId: ObjectIdHex, scouterId: string): string {
+  return `${eventId}:${scouterId}`;
+}
