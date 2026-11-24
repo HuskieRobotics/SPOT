@@ -507,6 +507,7 @@ describe("v6: a played match records what the data model and the configuration a
           _id: "0123456789abcdef01234567",
           tenantId: DEFAULT_TENANT,
           eventId: "0123456789abcdef01234568",
+          level: "qual",
           matchNumber: 1,
           team: "3061",
           scouterId: "900001",

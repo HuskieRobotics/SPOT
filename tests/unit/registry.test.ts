@@ -29,6 +29,7 @@ const match = (
   number: number,
   teams: (string | null)[] = ["11", "12", "13", "21", "22", "23"],
 ): CurrentMatch => ({
+  level: "qual",
   number,
   red: teams.slice(0, 3) as Slots,
   blue: teams.slice(3, 6) as Slots,
@@ -115,7 +116,7 @@ describe("RT-9 to RT-14a: assignment", () => {
     const sim = new Sim()
       .do({
         type: "setMatch",
-        match: { number: 1, red: ["11", null, null], blue: [null, "22", null] },
+        match: { level: "qual", number: 1, red: ["11", null, null], blue: [null, "22", null] },
       })
       .signIn(...ids(3));
     expect(ids(3).map((id) => sim.team(id))).toEqual(["11", "22", null]);
@@ -388,7 +389,7 @@ describe("RT-31 to RT-36: release and replacement", () => {
     sim.do({ type: "release", scouterId: "s2", to: "s1" });
     expect(sim.error).toBeUndefined();
     expect(sim.team("s1")).toBe("11");
-    expect(holderAtEnd(sim.state.assignments["1:11"])?.scouterId).toBe("s1");
+    expect(holderAtEnd(sim.state.assignments["qual:1:11"])?.scouterId).toBe("s1");
   });
 
   it("RT-34: a replacement after the match is under way joins at once and is marked as joining late", () => {
@@ -400,7 +401,7 @@ describe("RT-31 to RT-36: release and replacement", () => {
       .clear()
       .do({ type: "release", scouterId: "s1" });
     expect(sim.kinds("s7")).toEqual(["assigned", "enter-match"]);
-    const a = sim.state.assignments["1:11"];
+    const a = sim.state.assignments["qual:1:11"];
     expect(a.holders.map((h) => [h.scouterId, h.ended, h.afterStart])).toEqual([
       ["s1", "released", false],
       ["s7", null, true],
@@ -409,7 +410,7 @@ describe("RT-31 to RT-36: release and replacement", () => {
 
   it("RT-34, RT-36: a release before anyone starts is a clean substitution", () => {
     const sim = dead().do({ type: "release", scouterId: "s1" });
-    const a = sim.state.assignments["1:11"];
+    const a = sim.state.assignments["qual:1:11"];
     expect(a.holders.at(-1)).toMatchObject({ scouterId: "s7", afterStart: false });
     expect(sim.entry("s7").entered).toBe(false);
   });
@@ -420,21 +421,35 @@ describe("RT-31 to RT-36: release and replacement", () => {
     for (const id of ids(6)) sim.do({ type: "start", scouterId: id });
     sim.do({ type: "release", scouterId: "s1" });
     sim.do({ type: "finish", scouterId: "s7" });
-    const a = sim.state.assignments["1:11"];
+    const a = sim.state.assignments["qual:1:11"];
     expect(holderAtEnd(a)?.scouterId).toBe("s7");
     expect(wasReplacement(a, "s7")).toBe(true);
     expect(wasReplacement(a, "s1")).toBe(false);
-    expect(wasReplacement(sim.state.assignments["1:12"], "s2")).toBe(false);
+    expect(wasReplacement(sim.state.assignments["qual:1:12"], "s2")).toBe(false);
   });
 
   it("RT-35: a robot whose holder signed out before the match ended has no holder at the end", () => {
     const sim = new Sim().do({ type: "setMatch", match: match(1) }).signIn("s1");
     sim.do({ type: "signOut", scouterId: "s1" });
-    expect(holderAtEnd(sim.state.assignments["1:11"])).toBeNull();
+    expect(holderAtEnd(sim.state.assignments["qual:1:11"])).toBeNull();
   });
 });
 
 describe("BL-54: changing the match", () => {
+  it("correcting the current match's teams takes back only the robots that left it", () => {
+    const sim = new Sim().do({ type: "setMatch", match: match(1) }).signIn("s1", "s2", "s3");
+    sim.clear().do({ type: "setMatch", match: match(1) });
+    expect(sim.effects).toEqual([]); // the same teams: nothing happens
+    sim.do({ type: "setMatch", match: match(1, ["11", "99", "13", "21", "22", "23"]) });
+    expect([sim.team("s1"), sim.team("s2"), sim.team("s3")]).toEqual(["11", "99", "13"]);
+    expect(sim.kinds("s1")).toEqual([]);
+    expect(sim.kinds("s2")).toEqual(["unassigned", "assigned"]);
+    expect(sim.state.assignments["qual:1:12"].holders[0]).toMatchObject({
+      scouterId: "s2",
+      ended: "unassigned",
+    });
+  });
+
   it("re-assigns everyone who has not started, and tells them", () => {
     const sim = new Sim().do({ type: "setMatch", match: match(1) }).signIn("s1", "s2");
     sim.clear().do({ type: "setMatch", match: match(2, ["31", "32", "33", "41", "42", "43"]) });
@@ -484,11 +499,11 @@ describe("BL-54: changing the match", () => {
         holders: [expect.objectContaining({ scouterId: "s1", ended: "unassigned" })],
       }),
     );
-    expect(Object.keys(sim.state.assignments).sort()).toEqual(["1:11", "2:11"]);
+    expect(Object.keys(sim.state.assignments).sort()).toEqual(["qual:1:11", "qual:2:11"]);
     sim.do({ type: "release", scouterId: "s1" }).signIn("s2");
     sim.do({ type: "setMatch", match: match(1) });
     // s1 was released from 11 in match 2 only; in match 1 the history continues.
-    expect(sim.state.assignments["1:11"].holders.map((h) => [h.scouterId, h.ended])).toEqual([
+    expect(sim.state.assignments["qual:1:11"].holders.map((h) => [h.scouterId, h.ended])).toEqual([
       ["s1", "unassigned"],
       ["s1", null],
     ]);

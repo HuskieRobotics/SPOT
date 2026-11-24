@@ -106,7 +106,34 @@ mode; a two-panel body: **Scouters** and **Matches**.
   has no locks and saves on every input. `tempTeams` de-dup compares numbers against objects
   and therefore never de-duplicates.
 
-**[A-9]** FMS practice-match fallback: not used; may be dropped.
+**v6 (#355, decided 2026-11-24).** The manual schedule is kept (D-4) and lives at
+`/admin/schedule`, behind the admin password (SEC-5). It replaces AD-22 to AD-25:
+
+- An admin types matches only when TBA does not have them: an event TBA does not cover, or a
+  server that cannot reach TBA. When TBA has the event, playoff matches appear as TBA adds them.
+- **AD-8a** **[decided 2026-11-24, maintainer]** Precedence is per level: typed qualifications
+  are used instead of TBA's qualifications, and typed playoffs instead of TBA's playoffs. Typing
+  the playoffs at an event whose qualifications TBA has keeps TBA's qualifications. (AD-8 was
+  all or nothing.)
+- The page says, for qualifications and for playoffs, where scouters are assigned from (typed,
+  TBA's, or none yet), when TBA's was last read, and why it could not be, with a button to read
+  it now.
+- **Qualification matches** and **Playoff matches** each have a **Number of matches** and
+  **Set** that grow or shrink that level; each match has six boxes, red 1 to 3 then blue 1 to 3,
+  and is named as the field names it ("Qual 3", "Playoff 5", "Final 1" for playoff 14, RT-22a).
+  Teams are typed as an admin reads them (`3061`, `frc3061`, `2338b`) and a box may stay empty
+  while the schedule is being typed.
+- **Save** stores the whole schedule in MongoDB, so a restart keeps it (v5 kept it in memory).
+  A team that is not a team number, a team twice in one match, or a match twice is refused with
+  the match and slot, and nothing is saved. Setting a level's count to 0 and saving goes back to
+  TBA's for that level.
+- Each row has **Lock** and **Unlock** (AD-25a): a locked row cannot be edited until unlocked, and
+  the lock is saved with the schedule.
+- The schedule's teams, once each, replace `tempTeams` (F-12); analysis reads them in Phase 3.
+
+Tests: `tests/unit/schedule.test.ts`, `tests/e2e/admin-schedule.spec.ts`.
+
+**[A-9]** FMS practice-match fallback: dropped in v6 (RT-23a).
 
 ## Checklist page (`/checklist`, not mounted) — **[A-10] dropped**
 

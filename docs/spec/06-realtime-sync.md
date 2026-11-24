@@ -216,6 +216,31 @@ Decided 2026-11-24, where the requirements above left a choice:
   which keeps a "B" robot at an off-season event (BL-308). The v5 string-versus-number mismatch
   between TBA and the FIRST API disappears with the fallback.
 
+## v6: the schedule (`src/schedule/`, #355)
+
+- **RT-22a** **[decided 2026-11-24, maintainer]** A match is a level and a number within it,
+  as the field shows it (document 21 DV-17): **Qual 1 to N**, and **Playoff 1 to 16**. A
+  qualification keeps TBA's number, which analysis joins TBA's results on (DM-11). In FRC's
+  double-elimination playoff TBA keys the bracket `sf1m1` to `sf13m1` and the finals `f1m1` to
+  `f1m3`; they are playoffs 1 to 13 and 14 to 16, shown as "Playoff 5" and "Final 2". Any other
+  playoff format (best-of-three rounds before 2023, an off-season event's own bracket) is
+  numbered from 1 in TBA's order of level, set and match. v5 put playoffs after the
+  qualifications by adding TBA's `match_number` to an offset per level, so all 13 bracket
+  matches, each number 1 of its own set, shared one number. Neither real export scouted
+  playoffs, so no data depended on v5's numbers. Tests: `tests/unit/schedule.test.ts`.
+- The current match, and every assignment and holding, is a level and a number, so Qual 5 and
+  Playoff 5 never meet in the registry.
+- TBA's schedule is kept in the schedule document (DV-14). It is read again when an admin asks,
+  or when the schedule page is shown and the copy is more than five minutes old, so playoff
+  matches appear as TBA adds them. If TBA cannot be read, the last copy stays and the page says
+  why: no `TBA_API_KEY` (RT-23, also logged once), a refused key, an unknown event, or no
+  connection. Every request to TBA times out after 10 s (OF-7).
+- Team keys from TBA and from the typed schedule are normalized on the way in (RT-23b): `frc2338B`
+  and a typed `2338b` are both `2338B`.
+- When the schedule changes, the registry follows it (#354's runtime): if the current match's
+  teams were corrected, only the robots that left it are taken back from scouters who have not
+  started; if the current match left the schedule, there is no current match.
+
 ## Demo mode summary (across the system)
 
 | Behavior                             | Non-demo                                           | Demo                                                          |

@@ -56,9 +56,9 @@ test("a device's stream delivers assignments as they happen, and a removal stops
   expect(
     (await request.post("/api/admin/session", { data: { password: E2E_ADMIN_PASSWORD } })).status(),
   ).toBe(204);
-  await request.post("/api/admin/registry", { data: { action: "set-match", matchNumber: null } });
+  await request.post("/api/admin/registry", { data: { action: "set-match", match: null } });
   const chosen = await request.post("/api/admin/registry", {
-    data: { action: "set-match", matchNumber: 1 },
+    data: { action: "set-match", match: { level: "qual", number: 1 } },
   });
   expect(chosen.status()).toBe(200);
   // Within the 2 to 3 s the spec allows (RT-14c), so nothing between server and browser buffers.

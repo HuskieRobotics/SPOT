@@ -5,17 +5,33 @@
   "description": "Who held one robot in one match, in order (DV-16). Saved behind the in-memory registry like the sessions, so the server can tell, when a record arrives, whether it came from the scouter who held the robot at the end of the match (RT-35) and whether that scouter joined late (RT-34).",
   "type": "object",
   "additionalProperties": false,
-  "required": ["_id", "tenantId", "eventId", "matchNumber", "team", "holders"],
+  "required": ["_id", "tenantId", "eventId", "level", "matchNumber", "team", "holders"],
   "properties": {
     "_id": {
       "type": "string",
-      "pattern": "^[0-9a-f]{24}:[1-9][0-9]*:[1-9][0-9]{0,4}[A-Z]?$",
-      "description": "<event id>:<match number>:<team key>."
+      "pattern": "^[0-9a-f]{24}:(qual|playoff):[1-9][0-9]*:[1-9][0-9]{0,4}[A-Z]?$",
+      "description": "<event id>:<level>:<match number>:<team key>."
     },
-    "tenantId": { "type": "string", "minLength": 1 },
-    "eventId": { "type": "string", "pattern": "^[0-9a-f]{24}$" },
-    "matchNumber": { "type": "integer", "minimum": 1 },
-    "team": { "type": "string", "pattern": "^[1-9][0-9]{0,4}[A-Z]?$" },
+    "tenantId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "eventId": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{24}$"
+    },
+    "level": {
+      "enum": ["qual", "playoff"],
+      "description": "Qualification or playoff; the match number counts within it (DV-17, RT-22a)."
+    },
+    "matchNumber": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "team": {
+      "type": "string",
+      "pattern": "^[1-9][0-9]{0,4}[A-Z]?$"
+    },
     "holders": {
       "type": "array",
       "items": {
@@ -23,8 +39,14 @@
         "additionalProperties": false,
         "required": ["scouterId", "from", "until", "ended", "afterStart"],
         "properties": {
-          "scouterId": { "type": "string", "minLength": 1 },
-          "from": { "type": "integer", "minimum": 0 },
+          "scouterId": {
+            "type": "string",
+            "minLength": 1
+          },
+          "from": {
+            "type": "integer",
+            "minimum": 0
+          },
           "until": {
             "type": ["integer", "null"],
             "minimum": 0,

@@ -9,6 +9,7 @@
     "_id",
     "tenantId",
     "eventId",
+    "level",
     "matchNumber",
     "team",
     "scouterId",
@@ -25,10 +26,24 @@
     "actions"
   ],
   "properties": {
-    "_id": { "$ref": "#/$defs/objectId" },
-    "tenantId": { "type": "string", "minLength": 1 },
-    "eventId": { "$ref": "#/$defs/objectId" },
-    "matchNumber": { "type": "integer", "minimum": 1 },
+    "_id": {
+      "$ref": "#/$defs/objectId"
+    },
+    "tenantId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "eventId": {
+      "$ref": "#/$defs/objectId"
+    },
+    "level": {
+      "enum": ["qual", "playoff"],
+      "description": "Qualification or playoff; the match number counts within it (DV-17, RT-22a)."
+    },
+    "matchNumber": {
+      "type": "integer",
+      "minimum": 1
+    },
     "team": {
       "type": "string",
       "pattern": "^[1-9][0-9]{0,4}[A-Z]?$",
@@ -38,30 +53,70 @@
       "type": ["string", "null"],
       "description": "Student ID (SEC-6); null when no signed-in scouter produced the record."
     },
-    "source": { "enum": ["app", "qr", "import"] },
-    "clientVersion": { "type": "string" },
-    "submittedAt": { "type": "integer", "minimum": 0 },
-    "matchKey": { "type": "string", "minLength": 1 },
-    "nonce": { "type": "string", "minLength": 1 },
-    "coverage": { "enum": ["full", "partial"] },
-    "superseded": { "type": "boolean" },
+    "source": {
+      "enum": ["app", "qr", "import"]
+    },
+    "clientVersion": {
+      "type": "string"
+    },
+    "submittedAt": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "matchKey": {
+      "type": "string",
+      "minLength": 1
+    },
+    "nonce": {
+      "type": "string",
+      "minLength": 1
+    },
+    "coverage": {
+      "enum": ["full", "partial"]
+    },
+    "superseded": {
+      "type": "boolean"
+    },
     "flag": {
       "type": "object",
       "additionalProperties": false,
       "required": ["flagged", "reason", "source", "at"],
       "properties": {
-        "flagged": { "type": "boolean" },
-        "reason": { "type": ["string", "null"] },
-        "source": { "enum": ["human", "machine", null] },
-        "at": { "type": ["integer", "null"] }
+        "flagged": {
+          "type": "boolean"
+        },
+        "reason": {
+          "type": ["string", "null"]
+        },
+        "source": {
+          "enum": ["human", "machine", null]
+        },
+        "at": {
+          "type": ["integer", "null"]
+        }
       }
     },
-    "notes": { "type": ["string", "null"] },
-    "tags": { "type": "array", "items": { "type": "string" } },
-    "actions": { "type": "array", "items": { "$ref": "#/$defs/action" } }
+    "notes": {
+      "type": ["string", "null"]
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "actions": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/action"
+      }
+    }
   },
   "$defs": {
-    "objectId": { "type": "string", "pattern": "^[0-9a-f]{24}$" },
+    "objectId": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{24}$"
+    },
     "action": {
       "type": "object",
       "additionalProperties": false,
@@ -78,11 +133,22 @@
           "minimum": 0,
           "description": "Milliseconds of match time REMAINING (DM-3)."
         },
-        "phase": { "type": ["string", "null"] },
-        "segment": { "type": ["string", "null"] },
-        "segmentKind": { "type": ["string", "null"] },
-        "segmentIndex": { "type": ["integer", "null"], "minimum": 1 },
-        "other": { "type": "object" }
+        "phase": {
+          "type": ["string", "null"]
+        },
+        "segment": {
+          "type": ["string", "null"]
+        },
+        "segmentKind": {
+          "type": ["string", "null"]
+        },
+        "segmentIndex": {
+          "type": ["integer", "null"],
+          "minimum": 1
+        },
+        "other": {
+          "type": "object"
+        }
       }
     }
   }

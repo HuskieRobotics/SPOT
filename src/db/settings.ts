@@ -26,7 +26,12 @@ export function settingsCollection(db: Db) {
   return db.collection<Settings>(COLLECTIONS.settings);
 }
 
-const cache = new WeakMap<Db, Map<TenantId, { at: number; value: Settings }>>();
+let cache = new WeakMap<Db, Map<TenantId, { at: number; value: Settings }>>();
+
+/** Forget every cached read, so the next one goes to the database. Tests only. */
+export function forgetCachedSettings() {
+  cache = new WeakMap();
+}
 
 function cacheOf(db: Db) {
   let map = cache.get(db);

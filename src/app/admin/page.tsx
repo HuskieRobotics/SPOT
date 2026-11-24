@@ -3,6 +3,7 @@
  * scouter panels arrive with #357.
  */
 import type { Metadata } from "next";
+import Link from "next/link";
 import { SignOutButton } from "./sign-out-button";
 
 export const metadata: Metadata = {
@@ -17,6 +18,9 @@ export default function AdminPage() {
         You are signed in. Choosing the event and match and watching scouters come with the admin
         page (#357).
       </p>
+      <Link href="/admin/schedule" className="text-primary underline-offset-4 hover:underline">
+        Match schedule
+      </Link>
       <SignOutButton />
     </main>
   );

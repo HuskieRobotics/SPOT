@@ -472,6 +472,7 @@ export function generate(options: GenerateOptions): GeneratedDataset {
         _id: objectId(random),
         tenantId,
         eventId,
+        level: "qual",
         matchNumber,
         team,
         scouterId,

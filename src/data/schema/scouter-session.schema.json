@@ -12,6 +12,7 @@
     "scouterId",
     "deviceId",
     "status",
+    "matchLevel",
     "matchNumber",
     "team",
     "accepted",
@@ -44,6 +45,10 @@
     },
     "status": {
       "enum": ["waiting", "scouting", "complete"]
+    },
+    "matchLevel": {
+      "enum": ["qual", "playoff", null],
+      "description": "The level of `matchNumber`, or null with it (DV-17)."
     },
     "matchNumber": {
       "type": ["integer", "null"],

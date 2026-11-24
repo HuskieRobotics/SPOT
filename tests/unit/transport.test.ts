@@ -25,6 +25,7 @@ const ORIGIN = "http://localhost:3000";
 const PASSWORD = "transport test password";
 
 const matches: ScheduledMatch[] = [1, 2].map((n) => ({
+  level: "qual",
   number: n,
   key: `2026mnwi_qm${n}`,
   red: [`${n}01`, `${n}02`, `${n}03`],
@@ -221,7 +222,10 @@ describe("T-6: devices over HTTP", () => {
       await d.open();
     }
     for (const d of devices) await d.stream!.drain();
-    const { status, snapshot } = await admin({ action: "set-match", matchNumber: 1 });
+    const { status, snapshot } = await admin({
+      action: "set-match",
+      match: { level: "qual", number: 1 },
+    });
     expect(status).toBe(200);
     expect(snapshot?.match?.number).toBe(1);
     expect(snapshot?.entries.map((e) => e.team)).toEqual([
@@ -315,7 +319,7 @@ describe("T-6: devices over HTTP", () => {
   it("refuses what the registry refuses, and a match the schedule lacks, with messages", async () => {
     const r1 = await admin({ action: "release", scouterId: "nobody" });
     expect(r1.status).toBe(409);
-    const r2 = await admin({ action: "set-match", matchNumber: 9 });
+    const r2 = await admin({ action: "set-match", match: { level: "qual", number: 9 } });
     expect(r2.status).toBe(404);
     const r3 = await admin({ action: "dance" });
     expect(r3.status).toBe(400);
