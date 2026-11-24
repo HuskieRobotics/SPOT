@@ -27,6 +27,7 @@ async function main() {
   });
   await updateSchedule(db, event._id, {
     manual: [1, 2].map((n) => ({
+      level: "qual" as const,
       number: n,
       key: `2026mnwi_qm${n}`,
       red: [`${n}01`, `${n}02`, `${n}03`],

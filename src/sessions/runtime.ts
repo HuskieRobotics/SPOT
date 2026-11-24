@@ -24,7 +24,8 @@ import {
   type SessionStore,
 } from "@/db/sessions";
 import { getSettings } from "@/db/settings";
-import { DEFAULT_TENANT, type ObjectIdHex, type TenantId } from "@/data/types";
+import { DEFAULT_TENANT, type MatchRef, type ObjectIdHex, type TenantId } from "@/data/types";
+import { matchLabel } from "@/schedule/labels";
 import { Hub, HEARTBEAT_MS, type Connection } from "./hub";
 import {
   apply,
@@ -74,6 +75,7 @@ export interface AdminEntry {
   scouterId: string;
   status: DeviceView["status"];
   connected: boolean;
+  matchLevel: DeviceView["matchLevel"];
   matchNumber: number | null;
   team: string | null;
   alliance: DeviceView["alliance"];
@@ -140,7 +142,7 @@ export class Runtime {
         eventId,
         tenantId: this.tenantId,
         rules: settings.startRules,
-        match: currentMatchOf(effectiveMatches(schedule), schedule.currentMatchNumber),
+        match: currentMatchOf(effectiveMatches(schedule), schedule.currentMatch),
         entries,
         assignments,
         now: this.now(),
@@ -301,24 +303,28 @@ export class Runtime {
       const state = await this.current();
       if (!state) return;
       const schedule = await getSchedule(this.db, state.eventId, this.tenantId);
-      const match = currentMatchOf(effectiveMatches(schedule), schedule.currentMatchNumber);
+      const match = currentMatchOf(effectiveMatches(schedule), schedule.currentMatch);
       if (match === null && state.match === null) return;
       this.dispatch({ type: "setMatch", match });
     });
   }
 
-  /** Choose the current match by its number in the schedule, or none (RT-16). */
-  setMatch(matchNumber: number | null): Promise<void> {
+  /** Choose the current match by its level and number in the schedule, or none (RT-16). */
+  setMatch(ref: MatchRef | null): Promise<void> {
     return this.serial(async () => {
       const state = await this.required();
       const schedule = await getSchedule(this.db, state.eventId, this.tenantId);
-      const match = currentMatchOf(effectiveMatches(schedule), matchNumber);
-      if (matchNumber !== null && !match)
-        throw new Refusal(404, "no-such-match", `Match ${matchNumber} is not in the schedule.`);
+      const match = currentMatchOf(effectiveMatches(schedule), ref);
+      if (ref !== null && !match)
+        throw new Refusal(
+          404,
+          "no-such-match",
+          `${matchLabel(ref.level, ref.number)} is not in the schedule.`,
+        );
       await updateSchedule(
         this.db,
         state.eventId,
-        { currentMatchNumber: matchNumber },
+        { currentMatch: ref },
         { tenantId: this.tenantId, now: this.now() },
       );
       this.dispatch({ type: "setMatch", match });
@@ -355,10 +361,13 @@ export class Runtime {
 
 function currentMatchOf(
   matches: ReturnType<typeof effectiveMatches>,
-  number: number | null,
+  ref: MatchRef | null,
 ): CurrentMatch | null {
-  const m = number === null ? undefined : matches.find((x) => x.number === number);
-  return m ? { number: m.number, red: m.red, blue: m.blue } : null;
+  const m =
+    ref === null
+      ? undefined
+      : matches.find((x) => x.level === ref.level && x.number === ref.number);
+  return m ? { level: m.level, number: m.number, red: m.red, blue: m.blue } : null;
 }
 
 // ------------------------------------------------------------------- the process's runtime

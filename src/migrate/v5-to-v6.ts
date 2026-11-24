@@ -288,6 +288,8 @@ export function migrate(
       _id: hex(p._id),
       tenantId,
       eventId: hex(p.eventNumber),
+      // Both migrated seasons scouted qualifications only (DV-17).
+      level: "qual",
       matchNumber: num(p.matchNumber),
       team: teamKeyFromV5(p.robotNumber),
       scouterId,
@@ -314,7 +316,7 @@ export function migrate(
   // because who "finished the match" (RT-35) is not knowable from old data.
   const byRobotMatch = new Map<string, TeamMatchPerformance[]>();
   for (const p of performances) {
-    const key = `${p.eventId}:${p.matchNumber}:${p.team}`;
+    const key = `${p.eventId}:${p.level}:${p.matchNumber}:${p.team}`;
     const list = byRobotMatch.get(key) ?? [];
     list.push(p);
     byRobotMatch.set(key, list);

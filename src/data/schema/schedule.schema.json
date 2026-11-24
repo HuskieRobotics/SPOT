@@ -5,7 +5,7 @@
   "description": "An event's matches and its current match, one document per event (DV-14, D-4). Stored so a restart keeps them.",
   "type": "object",
   "additionalProperties": false,
-  "required": ["_id", "tenantId", "eventId", "tba", "manual", "currentMatchNumber", "updatedAt"],
+  "required": ["_id", "tenantId", "eventId", "tba", "manual", "currentMatch", "updatedAt"],
   "properties": {
     "_id": {
       "type": "string",
@@ -43,12 +43,22 @@
       "items": {
         "$ref": "#/$defs/match"
       },
-      "description": "The schedule an admin typed. When it is not empty it is used instead of TBA's (AD-8)."
+      "description": "The schedule an admin typed. For each level that has typed matches, they are used instead of TBA's (AD-8, per level)."
     },
-    "currentMatchNumber": {
-      "type": ["integer", "null"],
-      "minimum": 1,
-      "description": "The match being scouted, chosen on the admin page (RT-16)."
+    "currentMatch": {
+      "type": ["object", "null"],
+      "additionalProperties": false,
+      "required": ["level", "number"],
+      "description": "The match being scouted, chosen on the admin page (RT-16).",
+      "properties": {
+        "level": {
+          "enum": ["qual", "playoff"]
+        },
+        "number": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
     },
     "updatedAt": {
       "type": "integer",
@@ -72,11 +82,16 @@
     "match": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["number", "key", "red", "blue"],
+      "required": ["level", "number", "key", "red", "blue"],
       "properties": {
+        "level": {
+          "enum": ["qual", "playoff"],
+          "description": "Qualification or playoff; the match number counts within it (DV-17, RT-22a)."
+        },
         "number": {
           "type": "integer",
-          "minimum": 1
+          "minimum": 1,
+          "description": "Within its level: qualification 1 to N, playoff 1 to 16 (RT-22a)."
         },
         "key": {
           "type": "string",

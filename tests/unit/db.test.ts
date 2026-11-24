@@ -44,6 +44,7 @@ const session = (eventId: string, scouterId: string, over: Partial<ScouterSessio
   scouterId,
   deviceId: null,
   status: "waiting" as const,
+  matchLevel: "qual" as const,
   matchNumber: 4,
   team: "3061",
   accepted: false,
@@ -238,6 +239,7 @@ describe("database layer", () => {
     it("keep the matches and the current match, and prefer the manual schedule (AD-8)", async () => {
       const eventId = oid();
       const match = (n: number, red: Schedule["manual"][0]["red"]) => ({
+        level: "qual" as const,
         number: n,
         key: `2026mnwi_qm${n}`,
         red,
@@ -250,11 +252,11 @@ describe("database layer", () => {
       expect(effectiveMatches(await getSchedule(db, eventId))[0].red[1]).toBe("2338B");
       await updateSchedule(db, eventId, {
         manual: [match(1, ["9", null, null])],
-        currentMatchNumber: 1,
+        currentMatch: { level: "qual", number: 1 },
       });
       const s = await getSchedule(db, eventId);
       expect(effectiveMatches(s)[0].red).toEqual(["9", null, null]);
-      expect(s.currentMatchNumber).toBe(1);
+      expect(s.currentMatch).toEqual({ level: "qual", number: 1 });
       expect(s.tba?.matches).toHaveLength(1);
     });
 
@@ -262,7 +264,13 @@ describe("database layer", () => {
       await expect(
         updateSchedule(db, oid(), {
           manual: [
-            { number: 1, key: "m1", red: ["frc3061", null, null], blue: [null, null, null] },
+            {
+              level: "qual",
+              number: 1,
+              key: "m1",
+              red: ["frc3061", null, null],
+              blue: [null, null, null],
+            },
           ],
         }),
       ).rejects.toThrow(/red/);

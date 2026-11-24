@@ -160,6 +160,8 @@ export function buildEnrichedDataset(
     prepare: (tmps) => {
       if (!tba || !enabled) return;
       for (const tmp of tmps) {
+        // TBA's results join on qualification numbers; a playoff record is not enriched (DV-17).
+        if (tmp.level === "playoff") continue;
         const extra = scoreBreakdownActions(tba.matches, tmp.matchNumber, tmp.team, prefixes);
         if (extra.length > 0) tmp.actions = [...tmp.actions, ...extra];
       }

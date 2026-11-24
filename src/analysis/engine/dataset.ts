@@ -9,13 +9,22 @@
  *
  * `teams` holds one object per team key (DM-1a) that appears in `tmps`; team entries write there.
  */
-import type { Action, Coverage, Flag, PerformanceSource, TeamMatchPerformance } from "@/data/types";
+import type {
+  Action,
+  Coverage,
+  Flag,
+  MatchLevel,
+  PerformanceSource,
+  TeamMatchPerformance,
+} from "@/data/types";
 import { compareTeamKeys, type TeamKey } from "@/data/team";
 
 /** The stored fields analysis may see. Everything else on a performance is pipeline output. */
 export interface AnalysisPerformanceFields {
   _id: string;
   eventId: string;
+  /** Qualification or playoff; `matchNumber` counts within it (DV-17). */
+  level: MatchLevel;
   matchNumber: number;
   team: TeamKey;
   source: PerformanceSource;
@@ -32,6 +41,7 @@ export interface AnalysisPerformanceFields {
 export const ANALYSIS_PERFORMANCE_FIELDS = [
   "_id",
   "eventId",
+  "level",
   "matchNumber",
   "team",
   "source",
@@ -93,10 +103,13 @@ function deepFreeze<T>(value: T): T {
  * took the place of the first scout).
  */
 export function comparePerformances(
-  a: Pick<AnalysisPerformanceFields, "matchNumber" | "submittedAt" | "_id">,
-  b: Pick<AnalysisPerformanceFields, "matchNumber" | "submittedAt" | "_id">,
+  a: Pick<AnalysisPerformanceFields, "level" | "matchNumber" | "submittedAt" | "_id">,
+  b: Pick<AnalysisPerformanceFields, "level" | "matchNumber" | "submittedAt" | "_id">,
 ): number {
+  // Qualifications, then playoffs (DV-17).
+  const level = (p: { level?: MatchLevel }) => (p.level === "playoff" ? 1 : 0);
   return (
+    level(a) - level(b) ||
     a.matchNumber - b.matchNumber ||
     a.submittedAt - b.submittedAt ||
     (a._id < b._id ? -1 : a._id > b._id ? 1 : 0)

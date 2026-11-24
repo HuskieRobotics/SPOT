@@ -218,12 +218,18 @@ Decided 2026-11-24, where the requirements above left a choice:
 
 ## v6: the schedule (`src/schedule/`, #355)
 
-- **RT-22a** **[decided 2026-11-24]** A qualification match keeps TBA's number, which analysis
-  joins TBA's results on (DM-11). Playoff matches continue after the last qualification, one
-  number each, in TBA's order of level, set and match. v5 added TBA's `match_number` to an
-  offset per level, but in a double-elimination playoff every semifinal match is number 1 of its
-  own set, so all 13 semifinals of 2026mnwi would have shared one number. Neither real export
-  scouted playoffs, so no data depended on v5's numbers. Tests: `tests/unit/schedule.test.ts`.
+- **RT-22a** **[decided 2026-11-24, maintainer]** A match is a level and a number within it,
+  as the field shows it (document 21 DV-17): **Qual 1 to N**, and **Playoff 1 to 16**. A
+  qualification keeps TBA's number, which analysis joins TBA's results on (DM-11). In FRC's
+  double-elimination playoff TBA keys the bracket `sf1m1` to `sf13m1` and the finals `f1m1` to
+  `f1m3`; they are playoffs 1 to 13 and 14 to 16, shown as "Playoff 5" and "Final 2". Any other
+  playoff format (best-of-three rounds before 2023, an off-season event's own bracket) is
+  numbered from 1 in TBA's order of level, set and match. v5 put playoffs after the
+  qualifications by adding TBA's `match_number` to an offset per level, so all 13 bracket
+  matches, each number 1 of its own set, shared one number. Neither real export scouted
+  playoffs, so no data depended on v5's numbers. Tests: `tests/unit/schedule.test.ts`.
+- The current match, and every assignment and holding, is a level and a number, so Qual 5 and
+  Playoff 5 never meet in the registry.
 - TBA's schedule is kept in the schedule document (DV-14). It is read again when an admin asks,
   or when the schedule page is shown and the copy is more than five minutes old, so playoff
   matches appear as TBA adds them. If TBA cannot be read, the last copy stays and the page says

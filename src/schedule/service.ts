@@ -1,7 +1,7 @@
 /**
  * The active event's schedule on the server (#355): TBA's, read and kept in the schedule
  * document (DV-14), and the manual one an admin types. The manual schedule wins when it is not
- * empty (AD-8).
+ * empty, one level at a time (AD-8).
  *
  * TBA's copy is re-read when an admin asks, or when the schedule is shown and the copy is older
  * than five minutes, so playoff matches appear as TBA adds them. If TBA cannot be read, the last
@@ -9,8 +9,8 @@
  */
 import type { Db } from "mongodb";
 import { getEvent } from "@/db/events";
-import { effectiveMatches, getSchedule, updateSchedule } from "@/db/schedules";
-import type { ObjectIdHex, ScheduledMatch } from "@/data/types";
+import { effectiveMatches, getSchedule, hasMatch, updateSchedule } from "@/db/schedules";
+import type { MatchLevel, MatchRef, ObjectIdHex, ScheduledMatch } from "@/data/types";
 import type { TeamKey } from "@/data/team";
 import { parseManualSchedule, scheduleTeams } from "./manual";
 import { fetchTbaMatches, scheduleFromTba, TbaError } from "./tba";
@@ -20,15 +20,15 @@ export const TBA_STALE_MS = 5 * 60_000;
 export interface ScheduleView {
   eventId: ObjectIdHex;
   tbaKey: string;
-  /** Which schedule assignment uses (AD-8). */
-  source: "manual" | "tba" | "none";
+  /** Where each level's matches come from (AD-8, per level). */
+  source: Record<MatchLevel, "manual" | "tba" | "none">;
   matches: ScheduledMatch[];
   manual: ScheduledMatch[];
   tba: { fetchedAt: number; count: number } | null;
   /** Why TBA's schedule could not be read just now, for the admin to act on (RT-23). */
   tbaError: string | null;
   tbaKeyConfigured: boolean;
-  currentMatchNumber: number | null;
+  currentMatch: MatchRef | null;
   /** Every team in the schedule in use; replaces v5's `tempTeams` (F-12). */
   teams: TeamKey[];
 }
@@ -77,7 +77,10 @@ export async function scheduleView(
   return {
     eventId,
     tbaKey: event.tbaKey,
-    source: schedule.manual.length > 0 ? "manual" : schedule.tba ? "tba" : "none",
+    source: {
+      qual: sourceOf(schedule, "qual"),
+      playoff: sourceOf(schedule, "playoff"),
+    },
     matches,
     manual: schedule.manual,
     tba: schedule.tba
@@ -85,13 +88,21 @@ export async function scheduleView(
       : null,
     tbaError,
     tbaKeyConfigured: key !== undefined,
-    currentMatchNumber: schedule.currentMatchNumber,
+    currentMatch: schedule.currentMatch,
     teams: scheduleTeams(matches),
   };
 }
 
+function sourceOf(
+  schedule: { manual: ScheduledMatch[]; tba: { matches: ScheduledMatch[] } | null },
+  level: MatchLevel,
+): "manual" | "tba" | "none" {
+  if (schedule.manual.some((m) => m.level === level)) return "manual";
+  return schedule.tba?.matches.some((m) => m.level === level) ? "tba" : "none";
+}
+
 /**
- * Save the manual schedule an admin typed (an empty list goes back to TBA's). Throws
+ * Save the manual schedule an admin typed (a level with no typed matches uses TBA's). Throws
  * `ScheduleError` naming the first problem. If the current match is no longer in the schedule
  * in use, there is no current match.
  */
@@ -103,15 +114,12 @@ export async function saveManualSchedule(
 ): Promise<void> {
   const manual = parseManualSchedule(typed);
   const schedule = await getSchedule(db, eventId);
-  const inUse = manual.length > 0 ? manual : (schedule.tba?.matches ?? []);
-  const current = schedule.currentMatchNumber;
+  const inUse = effectiveMatches({ ...schedule, manual });
+  const current = schedule.currentMatch;
   await updateSchedule(
     db,
     eventId,
-    {
-      manual,
-      currentMatchNumber: inUse.some((m) => m.number === current) ? current : null,
-    },
+    { manual, currentMatch: hasMatch(inUse, current) ? current : null },
     { now },
   );
 }

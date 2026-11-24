@@ -220,7 +220,9 @@ export const countMatches = defineTransformer<{ weight?: number }>({
   name: "countMatches",
   summary: "Count the matches a team played",
   optionsSchema: builtInOptions("countMatches"),
-  run: ({ tmps }, { weight }) => new Set(tmps.map((t) => t.matchNumber)).size * (weight ?? 1),
+  // Qual 5 and Playoff 5 are different matches (DV-17).
+  run: ({ tmps }, { weight }) =>
+    new Set(tmps.map((t) => `${t.level ?? "qual"}:${t.matchNumber}`)).size * (weight ?? 1),
 });
 
 /** Population standard deviation of a value over a team's matches, skipping No Data. */

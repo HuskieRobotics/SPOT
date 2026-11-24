@@ -23,6 +23,7 @@ import {
   type Assignment,
   type Holder,
   type ObjectIdHex,
+  type MatchLevel,
   type ScheduledMatch,
   type ScouterSession,
   type SessionStatus,
@@ -32,7 +33,7 @@ import {
 import type { TeamKey } from "@/data/team";
 
 /** The current match, as the schedule gives it (red 1 to 3, then blue 1 to 3; RT-9). */
-export type CurrentMatch = Pick<ScheduledMatch, "number" | "red" | "blue">;
+export type CurrentMatch = Pick<ScheduledMatch, "level" | "number" | "red" | "blue">;
 
 export interface Entry extends ScouterSession {
   /** Whether the device is connected now. Never saved (DV-15). */
@@ -59,6 +60,7 @@ export type Alliance = "red" | "blue";
 /** What a device needs to know about its scouter. */
 export interface DeviceView {
   status: SessionStatus;
+  matchLevel: MatchLevel | null;
   matchNumber: number | null;
   team: TeamKey | null;
   alliance: Alliance | null;
@@ -118,13 +120,15 @@ export interface Result {
 // ------------------------------------------------------------------- reading the state
 
 /** The key of a robot's history in `RegistryState.assignments`. */
-export function holdingKey(matchNumber: number, team: TeamKey): string {
-  return `${matchNumber}:${team}`;
+export function holdingKey(level: MatchLevel, matchNumber: number, team: TeamKey): string {
+  return `${level}:${matchNumber}:${team}`;
 }
 
 /** The current match's history for a robot. */
 export function currentAssignment(state: RegistryState, team: TeamKey): Assignment | undefined {
-  return state.match ? state.assignments[holdingKey(state.match.number, team)] : undefined;
+  return state.match
+    ? state.assignments[holdingKey(state.match.level, state.match.number, team)]
+    : undefined;
 }
 
 export function robotsOf(match: CurrentMatch): { team: TeamKey; alliance: Alliance }[] {
@@ -141,16 +145,21 @@ function allianceOf(match: CurrentMatch | null, team: TeamKey | null): Alliance 
 
 /** Whether the entry holds a robot of the current match. */
 export function holdsCurrent(state: RegistryState, entry: Entry): boolean {
-  return entry.team !== null && state.match !== null && entry.matchNumber === state.match.number;
+  return (
+    entry.team !== null &&
+    state.match !== null &&
+    entry.matchLevel === state.match.level &&
+    entry.matchNumber === state.match.number
+  );
 }
 
 export function deviceView(state: RegistryState, entry: Entry): DeviceView {
   return {
     status: entry.status,
+    matchLevel: entry.matchLevel,
     matchNumber: entry.matchNumber,
     team: entry.team,
-    alliance:
-      entry.matchNumber === state.match?.number ? allianceOf(state.match, entry.team) : null,
+    alliance: holdsCurrent(state, entry) ? allianceOf(state.match, entry.team) : null,
     accepted: entry.accepted,
     entered: entry.entered,
   };
@@ -221,10 +230,11 @@ class Changes {
 
 function assignmentFor(state: RegistryState, team: TeamKey): Assignment {
   const match = state.match!;
-  return (state.assignments[holdingKey(match.number, team)] ??= {
-    _id: assignmentId(state.eventId, match.number, team),
+  return (state.assignments[holdingKey(match.level, match.number, team)] ??= {
+    _id: assignmentId(state.eventId, match.level, match.number, team),
     tenantId: state.tenantId,
     eventId: state.eventId,
+    level: match.level,
     matchNumber: match.number,
     team,
     holders: [],
@@ -241,9 +251,10 @@ function give(state: RegistryState, ch: Changes, e: Entry, team: TeamKey, now: n
   const a = assignmentFor(state, team);
   const afterStart = underWay(state);
   a.holders.push({ scouterId: e.scouterId, from: now, until: null, ended: null, afterStart });
-  ch.assignment(holdingKey(state.match!.number, team));
+  ch.assignment(holdingKey(state.match!.level, state.match!.number, team));
   Object.assign(e, {
     status: "waiting",
+    matchLevel: state.match!.level,
     matchNumber: state.match!.number,
     team,
     accepted: false,
@@ -281,8 +292,8 @@ function endHolding(
   ended: Holder["ended"],
   now: number,
 ) {
-  if (e.team === null || e.matchNumber === null) return;
-  const key = holdingKey(e.matchNumber, e.team);
+  if (e.team === null || e.matchNumber === null || e.matchLevel === null) return;
+  const key = holdingKey(e.matchLevel, e.matchNumber, e.team);
   const holder = currentHolder(state.assignments[key]);
   if (holder?.scouterId !== e.scouterId) return;
   holder.until = now;
@@ -294,6 +305,7 @@ function endHolding(
 function clear(e: Entry) {
   Object.assign(e, {
     status: "waiting",
+    matchLevel: null,
     matchNumber: null,
     team: null,
     accepted: false,
@@ -386,7 +398,7 @@ export function restore(args: {
   for (const s of args.entries)
     state.entries[s.scouterId] = { ...structuredClone(s), connected: false };
   for (const a of args.assignments)
-    state.assignments[holdingKey(a.matchNumber, a.team)] = structuredClone(a);
+    state.assignments[holdingKey(a.level, a.matchNumber, a.team)] = structuredClone(a);
   if (Object.values(state.entries).some((e) => holdsCurrent(state, e) && e.entered))
     state.startedAt = args.now;
   return state;
@@ -420,6 +432,7 @@ export function apply(previous: RegistryState, event: RegistryEvent): Result {
           scouterId: event.scouterId,
           deviceId: null,
           status: "waiting",
+          matchLevel: null,
           matchNumber: null,
           team: null,
           accepted: false,
@@ -484,7 +497,11 @@ export function apply(previous: RegistryState, event: RegistryEvent): Result {
       break;
     }
     case "setMatch": {
-      if (event.match !== null && event.match.number === state.match?.number) {
+      if (
+        event.match !== null &&
+        event.match.level === state.match?.level &&
+        event.match.number === state.match?.number
+      ) {
         // The same match with corrected teams (an admin fixed a typo in the schedule): only the
         // robots that left the match are taken back from those waiting; everyone else keeps
         // theirs. Someone already scouting a robot keeps it; the admin decides about that record.

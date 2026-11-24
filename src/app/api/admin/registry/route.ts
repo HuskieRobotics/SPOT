@@ -29,14 +29,22 @@ export async function POST(request: Request) {
     const runtime = await getRuntime();
     switch (body.action) {
       case "set-match": {
-        const n = body.matchNumber;
-        if (n !== null && !(typeof n === "number" && Number.isInteger(n) && n >= 1))
+        const m = body.match as { level?: unknown; number?: unknown } | null | undefined;
+        if (m === null) await runtime.setMatch(null);
+        else if (
+          m &&
+          (m.level === "qual" || m.level === "playoff") &&
+          typeof m.number === "number" &&
+          Number.isInteger(m.number) &&
+          m.number >= 1
+        )
+          await runtime.setMatch({ level: m.level, number: m.number });
+        else
           throw new Refusal(
             400,
-            "match-number",
-            "The match number is a whole number from 1, or null.",
+            "match",
+            "The match is { level: qual or playoff, number: a whole number from 1 }, or null.",
           );
-        await runtime.setMatch(n);
         break;
       }
       case "start":

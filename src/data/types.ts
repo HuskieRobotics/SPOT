@@ -19,6 +19,19 @@ export type TenantId = string;
 
 export const DEFAULT_TENANT: TenantId = "default";
 
+/**
+ * Qualification or playoff (DV-17, RT-22a). A match number names a match only within its level:
+ * qualifications are numbered from 1, and so are playoffs (1 to 13, then the finals 14 to 16),
+ * as the field shows them.
+ */
+export type MatchLevel = "qual" | "playoff";
+
+/** A match: its level and number. */
+export interface MatchRef {
+  level: MatchLevel;
+  number: number;
+}
+
 /** How a performance reached the server. Replaces the v5 `scouterId: "qrcode"` sentinel. */
 export type PerformanceSource = "app" | "qr" | "import";
 
@@ -63,6 +76,8 @@ export interface TeamMatchPerformance {
   _id: ObjectIdHex;
   tenantId: TenantId;
   eventId: ObjectIdHex;
+  /** Qualification or playoff; `matchNumber` counts within it (DV-17). */
+  level: MatchLevel;
   matchNumber: number;
   /** Team key such as "3061" or "2338B"; always a string (DM-1a, BL-308). */
   team: TeamKey;
@@ -154,6 +169,8 @@ export interface Settings {
 
 /** One match of a schedule. A slot not filled in yet is null (a manual schedule being typed). */
 export interface ScheduledMatch {
+  level: MatchLevel;
+  /** Within its level: qualification 1 to N, playoff 1 to 16 (RT-22a). */
   number: number;
   /** TBA's match key (`2026mnwi_qm12`), or a made-up one for a manual match. */
   key: string;
@@ -172,7 +189,7 @@ export interface Schedule {
   tba: { matches: ScheduledMatch[]; fetchedAt: number } | null;
   /** Typed by an admin; when not empty it is used instead of TBA's (AD-8). */
   manual: ScheduledMatch[];
-  currentMatchNumber: number | null;
+  currentMatch: MatchRef | null;
   updatedAt: number;
 }
 
@@ -192,6 +209,7 @@ export interface ScouterSession {
   /** The device signed in on (docs/spec/15); the stream and actions must name it. */
   deviceId: string | null;
   status: SessionStatus;
+  matchLevel: MatchLevel | null;
   matchNumber: number | null;
   /** The robot held (RT-25). */
   team: TeamKey | null;
@@ -229,11 +247,17 @@ export interface Assignment {
   _id: string;
   tenantId: TenantId;
   eventId: ObjectIdHex;
+  level: MatchLevel;
   matchNumber: number;
   team: TeamKey;
   holders: Holder[];
 }
 
-export function assignmentId(eventId: ObjectIdHex, matchNumber: number, team: TeamKey): string {
-  return `${eventId}:${matchNumber}:${team}`;
+export function assignmentId(
+  eventId: ObjectIdHex,
+  level: MatchLevel,
+  matchNumber: number,
+  team: TeamKey,
+): string {
+  return `${eventId}:${level}:${matchNumber}:${team}`;
 }
