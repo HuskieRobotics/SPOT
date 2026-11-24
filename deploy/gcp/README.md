@@ -10,3 +10,10 @@ in-memory state; MongoDB Atlas for data; secrets from Secret Manager or environm
 The recipe must satisfy `docs/spec/10-setup-and-deployment.md` and the hosting section of
 `docs/spec/15-rewrite-technology-direction.md`, including a request timeout long enough for
 streaming responses (SSE, ADR 0001).
+
+## The scouter stream (ADR 0001, #354)
+
+`/api/scouter/stream` stays open while a scouter is signed in. Cloud Run ends a request at its
+timeout (300 s by default) and the browser reconnects 3 s later, which the stream absorbs: every
+reconnect starts with the scouter's state. Raise the timeout (up to 3600 s) to reconnect less
+often, and keep `max-instances 1`, because one process owns the registry (AR-21).

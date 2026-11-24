@@ -187,6 +187,8 @@ export interface ScouterSession {
   tenantId: TenantId;
   eventId: ObjectIdHex;
   scouterId: string;
+  /** The device signed in on (docs/spec/15); the stream and actions must name it. */
+  deviceId: string | null;
   status: SessionStatus;
   matchNumber: number | null;
   /** The robot held (RT-25). */

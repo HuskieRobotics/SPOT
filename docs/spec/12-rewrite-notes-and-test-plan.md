@@ -231,7 +231,8 @@ Rationale in [ADR 0004](../adr/0004-authentication-and-privacy.md).
   submission sends it in the `X-SPOT-Event-Code` header; it is compared ignoring case, spaces
   and dashes. A refusal is 403 with a reason (`missing`, `wrong`, or `no-code` for an event that
   has none) and a message a scouter can act on, and the device keeps the record (SEC-9). The
-  submission route that calls the check is #360.
+  submission route that calls the check is #360. Signing in for assignment checks it too (#354), so a stranger
+  cannot take robots; scouting with no server never needs it (SEC-9).
 
 ## Dead or vestigial code (safe to drop or restore deliberately)
 

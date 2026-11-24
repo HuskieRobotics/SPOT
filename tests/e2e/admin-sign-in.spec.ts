@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { E2E_ADMIN_PASSWORD } from "../../playwright.config";
+import { E2E_ADMIN_PASSWORD } from "./fixtures";
 
 // SEC-4, SEC-5 (#352): the proxy guards admin pages in the running app, not only in unit tests.
 // Uses the password playwright.config.ts gives the server; a server reused locally needs it too.

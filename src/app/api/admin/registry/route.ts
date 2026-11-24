@@ -1,0 +1,61 @@
+/**
+ * The scouter registry for admins (RT-15 to RT-18, #354), behind the admin session that
+ * `src/proxy.ts` checks. Admin views poll GET every 2 to 3 s (NF-5, RT-14c).
+ *
+ * GET  → `{ snapshot }`: the event, current match, start rules and every entry; null if no
+ *        event is active
+ * POST `{ action: "set-match", matchNumber }` (a number, or null for none) — RT-16
+ *      `{ action: "start" }` — admin start (RT-12a)
+ *      `{ action: "release", scouterId, to? }` — RT-31, RT-32
+ *      `{ action: "remove", scouterId }` — RT-29; signs the device out
+ */
+import { jsonBody, scouterIdFrom } from "@/sessions/input";
+import { getRuntime, Refusal, refusalResponse } from "@/sessions/runtime";
+
+export const dynamic = "force-dynamic";
+
+export async function GET() {
+  try {
+    const runtime = await getRuntime();
+    return Response.json({ snapshot: await runtime.snapshot() });
+  } catch (error) {
+    return refusalResponse(error);
+  }
+}
+
+export async function POST(request: Request) {
+  try {
+    const body = await jsonBody(request);
+    const runtime = await getRuntime();
+    switch (body.action) {
+      case "set-match": {
+        const n = body.matchNumber;
+        if (n !== null && !(typeof n === "number" && Number.isInteger(n) && n >= 1))
+          throw new Refusal(
+            400,
+            "match-number",
+            "The match number is a whole number from 1, or null.",
+          );
+        await runtime.setMatch(n);
+        break;
+      }
+      case "start":
+        await runtime.adminStart();
+        break;
+      case "release":
+        await runtime.release(
+          scouterIdFrom(body.scouterId),
+          body.to === undefined || body.to === null ? undefined : scouterIdFrom(body.to),
+        );
+        break;
+      case "remove":
+        await runtime.remove(scouterIdFrom(body.scouterId));
+        break;
+      default:
+        throw new Refusal(400, "action", "The action must be set-match, start, release or remove.");
+    }
+    return Response.json({ snapshot: await runtime.snapshot() });
+  } catch (error) {
+    return refusalResponse(error);
+  }
+}

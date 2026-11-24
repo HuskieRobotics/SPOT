@@ -127,19 +127,25 @@ is configured, and for admin routes when `DEMO` is true); **none** = unauthentic
 ## v6 routes
 
 Auth column: **admin** = the `spot-admin` session cookie, checked by `src/proxy.ts` for
-everything under `/admin` and `/api/admin` (SEC-4a, SEC-5a); **open** = no session needed.
+everything under `/admin` and `/api/admin` (SEC-4a, SEC-5a); **open** = no admin session
+needed (the scouter routes check the device's session instead, ADR 0001).
 Errors are JSON `{ error, message }`, with a message a person can act on.
 
-| Method | Path                                    | Auth  | Behavior                                                                                   |
-| ------ | --------------------------------------- | ----- | ------------------------------------------------------------------------------------------ |
-| GET    | `/admin/sign-in?next=<path>`            | open  | Sign-in page; returns to `next` (a path on this site) afterwards                           |
-| GET    | `/admin`                                | admin | Admin page (#357)                                                                          |
-| GET    | `/api/admin/session`                    | open  | `{ signedIn, configured }`                                                                 |
-| POST   | `/api/admin/session` `{ password }`     | open  | 204 and the cookie; 401 wrong password (after 500 ms); 503 no `SPOT_ADMIN_PASSWORD` set    |
-| DELETE | `/api/admin/session`                    | open  | 204, cookie cleared                                                                        |
-| GET    | `/api/admin/events`                     | admin | Every event, with its event code (SEC-3)                                                   |
-| POST   | `/api/admin/events` `{ tbaKey, label }` | admin | 201 with the new event and a fresh event code; 400 not a TBA key or label; 409 code in use |
-| POST   | `/api/admin/events/:id/event-code`      | admin | Rotate the event code → `{ eventCode, eventCodeRotatedAt }`; 404                           |
+| Method | Path                                                        | Auth  | Behavior                                                                                                                                                                                                       |
+| ------ | ----------------------------------------------------------- | ----- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| GET    | `/admin/sign-in?next=<path>`                                | open  | Sign-in page; returns to `next` (a path on this site) afterwards                                                                                                                                               |
+| GET    | `/admin`                                                    | admin | Admin page (#357)                                                                                                                                                                                              |
+| GET    | `/api/admin/session`                                        | open  | `{ signedIn, configured }`                                                                                                                                                                                     |
+| POST   | `/api/admin/session` `{ password }`                         | open  | 204 and the cookie; 401 wrong password (after 500 ms); 503 no `SPOT_ADMIN_PASSWORD` set                                                                                                                        |
+| DELETE | `/api/admin/session`                                        | open  | 204, cookie cleared                                                                                                                                                                                            |
+| GET    | `/api/admin/events`                                         | admin | Every event, with its event code (SEC-3)                                                                                                                                                                       |
+| POST   | `/api/admin/events` `{ tbaKey, label }`                     | admin | 201 with the new event and a fresh event code; 400 not a TBA key or label; 409 code in use                                                                                                                     |
+| POST   | `/api/admin/events/:id/event-code`                          | admin | Rotate the event code → `{ eventCode, eventCodeRotatedAt }`; 404                                                                                                                                               |
+| GET    | `/api/admin/registry`                                       | admin | `{ snapshot }`: event, current match, start rules, every entry with `connected`; null with no active event. Admin views poll it every 2 to 3 s                                                                 |
+| POST   | `/api/admin/registry` `{ action, ... }`                     | admin | `set-match` `{ matchNumber \| null }` (RT-16), `start` (RT-12a), `release` `{ scouterId, to? }` (RT-31), `remove` `{ scouterId }` (RT-29) → `{ snapshot }`; 400, 404 no such match, 409 refused with a message |
+| POST   | `/api/scouter/sign-in` `{ scouterId, deviceId, eventCode }` | open  | `{ view }`, binding the session to the device; 403 wrong event code; 409 no active event                                                                                                                       |
+| POST   | `/api/scouter/action` `{ scouterId, deviceId, action }`     | open  | `accept`, `start`, `finish`, `ready`, `sign-out` → `{ view }`; 401 when this device does not hold the session                                                                                                  |
+| GET    | `/api/scouter/stream?scouter=&device=`                      | open  | Server-sent events: `state` first, then `assigned`, `enter-match`, `unassigned`, `signed-out`; heartbeat every 20 s; 401 JSON for a session this device does not hold (ADR 0001)                               |
 
 Without a session, an admin page redirects to the sign-in page and an admin route answers 401
 `{ error: "admin-sign-in" }`. A submission carries the event code in `X-SPOT-Event-Code`; a

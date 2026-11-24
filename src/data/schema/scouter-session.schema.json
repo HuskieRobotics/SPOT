@@ -10,6 +10,7 @@
     "tenantId",
     "eventId",
     "scouterId",
+    "deviceId",
     "status",
     "matchNumber",
     "team",
@@ -36,6 +37,10 @@
       "type": "string",
       "minLength": 1,
       "description": "Student ID (SEC-6)."
+    },
+    "deviceId": {
+      "type": ["string", "null"],
+      "description": "The device the scouter signed in on, a random id it keeps (docs/spec/15). The stream and every action must name it, and signing in on another device moves the session there."
     },
     "status": {
       "enum": ["waiting", "scouting", "complete"]

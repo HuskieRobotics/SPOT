@@ -100,6 +100,7 @@ describe("document schemas", () => {
         tenantId: DEFAULT_TENANT,
         eventId: oid("c"),
         scouterId: "123456",
+        deviceId: "d-1",
         status: "scouting",
         matchNumber: 12,
         team: "2338B",

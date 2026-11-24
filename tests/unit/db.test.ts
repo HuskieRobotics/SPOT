@@ -42,6 +42,7 @@ const session = (eventId: string, scouterId: string, over: Partial<ScouterSessio
   tenantId: DEFAULT_TENANT,
   eventId,
   scouterId,
+  deviceId: null,
   status: "waiting" as const,
   matchNumber: 4,
   team: "3061",
