@@ -2,7 +2,9 @@ import { defineConfig, devices } from "@playwright/test";
 import { E2E_ADMIN_PASSWORD } from "./tests/e2e/fixtures";
 
 const port = Number(process.env.PORT || 3000);
-const ADMIN_PAGE = /admin-page\.spec\.ts/;
+// Tests that choose the current match drive the one registry every test shares: they run one
+// project at a time, after the others, so no other device is handed their robots.
+const REGISTRY = /(scouter-stream|scouting-client|admin-page)\.spec\.ts/;
 
 export { E2E_ADMIN_PASSWORD };
 
@@ -19,15 +21,26 @@ export default defineConfig({
   },
   projects: [
     // Scouters primarily use personal phones (docs/spec/02, NF-1); test the mobile viewport first.
-    { name: "mobile-chromium", use: { ...devices["Pixel 7"] }, testIgnore: ADMIN_PAGE },
-    { name: "desktop-chromium", use: { ...devices["Desktop Chrome"] }, testIgnore: ADMIN_PAGE },
-    // The admin page's test drives the one registry every other test shares (the current match,
-    // who holds which robot), so it runs alone, after the others.
+    { name: "mobile-chromium", use: { ...devices["Pixel 7"] }, testIgnore: REGISTRY },
+    { name: "desktop-chromium", use: { ...devices["Desktop Chrome"] }, testIgnore: REGISTRY },
+    {
+      name: "scouter-stream",
+      use: { ...devices["Desktop Chrome"] },
+      testMatch: /scouter-stream\.spec\.ts/,
+      dependencies: ["mobile-chromium", "desktop-chromium"],
+    },
+    // The scouting client is used on a phone held sideways (#359).
+    {
+      name: "scouting-client",
+      use: { ...devices["Pixel 7 landscape"] },
+      testMatch: /scouting-client\.spec\.ts/,
+      dependencies: ["scouter-stream"],
+    },
     {
       name: "admin-page",
       use: { ...devices["Desktop Chrome"] },
-      testMatch: ADMIN_PAGE,
-      dependencies: ["mobile-chromium", "desktop-chromium"],
+      testMatch: /admin-page\.spec\.ts/,
+      dependencies: ["scouting-client"],
     },
   ],
   webServer: {

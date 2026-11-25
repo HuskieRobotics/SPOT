@@ -81,6 +81,10 @@ class FakeServer implements ScouterApi {
     this.signedIn = this.signedIn.filter((id) => id !== scouterId);
     return { ok: true as const, value: {} };
   }
+
+  async act() {
+    return OFFLINE;
+  }
 }
 
 describe("RT-26: what a device remembers", () => {

@@ -211,7 +211,7 @@ Do these before writing application code. Each one removes a class of rework lat
 | 1. Core engine (no UI)        | Config loader + JSON Schema validation + converter; pipeline engine and all built-in transformers as pure TypeScript; synthetic generator; extension loader                                                     | Oracle tests pass on the real dump and synthetic data; T-2/T-3/T-4 green                                                  |
 | 2. Scouting vertical slice    | Scouting client (landing, sign-in, waiting, grid, timer with hold and 2×, undo, executables, submission, IndexedDB, QR), session/assignment service (SSE or polling), admin match selection and scouter monitor | Playwright: two simulated scouters get assigned, scout, submit; data lands in MongoDB; offline path yields a scannable QR |
 | 3. Analysis dashboard         | Team view, all built-in modules on Plotly, event switching, search, Compare, Filter Teams with configurable bands, client-side CSV, Simulate Match and Auto Pick behind config flags                            | Renders the oracle dataset; screenshot and smoke tests per module                                                         |
-| 4. Operations                 | Edit page (flags, delete, unscouted), QR scanner, settings UI replacing the wizard (R-32), deploy recipes for EC2 and Cloud Run, migration script run against the real dump                                     | End-to-end suite green; deployed to a staging EC2 instance                                                                |
+| 4. Operations                 | Edit page (flags, delete, unscouted), QR scanner, settings UI replacing the wizard (R-32), deploy recipes for EC2 and Cloud Run, migration script run against the real dump, demo mode (DM-MODE-1 to 6, #374)   | End-to-end suite green; deployed to a staging EC2 instance; a public demo instance scouts and shows a match end to end    |
 | 5. Hardening and backlog core | BL-7, BL-43, accessibility pass, docs (Quickstart, Configuration Guide, Usage Guide rewritten from this spec); BL-93, BL-54, BL-116 and BL-33 moved to phase 2 (§5)                                             | Configure the 2027 game from the schema alone after kickoff                                                               |
 | 6. Cutover                    | Parallel run at an off-season event or scrimmage with the v5 app; compare datasets; tag `v5.2.0-final`; merge `v6` to `main`                                                                                    | First 2027 event scouted on v6                                                                                            |
 
@@ -325,6 +325,11 @@ controls, AD-4b, and several admins at once, RT-14b).
 Recommended order from here: **gate W** (about 2027-02-20), the rest of phase 2, the core of
 phase 3, and the event-critical part of phase 4, about six weeks after kickoff. Break each phase
 into issues on its milestone when it starts, as Phases 1 and 2 were.
+
+**Demo mode (#374)** is in phase 4 but not in gate W-3: Team 3061's events don't need it, but
+other teams need it to evaluate SPOT without installing anything (document 01). It comes after
+submission (#360) and the phase 3 team view, because its whole path ends with the scouted match
+in analysis. It replaces #218, which only tidied v5's label code. Added 2026-11-24.
 
 Section 2 assumed about 15 weeks to kickoff and a team of students; the gates replace that
 assumption.

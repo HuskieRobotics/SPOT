@@ -3,7 +3,11 @@
 /**
  * Runs one scouting session (src/scouting/session.ts) in React: holds the state, ticks the clock
  * on every animation frame while something on screen changes with time, and passes the real time
- * to every operation. The scouting-screen preview uses it, and so will the Phase 2 client.
+ * to every operation. The scouting-screen preview and the scouting client (#359) use it.
+ *
+ * The client resumes a match after a reload from the state it saved (`initial`), and saves the
+ * state after every operation (`onChange`). Ticks are not reported: the clock is read from real
+ * time, so `advance` on the saved state replays whatever the clock did since (NF-3, RT-26).
  */
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { MatchScoutingConfig } from "@/config/types";
@@ -44,13 +48,33 @@ function changesWithTime(state: SessionState, now: number): boolean {
   return state.positionLock !== null && now <= state.positionLock.until;
 }
 
+export interface SessionOptions {
+  /** The state to start from instead of a new match. */
+  initial?: SessionState;
+  /** Called with the new state after every operation (a press, a tap, a speed change). */
+  onChange?(state: SessionState): void;
+}
+
 export function useScoutingSession(
   config: MatchScoutingConfig,
   settings: ScoutingSettings,
+  options: SessionOptions = {},
 ): ScoutingSession {
   const context = useMemo(() => ({ config, settings }), [config, settings]);
-  const [state, setState] = useState(() => initialState(config));
+  const [state, setState] = useState(() => options.initial ?? initialState(config));
   const [now, setNow] = useState(0);
+
+  // Report the state an operation produced, once React has it.
+  const changed = useRef(false);
+  const onChange = useRef(options.onChange);
+  useEffect(() => {
+    onChange.current = options.onChange;
+  }, [options.onChange]);
+  useEffect(() => {
+    if (!changed.current) return;
+    changed.current = false;
+    onChange.current?.(state);
+  }, [state]);
 
   // The ticker and the operations read the latest context without restarting.
   const contextRef = useRef(context);
@@ -76,6 +100,7 @@ export function useScoutingSession(
     (operation: (s: SessionState, c: ScoutingContext, t: number) => SessionState) => {
       const t = Date.now();
       setNow(t);
+      changed.current = true;
       setState((s) => operation(s, contextRef.current, t));
     },
     [],

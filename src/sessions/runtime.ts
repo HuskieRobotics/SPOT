@@ -323,7 +323,11 @@ export class Runtime {
 
   private async settingsMessage(): Promise<DeviceMessage> {
     const settings = await getSettings(this.db, { tenantId: this.tenantId, now: this.now() });
-    return { kind: "settings", fieldFlipped: settings.fieldFlipped };
+    return {
+      kind: "settings",
+      fieldFlipped: settings.fieldFlipped,
+      eventId: settings.activeEventId,
+    };
   }
 
   /**

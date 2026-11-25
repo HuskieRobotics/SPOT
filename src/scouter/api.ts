@@ -5,6 +5,7 @@
  */
 import { JOIN_CODE_HEADER } from "@/auth/join-code";
 import type { DeviceView } from "@/sessions/registry";
+import type { DeviceAction } from "@/sessions/runtime";
 import type { RosterEntry } from "./device";
 
 export const REQUEST_TIMEOUT_MS = 8_000;
@@ -57,6 +58,12 @@ export interface ScouterApi {
     name?: string;
   }): Promise<Reply<{ view: DeviceView; name: string }>>;
   signOut(scouterId: string, deviceId: string): Promise<Reply<unknown>>;
+  /** Tell the registry what the scouter did (RT-1): the reply is where they are now. */
+  act(
+    scouterId: string,
+    deviceId: string,
+    action: Exclude<DeviceAction, "sign-out">,
+  ): Promise<Reply<{ view: DeviceView }>>;
 }
 
 export function httpApi(fetchImpl: typeof fetch = fetch): ScouterApi {
@@ -74,6 +81,12 @@ export function httpApi(fetchImpl: typeof fetch = fetch): ScouterApi {
       call(
         "/api/scouter/action",
         { method: "POST", body: JSON.stringify({ scouterId, deviceId, action: "sign-out" }) },
+        fetchImpl,
+      ),
+    act: (scouterId, deviceId, action) =>
+      call(
+        "/api/scouter/action",
+        { method: "POST", body: JSON.stringify({ scouterId, deviceId, action }) },
         fetchImpl,
       ),
   };

@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { Cairo } from "next/font/google";
+import { THEME_SCRIPT } from "@/lib/theme";
 import { cn } from "@/lib/utils";
 
 // Cairo is the v5 font (--font: Cairo, sans-serif).
@@ -26,7 +27,11 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={cn("font-sans", cairo.variable)}>
+    // The theme script may add `dark` before React hydrates (SC-3).
+    <html lang="en" className={cn("font-sans", cairo.variable)} suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
+      </head>
       <body className="bg-background text-foreground min-h-dvh antialiased">{children}</body>
     </html>
   );

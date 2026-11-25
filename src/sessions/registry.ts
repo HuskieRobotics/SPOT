@@ -81,9 +81,10 @@ export type DeviceMessage =
   | { kind: "signed-out" }
   /**
    * What an admin sets for every device (A-19, SC-28), sent by the runtime when a stream opens
-   * and when it changes. The registry itself never sends it.
+   * and when it changes. The registry itself never sends it. `eventId` is the active event, which
+   * the device keeps with each match it scouts (#359).
    */
-  | { kind: "settings"; fieldFlipped: boolean };
+  | { kind: "settings"; fieldFlipped: boolean; eventId: ObjectIdHex | null };
 
 export type Effect =
   | { type: "send"; to: string; message: DeviceMessage }

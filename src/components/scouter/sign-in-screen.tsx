@@ -4,16 +4,16 @@
  * Signing in on a scouting device (SEC-2, SEC-6, SEC-7, RT-26, #356): the join code once per
  * device, typed or from the admin page's QR code; then a name from the roster, searchable, or
  * "I'm not on the list". Works offline from the roster the device last read (OF-1). The
- * scouting client (#359) shows this before its waiting page.
+ * scouting client (#359) shows it on its landing page and takes over once someone signs in.
  */
 import { useEffect, useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { httpApi } from "@/scouter/api";
-import { browserStore, DeviceStore, joinCodeFromUrl, type SignedIn } from "@/scouter/device";
-import { refreshRoster, sendPendingScouters, signIn, signOut } from "@/scouter/sign-in";
+import type { DeviceStore, SignedIn } from "@/scouter/device";
+import { refreshRoster, sendPendingScouters, signIn } from "@/scouter/sign-in";
 
-type Phase = "join" | "pick" | "add" | "signed-in";
+type Phase = "join" | "pick" | "add";
 
 interface Message {
   text: string;
@@ -22,18 +22,20 @@ interface Message {
 
 const input = "bg-background w-full rounded-md border px-3 py-2";
 
-export function SignInScreen({ onSignedIn }: { onSignedIn?: (who: SignedIn) => void }) {
-  // Browser only (see `SignInClient`): the device's storage decides the first screen.
-  const [store] = useState(() => {
-    const s = new DeviceStore(browserStore());
-    const fromLink = joinCodeFromUrl(window.location.search);
-    if (fromLink) s.setJoinCode(fromLink);
-    return s;
-  });
+export function SignInScreen({
+  store,
+  onSignedIn,
+  askForJoinCode = false,
+}: {
+  store: DeviceStore;
+  /** Signed in; `note` says when it was on this device only, with no connection. */
+  onSignedIn(who: SignedIn, note?: string): void;
+  /** Start at the join code even if the device has one (the menu's "Change join code"). */
+  askForJoinCode?: boolean;
+}) {
   const api = useMemo(() => httpApi(), []);
-  // A reload keeps whoever signed in (RT-26).
   const [phase, setPhase] = useState<Phase>(() =>
-    store.signedIn() ? "signed-in" : store.joinCode() ? "pick" : "join",
+    store.joinCode() && !askForJoinCode ? "pick" : "join",
   );
   const [code, setCode] = useState(() => store.joinCode() ?? "");
   const [search, setSearch] = useState("");
@@ -86,14 +88,13 @@ export function SignInScreen({ onSignedIn }: { onSignedIn?: (who: SignedIn) => v
       setMessage({ text: outcome.message, error: true });
       setPhase("join");
     } else if (outcome.status === "refused") setMessage({ text: outcome.message, error: true });
-    else {
-      if (outcome.status === "offline")
-        setMessage({
-          text: "No connection: you are signed in on this device. You will be assigned a robot when the connection returns.",
-        });
-      setPhase("signed-in");
-      onSignedIn?.(store.signedIn()!);
-    }
+    else
+      onSignedIn(
+        store.signedIn()!,
+        outcome.status === "offline"
+          ? "No connection: you are signed in on this device. You will be assigned a robot when the connection returns."
+          : undefined,
+      );
   }
 
   async function addSelf(event: React.FormEvent) {
@@ -168,29 +169,6 @@ export function SignInScreen({ onSignedIn }: { onSignedIn?: (who: SignedIn) => v
         {status}
       </form>
     );
-
-  if (phase === "signed-in") {
-    const who = store.signedIn();
-    return (
-      <div className="flex w-full max-w-sm flex-col gap-3">
-        <p className="text-lg">
-          Signed in as <strong>{who?.name}</strong>
-        </p>
-        {status}
-        <Button
-          variant="outline"
-          onClick={async () => {
-            await signOut(store, api);
-            setMessage(null);
-            setPhase("pick");
-            void loadRoster();
-          }}
-        >
-          Sign out
-        </Button>
-      </div>
-    );
-  }
 
   const list = store
     .pickList()

@@ -253,9 +253,9 @@ into configuration.
 v6 replaces SC-9 to SC-11 (a typed first and last name) with sign-in by student ID from a roster,
 document 12 SEC-6 to SEC-8a: the join code once per device, then a name from the roster or
 **I'm not on the list**. It works offline from the roster the device last read (OF-1). The
-screen is `src/components/scouter/sign-in-screen.tsx`, standing alone at `/sign-in` until the
-scouting client (#359) shows it before its waiting page. Asking for the match and team when
-offline (SC-10) belongs to the offline path (#361).
+screen is `src/components/scouter/sign-in-screen.tsx`, on the scouting client's landing page
+(#359); `/sign-in` redirects there. Asking for the match and team when offline (SC-10) belongs
+to the offline path (#361).
 
 ## v6: the scouting rules (`src/scouting/`, #322)
 
@@ -346,6 +346,64 @@ so far are listed newest first in the data model's shape (document 21 DV-1), and
 how many a real match would send. `tests/e2e/scouting-preview.spec.ts` plays a 2025 match to
 submission and drives 2026's A-Stop lock, field map, alliance zones and shift kinds, on the phone
 viewport first.
+
+## v6: the scouting client (`/`, #359)
+
+The client wraps the scouting screen in sign-in, sessions and the device's storage. Its rules are
+plain TypeScript in `src/scouter/` (`match.ts`, `connection.ts`, `device.ts`), tested in
+`tests/unit/scouting-client.test.ts`; the pages are in `src/components/scouter/`, and
+`tests/e2e/scouting-client.spec.ts` plays the whole journey on a phone held in landscape (T-7).
+Decided 2026-11-24:
+
+- **SC-7, SC-8** The landing page shows the logo, "SPOT", the version (from `package.json`), the
+  sign-in screen, and links to feedback and the scouting-screen preview. Google sign-in is gone
+  (F-13). The demo label is not built yet: it comes with demo mode (DM-MODE-5, document 01).
+- **SC-1, OF-7** One status line on every signed-in page: the menu, the connection (**Connected**;
+  **Disconnected** once connected since the page loaded; **Not connected** before that), and the
+  match as the field names it (`Qual 12 | Team 3061`, DV-17) on the alliance's color with black
+  text. A finished scouter waits with no match shown. The reload icon is the menu's **Reload**:
+  every press is saved, so a reload loses nothing and needs no warning.
+- **Connection (RT-5 to RT-8, F-17)** The stream is read with `fetch`, so a refusal's reason is
+  readable. Attempts back off from 1 s to 10 s with no message per attempt; the browser coming
+  back online tries at once; a stream silent for 45 s (two missed heartbeats) is reopened. If
+  the registry no longer knows the scouter (a sign-in made offline, an entry removed while the
+  device was away), the device signs in again on its own. It signs out only when another device
+  took the session, the join code is wrong, or the registry sends `signed-out`.
+- **SC-12** The waiting page shows a turning gear, v5's five hints shuffled and changing every
+  7 s, and who is signed in. Once assigned, it shows the match and robot to wait for.
+- **SC-13, RT-27** A new robot shows "You have been assigned team T in Qual N." until the
+  scouter presses OK, on any page. The OK is kept on the device, so a reload or a lost request
+  never asks again; the device sends it when the connection returns.
+- **RT-6** The match screen opens when the registry sends the scouter in (`enter-match`, or a
+  `state` that says so), never again for a match finished on this device. Before Start Match,
+  a new robot replaces the screen; once started, nothing replaces it until it is submitted.
+- **BL-54** A robot taken back before the scouter started (the match changed, or an admin
+  released it) closes the match screen with a message saying why, on any page; the next robot
+  follows. After the start, a release ends the match with what it recorded kept; a match change
+  never interrupts it.
+- **RT-26, F-23** The device keeps who is signed in, what the registry last said, the field
+  orientation and event, the configuration, and the match in progress with the configuration it
+  began with, saved after every press. A reload resumes the same presses, screens, highlights and
+  clock: the clock is read from real time (NF-3), so it stands where it would have.
+- **RT-27, RT-28** Whatever the registry missed while the connection was down (an OK, a start, a
+  finish) is sent again the next time it says where the scouter is.
+- **SC-39 (in part)** Submit keeps the match on the device as a finished record (its actions,
+  match, team, alliance, event, nonce, scouter and time) and tells the registry `finish` and
+  `ready`. The waiting page counts the matches not yet sent. #360 sends them, and turns the
+  count into the pending list (BL-93).
+- **SC-28** The robot's alliance comes from the schedule at the moment the scouter is sent in,
+  and the field orientation from the admin setting, live.
+- **BL-230** The menu offers **2× speed, for a video…** during a match, behind a confirmation;
+  the status line shows **2×** while it runs, and **Back to normal speed** ends it. Recorded
+  times stay in match time.
+- **SC-3, SC-4, OF-8** The menu: dark or light mode (kept on the device and applied before the
+  first paint), Analysis and Admin in a new tab, Give feedback (the GitHub issues page; v5's
+  email link is gone), Reload, Change join code, Sign out (asking first during a started match,
+  whose record is kept), and Reset app data, which says how many matches not yet sent would be
+  lost.
+- **SC-6, CS-17** The configuration comes from `/api/config/match-scouting` and is kept on the
+  device for a reload without a connection.
+- Landscape fills the screen on phones and tablets; portrait is #43.
 
 ## Backlog items affecting this page (document 16)
 
