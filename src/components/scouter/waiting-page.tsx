@@ -62,12 +62,15 @@ export function WaitingPage({
   statusLine,
   name,
   assigned,
+  compact = false,
   children,
 }: {
   statusLine: ReactNode;
   name: string;
   /** The robot the scouter holds and waits to scout, if any. */
   assigned: MatchKey | null;
+  /** Without the gear and the hint, to make room for scouting with no connection (OF-1). */
+  compact?: boolean;
   /** Messages and the matches kept on the device. */
   children?: ReactNode;
 }) {
@@ -75,14 +78,16 @@ export function WaitingPage({
     <div className="flex min-h-dvh flex-col">
       {statusLine}
       <main className="flex flex-1 flex-col items-center justify-center gap-5 p-4 text-center">
-        <Image
-          src="/img/gear.svg"
-          alt=""
-          width={96}
-          height={96}
-          priority
-          className="animate-[spin_6s_linear_infinite] dark:invert"
-        />
+        {!compact && (
+          <Image
+            src="/img/gear.svg"
+            alt=""
+            width={96}
+            height={96}
+            priority
+            className="animate-[spin_6s_linear_infinite] dark:invert"
+          />
+        )}
         {assigned ? (
           <div className="flex flex-col gap-1">
             <h1 className="text-2xl font-bold">{matchText(assigned)}</h1>
@@ -91,7 +96,7 @@ export function WaitingPage({
         ) : (
           <h1 className="text-2xl font-bold">Waiting to be assigned…</h1>
         )}
-        <Hint />
+        {!compact && <Hint />}
         <p className="text-sm">
           Signed in as <strong>{name}</strong>
         </p>

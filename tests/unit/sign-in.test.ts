@@ -7,14 +7,23 @@ import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import type { Db } from "mongodb";
 import { JOIN_CODE_HEADER } from "@/auth/join-code";
 import * as rosterRoute from "@/app/api/scouter/roster/route";
+import * as scheduleRoute from "@/app/api/scouter/schedule/route";
 import * as signInRoute from "@/app/api/scouter/sign-in/route";
 import { createEvent } from "@/db/events";
+import { updateSchedule } from "@/db/schedules";
 import { getScouter, saveScouter } from "@/db/scouters";
 import { forgetCachedSettings, updateSettings } from "@/db/settings";
 import { DEFAULT_TENANT } from "@/data/types";
 import type { Reply, ScouterApi } from "@/scouter/api";
 import { DeviceStore, joinCodeFromUrl, memoryStore, type RosterEntry } from "@/scouter/device";
-import { refreshRoster, sendPendingScouters, signIn, signOut } from "@/scouter/sign-in";
+import type { ScheduleRow } from "@/scouter/match";
+import {
+  refreshRoster,
+  refreshSchedule,
+  sendPendingScouters,
+  signIn,
+  signOut,
+} from "@/scouter/sign-in";
 import { resetRuntime } from "@/sessions/runtime";
 import { startMongo, type TestMongo } from "../support/mongo";
 
@@ -29,6 +38,10 @@ class FakeServer implements ScouterApi {
     { id: "100002", name: "Zoe Park" },
   ];
   signedIn: string[] = [];
+  eventId = "0123456789abcdef01234567";
+  matches: ScheduleRow[] = [
+    { level: "qual", number: 1, red: ["101", "102", "103"], blue: ["104", "105", "106"] },
+  ];
 
   private refuse(code: string | null): Reply<never> | null {
     if (!this.online) return OFFLINE;
@@ -39,6 +52,15 @@ class FakeServer implements ScouterApi {
 
   async roster(joinCode: string) {
     return this.refuse(joinCode) ?? { ok: true as const, value: { scouters: [...this.scouters] } };
+  }
+
+  async schedule(joinCode: string) {
+    return (
+      this.refuse(joinCode) ?? {
+        ok: true as const,
+        value: { eventId: this.eventId, matches: structuredClone(this.matches) },
+      }
+    );
   }
 
   async addScouters(joinCode: string, scouters: RosterEntry[]) {
@@ -154,7 +176,26 @@ describe("SEC-6, SEC-7, SEC-7a: signing in on a device", () => {
       status: "offline",
       name: "Alex Rivera",
     });
-    expect(store.signedIn()?.name).toBe("Alex Rivera");
+    expect(store.signedIn()).toMatchObject({ name: "Alex Rivera", offline: true });
+  });
+
+  it("OF-1, SC-28: keeps the event and its schedule for a match typed with no connection", async () => {
+    const { server, store } = setup();
+    expect(await refreshSchedule(store, server, 5)).toBe(true);
+    expect(store.schedule()).toEqual({
+      eventId: server.eventId,
+      matches: server.matches,
+      readAt: 5,
+    });
+    expect(store.settings().eventId).toBe(server.eventId);
+    // Offline, or refused: what the device has stays.
+    server.online = false;
+    server.matches = [];
+    expect(await refreshSchedule(store, server, 9)).toBe(false);
+    server.online = true;
+    store.setJoinCode("WRONG1");
+    expect(await refreshSchedule(store, server, 9)).toBe(false);
+    expect(store.schedule()?.matches).toHaveLength(1);
   });
 
   it("SEC-7: a scouter added offline is kept on the device and created with the next sync", async () => {
@@ -228,6 +269,13 @@ describe("the roster and sign-in routes (T-5)", () => {
         body: body ? JSON.stringify(body) : undefined,
       }),
     );
+  const schedule = (joinCode: string | null) =>
+    scheduleRoute.GET(
+      new Request(`${ORIGIN}/api/scouter/schedule`, {
+        headers: joinCode ? { [JOIN_CODE_HEADER]: joinCode } : {},
+      }),
+    );
+  let eventId = "";
   const signInAs = (body: object) =>
     signInRoute.POST(
       new Request(`${ORIGIN}/api/scouter/sign-in`, {
@@ -242,6 +290,19 @@ describe("the roster and sign-in routes (T-5)", () => {
     process.env.MONGODB_URI = mongo.uri;
     const event = await createEvent(db, { tbaKey: "2026mnwi", label: "official" });
     code = event.joinCode!;
+    eventId = event._id;
+    await updateSchedule(db, event._id, {
+      manual: [
+        {
+          level: "qual",
+          number: 1,
+          key: "manual_qm1",
+          red: ["101", "102", "103"],
+          blue: ["104", "3061B", null],
+          locked: true,
+        },
+      ],
+    });
     await updateSettings(db, { activeEventId: event._id });
     forgetCachedSettings();
     const base = { tenantId: DEFAULT_TENANT, aliases: [], createdAt: 1 };
@@ -277,6 +338,18 @@ describe("the roster and sign-in routes (T-5)", () => {
       scouters: [
         { id: "100001", name: "Alex Rivera" },
         { id: "100002", name: "Zoe Park" },
+      ],
+    });
+  });
+
+  it("OF-1, SC-28: the schedule route sends the active event and who is on which alliance, with the join code", async () => {
+    for (const joinCode of [null, "WRONG1"]) expect((await schedule(joinCode)).status).toBe(403);
+    const r = await schedule(code);
+    expect(r.status).toBe(200);
+    expect(await r.json()).toEqual({
+      eventId,
+      matches: [
+        { level: "qual", number: 1, red: ["101", "102", "103"], blue: ["104", "3061B", null] },
       ],
     });
   });

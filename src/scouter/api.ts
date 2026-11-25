@@ -1,6 +1,6 @@
 /**
- * The device's calls to the server: signing in (#356), the registry (#359), and sending matches
- * (#360). Every call has a timeout and tells
+ * The device's calls to the server: signing in (#356), the registry (#359), sending matches
+ * (#360), and the schedule (#361). Every call has a timeout and tells
  * "the server cannot be reached" apart from "the server said no" (OF-7), so the device can carry
  * on offline in the first case and show the server's message in the second.
  */
@@ -10,6 +10,7 @@ import type { DeviceAction } from "@/sessions/runtime";
 import type { Submission, SubmissionResult } from "@/submissions/submission";
 import type { ObjectIdHex } from "@/data/types";
 import type { RosterEntry } from "./device";
+import type { ScheduleRow } from "./match";
 
 export const REQUEST_TIMEOUT_MS = 8_000;
 
@@ -50,6 +51,8 @@ export async function call<T>(
 
 export interface ScouterApi {
   roster(joinCode: string): Promise<Reply<{ scouters: RosterEntry[] }>>;
+  /** The active event and its schedule, kept for typing a match offline (#361). */
+  schedule(joinCode: string): Promise<Reply<{ eventId: ObjectIdHex; matches: ScheduleRow[] }>>;
   addScouters(
     joinCode: string,
     scouters: RosterEntry[],
@@ -78,6 +81,7 @@ export interface ScouterApi {
 export function httpApi(fetchImpl: typeof fetch = fetch): ScouterApi {
   return {
     roster: (joinCode) => call("/api/scouter/roster", { joinCode }, fetchImpl),
+    schedule: (joinCode) => call("/api/scouter/schedule", { joinCode }, fetchImpl),
     addScouters: (joinCode, scouters) =>
       call(
         "/api/scouter/roster",

@@ -254,8 +254,8 @@ v6 replaces SC-9 to SC-11 (a typed first and last name) with sign-in by student 
 document 12 SEC-6 to SEC-8a: the join code once per device, then a name from the roster or
 **I'm not on the list**. It works offline from the roster the device last read (OF-1). The
 screen is `src/components/scouter/sign-in-screen.tsx`, on the scouting client's landing page
-(#359); `/sign-in` redirects there. Asking for the match and team when offline (SC-10) belongs
-to the offline path (#361).
+(#359); `/sign-in` redirects there. Asking for the match and team when offline (SC-10) is in
+"v6: offline" below (#361).
 
 ## v6: the scouting rules (`src/scouting/`, #322)
 
@@ -419,6 +419,58 @@ Decided 2026-11-24:
 - **SC-6, CS-17** The configuration comes from `/api/config/match-scouting` and is kept on the
   device for a reload without a connection.
 - Landscape fills the screen on phones and tablets; portrait is #43.
+
+## v6: offline (#361, document 18)
+
+Decided 2026-11-25. The tests are `tests/unit/offline.test.ts` and `tests/e2e/offline.spec.ts`
+(T-8).
+
+- **SC-5, OF-5** A service worker keeps the app: `/sw.js` is
+  `src/offline/service-worker.ts`, sent with the list of the build's files
+  (`src/offline/shell.ts`). That list is every file under `.next/static/`, every image in
+  `public/`, the web app manifest and `/`. It is read from the build output when the server
+  starts answering, so `next build && next start` needs no extra step. A new build is a new
+  worker, installed on the next online load; it deletes the earlier build's cache.
+  - `/` comes from the network when it answers within 4 s, and from the cache otherwise (OF-7),
+    whatever its query string.
+  - Built files and images come from the cache.
+  - Everything else goes to the network: the API, the event stream and other pages.
+  - Only a production build registers the worker. Under `next dev`, `/sw.js` removes any worker
+    a production run left, so code being edited is never served stale.
+  - The legacy `public/icons/site.webmanifest` is replaced by `/manifest.webmanifest`
+    (`src/app/manifest.ts`).
+- **OF-5, OF-8** The scouting client keeps its own data in the device's storage, not in the
+  worker's cache: the configuration (revalidated by `ETag` on every online load), the roster,
+  the schedule and the settings. A configuration change therefore reaches a device on its next
+  online load, and Reset app data clears the worker and its caches too.
+- **SC-5** On browsers that offer installation (Chrome and Edge), the landing or waiting page
+  asks **Install SPOT?** once per device, never during a match. Safari users add it from the
+  Share menu.
+- **SC-10, SC-11, OF-1** With no connection, the waiting page shows **Scout without an
+  assignment**, below the heading, without the gear and hint, so it fits a phone held sideways.
+  It appears once the connection has tried and failed, so an online device never flashes it.
+  - The scouter types the match (Qual or Playoff, and its number) and the team. A B team
+    (`3061B`) is allowed.
+  - A robot the registry gave the scouter before the connection dropped is filled in.
+  - The alliance comes from that assignment, or from the schedule the device read with the
+    roster (`GET /api/scouter/schedule`, kept as `spot.schedule`).
+  - When the schedule does not have the team in that match, the form says so, and the scouter
+    chooses the alliance by the robot's bumpers.
+  - The match is scouted with the full configured grid, and submitting with no connection shows
+    its QR code (SC-41).
+- **A typed match and the registry.** The registry did not send the scouter into a typed match,
+  so it hears nothing of it (no start, no finish) unless it gave the scouter the same robot.
+  - It closes the match before Start Match only to send the scouter to another robot (BL-54).
+  - A release or a match change for a robot the scouter did not hold leaves it alone.
+  - Before Start Match, the menu's **Leave this match** closes it.
+- **Signed in offline, on a second phone.** A scouter whose phone died signs in offline on
+  another. On reconnecting, that phone takes the session over, because its sign-in is the newer
+  one: the device remembers that the registry never heard of it. The first phone is signed out
+  as usual. A phone whose sign-in reached the registry still signs out when another phone takes
+  the session.
+- **Event.** The device learns its event from the schedule route as well as the stream, so a
+  scouter who never connected after signing in can still file a typed match, and draw its QR
+  code, under the right event.
 
 ## Backlog items affecting this page (document 16)
 

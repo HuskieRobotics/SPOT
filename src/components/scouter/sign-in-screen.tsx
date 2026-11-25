@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { httpApi } from "@/scouter/api";
 import type { DeviceStore, SignedIn } from "@/scouter/device";
-import { refreshRoster, sendPendingScouters, signIn } from "@/scouter/sign-in";
+import { refreshRoster, refreshSchedule, sendPendingScouters, signIn } from "@/scouter/sign-in";
 
 type Phase = "join" | "pick" | "add";
 
@@ -46,9 +46,11 @@ export function SignInScreen({
   const [, rerender] = useState(0);
 
   // Read the roster and send any scouters added offline; say so if the server cannot be reached.
+  // The schedule comes too, for a match typed with no connection later (OF-1).
   async function loadRoster(): Promise<boolean> {
     const notices = await sendPendingScouters(store, api);
     const result = await refreshRoster(store, api);
+    if (result.ok) await refreshSchedule(store, api);
     rerender((n) => n + 1);
     if (!result.ok && result.error === "join-code") {
       setMessage({ text: result.message ?? "Enter the join code.", error: true });

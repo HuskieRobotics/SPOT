@@ -193,6 +193,8 @@ modules,executables}/` at runtime and serves them as plain scripts registered on
   (document 02, AR-11) cannot survive hashed build assets. Use an injected-manifest approach
   (Serwist or Workbox `injectManifest`) for the app shell, and keep explicit runtime caching
   rules for `/api/...dataset` (network-first) and config endpoints (stale-while-revalidate).
+  **v6 (#361):** a small hand-written worker reads its manifest from the build output, and the
+  scouting client keeps its data in device storage; see document 18.
   Do not precache third-party CDN URLs (F-16); self-host Plotly and fonts instead.
 - **Plotly.** Must be loaded client-only (`next/dynamic` with `ssr: false`); it is large
   (~3 MB). The modules use `histogram2dcontour`, `scatterpolar`, layout images, and theme

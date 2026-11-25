@@ -435,7 +435,9 @@ that a new feature can be verified not to break existing behavior. Requirements:
   scouting screen through submission; the online and offline submit journeys follow with the
   Phase 2 client.
 - **T-8** Offline behavior is tested by loading the app, going offline in the browser
-  harness, and asserting the scouting and analysis pages still function from cache.
+  harness, and asserting the scouting and analysis pages still function from cache. v6:
+  `tests/e2e/offline.spec.ts` (#361) does so for the scouting client, reading its QR code back
+  with a decoder; the analysis page joins in Phase 3.
 - **T-9** Test fixtures must not require live TBA or FMS credentials; all external calls are
   recorded or stubbed. A small recorded TBA event (matches, teams, coprs) is checked in.
 - **T-10** Executables (document 05) are testable in isolation: each `execute`/`reverse`

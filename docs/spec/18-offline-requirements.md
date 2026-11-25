@@ -92,7 +92,28 @@ Any replacement must preserve "every input the pipeline needs is a cacheable req
 **v6 (#360):** OF-2 is built: finished matches wait in IndexedDB until the server acknowledges
 them, are sent in batches with server-side de-duplication by nonce, and are listed with a retry
 and a QR code each (document 05, "v6: the scouting client"; document 06, "v6: submission and
-sync"). Loading the page with no connection is #361.
+sync").
+
+**v6 (#361):** for the scouting client, OF-1, OF-5 to OF-8 and the scouting part of OF-9 are
+built (document 05, "v6: offline").
+
+- **What the worker caches.** A hand-written service worker (`src/offline/service-worker.ts`)
+  caches the build's shell at install, an injected manifest read from the build output:
+  `.next/static/`, the images in `public/`, the manifest and `/`.
+- **Why not Serwist.** Its Turbopack integration adds esbuild and SWC as build-time
+  dependencies; the worker needed here is about 100 lines, and it is tested from the exact text
+  `/sw.js` sends.
+- **Where the data lives.** The scouting client's data (configuration, roster, schedule,
+  settings) is kept in the device's own storage rather than by runtime caching rules in the
+  worker. OF-5's "every input a page needs at startup is cacheable" holds either way. The
+  network-first dataset rule and the per-event caches of OF-3 are for the analysis page
+  (Phase 3), which adds its page to `OFFLINE_PAGES` in `src/offline/shell.ts`. The scanner
+  (OF-4, Phase 4) does the same.
+- **OF-6** Fonts are self-hosted by `next/font` at build time; icons are bundled.
+- **OF-9 test.** `tests/e2e/offline.spec.ts` loads online once, goes offline (the worker's own
+  network included), reloads, signs in and scouts a typed 2026 match. It reads the QR code back
+  from a screenshot with a decoder, then checks that the match is stored once after
+  reconnecting and that a stale configuration is replaced on the next online load.
 
 ## Implications for the technology direction (document 15)
 
