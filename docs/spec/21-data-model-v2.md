@@ -198,6 +198,11 @@ runs on documents it is given.
   `scouterId` (SEC-8) and `publicEvents` no `joinCode` (SEC-3). The admin reads are separate
   functions, so a caller states which view it serves.
 - Tests: `tests/unit/db.test.ts` (T-5).
+- **Storing a submission** (#360, `src/submissions/`): the server sets `_id`, `tenantId`,
+  `eventId`, `source`, `matchKey` (DV-18), `superseded`, `flag`, `notes: null` and `tags: []`, and
+  validates the whole document before it reaches MongoDB. Then it settles the robot's records for
+  that match: `superseded` (RT-14a, RT-35), `coverage` (RT-34) and machine flags (RT-36),
+  document 06 "v6: submission and sync".
 
 Still to build: **a driver-backed runner** for the migration, which phase 4 runs against the
 real dump (document 17 §3). The transform and the report are the parts worth testing, and they

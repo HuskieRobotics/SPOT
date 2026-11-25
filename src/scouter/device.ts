@@ -2,11 +2,11 @@
  * What a device remembers across reloads and restarts (RT-26, SEC-2, SEC-7, #356, #359): its
  * device id, the event's join code, the roster it last read, scouters added on it but not yet
  * sent, who is signed in on it, what the server last said about them, the scouting
- * configuration, the match being scouted, and the matches scouted but not yet sent.
+ * configuration, the match being scouted, and which matches it has finished.
  *
  * Kept in `localStorage`, which survives a reload and a browser restart. Where storage is
- * unavailable (a private window that refuses it), the device remembers in memory only. #360
- * moves the scouted matches to IndexedDB, where sync keeps them.
+ * unavailable (a private window that refuses it), the device remembers in memory only. The
+ * finished records wait in IndexedDB until the server has them (`records.ts`, #360).
  */
 import { normalizeJoinCode } from "@/auth/join-code";
 import { THEME_KEY } from "@/lib/theme";
@@ -44,7 +44,8 @@ const KEYS = {
   config: "spot.config",
   match: "spot.match",
   matchConfig: "spot.matchConfig",
-  finished: "spot.finished",
+  done: "spot.done",
+  finishing: "spot.finishing",
 } as const;
 
 /** What an admin set for every device, as the stream last sent it (A-19, SC-28). */
@@ -58,6 +59,9 @@ export interface CachedConfig {
   version: string;
   config: MatchScoutingConfig;
 }
+
+/** Enough finished matches to cover any the registry may still ask about. */
+const DONE_KEPT = 50;
 
 class MemoryStore implements KeyValue {
   private readonly map = new Map<string, string>();
@@ -246,13 +250,40 @@ export class DeviceStore {
     this.store.removeItem(KEYS.matchConfig);
   }
 
-  /** Matches scouted on this device and not yet sent (#360 sends them). */
-  finished(): FinishedMatch[] {
-    return this.read<FinishedMatch[]>(KEYS.finished) ?? [];
+  /**
+   * The matches finished on this device, as `keyOf` text, latest last: the screen never opens
+   * again for one, and the registry is told it was finished if it missed that (RT-27, RT-28).
+   * The records themselves wait in `records.ts` until the server has them.
+   */
+  done(): string[] {
+    return this.read<string[]>(KEYS.done) ?? [];
   }
 
-  addFinished(match: FinishedMatch) {
-    this.write(KEYS.finished, [...this.finished().filter((m) => m.nonce !== match.nonce), match]);
+  addDone(key: string) {
+    this.write(KEYS.done, [...this.done().filter((k) => k !== key), key].slice(-DONE_KEPT));
+  }
+
+  /**
+   * Matches just finished, on their way to the record store (`records.ts`). Writing here is
+   * synchronous, so the match leaves the screen and its record is safe in the same moment; the
+   * app moves each to IndexedDB, and moves any left by a reload when it starts.
+   */
+  finishing(): { record: FinishedMatch; config: CachedConfig }[] {
+    return this.read(KEYS.finishing) ?? [];
+  }
+
+  addFinishing(record: FinishedMatch, config: CachedConfig) {
+    this.write(KEYS.finishing, [
+      ...this.finishing().filter((f) => f.record.nonce !== record.nonce),
+      { record, config },
+    ]);
+  }
+
+  removeFinishing(nonce: string) {
+    this.write(
+      KEYS.finishing,
+      this.finishing().filter((f) => f.record.nonce !== nonce),
+    );
   }
 
   /** Forget everything SPOT keeps on this device (OF-8). */

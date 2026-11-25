@@ -215,7 +215,7 @@ describe("RT-6, RT-27: when the match screen opens", () => {
     expect(shouldEnter(view(), null, [])).toBe(false); // assigned, not yet sent in
     expect(shouldEnter(view({ entered: true }), null, [])).toBe(true);
     expect(shouldEnter(view({ entered: true, status: "scouting" }), null, [])).toBe(true);
-    const done = finishMatch(begin(), 5_000);
+    const done = keyOf(finishMatch(begin(), 5_000));
     expect(shouldEnter(view({ entered: true, status: "scouting" }), null, [done])).toBe(false);
     expect(shouldEnter(view({ entered: true, status: "complete" }), null, [])).toBe(false);
   });
@@ -244,7 +244,7 @@ describe("RT-27, RT-28: catching the registry up after a lost connection", () =>
   it("sends the OK, the start and the finish it missed, and nothing it already has", () => {
     const m = begin();
     const running = { ...m, state: press(m.state, context, startButton(), 2_000) };
-    const done = finishMatch(running, 9_000);
+    const done = keyOf(finishMatch(running, 9_000));
     expect(reconcile(view(), null, [], keyOf(m))).toEqual(["accept"]);
     expect(reconcile(view({ accepted: true, entered: true }), running, [], null)).toEqual([
       "start",
@@ -262,7 +262,7 @@ describe("RT-27, RT-28: catching the registry up after a lost connection", () =>
 });
 
 describe("RT-26, F-23: a reload mid-match resumes the same presses and clock", () => {
-  it("keeps the match, its configuration and the matches not yet sent", () => {
+  it("keeps the match, its configuration, and the matches finished and on their way", () => {
     const storage = memoryStore();
     const store = new DeviceStore(storage);
     const cached = { version: "abc123", config };
@@ -271,7 +271,9 @@ describe("RT-26, F-23: a reload mid-match resumes the same presses and clock", (
     state = setSpeed(state, context, 11_000, 2); // BL-230: twice as fast from here
     m = { ...m, state };
     store.setMatch(m, cached);
-    store.addFinished(finishMatch(begin(view({ entered: true, matchNumber: 11 })), 9_000));
+    const eleven = finishMatch(begin(view({ entered: true, matchNumber: 11 })), 9_000);
+    store.addFinishing(eleven, cached);
+    store.addDone(keyOf(eleven));
 
     const after = new DeviceStore(storage); // the reload
     const resumed = after.match()!;
@@ -282,7 +284,8 @@ describe("RT-26, F-23: a reload mid-match resumes the same presses and clock", (
     expect(advance(resumed.match.state, context, t)).toEqual(advance(state, context, t));
     const elapsed = config.timing.totalMs - advance(resumed.match.state, context, t).ts;
     expect(elapsed).toBe(1_000 + 2 * 10_000); // 1 s at 1×, then 10 s at 2×
-    expect(after.finished().map((f) => f.number)).toEqual([11]);
+    expect(after.finishing().map((f) => f.record.number)).toEqual([11]);
+    expect(after.done()).toEqual([keyOf(eleven)]);
   });
 
   it("drops a saved match whose configuration is missing, and reset forgets everything", () => {
@@ -291,10 +294,10 @@ describe("RT-26, F-23: a reload mid-match resumes the same presses and clock", (
     store.setMatch(begin()); // no configuration saved with it
     expect(store.match()).toBeNull();
     store.setJoinCode("TSTCDE");
-    store.addFinished(finishMatch(begin(), 2));
+    store.addFinishing(finishMatch(begin(), 2), { version: "abc123", config });
     store.reset();
     expect(store.joinCode()).toBeNull();
-    expect(store.finished()).toEqual([]);
+    expect(store.finishing()).toEqual([]);
   });
 
   it("a finished record keeps what was recorded, as analysis receives it (DV-1)", () => {

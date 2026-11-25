@@ -40,6 +40,12 @@ export class StreamReader {
     return true;
   }
 
+  /** Stop reading, as a closed connection does: the server's stream is cancelled. */
+  cancel() {
+    this.done = true;
+    void this.reader.cancel().catch(() => undefined);
+  }
+
   /** The next event, waiting for it to arrive; null once the stream has ended. */
   async next(timeoutMs = 2000): Promise<SseEvent | null> {
     const deadline = Date.now() + timeoutMs;

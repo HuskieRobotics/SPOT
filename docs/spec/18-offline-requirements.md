@@ -89,6 +89,11 @@ Any replacement must preserve "every input the pipeline needs is a cacheable req
   the browser harness, reload, and assert OF-1, OF-3 (including switching to an event viewed
   earlier while online), and OF-4.
 
+**v6 (#360):** OF-2 is built: finished matches wait in IndexedDB until the server acknowledges
+them, are sent in batches with server-side de-duplication by nonce, and are listed with a retry
+and a QR code each (document 05, "v6: the scouting client"; document 06, "v6: submission and
+sync"). Loading the page with no connection is #361.
+
 ## Implications for the technology direction (document 15)
 
 - The transport choice is unaffected: polling and SSE both degrade to "disconnected" and the

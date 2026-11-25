@@ -222,6 +222,35 @@ Decided 2026-11-24, where the requirements above left a choice:
   which keeps a "B" robot at an off-season event (BL-308). The v5 string-versus-number mismatch
   between TBA and the FIRST API disappears with the fallback.
 
+## v6: submission and sync (`src/submissions/`, #360)
+
+A device sends finished matches to `POST /api/scouter/performances`; the device side is in
+document 05. Tests: `tests/unit/submission.test.ts` (T-5, T-6a) and the RT-35 case over HTTP in
+`tests/unit/transport.test.ts`. Decided 2026-11-24:
+
+- **One request, no question first** (replaces RT-20's `syncData` exchange). The device holds
+  only what the server has not acknowledged, so asking which records it lacks would save
+  nothing. Each record is answered `stored`, `duplicate` or `invalid`; the device forgets the
+  first two. A reply lost on the way back costs one resend, answered `duplicate`.
+- **By the event it was scouted at.** A request names the record's event and carries that event's
+  join code (SEC-2), so a device that syncs after the admin moved to the next event still files
+  its matches where they belong. No event id means the active event.
+- **Stored once per nonce** (DV-18), looked up across superseded records too; a copy scanned from
+  the QR code first makes the synced one a duplicate.
+- **RT-14a, RT-35** When a record arrives, the robot's current records for that match are
+  settled: the latest `submittedAt` wins, except that a scouter released from the robot loses to
+  whoever held it at the end. Only current records are weighed, so an admin's promotion of a
+  superseded record (Phase 4) stands until a new record arrives. The history comes from the
+  registry for the active event, which the database may not have caught up with.
+- **RT-34** Coverage is `partial` when the device ended the match early, or when the scouter took
+  the robot after the match started.
+- **RT-36** A replacement's record is flagged (`source: "machine"`) when they joined mid-match,
+  or when the released scouter's record exists too, whichever arrives first. A flag already set
+  is never overwritten. The flag is public, so the reason says "replacement" and names no one
+  (SEC-8); the edit page shows who from the records' scouter ids.
+- **One at a time.** Arrivals are handled in order in the process, like the registry's events,
+  so two records for one robot are never settled at once.
+
 ## v6: the schedule (`src/schedule/`, #355)
 
 - **RT-22a** **[decided 2026-11-24, maintainer]** A match is a level and a number within it,

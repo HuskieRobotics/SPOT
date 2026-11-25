@@ -17,6 +17,10 @@ import { matchLabel } from "@/schedule/labels";
 import { holdingKey, type Alliance, type DeviceView } from "@/sessions/registry";
 import type { DeviceAction } from "@/sessions/runtime";
 import { initialState, recordedActions, type SessionState } from "@/scouting/session";
+import type { Submission } from "@/submissions/submission";
+
+/** The app's version, recorded on each match (`next.config.ts` sets it from package.json). */
+export const CLIENT_VERSION = process.env.SPOT_VERSION ?? "0.0.0";
 
 export interface MatchKey {
   level: MatchLevel;
@@ -36,13 +40,14 @@ export interface ActiveMatch extends MatchKey {
   state: SessionState;
 }
 
-/** A match scouted on this device, kept until it is sent (#360). */
+/** A match scouted on this device, kept until the server has it (#360, OF-2). */
 export interface FinishedMatch extends MatchKey {
   alliance: Alliance;
   scouterId: string;
   eventId: ObjectIdHex | null;
   nonce: string;
   configVersion: string;
+  clientVersion: string;
   submittedAt: number;
   actions: Action[];
   /** Why it ended before Submit: an admin released the robot, or the scouter was signed out. */
@@ -70,22 +75,20 @@ export function started(match: ActiveMatch): boolean {
   return match.state.status !== "pre-match";
 }
 
-const finishedFor = (finished: readonly FinishedMatch[], m: MatchKey) =>
-  finished.some((f) => keyOf(f) === keyOf(m));
-
 /**
  * Whether to open the match screen for what the registry says (RT-6, RT-27): the scouter was
  * sent into a match they have not finished, and is not scouting another match on this device.
+ * `done` holds the `keyOf` of matches finished on this device.
  */
 export function shouldEnter(
   view: DeviceView | null,
   active: ActiveMatch | null,
-  finished: readonly FinishedMatch[],
+  done: readonly string[],
 ): boolean {
   const m = viewMatch(view);
   if (!m || !view!.entered || view!.alliance === null || view!.status === "complete") return false;
   if (active && (keyOf(active) === keyOf(m) || started(active))) return false;
-  return !finishedFor(finished, m);
+  return !done.includes(keyOf(m));
 }
 
 /** A new match for the robot the registry sent the scouter to. */
@@ -127,6 +130,7 @@ export function finishMatch(
     eventId: match.eventId,
     nonce: match.nonce,
     configVersion: match.configVersion,
+    clientVersion: CLIENT_VERSION,
     submittedAt: now,
     actions: recordedActions(match.state),
     cutShort,
@@ -141,7 +145,7 @@ export function finishMatch(
 export function reconcile(
   view: DeviceView | null,
   active: ActiveMatch | null,
-  finished: readonly FinishedMatch[],
+  done: readonly string[],
   accepted: string | null,
 ): DeviceAction[] {
   const m = viewMatch(view);
@@ -150,7 +154,7 @@ export function reconcile(
   if (!view.accepted && accepted === keyOf(m)) actions.push("accept");
   if (active && keyOf(active) === keyOf(m) && started(active) && view.status === "waiting")
     actions.push("start");
-  if (view.status !== "complete" && finishedFor(finished, m)) actions.push("finish", "ready");
+  if (view.status !== "complete" && done.includes(keyOf(m))) actions.push("finish", "ready");
   else if (view.status === "complete") actions.push("ready");
   return actions;
 }
@@ -163,4 +167,23 @@ export function assignmentPrompt(view: DeviceView | null, accepted: string | nul
   const m = viewMatch(view);
   if (!m || view!.accepted || accepted === keyOf(m) || view!.status !== "waiting") return null;
   return `You have been assigned team ${m.team} in ${matchLabel(m.level, m.number)}.`;
+}
+
+/**
+ * What the server receives (#360). A match that ended before Submit (released, signed out)
+ * covers only part of the match (RT-34); the server also marks partial a replacement who took
+ * the robot mid-match, which the device does not know.
+ */
+export function toSubmission(f: FinishedMatch): Submission {
+  return {
+    level: f.level,
+    matchNumber: f.number,
+    team: f.team,
+    scouterId: f.scouterId,
+    nonce: f.nonce,
+    submittedAt: f.submittedAt,
+    clientVersion: f.clientVersion,
+    coverage: f.cutShort ? "partial" : "full",
+    actions: f.actions,
+  };
 }

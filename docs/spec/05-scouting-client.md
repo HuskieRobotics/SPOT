@@ -387,10 +387,25 @@ Decided 2026-11-24:
   clock: the clock is read from real time (NF-3), so it stands where it would have.
 - **RT-27, RT-28** Whatever the registry missed while the connection was down (an OK, a start, a
   finish) is sent again the next time it says where the scouter is.
-- **SC-39 (in part)** Submit keeps the match on the device as a finished record (its actions,
-  match, team, alliance, event, nonce, scouter and time) and tells the registry `finish` and
-  `ready`. The waiting page counts the matches not yet sent. #360 sends them, and turns the
-  count into the pending list (BL-93).
+- **SC-39** Submit keeps the match on the device as a finished record (its actions, match, team,
+  alliance, event, nonce, scouter, app version and time), tells the registry `finish` and
+  `ready`, and sends it (#360). A match that ended early (released, signed out) is sent as
+  `partial` (RT-34).
+- **SC-40, SC-42** Sent at once: the status line says **Sending…**, then **Match sent.** The v5
+  page reload after a sync is gone: the client returns to the waiting page by itself.
+- **SC-41** Not sent (no connection, a wrong join code, a record the server refused): the QR code
+  fills the screen, black on white in either theme, with the match, the reason and **Tap to
+  dismiss**, and the match stays on the device. The code is drawn with the configuration the
+  match was scouted with, kept beside the record for as long as a record needs it.
+- **OF-2, BL-93, RT-21, RT-28** The device keeps every finished match in IndexedDB until the
+  server acknowledges it (`src/scouter/records.ts`), and sends them (`src/scouter/sync.ts`) on
+  start, after each submission, when the connection or the browser comes back, every minute
+  while any are left, and on **Send now**. The waiting and landing pages list them, each with its
+  time, the server's reason if it refused it, and its QR code; the status line shows **N not
+  sent** on every page. The handoff is safe against a reload: Submit writes the record to
+  `localStorage` in the same moment it leaves the screen, and the app moves it to IndexedDB, at
+  once or on the next start. A browser that refuses IndexedDB keeps them in memory and says a
+  reload would lose them. Reset app data clears them, after warning how many.
 - **SC-28** The robot's alliance comes from the schedule at the moment the scouter is sent in,
   and the field orientation from the admin setting, live.
 - **BL-230** The menu offers **2× speed, for a video…** during a match, behind a confirmation;
