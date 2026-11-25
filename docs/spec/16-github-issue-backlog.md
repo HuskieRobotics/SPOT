@@ -61,7 +61,7 @@ Backlog requirement ids are `BL-<issue number>` so they can be traced to GitHub.
 | #116  | Visual indicator that clicking a scouter disconnects them.                      | core    | **BL-116** Disconnect MUST be an explicit control with an icon, not a hidden click target (document 07, AD-5).              |
 | #33   | Support or disable multiple admins. Answer 28: 2–3 students share admin duties. | core    | **BL-33** Multiple concurrent admin sessions MUST be supported; state changes (current match) propagate to all admin views. |
 | #120  | Middleware-based auth and demo-mode checks.                                     | covered | Document 15 (Next.js middleware) and document 12 (S-1).                                                                     |
-| #218  | Single implementation of the demo-mode label.                                   | covered | Shared components in the rewrite.                                                                                           |
+| #218  | Single implementation of the demo-mode label.                                   | covered | Shared components in the rewrite; folded into #374 (demo mode, DM-MODE-5).                                                  |
 
 ## F. Platform, hosting, and telemetry
 
