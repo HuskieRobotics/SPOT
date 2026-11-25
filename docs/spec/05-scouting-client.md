@@ -356,8 +356,8 @@ plain TypeScript in `src/scouter/` (`match.ts`, `connection.ts`, `device.ts`), t
 Decided 2026-11-24:
 
 - **SC-7, SC-8** The landing page shows the logo, "SPOT", the version (from `package.json`), the
-  sign-in screen, and links to feedback and the scouting-screen preview. Google sign-in and the
-  `DEMO` label are gone (F-13).
+  sign-in screen, and links to feedback and the scouting-screen preview. Google sign-in is gone
+  (F-13). The demo label is not built yet: it comes with demo mode (DM-MODE-5, document 01).
 - **SC-1, OF-7** One status line on every signed-in page: the menu, the connection (**Connected**;
   **Disconnected** once connected since the page loaded; **Not connected** before that), and the
   match as the field names it (`Qual 12 | Team 3061`, DV-17) on the alliance's color with black
