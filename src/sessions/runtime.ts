@@ -26,12 +26,22 @@ import {
   type SessionStore,
 } from "@/db/sessions";
 import { getSettings } from "@/db/settings";
-import { DEFAULT_TENANT, type MatchRef, type ObjectIdHex, type TenantId } from "@/data/types";
+import {
+  assignmentId,
+  DEFAULT_TENANT,
+  type Assignment,
+  type MatchLevel,
+  type MatchRef,
+  type ObjectIdHex,
+  type TenantId,
+} from "@/data/types";
+import type { TeamKey } from "@/data/team";
 import { matchLabel } from "@/schedule/labels";
 import { Hub, HEARTBEAT_MS, type Connection } from "./hub";
 import {
   apply,
   deviceView,
+  holdingKey,
   restore,
   type CurrentMatch,
   type DeviceMessage,
@@ -397,6 +407,31 @@ export class Runtime {
     return this.serial(async () => {
       await this.required();
       this.refuseIfError(this.dispatch({ type: "remove", scouterId }));
+    });
+  }
+
+  // ----------------------------------------------------------------- submissions
+
+  /**
+   * Who held a robot in a match (DV-16), for settling the records that arrive for it (#360,
+   * RT-35, RT-36): the registry's own copy for the active event, which the database may not have
+   * caught up with, or the saved history for an earlier event.
+   */
+  assignmentOf(
+    eventId: ObjectIdHex,
+    level: MatchLevel,
+    matchNumber: number,
+    team: TeamKey,
+  ): Promise<Assignment | null> {
+    return this.serial(async () => {
+      if (this.state?.eventId === eventId) {
+        const a = this.state.assignments[holdingKey(level, matchNumber, team)];
+        return a ? structuredClone(a) : null;
+      }
+      return assignmentCollection(this.db).findOne({
+        _id: assignmentId(eventId, level, matchNumber, team),
+        tenantId: this.tenantId,
+      });
     });
   }
 

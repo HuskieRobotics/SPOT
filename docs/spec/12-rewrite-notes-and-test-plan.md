@@ -231,8 +231,7 @@ Rationale in [ADR 0004](../adr/0004-authentication-and-privacy.md).
   (`ABCDEFGHJKMNPQRSTWXYZ23456789`), made when the event is created and rotated by an admin. A
   submission sends it in the `X-SPOT-Join-Code` header; it is compared ignoring case, spaces
   and dashes. A refusal is 403 with a reason (`missing`, `wrong`, or `no-code` for an event that
-  has none) and a message a scouter can act on, and the device keeps the record (SEC-9). The
-  submission route that calls the check is #360. Signing in for assignment checks it too (#354), so a stranger
+  has none) and a message a scouter can act on, and the device keeps the record (SEC-9). The submission route checks it against the event the records were scouted at (#360). Signing in for assignment checks it too (#354), so a stranger
   cannot take robots; scouting with no server never needs it (SEC-9).
 - **SEC-6a** **[decided 2026-11-24]** An admin corrects a scouter's name on the admin page's
   roster (#357), for a name misspelled at **I'm not on the list**. Only the `scouters` record

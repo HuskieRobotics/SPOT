@@ -1,11 +1,14 @@
 /**
- * The device's calls to the server for signing in (#356). Every call has a timeout and tells
+ * The device's calls to the server: signing in (#356), the registry (#359), and sending matches
+ * (#360). Every call has a timeout and tells
  * "the server cannot be reached" apart from "the server said no" (OF-7), so the device can carry
  * on offline in the first case and show the server's message in the second.
  */
 import { JOIN_CODE_HEADER } from "@/auth/join-code";
 import type { DeviceView } from "@/sessions/registry";
 import type { DeviceAction } from "@/sessions/runtime";
+import type { Submission, SubmissionResult } from "@/submissions/submission";
+import type { ObjectIdHex } from "@/data/types";
 import type { RosterEntry } from "./device";
 
 export const REQUEST_TIMEOUT_MS = 8_000;
@@ -64,6 +67,12 @@ export interface ScouterApi {
     deviceId: string,
     action: Exclude<DeviceAction, "sign-out">,
   ): Promise<Reply<{ view: DeviceView }>>;
+  /** Send finished matches scouted at one event (#360): one result per record, in order. */
+  submit(
+    joinCode: string,
+    eventId: ObjectIdHex | null,
+    records: Submission[],
+  ): Promise<Reply<{ results: SubmissionResult[] }>>;
 }
 
 export function httpApi(fetchImpl: typeof fetch = fetch): ScouterApi {
@@ -87,6 +96,12 @@ export function httpApi(fetchImpl: typeof fetch = fetch): ScouterApi {
       call(
         "/api/scouter/action",
         { method: "POST", body: JSON.stringify({ scouterId, deviceId, action }) },
+        fetchImpl,
+      ),
+    submit: (joinCode, eventId, records) =>
+      call(
+        "/api/scouter/performances",
+        { method: "POST", joinCode, body: JSON.stringify({ eventId, records }) },
         fetchImpl,
       ),
   };

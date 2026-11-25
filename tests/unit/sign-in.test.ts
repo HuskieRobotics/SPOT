@@ -82,6 +82,10 @@ class FakeServer implements ScouterApi {
     return { ok: true as const, value: {} };
   }
 
+  async submit() {
+    return OFFLINE;
+  }
+
   async act() {
     return OFFLINE;
   }

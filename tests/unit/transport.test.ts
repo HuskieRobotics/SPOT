@@ -12,6 +12,9 @@ import * as signInRoute from "@/app/api/scouter/sign-in/route";
 import * as actionRoute from "@/app/api/scouter/action/route";
 import * as streamRoute from "@/app/api/scouter/stream/route";
 import * as registryRoute from "@/app/api/admin/registry/route";
+import * as submitRoute from "@/app/api/scouter/performances/route";
+import { JOIN_CODE_HEADER } from "@/auth/join-code";
+import { performanceCollection } from "@/db/performances";
 import { createEvent } from "@/db/events";
 import { updateSchedule } from "@/db/schedules";
 import { sessionCollection } from "@/db/sessions";
@@ -72,9 +75,15 @@ class Device {
     return response;
   }
 
-  /** The network drops: the server sees the request aborted. */
+  /**
+   * The network drops: the server sees the request aborted and its stream cancelled. Both,
+   * because Node's `Request` follows the caller's signal through a weak reference, so once the
+   * request is garbage collected the abort alone may never arrive; a real server sees the socket
+   * close, which cancels the stream.
+   */
   drop() {
     this.abort?.abort();
+    this.stream?.cancel();
     this.stream = null;
   }
 
@@ -261,6 +270,53 @@ describe("T-6: devices over HTTP", () => {
     ({ snapshot } = await admin());
     expect(snapshot?.entries.find((e) => e.scouterId === devices[5].scouterId)?.team).toBeNull();
     expect(await devices[5].kinds()).toEqual(["unassigned"]);
+  });
+
+  it("RT-35, RT-36: records after that release are settled by the registry's own history", async () => {
+    // Match 1 is under way, so whoever takes the released robot joins mid-match (RT-34).
+    const replacement = new Device("200098");
+    await replacement.signIn();
+    await replacement.open();
+    const { snapshot } = await admin();
+    expect(snapshot?.entries.find((e) => e.scouterId === "200098")?.team).toBe("106");
+    const send = (scouterId: string, nonce: string, submittedAt: number) =>
+      submitRoute.POST(
+        new Request(`${ORIGIN}/api/scouter/performances`, {
+          method: "POST",
+          headers: { [JOIN_CODE_HEADER]: joinCode, "content-type": "application/json" },
+          body: JSON.stringify({
+            eventId: event._id,
+            records: [
+              {
+                level: "qual",
+                matchNumber: 1,
+                team: "106",
+                scouterId,
+                nonce,
+                submittedAt,
+                clientVersion: "6.0.0",
+                coverage: "full",
+                actions: [],
+              },
+            ],
+          }),
+        }),
+      );
+    // The released scouter's device syncs last, with the latest time; it still loses.
+    expect((await send("200098", "replacement1", 1_000)).status).toBe(200);
+    expect((await send(devices[5].scouterId, "releasedrec1", 9_000)).status).toBe(200);
+    const docs = await performanceCollection(db)
+      .find({ eventId: event._id, matchNumber: 1, team: "106" })
+      .toArray();
+    const by = (id: string) => docs.find((d) => d.scouterId === id)!;
+    expect(by(devices[5].scouterId).superseded).toBe(true);
+    expect(by("200098")).toMatchObject({
+      superseded: false,
+      coverage: "partial",
+      flag: { flagged: true, source: "machine" },
+    });
+    replacement.drop();
+    await admin({ action: "remove", scouterId: "200098" });
   });
 
   it("refuses what the registry refuses, and a match the schedule lacks, with messages", async () => {

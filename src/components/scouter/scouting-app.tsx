@@ -8,19 +8,26 @@
  * The registry's messages arrive on the connection (`src/scouter/connection.ts`); the rules for
  * opening, closing and keeping a match are in `src/scouter/match.ts`.
  *
- * Submitting keeps the match on the device. #360 sends it to the server and shows the list of
- * matches not yet sent; until then the waiting page counts them.
+ * Submitting keeps the match on the device, then sends it (#360, `src/scouter/sync.ts`): at once,
+ * whenever the connection comes back, and every minute while any is left. A match not sent is
+ * shown as a QR code (SC-41) and stays in the pending list (OF-2, BL-93) until the server has it.
  */
 import Image from "next/image";
 import Link from "next/link";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import type { MatchScoutingConfig } from "@/config/types";
 import { newNonce } from "@/data/nonce";
 import { cn } from "@/lib/utils";
 import { call, httpApi } from "@/scouter/api";
 import { Connection, type ConnectionStatus } from "@/scouter/connection";
-import { browserStore, DeviceStore, joinCodeFromUrl, type SignedIn } from "@/scouter/device";
+import {
+  browserStore,
+  DeviceStore,
+  joinCodeFromUrl,
+  type CachedConfig,
+  type SignedIn,
+} from "@/scouter/device";
 import {
   assignmentPrompt,
   beginMatch,
@@ -32,13 +39,17 @@ import {
   viewMatch,
   type FinishedMatch,
 } from "@/scouter/match";
+import { browserRecords, type PendingRecord, type RecordStore } from "@/scouter/records";
 import { signOut as signOutOfRegistry } from "@/scouter/sign-in";
+import { Syncer, type SyncOutcome } from "@/scouter/sync";
 import { matchLabel } from "@/schedule/labels";
 import type { SessionState } from "@/scouting/session";
 import type { DeviceAction } from "@/sessions/runtime";
 import type { DeviceMessage, DeviceView } from "@/sessions/registry";
 import { Dialog } from "./dialog";
 import { MatchPage } from "./match-page";
+import { PendingList } from "./pending-list";
+import { QrSheet } from "./qr-sheet";
 import { SettingsMenu } from "./settings-menu";
 import { SignInScreen } from "./sign-in-screen";
 import { ConnectionLabel, MatchLabel } from "./status-line";
@@ -50,6 +61,12 @@ interface Notice {
 }
 
 type Confirm = "sign-out" | "reset" | null;
+
+/** Send matches every minute while any are left, besides on connecting and on submitting. */
+const RETRY_MS = 60_000;
+
+const NOT_SENT_OFFLINE =
+  "No connection. The match is kept on this device and sent when the connection returns. An admin can scan this code now.";
 
 function withdrawnText(view: DeviceView | null, reason: "released" | "match-changed"): string {
   const m = viewMatch(view);
@@ -83,12 +100,89 @@ export function ScoutingApp() {
   const [askForJoinCode, setAskForJoinCode] = useState(false);
   const [confirm, setConfirm] = useState<Confirm>(null);
   const [configError, setConfigError] = useState<string | null>(null);
+  // Matches not yet on the server (OF-2), and the QR code on show (SC-41).
+  const [records, setRecords] = useState<RecordStore | null>(null);
+  const [pending, setPending] = useState<PendingRecord[]>([]);
+  const [sending, setSending] = useState(false);
+  const [qr, setQr] = useState<{
+    record: PendingRecord;
+    config: CachedConfig | null;
+    message: string | null;
+  } | null>(null);
+  const opened = useRef<Promise<RecordStore> | null>(null);
+  const openRecords = useCallback(() => (opened.current ??= browserRecords()), []);
 
   const signedIn = store.signedIn();
   const view = store.view();
   const settings = store.settings();
   const active = store.match();
-  const finished = store.finished();
+
+  // ------------------------------------------------------------ keeping and sending matches
+  const syncer = useMemo(
+    () =>
+      records &&
+      new Syncer({
+        records,
+        api,
+        joinCode: () => store.joinCode(),
+        onChange: () => void records.all().then(setPending),
+        onBusy: setSending,
+      }),
+    [records, api, store],
+  );
+
+  /**
+   * Move finished matches from the device store to IndexedDB, including any a reload left, and
+   * show what is waiting.
+   */
+  const keepFinished = useCallback(async () => {
+    const r = await openRecords();
+    for (const { record, config } of store.finishing()) {
+      await r.put(record, config);
+      store.removeFinishing(record.nonce);
+    }
+    return r;
+  }, [store, openRecords]);
+
+  /** Send what is waiting; the syncer's `onChange` updates the list. */
+  const send = useCallback(
+    async (): Promise<SyncOutcome | null> => (syncer ? syncer.sync() : null),
+    [syncer],
+  );
+
+  useEffect(() => {
+    void keepFinished().then(async (r) => {
+      setRecords(r);
+      setPending(await r.all());
+    });
+  }, [keepFinished]);
+
+  // Send on start, when the browser comes online, and every minute while any are left (RT-21).
+  useEffect(() => {
+    if (!syncer) return;
+    const go = () => void syncer.sync();
+    const first = setTimeout(go, 0);
+    window.addEventListener("online", go);
+    const timer = setInterval(go, RETRY_MS);
+    return () => {
+      clearTimeout(first);
+      window.removeEventListener("online", go);
+      clearInterval(timer);
+    };
+  }, [syncer]);
+
+  /** End a match and keep its record: off the screen and safe at once, then sent (SC-39). */
+  const finish = useCallback(
+    (record: FinishedMatch, config: CachedConfig) => {
+      store.addFinishing(record, config);
+      store.addDone(keyOf(record));
+      store.clearMatch();
+      void keepFinished()
+        .then((r) => r.all())
+        .then(setPending);
+    },
+    [store, keepFinished],
+  );
 
   // ------------------------------------------------------------ talking to the registry
   const act = useCallback(
@@ -111,11 +205,11 @@ export function ScoutingApp() {
       const current = store.match();
       if (!current) return false;
       const kept = started(current.match);
-      if (kept) store.addFinished(finishMatch(current.match, Date.now(), cutShort));
-      store.clearMatch();
+      if (kept) finish(finishMatch(current.match, Date.now(), cutShort), current.config);
+      else store.clearMatch();
       return kept;
     },
-    [store],
+    [store, finish],
   );
 
   /** After the registry says where the scouter is: open the match screen, and catch it up. */
@@ -127,7 +221,7 @@ export function ScoutingApp() {
     const m = viewMatch(view);
     if (current && !started(current.match) && (!m || keyOf(m) !== keyOf(current.match)))
       store.clearMatch();
-    if (config && view && shouldEnter(view, store.match()?.match ?? null, store.finished())) {
+    if (config && view && shouldEnter(view, store.match()?.match ?? null, store.done())) {
       const who = store.signedIn()!;
       store.setMatch(
         beginMatch(view, {
@@ -145,7 +239,7 @@ export function ScoutingApp() {
     for (const action of reconcile(
       view,
       store.match()?.match ?? null,
-      store.finished(),
+      store.done(),
       store.accepted(),
     ))
       await act(action as Exclude<DeviceAction, "sign-out">);
@@ -247,6 +341,12 @@ export function ScoutingApp() {
     };
   }, [scouterId, store, api, onMessage, signOutHere]);
 
+  // A connection that opens is the server back: send what waited (RT-21, RT-28).
+  const connected = connection.status === "connected";
+  useEffect(() => {
+    if (connected) void syncer?.sync();
+  }, [connected, syncer]);
+
   // ------------------------------------------------------------ the scouter's own actions
   const onMatchChange = useCallback(
     (state: SessionState) => {
@@ -255,18 +355,57 @@ export function ScoutingApp() {
       const before = current.match.state.status;
       const match = { ...current.match, state };
       if (state.status === "submitted") {
-        store.addFinished(finishMatch(match, Date.now()));
-        store.clearMatch();
-        setInfo("Match saved on this device.");
+        const record = finishMatch(match, Date.now());
+        finish(record, current.config);
+        setInfo("Sending…");
         refresh();
         void act("finish").then(() => act("ready"));
+        // SC-40, SC-41: sent, or shown as a QR code and kept for the next try.
+        void (async () => {
+          await keepFinished();
+          const outcome = await send();
+          const left = (await openRecords().then((r) => r.all())).find(
+            (r) => r.nonce === record.nonce,
+          );
+          if (!left) {
+            setInfo("Match sent.");
+            return;
+          }
+          setInfo(null);
+          setQr({
+            record: left,
+            config: current.config,
+            message: outcome?.offline || !outcome ? NOT_SENT_OFFLINE : outcome.message,
+          });
+        })();
         return;
       }
       store.setMatch(match);
       if (before === "pre-match" && state.status === "running") void act("start");
     },
-    [store, act, refresh],
+    [store, act, refresh, finish, keepFinished, send, openRecords],
   );
+
+  const showQr = async (record: PendingRecord) => {
+    const r = await openRecords();
+    const config = store.config();
+    setQr({
+      record,
+      config:
+        (await r.config(record.configVersion)) ??
+        (config?.version === record.configVersion ? config : null),
+      message: record.problem,
+    });
+  };
+
+  const sendNow = async () => {
+    const outcome = await send();
+    if (!outcome) return;
+    if (outcome.offline) setInfo("No connection. The matches are kept on this device.");
+    else if (outcome.message) setInfo(outcome.message);
+    else if (outcome.sent > 0)
+      setInfo(`${outcome.sent} ${outcome.sent === 1 ? "match" : "matches"} sent.`);
+  };
 
   const accept = () => {
     const m = viewMatch(store.view());
@@ -292,6 +431,7 @@ export function ScoutingApp() {
 
   async function reset() {
     store.reset();
+    await (await openRecords()).clear();
     try {
       for (const key of await caches.keys()) await caches.delete(key);
       for (const r of (await navigator.serviceWorker?.getRegistrations()) ?? [])
@@ -302,7 +442,16 @@ export function ScoutingApp() {
     location.replace("/");
   }
 
-  const unsent = finished.length + (active && started(active.match) ? 1 : 0);
+  const unsent = pending.length + (active && started(active.match) ? 1 : 0);
+  const pendingList = (
+    <PendingList
+      records={pending}
+      sending={sending}
+      durable={records?.durable ?? true}
+      onSend={() => void sendNow()}
+      onShowQr={(r) => void showQr(r)}
+    />
+  );
   const menu = (speed?: { value: number; set(speed: number): void }) => (
     <SettingsMenu
       signedIn={signedIn !== null}
@@ -313,8 +462,10 @@ export function ScoutingApp() {
     />
   );
   // A scouter who finished a match still holds its robot until the match changes (RT-35), but
-  // waits for the next assignment.
-  const waitingFor = view?.status === "complete" ? null : viewMatch(view);
+  // waits for the next assignment, even before the registry has heard of the finish.
+  const viewed = viewMatch(view);
+  const waitingFor =
+    view?.status === "complete" || (viewed && store.done().includes(keyOf(viewed))) ? null : viewed;
   const assignedMatch = active?.match ?? waitingFor;
   const alliance = active?.match.alliance ?? view?.alliance ?? null;
   const statusParts = (speed?: { value: number; set(speed: number): void }) => (
@@ -322,6 +473,11 @@ export function ScoutingApp() {
       {menu(speed)}
       <ConnectionLabel status={connection.status} detail={connection.detail} />
       {assignedMatch && <MatchLabel match={assignedMatch} alliance={alliance} />}
+      {pending.length > 0 && (
+        <span className="text-destructive shrink-0 font-medium" data-testid="not-sent">
+          {pending.length} not sent
+        </span>
+      )}
       {speed && speed.value !== 1 && (
         <span className="bg-destructive shrink-0 rounded px-1.5 font-bold text-white">
           {speed.value}×
@@ -354,6 +510,7 @@ export function ScoutingApp() {
             {signedOutReason}
           </p>
         )}
+        {pendingList}
         <SignInScreen
           key={askForJoinCode ? "join" : "pick"}
           store={store}
@@ -403,12 +560,7 @@ export function ScoutingApp() {
             {configError}
           </p>
         )}
-        {finished.length > 0 && (
-          <p className="text-muted-foreground text-sm" data-testid="unsent">
-            {finished.length} {finished.length === 1 ? "match" : "matches"} saved on this device,
-            not yet sent.
-          </p>
-        )}
+        {pendingList}
       </WaitingPage>
     );
   }
@@ -426,6 +578,14 @@ export function ScoutingApp() {
         <Dialog title={notice.title} actions={<Button onClick={() => setNotice(null)}>OK</Button>}>
           {notice.text}
         </Dialog>
+      )}
+      {qr && (
+        <QrSheet
+          record={qr.record}
+          config={qr.config}
+          message={qr.message}
+          onDismiss={() => setQr(null)}
+        />
       )}
       {confirm === "sign-out" && (
         <Dialog
