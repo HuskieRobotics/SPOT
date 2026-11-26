@@ -4,8 +4,9 @@
  *
  * Read from disk on each request, so a saved change reaches devices on their next online load
  * with no rebuild (OF-8). The version, a hash of the file's text, is the `ETag`, and
- * `Cache-Control: no-cache` makes the browser (and the service worker, #361) ask every time and
- * get 304 when nothing changed. A file with errors is refused with a message naming
+ * `Cache-Control: no-cache` makes the browser ask every time and get 304 when nothing changed.
+ * The service worker leaves this route to the network; the device keeps its own copy for
+ * offline use (#361). A file with errors is refused with a message naming
  * `config:check`, so devices keep the copy they have rather than scout with a broken one.
  *
  * Not behind the join code: v5 served the same file to anyone, and it holds no secrets.

@@ -11,6 +11,10 @@
  * Submitting keeps the match on the device, then sends it (#360, `src/scouter/sync.ts`): at once,
  * whenever the connection comes back, and every minute while any is left. A match not sent is
  * shown as a QR code (SC-41) and stays in the pending list (OF-2, BL-93) until the server has it.
+ *
+ * Offline (#361, docs/spec/18): the service worker keeps the app, so the page opens with no
+ * connection, and with no connection the waiting page lets the scouter type the match and team
+ * and scout it (OF-1, SC-10).
  */
 import Image from "next/image";
 import Link from "next/link";
@@ -19,6 +23,7 @@ import { Button } from "@/components/ui/button";
 import type { MatchScoutingConfig } from "@/config/types";
 import { newNonce } from "@/data/nonce";
 import { cn } from "@/lib/utils";
+import { registerServiceWorker } from "@/offline/register";
 import { call, httpApi } from "@/scouter/api";
 import { Connection, type ConnectionStatus } from "@/scouter/connection";
 import {
@@ -30,23 +35,29 @@ import {
 } from "@/scouter/device";
 import {
   assignmentPrompt,
+  beginManualMatch,
   beginMatch,
+  closesUnstarted,
   finishMatch,
   keyOf,
   reconcile,
+  registryHas,
   shouldEnter,
   started,
   viewMatch,
   type FinishedMatch,
+  type MatchKey,
 } from "@/scouter/match";
 import { browserRecords, type PendingRecord, type RecordStore } from "@/scouter/records";
-import { signOut as signOutOfRegistry } from "@/scouter/sign-in";
+import { refreshSchedule, signOut as signOutOfRegistry } from "@/scouter/sign-in";
 import { Syncer, type SyncOutcome } from "@/scouter/sync";
 import { matchLabel } from "@/schedule/labels";
 import type { SessionState } from "@/scouting/session";
 import type { DeviceAction } from "@/sessions/runtime";
-import type { DeviceMessage, DeviceView } from "@/sessions/registry";
+import type { Alliance, DeviceMessage, DeviceView } from "@/sessions/registry";
 import { Dialog } from "./dialog";
+import { InstallPrompt } from "./install-prompt";
+import { ManualMatchForm } from "./manual-match-form";
 import { MatchPage } from "./match-page";
 import { PendingList } from "./pending-list";
 import { QrSheet } from "./qr-sheet";
@@ -91,9 +102,12 @@ export function ScoutingApp() {
   const api = useMemo(() => httpApi(), []);
   const [, setVersion] = useState(0);
   const refresh = useCallback(() => setVersion((v) => v + 1), []);
-  const [connection, setConnection] = useState<{ status: ConnectionStatus; detail?: string }>({
-    status: "not-connected",
-  });
+  // `tried`: the connection has reported once, so "not connected" is known rather than assumed.
+  const [connection, setConnection] = useState<{
+    status: ConnectionStatus;
+    detail?: string;
+    tried?: boolean;
+  }>({ status: "not-connected" });
   const [notice, setNotice] = useState<Notice | null>(null);
   const [info, setInfo] = useState<string | null>(null);
   const [signedOutReason, setSignedOutReason] = useState<string | null>(null);
@@ -111,6 +125,9 @@ export function ScoutingApp() {
   } | null>(null);
   const opened = useRef<Promise<RecordStore> | null>(null);
   const openRecords = useCallback(() => (opened.current ??= browserRecords()), []);
+
+  // The app itself is kept for opening with no connection (OF-1, OF-5).
+  useEffect(registerServiceWorker, []);
 
   const signedIn = store.signedIn();
   const view = store.view();
@@ -218,8 +235,7 @@ export function ScoutingApp() {
     const current = store.match();
     const config = store.config();
     // A robot not yet started that the registry no longer gives this scouter closes.
-    const m = viewMatch(view);
-    if (current && !started(current.match) && (!m || keyOf(m) !== keyOf(current.match)))
+    if (current && !started(current.match) && closesUnstarted(view, current.match))
       store.clearMatch();
     if (config && view && shouldEnter(view, store.match()?.match ?? null, store.done())) {
       const who = store.signedIn()!;
@@ -280,7 +296,12 @@ export function ScoutingApp() {
       if (message.kind === "unassigned") {
         const current = store.match();
         const was = viewMatch(before);
-        const ours = current && (!was || keyOf(was) === keyOf(current.match));
+        // A match typed offline is the registry's only if it gave the scouter that robot.
+        const ours =
+          current &&
+          (current.match.manual
+            ? registryHas(before, current.match)
+            : !was || keyOf(was) === keyOf(current.match));
         if (ours && started(current.match)) {
           if (message.reason === "released") {
             leaveMatch("released");
@@ -323,7 +344,7 @@ export function ScoutingApp() {
       store,
       api,
       handlers: {
-        status: (status, detail) => setConnection({ status, detail }),
+        status: (status, detail) => setConnection({ status, detail, tried: true }),
         message: onMessage,
         // Ignored after signing out here: the registry's own sign-out message follows it.
         signedOut: (reason) => {
@@ -341,11 +362,15 @@ export function ScoutingApp() {
     };
   }, [scouterId, store, api, onMessage, signOutHere]);
 
-  // A connection that opens is the server back: send what waited (RT-21, RT-28).
+  // A connection that opens is the server back: send what waited (RT-21, RT-28), and read the
+  // schedule for the next time it drops (OF-1).
   const connected = connection.status === "connected";
   useEffect(() => {
     if (connected) void syncer?.sync();
   }, [connected, syncer]);
+  useEffect(() => {
+    if (connected) void refreshSchedule(store, api);
+  }, [connected, store, api]);
 
   // ------------------------------------------------------------ the scouter's own actions
   const onMatchChange = useCallback(
@@ -354,12 +379,14 @@ export function ScoutingApp() {
       if (!current) return;
       const before = current.match.state.status;
       const match = { ...current.match, state };
+      // The registry hears only of the robot it gave: a match typed offline may be another.
+      const tell = !match.manual || registryHas(store.view(), match);
       if (state.status === "submitted") {
         const record = finishMatch(match, Date.now());
         finish(record, current.config);
         setInfo("Sending…");
         refresh();
-        void act("finish").then(() => act("ready"));
+        if (tell) void act("finish").then(() => act("ready"));
         // SC-40, SC-41: sent, or shown as a QR code and kept for the next try.
         void (async () => {
           await keepFinished();
@@ -381,7 +408,7 @@ export function ScoutingApp() {
         return;
       }
       store.setMatch(match);
-      if (before === "pre-match" && state.status === "running") void act("start");
+      if (tell && before === "pre-match" && state.status === "running") void act("start");
     },
     [store, act, refresh, finish, keepFinished, send, openRecords],
   );
@@ -405,6 +432,26 @@ export function ScoutingApp() {
     else if (outcome.message) setInfo(outcome.message);
     else if (outcome.sent > 0)
       setInfo(`${outcome.sent} ${outcome.sent === 1 ? "match" : "matches"} sent.`);
+  };
+
+  /** Scout a match the scouter typed, with no connection (OF-1, SC-10). */
+  const scoutManually = (key: MatchKey, alliance: Alliance) => {
+    const config = store.config();
+    const who = store.signedIn();
+    if (!config || !who) return;
+    store.setMatch(
+      beginManualMatch(key, alliance, {
+        scouterId: who.scouterId,
+        eventId: store.settings().eventId,
+        config: config.config,
+        configVersion: config.version,
+        nonce: newNonce(),
+        now: Date.now(),
+      }),
+      config,
+    );
+    setInfo(null);
+    refresh();
   };
 
   const accept = () => {
@@ -458,6 +505,14 @@ export function ScoutingApp() {
       onSignOut={() => (active && started(active.match) ? setConfirm("sign-out") : void signOut())}
       onChangeJoinCode={changeJoinCode}
       onReset={() => setConfirm("reset")}
+      onLeaveMatch={
+        active?.match.manual && !started(active.match)
+          ? () => {
+              store.clearMatch();
+              refresh();
+            }
+          : undefined
+      }
       speed={speed}
     />
   );
@@ -542,8 +597,12 @@ export function ScoutingApp() {
       />
     );
   } else {
+    // SC-10: with no connection, the scouter can type a match; known once the connection tried.
+    const typing =
+      connection.tried === true && connection.status !== "connected" && store.config() !== null;
     page = (
       <WaitingPage
+        compact={typing}
         statusLine={
           <header className="flex h-10 items-center border-b px-2 text-sm">{statusParts()}</header>
         }
@@ -560,6 +619,16 @@ export function ScoutingApp() {
             {configError}
           </p>
         )}
+        {typing && (
+          <ManualMatchForm
+            key={waitingFor ? keyOf(waitingFor) : "none"}
+            assigned={waitingFor}
+            assignedAlliance={waitingFor ? (view?.alliance ?? null) : null}
+            schedule={store.schedule()?.matches ?? []}
+            eventKnown={settings.eventId !== null}
+            onScout={scoutManually}
+          />
+        )}
         {pendingList}
       </WaitingPage>
     );
@@ -569,6 +638,7 @@ export function ScoutingApp() {
   return (
     <>
       {page}
+      <InstallPrompt store={store} show={!active && !qr} />
       {prompt && !notice && (
         <Dialog title="Match information" actions={<Button onClick={accept}>OK</Button>}>
           {prompt}

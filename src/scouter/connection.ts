@@ -9,9 +9,10 @@
  * - A stream that has sent nothing, not even its 20 s heartbeat, for 45 s is taken for dead
  *   and reopened, which catches a Wi-Fi change that leaves the old connection hanging.
  * - The registry no longer knowing the scouter (a sign-in made offline, a server whose active
- *   event changed back) signs them in again with the details the device kept. Only a refusal a
- *   person must act on, another device taking the session or a wrong join code, signs the device
- *   out.
+ *   event changed back) signs them in again with the details the device kept. So does a session
+ *   the registry still binds to another device when this device's sign-in was made offline: that
+ *   sign-in is the newer one (#361). Only a refusal a person must act on, another device taking
+ *   the session or a wrong join code, signs the device out.
  */
 import type { DeviceMessage } from "@/sessions/registry";
 import type { ScouterApi } from "./api";
@@ -108,8 +109,12 @@ export class Connection {
         await this.pause(this.nextDelay());
         continue;
       }
-      if (outcome.status === 401 && outcome.error === "not-signed-in") {
-        // The registry has no session for this scouter: sign in again, once without waiting.
+      if (
+        outcome.status === 401 &&
+        (outcome.error === "not-signed-in" || (outcome.error === "other-device" && who.offline))
+      ) {
+        // The registry has no session for this scouter, or an older one on another device: sign
+        // in again, once without waiting.
         if (signedInAgain) await this.pause(this.nextDelay());
         signedInAgain = true;
         const result = await signIn(store, api, { id: who.scouterId, name: who.name });

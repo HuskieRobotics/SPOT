@@ -9,9 +9,12 @@
  *   assignment can be withdrawn and the screen closes (BL-54).
  * - What the device did and the registry has not heard (a start, a finish, an OK pressed while
  *   the connection was down) is sent again when the registry next says where the scouter is.
+ * - With no connection, the scouter can type the match and team and scout it (OF-1, SC-10, #361).
+ *   The registry did not send them, so it neither closes that match nor hears of it, unless it
+ *   gave the scouter the same robot.
  */
 import type { MatchScoutingConfig } from "@/config/types";
-import type { TeamKey } from "@/data/team";
+import { toTeamKey, type TeamKey } from "@/data/team";
 import type { Action, MatchLevel, ObjectIdHex } from "@/data/types";
 import { matchLabel } from "@/schedule/labels";
 import { holdingKey, type Alliance, type DeviceView } from "@/sessions/registry";
@@ -38,6 +41,8 @@ export interface ActiveMatch extends MatchKey {
   enteredAt: number;
   configVersion: string;
   state: SessionState;
+  /** Typed by the scouter with no connection (OF-1, SC-10): the registry did not send them. */
+  manual?: true;
 }
 
 /** A match scouted on this device, kept until the server has it (#360, OF-2). */
@@ -91,21 +96,21 @@ export function shouldEnter(
   return !done.includes(keyOf(m));
 }
 
-/** A new match for the robot the registry sent the scouter to. */
-export function beginMatch(
-  view: DeviceView,
-  args: {
-    scouterId: string;
-    eventId: ObjectIdHex | null;
-    config: MatchScoutingConfig;
-    configVersion: string;
-    nonce: string;
-    now: number;
-  },
-): ActiveMatch {
+export interface BeginArgs {
+  scouterId: string;
+  eventId: ObjectIdHex | null;
+  config: MatchScoutingConfig;
+  configVersion: string;
+  nonce: string;
+  now: number;
+}
+
+function newMatch(key: MatchKey, alliance: Alliance, args: BeginArgs): ActiveMatch {
   return {
-    ...viewMatch(view)!,
-    alliance: view.alliance!,
+    level: key.level,
+    number: key.number,
+    team: key.team,
+    alliance,
     scouterId: args.scouterId,
     eventId: args.eventId,
     nonce: args.nonce,
@@ -113,6 +118,76 @@ export function beginMatch(
     configVersion: args.configVersion,
     state: initialState(args.config),
   };
+}
+
+/** A new match for the robot the registry sent the scouter to. */
+export function beginMatch(view: DeviceView, args: BeginArgs): ActiveMatch {
+  return newMatch(viewMatch(view)!, view.alliance!, args);
+}
+
+/** A match the scouter typed, with no connection (OF-1, SC-10). */
+export function beginManualMatch(key: MatchKey, alliance: Alliance, args: BeginArgs): ActiveMatch {
+  return { ...newMatch(key, alliance, args), manual: true };
+}
+
+/** Whether the registry gave the scouter this robot, so it hears what they do with it. */
+export function registryHas(view: DeviceView | null, m: MatchKey): boolean {
+  const assigned = viewMatch(view);
+  return assigned !== null && keyOf(assigned) === keyOf(m);
+}
+
+/**
+ * Whether a match not yet started closes because of what the registry says (BL-54): the
+ * registry gave the scouter no robot or another one. A match the scouter typed (OF-1) closes
+ * only for another robot: the registry not knowing it is no reason.
+ */
+export function closesUnstarted(view: DeviceView | null, active: ActiveMatch): boolean {
+  const assigned = viewMatch(view);
+  if (active.manual) return assigned !== null && keyOf(assigned) !== keyOf(active);
+  return assigned === null || keyOf(assigned) !== keyOf(active);
+}
+
+/** A match in the schedule the device keeps (#361): which teams are on each alliance. */
+export interface ScheduleRow {
+  level: MatchLevel;
+  number: number;
+  red: (TeamKey | null)[];
+  blue: (TeamKey | null)[];
+}
+
+/** The team's alliance in that match, by the schedule, or null when the schedule does not say. */
+export function allianceIn(schedule: readonly ScheduleRow[], m: MatchKey): Alliance | null {
+  const row = schedule.find((r) => r.level === m.level && r.number === m.number);
+  if (row?.red.includes(m.team)) return "red";
+  if (row?.blue.includes(m.team)) return "blue";
+  return null;
+}
+
+/** Playoff matches are numbered 1 to 16, as the field shows them (RT-22a). */
+const MAX_NUMBER: Record<MatchLevel, number> = { qual: 999, playoff: 16 };
+
+/** The match and team a scouter typed (SC-10), or what to fix. A B team is allowed. */
+export function checkManualMatch(typed: {
+  level: MatchLevel;
+  number: string;
+  team: string;
+}): { ok: true; key: MatchKey } | { ok: false; message: string } {
+  const number = Number(typed.number.trim());
+  if (!/^\d+$/.test(typed.number.trim()) || number < 1 || number > MAX_NUMBER[typed.level])
+    return {
+      ok: false,
+      message:
+        typed.level === "playoff"
+          ? "Type the playoff match number, 1 to 16, as the field shows it."
+          : "Type the match number the field shows.",
+    };
+  const team = toTeamKey(typed.team);
+  if (!team)
+    return {
+      ok: false,
+      message: "Type the team number, such as 3061, or 3061B for a team's second robot.",
+    };
+  return { ok: true, key: { level: typed.level, number, team } };
 }
 
 /** The record of a match: what it recorded, as analysis receives it (DV-1). */

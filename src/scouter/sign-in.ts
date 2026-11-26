@@ -44,6 +44,25 @@ export async function refreshRoster(
 }
 
 /**
+ * Read the active event and its schedule and keep them (#361): the event a match typed offline is
+ * filed under, and the alliance each team is on (OF-1, SC-28). Nothing changes when the server
+ * cannot be reached or refuses.
+ */
+export async function refreshSchedule(
+  store: DeviceStore,
+  api: ScouterApi,
+  now = Date.now(),
+): Promise<boolean> {
+  const joinCode = store.joinCode();
+  if (!joinCode) return false;
+  const reply = await api.schedule(joinCode);
+  if (!reply.ok) return false;
+  store.setSchedule(reply.value.eventId, reply.value.matches, now);
+  store.setSettings({ ...store.settings(), eventId: reply.value.eventId });
+  return true;
+}
+
+/**
  * Send the scouters added on this device (SEC-7). Each one the server created or already had
  * leaves the pending list; a student ID on the roster under another name is reported.
  */
@@ -86,7 +105,7 @@ export async function signIn(
     return { status: "online", name: reply.value.name, view: reply.value.view };
   }
   if (reply.offline) {
-    store.setSignedIn({ scouterId: who.id, name: who.name, at: now });
+    store.setSignedIn({ scouterId: who.id, name: who.name, at: now, offline: true });
     return { status: "offline", name: who.name };
   }
   if (reply.error === "join-code") return { status: "join-code", message: reply.message };

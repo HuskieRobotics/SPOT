@@ -4,7 +4,7 @@ import { E2E_ADMIN_PASSWORD } from "./tests/e2e/fixtures";
 const port = Number(process.env.PORT || 3000);
 // Tests that choose the current match drive the one registry every test shares: they run one
 // project at a time, after the others, so no other device is handed their robots.
-const REGISTRY = /(scouter-stream|scouting-client|admin-page)\.spec\.ts/;
+const REGISTRY = /(scouter-stream|scouting-client|offline|admin-page)\.spec\.ts/;
 
 export { E2E_ADMIN_PASSWORD };
 
@@ -18,6 +18,9 @@ export default defineConfig({
   use: {
     baseURL: `http://localhost:${port}`,
     trace: "on-first-retry",
+    // The service worker (#361) is tested on its own (tests/e2e/offline.spec.ts); elsewhere it
+    // would keep each test's pages and hide what the server sends.
+    serviceWorkers: "block",
   },
   projects: [
     // Scouters primarily use personal phones (docs/spec/02, NF-1); test the mobile viewport first.
@@ -36,11 +39,18 @@ export default defineConfig({
       testMatch: /scouting-client\.spec\.ts/,
       dependencies: ["scouter-stream"],
     },
+    // Offline (#361, T-8): the service worker keeps the app; signs in to the registry once back.
+    {
+      name: "offline",
+      use: { ...devices["Pixel 7 landscape"], serviceWorkers: "allow" },
+      testMatch: /offline\.spec\.ts/,
+      dependencies: ["scouting-client"],
+    },
     {
       name: "admin-page",
       use: { ...devices["Desktop Chrome"] },
       testMatch: /admin-page\.spec\.ts/,
-      dependencies: ["scouting-client"],
+      dependencies: ["offline"],
     },
   ],
   webServer: {

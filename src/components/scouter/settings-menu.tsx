@@ -3,7 +3,8 @@
 /**
  * The settings menu (SC-3, SC-4, OF-8), on every page of the scouting client: the theme, the
  * analysis and admin pages, feedback, reload, the join code, sign-out and resetting the app's
- * data. During a match it also holds the 2× clock for scouting from a video played at double
+ * data. Before the start of a match typed offline, it can leave that match (OF-1). During a match
+ * it also holds the 2× clock for scouting from a video played at double
  * speed (BL-230): two taps and a confirmation away, so it is never pressed by accident.
  */
 import { Menu } from "lucide-react";
@@ -19,6 +20,8 @@ export interface SettingsMenuProps {
   onSignOut?(): void;
   onChangeJoinCode(): void;
   onReset(): void;
+  /** Before the start of a match typed offline: close it (OF-1). */
+  onLeaveMatch?(): void;
   /** During a match: the clock's speed and how to change it (BL-230). */
   speed?: { value: number; set(speed: number): void };
 }
@@ -31,6 +34,7 @@ export function SettingsMenu({
   onSignOut,
   onChangeJoinCode,
   onReset,
+  onLeaveMatch,
   speed,
 }: SettingsMenuProps) {
   const [open, setOpen] = useState(false);
@@ -87,6 +91,11 @@ export function SettingsMenu({
                   Back to normal speed
                 </button>
               ))}
+            {onLeaveMatch && (
+              <button type="button" className={item} onClick={choose(onLeaveMatch)}>
+                Leave this match
+              </button>
+            )}
             <a className={item} href="/analysis" target="_blank" rel="noopener" onClick={close}>
               Analysis
             </a>

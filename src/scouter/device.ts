@@ -1,7 +1,7 @@
 /**
  * What a device remembers across reloads and restarts (RT-26, SEC-2, SEC-7, #356, #359): its
- * device id, the event's join code, the roster it last read, scouters added on it but not yet
- * sent, who is signed in on it, what the server last said about them, the scouting
+ * device id, the event's join code, the roster and schedule it last read, scouters added on it
+ * but not yet sent, who is signed in on it, what the server last said about them, the scouting
  * configuration, the match being scouted, and which matches it has finished.
  *
  * Kept in `localStorage`, which survives a reload and a browser restart. Where storage is
@@ -13,7 +13,7 @@ import { THEME_KEY } from "@/lib/theme";
 import type { MatchScoutingConfig } from "@/config/types";
 import type { ObjectIdHex } from "@/data/types";
 import type { DeviceView } from "@/sessions/registry";
-import type { ActiveMatch, FinishedMatch } from "./match";
+import type { ActiveMatch, FinishedMatch, ScheduleRow } from "./match";
 
 export interface KeyValue {
   getItem(key: string): string | null;
@@ -30,6 +30,11 @@ export interface SignedIn {
   scouterId: string;
   name: string;
   at: number;
+  /**
+   * Signed in with no connection: the registry has not heard of it, so a session it still binds
+   * to another device is older, and this device takes it over on reconnecting (#361).
+   */
+  offline?: true;
 }
 
 const KEYS = {
@@ -46,6 +51,8 @@ const KEYS = {
   matchConfig: "spot.matchConfig",
   done: "spot.done",
   finishing: "spot.finishing",
+  schedule: "spot.schedule",
+  installAsked: "spot.installAsked",
 } as const;
 
 /** What an admin set for every device, as the stream last sent it (A-19, SC-28). */
@@ -174,6 +181,24 @@ export class DeviceStore {
         .map((s) => ({ ...s, pending: false })),
       ...pending.map((s) => ({ ...s, pending: true })),
     ].sort(byName);
+  }
+
+  /** The active event's schedule as last read, for typing a match offline (OF-1, SC-28). */
+  schedule(): { eventId: ObjectIdHex; matches: ScheduleRow[]; readAt: number } | null {
+    return this.read(KEYS.schedule);
+  }
+
+  setSchedule(eventId: ObjectIdHex, matches: ScheduleRow[], readAt: number) {
+    this.write(KEYS.schedule, { eventId, matches, readAt });
+  }
+
+  /** Whether the install prompt has been shown on this device (SC-5): it is shown once. */
+  installAsked(): boolean {
+    return this.read<boolean>(KEYS.installAsked) === true;
+  }
+
+  setInstallAsked() {
+    this.write(KEYS.installAsked, true);
   }
 
   /** Who is signed in on this device; a reload keeps them (RT-26). */

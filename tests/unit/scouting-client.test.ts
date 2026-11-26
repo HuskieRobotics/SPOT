@@ -1,8 +1,8 @@
 /**
  * The scouting client's rules (#359), without a browser: reading the registry's stream and
  * reconnecting (RT-5 to RT-8, OF-7, F-17), when a match opens, closes or is kept (RT-6, RT-27,
- * RT-28, BL-54), what a device remembers across a reload (RT-26, F-23), and the configuration
- * route (CS-17, OF-8).
+ * RT-28, BL-54), a match typed with no connection (OF-1, SC-10), what a device remembers across
+ * a reload (RT-26, F-23), and the configuration route (CS-17, OF-8).
  */
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
@@ -13,12 +13,18 @@ import type { ScouterApi } from "@/scouter/api";
 import { Connection, parseSse, type ConnectionStatus } from "@/scouter/connection";
 import { DeviceStore, memoryStore } from "@/scouter/device";
 import {
+  allianceIn,
   assignmentPrompt,
+  beginManualMatch,
   beginMatch,
+  checkManualMatch,
+  closesUnstarted,
   finishMatch,
   keyOf,
   reconcile,
+  registryHas,
   shouldEnter,
+  toSubmission,
   type ActiveMatch,
 } from "@/scouter/match";
 import { advance, press, recordedActions, setSpeed } from "@/scouting/session";
@@ -89,10 +95,15 @@ class FakeStream {
 }
 
 /** A server whose stream route answers each request with the next reply queued. */
-function harness(replies: (() => Response | Promise<Response>)[]) {
+function harness(replies: (() => Response | Promise<Response>)[], signedInOffline = false) {
   const store = new DeviceStore(memoryStore());
   store.setJoinCode("TSTCDE");
-  store.setSignedIn({ scouterId: "700001", name: "Alex Rivera", at: 1 });
+  store.setSignedIn({
+    scouterId: "700001",
+    name: "Alex Rivera",
+    at: 1,
+    ...(signedInOffline ? { offline: true as const } : {}),
+  });
   const statuses: ConnectionStatus[] = [];
   const messages: DeviceMessage[] = [];
   const signedOut: string[] = [];
@@ -184,6 +195,17 @@ describe("OF-7, F-17: the connection's status, and reconnecting", () => {
     h.connection.stop();
   });
 
+  it("OF-1: a sign-in made offline takes over a session the registry still binds to an older device", async () => {
+    const stream = new FakeStream();
+    const h = harness([refused(401, "other-device"), () => stream.response], true);
+    await until(() => h.statuses.includes("connected"));
+    expect(h.signIns).toEqual(["700001"]);
+    expect(h.signedOut).toEqual([]);
+    // Now the registry has heard of it: another device taking the session signs this one out.
+    expect(h.store.signedIn()).not.toHaveProperty("offline");
+    h.connection.stop();
+  });
+
   it("signs the device out when another device took the session, or the registry says so", async () => {
     const other = harness([refused(401, "other-device", "You signed in on another device.")]);
     await other.done;
@@ -258,6 +280,84 @@ describe("RT-27, RT-28: catching the registry up after a lost connection", () =>
     ]);
     expect(reconcile(view({ status: "scouting", accepted: true }), running, [], null)).toEqual([]);
     expect(reconcile(view({ team: null }), null, [done], null)).toEqual([]);
+  });
+});
+
+describe("OF-1, SC-10, SC-11: a match typed with no connection", () => {
+  const args = {
+    scouterId: "700003",
+    eventId: "69a5ac455b39b683634e795e",
+    config,
+    configVersion: "abc123",
+    nonce: "m4nual0000ab",
+    now: 5_000,
+  };
+  const schedule = [
+    { level: "qual" as const, number: 1, red: ["101", "102", "103"], blue: ["104", "3061B", null] },
+  ];
+
+  it("takes a match number and a team, a B team included, and says what to fix", () => {
+    expect(checkManualMatch({ level: "qual", number: " 12 ", team: "3061b" })).toEqual({
+      ok: true,
+      key: { level: "qual", number: 12, team: "3061B" },
+    });
+    expect(checkManualMatch({ level: "playoff", number: "16", team: "frc254" })).toMatchObject({
+      ok: true,
+      key: { team: "254" },
+    });
+    for (const number of ["", "0", "1.5", "x", "1000"])
+      expect(checkManualMatch({ level: "qual", number, team: "3061" })).toMatchObject({
+        ok: false,
+        message: "Type the match number the field shows.",
+      });
+    expect(checkManualMatch({ level: "playoff", number: "17", team: "3061" })).toMatchObject({
+      ok: false,
+      message: expect.stringMatching(/1 to 16/),
+    });
+    for (const team of ["", "0", "3061BB", "B3061"])
+      expect(checkManualMatch({ level: "qual", number: "1", team })).toMatchObject({
+        ok: false,
+        message: expect.stringMatching(/3061B for a team's second robot/),
+      });
+  });
+
+  it("SC-28: the alliance comes from the schedule the device keeps, when it has the team", () => {
+    expect(allianceIn(schedule, { level: "qual", number: 1, team: "102" })).toBe("red");
+    expect(allianceIn(schedule, { level: "qual", number: 1, team: "3061B" })).toBe("blue");
+    expect(allianceIn(schedule, { level: "qual", number: 1, team: "3061" })).toBeNull();
+    expect(allianceIn(schedule, { level: "qual", number: 2, team: "101" })).toBeNull();
+    expect(allianceIn(schedule, { level: "playoff", number: 1, team: "101" })).toBeNull();
+  });
+
+  it("scouts with the full grid, and its record is filed like any other", () => {
+    const key = { level: "qual" as const, number: 1, team: "3061B" };
+    const m = beginManualMatch(key, "red", args);
+    expect(m).toMatchObject({ ...key, alliance: "red", manual: true, scouterId: "700003" });
+    expect(m.state).toEqual(begin().state);
+    expect(toSubmission(finishMatch(m, 9_000))).toMatchObject({
+      team: "3061B",
+      matchNumber: 1,
+      coverage: "full",
+    });
+  });
+
+  it("the registry closes it before the start only for another robot, and hears only of its own", () => {
+    const key = { level: "qual" as const, number: 12, team: "3061" };
+    const typed = beginManualMatch(key, "blue", args);
+    const other = beginManualMatch({ ...key, team: "254" }, "blue", args);
+    const unassigned = view({ team: null, matchLevel: null, matchNumber: null, alliance: null });
+    expect(closesUnstarted(unassigned, typed)).toBe(false);
+    expect(closesUnstarted(null, typed)).toBe(false);
+    expect(closesUnstarted(view(), typed)).toBe(false);
+    expect(closesUnstarted(view(), other)).toBe(true);
+    // A match the registry sent closes when the registry takes it back (BL-54).
+    expect(closesUnstarted(unassigned, begin())).toBe(true);
+    expect(closesUnstarted(view(), begin())).toBe(false);
+    expect(registryHas(view(), typed)).toBe(true);
+    expect(registryHas(view(), other)).toBe(false);
+    expect(registryHas(unassigned, typed)).toBe(false);
+    // Not opened again once finished, and the registry is caught up when it gave that robot.
+    expect(shouldEnter(view({ entered: true }), null, [keyOf(typed)])).toBe(false);
   });
 });
 
