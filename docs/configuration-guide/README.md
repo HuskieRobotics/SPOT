@@ -26,7 +26,8 @@ The files for the season SPOT is using right now are in the `config/` folder:
 | `analysis-modules.json`  | The charts and numbers the analysis pages show                                  | [Analysis modules](analysis-modules.md)       |
 
 Past seasons are kept in `config/seasons/<year>/`, so you can look at how an earlier game was
-set up. `config/seasons/2025/` is the best example of a typical game.
+set up, and the analysis pages read that year's events with them. `config/seasons/2025/` is the
+best example of a typical game.
 
 ## What you need
 

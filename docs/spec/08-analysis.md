@@ -71,6 +71,43 @@ TBA enrichment and the pipeline on it (TR-9), so the server never calls its own 
   show the team view. Team-view modules are (re)created on every `loadTeams` call.
 - **AN-15** Side column enabled only if any module has `position: "side"`.
 
+## v6: the dashboard (`/analysis`, #383)
+
+The page is drawn in the browser only (`src/components/analysis/`), and its logic is plain
+TypeScript tested without a page (`src/analysis/dashboard.ts`, `search.ts`, `teams.ts`; tests
+`analysis-dashboard` and `tests/e2e/analysis.spec.ts`). Decided 2026-11-26:
+
+- **AN-1, AN-2, AN-4** A header with the logo, "SPOT Analysis" and the event; a team list with
+  its search; and a welcome view or one team's view. The welcome view gives the event, how many
+  scouting records and teams it has, and what is wrong with the analysis configuration. A loading
+  message shows while data arrives. At 1100 px or narrower, as in v5, the team list opens from a
+  **Teams** button and takes the screen; choosing a team closes it.
+- **AN-3, AN-11a, DV-12b, #209** A standard select lists the events by code, the active one
+  marked "scouting now" and opened first. The address keeps the event and the team
+  (`/analysis?event=2025ilch_official&team=3061`), so a reload or a shared link opens the same
+  view.
+- **CS-17: an event's season.** Each event is read with the configuration of the season named
+  for its year (`config/seasons/2025` for 2025ilch), or with the active one when there is no such
+  folder. v5 had one configuration at a time, so a past season's event read with the new game's
+  files showed nonsense.
+- **AN-7, AN-9, AN-10, TR-9** The browser enriches the performances with TBA's data and runs the
+  pipeline, exactly as `npm run oracle:compare` does (a test compares every team's values). TBA's
+  data is optional: when it can't be read, a note says why and how old the copy is, and the
+  dashboard shows scouting data without TBA's results and OPRs.
+- **TR-10** What config:check finds in the season's analysis files, and what the pipeline could
+  not run, are listed on the welcome view for an admin. A problem never hides the page.
+- **AN-12, AN-13** The list is every team with data, number and nickname. Search ranks the exact
+  number, numbers starting with the query, names starting with it, words starting with it, then
+  anywhere, and forgives one typo or letters in order, as v5's `fuzzysort` did. It is written in
+  SPOT rather than added as a dependency.
+- **AN-14, AN-15** The team view shows the team modules in a main column and, when a module asks
+  for it, a side column. v5 hid a team's modules when the team had no data, but v6 lists only
+  teams with data, so that rule has nothing to hide. Until the modules are built (#384 to #386),
+  each shows its name and the values it reads.
+- **AN-18a, RT-34, RT-36** The team view says how many of its matches are flagged for review or
+  cover only part of the match.
+- The scouting client's menu and the admin page link to the dashboard.
+
 ## Compare Team Scores (bubble graph)
 
 - **AN-16** Three selects (X, Y, Z size) populated with `averageScores.<key>` ("Average

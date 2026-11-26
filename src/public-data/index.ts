@@ -7,6 +7,7 @@
  * calls the server's own routes (D-5, #90).
  */
 import type { Db } from "mongodb";
+import { ACTIVE_SEASON, listSeasons } from "@/config/load";
 import { getEvent, findEventByCode, publicEvents } from "@/db/events";
 import { performanceCollection } from "@/db/performances";
 import { getSettings } from "@/db/settings";
@@ -25,6 +26,17 @@ export interface EventSummary {
   label: string;
   /** The event scouters are writing to now (AN-11a). */
   active: boolean;
+  /**
+   * The season whose configuration reads this event: the season folder named for the event's
+   * year (`config/seasons/2025` for 2025ilch), or the active season when there is none.
+   */
+  season: string;
+}
+
+/** The season whose configuration reads an event of this TBA key (CS-17). */
+export function seasonFor(tbaKey: string, root: string = process.cwd()): string {
+  const year = tbaKey.slice(0, 4);
+  return listSeasons(root).some((s) => s.name === year) ? year : ACTIVE_SEASON;
 }
 
 /** Every event, newest code first, saying which is active. */
@@ -35,6 +47,7 @@ export async function eventList(db: Db): Promise<EventSummary[]> {
     tbaKey: e.tbaKey,
     label: e.label,
     active: e._id === activeEventId,
+    season: seasonFor(e.tbaKey),
   }));
 }
 
@@ -44,6 +57,7 @@ export function summaryOf(event: SpotEvent, activeEventId: string | null): Event
     tbaKey: event.tbaKey,
     label: event.label,
     active: event._id === activeEventId,
+    season: seasonFor(event.tbaKey),
   };
 }
 

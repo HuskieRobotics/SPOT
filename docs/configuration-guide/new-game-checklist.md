@@ -15,7 +15,8 @@ run `npm run config:check` and fix every error.**
 ## 1. Kickoff day: set up
 
 - [ ] **Put last season away.** Copy `config/*.json` (the three files) to
-      `config/seasons/<last year>/`, and in each copy change the `"$schema"` line to start
+      `config/seasons/<last year>/`, named exactly the year (`2026`): the analysis pages read
+      last season's events with it. In each copy change the `"$schema"` line to start
       `"../../../src/config/schema/`.
       _Check:_ `npm run config:check -- config/seasons/<last year>` finds what it found in
       `config/` before. [How](new-season.md#1-put-last-season-away)

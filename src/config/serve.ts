@@ -14,7 +14,14 @@
  */
 import { checkConfiguration } from "./check";
 import type { Finding } from "./check/report";
-import { ACTIVE_SEASON, findSeason, readSeason, versionOf, type ConfigSources } from "./load";
+import {
+  ACTIVE_SEASON,
+  findSeason,
+  readSeason,
+  versionOf,
+  type ConfigSources,
+  type Season,
+} from "./load";
 
 /** `body` as JSON with `version` as its `ETag`, or 304 when the request already has it. */
 export function withVersion(request: Request, version: string, body: unknown): Response {
@@ -73,33 +80,53 @@ export function checkAnalysisFile(kind: AnalysisFile, sources: ConfigSources): S
   return { version: versionOf(source), etag, config: problem ? null : config, findings, problem };
 }
 
-const checked = new Map<AnalysisFile, ServedFile>();
+const checked = new Map<string, ServedFile>();
 
-/** The active season's analysis file, as checked; checked again only when a file changed. */
-export function analysisFile(kind: AnalysisFile): ServedFile | null {
-  const sources = readSeason(findSeason(ACTIVE_SEASON)!);
+/** A season's analysis file, as checked; checked again only when a file changed. */
+export function analysisFile(kind: AnalysisFile, season: Season): ServedFile | null {
+  const sources = readSeason(season);
   if (sources[kind] === undefined) return null;
   const etag = etagOf(kind, sources);
-  const kept = checked.get(kind);
+  const key = `${season.name}/${kind}`;
+  const kept = checked.get(key);
   if (kept?.etag === etag) return kept;
   const served = checkAnalysisFile(kind, sources)!;
-  checked.set(kind, served);
+  checked.set(key, served);
   return served;
+}
+
+/**
+ * The season a request names by `?season=<name>` (as the events list gives it), or the active
+ * season; null for a name no season has.
+ */
+export function requestedSeason(request: Request): Season | null {
+  const name = new URL(request.url).searchParams.get("season") ?? ACTIVE_SEASON;
+  return findSeason(name) ?? null;
+}
+
+export function noSeason(request: Request): Response {
+  const name = new URL(request.url).searchParams.get("season");
+  return Response.json(
+    { error: "no-season", message: `There is no season ${name}.` },
+    { status: 404 },
+  );
 }
 
 /** The route's answer for an analysis file: `{ version, config, findings }`, or 503. */
 export function analysisFileResponse(request: Request, kind: AnalysisFile): Response {
-  const file = analysisFile(kind);
+  const season = requestedSeason(request);
+  if (!season) return noSeason(request);
+  const file = analysisFile(kind, season);
   if (!file)
     return Response.json(
-      { error: "config", message: `This server has no config/${kind}.json.` },
+      { error: "config", message: `This server has no ${season.folder}/${kind}.json.` },
       { status: 503 },
     );
   if (file.problem)
     return Response.json(
       {
         error: "config",
-        message: `${file.problem} An admin must fix it (npm run config:check says where).`,
+        message: `${file.problem.replace("config/", `${season.folder}/`)} An admin must fix it (npm run config:check says where).`,
         findings: file.findings,
       },
       { status: 503 },

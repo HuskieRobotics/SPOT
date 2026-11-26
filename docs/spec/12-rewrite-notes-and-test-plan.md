@@ -445,6 +445,8 @@ that a new feature can be verified not to break existing behavior. Requirements:
   `tests/e2e/admin-page.spec.ts` has an admin select a match and assign scouters;
   `tests/e2e/acceptance.spec.ts` (#363) runs both together and checks MongoDB. Scanning the code
   on the scanner page, and the analysis, edit and setup journeys, follow with Phases 3 and 4.
+  `tests/e2e/analysis.spec.ts` (#383) chooses an event, finds a team and opens it on the oracle's
+  migrated events; the bubble graph and Filter Teams follow with #387.
 - **T-8** Offline behavior is tested by loading the app, going offline in the browser
   harness, and asserting the scouting and analysis pages still function from cache. v6:
   `tests/e2e/offline.spec.ts` (#361) does so for the scouting client, reading its QR code back
