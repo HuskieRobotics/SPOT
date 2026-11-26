@@ -499,7 +499,7 @@
           }
         },
         {
-          "description": "Custom executable from an extension",
+          "description": "An extension executable (ADR 0005): its other fields are its options, which config:check checks against the extension's own schema (src/scouting/extensions, docs/extension-executables.md)",
           "properties": {
             "type": {
               "type": "string",
@@ -516,9 +516,6 @@
                   "multiplier"
                 ]
               }
-            },
-            "args": {
-              "type": "array"
             }
           }
         }

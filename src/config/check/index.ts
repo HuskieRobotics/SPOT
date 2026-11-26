@@ -6,8 +6,9 @@
  * 1. Each file is read as JSON and validated against its schema (docs/spec/20).
  * 2. Checks the schemas cannot express: references inside match-scouting.json (layers, buttons,
  *    phases, variables), and from the other files into it (the button and period ids options
- *    name, enrichment phases); whether a long match fits one QR code (CC-7); transformer names and options against the
- *    registry, extensions included (TR-14); module names.
+ *    name, enrichment phases); whether a long match fits one QR code (CC-7); transformer names
+ *    and options against the registry, extensions included (TR-14); extension executables' names
+ *    and options (#362); module names.
  * 3. The pipeline runs on generated matches (./generated.ts): paths nothing writes, values that
  *    are empty for everyone, rankings a team that never did anything drops out of.
  *
@@ -17,6 +18,7 @@
  */
 import type { TransformerRegistry } from "@/analysis/engine";
 import { createRegistry } from "@/analysis/transformers";
+import type { ExecutableSet } from "@/scouting/executables";
 import type { AnalysisModulesConfig, AnalysisPipelineConfig, MatchScoutingConfig } from "../types";
 import { validateConfig, type ConfigKind } from "../validate";
 import { checkModulesFile, checkPipelineFile } from "./analysis";
@@ -32,6 +34,8 @@ export { CONFIG_FILES, formatReport, type CheckReport, type Finding } from "./re
 export interface CheckOptions {
   /** The transformers to check pipeline entries against; the app's registry by default. */
   registry?: TransformerRegistry;
+  /** The extension executables buttons may name; the app's by default (#362). */
+  executables?: ExecutableSet;
   /** Run the pipeline on generated matches (CC-9 to CC-12); default true. */
   generated?: boolean;
 }
@@ -124,7 +128,7 @@ export function checkConfiguration(
   }
 
   const ms = valid["match-scouting"] ? (docs["match-scouting"] as MatchScoutingConfig) : null;
-  if (ms) checkMatchScouting(ms, report);
+  if (ms) checkMatchScouting(ms, report, options.executables);
   else if (docs["match-scouting"] !== undefined) {
     skipped.push(
       "checks within match-scouting.json, and of the ids other files name: fix the errors in match-scouting.json first.",

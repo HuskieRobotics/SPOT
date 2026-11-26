@@ -281,7 +281,7 @@ Phase 4.
 - **DM-15e** **Positions are encoded** (maintainer, 2026-11-24): a flag on every action, then x
   and y in 7 bits each when set (whole percentages, SC-32). v5 left them out, so heatmaps lost
   every QR-scanned match. Anything else in `other` cannot be carried, and the encoder refuses it;
-  extension executables (#362) must decide what they record.
+  extension executables record nothing (document 05 SC-38, #362), so only a position reaches it.
 - **DM-15f** **Text and size.** The bits, padded to whole bytes, are written as Base45 (RFC 9285)
   and drawn in the QR alphanumeric mode at error correction M: about 3% over raw bytes, against
   33% for v5's base64, and text any scanner returns unchanged. One code holds at most 2260 bytes

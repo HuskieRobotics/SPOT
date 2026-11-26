@@ -491,7 +491,7 @@ describe("CC-3: references within match-scouting.json", () => {
     ]);
   });
 
-  it("executables: a layer that does not exist, and a type that is not built in", () => {
+  it("executables: a layer that does not exist, and a type neither built in nor an extension (#362)", () => {
     const found = check((d) => {
       d.ms.layout.layers[0].buttons[0].executables = [
         { type: "layer", to: "layer-99" },
@@ -505,9 +505,9 @@ describe("CC-3: references within match-scouting.json", () => {
         'There is no layer "layer-99".',
       ],
       [
-        "warning",
+        "error",
         'layer "layer-0" › button "startGame" › executable 2 (layr) › type',
-        '"layr" is not a built-in executable, so pressing the button does nothing unless an extension provides it.',
+        'There is no executable "layr".',
       ],
     ]);
     expect(found[1].hint).toBe('Did you mean "layer"?');

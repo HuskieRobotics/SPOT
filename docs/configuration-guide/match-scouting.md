@@ -169,8 +169,10 @@ When the scouter presses Undo, each one is reversed.
 | `{ "type": "hide" }`                                                                         | Hide the button once pressed, for something that happens once per match. Undo shows it again.                                                                                                                                                                                                                     |
 | `{ "type": "multiplier", "count": 2 }`                                                       | Record the action `count` times with one press, such as "scored two at once".                                                                                                                                                                                                                                     |
 
-A programmer can add new executables; a type the list above doesn't have is passed on to that
-code as `{ "type": "...", "args": [ ... ] }`.
+A programmer can add new executables ([Writing an extension executable](../extension-executables.md)).
+One is written like a built-in, with its own fields, such as `{ "type": "pressLimit", "max": 3 }`.
+`npm run config:check` reports a type that is neither in the list above nor added by a
+programmer, and fields the executable does not accept.
 
 ## Variables, and buttons that depend on them
 
