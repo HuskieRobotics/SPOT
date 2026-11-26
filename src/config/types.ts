@@ -28,8 +28,11 @@ export type Executable =
   | { type: "clearHighlight" }
   | { type: "hide" }
   | { type: "multiplier"; count: number }
-  /** Custom executable provided by an extension; arguments are passed through. */
-  | { type: string; args?: unknown[] };
+  /**
+   * An extension executable (ADR 0005, #362): its other fields are its options, checked against
+   * the extension's own schema (src/scouting/extensions).
+   */
+  | { type: string; [option: string]: unknown };
 
 export interface Button {
   id: string;

@@ -25,6 +25,8 @@ import {
   withSpeed,
   type Clock,
 } from "./clock";
+import { appExecutables, runExtension, type ExecutableSet } from "./executables";
+import type { ExecutablePress, ExecutableView } from "./extension-api";
 
 /** How the event is set up for this scouter (SC-28). */
 export interface ScoutingSettings {
@@ -39,6 +41,8 @@ export const DEFAULT_SETTINGS: ScoutingSettings = { alliance: "red", fieldFlippe
 export interface ScoutingContext {
   config: MatchScoutingConfig;
   settings: ScoutingSettings;
+  /** The extension executables buttons may name; the app's (`src/scouting/extensions`) if absent. */
+  executables?: ExecutableSet;
 }
 
 /** A button on a layer. Ids repeat across layers (every layer has its own Undo). */
@@ -72,6 +76,7 @@ export interface EngagedLock {
 type Revert =
   | { kind: "variable"; name: string; previous: string | number | boolean | undefined }
   | { kind: "hidden"; key: string }
+  | { kind: "shown"; key: string }
   | { kind: "highlights"; previous: readonly string[] }
   | { kind: "segmentKind"; segment: string; previous: KindSelection | undefined }
   | { kind: "lock"; previous: EngagedLock | null }
@@ -558,9 +563,35 @@ function applyExecutables(
       case "multiplier":
         copies = Math.max(1, (executable as { count: number }).count);
         break;
-      default:
-        // An extension's executable (CS-7): it cannot change what is recorded here.
+      default: {
+        // An extension's executable (#362): it may change what the scouter sees, never what is
+        // recorded (SC-38), and undo puts back what it changed (T-10).
+        const extension = (context.executables ?? appExecutables()).get(executable.type);
+        // config:check reports an unknown type, and the server never sends such a file.
+        if (!extension) break;
+        const options: Record<string, unknown> = { ...executable };
+        delete options.type;
+        const before: ExecutableView = {
+          variables: next.variables,
+          highlights: next.highlights,
+          hidden: next.hidden,
+        };
+        const outcome = runExtension(extension, before, {
+          options,
+          ...pressesFor(next, ref, button, index),
+          config,
+          settings: context.settings,
+        });
+        if (!outcome.ok) {
+          console.error(
+            `The "${executable.type}" executable on button "${button.id}" failed: ${outcome.message}. The press was recorded without it.`,
+          );
+          break;
+        }
+        revert.push(...revertsFor(before, outcome.view));
+        next = { ...next, ...outcome.view };
         break;
+      }
     }
   }
 
@@ -584,6 +615,59 @@ function applyExecutables(
       : [];
   queue[index] = { ...entry, actions, revert: [...entry.revert, ...revert] };
   return { ...next, queue, awaitingPosition: awaiting ? index : next.awaitingPosition };
+}
+
+/** The press an executable runs for, and the presses before it, as an extension sees them. */
+function pressesFor(
+  state: SessionState,
+  ref: ButtonRef,
+  button: Button,
+  index: number | null,
+): { press: ExecutablePress; earlier: ExecutablePress[] } {
+  const seen = (e: Entry): ExecutablePress => ({
+    layer: e.layer,
+    button: e.button,
+    type: e.type,
+    ts: e.ts,
+    placement: e.placement,
+  });
+  if (index !== null) {
+    return { press: seen(state.queue[index]), earlier: state.queue.slice(0, index).map(seen) };
+  }
+  // An undo button's own executables: its press is not in the queue.
+  return {
+    press: {
+      layer: ref.layer,
+      button: button.id,
+      type: button.type,
+      ts: Math.max(0, state.ts),
+      placement: { ...state.placement },
+    },
+    earlier: state.queue.map(seen),
+  };
+}
+
+/** What undo must put back after an extension turned `before` into `after`. */
+function revertsFor(before: ExecutableView, after: ExecutableView): Revert[] {
+  const revert: Revert[] = [];
+  const names = new Set([...Object.keys(before.variables), ...Object.keys(after.variables)]);
+  for (const name of names) {
+    if (before.variables[name] !== after.variables[name]) {
+      revert.push({ kind: "variable", name, previous: before.variables[name] });
+    }
+  }
+  const same = (a: readonly string[], b: readonly string[]) =>
+    a.length === b.length && a.every((x, i) => x === b[i]);
+  if (!same(before.highlights, after.highlights)) {
+    revert.push({ kind: "highlights", previous: before.highlights });
+  }
+  for (const key of after.hidden) {
+    if (!before.hidden.includes(key)) revert.push({ kind: "hidden", key });
+  }
+  for (const key of before.hidden) {
+    if (!after.hidden.includes(key)) revert.push({ kind: "shown", key });
+  }
+  return revert;
 }
 
 /** Ids of the buttons that highlight in `group`, on any layer. */
@@ -665,6 +749,9 @@ export function undo(state: SessionState, context: ScoutingContext): SessionStat
       }
       case "hidden":
         next = { ...next, hidden: next.hidden.filter((k) => k !== r.key) };
+        break;
+      case "shown":
+        if (!next.hidden.includes(r.key)) next = { ...next, hidden: [...next.hidden, r.key] };
         break;
       case "highlights":
         next = { ...next, highlights: r.previous };

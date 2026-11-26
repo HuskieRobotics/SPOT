@@ -181,7 +181,9 @@ function convertExecutable(
       warnings.push(`${where}: dropped no-op executable ${e.type}`);
       return { type: "hide" }; // never reached in practice; replaced below
     default:
-      warnings.push(`${where}: unknown executable ${e.type} kept as custom`);
+      warnings.push(
+        `${where}: unknown executable ${e.type} kept; config:check reports it unless an extension executable of that name is registered`,
+      );
       return { type: e.type, args };
   }
 }

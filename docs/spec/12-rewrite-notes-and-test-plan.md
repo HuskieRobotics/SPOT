@@ -442,7 +442,11 @@ that a new feature can be verified not to break existing behavior. Requirements:
   recorded or stubbed. A small recorded TBA event (matches, teams, coprs) is checked in.
 - **T-10** Executables (document 05) are testable in isolation: each `execute`/`reverse`
   pair is exercised against a fake button/layer DOM, and `reverse` after `execute` must
-  restore the prior state (this would have caught F-1).
+  restore the prior state (this would have caught F-1). v6: no executable has a `reverse`. A
+  built-in records on the press what it changed, and undo puts that back (document 05 SC-24).
+  An extension's changes are found by comparing before and after (SC-38, #362).
+  `tests/unit/scouting-session.test.ts` and `tests/unit/executables.test.ts` play a press and its
+  undo through the session and check the state is restored.
 
 Mapping of the manual System Test Plan to automated layers:
 

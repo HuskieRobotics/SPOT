@@ -216,12 +216,12 @@ describe("v2 configuration schemas", () => {
     );
   });
 
-  it("CS-7: validates executables by type and accepts custom executables", () => {
+  it("CS-7: validates executables by type, and leaves an extension's fields to its own schema (#362)", () => {
     const c = minimalMatchScouting();
     c.layout.layers[1].buttons[0].executables = [
       { type: "layer", to: "teleop" },
       { type: "multiplier", count: 3 },
-      { type: "sparkle", args: [1] },
+      { type: "sparkle", colors: ["red"], times: 2 },
     ];
     expect(validateConfig("match-scouting", c).ok).toBe(true);
     c.layout.layers[1].buttons[0].executables = [{ type: "multiplier", count: 1 }];

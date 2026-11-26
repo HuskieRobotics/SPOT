@@ -306,7 +306,21 @@ the v5 behavior above (decided 2026-11-21, #322):
   it shows on every layer with that button: 2026's Start Shooting stays lit from auto into
   teleop. Undo puts back the highlights from before the press, which fixes F-1.
 - **SC-37** `multiplier` records the action `count` times in one press.
-- **SC-38** An extension's executable changes nothing the session records.
+- **SC-38** An extension executable (#362; `src/scouting/extensions/`,
+  `docs/extension-executables.md`) may change what the scouter sees, never what the session
+  records.
+  - It is given frozen copies of the variables, highlights and hidden buttons, of the press and
+    the presses before it, and of the configuration and settings. It returns the variables,
+    highlights and hidden buttons, and the session keeps only those three.
+  - Undo puts back what it changed, found by comparing before and after, so an extension has no
+    reverse to write (T-10). v5's hand-written reverses caused F-1.
+  - A throw, or a result that is not a view, is logged and the press records without the
+    executable. v5 rethrew, which lost the press mid-match.
+  - It records nothing, so the QR code needs nothing for it (document 03 DM-15e).
+  - It is built into the app's bundle, so the service worker keeps it with the rest of the app
+    and it works offline (OF-5).
+  - The session does nothing for a type it does not have. config:check reports one as an error,
+    and the server refuses such a file (document 20 CS-17).
 - After the clock reaches 0, presses still record with `ts` 0. The match control shows "Match
   Complete" for 2 s, then "Submit Match".
 

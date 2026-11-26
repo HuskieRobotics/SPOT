@@ -4,9 +4,11 @@
  * fit the grid; every layer can be reached.
  */
 import { suggest } from "@/lib/suggest";
+import { appExecutables, type ExecutableSet } from "@/scouting/executables";
 import matchScoutingSchema from "../schema/match-scouting.schema.json";
 import type { Executable, MatchScoutingConfig } from "../types";
-import type { Key } from "./json";
+import { validateExecutableOptions } from "./executables";
+import { keysFromPointer, type Key } from "./json";
 import { builtInExecutables } from "./references";
 import type { Reporter } from "./report";
 
@@ -25,7 +27,11 @@ export function nearHint(id: string, candidates: readonly string[], noun: string
 
 const plural = (n: number, word: string) => `${n} ${word}${n === 1 ? "" : "s"}`;
 
-export function checkMatchScouting(ms: MatchScoutingConfig, report: Reporter): void {
+export function checkMatchScouting(
+  ms: MatchScoutingConfig,
+  report: Reporter,
+  executables: ExecutableSet = appExecutables(),
+): void {
   const layers = ms.layout.layers;
   const layerIds = layers.map((l) => l.id);
   const buttonIds = [...new Set(layers.flatMap((l) => l.buttons.map((b) => b.id)))];
@@ -54,6 +60,39 @@ export function checkMatchScouting(ms: MatchScoutingConfig, report: Reporter): v
       }
     }
   }
+
+  // An extension executable (ADR 0005, #362): registered, and its options as its schema says.
+  const checkExtension = (x: Executable, xk: Key[]) => {
+    const extension = executables.get(x.type);
+    if (!extension) {
+      report.error(
+        FILE,
+        [...xk, "type"],
+        `There is no executable "${x.type}".`,
+        nearHint(x.type, [...BUILT_IN_EXECUTABLES, ...executables.keys()], "executable"),
+      );
+      return;
+    }
+    const options: Record<string, unknown> = { ...x };
+    delete options.type;
+    let issues;
+    try {
+      issues = validateExecutableOptions(extension, options);
+    } catch (error) {
+      report.error(
+        FILE,
+        [...xk, "type"],
+        error instanceof Error ? error.message : String(error),
+        "This is a bug in the executable's code, not in the configuration. Ask whoever wrote the extension to fix it.",
+      );
+      return;
+    }
+    for (const issue of issues) {
+      const at = [...xk, ...keysFromPointer(options, issue.pointer ?? "")];
+      if (issue.property && issue.message.startsWith("unknown")) at.push(issue.property);
+      report.error(FILE, at, issue.message, `${x.type}: ${extension.summary}.`);
+    }
+  };
 
   const duplicates = (ids: string[], keysOf: (i: number) => Key[], noun: string) => {
     const seen = new Set<string>();
@@ -185,14 +224,7 @@ export function checkMatchScouting(ms: MatchScoutingConfig, report: Reporter): v
           buttonRefs(c.always, [...xk, "always"]);
           conditionalRefs(c.conditional, [...xk, "conditional"]);
         }
-        if (!BUILT_IN_EXECUTABLES.includes(x.type)) {
-          report.warning(
-            FILE,
-            [...xk, "type"],
-            `"${x.type}" is not a built-in executable, so pressing the button does nothing unless an extension provides it.`,
-            nearHint(x.type, BUILT_IN_EXECUTABLES, "built-in executable"),
-          );
-        }
+        if (!BUILT_IN_EXECUTABLES.includes(x.type)) checkExtension(x, xk);
       });
     });
   });

@@ -97,7 +97,8 @@ describe("v1 -> v2 converter on every archived season", () => {
       const layerIds = new Set(config.layout.layers.map((l) => l.id));
       for (const layer of config.layout.layers)
         for (const b of layer.buttons)
-          for (const e of b.executables) if ("to" in e) expect(layerIds.has(e.to)).toBe(true);
+          for (const e of b.executables)
+            if ("to" in e) expect(layerIds.has(e.to as string)).toBe(true);
       for (const p of config.timing.phases) if (p.layer) expect(layerIds.has(p.layer)).toBe(true);
     });
     if (s.pipeline) {

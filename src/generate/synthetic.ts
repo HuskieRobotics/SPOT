@@ -202,8 +202,8 @@ function applyExecutables(
         multiplier = (executable as { count: number }).count;
         break;
       }
-      // exclusiveHighlight and clearHighlight are presentation only, and an unknown type is an
-      // extension we cannot model: neither changes what gets recorded.
+      // exclusiveHighlight and clearHighlight are presentation only. An extension executable
+      // (#362) changes only what is shown, never what is recorded (SC-38), and is not modeled.
       default:
         break;
     }
