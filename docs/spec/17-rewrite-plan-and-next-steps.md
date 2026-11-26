@@ -288,7 +288,8 @@ scouted an event in parallel with v5 without losing data.
 
 ## 5. Status and next steps
 
-Last updated 2026-11-22. **Phases 0 and 1 are complete, and so is gate K.** Phase 0 items are numbered as in
+Last updated 2026-11-26. **Phases 0 and 1 are complete, and so is gate K. Phase 2 meets its exit
+criterion (#363), which meets gate W-1; the audit (#364) closes the phase.** Phase 0 items are numbered as in
 section 2.
 
 | #   | Phase 0 item                       | Status                                                                                                                                                                                                                                                                                                                                   |
@@ -313,7 +314,16 @@ a pure state machine (`src/scouting/`, document 05) and the screen's components
 (`src/components/scouting/`), which the Phase 2 client wraps. It decided how the application
 loads the four files (document 20 CS-17).
 
-**Phase 2 is next**, broken into issues #351 to #364 on the "v6 Phase 2" milestone (2026-11-22),
+**Phase 2's exit criterion is met** (2026-11-26, #363): `tests/e2e/acceptance.spec.ts`, run in
+CI with the rest of the browser tests (T-1), has two scouters on phones and an admin page run
+matches from TBA's recorded schedule (T-9) against `next start` and the in-memory MongoDB. Both
+records land in MongoDB, valid, with the right team, match, event and scouter. It also plays the
+two reconnection paths of T-6a, and reads a QR code made with no connection back to the very
+record MongoDB stores. With it, gate W-1 is met: the scouting client, sessions and assignment,
+sync, the offline path with QR, admin match selection, and the schedule from TBA and typed by
+hand all work together.
+
+**Phase 2** was broken into issues #351 to #364 on the "v6 Phase 2" milestone (2026-11-22),
 in build order: the database layer, the admin password and join code, scouter sessions as pure
 TypeScript, their transport, the match schedule, the roster and sign-in, the admin page, the QR
 codec, the scouting client, submission and sync, offline scouting, extension executables, the

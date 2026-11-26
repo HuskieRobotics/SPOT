@@ -76,6 +76,17 @@ export function scheduleFromTba(matches: TbaMatch[]): ScheduledMatch[] {
 
 export class TbaError extends Error {}
 
+/** TBA's read API (v3). */
+export const TBA_API_URL = "https://www.thebluealliance.com/api/v3";
+
+/**
+ * Where to read TBA: `TBA_API_URL` when it is set, which only the browser tests do, to answer
+ * from recorded responses (T-9). Leave it unset everywhere else.
+ */
+export function tbaApiUrl(): string {
+  return (process.env.TBA_API_URL || TBA_API_URL).replace(/\/+$/, "");
+}
+
 /** How long to wait for TBA before giving up (OF-7: no request may hang). */
 export const TBA_TIMEOUT_MS = 10_000;
 
@@ -94,10 +105,10 @@ export async function fetchTbaMatches(
     );
   let response: Response;
   try {
-    response = await fetchImpl(
-      `https://www.thebluealliance.com/api/v3/event/${encodeURIComponent(eventKey)}/matches`,
-      { headers: { "X-TBA-Auth-Key": apiKey }, signal: AbortSignal.timeout(TBA_TIMEOUT_MS) },
-    );
+    response = await fetchImpl(`${tbaApiUrl()}/event/${encodeURIComponent(eventKey)}/matches`, {
+      headers: { "X-TBA-Auth-Key": apiKey },
+      signal: AbortSignal.timeout(TBA_TIMEOUT_MS),
+    });
   } catch {
     throw new TbaError(
       "The Blue Alliance could not be reached. Try again, or type the schedule by hand.",
