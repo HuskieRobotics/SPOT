@@ -33,6 +33,7 @@ export const INDEXES: Record<DocumentKind, IndexDescription[]> = {
   schedule: [],
   "scouter-session": [{ name: "event", key: { tenantId: 1, eventId: 1 } }],
   assignment: [{ name: "event_match", key: { tenantId: 1, eventId: 1, matchNumber: 1 } }],
+  "tba-data": [],
 };
 
 export function validatorFor(kind: DocumentKind) {

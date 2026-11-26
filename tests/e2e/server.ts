@@ -3,13 +3,14 @@
  * MongoDB, seeded with one active event and a two-match typed schedule, then `next start` on it.
  * Plain Node, no Docker (CLAUDE.md). Expects `npm run build` to have run.
  *
- * TBA is answered from the recorded 2026mnwi matches (T-9), so the playoffs come from TBA's
- * schedule and the qualifications from the typed one (AD-8). Nothing reaches thebluealliance.com.
+ * TBA is answered from the recorded events in tools/oracle/fixtures/tba (T-9): matches, COPRs and
+ * teams. The playoffs come from TBA's 2026mnwi schedule and the qualifications from the typed one
+ * (AD-8). Nothing reaches thebluealliance.com.
  *
  * The seed is test data, not a secret: tests/e2e names the same join code and TBA key.
  */
 import { spawn } from "node:child_process";
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { createServer } from "node:http";
 import type { AddressInfo } from "node:net";
 import { join } from "node:path";
@@ -22,19 +23,23 @@ import { addScouter } from "../../src/db/scouters";
 import { updateSettings } from "../../src/db/settings";
 import { E2E_JOIN_CODE, E2E_MONGO_PORT, E2E_MONGO_URI, E2E_ROSTER, E2E_TBA_KEY } from "./fixtures";
 
-/** TBA's read API for the one event the tests use, from its recorded answer. */
+/** TBA's read API for the recorded events in `tools/oracle/fixtures/tba/` (T-9). */
 async function recordedTba(): Promise<string> {
-  const matches = readFileSync(
-    join(process.cwd(), "tools", "oracle", "fixtures", "tba", "2026mnwi", "matches.json"),
-  );
+  const recorded = join(process.cwd(), "tools", "oracle", "fixtures", "tba");
+  // `/event/<key>/matches`, `/coprs` and `/teams/simple` (whose recording is the full team list).
+  const files: Record<string, string> = {
+    matches: "matches",
+    coprs: "coprs",
+    "teams/simple": "teams",
+  };
   const server = createServer((request, response) => {
-    if (request.headers["x-tba-auth-key"] !== E2E_TBA_KEY) {
-      response.writeHead(401, { "content-type": "application/json" }).end("{}");
-    } else if (request.url === "/api/v3/event/2026mnwi/matches") {
-      response.writeHead(200, { "content-type": "application/json" }).end(matches);
-    } else {
-      response.writeHead(404, { "content-type": "application/json" }).end("{}");
-    }
+    const answer = (status: number, body: string | Buffer = "{}") =>
+      response.writeHead(status, { "content-type": "application/json" }).end(body);
+    if (request.headers["x-tba-auth-key"] !== E2E_TBA_KEY) return answer(401);
+    const m = /^\/api\/v3\/event\/(\w+)\/(matches|coprs|teams\/simple)$/.exec(request.url ?? "");
+    const file = m && join(recorded, m[1], `${files[m[2]]}.json`);
+    if (!file || !existsSync(file)) return answer(404);
+    answer(200, readFileSync(file));
   });
   await new Promise<void>((resolve) => server.listen(0, "127.0.0.1", resolve));
   server.unref();

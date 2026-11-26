@@ -15,6 +15,7 @@
  */
 import { toTeamKey } from "@/data/team";
 import type { ScheduledMatch } from "@/data/types";
+import { TbaError, tbaGet, type TbaFailure } from "@/tba/api";
 
 export interface TbaMatch {
   key: string;
@@ -74,21 +75,19 @@ export function scheduleFromTba(matches: TbaMatch[]): ScheduledMatch[] {
   ];
 }
 
-export class TbaError extends Error {}
+export { TBA_API_URL, TBA_TIMEOUT_MS, TbaError, tbaApiUrl } from "@/tba/api";
 
-/** TBA's read API (v3). */
-export const TBA_API_URL = "https://www.thebluealliance.com/api/v3";
-
-/**
- * Where to read TBA: `TBA_API_URL` when it is set, which only the browser tests do, to answer
- * from recorded responses (T-9). Leave it unset everywhere else.
- */
-export function tbaApiUrl(): string {
-  return (process.env.TBA_API_URL || TBA_API_URL).replace(/\/+$/, "");
-}
-
-/** How long to wait for TBA before giving up (OF-7: no request may hang). */
-export const TBA_TIMEOUT_MS = 10_000;
+/** What the schedule page says for each way a read can fail (RT-23). */
+const SCHEDULE_MESSAGES: Record<TbaFailure, (eventKey: string, detail: string) => string> = {
+  "no-key": () =>
+    "This server has no TBA_API_KEY, so it cannot read TBA's schedule. Set it, or type the schedule by hand.",
+  unreachable: () =>
+    "The Blue Alliance could not be reached. Try again, or type the schedule by hand.",
+  refused: () => "TBA refused the TBA_API_KEY. Check the key on thebluealliance.com/account.",
+  "not-found": (eventKey) => `TBA has no event ${eventKey}. Check the event's TBA key.`,
+  status: (_, detail) => `${detail} Try again later.`,
+  shape: () => "TBA's answer was not a list of matches.",
+};
 
 /**
  * Read an event's matches from TBA. Throws `TbaError` with a message for an admin when the key
@@ -99,29 +98,13 @@ export async function fetchTbaMatches(
   apiKey: string | undefined,
   fetchImpl: typeof fetch = fetch,
 ): Promise<TbaMatch[]> {
-  if (!apiKey)
-    throw new TbaError(
-      "This server has no TBA_API_KEY, so it cannot read TBA's schedule. Set it, or type the schedule by hand.",
-    );
-  let response: Response;
+  let body: unknown;
   try {
-    response = await fetchImpl(`${tbaApiUrl()}/event/${encodeURIComponent(eventKey)}/matches`, {
-      headers: { "X-TBA-Auth-Key": apiKey },
-      signal: AbortSignal.timeout(TBA_TIMEOUT_MS),
-    });
-  } catch {
-    throw new TbaError(
-      "The Blue Alliance could not be reached. Try again, or type the schedule by hand.",
-    );
+    body = await tbaGet(`/event/${encodeURIComponent(eventKey)}/matches`, apiKey, fetchImpl);
+  } catch (error) {
+    if (!(error instanceof TbaError)) throw error;
+    throw new TbaError(SCHEDULE_MESSAGES[error.reason](eventKey, error.message), error.reason);
   }
-  if (response.status === 401)
-    throw new TbaError(
-      "TBA refused the TBA_API_KEY. Check the key on thebluealliance.com/account.",
-    );
-  if (response.status === 404)
-    throw new TbaError(`TBA has no event ${eventKey}. Check the event's TBA key.`);
-  if (!response.ok) throw new TbaError(`TBA answered ${response.status}. Try again later.`);
-  const body = (await response.json()) as unknown;
-  if (!Array.isArray(body)) throw new TbaError("TBA's answer was not a list of matches.");
+  if (!Array.isArray(body)) throw new TbaError(SCHEDULE_MESSAGES.shape(eventKey, ""), "shape");
   return body as TbaMatch[];
 }

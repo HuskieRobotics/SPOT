@@ -29,8 +29,30 @@
 - **AN-10** Load `/config/analysis-pipeline.json`, obtain transformers via `getTransformers()`
   (from `/analysis/transformers.js`), and run each entry in order:
   `dataset = transformers[type][name].execute(dataset, outputPath, options)`.
-- **AN-11** Merge manual TMPs/teams (see DM-14; v6 decides in #345). Also fetch the match list
-  (`/admin/api/matches[/<eventId>]`) for the (dormant) match view.
+- **AN-11** Merge manual TMPs/teams (see DM-14). Also fetch the match list
+  (`/admin/api/matches[/<eventId>]`) for the (dormant) match view. **v6:** the manual data is
+  dropped (DM-14, #345); the match list comes with Simulate Match (#389).
+
+**v6: the data the dashboard reads (#382).** Anyone may read it (SEC-1), and the browser runs
+TBA enrichment and the pipeline on it (TR-9), so the server never calls its own routes (D-5,
+#90). Routes in document 11:
+
+- **AN-3, AN-11a** `GET /api/analysis/events`: every event by its code, saying which is active,
+  with no join code (SEC-3).
+- **AN-6** `GET /api/analysis/dataset?event=<code>`: an event's current performances (RT-14a)
+  without scouter ids (SEC-8). Flagged and partial records are included, so the dashboard can
+  say so (AN-18a).
+- **AN-6, AN-9** `GET /api/analysis/tba?event=<code>`: the event's matches with score
+  breakdowns, its component OPRs and its teams' nicknames, kept per event (DV-19) and read from
+  TBA again after five minutes (NF-6). When TBA can't be read, the last copy serves, with a
+  message saying why.
+- **CS-17** `GET /api/config/analysis-pipeline` and `/api/config/analysis-modules`: the files
+  with a version as the `ETag`, and what `config:check` finds in them. A file is refused only
+  when it can't be used at all (not JSON, or no list of entries): one bad entry must not take the
+  dashboard down, and the engine skips a bad entry itself (TR-10).
+- **AN-12, A-37** The team list is every team with data, in team order, with TBA's nickname
+  when TBA knows the team (`src/analysis/teams.ts`). A team TBA doesn't know, such as a B robot,
+  is listed by its number.
 
 ## Team list and team view
 

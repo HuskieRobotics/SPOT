@@ -12,6 +12,7 @@
  * Not behind the join code: v5 served the same file to anyone, and it holds no secrets.
  */
 import { ACTIVE_SEASON, findSeason, loadMatchScouting, readSeason, versionOf } from "@/config/load";
+import { withVersion } from "@/config/serve";
 import type { MatchScoutingConfig } from "@/config/types";
 
 export const dynamic = "force-dynamic";
@@ -46,10 +47,5 @@ export function GET(request: Request) {
       },
       { status: 503 },
     );
-  const etag = `"${version}"`;
-  const headers = { etag, "cache-control": "no-cache" };
-  const sent = request.headers.get("if-none-match");
-  if (sent && sent.split(",").some((t) => t.trim().replace(/^W\//, "") === etag))
-    return new Response(null, { status: 304, headers });
-  return Response.json({ version, config }, { headers });
+  return withVersion(request, version, { version, config });
 }

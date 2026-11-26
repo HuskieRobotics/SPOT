@@ -25,7 +25,8 @@ also uses. Each ends with what v6 does (audited in document 23).
   every action button starts at 0 and unknown ids are still counted; TBA results start at 0
   from `knownIds` and the event's reports (DM-11b); there is no catalog layer (CS-5).
 - **Q-5** A team appears in the analysis sidebar only if it is both in the dataset and in the
-  TBA/manual team list. **v6:** Phase 3, which may show every team with data (A-37).
+  TBA/manual team list. **v6:** every team with data is listed, by number when TBA has no
+  nickname for it (AN-12, A-37, #382).
 - **Q-6** In demo mode `syncData` returns `[]`, so scouted data is never uploaded through the
   socket; the client still receives the ack, **clears IndexedDB**, reports "Data Sync
   Complete!", and reloads. Demo scouting data is therefore discarded by design. **v6:** demo
@@ -320,7 +321,7 @@ Rationale in [ADR 0004](../adr/0004-authentication-and-privacy.md).
 | D-10 stack/transport                              | Next.js, Tailwind, MongoDB preferred [A-4]; 2–3 s latency fine, so polling or SSE [A-50]; EC2 bare Node + nginx + Atlas, GCP easy path [A-48, A-43]                                                                                                                         | 02, 10, 15       |
 | Data migration                                    | One-time migration acceptable; old seasons may be left behind [A-2]                                                                                                                                                                                                         | 03               |
 | `countActions(all)` unknown ids                   | Keep today's behavior (count ids absent from the config); the oracle harness reports unknown ids found in the 2025 export (decided 2026-09-17)                                                                                                                              | 09, 17           |
-| Manual data hooks                                 | Revised [A-13]: they also support offline analysis because `/analysis/api/manual` is a precached pipeline input; keep the property that every pipeline input is cacheable (document 18)                                                                                     | 03, 18           |
+| Manual data hooks                                 | Revised [A-13]: they also support offline analysis because `/analysis/api/manual` is a precached pipeline input; keep the property that every pipeline input is cacheable (document 18) **v6: dropped** (DM-14, #345).                                                      | 03, 18           |
 | Offline operation                                 | Elevated to a first-class requirement with its own document and tests (OF-1 to OF-9, T-8)                                                                                                                                                                                   | 18               |
 | Duplicate scouting                                | Never two scouters on one robot at once; re-scout replaces earlier data [A-29]                                                                                                                                                                                              | 06 RT-14a        |
 | Manual schedule                                   | **Decided 2026-09-17:** kept, and persisted with the current match. An event with no TBA presence matters as much as an event with no connectivity (D-4)                                                                                                                    |
@@ -451,7 +452,8 @@ that a new feature can be verified not to break existing behavior. Requirements:
 - **T-9** Test fixtures must not require live TBA or FMS credentials; all external calls are
   recorded or stubbed. A small recorded TBA event (matches, teams, coprs) is checked in. v6: the
   unit tests pass a stub `fetch`; the browser tests' server (`tests/e2e/server.ts`, #363) answers
-  TBA from the recorded 2026mnwi matches, through `TBA_API_URL`, so nothing reaches TBA.
+  TBA from the recorded events' matches, COPRs and teams (#382), through `TBA_API_URL`, so nothing
+  reaches TBA.
 - **T-10** Executables (document 05) are testable in isolation: each `execute`/`reverse`
   pair is exercised against a fake button/layer DOM, and `reverse` after `execute` must
   restore the prior state (this would have caught F-1). v6: no executable has a `reverse`. A

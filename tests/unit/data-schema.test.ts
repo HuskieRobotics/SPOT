@@ -114,6 +114,33 @@ describe("document schemas", () => {
     ).toEqual([]);
   });
 
+  it("DV-19: TBA data per event keeps only what enrichment and the team list read", () => {
+    const tba = {
+      _id: oid("c"),
+      tenantId: DEFAULT_TENANT,
+      eventId: oid("c"),
+      tbaKey: "2026mnwi",
+      matches: [
+        {
+          comp_level: "qm",
+          match_number: 1,
+          alliances: { red: { team_keys: ["frc3061"] }, blue: { team_keys: ["frc254"] } },
+          score_breakdown: { red: { autoTowerRobot1: "Level1" }, blue: {} },
+        },
+      ],
+      coprs: { "Hub Auto Fuel Count": { frc3061: 12.5 } },
+      teams: [{ team: "3061", nickname: "Huskie Robotics" }],
+      fetchedAt: 1772809355374,
+    };
+    expect(validateDocument("tba-data", tba).issues).toEqual([]);
+    const withScore = structuredClone(tba);
+    (withScore.matches[0].alliances.red as Record<string, unknown>).score = 136;
+    expect(validateDocument("tba-data", withScore).ok).toBe(false);
+    expect(
+      validateDocument("tba-data", { ...tba, teams: [{ team: 3061, nickname: null }] }).ok,
+    ).toBe(false);
+  });
+
   it("DV-3, DM-1a: refuses a team that arrived as a number", () => {
     const p = { ...performance(), team: 3061 };
     expect(validateDocument("team-match-performance", p).issues).toContainEqual(
