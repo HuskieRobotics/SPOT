@@ -90,6 +90,7 @@ quotes the test's name.
 
 - **DM-14 and AN-11, the hand-entered data hooks:** v6 never decided whether to keep them.
   The engine needs no hook. Decided with the dashboard's data loading in Phase 3, #345.
+  **Decided 2026-11-26 (#382): dropped.**
 - **The configuration loader:** no requirement said how the application loads the four files.
   Phase 1 built validation (`src/config/validate.ts`), the checks (`src/config/check/`, which
   read nothing from disk) and the folder reader the scripts use. How pages load and serve the
@@ -181,7 +182,7 @@ quotes the test's name.
 | DM-12  | Replaced | by TR-5                                                                                      |
 | DM-13  | Replaced | by DM-13a                                                                                    |
 | DM-13a | Done     | `tba-enrichment`; rule `opr-without-tba`                                                     |
-| DM-14  | Open     | #345                                                                                         |
+| DM-14  | Done     | Dropped (#345, decided 2026-11-26): v5 shipped both files empty                              |
 | BL-195 | Later    | A hook for later; the `scouters` collection meets it (DM-7e)                                 |
 
 ### Document 08: analysis, data loading
@@ -191,7 +192,7 @@ quotes the test's name.
 | AN-7   | Done     | As DM-11a                                                                            |
 | AN-9   | Done     | `tba-enrichment`, `engine`                                                           |
 | AN-10  | Done     | `engine`                                                                             |
-| AN-11  | Open     | #345 for manual data; the match list is Phase 3                                      |
+| AN-11  | Later    | The manual data is dropped (DM-14); the match list comes with Simulate Match, #389   |
 | AN-25  | Replaced | by AN-26a                                                                            |
 | AN-26a | Later    | Phase 3 builds the CSV in the browser, on the one pipeline Phase 1 built (TR-9, D-5) |
 
@@ -236,7 +237,7 @@ quotes the test's name.
 | ---------- | -------- | --------------------------------------------------------------------------------------------------------- |
 | A-1, A-3   | Done     | JSON configuration for students, and the documented pipeline structure: `docs/configuration-guide/` (K-4) |
 | A-5, A-49  | Done     | ADR 0005, TR-14                                                                                           |
-| A-13       | Open     | #345                                                                                                      |
+| A-13       | Done     | As DM-14: dropped                                                                                         |
 | A-14       | Done     | CS-13 (the bands); the page is Phase 3                                                                    |
 | A-22, A-23 | Done     | CS-16, CS-5                                                                                               |
 | A-34       | Done     | CS-12                                                                                                     |

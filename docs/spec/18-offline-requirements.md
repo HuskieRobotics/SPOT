@@ -47,6 +47,9 @@ configuration edits are not hidden by stale caches.
 is in the precache list because the pipeline unconditionally fetches it: a stable, cacheable
 endpoint for optional hand-entered data is part of what makes the pipeline runnable offline.
 Any replacement must preserve "every input the pipeline needs can be kept on the device" (OF-5).
+**v6:** the hooks are dropped (DM-14, #345), so this input is gone; the analysis page's inputs
+are the dataset, the TBA data and the configuration files (document 08, "v6: the data the
+dashboard reads").
 
 ## Requirements for the rewrite
 

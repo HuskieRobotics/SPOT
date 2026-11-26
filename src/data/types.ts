@@ -6,6 +6,7 @@
  * docs/spec/06 (RT-24 to RT-36).
  */
 
+import type { TbaCoprs, TbaMatch } from "@/analysis/enrichment/tba";
 import type { TeamKey } from "./team";
 
 /** 24-character hexadecimal MongoDB ObjectId, as it travels outside the driver. */
@@ -130,6 +131,32 @@ export interface Scouter {
   /** True for a record reconstructed from v5 data, which had no student ids. */
   legacy: boolean;
   createdAt: number;
+}
+
+/** A team at an event, as TBA names it (AN-12). */
+export interface TbaTeam {
+  team: TeamKey;
+  /** TBA's nickname ("WildStang"), or null when TBA gives none. */
+  nickname: string | null;
+}
+
+/**
+ * What The Blue Alliance last said about an event, for analysis (DV-19, #382): the matches with
+ * their score breakdowns (DM-11a), component OPRs (DM-13a) and the event's teams (AN-12). One
+ * document per event (F-6), so the dashboard works while TBA cannot be reached.
+ */
+export interface TbaData {
+  /** The event's id. */
+  _id: ObjectIdHex;
+  tenantId: TenantId;
+  eventId: ObjectIdHex;
+  tbaKey: string;
+  /** Only the fields enrichment reads (`src/analysis/enrichment/tba.ts`). */
+  matches: TbaMatch[];
+  coprs: TbaCoprs;
+  teams: TbaTeam[];
+  /** When TBA was last read, epoch ms (NF-6). */
+  fetchedAt: number;
 }
 
 /** Fields that must never appear in a public response (SEC-8). */

@@ -46,6 +46,12 @@ Added in Phase 2 (#351), for what the server must keep across a restart:
 | DV-17 | **A match is a level and a number** (decided 2026-11-24): `level` is `qual` or `playoff`, and `matchNumber` counts within it, as the field does (Qual 1 to N, Playoff 1 to 16; document 06 RT-22a). Performances, schedule matches, registry entries (`matchLevel`) and assignment histories all carry it, and the current match is `{ level, number }`. Analysis orders qualifications before playoffs, counts Qual 5 and Playoff 5 as two matches, and joins TBA's results to qualifications only. Migrated 2025 and 2026 data is all `qual`: neither event scouted playoffs. The QR code carries it too (#358).                                                                                                                                                                                      | RT-22a, DM-11          |
 | DV-18 | **A v6 record's `matchKey` and `nonce`** (#358): the device makes the nonce when the scouter finishes a match, 12 lowercase base-36 characters (`newNonce`, about 62 random bits), and the key is `q12-3061-<nonce>` (`p` for a playoff; `performanceKey`). The key names no scouter, so the copy scanned from a QR code and the copy synced later have the same key and nonce, and the second is a duplicate. Migrated records keep v5's `matchId` and `matchId_rand`.                                                                                                                                                                                                                                                                                                                                 | DV-11, DM-16           |
 
+Added in Phase 3 (#382), for the analysis dashboard:
+
+| Id    | Change                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  | Requires                     |
+| ----- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------- |
+| DV-19 | **What TBA last said about each event**, one document per event (`tbaData`, `_id` the event id): its matches, keeping only what enrichment reads (level, number, alliances' team keys, score breakdown), its component OPRs, and its teams with TBA's nicknames, with when TBA was read. Read again when more than five minutes old; when TBA can't be read, the last copy serves, so the dashboard works the same without TBA, with fewer values. v5 kept one copy in memory for whichever event was asked last (F-6). | AN-6, AN-9, AN-12, NF-6, F-6 |
+
 Deliberate redundancy: the placement could be recomputed from `ts` and the season's
 configuration, but the configuration is edited between seasons and sometimes within one, so
 storing it keeps the data self-describing. `matchKey` is kept verbatim from v5 for the same
@@ -203,6 +209,9 @@ runs on documents it is given.
   validates the whole document before it reaches MongoDB. Then it settles the robot's records for
   that match: `superseded` (RT-14a, RT-35), `coverage` (RT-34) and machine flags (RT-36),
   document 06 "v6: submission and sync".
+
+- **Public reads for analysis** (#382, `src/public-data/`): the events by code, an event's current
+  performances without scouter ids, and its TBA data (DV-19). Anyone may read them (SEC-1).
 
 Still to build: **a driver-backed runner** for the migration, which phase 4 runs against the
 real dump (document 17 §3). The transform and the report are the parts worth testing, and they

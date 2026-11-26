@@ -79,6 +79,9 @@ Not used.
     of the aggregated data routes the service worker precaches so the analysis pipeline can
     run without a server connection. Captured in document 18.
 
+    _v6 (2026-11-26, #345):_ dropped. Both files shipped empty and nothing relied on them; the
+    server no longer calls itself (document 03 DM-14).
+
 14. **Filter Teams** rating bands (Rating1–4 thresholds, OPR ranges 0–100/101–150/151–250/250+)
     are hard-coded for 2026. Should these be configurable?
 

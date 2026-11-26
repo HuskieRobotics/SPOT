@@ -210,20 +210,22 @@ Before transformers run, the client:
   responses the page fetched (or cached, OF-3); it fetches nothing itself (ADR 0005).
 
 - **DM-14** After transformers, appends `manual.tmps` (with `manual: true`) and sets
-  `teams[t].manual.<path>` from `manual.teams` (both currently empty JSON files). **v6: not
-  built.** The Phase 1 engine needs no hook, and whether v6 keeps one is decided with the
-  dashboard's data loading in Phase 3 (#345).
+  `teams[t].manual.<path>` from `manual.teams` (both currently empty JSON files). **v6: dropped**
+  (decided 2026-11-26, #345). Both files shipped empty, no one recalled using them, and the
+  engine needs no hook. A match entered by hand comes in as a performance through the QR scanner
+  or the edit page (Phase 4), so it is analyzed like any other.
 
 **[A-34]** The TBA score-breakdown mapping (DM-11) must be configurable per season (which keys
 to import and how to name them); today it imports every `auto*`/`endGame*` key by convention.
 **[A-13, revised 2026-09-17]** The `manual/*.json` hooks serve the server self-calls **and**
 offline operation: `/analysis/api/manual` is precached so the pipeline can run without the
-server (document 18). Any replacement must keep every pipeline input cacheable.
+server (document 18). Any replacement must keep every pipeline input cacheable. **v6:** the hooks
+are dropped (DM-14), and the server no longer calls itself (#382, #90).
 **BL-195** The dataset should be able to carry a third top-level collection, `scouters`.
 
 Well-known derived paths produced by the default pipeline and consumed by modules/CSV:
 `counts.*`, `scores.*`, `cycle.*` (tmp), `cycles.*` (team), `averages.*`, `averageScores.*`,
-`aggregatedActions`, `standardDeviation`, `opr.*`, `manual.*`, `zoneActionRating`,
+`aggregatedActions`, `standardDeviation`, `opr.*`, `manual.*` (v5 only, DM-14), `zoneActionRating`,
 `zoneActionRatingAverages`, `disabledCounts`, `averageTimes.*`, `actionTimes.*`.
 
 ## QR-code payload (binary, base64, error correction M)
