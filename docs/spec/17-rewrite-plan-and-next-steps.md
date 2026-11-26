@@ -288,8 +288,8 @@ scouted an event in parallel with v5 without losing data.
 
 ## 5. Status and next steps
 
-Last updated 2026-11-26. **Phases 0 and 1 are complete, and so is gate K. Phase 2 meets its exit
-criterion (#363), which meets gate W-1; the audit (#364) closes the phase.** Phase 0 items are numbered as in
+Last updated 2026-11-26. **Phases 0, 1 and 2 are complete, and so are gate K and gate W-1.
+Phase 3 is next.** Phase 0 items are numbered as in
 section 2.
 
 | #   | Phase 0 item                       | Status                                                                                                                                                                                                                                                                                                                                   |
@@ -311,7 +311,7 @@ K-5 (#322) and K-6 (#333), seven weeks before kickoff.
 
 **K-5, the scouting-screen preview (#322)**, is the first piece of phase 2: the scouting rules as
 a pure state machine (`src/scouting/`, document 05) and the screen's components
-(`src/components/scouting/`), which the Phase 2 client wraps. It decided how the application
+(`src/components/scouting/`), which the scouting client (#359) wraps. It decided how the application
 loads the four files (document 20 CS-17).
 
 **Phase 2's exit criterion is met** (2026-11-26, #363): `tests/e2e/acceptance.spec.ts`, run in
@@ -323,7 +323,9 @@ record MongoDB stores. With it, gate W-1 is met: the scouting client, sessions a
 sync, the offline path with QR, admin match selection, and the schedule from TBA and typed by
 hand all work together.
 
-**Phase 2** was broken into issues #351 to #364 on the "v6 Phase 2" milestone (2026-11-22),
+**Phase 2 is complete** (audited 2026-11-26, #364): every requirement it owns is built and
+tested or moved to a later phase on purpose, and document 23 records the audit. It was broken
+into issues #351 to #364 on the "v6 Phase 2" milestone (2026-11-22),
 in build order: the database layer, the admin password and join code, scouter sessions as pure
 TypeScript, their transport, the match schedule, the roster and sign-in, the admin page, the QR
 codec, the scouting client, submission and sync, offline scouting, extension executables, the
@@ -332,8 +334,8 @@ phase 2 because a phase 2 requirement already demands them: BL-93 (OF-2's pendin
 (the session model re-assigns waiting scouters), BL-116 and BL-33 (the admin page's labelled
 controls, AD-4b, and several admins at once, RT-14b).
 
-Recommended order from here: **gate W** (about 2027-02-20), the rest of phase 2, the core of
-phase 3, and the event-critical part of phase 4, about six weeks after kickoff. Break each phase
+Recommended order from here, toward **gate W** (about 2027-02-20): the core of phase 3 (W-2),
+then the event-critical part of phase 4 (W-3), about six weeks after kickoff. Break each phase
 into issues on its milestone when it starts, as Phases 1 and 2 were.
 
 **Demo mode (#374)** is in phase 4 but not in gate W-3: Team 3061's events don't need it, but

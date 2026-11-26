@@ -1,13 +1,15 @@
 import { expect, test } from "@playwright/test";
 import { E2E_JOIN_CODE } from "./fixtures";
 
+const FEEDBACK = "https://github.com/HuskieRobotics/SPOT/issues";
+
 // #356, #359: signing in on a scouting device (SEC-2, SEC-3b, SEC-6, SEC-7, RT-26, OF-1). Each test
 // runs in its own browser context, so it starts as a device that has never been used. Other tests
 // add scouters to the shared roster, so these look for the seeded names rather than count them.
 // A signed-in device holds its scouter's session, so each project signs in a different scouter:
 // two devices with the same scouter would sign each other out (SEC-6).
 
-test("SEC-3b, SEC-7, RT-26: the QR link fills in the join code; pick a name; a reload keeps it", async ({
+test("SEC-3b, SEC-7, RT-26, SC-3: the QR link fills in the join code; pick a name; a reload keeps it; the menu", async ({
   page,
 }) => {
   const [search, name] =
@@ -27,8 +29,27 @@ test("SEC-3b, SEC-7, RT-26: the QR link fills in the join code; pick a name; a r
   await page.reload();
   await expect(page.getByText(`Signed in as ${name}`)).toBeVisible();
 
+  // SC-3: the menu. Dark mode is kept on the device; the other pages open in a new tab.
+  const menu = page.getByRole("navigation", { name: "Settings" });
   await page.getByRole("button", { name: "Menu" }).click();
-  await page.getByRole("button", { name: "Sign out" }).click();
+  await menu.getByRole("button", { name: "Dark mode" }).click();
+  await expect(page.locator("html")).toHaveClass(/\bdark\b/);
+  await page.reload();
+  await expect(page.locator("html")).toHaveClass(/\bdark\b/);
+  await page.getByRole("button", { name: "Menu" }).click();
+  await menu.getByRole("button", { name: "Light mode" }).click();
+  await expect(page.locator("html")).not.toHaveClass(/\bdark\b/);
+  // The menu stays open after changing the theme.
+  for (const [link, href] of [
+    ["Analysis", "/analysis"],
+    ["Admin", "/admin"],
+    ["Give feedback", FEEDBACK],
+  ])
+    await expect(menu.getByRole("link", { name: link })).toHaveAttribute("href", href);
+  for (const item of ["Reload", "Change join code", "Reset app data"])
+    await expect(menu.getByRole("button", { name: item })).toBeVisible();
+
+  await menu.getByRole("button", { name: "Sign out" }).click();
   await expect(roster.getByRole("button", { name: "Zoe Park" })).toBeVisible();
 });
 

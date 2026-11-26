@@ -244,7 +244,7 @@ describe("SC-24 (v6): undo", () => {
   });
 });
 
-describe("SC-25, SC-26, SC-30, SC-31: layers, conditional layers and variables (2023)", () => {
+describe("SC-18, SC-25, SC-26, SC-29, SC-30, SC-31: layers, conditional layers and variables (2023)", () => {
   it("shows only the buttons the variables allow, and undo restores both", () => {
     const m = new Match(c2023).press("prePickupCone", "layer-0").start().until(140000);
     const shown = () => screenButtons(m.state, m.context, m.now).map((b) => b.id);
@@ -270,7 +270,7 @@ describe("SC-25, SC-26, SC-30, SC-31: layers, conditional layers and variables (
   });
 });
 
-describe("SC-27 (v6): locks", () => {
+describe("SC-27, SC-27b, CS-9 (v6): locks, a client rule of the configuration", () => {
   it("A-Stop disables every button but undo and the match control until teleop begins", () => {
     const m = new Match(c2026).press("preloadFuel").start().until(150000).press("aStop");
     expect(m.state.lock?.lock.id).toBe("aStop");
@@ -358,7 +358,7 @@ describe("SC-32, SC-31a: field positions", () => {
   });
 });
 
-describe("SC-34, SC-35, SC-36: highlights and hiding", () => {
+describe("SC-34, SC-35, SC-36, F-1: highlights and hiding", () => {
   it("highlights one button of a group, on every layer that has it; clearHighlight ends it", () => {
     const m = new Match(c2026).press("preloadFuel").start().until(150000).press("StartShooting");
     expect(m.state.highlights).toEqual(["StartShooting"]);
@@ -389,6 +389,26 @@ describe("SC-37: multiplier", () => {
     expect(m.actions().filter((a) => a.id === "leave")).toHaveLength(3);
     m.undo();
     expect(m.actions().filter((a) => a.id === "leave")).toHaveLength(0);
+  });
+});
+
+describe("SC-33: constantPosition", () => {
+  it("stores the configured spot with the action, the same on a flipped field, and undo takes it", () => {
+    const config = structuredClone(c2025);
+    config.layout.layers[1].buttons.find((b) => b.id === "leave")!.executables = [
+      { type: "constantPosition", position: { x: 50, y: 20 } },
+    ];
+    for (const fieldFlipped of [false, true]) {
+      const m = new Match(config, { fieldFlipped })
+        .press("preloadCoral")
+        .start()
+        .until(150000)
+        .press("leave");
+      expect(m.state.awaitingPosition).toBeNull();
+      expect(m.actions().find((a) => a.id === "leave")?.other).toEqual({ pos: { x: 50, y: 20 } });
+      m.undo();
+      expect(m.actions().filter((a) => a.id === "leave")).toHaveLength(0);
+    }
   });
 });
 

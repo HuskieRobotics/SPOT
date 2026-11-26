@@ -22,7 +22,8 @@ test("an admin page needs the admin password, and sign-out ends the session", as
   expect(cookie?.httpOnly).toBe(true);
   expect(cookie?.sameSite).toBe("Strict");
 
-  await page.getByRole("button", { name: "Sign out" }).click();
+  // Exact: a scouter signed in by a test running alongside has a card with "Sign out <name>".
+  await page.getByRole("button", { name: "Sign out", exact: true }).click();
   await expect(page).toHaveURL(/\/admin\/sign-in$/);
   await page.goto("/admin");
   await expect(page).toHaveURL(/\/admin\/sign-in/);

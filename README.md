@@ -19,9 +19,11 @@ MongoDB). It is not yet usable at events.
 
 ## Status
 
-Phases 0 (preparation) and 1 (core engine) are complete, and so is gate K: students can write
-a new game's configuration, check it, and preview it before any match is played. Phase 2 (the
-scouting vertical slice) is next, aimed at gate W, testing v6 beside v5 at Week 0. Live status
+Phases 0 (preparation), 1 (core engine) and 2 (the scouting vertical slice) are complete. Gate K
+is met: students can write a new game's configuration, check it, and preview it before any match
+is played. So is gate W-1: scouters sign in, are assigned robots, scout and submit, online or
+with a QR code offline, and an admin runs the matches. Phase 3 (the analysis dashboard) is next,
+aimed at gate W, testing v6 beside v5 at Week 0. Live status
 is in `docs/spec/17-rewrite-plan-and-next-steps.md` §5, and work is tracked by the "v6 Phase N"
 milestones on GitHub. The app skeleton, test tooling, and CI verify every pull request
 automatically (`docs/spec/02-architecture.md`, NF-8).

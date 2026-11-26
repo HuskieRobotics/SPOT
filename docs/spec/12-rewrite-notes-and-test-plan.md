@@ -14,8 +14,9 @@ also uses. Each ends with what v6 does (audited in document 23).
   config. **v6: replaced** by CS-16 (2026-11-19). An action stores the button id and its period;
   the converter rewrote the 2026 pipeline into that form (#320).
 - **Q-2** Temp actions (`startGame`, `teleopActive`, `teleopInactive`) never leave the client but
-  count toward the undo guard (`minOfQueueLength`) and the last-actions readout. **v6:** Phase 2
-  (the scouting client).
+  count toward the undo guard (`minOfQueueLength`) and the last-actions readout. **v6: kept.**
+  A `none` press and the start are entries in the session's queue, counted by the undo guard and
+  shown in the readout, and record no action (document 05 SC-23 and SC-24, v6).
 - **Q-3** `ts` counts **down** (milliseconds remaining). `cycle.timeDifferential = start.ts - end.ts`
   is therefore positive. TBA-derived synthetic actions use `ts = 0`. **v6: kept** (DM-3, A-33,
   DM-11a).
@@ -437,9 +438,12 @@ that a new feature can be verified not to break existing behavior. Requirements:
   produce a QR code, then scan it on the scanner page; admin selects a match and assigns
   scouters; analysis loads a team, the bubble graph, and Filter Teams; edit page flags and
   deletes a TMP; setup wizard saves a configuration. The manual plan below is the source of
-  these journeys. v6: `tests/e2e/scouting-preview.spec.ts` (#322) plays a match on the
-  scouting screen through submission; the online and offline submit journeys follow with the
-  Phase 2 client.
+  these journeys. v6: the scouting journeys are built (Phase 2).
+  `tests/e2e/scouting-client.spec.ts` scouts a full match on a phone held sideways and submits it
+  online, and makes a QR code offline;
+  `tests/e2e/admin-page.spec.ts` has an admin select a match and assign scouters;
+  `tests/e2e/acceptance.spec.ts` (#363) runs both together and checks MongoDB. Scanning the code
+  on the scanner page, and the analysis, edit and setup journeys, follow with Phases 3 and 4.
 - **T-8** Offline behavior is tested by loading the app, going offline in the browser
   harness, and asserting the scouting and analysis pages still function from cache. v6:
   `tests/e2e/offline.spec.ts` (#361) does so for the scouting client, reading its QR code back

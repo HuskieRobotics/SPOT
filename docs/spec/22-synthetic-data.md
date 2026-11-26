@@ -15,7 +15,7 @@ only on recorded data.
 
 The generator walks a `match-scouting.json` the way a scouter would, and emits the performances
 that walk produces. It is a **headless model of the scouting rules**, which makes it the first
-executable statement of those rules rather than a bag of random documents. The Phase 2 client
+executable statement of those rules rather than a bag of random documents. The scouting client
 and this generator should agree; where they disagree, one of them is wrong about the
 configuration, and that is worth finding out before an event rather than during one.
 

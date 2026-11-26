@@ -121,26 +121,26 @@ quotes the test's name.
 
 ### Document 20: configuration schema v2 and config:check
 
-| Id            | Status   | Where                                                                                                                     |
-| ------------- | -------- | ------------------------------------------------------------------------------------------------------------------------- |
-| CS-1          | Done     | `config-v2-schema`, `config-convert`                                                                                      |
-| CS-2          | Done     | `config-convert`; `config-check` (CC-3, "phases and segments in match order")                                             |
-| CS-3          | Replaced | by CS-16                                                                                                                  |
-| CS-4          | Done     | `config-v2-schema`, `config-convert`, `config-check` (CC-3, #326)                                                         |
-| CS-5          | Done     | `config-convert`; `phase` ("round-trips every derived prefix")                                                            |
-| CS-6          | Done     | `config-convert` ("match-scouting converts to a valid v2 document" resolves every layer); `config-check` (CC-3)           |
-| CS-7          | Done     | `config-v2-schema`                                                                                                        |
-| CS-8          | Done     | `config-convert`                                                                                                          |
-| CS-9          | Done     | `config-convert`. The scouting client that applies the rules is Phase 2.                                                  |
-| CS-10         | Done     | `config-v2-schema`, `engine`, `arithmetic`, `count-actions`                                                               |
-| CS-11         | Done     | `config-convert`; `config-check` (CC-2, F-25)                                                                             |
-| CS-12         | Done     | `config-convert`, `tba-enrichment`, `config-check` (CC-6)                                                                 |
-| CS-13         | Done     | `config-v2-schema`. The modules that read these options are Phase 3.                                                      |
-| CS-14         | Later    | `config-convert` widens the id field and CC-7 checks it, but the encoding that replaces the composite-id index is Phase 2 |
-| CS-15         | Done     | By design: no settings file and no schema for one (ADR 0003)                                                              |
-| CS-16         | Done     | `count-actions`, `config-convert`, `oracle-compare`; rules `action-period-fields`, `counts-every-period-2026`             |
-| CC-1 to CC-8  | Done     | `config-check`                                                                                                            |
-| CC-9 to CC-12 | Done     | `config-check-generated`                                                                                                  |
+| Id            | Status   | Where                                                                                                                                   |
+| ------------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| CS-1          | Done     | `config-v2-schema`, `config-convert`                                                                                                    |
+| CS-2          | Done     | `config-convert`; `config-check` (CC-3, "phases and segments in match order")                                                           |
+| CS-3          | Replaced | by CS-16                                                                                                                                |
+| CS-4          | Done     | `config-v2-schema`, `config-convert`, `config-check` (CC-3, #326)                                                                       |
+| CS-5          | Done     | `config-convert`; `phase` ("round-trips every derived prefix")                                                                          |
+| CS-6          | Done     | `config-convert` ("match-scouting converts to a valid v2 document" resolves every layer); `config-check` (CC-3)                         |
+| CS-7          | Done     | `config-v2-schema`                                                                                                                      |
+| CS-8          | Done     | `config-convert`                                                                                                                        |
+| CS-9          | Done     | `config-convert`, `scouting-session` (the client applies the rules, Phase 2)                                                            |
+| CS-10         | Done     | `config-v2-schema`, `engine`, `arithmetic`, `count-actions`                                                                             |
+| CS-11         | Done     | `config-convert`; `config-check` (CC-2, F-25)                                                                                           |
+| CS-12         | Done     | `config-convert`, `tba-enrichment`, `config-check` (CC-6)                                                                               |
+| CS-13         | Done     | `config-v2-schema`. The modules that read these options are Phase 3.                                                                    |
+| CS-14         | Done     | `qr` (#358): a button index and its period (CS-16), the layout derived from match-scouting.json (DM-15d); CC-7 checks a long match fits |
+| CS-15         | Done     | By design: no settings file and no schema for one (ADR 0003)                                                                            |
+| CS-16         | Done     | `count-actions`, `config-convert`, `oracle-compare`; rules `action-period-fields`, `counts-every-period-2026`                           |
+| CC-1 to CC-8  | Done     | `config-check`                                                                                                                          |
+| CC-9 to CC-12 | Done     | `config-check-generated`                                                                                                                |
 
 ### Document 22: synthetic data
 
@@ -150,19 +150,19 @@ quotes the test's name.
 
 ### Document 21: data model v2 (Phase 0, which the engine reads)
 
-| Id                    | Status | Where                                                                                   |
-| --------------------- | ------ | --------------------------------------------------------------------------------------- |
-| DV-1                  | Done   | `data-schema`, `migrate`, `phase`; rule `action-period-fields`                          |
-| DV-2                  | Done   | `data-schema`, `engine` (BL-31)                                                         |
-| DV-3                  | Done   | `data-schema`, `team`, `mongo`                                                          |
-| DV-4                  | Done   | `data-schema`, `migrate`. Signing in by student ID is Phase 2.                          |
-| DV-5, DV-6            | Done   | `data-schema`, `migrate`                                                                |
-| DV-7                  | Done   | `data-schema` (the fields exist; Phase 2 and later fill them)                           |
-| DV-8                  | Done   | `data-schema`, `migrate`                                                                |
-| DV-9                  | Done   | `migrate` ("splits an event code"). Write gating with the join code is Phase 2.         |
-| DV-10                 | Done   | `engine` (DM-1b); rules `missing-nan`, `missing-undefined`                              |
-| DV-11                 | Done   | `migrate`, `config-convert` (`actionQueue` becomes `actions`)                           |
-| DV-12, DV-12a, DV-12b | Later  | The settings document is Phase 2, and the pages that select an event are Phases 2 and 3 |
+| Id                    | Status | Where                                                                                                                                                      |
+| --------------------- | ------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| DV-1                  | Done   | `data-schema`, `migrate`, `phase`; rule `action-period-fields`                                                                                             |
+| DV-2                  | Done   | `data-schema`, `engine` (BL-31)                                                                                                                            |
+| DV-3                  | Done   | `data-schema`, `team`, `mongo`                                                                                                                             |
+| DV-4                  | Done   | `data-schema`, `migrate`, `sign-in` (signing in by student ID, Phase 2)                                                                                    |
+| DV-5, DV-6            | Done   | `data-schema`, `migrate`                                                                                                                                   |
+| DV-7                  | Done   | `data-schema` (the fields exist; Phase 2 and later fill them)                                                                                              |
+| DV-8                  | Done   | `data-schema`, `migrate`                                                                                                                                   |
+| DV-9                  | Done   | `migrate` ("splits an event code"); the join code gates writes in `submission` (Phase 2)                                                                   |
+| DV-10                 | Done   | `engine` (DM-1b); rules `missing-nan`, `missing-undefined`                                                                                                 |
+| DV-11                 | Done   | `migrate`, `config-convert` (`actionQueue` becomes `actions`)                                                                                              |
+| DV-12, DV-12a, DV-12b | Done   | `admin-page` (Phase 2): the settings document holds the active event (DV-13), chosen and shown by its code. The analysis page's event switching is Phase 3 |
 
 ### Document 03: data model and the analysis dataset
 
@@ -203,32 +203,32 @@ quotes the test's name.
 
 ### Document 12: tests, decisions, defects and quirks
 
-| Id   | Status     | Where                                                                                                                                                                        |
-| ---- | ---------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| T-1  | Done       | `.github/workflows/ci.yml`: lint, typecheck, unit tests, build and end-to-end tests on every pull request                                                                    |
-| T-2  | Done       | Its Phase 1 part: every transformer, `getPath` and `setPath`, TBA enrichment and OPRs. Action ids, undo, QR, assignment, schedules, Filter Teams and CSV are Phases 2 and 3. |
-| T-3  | Done       | `config-check`, `config-check-generated`, `config-convert`, `config-active`                                                                                                  |
-| T-4  | Done       | `oracle-compare`, `oracle-golden`, `synthetic`                                                                                                                               |
-| T-9  | Done       | Recorded TBA responses in `tools/oracle/`; no test calls TBA                                                                                                                 |
-| D-1  | Done       | A versioned successor with a converter (document 20)                                                                                                                         |
-| D-2  | Done       | Game constants are configuration (CS-4, CS-9, CS-12, CS-13). The clients that read them are Phases 2 and 3.                                                                  |
-| D-5  | Done       | One pipeline implementation that also runs in the browser (TR-9). The server's calls to itself go with Phases 2 and 3 (#90).                                                 |
-| D-7  | Done       | As DM-1a                                                                                                                                                                     |
-| D-7a | Done       | As DM-1b                                                                                                                                                                     |
-| D-8  | Done       | ES modules and explicit registration (TR-9, TR-14, ADR 0005)                                                                                                                 |
-| F-2  | Done       | `aggregation` ("F-2: the tmp variant works")                                                                                                                                 |
-| F-3  | Done       | `engine`, `action-sequence`                                                                                                                                                  |
-| F-4  | Divergence | For analysis: derived ids (CS-5) and TBA ids from `knownIds` (DM-11b); rule `counts-catalog-ids-2026`. The QR side is Phase 2; CC-7 checks the id field until then.          |
-| F-11 | Done       | Gone: v6 has no `analysis-transformers.json`                                                                                                                                 |
-| F-19 | Done       | In configuration, as D-2                                                                                                                                                     |
-| F-24 | Divergence | `arithmetic`; rule `ratio-falsy-divbyzero-2025`                                                                                                                              |
-| F-25 | Divergence | `arithmetic`, `config-check`; rule `ratio-misplaced-divbyzero-2025`                                                                                                          |
-| F-26 | Divergence | As TR-13                                                                                                                                                                     |
-| F-27 | Done       | `config-check-generated` (CC-10), `config-preview` (MO-3, MO-4). The modules are Phase 3.                                                                                    |
-| F-28 | Divergence | As TR-15                                                                                                                                                                     |
-| Q-1  | Replaced   | by CS-16                                                                                                                                                                     |
-| Q-3  | Done       | As DM-3                                                                                                                                                                      |
-| Q-4  | Done       | `count-actions` ("all: counts ids the configuration does not know"), as Q-4 now says                                                                                         |
+| Id   | Status     | Where                                                                                                                                                                                                                              |
+| ---- | ---------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| T-1  | Done       | `.github/workflows/ci.yml`: lint, typecheck, unit tests, build and end-to-end tests on every pull request                                                                                                                          |
+| T-2  | Done       | Phase 1: every transformer, `getPath` and `setPath`, TBA enrichment and OPRs. Phase 2: action ids and undo in `scouting-session`, QR in `qr`, assignment in `registry`, schedules in `schedule`. Filter Teams and CSV are Phase 3. |
+| T-3  | Done       | `config-check`, `config-check-generated`, `config-convert`, `config-active`                                                                                                                                                        |
+| T-4  | Done       | `oracle-compare`, `oracle-golden`, `synthetic`                                                                                                                                                                                     |
+| T-9  | Done       | Recorded TBA responses in `tools/oracle/`; no test calls TBA. The browser tests' server answers TBA from them (#363)                                                                                                               |
+| D-1  | Done       | A versioned successor with a converter (document 20)                                                                                                                                                                               |
+| D-2  | Done       | Game constants are configuration (CS-4, CS-9, CS-12, CS-13). The scouting client reads them (Phase 2); the analysis client is Phase 3.                                                                                             |
+| D-5  | Done       | One pipeline implementation that also runs in the browser (TR-9). The server's calls to itself go with Phases 2 and 3 (#90).                                                                                                       |
+| D-7  | Done       | As DM-1a                                                                                                                                                                                                                           |
+| D-7a | Done       | As DM-1b                                                                                                                                                                                                                           |
+| D-8  | Done       | ES modules and explicit registration (TR-9, TR-14, ADR 0005)                                                                                                                                                                       |
+| F-2  | Done       | `aggregation` ("F-2: the tmp variant works")                                                                                                                                                                                       |
+| F-3  | Done       | `engine`, `action-sequence`                                                                                                                                                                                                        |
+| F-4  | Divergence | For analysis: derived ids (CS-5) and TBA ids from `knownIds` (DM-11b); rule `counts-catalog-ids-2026`. The QR code carries the button and its period (CS-14, #358), so no id list can drift.                                       |
+| F-11 | Done       | Gone: v6 has no `analysis-transformers.json`                                                                                                                                                                                       |
+| F-19 | Done       | In configuration, as D-2                                                                                                                                                                                                           |
+| F-24 | Divergence | `arithmetic`; rule `ratio-falsy-divbyzero-2025`                                                                                                                                                                                    |
+| F-25 | Divergence | `arithmetic`, `config-check`; rule `ratio-misplaced-divbyzero-2025`                                                                                                                                                                |
+| F-26 | Divergence | As TR-13                                                                                                                                                                                                                           |
+| F-27 | Done       | `config-check-generated` (CC-10), `config-preview` (MO-3, MO-4). The modules are Phase 3.                                                                                                                                          |
+| F-28 | Divergence | As TR-15                                                                                                                                                                                                                           |
+| Q-1  | Replaced   | by CS-16                                                                                                                                                                                                                           |
+| Q-3  | Done       | As DM-3                                                                                                                                                                                                                            |
+| Q-4  | Done       | `count-actions` ("all: counts ids the configuration does not know"), as Q-4 now says                                                                                                                                               |
 
 ### Document 14: answers that changed Phase 1
 
@@ -247,16 +247,255 @@ quotes the test's name.
 
 ### Documents 02, 17 and the ADRs
 
-| Id       | Status | Where                                                                                                                                                   |
-| -------- | ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| NF-8     | Done   | As T-1                                                                                                                                                  |
-| NF-12    | Done   | `.nvmrc` is 24, and `package.json` requires Node 24 or later                                                                                            |
-| NF-13    | Done   | `.vscode/launch.json`: `vscode-launch`                                                                                                                  |
-| K-1      | Done   | This audit, `oracle-compare`                                                                                                                            |
-| K-2      | Done   | #317: `config-check`, `config-check-generated`                                                                                                          |
-| K-3      | Done   | #318: `config-preview`                                                                                                                                  |
-| K-4      | Done   | #321: `config-guide`                                                                                                                                    |
-| K-5      | Done   | #322: `config-load`, `config-guide`, and the browser test `tests/e2e/scouting-preview.spec.ts`                                                          |
-| K-6      | Done   | #333: `config-guide`                                                                                                                                    |
-| ADR 0003 | Done   | For the game configuration: four files with schemas. Settings and secrets are Phase 2 and 4.                                                            |
-| ADR 0005 | Done   | For transformers (TR-14) and executables (SC-38, #362). Extension modules are Phase 3; their names stay open in the schema until then (document 20 §6). |
+| Id       | Status | Where                                                                                                                                                                           |
+| -------- | ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| NF-8     | Done   | As T-1                                                                                                                                                                          |
+| NF-12    | Done   | `.nvmrc` is 24, and `package.json` requires Node 24 or later                                                                                                                    |
+| NF-13    | Done   | `.vscode/launch.json`: `vscode-launch`                                                                                                                                          |
+| K-1      | Done   | This audit, `oracle-compare`                                                                                                                                                    |
+| K-2      | Done   | #317: `config-check`, `config-check-generated`                                                                                                                                  |
+| K-3      | Done   | #318: `config-preview`                                                                                                                                                          |
+| K-4      | Done   | #321: `config-guide`                                                                                                                                                            |
+| K-5      | Done   | #322: `config-load`, `config-guide`, and the browser test `tests/e2e/scouting-preview.spec.ts`                                                                                  |
+| K-6      | Done   | #333: `config-guide`                                                                                                                                                            |
+| ADR 0003 | Done   | For the game configuration: four files with schemas. The settings document is built (DV-13, Phase 2); the settings page is Phase 4 (R-32), and secrets stay in the environment. |
+| ADR 0005 | Done   | For transformers (TR-14) and executables (SC-38, #362). Extension modules are Phase 3; their names stay open in the schema until then (document 20 §6).                         |
+
+## Phase 2: scouting vertical slice (audited 2026-11-26, #364)
+
+**Scope** (document 17 §3): the scouting client (landing, sign-in, waiting, the grid, the clock
+with its hold and 2×, undo, executables, submission, IndexedDB, QR), the session and assignment
+service with its transport, and the admin page's match selection and scouter monitor. Issues
+#351 to #364, after the scouting-screen preview (#322, K-5) that began it, and four backlog items
+moved in from phase 5: BL-93, BL-54, BL-116 and BL-33.
+
+**Exit criterion: met.** `tests/e2e/acceptance.spec.ts` (#363), run in CI with every browser
+test: two scouters on phones and an admin page, against `next start`, the in-memory MongoDB and
+TBA's recorded schedule, get assigned, scout and submit, and the records land in MongoDB valid
+and correct; the QR code made offline decodes to the record MongoDB stores. Gate W-1 is met.
+
+- `npm test`: 851 tests pass, including the ones this audit added.
+- The browser tests: 30 pass, and 2 are skipped by design: two tests that change shared server
+  state run in one project only.
+- Nothing in the engine changed: `npm run oracle:compare` still matches all four sets entry by
+  entry, and `npm run config:check` still gives 11 errors and 8 warnings for the active files
+  and 6 and 6 for `config/seasons/2025`, as at Phase 1.
+
+### What the audit changed
+
+**Spec text that no longer matched what was built:**
+
+1. Document 05 described the scouting-screen preview's components as waiting for "the Phase 2
+   client", which exists (#359).
+2. Document 12: Q-2 still said "Phase 2", and T-7 said the online and offline journeys would
+   follow. Both now say what was built and where it is tested.
+3. Document 11's v6 route table had no row for `/scouting-preview`.
+4. Document 02: NF-1 asked for a manifest locked to landscape. v6's manifest does not lock the
+   orientation, because the admin page and, later, analysis are used upright; whether the
+   scouting screen refuses portrait is #43. NF-2's install modal is replaced by SC-5's.
+5. Document 22 still called the scouting client "the Phase 2 client".
+6. Document 17 §5 and the README now record Phase 2 as complete and Phase 3 as next.
+7. Phase 1's rows that waited for Phase 2 are updated above: CS-9, CS-14, DV-4, DV-9, DV-12,
+   T-2, T-9, D-2, F-4 and ADR 0003.
+
+**Decisions made along the way, checked to be in the spec text:** the transport (ADR 0001,
+"Implementation"), the QR layout (document 03 DM-15d to DM-16, document 20 CS-14), the
+registry's persistence (document 21 DV-15 and DV-16), how the roster reaches devices (document
+12 SEC-7a and SEC-8a), the offline worker and where the client's data lives (document 18, and
+OF-5 as reworded in #377), and extension executables (document 05 SC-38).
+
+**Rules that were only implied, now written down:**
+
+- Document 06, "v6: the registry": who gets which robot. Free robots go to waiting scouters in
+  sign-in order, red 1 to 3 then blue 1 to 3, skipping one a scouter was released from; a
+  scouter who signs in or returns while a match is current gets a free robot at once. The
+  acceptance test's replacement depends on it.
+- Document 06, "v6: submission and sync": `submittedAt` is the device's clock, so a phone with a
+  clock far wrong could win or lose RT-14a's "latest". Accepted, with the reason.
+
+**Tests:** a new test for SC-33 (`constantPosition`), which nothing exercised. The browser
+tests now check the landing page's version and links (SC-4, SC-7) and the settings menu
+(SC-3). 15 test names in 8 files gained the ids they check. The admin sign-in browser test
+pressed "Sign out" by a name that a scouter's card, left by a test running alongside, also
+matched, so it failed now and then; it now matches the name exactly. **Code:** the landing page's
+feedback link uses the menu's constant instead of a second copy of the address.
+
+**Gaps, each moved on purpose:**
+
+- **SEC-6's aliases and merge** are Phase 4, with the edit page (SEC-6a). Until then a scouter
+  added twice under two student IDs stays two records.
+- **SEC-1:** the read path already drops private fields (SEC-8, `db`); the public dataset route
+  is Phase 3.
+- **SEC-5's other admin actions** (flag, edit, delete, the scanner's undo) are Phase 4; demo
+  mode is #374. Restart is gone (AD-9).
+- **OF-3, OF-4 and the rest of OF-9 and T-7** belong to the analysis page (Phase 3) and the
+  scanner and edit pages (Phase 4).
+- **ADR 0001's stream through nginx and Cloud Run** is tested with their recipes (W-3).
+- **The migration's driver-backed runner** (document 21 §6) runs against the real dump in
+  Phase 4.
+- **Portrait on the scouting screen** is #43.
+
+### Document 05: the scouting client
+
+| Id             | Status   | Where                                                                                                                             |
+| -------------- | -------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| SC-1           | Done     | `scouting-client`; the browser test `tests/e2e/scouting-client.spec.ts`                                                           |
+| SC-2           | Done     | `scouting-session`                                                                                                                |
+| SC-3           | Done     | The browser tests `tests/e2e/sign-in.spec.ts` (the menu) and `tests/e2e/scouting-client.spec.ts` (sign out)                       |
+| SC-4           | Done     | The browser test `tests/e2e/smoke.spec.ts`: the GitHub issues page. v5's email link is gone                                       |
+| SC-5           | Done     | The browser test `tests/e2e/offline.spec.ts`: the manifest, its icons, and the offer once per device                              |
+| SC-6           | Done     | As CS-17                                                                                                                          |
+| SC-7           | Done     | The browser test `tests/e2e/smoke.spec.ts`. The demo label comes with demo mode (#374)                                            |
+| SC-8           | Replaced | Google sign-in is dropped (F-13; #126 closed)                                                                                     |
+| SC-9           | Replaced | by SEC-7a: a name from the roster                                                                                                 |
+| SC-10, SC-11   | Done     | `scouting-client`; the browser test `tests/e2e/offline.spec.ts`                                                                   |
+| SC-12          | Done     | The browser test `tests/e2e/scouting-client.spec.ts`                                                                              |
+| SC-13          | Done     | `scouting-client`                                                                                                                 |
+| SC-14          | Done     | `scouting-session`; the browser test `tests/e2e/scouting-preview.spec.ts`                                                         |
+| SC-15          | Replaced | by the session's state (`src/scouting/session.ts`): v5's bookkeeping on DOM elements                                              |
+| SC-16          | Done     | Presentation, seen in the preview; not tested                                                                                     |
+| SC-17, SC-18   | Done     | `scouting-session`                                                                                                                |
+| SC-19 to SC-21 | Done     | `scouting-clock`, `scouting-session`                                                                                              |
+| SC-21a         | Done     | `scouting-clock` (BL-298's hold); BL-230's 2× clock in `scouting-client`                                                          |
+| SC-22 to SC-26 | Done     | `scouting-session`; the browser test `tests/e2e/scouting-preview.spec.ts`                                                         |
+| SC-27, SC-27b  | Done     | `scouting-session`                                                                                                                |
+| SC-27a         | Replaced | by SC-27 (v6): a lock's trigger buttons are configuration (`rules.locks`, CS-9), not a name containing "astop"                    |
+| SC-28          | Done     | `scouting-session`, `scouting-client`, `admin-page`                                                                               |
+| SC-29 to SC-37 | Done     | `scouting-session`                                                                                                                |
+| SC-38          | Done     | `executables`                                                                                                                     |
+| SC-39          | Done     | `submission`                                                                                                                      |
+| SC-40, SC-42   | Done     | The browser test `tests/e2e/scouting-client.spec.ts`: sent at once, with no reload                                                |
+| SC-41          | Done     | The browser tests `tests/e2e/scouting-client.spec.ts`, `tests/e2e/offline.spec.ts` and `tests/e2e/acceptance.spec.ts`             |
+| SC-43, SC-44   | Replaced | by the connection (RT-5 to RT-8) and its status line (OF-7), and sending on connecting (RT-28)                                    |
+| SC-45          | Replaced | by the stream's `signed-out` (ADR 0001)                                                                                           |
+| SC-46 to SC-48 | Replaced | by the stream's messages, each carrying the scouter's whole view, and HTTP actions, whose reply is the acknowledgement (ADR 0001) |
+| BL-54          | Done     | `registry`, `scouting-client`                                                                                                     |
+| BL-93          | Done     | The browser test `tests/e2e/scouting-client.spec.ts`: the list, its QR codes and **Send now**                                     |
+| BL-230         | Done     | `scouting-client`                                                                                                                 |
+| BL-298         | Done     | `scouting-clock`                                                                                                                  |
+
+### Document 06: real-time coordination
+
+| Id              | Status   | Where                                                                                                                           |
+| --------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| RT-1            | Replaced | by `POST /api/scouter/sign-in` and `POST /api/scouter/action` (ADR 0001)                                                        |
+| RT-2, RT-3      | Replaced | by `POST /api/scouter/performances` (#360): validated, behind the join code, stored once per nonce (DV-18)                      |
+| RT-4            | Replaced | by RT-29                                                                                                                        |
+| RT-5            | Done     | `transport`, `scouting-client`                                                                                                  |
+| RT-6            | Done     | `scouting-client`                                                                                                               |
+| RT-7            | Replaced | The device sends on its own (RT-21); the server never asks                                                                      |
+| RT-8            | Done     | `scouting-client` (`signed-out`)                                                                                                |
+| RT-9            | Done     | `registry`                                                                                                                      |
+| RT-10           | Replaced | by RT-25: a robot anyone holds, connected or not, is not free                                                                   |
+| RT-11           | Done     | `registry`. With RT-14a, a seventh scouter waits instead of doubling a robot                                                    |
+| RT-12, RT-13    | Replaced | by RT-12a. RT-13's demo start comes with demo mode (#374)                                                                       |
+| RT-12a          | Done     | `registry`, `transport`, `admin-page`                                                                                           |
+| RT-14, RT-14a   | Done     | `registry`, `submission`                                                                                                        |
+| RT-14b          | Done     | `admin-page`; two admins in the browser test `tests/e2e/admin-page.spec.ts`                                                     |
+| RT-14c          | Done     | The browser test `tests/e2e/scouter-stream.spec.ts`: an assignment arrives within the 2 to 3 s allowed                          |
+| RT-15           | Replaced | by RT-12a's admin start, scoped to the current match                                                                            |
+| RT-16           | Done     | `transport`                                                                                                                     |
+| RT-17           | Replaced | by the registry's `remove` (RT-29): one action for **Sign out** and **Remove**                                                  |
+| RT-18           | Replaced | by `GET /api/admin/registry` (document 11)                                                                                      |
+| RT-19, RT-20    | Replaced | by "v6: submission and sync": one request, no question first                                                                    |
+| RT-21           | Done     | `submission`                                                                                                                    |
+| RT-22, RT-22a   | Done     | `schedule`                                                                                                                      |
+| RT-23 to RT-23b | Done     | `schedule`                                                                                                                      |
+| RT-24 to RT-36  | Done     | `registry`, `submission`, `transport`, `scouting-client`; both paths of T-6a in the browser test `tests/e2e/acceptance.spec.ts` |
+
+### Document 07: the admin page and the schedule
+
+| Id             | Status   | Where                                                                                                      |
+| -------------- | -------- | ---------------------------------------------------------------------------------------------------------- |
+| AD-1, AD-2     | Replaced | by SEC-4a and SEC-5a: a cookie, checked in `src/proxy.ts`                                                  |
+| AD-3           | Replaced | v5 databases are migrated before v6 uses them (`npm run migrate`, document 21 §3)                          |
+| AD-4           | Done     | `admin-page`; cards stay (RT-29)                                                                           |
+| AD-4a, AD-4b   | Done     | The browser tests `tests/e2e/admin-page.spec.ts` and `tests/e2e/acceptance.spec.ts`                        |
+| AD-5 to AD-7   | Replaced | by the v6 admin page (document 07): **Sign out** and **Remove**, **Start match** (RT-12a), the match panel |
+| AD-8           | Replaced | by AD-8a                                                                                                   |
+| AD-8a          | Done     | `schedule`                                                                                                 |
+| AD-9           | Replaced | Not carried over: a deployment restarts the process (document 10)                                          |
+| AD-10 to AD-21 | Later    | The edit page and the QR scanner, Phase 4                                                                  |
+| AD-22 to AD-25 | Replaced | by the schedule page at `/admin/schedule`; AD-25's `tempTeams` by the schedule's teams (F-12)              |
+| AD-25a         | Done     | `schedule`; the browser test `tests/e2e/admin-schedule.spec.ts`                                            |
+
+### Document 18: offline, for scouting
+
+| Id   | Status | Where                                                                                                                        |
+| ---- | ------ | ---------------------------------------------------------------------------------------------------------------------------- |
+| OF-1 | Done   | `scouting-client`, `sign-in`, `offline`; the browser test `tests/e2e/offline.spec.ts`                                        |
+| OF-2 | Done   | `submission`; the browser test `tests/e2e/scouting-client.spec.ts`                                                           |
+| OF-3 | Later  | The analysis page, Phase 3                                                                                                   |
+| OF-4 | Later  | The QR scanner, Phase 4                                                                                                      |
+| OF-5 | Done   | `offline`, for the scouting client, as reworded in #377                                                                      |
+| OF-6 | Done   | `offline`; the browser test `tests/e2e/offline.spec.ts`                                                                      |
+| OF-7 | Done   | `scouting-client`, `offline`, `schedule`                                                                                     |
+| OF-8 | Done   | `offline`, `config-load`; the browser test `tests/e2e/offline.spec.ts`                                                       |
+| OF-9 | Done   | For the scouting client: the browser test `tests/e2e/offline.spec.ts`. The analysis and scanner pages join in Phases 3 and 4 |
+
+### Document 21: what the server keeps
+
+| Id                     | Status | Where                                                     |
+| ---------------------- | ------ | --------------------------------------------------------- |
+| DV-13, DV-14           | Done   | `db`                                                      |
+| DV-15                  | Done   | `db`, `registry`, `transport`                             |
+| DV-16                  | Done   | `registry`                                                |
+| DV-17                  | Done   | `schedule`                                                |
+| DV-18                  | Done   | `submission`                                              |
+| §6, the database layer | Done   | `db` (T-5). Its driver-backed migration runner is Phase 4 |
+
+### Document 03: the QR code
+
+| Id               | Status | Where                                                 |
+| ---------------- | ------ | ----------------------------------------------------- |
+| DM-15a, DM-15c   | Done   | `qr`                                                  |
+| DM-15d to DM-15f | Done   | `qr`                                                  |
+| DM-16            | Done   | `qr`; the browser test `tests/e2e/acceptance.spec.ts` |
+
+### Document 12: security, tests and defects
+
+| Id                    | Status | Where                                                                                                                                             |
+| --------------------- | ------ | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| SEC-1                 | Later  | The read path drops private fields (SEC-8); the public dataset route is Phase 3                                                                   |
+| SEC-2                 | Done   | `submission`, `transport`, `sign-in`                                                                                                              |
+| SEC-3, SEC-3a, SEC-3b | Done   | `admin-auth`, `db`, `submission`, `sign-in`                                                                                                       |
+| SEC-4, SEC-4a         | Done   | `admin-auth`; the browser test `tests/e2e/admin-sign-in.spec.ts`                                                                                  |
+| SEC-5                 | Done   | `admin-auth`, for Phase 2's actions (events, the schedule, the registry, settings, the roster). The rest are Phase 4, and demo mode is #374       |
+| SEC-5a                | Done   | `admin-auth`                                                                                                                                      |
+| SEC-6                 | Done   | `db`, `sign-in`. Aliases and the merge are Phase 4 (SEC-6a)                                                                                       |
+| SEC-6a                | Done   | `admin-page`: correcting a name                                                                                                                   |
+| SEC-7, SEC-7a         | Done   | `sign-in`                                                                                                                                         |
+| SEC-8, SEC-8a         | Done   | `db`, `sign-in`                                                                                                                                   |
+| SEC-9                 | Done   | `admin-auth`, `submission`                                                                                                                        |
+| SEC-10                | Done   | By design: nothing to build (ADR 0004)                                                                                                            |
+| T-5                   | Done   | `db`, `admin-auth`, `sign-in`, `schedule`, `submission`: every route under `src/app/api/` is called by a unit test, against the in-memory MongoDB |
+| T-6                   | Done   | `registry`, `transport`                                                                                                                           |
+| T-6a                  | Done   | `registry`, `submission`, `transport`; the browser test `tests/e2e/acceptance.spec.ts`                                                            |
+| T-7                   | Done   | For Phase 2's journeys, as T-7 now says; the others follow with Phases 3 and 4                                                                    |
+| T-8                   | Done   | `offline`, for the scouting client; the analysis page joins in Phase 3                                                                            |
+| T-10                  | Done   | `executables`; for the built-in executables, as SC-24                                                                                             |
+| Q-2                   | Done   | As SC-23 and SC-24 (v6)                                                                                                                           |
+| F-1                   | Done   | `scouting-session`                                                                                                                                |
+| F-5                   | Done   | `qr`: a 12-character nonce, about 62 bits (DV-18)                                                                                                 |
+| F-8 to F-10           | Done   | Gone with v5's socket handlers: demo mode is #374, nothing is pruned (RT-29), and every device action has a route (ADR 0001)                      |
+| F-12                  | Done   | `schedule`                                                                                                                                        |
+| F-13                  | Done   | Google sign-in is dropped                                                                                                                         |
+| F-16                  | Done   | As OF-6                                                                                                                                           |
+| F-17, F-23            | Done   | `scouting-client`                                                                                                                                 |
+| F-20 to F-22          | Done   | `registry`                                                                                                                                        |
+
+### Documents 02, 17 and the ADRs
+
+| Id       | Status   | Where                                                                                                                                       |
+| -------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| NF-1     | Done     | The browser tests scout on a Pixel 7 held sideways. The manifest does not lock the orientation (#43)                                        |
+| NF-2     | Replaced | by SC-5 (v6)                                                                                                                                |
+| NF-3     | Done     | `scouting-clock`                                                                                                                            |
+| NF-5     | Done     | The admin page polls every 2.5 s; in the browser test `tests/e2e/admin-page.spec.ts`, one admin's change shows in the other's view          |
+| NF-6     | Done     | `schedule`, for matches; COPRs are Phase 3                                                                                                  |
+| NF-7     | Done     | The browser test `tests/e2e/offline.spec.ts` (the manifest and its icons); the favicon and Apple touch icon are in `src/app/layout.tsx`     |
+| NF-11    | Done     | For scouting: the registry tests run seven scouters, and the browser tests two phones and two admins. The data volume is Phase 3's to check |
+| W-1      | Done     | #363: the browser test `tests/e2e/acceptance.spec.ts`                                                                                       |
+| ADR 0001 | Done     | `transport`; the browser test `tests/e2e/scouter-stream.spec.ts`. nginx and Cloud Run are tested with their recipes (W-3)                   |
+| ADR 0004 | Done     | As SEC-1 to SEC-10; the merge is Phase 4                                                                                                    |
+| ADR 0006 | Done     | As RT-12a and RT-24 to RT-36                                                                                                                |
