@@ -89,7 +89,17 @@ test("T-7, SC-12, SC-13, RT-6, RT-26: sign in, wait, get assigned, scout, reload
   // BL-230: the 2× clock is behind the menu and a confirmation.
   await page.getByRole("button", { name: "Menu" }).click();
   await page.getByRole("button", { name: "2× speed, for a video…" }).click();
-  await page.getByRole("alertdialog").getByRole("button", { name: "Play at 2×" }).click();
+  // The question wraps inside its dialog, which fits the screen, though the menu that opens it
+  // sits in the status line, whose text never wraps.
+  const confirm = page.getByRole("alertdialog", { name: "Play the clock at 2×?" });
+  await expect(confirm).toContainText("Only for scouting a recording");
+  expect(
+    await confirm.evaluate(
+      (el) =>
+        el.scrollWidth <= el.clientWidth && el.getBoundingClientRect().right <= window.innerWidth,
+    ),
+  ).toBe(true);
+  await confirm.getByRole("button", { name: "Play at 2×" }).click();
   await expect(s.region.getByText("2×", { exact: true })).toBeVisible();
   await page.getByRole("button", { name: "Menu" }).click();
   await page.getByRole("button", { name: "Back to normal speed" }).click();
