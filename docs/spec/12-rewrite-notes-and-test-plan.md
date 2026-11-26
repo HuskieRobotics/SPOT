@@ -78,7 +78,8 @@ also uses. Each ends with what v6 does (audited in document 23).
 - **F-17** `Popup` for `connect_error` fires on every reconnect attempt, spamming the UI when
   offline.
 - **F-18** `SingleDisplay.formatData` with `wholeMatch` mutates the shared `alliances` array via
-  `push("|")` in `setMatchModules`.
+  `push("|")` in `setMatchModules`. **v6:** a module's values are plain functions of the teams and
+  the dataset that change neither (`src/analysis/modules/values.ts`, #384), tested in `modules`.
 - **F-19** Hard-coded 2026 game constants in the scouting client: `autoPhaseEndTime = 140000`,
   `endgameTime = 30000`, `shiftSwitchInterval = 25000`, shift button ids, `AZone`/`OAZone`
   ids, A-Stop detection, and the half-field coordinate transform in `HeatmapScatterPlot`.
