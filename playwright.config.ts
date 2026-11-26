@@ -4,7 +4,7 @@ import { E2E_ADMIN_PASSWORD } from "./tests/e2e/fixtures";
 const port = Number(process.env.PORT || 3000);
 // Tests that choose the current match drive the one registry every test shares: they run one
 // project at a time, after the others, so no other device is handed their robots.
-const REGISTRY = /(scouter-stream|scouting-client|offline|admin-page)\.spec\.ts/;
+const REGISTRY = /(scouter-stream|scouting-client|offline|admin-page|acceptance)\.spec\.ts/;
 
 export { E2E_ADMIN_PASSWORD };
 
@@ -51,6 +51,13 @@ export default defineConfig({
       use: { ...devices["Desktop Chrome"] },
       testMatch: /admin-page\.spec\.ts/,
       dependencies: ["offline"],
+    },
+    // Phase 2's exit criterion (#363, W-1): phones and an admin, each in a context of its own.
+    {
+      name: "acceptance",
+      use: { ...devices["Desktop Chrome"] },
+      testMatch: /acceptance\.spec\.ts/,
+      dependencies: ["admin-page"],
     },
   ],
   webServer: {

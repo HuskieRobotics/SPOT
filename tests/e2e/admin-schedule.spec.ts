@@ -1,9 +1,10 @@
 import { expect, test } from "@playwright/test";
 import { E2E_ADMIN_PASSWORD } from "./fixtures";
 
-// #355, D-4, AD-22 to AD-25a, DV-17: an admin types a schedule. The e2e server seeds two typed
-// qualification matches (tests/e2e/server.ts); this test adds a third and a final, then removes
-// them, so the matches other tests use are untouched. One project only: it changes shared
+// #355, D-4, AD-8, AD-22 to AD-25a, DV-17: an admin types a schedule. The e2e server seeds two
+// typed qualification matches, and TBA's recorded 2026mnwi schedule gives the playoffs
+// (tests/e2e/server.ts, T-9); this test adds a third qualification and typed playoffs, then
+// removes them, so the matches other tests use are untouched. One project only: it changes shared
 // server state.
 test("an admin types matches, is told what is wrong, saves them, and locks one", async ({
   page,
@@ -14,6 +15,7 @@ test("an admin types matches, is told what is wrong, saves them, and locks one",
   await page.getByRole("button", { name: "Sign in" }).click();
   await expect(page.getByRole("heading", { name: "Match schedule" })).toBeVisible();
   await expect(page.getByText("Qualifications: the 2 typed below.")).toBeVisible();
+  await expect(page.getByText("Playoffs: 15 from TBA (2026mnwi).")).toBeVisible();
   await expect(page.getByLabel("Qual 1 Red 1")).toHaveValue("101");
 
   const setCount = async (level: "qualification" | "playoff", n: number) => {
@@ -56,5 +58,6 @@ test("an admin types matches, is told what is wrong, saves them, and locks one",
   await page.getByRole("button", { name: "Save" }).click();
   await expect(page.getByRole("status")).toHaveText("Saved.");
   await expect(page.getByLabel("Qual 3 Red 1")).toHaveCount(0);
-  await expect(page.getByText("Playoffs: none yet.")).toBeVisible();
+  // AD-8: with no typed playoffs, TBA's are used again.
+  await expect(page.getByText("Playoffs: 15 from TBA (2026mnwi).")).toBeVisible();
 });

@@ -269,7 +269,9 @@ document 05. Tests: `tests/unit/submission.test.ts` (T-5, T-6a) and the RT-35 ca
   or when the schedule page is shown and the copy is more than five minutes old, so playoff
   matches appear as TBA adds them. If TBA cannot be read, the last copy stays and the page says
   why: no `TBA_API_KEY` (RT-23, also logged once), a refused key, an unknown event, or no
-  connection. Every request to TBA times out after 10 s (OF-7).
+  connection. Every request to TBA times out after 10 s (OF-7). `TBA_API_URL` points the server
+  elsewhere; only the browser tests set it, to answer from the recorded 2026mnwi schedule (T-9,
+  `tests/e2e/server.ts`).
 - Team keys from TBA and from the typed schedule are normalized on the way in (RT-23b): `frc2338B`
   and a typed `2338b` are both `2338B`.
 - When the schedule changes, the registry follows it (#354's runtime): if the current match's

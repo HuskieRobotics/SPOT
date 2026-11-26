@@ -129,6 +129,18 @@ describe("RT-23, RT-23a: reading TBA", () => {
     expect(init.signal).toBeDefined(); // OF-7: it cannot hang
   });
 
+  it("T-9: TBA_API_URL points the server at recorded responses, for the browser tests", async () => {
+    const f = ok([]);
+    vi.stubEnv("TBA_API_URL", "http://127.0.0.1:4999/api/v3/");
+    try {
+      await fetchTbaMatches("2026mnwi", "k", f);
+    } finally {
+      vi.unstubAllEnvs();
+    }
+    const [url] = (f as unknown as { mock: { calls: [string][] } }).mock.calls[0];
+    expect(url).toBe("http://127.0.0.1:4999/api/v3/event/2026mnwi/matches");
+  });
+
   it("says what is wrong, for an admin to act on", async () => {
     await expect(fetchTbaMatches("2026mnwi", undefined, ok([]))).rejects.toThrow(/TBA_API_KEY/);
     await expect(fetchTbaMatches("2026mnwi", "k", ok({}, 401))).rejects.toThrow(/refused/);

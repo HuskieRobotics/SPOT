@@ -425,7 +425,13 @@ that a new feature can be verified not to break existing behavior. Requirements:
   the replacement path (RT-31 to RT-35): an admin releases a disconnected scouter's robot
   before the match, someone else takes it, and the original scouter reconnecting does **not**
   get it back; a late submission from the released scouter does not overwrite the
-  replacement's record; and the resulting performance comes back auto-flagged (RT-36).
+  replacement's record; and the resulting performance comes back auto-flagged (RT-36). v6:
+  the registry's rules are unit-tested in `registry.test.ts` and `submission.test.ts`, and
+  `tests/e2e/acceptance.spec.ts` (#363) plays both paths with phones and an admin page in a
+  browser, checking what MongoDB stores. A scouter who drops mid-match keeps one card and the
+  same robot, and the presses made while away arrive in one record. A robot released while its
+  scouter is away goes to a replacement; the original returns to waiting with another robot; their
+  late record is kept superseded, and the replacement's is flagged.
 - **T-7** End-to-end browser tests (for example Playwright, mobile viewport) cover the
   critical user journeys once each: scout a full match and submit online; scout offline and
   produce a QR code, then scan it on the scanner page; admin selects a match and assigns
@@ -439,7 +445,9 @@ that a new feature can be verified not to break existing behavior. Requirements:
   `tests/e2e/offline.spec.ts` (#361) does so for the scouting client, reading its QR code back
   with a decoder; the analysis page joins in Phase 3.
 - **T-9** Test fixtures must not require live TBA or FMS credentials; all external calls are
-  recorded or stubbed. A small recorded TBA event (matches, teams, coprs) is checked in.
+  recorded or stubbed. A small recorded TBA event (matches, teams, coprs) is checked in. v6: the
+  unit tests pass a stub `fetch`; the browser tests' server (`tests/e2e/server.ts`, #363) answers
+  TBA from the recorded 2026mnwi matches, through `TBA_API_URL`, so nothing reaches TBA.
 - **T-10** Executables (document 05) are testable in isolation: each `execute`/`reverse`
   pair is exercised against a fake button/layer DOM, and `reverse` after `execute` must
   restore the prior state (this would have caught F-1). v6: no executable has a `reverse`. A
