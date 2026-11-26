@@ -46,7 +46,7 @@ configuration edits are not hidden by stale caches.
 `src/analysis/manual/teams.json` and `tmps.json`. Beyond being a server self-call target, it
 is in the precache list because the pipeline unconditionally fetches it: a stable, cacheable
 endpoint for optional hand-entered data is part of what makes the pipeline runnable offline.
-Any replacement must preserve "every input the pipeline needs is a cacheable request".
+Any replacement must preserve "every input the pipeline needs can be kept on the device" (OF-5).
 
 ## Requirements for the rewrite
 
@@ -69,13 +69,21 @@ Any replacement must preserve "every input the pipeline needs is a cacheable req
   event shown.
 - **OF-4** The QR scanner page MUST work offline: scanned TMPs are cached locally and synced
   when the page next loads online, with de-duplication.
-- **OF-5** Every input a page needs at startup MUST be a cacheable request (or bundled):
-  configuration, generated code, and the data snapshots listed above. In a Next.js rewrite
-  this means app-shell precaching by an injected manifest (hashed assets), plus explicit
-  runtime caching rules for the config and data endpoints: network-first for the dataset,
-  stale-while-revalidate for the rest, and a versioned cache key so a config change
-  invalidates stale copies. Extension bundles served from the `extensions/` folder
-  (document 15) MUST be included in the cache.
+- **OF-5** Every input a page needs at startup MUST be kept on the device after one online
+  load, or bundled: configuration, generated code, and the data snapshots listed above. The
+  service worker or the page itself may keep an input (reworded 2026-11-26, #361; the earlier
+  text required runtime caching rules in the worker for every endpoint).
+  - **Code**, the build's hashed assets, is precached by the service worker from an injected
+    manifest of the build output.
+  - **Data** is kept by the page in the device's storage (`localStorage`, IndexedDB) or by
+    runtime caching rules in the worker. The dataset is read from the network first, so an
+    edit is never masked by a stale copy. A configuration carries a version stamp, so a
+    change replaces stale copies (OF-8).
+  - A kept copy is found by everything its reply depends on, such as the event a join code
+    selects, not by its URL alone.
+  - The page MUST be able to tell a kept copy from a fresh reply, so it can say what it is
+    showing (OF-3, OF-7).
+  - Extension bundles served from the `extensions/` folder (document 15) MUST be kept too.
 - **OF-6** Third-party assets (charts, fonts, icons) MUST be self-hosted so cache install
   cannot fail on an unreachable CDN and so the app works on networks that block CDNs (F-16).
 - **OF-7** The user MUST always see connection state (today's `Connected` / `Disconnected` /
@@ -105,10 +113,12 @@ built (document 05, "v6: offline").
   `/sw.js` sends.
 - **Where the data lives.** The scouting client's data (configuration, roster, schedule,
   settings) is kept in the device's own storage rather than by runtime caching rules in the
-  worker. OF-5's "every input a page needs at startup is cacheable" holds either way. The
-  network-first dataset rule and the per-event caches of OF-3 are for the analysis page
-  (Phase 3), which adds its page to `OFFLINE_PAGES` in `src/offline/shell.ts`. The scanner
-  (OF-4, Phase 4) does the same.
+  worker, which never answers an `/api/` request. The page knows when a read failed and when
+  its copy was taken, a copy is stored with its event, and a match keeps the configuration it
+  was scouted with. The network-first dataset and the per-event copies of OF-3 are for the
+  analysis page (Phase 3), which adds its page to `OFFLINE_PAGES` in `src/offline/shell.ts`
+  and chooses between the page's storage and a worker rule for its data. The scanner (OF-4,
+  Phase 4) does the same.
 - **OF-6** Fonts are self-hosted by `next/font` at build time; icons are bundled.
 - **OF-9 test.** `tests/e2e/offline.spec.ts` loads online once, goes offline (the worker's own
   network included), reloads, signs in and scouts a typed 2026 match. It reads the QR code back

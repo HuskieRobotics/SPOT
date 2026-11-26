@@ -191,8 +191,8 @@ modules,executables}/` at runtime and serves them as plain scripts registered on
 - **PWA/offline.** See document 18 for the full requirement set (OF-1 to OF-9); the summary
   here is the implementation consequence. The hand-written service worker with a hard-coded precache list
   (document 02, AR-11) cannot survive hashed build assets. Use an injected-manifest approach
-  (Serwist or Workbox `injectManifest`) for the app shell, and keep explicit runtime caching
-  rules for `/api/...dataset` (network-first) and config endpoints (stale-while-revalidate).
+  for the app shell, and keep each page's data on the device, in the page's storage or by
+  runtime caching rules, with the dataset read from the network first (OF-5).
   **v6 (#361):** a small hand-written worker reads its manifest from the build output, and the
   scouting client keeps its data in device storage; see document 18.
   Do not precache third-party CDN URLs (F-16); self-host Plotly and fonts instead.
