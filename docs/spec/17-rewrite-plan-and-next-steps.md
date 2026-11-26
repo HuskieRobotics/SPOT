@@ -334,6 +334,16 @@ phase 2 because a phase 2 requirement already demands them: BL-93 (OF-2's pendin
 (the session model re-assigns waiting scouters), BL-116 and BL-33 (the admin page's labelled
 controls, AD-4b, and several admins at once, RT-14b).
 
+**Phase 3 is next**, broken into issues #382 to #393 on the "v6 Phase 3" milestone
+(2026-11-26), in build order: the public data routes (the dataset, events, teams and TBA data,
+with the decision on the manual data hooks, #345), the dashboard with event switching, the team
+list and search, the text modules, the chart modules on Plotly, the heatmap, Compare Team Scores
+and Filter Teams, the CSV in the browser, Simulate Match and Auto Pick behind configuration
+flags, offline analysis, extension modules, the acceptance test of the exit criterion, and the
+audit. Gate W-2's core is the first five (#382 to #386); the rest can follow Week 0, though
+offline analysis (#390) should come before the first event. Five older issues close through
+them: #90 and #345 through #382, #209 through #383, #232 through #388, and #299 through #389.
+
 Recommended order from here, toward **gate W** (about 2027-02-20): the core of phase 3 (W-2),
 then the event-critical part of phase 4 (W-3), about six weeks after kickoff. Break each phase
 into issues on its milestone when it starts, as Phases 1 and 2 were.
