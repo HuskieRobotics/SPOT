@@ -11,39 +11,48 @@
  *
  * Not behind the join code: v5 served the same file to anyone, and it holds no secrets.
  */
-import { ACTIVE_SEASON, findSeason, loadMatchScouting, readSeason, versionOf } from "@/config/load";
-import { withVersion } from "@/config/serve";
+import { loadMatchScouting, readSeason, versionOf, type Season } from "@/config/load";
+import { noSeason, requestedSeason, withVersion } from "@/config/serve";
 import type { MatchScoutingConfig } from "@/config/types";
 
 export const dynamic = "force-dynamic";
 
-let checked: { version: string; config: MatchScoutingConfig | null; errors: number } | null = null;
+interface Checked {
+  version: string | null;
+  config: MatchScoutingConfig | null;
+  errors: number;
+}
 
-/** The file as checked, checking it again only when its text changed. */
-function current(): { version: string | null; config: MatchScoutingConfig | null; errors: number } {
-  const season = findSeason(ACTIVE_SEASON)!;
+const checked = new Map<string, Checked>();
+
+/** The season's file as checked, checking it again only when its text changed. */
+function current(season: Season): Checked {
   const source = readSeason(season)["match-scouting"];
   if (source === undefined) return { version: null, config: null, errors: 0 };
   const version = versionOf(source);
-  if (checked?.version !== version) {
-    const loaded = loadMatchScouting(source);
-    checked = { version, config: loaded.config, errors: loaded.errors.length };
-  }
-  return checked;
+  const kept = checked.get(season.name);
+  if (kept?.version === version) return kept;
+  const loaded = loadMatchScouting(source);
+  const result = { version, config: loaded.config, errors: loaded.errors.length };
+  checked.set(season.name, result);
+  return result;
 }
 
+/** `?season=<name>` reads another season's file, for the analysis dashboard (#383). */
 export function GET(request: Request) {
-  const { version, config, errors } = current();
+  const season = requestedSeason(request);
+  if (!season) return noSeason(request);
+  const { version, config, errors } = current(season);
   if (version === null)
     return Response.json(
-      { error: "config", message: "This server has no config/match-scouting.json." },
+      { error: "config", message: `This server has no ${season.folder}/match-scouting.json.` },
       { status: 503 },
     );
   if (!config)
     return Response.json(
       {
         error: "config",
-        message: `The scouting configuration has ${errors} ${errors === 1 ? "error" : "errors"}. An admin must fix config/match-scouting.json (npm run config:check lists ${errors === 1 ? "it" : "them"}).`,
+        message: `The scouting configuration has ${errors} ${errors === 1 ? "error" : "errors"}. An admin must fix ${season.folder}/match-scouting.json (npm run config:check lists ${errors === 1 ? "it" : "them"}).`,
       },
       { status: 503 },
     );

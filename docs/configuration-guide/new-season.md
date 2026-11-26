@@ -18,6 +18,10 @@ The files in `config/` are the season SPOT is using. Before changing them for th
 3. Check the copy: `npm run config:check -- config/seasons/2026`. It should find what it found
    in `config/` before.
 
+Name the folder exactly the year, `2026`. The analysis pages read an event with the season named
+for its year, so last season's events still show with last season's configuration. Without a
+folder for its year, an event is read with the files in `config/`, made for another game.
+
 A mentor also removes the test that keeps `config/` equal to what the converter made from the
 2026 files (in `tests/unit/config-active.test.ts`), because you are about to edit them by hand.
 

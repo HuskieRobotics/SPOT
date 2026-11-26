@@ -17,6 +17,9 @@ export default function AdminPage() {
       <header className="flex flex-wrap items-center justify-between gap-3">
         <h1 className="text-3xl font-bold tracking-tight">SPOT admin</h1>
         <nav className="flex items-center gap-4">
+          <Link href="/analysis" className="text-primary underline-offset-4 hover:underline">
+            Analysis
+          </Link>
           <Link href="/admin/schedule" className="text-primary underline-offset-4 hover:underline">
             Match schedule
           </Link>

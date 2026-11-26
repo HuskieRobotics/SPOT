@@ -21,7 +21,7 @@ export type Reply<T> =
 
 export async function call<T>(
   path: string,
-  init: RequestInit & { joinCode?: string | null } = {},
+  init: RequestInit & { joinCode?: string | null; timeoutMs?: number } = {},
   fetchImpl: typeof fetch = fetch,
 ): Promise<Reply<T>> {
   const headers = new Headers(init.headers);
@@ -29,10 +29,11 @@ export async function call<T>(
   if (init.joinCode) headers.set(JOIN_CODE_HEADER, init.joinCode);
   let response: Response;
   try {
+    const { timeoutMs = REQUEST_TIMEOUT_MS, ...rest } = init;
     response = await fetchImpl(path, {
-      ...init,
+      ...rest,
       headers,
-      signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
+      signal: AbortSignal.timeout(timeoutMs),
     });
   } catch {
     return { ok: false, offline: true };

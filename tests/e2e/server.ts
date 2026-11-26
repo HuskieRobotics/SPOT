@@ -7,6 +7,9 @@
  * teams. The playoffs come from TBA's 2026mnwi schedule and the qualifications from the typed one
  * (AD-8). Nothing reaches thebluealliance.com.
  *
+ * It also holds the oracle's 2025ilch and 2026mnwi events, migrated from their v5 exports, for the
+ * analysis dashboard.
+ *
  * The seed is test data, not a secret: tests/e2e names the same join code and TBA key.
  */
 import { spawn } from "node:child_process";
@@ -14,10 +17,13 @@ import { existsSync, readFileSync } from "node:fs";
 import { createServer } from "node:http";
 import type { AddressInfo } from "node:net";
 import { join } from "node:path";
-import { MongoClient } from "mongodb";
+import { MongoClient, type Db } from "mongodb";
 import { MongoMemoryServer } from "mongodb-memory-server";
 import { ensureCollections } from "../../src/db/collections";
-import { createEvent } from "../../src/db/events";
+import type { MatchScoutingConfig } from "../../src/config/types";
+import { createEvent, eventCollection } from "../../src/db/events";
+import { performanceCollection } from "../../src/db/performances";
+import { migrate } from "../../src/migrate/v5-to-v6";
 import { updateSchedule } from "../../src/db/schedules";
 import { addScouter } from "../../src/db/scouters";
 import { updateSettings } from "../../src/db/settings";
@@ -46,6 +52,40 @@ async function recordedTba(): Promise<string> {
   return `http://127.0.0.1:${(server.address() as AddressInfo).port}/api/v3`;
 }
 
+const read = (...path: string[]) => JSON.parse(readFileSync(join(process.cwd(), ...path), "utf8"));
+
+/**
+ * The oracle's real events (#383, #392), migrated from their v5 exports the way an upgrade will be
+ * (docs/spec/21 §3), as two more events beside the active one: data for the analysis dashboard.
+ * Neither is active, so no scouting test writes to them.
+ */
+async function seedOracleEvents(db: Db) {
+  const sets = [
+    { dump: "2025Reefscape", config: ["config", "seasons", "2025"], code: "2025ilch_official" },
+    { dump: "2026Rebuilt", config: ["config"], code: "2026mnwi_official" },
+  ];
+  for (const set of sets) {
+    const migrated = migrate(
+      {
+        performances: read(
+          "tools",
+          "oracle",
+          "fixtures",
+          "db",
+          `${set.dump}.teamMatchPerformances.json`,
+        ),
+        events: read("tools", "oracle", "fixtures", "db", `${set.dump}.events.json`),
+      },
+      { config: read(...set.config, "match-scouting.json") as MatchScoutingConfig, now: 0 },
+    );
+    const event = migrated.events.find((e) => e.code === set.code)!;
+    await eventCollection(db).insertOne(event);
+    await performanceCollection(db).insertMany(
+      migrated.performances.filter((p) => p.eventId === event._id),
+    );
+  }
+}
+
 async function main() {
   const mongo = await MongoMemoryServer.create({ instance: { port: E2E_MONGO_PORT } });
   const uri = E2E_MONGO_URI;
@@ -69,6 +109,7 @@ async function main() {
   });
   await updateSettings(db, { activeEventId: event._id });
   for (const [id, name] of E2E_ROSTER) await addScouter(db, { id, name });
+  await seedOracleEvents(db);
   await client.close();
 
   // E2E_NEXT=dev runs the same tests against `next dev` (ADR 0001's time-box asked for both).

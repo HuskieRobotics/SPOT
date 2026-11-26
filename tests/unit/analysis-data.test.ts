@@ -14,6 +14,8 @@ import * as eventsRoute from "@/app/api/analysis/events/route";
 import * as tbaRoute from "@/app/api/analysis/tba/route";
 import { buildEnrichedDataset } from "@/analysis/enrichment/tba";
 import { teamList } from "@/analysis/teams";
+import * as matchScoutingRoute from "@/app/api/config/match-scouting/route";
+import { ACTIVE_SEASON, findSeason } from "@/config/load";
 import { analysisFile, checkAnalysisFile } from "@/config/serve";
 import type { AnalysisPipelineConfig } from "@/config/types";
 import { validateDocument } from "@/data/validate";
@@ -29,6 +31,7 @@ import { createEvent } from "@/db/events";
 import { insertPerformance } from "@/db/performances";
 import { forgetCachedSettings, updateSettings } from "@/db/settings";
 import { getTbaData } from "@/db/tba-data";
+import { seasonFor } from "@/public-data";
 import { TBA_DATA_STALE_MS, tbaDataFor } from "@/public-data/tba";
 import { startMongo, type TestMongo } from "../support/mongo";
 
@@ -131,8 +134,20 @@ describe("SEC-1, SEC-3, DV-12b, AN-11a: anyone may list the events, by code", ()
     const r = await get(eventsRoute, "/api/analysis/events");
     expect(r.status).toBe(200);
     expect(r.json.events).toEqual([
-      { code: "2026mnwi_official", tbaKey: "2026mnwi", label: "official", active: true },
-      { code: "2025ilch_official", tbaKey: "2025ilch", label: "official", active: false },
+      {
+        code: "2026mnwi_official",
+        tbaKey: "2026mnwi",
+        label: "official",
+        active: true,
+        season: "active",
+      },
+      {
+        code: "2025ilch_official",
+        tbaKey: "2025ilch",
+        label: "official",
+        active: false,
+        season: "2025",
+      },
     ]);
     expect(JSON.stringify(r.json)).not.toContain(mnwi.joinCode!);
   });
@@ -305,11 +320,33 @@ describe("CS-17, OF-8: the analysis files, for the dashboard", () => {
   }
 
   it("the findings are config:check's own, file by file", () => {
-    const pipeline = analysisFile("analysis-pipeline")!;
+    const pipeline = analysisFile("analysis-pipeline", findSeason(ACTIVE_SEASON)!)!;
     expect(pipeline.findings.some((f) => /"attemptClimb" is not a button id/.test(f.message))).toBe(
       true,
     );
     expect(pipeline.problem).toBeNull();
+  });
+
+  it("CS-17: an event's season reads it: the season named for its year, else the active one", async () => {
+    expect(seasonFor("2025ilch")).toBe("2025");
+    expect(seasonFor("2026mnwi")).toBe(ACTIVE_SEASON);
+    expect(seasonFor("2027week0")).toBe(ACTIVE_SEASON);
+    for (const [route, kind] of [
+      [analysisPipelineRoute, "analysis-pipeline"],
+      [analysisModulesRoute, "analysis-modules"],
+      [matchScoutingRoute, "match-scouting"],
+    ] as const) {
+      const r = await get(route, `/api/config/${kind}?season=2025`);
+      const file = readFileSync(
+        join(process.cwd(), "config", "seasons", "2025", `${kind}.json`),
+        "utf8",
+      );
+      expect(r.status).toBe(200);
+      expect(r.json.config).toEqual(JSON.parse(file));
+      const missing = await get(route, `/api/config/${kind}?season=../secrets`);
+      expect(missing.status).toBe(404);
+      expect(missing.json.message).toBe("There is no season ../secrets.");
+    }
   });
 
   it("a file that can't be used at all is refused, saying why", () => {
