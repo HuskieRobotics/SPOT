@@ -3,8 +3,13 @@
 /**
  * A message the scouter must answer before going on: an assignment (SC-13), a withdrawn robot
  * (BL-54), a confirmation. Drawn over every page, including the match screen.
+ *
+ * It is drawn into the page's body, not where it is used: the menu that asks for 2× sits in the
+ * match screen's status line, whose text never wraps, and a dialog drawn there could not wrap
+ * either.
  */
 import { useEffect, useId, useRef, type ReactNode } from "react";
+import { createPortal } from "react-dom";
 
 export function Dialog({
   title,
@@ -21,7 +26,7 @@ export function Dialog({
     // Focus the first action, so a keyboard or a screen reader lands on the answer.
     box.current?.querySelector<HTMLElement>("button")?.focus();
   }, []);
-  return (
+  return createPortal(
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
       <div
         ref={box}
@@ -39,6 +44,7 @@ export function Dialog({
         </div>
         <div className="flex flex-wrap justify-end gap-2">{actions}</div>
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }
