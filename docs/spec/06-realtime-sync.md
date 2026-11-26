@@ -152,6 +152,12 @@ Decided 2026-11-24, where the requirements above left a choice:
 - **An assignment holds steady** (replaces the NOTE above). A waiting scouter keeps their robot
   until the match changes or an admin releases it; later sign-ins move no one. v5 re-assigned on
   every update, so a robot could change under a scouter who had already seen it.
+- **Who gets which robot** (RT-9, RT-11, RT-14; written down by the Phase 2 audit, #364). Free
+  robots go to connected waiting scouters in the order they signed in, red 1 to 3 then blue 1
+  to 3, skipping a robot a scouter was released from in this match (RT-33). A scouter who signs
+  in or reconnects while a match is current, and holds no robot in it, is given a free one at
+  once, and waits for a start like any latecomer. So a robot released with no one waiting goes to
+  whoever signs in next.
 - **The quorum fires once per match**, when no one has been sent in yet. Afterwards a latecomer
   waits for an admin start, or for start on first scouter if it is on, so a quorum never turns
   into issue 34's behavior. Set the quorum to the number of scouters staffed per match, not
@@ -248,6 +254,11 @@ document 05. Tests: `tests/unit/submission.test.ts` (T-5, T-6a) and the RT-35 ca
   or when the released scouter's record exists too, whichever arrives first. A flag already set
   is never overwritten. The flag is public, so the reason says "replacement" and names no one
   (SEC-8); the edit page shows who from the records' scouter ids.
+- **The device's clock decides "latest"** (RT-14a): `submittedAt` is when the scouter pressed
+  Submit, read from the device. A phone whose clock is far wrong could win or lose against a
+  re-scout it should not. This is accepted (written down by the Phase 2 audit, #364): phones set
+  their clocks from the network, and the other record is kept, for an admin to promote on the
+  edit page (RT-35, Phase 4).
 - **One at a time.** Arrivals are handled in order in the process, like the registry's events,
   so two records for one robot are never settled at once.
 

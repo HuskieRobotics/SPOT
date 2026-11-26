@@ -392,7 +392,7 @@ describe("RT-31 to RT-36: release and replacement", () => {
     expect(holderAtEnd(sim.state.assignments["qual:1:11"])?.scouterId).toBe("s1");
   });
 
-  it("RT-34: a replacement after the match is under way joins at once and is marked as joining late", () => {
+  it("RT-34, DV-16: a replacement after the match is under way joins at once, and the robot's history marks them as joining late", () => {
     const sim = new Sim().do({ type: "setMatch", match: match(1) }).signIn(...ids(7));
     sim.do({ type: "adminStart" });
     for (const id of ids(6)) sim.do({ type: "start", scouterId: id });

@@ -72,7 +72,7 @@ function sample(overrides: Partial<QrInput> = {}): QrInput {
   };
 }
 
-describe("Base45 (RFC 9285)", () => {
+describe("DM-15f: Base45 (RFC 9285)", () => {
   it("encodes the RFC's examples, and reads them back", () => {
     const cases: [string, string][] = [
       ["AB", "BB8"],
@@ -108,7 +108,7 @@ describe("bits", () => {
   });
 });
 
-describe("CS-14, CC-7: the layout is derived from match-scouting.json", () => {
+describe("CS-14, CC-7, DM-15d: the layout is derived from match-scouting.json", () => {
   it("2026: 48 ids in 6 bits, 17 periods in 5, a 160 s match in 18", () => {
     const layout = qrLayout(configs[2026]);
     expect(layout.buttons).toHaveLength(48);
@@ -134,7 +134,7 @@ describe("CS-14, CC-7: the layout is derived from match-scouting.json", () => {
   });
 });
 
-describe("T-2: round trip over generated matches", () => {
+describe("T-2, DM-16: round trip over generated matches", () => {
   for (const season of Object.keys(configs)) {
     it(`${season}: decoding gives back every field the code carries`, () => {
       const config = configs[season];
@@ -160,7 +160,7 @@ describe("T-2: round trip over generated matches", () => {
     });
   }
 
-  it("keeps positions, which v5's codes dropped", () => {
+  it("DM-15e: keeps positions, which v5's codes dropped", () => {
     const layout = qrLayout(configs[2026]);
     const { performances } = generate({ config: configs[2026], seed: "qr-pos", matches: 20 });
     const positioned = performances.filter((p) => p.actions.some((a) => a.other?.pos));
@@ -171,7 +171,7 @@ describe("T-2: round trip over generated matches", () => {
 });
 
 describe("T-2: the real 2026 match with the most actions", () => {
-  it("fits one code at error correction M", () => {
+  it("DM-15f: fits one code at error correction M", () => {
     const config = configs[2026];
     const layout = qrLayout(config);
     const { performances } = migrate(
@@ -269,7 +269,7 @@ describe("the decoder refuses a code it cannot read rightly", () => {
   });
 });
 
-describe("DV-11: a device's nonce", () => {
+describe("DV-11, F-5: a device's nonce", () => {
   it("is 12 base-36 characters, and a QR code carries it", () => {
     const nonces = new Set(Array.from({ length: 200 }, newNonce));
     expect(nonces.size).toBe(200);

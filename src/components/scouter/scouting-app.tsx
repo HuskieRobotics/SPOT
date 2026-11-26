@@ -61,7 +61,7 @@ import { ManualMatchForm } from "./manual-match-form";
 import { MatchPage } from "./match-page";
 import { PendingList } from "./pending-list";
 import { QrSheet } from "./qr-sheet";
-import { SettingsMenu } from "./settings-menu";
+import { FEEDBACK_URL, SettingsMenu } from "./settings-menu";
 import { SignInScreen } from "./sign-in-screen";
 import { ConnectionLabel, MatchLabel } from "./status-line";
 import { WaitingPage } from "./waiting-page";
@@ -578,7 +578,7 @@ export function ScoutingApp() {
           }}
         />
         <nav className="text-muted-foreground mt-auto flex gap-4 pt-6 text-sm">
-          <a href="https://github.com/HuskieRobotics/SPOT/issues" target="_blank" rel="noopener">
+          <a href={FEEDBACK_URL} target="_blank" rel="noopener">
             Give feedback
           </a>
           <Link href="/scouting-preview">Scouting-screen preview</Link>

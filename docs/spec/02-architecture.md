@@ -147,9 +147,14 @@ categorized precache list. The notes below describe the current implementation.
 
 - **NF-1** Scouting UI is designed for landscape phones/tablets (`manifest.json`
   `display: fullscreen`, `orientation: landscape`), touch-first, large grid buttons with
-  press feedback (`pointerdown` → `.pressed`, cleared 90 ms after release).
+  press feedback (`pointerdown` → `.pressed`, cleared 90 ms after release). **v6:** the scouting
+  screen fills a phone or tablet held sideways (document 05), with the same press feedback. The
+  manifest is `display: standalone` and does not lock the orientation, because the admin page
+  and, in Phase 3, the analysis page are used on laptops and phones held upright; whether the
+  scouting screen refuses portrait is issue #43.
 - **NF-2** Install prompt: on `beforeinstallprompt` show a modal "SPOT is better when you
-  install the app!" with Install / Maybe Later (once per page load).
+  install the app!" with Install / Maybe Later (once per page load). **v6: replaced** by SC-5
+  (#361): **Install SPOT?** once per device, never during a match.
 - **NF-3** Timer accuracy: match clock derived from `Date.now()` deltas (not accumulated
   intervals), updated every 10 ms, displayed with two decimals.
 - **NF-4** Analysis must function with the cached dataset when offline (event switching and

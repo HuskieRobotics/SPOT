@@ -286,7 +286,7 @@ describe("the schedule route (T-5)", () => {
     expect((await getSchedule(db, event._id)).tba?.matches).toHaveLength(91);
   });
 
-  it("TBA's copy is re-read only when it is old, or when an admin asks", async () => {
+  it("NF-6: TBA's copy is re-read only when it is old, or when an admin asks", async () => {
     fetchMock.mockClear();
     await call();
     expect(fetchMock).not.toHaveBeenCalled();

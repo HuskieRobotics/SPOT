@@ -255,7 +255,7 @@ describe("T-5: the submission route", () => {
     ]);
   });
 
-  it("SEC-2, SEC-3a, SEC-9: a wrong or missing join code is refused with its reason", async () => {
+  it("SEC-2, SEC-3a, SEC-9, DV-9: a wrong or missing join code is refused with its reason", async () => {
     const wrong = await post({ eventId: event._id, records: [submission()] }, "WRONG1");
     expect(wrong.status).toBe(403);
     expect(wrong.json).toMatchObject({ error: "join-code", reason: "wrong" });

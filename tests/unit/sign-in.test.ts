@@ -237,7 +237,7 @@ describe("SEC-6, SEC-7, SEC-7a: signing in on a device", () => {
     expect(store.signedIn()).toBeNull();
   });
 
-  it("a student ID not on the roster is refused with the server's message", async () => {
+  it("DV-4: a student ID not on the roster is refused with the server's message", async () => {
     const { server, store } = setup();
     expect(await signIn(store, server, { id: "999999", name: "Nobody" })).toEqual({
       status: "refused",

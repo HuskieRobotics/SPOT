@@ -64,7 +64,7 @@ describe("SC-20, NF-3: time remaining comes from elapsed time", () => {
   });
 });
 
-describe("BL-298: a phase with pauseMs holds the clock at its start", () => {
+describe("SC-21a, BL-298: a phase with pauseMs holds the clock at its start", () => {
   it("shows the phase's start for the hold, then counts down again", () => {
     const c = config(3000);
     expect(readClock(c, 14999)).toEqual({ remaining: 135001, holding: null });

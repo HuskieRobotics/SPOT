@@ -261,8 +261,8 @@ screen is `src/components/scouter/sign-in-screen.tsx`, on the scouting client's 
 
 v6 implements the rules above for a v2 configuration (document 20) as a pure state machine:
 `src/scouting/session.ts` holds the state and what each press does, `clock.ts` the match clock,
-and `view.ts` what the screen shows. The scouting-screen preview and the Phase 2 client drive
-the same code. `tests/unit/scouting-session.test.ts` is named after the requirements here, and
+and `view.ts` what the screen shows. The scouting-screen preview and the scouting client (#359)
+drive the same code. `tests/unit/scouting-session.test.ts` is named after the requirements here, and
 plays whole random matches of the 2022, 2023, 2025 and 2026 configurations to check that what
 they record agrees with the clock, the configuration and the data model. Where v6 differs from
 the v5 behavior above (decided 2026-11-21, #322):
@@ -327,8 +327,8 @@ the v5 behavior above (decided 2026-11-21, #322):
 ## v6: the scouting screen and its preview (`/scouting-preview`, #322, gate K-5)
 
 The screen is built from React components in `src/components/scouting/` that drive the rules
-above; the preview wraps them in controls, and the Phase 2 client will wrap them in sessions and
-sync. `useScoutingSession` holds the state and ticks the clock on each animation frame while the
+above; the preview wraps them in controls, and the scouting client wraps them in sessions and
+sync (#359). `useScoutingSession` holds the state and ticks the clock on each animation frame while the
 screen changes with time. `ScoutingScreen` is the status line, the grid, a lock's message and the
 field map. `ScoutingGrid`, `FieldMap` and `RecordedActions` are its parts.
 
@@ -340,7 +340,7 @@ field map. `ScoutingGrid`, `FieldMap` and `RecordedActions` are its parts.
   line breaks (`\n`) are kept.
 - **SC-16** Press feedback starts on `pointerdown` and ends 90 ms after the finger lifts.
 - **SC-1, SC-2** The status line shows the last-actions readout on the right. The preview shows
-  the layer on screen on the left, where the Phase 2 client will show the match and team.
+  the layer on screen on the left, where the scouting client shows the match and team.
 - **SC-27b** A locked button is disabled and drawn at 60% opacity. The lock's message is shown
   over the middle of the screen and does not block the buttons under it.
 - **SC-32** While the position lock runs, every button with a `position` executable on the screen
