@@ -24,7 +24,7 @@ dashboard) are complete. Gate K is met: students can write a new game's configur
 and preview it before any match is played. So are gates W-1 and W-2: scouters sign in, are
 assigned robots, scout and submit, online or with a QR code offline, and an admin runs the
 matches; the dashboard shows every module on an event's data, online or offline. Phase 4
-(operations: the edit page, the QR scanner, deployment) is next, aimed at gate W, testing v6
+(operations: the edit page, the QR scanner, deployment) has started, aimed at gate W, testing v6
 beside v5 at Week 0. Live status
 is in `docs/spec/17-rewrite-plan-and-next-steps.md` §5, and work is tracked by the "v6 Phase N"
 milestones on GitHub. The app skeleton, test tooling, and CI verify every pull request
