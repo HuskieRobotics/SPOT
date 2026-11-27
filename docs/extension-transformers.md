@@ -4,7 +4,8 @@ This guide is for programmers. Most analysis needs no code: the built-in transfo
 [docs/spec/09](spec/09-transformers-and-modules-catalog.md) are combined in
 `config/analysis-pipeline.json`, which students edit without programming. Write an extension
 only when no combination of built-ins computes what you need. For a new button executable, see
-[Writing an extension executable](extension-executables.md).
+[Writing an extension executable](extension-executables.md); for a new card on the dashboard,
+[Writing an extension module](extension-modules.md).
 
 An extension is a TypeScript file plus one line in an index file. It is part of the app's build,
 so adding or changing one means rebuilding and redeploying; nothing is installed while the app

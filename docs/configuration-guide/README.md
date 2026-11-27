@@ -140,5 +140,7 @@ npm run config:preview -- config/seasons/2025
 7. [Starting a new season](new-season.md): from kickoff to Week 0.
 8. [New-game checklist](new-game-checklist.md): the same, as a list to tick off.
 
-Students who can program can also add new kinds of calculations; see
-[Extension transformers](../extension-transformers.md).
+Students who can program can also add new kinds of calculations, button behaviors and dashboard
+modules; see [Extension transformers](../extension-transformers.md),
+[Extension executables](../extension-executables.md) and
+[Extension modules](../extension-modules.md).

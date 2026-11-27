@@ -260,7 +260,7 @@ quotes the test's name.
 | K-5      | Done   | #322: `config-load`, `config-guide`, and the browser test `tests/e2e/scouting-preview.spec.ts`                                                                                  |
 | K-6      | Done   | #333: `config-guide`                                                                                                                                                            |
 | ADR 0003 | Done   | For the game configuration: four files with schemas. The settings document is built (DV-13, Phase 2); the settings page is Phase 4 (R-32), and secrets stay in the environment. |
-| ADR 0005 | Done   | For transformers (TR-14) and executables (SC-38, #362). Extension modules are Phase 3; their names stay open in the schema until then (document 20 §6).                         |
+| ADR 0005 | Done   | For transformers (TR-14), executables (SC-38, #362) and modules (`extension-modules`, #391)                                                                                     |
 
 ## Phase 2: scouting vertical slice (audited 2026-11-26, #364)
 

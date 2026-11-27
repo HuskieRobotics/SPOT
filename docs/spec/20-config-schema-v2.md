@@ -381,8 +381,9 @@ mean "misses"?`), unless the object already has it; a value that fails every alt
   period in front of the button is explained as that button in that period, with the v6 way to
   write it (CS-16); a path is told its button id; a button that is not an action is named as such.
   A period id must exist (`preMatch` is always a phase id). A `by` grouping whose keys collide is
-  reported on the entry. Module action ids (HeatmapScatterPlot) are checked the same way, and a
-  module that is not built in is a warning until extension modules exist.
+  reported on the entry. Module action ids (HeatmapScatterPlot) are checked the same way. A module that is
+  neither built in nor a registered extension is an error with the closest name, and an extension
+  module's options are checked against its own schema (#391).
 - **CC-6 Enrichment.** Each score-breakdown prefix's `phase` must exist. Warnings: enrichment
   enabled with no prefixes, or with no `knownIds` (a count of a result nobody achieved at an
   event would be No Data instead of 0, DM-11b), and a known id that no prefix produces.
@@ -522,6 +523,7 @@ belong to the enrichment step.
   TR-14): their names stay open in the pipeline schema, which cannot know them, and the registry
   checks their options. Executables have theirs too (#362, `src/scouting/extensions/`): their
   names stay open in the match-scouting schema, and config:check checks names and options
-  against it. Module names stay open until their registry exists (Phase 3).
+  against it. Modules have theirs (#391, `src/components/analysis/extensions/`): their names stay
+  open in the modules schema, and config:check checks names and options against it.
 - Editor integration: `"$schema"` is a relative path, which VS Code resolves; if the schemas are
   ever published, switch to the `$id` URLs.

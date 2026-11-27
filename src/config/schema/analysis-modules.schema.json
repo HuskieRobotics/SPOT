@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://spot.team3061.org/schema/v2/analysis-modules.schema.json",
   "title": "SPOT analysis-modules configuration (v2)",
-  "description": "Dashboard widgets for the team and match views, plus Filter Teams rating bands. Built-in module options are validated strictly; extension modules accept any options. See docs/spec/09 and docs/spec/20.",
+  "description": "Dashboard widgets for the team and match views, plus Filter Teams rating bands. Built-in module options are validated strictly here; an extension module (docs/extension-modules.md) is named by its registered name, and config:check checks its options against its own schema. See docs/spec/09 and docs/spec/20.",
   "type": "object",
   "additionalProperties": false,
   "required": ["version", "modules", "filterTeams"],
