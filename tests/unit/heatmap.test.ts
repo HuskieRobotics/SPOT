@@ -21,7 +21,7 @@ describe("A-20: the half-field fold is an option", () => {
     }
   });
 
-  it("foldHalfField: the left third doubles, the right third turns onto it, the middle goes", () => {
+  it("foldHalfField: the near third doubles, the far third is turned onto it, the middle goes", () => {
     const fold = (x: number, y: number) => transformPoint({ x, y }, "foldHalfField");
     expect(fold(0, 10)).toEqual({ x: 0, y: 10 });
     expect(fold(15, 10)).toEqual({ x: 30, y: 10 });
@@ -29,6 +29,9 @@ describe("A-20: the half-field fold is an option", () => {
     expect(fold(100, 10)).toEqual({ x: 0, y: 90 });
     expect(fold(85, 10)).toEqual({ x: 30, y: 90 });
     expect(fold(70, 10)).toEqual({ x: 60, y: 90 });
+    // A half turn, not a mirror: near the far driver's right (top of the picture, y 10) lands
+    // near the near driver's right (bottom, y 90).
+    expect(fold(90, 10)).toEqual({ x: 20, y: 90 });
     // The edges of the middle third, as v5 drew them: 30.5 and 69.5 are left out.
     for (const x of [30.5, 31, 50, 69, 69.5]) expect(fold(x, 10)).toBeNull();
   });

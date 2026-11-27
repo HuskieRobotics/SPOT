@@ -4,7 +4,7 @@
  *
  * A position is stored as percentages of the field picture, x from the left and y from the top,
  * and always the same way round: a tap on a turned map is stored turned back (SC-28). So the
- * module draws positions as stored, unless `coordinateTransform` folds them (A-20).
+ * module draws positions as stored, unless `coordinateTransform` changes them (A-20).
  *
  * Nothing here changes the teams or the dataset it is given (F-18).
  */
@@ -38,9 +38,11 @@ export interface HeatmapOptions {
 /**
  * A position as the module draws it, or null when the transform leaves it out.
  *
- * `foldHalfField` is v5's 2026 fold, which v5 always applied (A-20): both ends of the field onto
- * one half-field picture. The left third doubles (`x < 30.5` → `(2x, y)`); the right third is
- * turned round onto it (`x > 69.5` → `(2(100 − x), 100 − y)`); the middle third is left out.
+ * `foldHalfField` is v5's 2026 transform, which v5 always applied (A-20): both alliance zones on
+ * one half-field picture. x runs along the field's length. The near third doubles
+ * (`x < 30.5` → `(2x, y)`). The far third is turned round onto it, a half turn rather than a
+ * mirror, so each driver's left stays left (`x > 69.5` → `(2(100 − x), 100 − y)`). The middle
+ * third, 2026's neutral zone, is left out.
  */
 export function transformPoint(
   point: Point,

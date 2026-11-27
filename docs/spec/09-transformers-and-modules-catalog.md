@@ -246,9 +246,16 @@ chart is drawn by one component, `src/components/analysis/modules/plot.tsx`. Dec
 HeatmapScatterPlot draws on Plotly like the charts, from positions computed by plain functions
 (`src/analysis/modules/heatmap.ts`, tested in `heatmap`). Decided 2026-11-26:
 
-- **A-20** The half-field fold is `coordinateTransform: "foldHalfField"`, v5's arithmetic
+- **A-20** v5's half-field transform is `coordinateTransform: "foldHalfField"`, its arithmetic
   unchanged: `x < 30.5 → (2x, y)`, `x > 69.5 → (2(100 − x), 100 − y)`, the middle third left out.
-  `"none"`, or no option, draws a position as stored. The v1 converter sets it from `imgPath`.
+  x runs along the field's length, so the middle third is a band across the field's width at its
+  centre: in 2026's picture, the neutral zone from the bumps and trenches inward. Despite the
+  name, the far third is not mirrored: both x and y change, a half turn about the field's centre,
+  so each end is drawn as its own driver station sees it and each driver's left stays left. FRC
+  fields are the same after a half turn, so one alliance zone's features land on the other's.
+  Doubling x stretches the near third over the first 61 % of the half-field picture; the rest,
+  nearer the centre line, stays empty. `"none"`, or no option, draws a position as stored. The
+  v1 converter sets it from `imgPath`. The option keeps its name (decided 2026-11-26).
 - **SC-28** A position is stored the same way round whatever the field orientation, so the module
   never turns one.
 - **Groups (#320)** An action counts in a group when its id is one of the group's and it passes

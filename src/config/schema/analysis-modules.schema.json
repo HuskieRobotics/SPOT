@@ -207,7 +207,7 @@
                   "imgPath": { "type": "string" },
                   "coordinateTransform": {
                     "enum": ["none", "foldHalfField"],
-                    "description": "foldHalfField reproduces the 2026 behavior: x>69.5 mirrored onto the left half, 30.5..69.5 dropped."
+                    "description": "foldHalfField reproduces 2026: both alliance zones on a half-field picture. x < 30.5 becomes (2x, y); x > 69.5 is turned round onto it, a half turn rather than a mirror, as (2(100 - x), 100 - y); 30.5 to 69.5, the neutral zone, is left out."
                   }
                 }
               }
