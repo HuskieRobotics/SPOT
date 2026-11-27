@@ -10,7 +10,7 @@ import type {
   AnalysisPipelineConfig,
   MatchScoutingConfig,
 } from "@/config/types";
-import type { PublicPerformance, TbaData } from "@/data/types";
+import type { PublicPerformance, ScheduledMatch, TbaData } from "@/data/types";
 import type { EventSummary } from "@/public-data";
 import { call, type Reply } from "@/scouter/api";
 
@@ -34,6 +34,19 @@ function failure(reply: Exclude<Reply<unknown>, { ok: true }>, what: string): st
   return reply.offline
     ? `No connection: ${what} could not be loaded.`
     : `${what} could not be loaded. ${reply.message}`;
+}
+
+/** A match as Simulate Match reads it (#389). */
+export type ScheduleMatch = Pick<ScheduledMatch, "level" | "number" | "key" | "red" | "blue">;
+
+/** The event's matches, for Simulate Match (AN-11, AN-23). */
+export async function loadSchedule(event: EventSummary): Promise<Loaded<ScheduleMatch[]>> {
+  const reply = await call<{ matches: ScheduleMatch[] }>(
+    `/api/analysis/schedule?event=${encodeURIComponent(event.code)}`,
+  );
+  return reply.ok
+    ? { ok: true, value: reply.value.matches }
+    : { ok: false, message: failure(reply, `${event.code}'s matches`) };
 }
 
 export async function loadEvents(): Promise<Loaded<EventSummary[]>> {

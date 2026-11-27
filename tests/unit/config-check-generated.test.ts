@@ -221,25 +221,32 @@ describe("CC-10: what modules show", () => {
     ]);
   });
 
-  it("win probability reads averageScores.total and standardDeviation", () => {
-    const found = check((d) => {
+  it("win probability reads averageScores.total and standardDeviation: the chance of winning, and the Auto Pick List when turned on (#389)", () => {
+    // 2025's configuration has both (#389): "Chance of Winning" leads its match-view modules.
+    const removed = (d: Parameters<Parameters<typeof check>[0]>[0]) =>
       d.pipeline.pipeline.splice(43, 1); // standardDeviation
-      d.modules.modules.push({
-        view: "match",
-        module: "SingleDisplay",
-        name: "Win Chance",
-        wholeMatch: true,
-        options: { aggrMethod: "percentChanceOfWinning" },
-      });
-    });
-    expect(found.map(brief)).toEqual([
+    const chance = [
+      "error",
+      'module 12 (match SingleDisplay "Chance of Winning") › options.aggrMethod',
+      '"percentChanceOfWinning" reads the team value "standardDeviation", which analysis-pipeline.json never writes.',
+      undefined,
+    ];
+    expect(check(removed).map(brief)).toEqual([
       [
         "error",
-        'module 19 (match SingleDisplay "Win Chance") › options.aggrMethod',
-        '"percentChanceOfWinning" reads the team value "standardDeviation", which analysis-pipeline.json never writes.',
+        "autoPickList",
+        '"autoPickList" reads the team value "standardDeviation", which analysis-pipeline.json never writes.',
         undefined,
       ],
+      chance,
     ]);
+    // With the Auto Pick List off, only the module reads them.
+    expect(
+      check((d) => {
+        removed(d);
+        d.modules.autoPickList = false;
+      }).map(brief),
+    ).toEqual([chance]);
   });
 
   it("a heatmap coordinate no listed action has", () => {
@@ -285,7 +292,7 @@ describe("CC-11: a value that is empty for everyone", () => {
         "warning",
         "entry 47 (tmp countActions → preMatchScores)",
         expect.stringMatching(
-          /^"preMatchScores" is 0 for every one of the \d+ performances in 120 generated matches\. Entry 48 \(team average → preMatchAverages\) and module 19 \(team Stats "Before the match"\) via "preMatchAverages\.autol4" read it\.$/,
+          /^"preMatchScores" is 0 for every one of the \d+ performances in 120 generated matches\. Entry 48 \(team average → preMatchAverages\) and module 20 \(team Stats "Before the match"\) via "preMatchAverages\.autol4" read it\.$/,
         ),
         'In the generated matches "autol4" was recorded only in phases "auto" and "teleop", never in "preMatch". The generated matches press what match-scouting.json shows on screen at each moment, so check this entry\'s options and which layers show these buttons when.',
       ],
@@ -321,7 +328,7 @@ describe("CC-11: a value that is empty for everyone", () => {
         "warning",
         "entry 47 (tmp countActions → autoOnly)",
         expect.stringMatching(
-          /^"autoOnly\.teleopl4" is 0 for every one of the \d+ performances in 120 generated matches, yet module 19 \(team Stats "Auto"\) via "autoOnlyAverages\.teleopl4" reads it\.$/,
+          /^"autoOnly\.teleopl4" is 0 for every one of the \d+ performances in 120 generated matches, yet module 20 \(team Stats "Auto"\) via "autoOnlyAverages\.teleopl4" reads it\.$/,
         ),
         expect.stringMatching(
           /^In the generated matches "teleopl4" was recorded only in phase "teleop", never in "auto"\./,

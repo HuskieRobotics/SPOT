@@ -1,6 +1,8 @@
 {
   "$schema": "../src/config/schema/analysis-modules.schema.json",
   "version": 2,
+  "simulateMatch": false,
+  "autoPickList": false,
   "modules": [
     {
       "view": "team",

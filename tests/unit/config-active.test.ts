@@ -34,6 +34,32 @@ interface ConfigSet {
   /** Legacy source file per kind, in config/v1. */
   sources: Record<ConfigKind, string>;
   opts: ConvertOptions;
+  /** What was set by hand on top of the converter's output, which v1 has no way to say. */
+  edit?: (kind: ConfigKind, converted: Record<string, unknown>) => Record<string, unknown>;
+}
+
+/**
+ * 2025 as a worked example of Simulate Match and the Auto Pick List (#389): v4.2.0 shipped it with
+ * both on (v5 turned them off in its code for 2026), and the chance of winning, which the 2023
+ * configurations had, leads its match-view modules.
+ */
+const CHANCE_OF_WINNING = {
+  view: "match",
+  module: "SingleDisplay",
+  name: "Chance of Winning",
+  wholeMatch: true,
+  options: { aggrMethod: "percentChanceOfWinning", decimals: 1 },
+  position: "main",
+};
+function edit2025(kind: ConfigKind, converted: Record<string, unknown>) {
+  if (kind !== "analysis-modules") return converted;
+  const modules = [...(converted.modules as { view: string }[])];
+  modules.splice(
+    modules.findIndex((m) => m.view === "match"),
+    0,
+    CHANCE_OF_WINNING,
+  );
+  return { ...converted, simulateMatch: true, autoPickList: true, modules };
 }
 
 const sets: Record<string, ConfigSet> = {
@@ -55,6 +81,7 @@ const sets: Record<string, ConfigSet> = {
       "analysis-modules": "analysis-modules-2025v2.json",
     },
     opts: { schemaBase: "../../../src/config/schema" },
+    edit: edit2025,
   },
 };
 
@@ -84,7 +111,10 @@ for (const [name, set] of Object.entries(sets)) {
     }
 
     it("matches the converter output for config/v1 (drift check)", () => {
-      for (const kind of kinds) expect(file(kind)).toEqual(convert(kind, set));
+      for (const kind of kinds) {
+        const converted = convert(kind, set) as unknown as Record<string, unknown>;
+        expect(file(kind)).toEqual(set.edit ? set.edit(kind, converted) : converted);
+      }
     });
 
     it("points $schema at the schema files", () => {

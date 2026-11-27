@@ -192,6 +192,35 @@ was largely qualitative; expected to return for a typical game.
   teams sorted descending (bubble sort). The `SingleDisplay` module implements the same
   comparison for `aggrMethod: "percentChanceOfWinning"`.
 
+**v6 (#389, decided 2026-11-27):** both return, each turned on by a field of
+analysis-modules.json, `simulateMatch` and `autoPickList` (off when left out; CS-13). The
+converter writes both as `false`. 2025's configuration turns both on, as v4.2.0 shipped, and
+leads its match-view modules with a chance of winning; 2026's leaves them off. A view a season
+leaves off has no button, and an address naming it opens the event.
+
+- **AN-11, AN-23 Simulate Match** (`src/components/analysis/simulate-view.tsx`,
+  `?view=simulate`). The match list is the event's schedule, the matches assignment uses (AD-8),
+  from a public route, `GET /api/analysis/schedule?event=`. It holds only which teams play in
+  which match, as TBA publishes and the event's scouting data already shows. A match fills the
+  six choices, leaving empty a team with no data, and choosing a team clears the match, as in
+  v5. Each alliance's column shows the match-view modules for its teams; a `wholeMatch` module
+  is also given the other alliance. An alliance with no team chosen shows no modules. v5 changed
+  the alliances it was given when it added the other one (F-18); v6 changes nothing it is given.
+- **The chance of winning** (`src/analysis/win-chance.ts`, AN-23 and AN-24 alike) is v5's
+  model: an alliance scores the sum of its teams' totals, with deviation √(Σ sd²). The chance is
+  Φ((a − b) / max(0.01, √(sdₐ² + sd_b²))). Φ is computed, good to 1.5 × 10⁻⁷, and exactly
+  0.5 at 0. v5 looked z up in simple-statistics' table, rounded to 0.01, so a chance can differ
+  from v5's in the third decimal place. A team without a total does not count, where v5 counted
+  0 (F-27), and an alliance with no team that has one shows No Data. A team without a standard
+  deviation counts 0, as in v5. SingleDisplay shows the chance as a percentage, two decimals
+  unless `decimals` says otherwise.
+- **AN-24 Auto Pick List** (`src/components/analysis/auto-pick-view.tsx`, `?view=pick`). Each
+  team with a total, ranked by its average chance against each other such team, highest first;
+  a tie keeps team order, by a sort rather than v5's bubble sort. v5 had no 0.01 floor here, so
+  two teams with no deviation divided by 0. Teams without a total are listed after the ranking,
+  and with fewer than two teams with a total, nobody is ranked. A team opens its view, where v5
+  drew the team's modules beside the list.
+
 ## CSV export (v5: `GET /analysis/api/csv`, server side; v6: client-side, ADR 0005)
 
 - **AN-25** Re-runs the pipeline on the server (dataset fetched from its own endpoint **plus**

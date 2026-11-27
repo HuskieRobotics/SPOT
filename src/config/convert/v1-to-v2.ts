@@ -767,6 +767,9 @@ export function convertAnalysisModules(
   const config: AnalysisModulesConfig = {
     $schema: `${opts.schemaBase ?? "../src/config/schema"}/analysis-modules.schema.json`,
     version: 2,
+    // v1 had no field for these: v5 turned them on and off in its code (A-6, BL-299).
+    simulateMatch: false,
+    autoPickList: false,
     modules: ids ? nativeModules(modules, ids, countRoots(pipeline.pipeline), warnings) : modules,
     filterTeams: { ratingBands: DEFAULT_RATING_BANDS },
   };

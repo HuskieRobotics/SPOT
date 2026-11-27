@@ -187,14 +187,14 @@ quotes the test's name.
 
 ### Document 08: analysis, data loading
 
-| Id     | Status   | Where                                                                              |
-| ------ | -------- | ---------------------------------------------------------------------------------- |
-| AN-7   | Done     | As DM-11a                                                                          |
-| AN-9   | Done     | `tba-enrichment`, `engine`                                                         |
-| AN-10  | Done     | `engine`                                                                           |
-| AN-11  | Later    | The manual data is dropped (DM-14); the match list comes with Simulate Match, #389 |
-| AN-25  | Replaced | by AN-26a                                                                          |
-| AN-26a | Done     | `csv` (#388), and the browser test downloads it                                    |
+| Id     | Status   | Where                                                                        |
+| ------ | -------- | ---------------------------------------------------------------------------- |
+| AN-7   | Done     | As DM-11a                                                                    |
+| AN-9   | Done     | `tba-enrichment`, `engine`                                                   |
+| AN-10  | Done     | `engine`                                                                     |
+| AN-11  | Done     | The manual data is dropped (DM-14); the match list is `analysis-data` (#389) |
+| AN-25  | Replaced | by AN-26a                                                                    |
+| AN-26a | Done     | `csv` (#388), and the browser test downloads it                              |
 
 ### Document 04: configuration v1
 

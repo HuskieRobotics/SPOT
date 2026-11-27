@@ -308,7 +308,8 @@ export function checkOnGeneratedMatches(check: GeneratedCheck): GeneratedSummary
   const o = observe(check);
   const entryAt = (i: number) => pipeline.pipeline[i];
   const entryName = (i: number) => describeLocation(PIPELINE, pipeline, ["pipeline", i]);
-  const moduleName = (i: number) => describeLocation(MODULES, modules, ["modules", i]);
+  const moduleName = (i: number) =>
+    i === AUTO_PICK ? "the Auto Pick List" : describeLocation(MODULES, modules, ["modules", i]);
   const noun = (kind: Kind, n = 2) =>
     kind === "tmp" ? (n === 1 ? "performance" : "performances") : n === 1 ? "team" : "teams";
   const catalog = new ActionCatalog(ms, check.enrichmentValid ? pipeline : null);
@@ -786,7 +787,14 @@ export function checkOnGeneratedMatches(check: GeneratedCheck): GeneratedSummary
 
 // ---------------------------------------------------------------------------- module paths
 
+/** The module index of what the Auto Pick List reads (it is no module). */
+const AUTO_PICK = -1;
+
+/** What the chance of winning reads (Simulate Match, Auto Pick: docs/spec/08 AN-23, AN-24). */
+const WIN_CHANCE_PATHS = ["averageScores.total", "standardDeviation"];
+
 interface ModuleRef {
+  /** The module's index, or AUTO_PICK. */
   module: number;
   ref: Reference;
   /** 1 or -1 when the module ranks teams by this path, else 0. */
@@ -812,7 +820,7 @@ function collectModuleRefs(modules: AnalysisModulesConfig, skip: ReadonlySet<num
     }
     // Win probability (Simulate Match, Auto Pick: docs/spec/08 AN-23, AN-24) reads two team values.
     if (m.module === "SingleDisplay" && m.options.aggrMethod === "percentChanceOfWinning") {
-      for (const id of ["averageScores.total", "standardDeviation"]) {
+      for (const id of WIN_CHANCE_PATHS) {
         out.push({
           module: i,
           ref: { kind: "path", id, keys: [...keys, "aggrMethod"] },
@@ -822,6 +830,14 @@ function collectModuleRefs(modules: AnalysisModulesConfig, skip: ReadonlySet<num
       }
     }
   });
+  if (modules.autoPickList === true)
+    for (const id of WIN_CHANCE_PATHS)
+      out.push({
+        module: AUTO_PICK,
+        ref: { kind: "path", id, keys: ["autoPickList"] },
+        sort: 1,
+        implicit: '"autoPickList"',
+      });
   return out;
 }
 

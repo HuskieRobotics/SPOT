@@ -317,3 +317,70 @@ test("#388 AN-26, AN-26b, F-27, SEC-8: the event's teams download as a CSV file"
     .filter(([h, v]) => /^\w+\.\w+ Average$/.test(h) && v !== "" && Number.isFinite(Number(v)));
   expect(counted.length).toBeGreaterThan(10);
 });
+
+test("#389 AN-23, AN-24: Simulate Match and the Auto Pick List, turned on for 2025", async ({
+  page,
+}) => {
+  const narrow = test.info().project.name === "mobile-chromium";
+  const views = page.getByRole("navigation", { name: "Views" });
+  const openTeams = async () => {
+    if (narrow) await page.getByRole("button", { name: "Teams" }).click();
+  };
+
+  // 2026 leaves both off: no button, and an address naming one opens the event.
+  await page.goto("/analysis?event=2026mnwi_official&view=simulate");
+  await expect(page.getByRole("heading", { name: "2026mnwi_official" })).toBeVisible();
+  await openTeams();
+  await expect(views.getByRole("button", { name: "Compare Team Scores" })).toBeVisible();
+  await expect(views.getByRole("button", { name: "Simulate Match" })).toHaveCount(0);
+  await expect(views.getByRole("button", { name: "Auto Pick List" })).toHaveCount(0);
+
+  // AN-23: a match from the schedule fills both alliances; each shows the match-view modules,
+  // and the chance of winning compares the two, so the chances add to 100 %.
+  const matchModules = (
+    read("config/seasons/2025/analysis-modules.json") as { modules: { view: string }[] }
+  ).modules.filter((m) => m.view === "match").length;
+  await page.goto("/analysis?event=2025ilch_official");
+  await openTeams();
+  await views.getByRole("button", { name: "Simulate Match" }).click();
+  await expect(page).toHaveURL(/view=simulate$/);
+  const match = page.getByLabel("Match", { exact: true });
+  await match.selectOption({ label: "Qual 1" });
+  for (const slot of ["Red 1", "Blue 1"])
+    await expect(page.getByLabel(slot, { exact: true })).not.toHaveValue("");
+  const red = page.getByRole("region", { name: "Red alliance" });
+  const blue = page.getByRole("region", { name: "Blue alliance" });
+  await expect(red.locator("section[data-module]")).toHaveCount(matchModules);
+  await expect(blue.locator("section[data-module]")).toHaveCount(matchModules);
+  const chance = async (side: typeof red) => {
+    await expect(side.getByTestId("chance")).toHaveText(/^\d+(\.\d)?%$/);
+    return Number((await side.getByTestId("chance").textContent())!.replace("%", ""));
+  };
+  expect((await chance(red)) + (await chance(blue))).toBeCloseTo(100, 0);
+
+  // Choosing a team clears the match; an alliance with no team shows no modules.
+  await page.getByLabel("Red 1", { exact: true }).selectOption("3061");
+  await expect(match).toHaveValue("");
+  for (const slot of ["Blue 1", "Blue 2", "Blue 3"])
+    await page.getByLabel(slot, { exact: true }).selectOption("");
+  await expect(blue.locator("section[data-module]")).toHaveCount(0);
+  await expect(blue).toContainText("Choose a team for this alliance.");
+
+  // AN-24: every team with a total, highest chance first; a team opens its view.
+  await openTeams();
+  await views.getByRole("button", { name: "Auto Pick List" }).click();
+  await expect(page).toHaveURL(/view=pick$/);
+  const picks = page.getByRole("list", { name: "Ranked teams" }).getByRole("button");
+  await expect(picks.first()).toBeVisible();
+  expect(await picks.count()).toBeGreaterThan(10);
+  const chances = (
+    await page
+      .getByRole("list", { name: "Ranked teams" })
+      .getByTestId("pick-chance")
+      .allTextContents()
+  ).map((t) => Number(t.trim().replace("%", "")));
+  expect(chances.every((c) => c >= 0 && c <= 100)).toBe(true);
+  expect(chances).toEqual([...chances].sort((a, b) => b - a));
+  await picks.first().click();
+  await expect(page.getByRole("heading", { name: /^Team \d+/ })).toBeVisible();
+});

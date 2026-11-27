@@ -212,6 +212,10 @@ export interface RatingBand {
 export interface AnalysisModulesConfig {
   $schema?: string;
   version: 2;
+  /** Turns on Simulate Match (docs/spec/08 AN-23, #389). Off when left out. */
+  simulateMatch?: boolean;
+  /** Turns on the Auto Pick List (AN-24, #389). Off when left out. */
+  autoPickList?: boolean;
   modules: ModuleEntry[];
   filterTeams: { ratingBands: RatingBand[] };
 }

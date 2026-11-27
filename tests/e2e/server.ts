@@ -25,6 +25,7 @@ import { createEvent, eventCollection } from "../../src/db/events";
 import { performanceCollection } from "../../src/db/performances";
 import { migrate } from "../../src/migrate/v5-to-v6";
 import { updateSchedule } from "../../src/db/schedules";
+import { scheduleFromTba, type TbaMatch } from "../../src/schedule/tba";
 import { addScouter } from "../../src/db/scouters";
 import { updateSettings } from "../../src/db/settings";
 import { E2E_JOIN_CODE, E2E_MONGO_PORT, E2E_MONGO_URI, E2E_ROSTER, E2E_TBA_KEY } from "./fixtures";
@@ -83,6 +84,11 @@ async function seedOracleEvents(db: Db) {
     await performanceCollection(db).insertMany(
       migrated.performances.filter((p) => p.eventId === event._id),
     );
+    // The schedule an admin would have read from TBA, for Simulate Match (#389).
+    const matches = read("tools", "oracle", "fixtures", "tba", event.tbaKey, "matches.json");
+    await updateSchedule(db, event._id, {
+      tba: { matches: scheduleFromTba(matches as TbaMatch[]), fetchedAt: 0 },
+    });
   }
 }
 
