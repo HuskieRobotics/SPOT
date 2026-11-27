@@ -17,6 +17,7 @@ import {
   type ConvertOptions,
 } from "@/config/convert/v1-to-v2";
 import { actionButtonIds, deriveKnownActionIds } from "@/config/knownActionIds";
+import type { AnalysisModulesConfig, AnalysisPipelineConfig } from "@/config/types";
 import { validateConfig, type ConfigKind } from "@/config/validate";
 
 const root = process.cwd();
@@ -62,6 +63,32 @@ function edit2025(kind: ConfigKind, converted: Record<string, unknown>) {
   return { ...converted, simulateMatch: true, autoPickList: true, modules };
 }
 
+/**
+ * 2026's names that matched nothing, fixed by hand (#392, docs/spec/12 F-29): config:check
+ * reported each one, and the modules naming them showed No Data. The v1 files stay as v5 ran them.
+ */
+function edit2026(kind: ConfigKind, converted: Record<string, unknown>) {
+  if (kind === "analysis-pipeline") {
+    const config = structuredClone(converted) as unknown as AnalysisPipelineConfig;
+    // The button is AttemptClimb; v5's "attemptClimb" never matched.
+    const climb = config.pipeline.find((e) => e.outputPath === "actionTimes.attemptClimb")!;
+    climb.options = { ...climb.options, actionId: ["AttemptClimb"] };
+    // "Auto Fuel OPR" in Team Stats reads it; TBA has it, but v5's OPR strings left it out.
+    config.enrichment.tba!.componentOprs!.splice(1, 0, "Hub Auto Fuel Count");
+    return config as unknown as Record<string, unknown>;
+  }
+  if (kind === "analysis-modules") {
+    const config = structuredClone(converted) as unknown as AnalysisModulesConfig;
+    // The button is fall, counted in the endgame; v5's catalog id "endgameFall" was never recorded.
+    const climb = config.modules.find((m) => m.name === "Attempted Climb Level")!;
+    (climb.options.bars as { path: string }[])[0].path = "counts.endgame.fall";
+    // The match view read points 2026 never scouted, and Simulate Match is off for 2026.
+    config.modules = config.modules.filter((m) => m.view !== "match");
+    return config as unknown as Record<string, unknown>;
+  }
+  return converted;
+}
+
 const sets: Record<string, ConfigSet> = {
   "active 2026 (config/)": {
     dir: ["config"],
@@ -71,6 +98,7 @@ const sets: Record<string, ConfigSet> = {
       "analysis-modules": "analysis-modules.json",
     },
     opts: { oprStrings, schemaBase: "../src/config/schema" },
+    edit: edit2026,
   },
   "archived 2025 (config/seasons/2025/)": {
     dir: ["config", "seasons", "2025"],

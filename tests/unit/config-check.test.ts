@@ -1,7 +1,7 @@
 /**
  * config:check (#317, gate K-2; docs/spec/12 T-3). Each class of finding is tested on a small
  * change to a real configuration (2025 for a phases-only game, 2026 for segments), then the done-
- * when items: the 2026 configuration reports the attemptClimb entry (docs/spec/20 §2.2), and every
+ * when items: v5's misspelled attemptClimb in 2026 is reported (docs/spec/20 §2.2), and every
  * archived v1 season that converts gives a readable report.
  *
  * The checks of the files themselves (CC-1 to CC-8) are tested without running the pipeline on
@@ -289,22 +289,20 @@ describe("CC-4: transformers (TR-10, TR-14)", () => {
 });
 
 describe("CC-5: ids that options name", () => {
-  it("done when: the 2026 configuration reports the attemptClimb entry (docs/spec/20 §2.2)", () => {
-    const r = checkConfiguration(sources(season2026), filesOnly);
-    const f = r.findings.find((x) => x.where.includes("actionTimes.attemptClimb"));
-    expect(f && brief(f)).toEqual({
+  it("done when: v5's misspelled button id in 2026 is reported (docs/spec/20 §2.2), and the active files fix it (F-29)", () => {
+    const [f] = check((d) => {
+      const entry = d.pipeline.pipeline.find((e) => e.outputPath === "actionTimes.attemptClimb")!;
+      entry.options = { ...entry.options, actionId: ["attemptClimb"] };
+    }, season2026);
+    expect(brief(f)).toEqual({
       severity: "error",
       file: "analysis-pipeline",
       where: "entry 6 (tmp actionTime → actionTimes.attemptClimb) › options.actionId",
       message: '"attemptClimb" is not a button id in match-scouting.json.',
       hint: 'Did you mean "AttemptClimb"?',
     });
-    // In the native 2026 pipeline (#320), that is the only id no button records.
-    expect(
-      r.findings
-        .filter((x) => x.file === "analysis-pipeline" && x.severity === "error")
-        .map((x) => x.where),
-    ).toEqual([f!.where]);
+    // #392: the active 2026 files name the button, so nothing in them is an error.
+    expect(checkConfiguration(sources(season2026), filesOnly).errors).toBe(0);
   });
 
   it("explains a v5 id that put the period in front of the button (CS-16)", () => {
@@ -844,6 +842,18 @@ describe("npm run config:check", () => {
     } finally {
       rmSync(dir, { recursive: true, force: true });
     }
-    expect(run("config").code).toBe(1);
+    expect(run("config").code).toBe(0);
+    // An error: 2026 with v5's misspelled button id (F-29).
+    const broken = mkdtempSync(join(tmpdir(), "spot-config-check-"));
+    const b = structuredClone(season2026);
+    const entry = b.pipeline.pipeline.find((e) => e.outputPath === "actionTimes.attemptClimb")!;
+    entry.options = { ...entry.options, actionId: ["attemptClimb"] };
+    for (const [kind, text] of Object.entries(sources(b)))
+      writeFileSync(join(broken, `${kind}.json`), text);
+    try {
+      expect(run(broken).code).toBe(1);
+    } finally {
+      rmSync(broken, { recursive: true, force: true });
+    }
   }, 30000);
 });

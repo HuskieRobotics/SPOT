@@ -175,6 +175,24 @@
       "v6": null
     },
     {
+      "id": "attempt-climb-2026",
+      "cites": "F-29 (#392)",
+      "why": "2026's actionTime asked for \"attemptClimb\", but the button is AttemptClimb, so v5 wrote null for every performance and every team. The active configuration names the button, so v6 writes when a robot first attempted to climb, and each team's average of it.",
+      "sets": ["2026mnwi_official-v5", "2026syn_synthetic-v5"],
+      "paths": ["actionTimes.attemptClimb", "averageTimes.attemptClimbTime"],
+      "legacy": [null],
+      "v6": "(any)"
+    },
+    {
+      "id": "opr-auto-fuel-2026",
+      "cites": "F-29, CF-3 (#392)",
+      "why": "2026's Team Stats showed \"Auto Fuel OPR\" from TBA's Hub Auto Fuel Count, which v5's OPR strings left out, so it was never fetched. The active configuration asks TBA for it, so v6 writes it from the recorded COPRs.",
+      "sets": ["2026mnwi_official-v5"],
+      "paths": ["opr.Hub Auto Fuel Count"],
+      "legacy": ["(absent)"],
+      "v6": "(any)"
+    },
+    {
       "id": "shift-slots-2026",
       "cites": "#326, SC-22, DV-1",
       "why": "v6 counts a shift by the field clock's slot (1-4); v5's ids numbered a kind's shifts from the scouter's toggle press, so its activeShift2 (the second active shift) was slot 3 or 4. The translation table maps v5's shift n to the first slot it can be in, so per-shift counts and their team averages compare v5 numbers with clock slots. Totals over a kind's shifts, and everything else, are still compared.",

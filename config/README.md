@@ -54,9 +54,20 @@ then the button (`counts.active1.Defense`, `counts.preMatch.preloadFuel`). It de
 the prefixes in `match-scouting.json`, and warns where a filter covers more periods than v5's list
 did (docs/spec/20 §2.2 item 5).
 
-Until the 2026 configuration is edited by hand for the new client, the drift test in
-`config-active.test.ts` requires these files to equal the converter output. Delete that one
-test when you start hand-editing.
+Four things were then fixed by hand, because v5's files named things that did not exist and
+the modules showed 0 or No Data (#392, docs/spec/12 F-29):
+
+- `analysis-pipeline.json`: the climb time asks for the button `AttemptClimb` (v5 wrote
+  `attemptClimb`), and `Hub Auto Fuel Count` is among the OPRs asked of TBA, for "Auto Fuel OPR" in
+  Team Stats.
+- `analysis-modules.json`: the Fall bar of "Attempted Climb Level" reads `counts.endgame.fall`
+  (v5 wrote `counts.endgameFall`), and the match view is gone. It read points 2026 never scouted,
+  and Simulate Match is off for 2026.
+
+`npm run config:check` reports no errors in these files, and eight warnings that are understood
+(docs/spec/20 §4). The drift test in `config-active.test.ts` requires the files to equal the
+converter output with these edits (`edit2026`). When the files are edited further, add the edit
+there, or delete that one test.
 
 `config.json` (server secrets and settings) no longer exists in v6; use environment variables
 (`.env.example`). The `v1/` folder holds the legacy configurations used as converter inputs, and

@@ -1,5 +1,7 @@
 import { readFileSync } from "node:fs";
 import { expect, test } from "@playwright/test";
+import { ACTIVE_SEASON, findSeason, readSeason } from "../../src/config/load";
+import { checkAnalysisFile } from "../../src/config/serve";
 
 // #383 (T-7): the analysis dashboard on the oracle's real events, which the e2e server migrates
 // from their v5 exports (tests/e2e/server.ts). It only reads, so it runs in every project.
@@ -88,12 +90,40 @@ test("AN-1 to AN-4, AN-11a to AN-15, SEC-8: choose an event, find a team, open i
 
   // SEC-8: no scouter appears anywhere on a public page (one of 2025ilch's scouters in v5).
   await expect(page.locator("body")).not.toContainText("CharlotteCao");
+});
 
-  // TR-10: the active season's analysis files have problems an admin can see, and the page works.
-  await event.selectOption("2026mnwi_official");
-  await expect(page.getByTestId("problems")).toContainText("The analysis configuration has");
-  await page.getByTestId("problems").locator("summary").click();
-  await expect(page.getByTestId("problems")).toContainText('"attemptClimb" is not a button id');
+test("TR-10: a mistake in the season's files is shown to an admin, and the page still works", async ({
+  page,
+}) => {
+  // The active 2026 files have no errors since #392. Put v5's misspelled button id back (F-29),
+  // and serve the file with what config:check finds in it, as the server would.
+  await page.route(/\/api\/config\/analysis-pipeline\?/, async (route) => {
+    const sources = readSeason(findSeason(ACTIVE_SEASON)!);
+    const misspelled = sources["analysis-pipeline"]!.replace(
+      '"actionId": ["AttemptClimb"]',
+      '"actionId": ["attemptClimb"]',
+    );
+    expect(misspelled).not.toBe(sources["analysis-pipeline"]);
+    const file = checkAnalysisFile("analysis-pipeline", {
+      ...sources,
+      "analysis-pipeline": misspelled,
+    })!;
+    await route.fulfill({
+      json: { version: file.version, config: file.config, findings: file.findings },
+    });
+  });
+  // The event's page lists the problems.
+  await page.goto("/analysis?event=2026mnwi_official");
+  const problems = page.getByTestId("problems");
+  await expect(problems.locator("summary")).toHaveText("The analysis configuration has 1 error");
+  await problems.locator("summary").click();
+  await expect(problems).toContainText('"attemptClimb" is not a button id');
+  // The rest of the dashboard draws.
+  await page.goto("/analysis?event=2026mnwi_official&team=3061");
+  await expect(page.getByRole("heading", { name: "Team 3061 · Huskie Robotics" })).toBeVisible();
+  await expect(
+    page.getByRole("region", { name: "Robot Action Counts Each Match" }).locator("[data-drawn]"),
+  ).toBeVisible();
 });
 
 // #385, MO-5: the chart modules, drawn by Plotly, in the theme's colours.

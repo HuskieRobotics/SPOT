@@ -529,3 +529,51 @@ export function compareGoldenSet(
     keep: options.keep,
   });
 }
+
+// ---------------------------------------------------------------- one team's values
+
+/** How a v6 team value stands against the golden output (#392, T-4). */
+export interface TeamValueCheck {
+  /** The golden value at that path, legacy paths translated; "(absent)" when it has none. */
+  legacy: unknown;
+  /** True when v6's value is the golden one; otherwise the rule that accepts the difference. */
+  same: boolean;
+  rule?: string;
+}
+
+/**
+ * Check v6 team values against a golden set, path by path, as `compareGoldenSet` does for the
+ * whole dataset: the browser tests use it to show that what the dashboard shows is the oracle's
+ * (#392). Returns a function of team, v6 path and v6 value (undefined when v6 has none).
+ */
+export function goldenTeamValues(
+  set: GoldenSet,
+  rules: readonly DivergenceRule[] = loadDivergences(),
+): (team: string, path: string, v6: unknown) => TeamValueCheck {
+  const golden = loadGolden(set);
+  const config = read(join(set.configDir, "match-scouting.json")) as MatchScoutingConfig;
+  const pipeline = read(join(set.configDir, "analysis-pipeline.json")) as AnalysisPipelineConfig;
+  const translation = translationFor(config, pipeline);
+  const byTeam = new Map<string, Map<string, unknown>>();
+  const leaves = (team: string) => {
+    let out = byTeam.get(team);
+    if (out) return out;
+    out = new Map();
+    for (const [original, value] of derived(golden.teams[team] ?? {}, new Set())) {
+      const legacyPath = renamed(rules, set.name, original).path;
+      const path = translation ? translation.mapLegacyPath("team", legacyPath) : legacyPath;
+      if (path === null) continue;
+      out.set(path, translation ? translation.mapLegacyValue("team", path, value) : value);
+    }
+    byTeam.set(team, out);
+    return out;
+  };
+  return (team, path, v6) => {
+    const values = leaves(team);
+    const legacy = values.has(path) ? values.get(path) : ABSENT;
+    const value = v6 === undefined ? ABSENT : v6;
+    if (Object.is(legacy, value)) return { legacy, same: true };
+    const rule = acceptingRule(rules, set.name, team, path, legacy, value);
+    return { legacy, same: false, ...(rule ? { rule: rule.id } : {}) };
+  };
+}

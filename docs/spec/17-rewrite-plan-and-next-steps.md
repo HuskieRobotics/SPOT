@@ -251,7 +251,7 @@ phase 6's parallel run brought forward as a test. Deployed on a staging EC2 inst
 | Id  | Ready means                                                                                                                                                                                                | From             |
 | --- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
 | W-1 | Phase 2 complete: scouting client, sessions and assignment, sync, the offline path with QR, admin match selection, schedule from TBA and manual.                                                           | Phase 2          |
-| W-2 | Phase 3 core: team view with the modules the 2027 configuration uses, event switching, search. Compare, Filter Teams, CSV, Simulate Match and Auto Pick can follow.                                        | Phase 3, partial |
+| W-2 | Phase 3 core: team view with the modules the 2027 configuration uses, event switching, search. Compare, Filter Teams, CSV, Simulate Match and Auto Pick can follow. **Met** (#392, §5).                    | Phase 3, partial |
 | W-3 | From phase 4: the EC2 recipe, the QR scanner, and the edit page's flag and delete. Settings come from environment variables; the settings UI, the Cloud Run recipe and the real-dump migration can follow. | Phase 4, partial |
 
 After Week 0, the rest of phases 3 and 4, then phase 5, then cutover (phase 6) once v6 has
@@ -288,8 +288,8 @@ scouted an event in parallel with v5 without losing data.
 
 ## 5. Status and next steps
 
-Last updated 2026-11-26. **Phases 0, 1 and 2 are complete, and so are gate K and gate W-1.
-Phase 3 is next.** Phase 0 items are numbered as in
+Last updated 2026-11-27. **Phases 0, 1 and 2 are complete, and so are gates K, W-1 and W-2.
+Phase 3's exit criterion is met, and its audit (#393) is next.** Phase 0 items are numbered as in
 section 2.
 
 | #   | Phase 0 item                       | Status                                                                                                                                                                                                                                                                                                                                   |
@@ -334,7 +334,7 @@ phase 2 because a phase 2 requirement already demands them: BL-93 (OF-2's pendin
 (the session model re-assigns waiting scouters), BL-116 and BL-33 (the admin page's labelled
 controls, AD-4b, and several admins at once, RT-14b).
 
-**Phase 3 is next**, broken into issues #382 to #393 on the "v6 Phase 3" milestone
+**Phase 3** was broken into issues #382 to #393 on the "v6 Phase 3" milestone
 (2026-11-26), in build order: the public data routes (the dataset, events, teams and TBA data,
 with the decision on the manual data hooks, #345), the dashboard with event switching, the team
 list and search, the text modules, the chart modules on Plotly, the heatmap, Compare Team Scores
@@ -344,9 +344,25 @@ audit. Gate W-2's core is the first five (#382 to #386); the rest can follow Wee
 offline analysis (#390) should come before the first event. Five older issues close through
 them: #90 and #345 through #382, #209 through #383, #232 through #388, and #299 through #389.
 
-Recommended order from here, toward **gate W** (about 2027-02-20): the core of phase 3 (W-2),
+**Phase 3's exit criterion is met** (2026-11-27, #392), and with it gate W-2. The browser tests,
+run in CI with the rest (T-1), draw the dashboard on the oracle's two real events, 2025ilch and
+2026mnwi, migrated from their v5 exports, with their recorded TBA data (T-9):
+
+- every built-in module draws with data and shows No Data without it, and matches a screenshot in
+  light and dark mode on a phone and a desktop (`tests/e2e/modules.spec.ts`);
+- the analysis journey of T-7: an event chosen, a team found and opened, the bubble graph, and
+  Filter Teams (`tests/e2e/analysis.spec.ts`);
+- for three teams at each event, every value the team view's Stats show is the golden output's,
+  or a reviewed divergence accepts the difference (T-4, `tests/e2e/oracle.spec.ts`).
+
+The active 2026 analysis files had 11 errors, each a name that matched nothing in v5 too; they
+are fixed, so every 2026 module shows data (document 12 F-29). Gate W-2 asked for the modules the
+2027 configuration uses; it is met because every built-in module is tested, whichever the 2027
+files choose.
+
+Recommended order from here, toward **gate W** (about 2027-02-20): the Phase 3 audit (#393),
 then the event-critical part of phase 4 (W-3), about six weeks after kickoff. Break each phase
-into issues on its milestone when it starts, as Phases 1 and 2 were.
+into issues on its milestone when it starts, as Phases 1, 2 and 3 were.
 
 **Demo mode (#374)** is in phase 4 but not in gate W-3: Team 3061's events don't need it, but
 other teams need it to evaluate SPOT without installing anything (document 01). It comes after

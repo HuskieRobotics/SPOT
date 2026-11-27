@@ -199,7 +199,14 @@ export function createSchemaSet<K extends string>(schemas: Record<K, unknown>): 
   const compiled = new Map<K, ValidateFunction>();
 
   const getAjv = () => {
-    if (!ajv) ajv = createAjv();
+    if (!ajv) {
+      ajv = createAjv();
+      // A schema may refer to another of the set by its $id (the modules schema reads the
+      // pipeline's period filters), so every one is known before the first is compiled, whatever
+      // order the files are checked in. Adding does not compile.
+      for (const schema of Object.values(schemas) as { $id?: unknown }[])
+        if (typeof schema.$id === "string") ajv.addSchema(schema as object);
+    }
     return ajv;
   };
 

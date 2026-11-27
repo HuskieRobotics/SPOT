@@ -371,6 +371,8 @@ describe("#320: oracle acceptance, 2026", () => {
       "average-keys-2026": 23,
       "cycles-2026": 26765,
       "performance-order-2026": 1448,
+      "attempt-climb-2026": 21,
+      "opr-auto-fuel-2026": 48,
     },
     "2026syn_synthetic-v5": {
       "missing-nan": 3231,
@@ -379,12 +381,13 @@ describe("#320: oracle acceptance, 2026", () => {
       "action-period-fields": 60552,
       "cycle-unended-count": 1800,
       "tba-ids-without-tba": 1824,
-      "opr-without-tba": 144,
+      "opr-without-tba": 192,
       "shift-slots-2026": 90287,
       "shift-numbering-2026": 60,
       "counts-every-period-2026": 100868,
       "average-keys-2026": 1172,
       "cycles-2026": 14984,
+      "attempt-climb-2026": 262,
     },
   };
 
@@ -482,13 +485,20 @@ describe("#320: oracle acceptance, 2026", () => {
     }
   });
 
-  it("v5's attemptClimb never matched, so the native configuration keeps it null (#320)", () => {
-    // The configuration asks for "attemptClimb"; the button is "AttemptClimb". config:check
-    // reports it (docs/spec/20 §4); the oracle shows v6 reproduces v5's null.
-    const entry = comparisons
-      .get("2026mnwi_official-v5")!
-      .entries.find((e) => e.outputPath === "actionTimes.attemptClimb");
-    expect(entry).toMatchObject({ status: "match", differences: 0 });
+  it("F-29 (#392): the climb time, once v5's misspelled id names the button, is the first AttemptClimb press", () => {
+    // v5 asked for "attemptClimb" and wrote null everywhere; the active configuration names the
+    // button, and attempt-climb-2026 accepts exactly the performances that pressed it.
+    const name = "2026mnwi_official-v5";
+    const set = goldenSets.find((s) => s.name === name)!;
+    const { dataset } = runGoldenSet(set);
+    const pressed = dataset.tmps.filter((t) => t.actions.some((a) => a.id === "AttemptClimb"));
+    expect(pressed.length).toBeGreaterThan(10);
+    for (const t of pressed)
+      expect(getPath(t, "actionTimes.attemptClimb", null)).toBe(
+        t.actions.find((a) => a.id === "AttemptClimb")!.ts,
+      );
+    const c = comparisons.get(name)!;
+    expect(c.acceptedPaths["attempt-climb-2026"]["actionTimes.attemptClimb"]).toBe(pressed.length);
   });
 });
 

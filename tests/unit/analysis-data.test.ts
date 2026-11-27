@@ -16,7 +16,7 @@ import * as tbaRoute from "@/app/api/analysis/tba/route";
 import { buildEnrichedDataset } from "@/analysis/enrichment/tba";
 import { teamList } from "@/analysis/teams";
 import * as matchScoutingRoute from "@/app/api/config/match-scouting/route";
-import { ACTIVE_SEASON, findSeason } from "@/config/load";
+import { ACTIVE_SEASON, findSeason, readSeason } from "@/config/load";
 import { analysisFile, checkAnalysisFile } from "@/config/serve";
 import type { AnalysisPipelineConfig } from "@/config/types";
 import { validateDocument } from "@/data/validate";
@@ -378,7 +378,7 @@ describe("CS-17, OF-8: the analysis files, for the dashboard", () => {
       expect(r.headers.get("cache-control")).toBe("no-cache");
       expect(r.json.version).toMatch(/^[0-9a-f]{12}$/);
       expect(Array.isArray(r.json.config[list])).toBe(true);
-      // The active 2026 files have errors (#392 fixes them); they are served, with the findings.
+      // A file is served with what config:check finds in it.
       expect(Array.isArray(r.json.findings)).toBe(true);
       for (const f of r.json.findings) expect(f.file).toBe(kind);
       const again = await get(route, `/api/config/${kind}`, {
@@ -389,11 +389,26 @@ describe("CS-17, OF-8: the analysis files, for the dashboard", () => {
   }
 
   it("the findings are config:check's own, file by file", () => {
-    const pipeline = analysisFile("analysis-pipeline", findSeason(ACTIVE_SEASON)!)!;
-    expect(pipeline.findings.some((f) => /"attemptClimb" is not a button id/.test(f.message))).toBe(
+    // The active 2026 files have no errors since #392.
+    const season = findSeason(ACTIVE_SEASON)!;
+    const pipeline = analysisFile("analysis-pipeline", season)!;
+    expect(pipeline.findings.filter((f) => f.severity === "error")).toEqual([]);
+    // With v5's misspelled button id back (F-29), the file is still served, with the error.
+    const sources = readSeason(season);
+    const misspelled = sources["analysis-pipeline"]!.replace(
+      '"actionId": ["AttemptClimb"]',
+      '"actionId": ["attemptClimb"]',
+    );
+    expect(misspelled).not.toBe(sources["analysis-pipeline"]);
+    const broken = checkAnalysisFile("analysis-pipeline", {
+      ...sources,
+      "analysis-pipeline": misspelled,
+    })!;
+    expect(broken.findings.some((f) => /"attemptClimb" is not a button id/.test(f.message))).toBe(
       true,
     );
-    expect(pipeline.problem).toBeNull();
+    expect(broken.problem).toBeNull();
+    expect(broken.config).not.toBeNull();
   });
 
   it("CS-17: an event's season reads it: the season named for its year, else the active one", async () => {

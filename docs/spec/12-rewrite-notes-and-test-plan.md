@@ -160,6 +160,19 @@ active into inactive stop within 10 s after the switch. Two rules follow:
   starts that never got an end, and a zone holds until the next zone press. The 2025 and 2026
   oracle comparisons record the differences as divergences; for 2025 a test checks that every
   performance whose cycles differ had a start left without an end.
+- **F-29** 2026's configuration named things that did not exist, and nothing said so: v5 showed 0
+  or nothing. The pipeline's `actionTime` asked for `attemptClimb`, but the button is
+  `AttemptClimb`, so `actionTimes.attemptClimb` was null for all 413 performances. "Attempted Climb
+  Level" read `counts.endgameFall`, a catalog id (F-4) that misspells the button `fall`, so its
+  Fall bar was always 0. "Auto Fuel OPR" in Team Stats read TBA's `Hub Auto Fuel Count`, which v5's
+  OPR strings (CF-3) never asked for. Five match-view modules read points (`averageScores.auto`,
+  `teleop`, `endgame`, `total`) that 2026 never scouted, copied from 2025; the match view was off
+  that season. Found by config:check (#317, #318).
+  **v6 (#392, decided 2026-11-27):** the active 2026 files fix each one: the button's id, the path
+  `counts.endgame.fall`, `Hub Auto Fuel Count` among the component OPRs, and no match view, since
+  Simulate Match is off for 2026 and its chance of winning needs `averageScores.total`. config:check
+  reports no errors in them. The oracle comparison accepts the climb times and the new OPR as
+  divergences (`attempt-climb-2026`, `opr-auto-fuel-2026`); the v1 files keep what v5 ran.
 
 ## Security concerns (all resolved 2026-09-17; see ADR 0004 and 0005)
 
@@ -416,7 +429,9 @@ that a new feature can be verified not to break existing behavior. Requirements:
   2026 (#320): the engine matches all four golden sets entry by entry, 2026 through the
   translation table generated from its configuration's prefixes, and
   `tests/unit/oracle-compare.test.ts` pins how many values each reviewed divergence accepts
-  (`tools/oracle/README.md`).
+  (`tools/oracle/README.md`). In the browser, `tests/e2e/oracle.spec.ts` (#392) checks the team
+  view of three teams at each real event: every value its Stats show is the golden one, or a
+  reviewed divergence accepts the difference.
 - **T-5** API/integration tests exercise every endpoint in document 11 against an ephemeral
   MongoDB (in-memory server or a container): auth status codes, demo-mode behavior, TMP
   de-duplication on sync and QR submission, flag/delete, event-scoped datasets, and setup
@@ -448,14 +463,18 @@ that a new feature can be verified not to break existing behavior. Requirements:
   `tests/e2e/scouting-client.spec.ts` scouts a full match on a phone held sideways and submits it
   online, and makes a QR code offline;
   `tests/e2e/admin-page.spec.ts` has an admin select a match and assign scouters;
-  `tests/e2e/acceptance.spec.ts` (#363) runs both together and checks MongoDB. Scanning the code
-  on the scanner page, and the analysis, edit and setup journeys, follow with Phases 3 and 4.
-  `tests/e2e/analysis.spec.ts` (#383) chooses an event, finds a team and opens it on the oracle's
-  migrated events; the bubble graph and Filter Teams follow with #387.
+  `tests/e2e/acceptance.spec.ts` (#363) runs both together and checks MongoDB. The analysis
+  journey is built (Phase 3): `tests/e2e/analysis.spec.ts` chooses an event, finds a team and
+  opens it on the oracle's migrated events (#383), and draws the bubble graph and filters the
+  teams (#387). `tests/e2e/modules.spec.ts` (#392) draws every built-in module on the real 2026
+  event, with data and with none (No Data), and compares each with a screenshot in light and dark
+  mode on a phone and a desktop; the screenshots are taken on Linux, where CI runs (README.md,
+  "Screenshots"). Scanning the code on the scanner page, and the edit and setup journeys, follow
+  with Phase 4.
 - **T-8** Offline behavior is tested by loading the app, going offline in the browser
   harness, and asserting the scouting and analysis pages still function from cache. v6:
   `tests/e2e/offline.spec.ts` (#361) does so for the scouting client, reading its QR code back
-  with a decoder; the analysis page joins in Phase 3.
+  with a decoder, and for the analysis page, which opens an event viewed online (#390).
 - **T-9** Test fixtures must not require live TBA or FMS credentials; all external calls are
   recorded or stubbed. A small recorded TBA event (matches, teams, coprs) is checked in. v6: the
   unit tests pass a stub `fetch`; the browser tests' server (`tests/e2e/server.ts`, #363) answers
