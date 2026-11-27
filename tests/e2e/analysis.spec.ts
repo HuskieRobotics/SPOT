@@ -196,3 +196,55 @@ test("#386, A-20, SC-28: the heatmap draws a team's shooting positions on the fi
     heatmap.getByRole("img", { name: "Teleop Shooting Heatmap: Teleop Start Shooting" }),
   ).toBeVisible();
 });
+
+test("#387 AN-16 to AN-22, T-7: compare an event's teams, and filter them", async ({ page }) => {
+  const narrow = test.info().project.name === "mobile-chromium";
+  const views = page.getByRole("navigation", { name: "Views" });
+  const openView = async (name: string) => {
+    if (narrow) await page.getByRole("button", { name: "Teams" }).click();
+    await views.getByRole("button", { name }).click();
+  };
+  await page.goto("/analysis?event=2026mnwi_official");
+
+  // AN-16 to AN-18: a bubble per team with the values chosen, drawn again on a change.
+  await openView("Compare Team Scores");
+  await expect(page).toHaveURL(/\?event=2026mnwi_official&view=compare$/);
+  const chart = page.getByRole("img", { name: "Compare Team Scores" });
+  await expect(chart).toHaveAttribute("data-drawn", "light");
+  const table = page.getByRole("table", { name: "Compare Team Scores" });
+  const bubbles = await table.locator("tbody tr").count();
+  expect(bubbles).toBeGreaterThan(10);
+  await expect(chart.locator("g.trace.scatter path.point")).toHaveCount(bubbles);
+  await expect(table.locator("thead th")).toHaveCount(4);
+  await page.getByLabel("Bubble size").selectOption("constant");
+  await expect(table.locator("thead th")).toHaveCount(3);
+  await expect(chart).toHaveAttribute("data-drawn", "light");
+
+  // A reload opens the same view.
+  await page.reload();
+  await expect(page.getByRole("heading", { name: "Compare Team Scores" })).toBeVisible();
+
+  // AN-19 to AN-22: a band narrows the teams; its chip removes it; a card opens the team.
+  await openView("Filter Teams");
+  await expect(page).toHaveURL(/view=filter$/);
+  const count = page.getByTestId("filter-count");
+  const all = Number(/^All (\d+) teams\.$/.exec((await count.textContent()) ?? "")?.[1]);
+  expect(all).toBeGreaterThan(10);
+  const cards = page.getByRole("list", { name: "Matching teams" }).getByRole("button");
+  await expect(cards).toHaveCount(all);
+  await page.getByRole("button", { name: "Band" }).click();
+  await page.getByRole("checkbox", { name: "Rating3" }).check();
+  await page.keyboard.press("Escape");
+  await expect(page.getByRole("checkbox", { name: "Rating3" })).toBeHidden();
+  await expect(count).toHaveText(new RegExp(`^\\d+ of ${all} teams match\\.$`));
+  const matching = Number(/^(\d+) of/.exec((await count.textContent()) ?? "")?.[1]);
+  expect(matching).toBeGreaterThan(0);
+  expect(matching).toBeLessThan(all);
+  await expect(cards).toHaveCount(matching);
+
+  await page.getByRole("button", { name: "Remove Rating3" }).click();
+  await expect(count).toHaveText(`All ${all} teams.`);
+  await cards.first().click();
+  await expect(page.getByRole("heading", { name: /^Team \d+/ })).toBeVisible();
+  await expect(page).toHaveURL(/&team=\d+$/);
+});

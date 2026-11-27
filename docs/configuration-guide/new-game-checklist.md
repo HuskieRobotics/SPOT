@@ -116,7 +116,8 @@ File: `analysis-modules.json` ([Analysis modules](analysis-modules.md)).
       [HeatmapScatterPlot](analysis-modules.md#heatmapscatterplot-where-on-the-field)
 - [ ] **Match page modules**, if the match page is turned on for this game.
 - [ ] **Filter Teams bands** (`"filterTeams"` → `"ratingBands"`): match the game's rating scale,
-      and OPR ranges that suit the new game's scores. [Filter Teams](analysis-modules.md#filter-teams)
+      with `"rating": true` on each band of that scale, and OPR ranges that suit the new game's
+      scores. [Filter Teams](analysis-modules.md#filter-teams)
 - [ ] _Check:_ `config:check` (every path a module shows exists); `config:preview` (each line
       varies, has the right unit, and lands where its module expects it; don't judge the size
       of made-up numbers); `config:preview -- config --team 3061` (one team's page, with

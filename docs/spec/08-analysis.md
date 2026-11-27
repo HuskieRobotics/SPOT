@@ -121,6 +121,20 @@ TypeScript tested without a page (`src/analysis/dashboard.ts`, `search.ts`, `tea
   title "Team Scores Scattergram".
 - **AN-18** Re-plotted on any select change and whenever the view is opened.
 
+**v6 (#387, decided 2026-11-27):** `src/analysis/compare.ts`, drawn by
+`src/components/analysis/compare-view.tsx`; the address is `?event=…&view=compare`.
+
+- The choices are every team's values, not only the first team's: averages, then OPRs, each
+  by name ("Average Auto Shooting Rating", "OPR Minor Foul Count"), then Constant.
+- A team missing a value chosen is left out and listed, where v5 drew it at 0 (F-27). So the
+  values first shown are the three that the most teams have; v5's first three left 30 of
+  2026mnwi's 48 teams off the chart.
+- A bubble's area follows its value, the largest 40 px across; v5's `√z × 15` px made an OPR
+  of 200 a bubble over 200 px wide. A value of 0 or less is the smallest bubble, and Constant
+  draws every bubble at 14 px. The y axis starts at 0 or below, so a negative OPR still shows.
+- The colour is the theme's `--chart-2` (v5's `#FF6030`); the hover names the team and each
+  value. The view's heading replaces Plotly's title.
+
 ## Filter Teams
 
 - **AN-18a** **[A-12, BL-208]** Flagged TMPs remain in analysis but the UI should warn when a
@@ -145,6 +159,22 @@ TypeScript tested without a page (`src/analysis/dashboard.ts`, `search.ts`, `tea
 - **AN-21a** **[A-14]** The rating bands and OPR ranges above must be configurable.
 - **AN-22** Results render as team cards (number + nickname); team names are fetched per
   render with a version counter to discard stale responses.
+
+**v6 (#387, decided 2026-11-27):** `src/analysis/filter-teams.ts`, drawn by
+`src/components/analysis/filter-view.tsx`; the address is `?event=…&view=filter`.
+
+- **AN-21, AN-21a** The rules are v5's. v5 knew its rating bands by their ids (Rating1 to
+  Rating4); v6 marks them in the configuration, `"rating": true` on a band (CS-13). Picking only
+  rating bands uses the every-rating rule, with the highest band's lowest value as the
+  threshold; any other choice of bands uses the any-value rule. As in v5, that rule checks every
+  band against every value, averages and OPRs alike, so an average of 0 is in "Low OPR (0-100)".
+- **AN-19, AN-20** The lists are "Value" (every team's averages and OPRs, by name, as in
+  Compare) and "Band" (the configuration's, in its order). One opens at a time, and a click
+  outside or Escape closes it. Each pick is a chip whose × removes it.
+- **AN-22** The names are the event's TBA nicknames, already loaded with the dashboard, so
+  there is nothing to fetch per render. A card opens the team's view. The page says how many
+  teams match.
+- A missing value, or one that is not a number, is no value (F-27).
 
 ## Dormant features preserved in code — **[A-6, BL-299] to be restored, toggled by config**
 

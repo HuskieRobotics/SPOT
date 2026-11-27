@@ -4,9 +4,10 @@
  * The analysis dashboard (#383; docs/spec/08 AN-1 to AN-4, AN-11a to AN-15): a header with the
  * event, a sidebar with the team list and its search, and a welcome view or one team's view.
  *
- * The address keeps the event and the team (`/analysis?event=2026mnwi_official&team=3061`), so a
- * link or a reload opens the same view. On a narrow screen (1100 px or less, as in v5) the team
- * list takes the screen when opened, and choosing a team closes it.
+ * The address keeps the event and the team (`/analysis?event=2026mnwi_official&team=3061`), or
+ * the view across teams (`&view=compare` or `&view=filter`, #387), so a link or a reload opens the
+ * same view. On a narrow screen (1100 px or less, as in v5) the team list takes the screen when
+ * opened, and choosing a team or a view closes it.
  */
 import Image from "next/image";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -14,9 +15,19 @@ import { searchTeams } from "@/analysis/search";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import type { EventSummary } from "@/public-data";
+import { CompareView } from "./compare-view";
 import { loadEvent, loadEvents, type LoadedEvent } from "./data";
+import { FilterView } from "./filter-view";
 import { Problems, TbaNotice } from "./notices";
 import { TeamView } from "./team-view";
+
+/** A view across the event's teams (#387), or null for the event or a team. */
+type View = "compare" | "filter";
+const VIEWS: { view: View; name: string }[] = [
+  { view: "compare", name: "Compare Team Scores" },
+  { view: "filter", name: "Filter Teams" },
+];
+const isView = (v: string | null): v is View => v === "compare" || v === "filter";
 
 type State =
   | { kind: "loading"; what: string }
@@ -24,18 +35,20 @@ type State =
   | {
       kind: "error";
       message: string;
-      again: { event: EventSummary; team: string | null } | null;
+      again: { event: EventSummary; team: string | null; view: View | null } | null;
     }
   | { kind: "ready"; loaded: LoadedEvent };
 
-function readAddress(): { event: string | null; team: string | null } {
+function readAddress(): { event: string | null; team: string | null; view: View | null } {
   const params = new URLSearchParams(window.location.search);
-  return { event: params.get("event"), team: params.get("team") };
+  const view = params.get("view");
+  return { event: params.get("event"), team: params.get("team"), view: isView(view) ? view : null };
 }
 
-function writeAddress(event: string, team: string | null) {
+function writeAddress(event: string, team: string | null, view: View | null = null) {
   const params = new URLSearchParams({ event });
   if (team) params.set("team", team);
+  else if (view) params.set("view", view);
   window.history.replaceState(null, "", `${window.location.pathname}?${params}`);
 }
 
@@ -65,24 +78,33 @@ export function Dashboard() {
   const [events, setEvents] = useState<EventSummary[] | null>(null);
   const [state, setState] = useState<State>({ kind: "loading", what: "the events" });
   const [team, setTeam] = useState<string | null>(null);
+  const [view, setView] = useState<View | null>(null);
   const [query, setQuery] = useState("");
   const [teamsOpen, setTeamsOpen] = useState(false);
   // Only the last event asked for is shown, however the loads finish.
   const asked = useRef(0);
 
-  const open = useCallback(async (event: EventSummary, keepTeam: string | null) => {
-    const ask = ++asked.current;
-    setState({ kind: "loading", what: event.code });
-    setTeam(keepTeam);
-    writeAddress(event.code, keepTeam);
-    const result = await loadEvent(event);
-    if (ask !== asked.current) return;
-    setState(
-      result.ok
-        ? { kind: "ready", loaded: result.value }
-        : { kind: "error", message: result.message, again: { event, team: keepTeam } },
-    );
-  }, []);
+  const open = useCallback(
+    async (event: EventSummary, keepTeam: string | null, keepView: View | null = null) => {
+      const ask = ++asked.current;
+      setState({ kind: "loading", what: event.code });
+      setTeam(keepTeam);
+      setView(keepTeam ? null : keepView);
+      writeAddress(event.code, keepTeam, keepView);
+      const result = await loadEvent(event);
+      if (ask !== asked.current) return;
+      setState(
+        result.ok
+          ? { kind: "ready", loaded: result.value }
+          : {
+              kind: "error",
+              message: result.message,
+              again: { event, team: keepTeam, view: keepView },
+            },
+      );
+    },
+    [],
+  );
 
   /** With the list of events: open the one the address names, else the active one. */
   const chooseEvent = useCallback(
@@ -105,7 +127,8 @@ export function Dashboard() {
         });
         return;
       }
-      void open(event, event.code === wanted.event ? wanted.team : null);
+      const same = event.code === wanted.event;
+      void open(event, same ? wanted.team : null, same ? wanted.view : null);
     },
     [open],
   );
@@ -131,8 +154,16 @@ export function Dashboard() {
 
   function chooseTeam(next: string | null) {
     setTeam(next);
+    setView(null);
     setTeamsOpen(false);
     if (loaded) writeAddress(loaded.event.code, next);
+  }
+
+  function chooseView(next: View) {
+    setTeam(null);
+    setView(next);
+    setTeamsOpen(false);
+    if (loaded) writeAddress(loaded.event.code, null, next);
   }
 
   return (
@@ -188,6 +219,23 @@ export function Dashboard() {
             teamsOpen ? "flex w-full" : "hidden",
           )}
         >
+          <nav aria-label="Views" className="flex flex-col">
+            {VIEWS.map((v) => (
+              <button
+                key={v.view}
+                type="button"
+                aria-current={view === v.view ? "page" : undefined}
+                onClick={() => chooseView(v.view)}
+                disabled={!loaded}
+                className={cn(
+                  "hover:bg-accent rounded-md px-2 py-1.5 text-left font-medium",
+                  view === v.view && "bg-accent",
+                )}
+              >
+                {v.name}
+              </button>
+            ))}
+          </nav>
           <input
             type="search"
             aria-label="Find a team"
@@ -237,7 +285,7 @@ export function Dashboard() {
               <Button
                 onClick={() =>
                   state.again
-                    ? void open(state.again.event, state.again.team)
+                    ? void open(state.again.event, state.again.team, state.again.view)
                     : void loadEvents().then(chooseEvent)
                 }
               >
@@ -250,6 +298,10 @@ export function Dashboard() {
               <TbaNotice tba={loaded.tba} />
               {selected ? (
                 <TeamView loaded={loaded} team={selected} />
+              ) : view === "compare" ? (
+                <CompareView key={loaded.event.code} loaded={loaded} />
+              ) : view === "filter" ? (
+                <FilterView key={loaded.event.code} loaded={loaded} onOpenTeam={chooseTeam} />
               ) : (
                 <Welcome loaded={loaded} />
               )}
