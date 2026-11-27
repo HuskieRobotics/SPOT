@@ -60,7 +60,8 @@ also uses. Each ends with what v6 does (audited in document 23).
   `/:eventID` variants can serve another event's data for up to 5 minutes.
 - **F-7** `/analysis/api/csv` duplicates every TMP (fetches the dataset via HTTP and again from
   Mongo) and relies on `removeDuplicates` to collapse them; without that transformer all
-  averages are unaffected but `countMatches`-style logic and cycle arrays double.
+  averages are unaffected but `countMatches`-style logic and cycle arrays double. **v6:** the
+  browser builds the CSV from the dataset the page already has (#388, AN-26a).
 - **F-8** `GET /admin/api/enterMatch` in demo mode calls `res.json` twice.
 - **F-9** `updateScouters` prune loop uses assignment (`x.timestamp = timestamp`) instead of
   comparison, so it never prunes and mutates the fetched list.

@@ -11,6 +11,7 @@
  */
 import Image from "next/image";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { csvFileName, teamsCsv } from "@/analysis/csv";
 import { searchTeams } from "@/analysis/search";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -50,6 +51,23 @@ function writeAddress(event: string, team: string | null, view: View | null = nu
   if (team) params.set("team", team);
   else if (view) params.set("view", view);
   window.history.replaceState(null, "", `${window.location.pathname}?${params}`);
+}
+
+/**
+ * The event's teams as a spreadsheet (#388, AN-26), made in the browser from the data on the page,
+ * so it works offline too.
+ */
+function downloadCsv(loaded: LoadedEvent) {
+  const blob = new Blob([teamsCsv(loaded.analysis.dataset)], { type: "text/csv;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = csvFileName(loaded.event.code);
+  document.body.append(link);
+  link.click();
+  link.remove();
+  // Later, so the browser has the file before its address goes.
+  setTimeout(() => URL.revokeObjectURL(url), 30_000);
 }
 
 function Welcome({ loaded }: { loaded: LoadedEvent }) {
@@ -235,6 +253,14 @@ export function Dashboard() {
                 {v.name}
               </button>
             ))}
+            <button
+              type="button"
+              onClick={() => loaded && downloadCsv(loaded)}
+              disabled={!loaded}
+              className="hover:bg-accent rounded-md px-2 py-1.5 text-left font-medium"
+            >
+              Download CSV
+            </button>
           </nav>
           <input
             type="search"

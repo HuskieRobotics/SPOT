@@ -248,3 +248,72 @@ test("#387 AN-16 to AN-22, T-7: compare an event's teams, and filter them", asyn
   await expect(page.getByRole("heading", { name: /^Team \d+/ })).toBeVisible();
   await expect(page).toHaveURL(/&team=\d+$/);
 });
+
+/** The rows of a CSV file, each a list of fields (RFC 4180: quoted fields, doubled quotes). */
+function parseCsv(text: string): string[][] {
+  const rows: string[][] = [];
+  let row: string[] = [];
+  let field = "";
+  let quoted = false;
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i];
+    if (quoted) {
+      if (c === '"' && text[i + 1] === '"') field += text[++i];
+      else if (c === '"') quoted = false;
+      else field += c;
+    } else if (c === '"') quoted = true;
+    else if (c === ",") {
+      row.push(field);
+      field = "";
+    } else if (c === "\n") {
+      row.push(field.replace(/\r$/, ""));
+      rows.push(row);
+      row = [];
+      field = "";
+    } else field += c;
+  }
+  return rows;
+}
+
+test("#388 AN-26, AN-26b, F-27, SEC-8: the event's teams download as a CSV file", async ({
+  page,
+}) => {
+  const narrow = test.info().project.name === "mobile-chromium";
+  const download = async (event: string) => {
+    await page.goto(`/analysis?event=${event}`);
+    const teams = Number(
+      /(\d+) teams?\./.exec((await page.getByTestId("event-summary").textContent()) ?? "")?.[1],
+    );
+    if (narrow) await page.getByRole("button", { name: "Teams" }).click();
+    const [file] = await Promise.all([
+      page.waitForEvent("download"),
+      page.getByRole("button", { name: "Download CSV" }).click(),
+    ]);
+    expect(file.suggestedFilename()).toBe(`${event}.csv`);
+    const text = readFileSync(await file.path(), "utf8");
+    return { text, rows: parseCsv(text), teams };
+  };
+
+  // 2025ilch: a row per team with data, each as wide as the header, and no scouter anywhere.
+  const ilch = await download("2025ilch_official");
+  const [header, ...rows] = ilch.rows;
+  expect(header[0]).toBe("Team #");
+  expect(header.some((h) => h.endsWith(" Score Average"))).toBe(true);
+  expect(header.some((h) => h.endsWith(" Cycle Average Time Complete"))).toBe(true);
+  expect(rows).toHaveLength(ilch.teams);
+  expect(rows.map((r) => r[0])).toContain("3061");
+  for (const row of rows) expect(row).toHaveLength(header.length);
+  expect(ilch.text).not.toContain("CharlotteCao");
+
+  // 2026mnwi: a value the pipeline could not compute is an empty cell, not 0.
+  const mnwi = await download("2026mnwi_official");
+  expect(mnwi.rows.slice(1)).toHaveLength(mnwi.teams);
+  expect(mnwi.rows.slice(1).some((r) => r.slice(1).includes(""))).toBe(true);
+  // AN-26: v6 counts each action per period, a column per value: 3061's are numbers.
+  const [mnwiHeader] = mnwi.rows;
+  const own = mnwi.rows.find((r) => r[0] === "3061")!;
+  const counted = mnwiHeader
+    .map((h, i) => [h, own[i]])
+    .filter(([h, v]) => /^\w+\.\w+ Average$/.test(h) && v !== "" && Number.isFinite(Number(v)));
+  expect(counted.length).toBeGreaterThan(10);
+});
