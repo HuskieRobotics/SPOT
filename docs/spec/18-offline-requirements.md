@@ -118,10 +118,9 @@ built (document 05, "v6: offline").
   settings) is kept in the device's own storage rather than by runtime caching rules in the
   worker, which never answers an `/api/` request. The page knows when a read failed and when
   its copy was taken, a copy is stored with its event, and a match keeps the configuration it
-  was scouted with. The network-first dataset and the per-event copies of OF-3 are for the
-  analysis page (Phase 3), which adds its page to `OFFLINE_PAGES` in `src/offline/shell.ts`
-  and chooses between the page's storage and a worker rule for its data. The scanner (OF-4,
-  Phase 4) does the same.
+  was scouted with. The analysis page's network-first data and per-event copies (OF-3) chose
+  the page's storage too (#390, "v6: offline analysis" below). The scanner (OF-4, Phase 4)
+  chooses for its own data.
 - **OF-6** Fonts are self-hosted by `next/font` at build time; icons are bundled. Plotly (#385)
   is bundled too, as its own 4.7 MB file that only a chart loads. The worker keeps every built
   file, so it keeps Plotly as well, ready for offline analysis (#390). **Decided 2026-11-26:**

@@ -166,7 +166,9 @@ project, run after the others, because it drives the registry every test shares)
   TBA's for that level.
 - Each row has **Lock** and **Unlock** (AD-25a): a locked row cannot be edited until unlocked, and
   the lock is saved with the schedule.
-- The schedule's teams, once each, replace `tempTeams` (F-12); analysis reads them in Phase 3.
+- The schedule's teams, once each, replace `tempTeams` (F-12). Analysis needs no team list: it
+  lists every team with data, named by TBA (AN-12, A-37), and Simulate Match reads the schedule
+  (#389).
 
 Tests: `tests/unit/schedule.test.ts`, `tests/e2e/admin-schedule.spec.ts`.
 

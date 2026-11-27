@@ -40,15 +40,15 @@ The examples come from `config/seasons/2025/analysis-modules.json`.
     },
 ```
 
-| Name           | Meaning                                                                                                                               |
-| -------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
-| `"view"`       | Which page: `"team"`, a team's page, or `"match"`, Simulate Match, which compares two alliances (turned on by `"simulateMatch"`).     |
-| `"module"`     | Which kind of module; see [Modules](#modules), or an extension module a programmer added.                                             |
-| `"name"`       | The title shown above it.                                                                                                             |
-| `"position"`   | On a team's page, `"main"` (the wide left column) or `"side"` (the narrow right column).                                              |
-| `"options"`    | What it shows; different for each kind of module.                                                                                     |
-| `"separate"`   | Optional: `true` keeps the module on a team's page even when the team has no scouting data.                                           |
-| `"wholeMatch"` | Optional, match page: `true` gives the module both alliances at once, for a module that compares them, such as the chance of winning. |
+| Name           | Meaning                                                                                                                                    |
+| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| `"view"`       | Which page: `"team"`, a team's page, or `"match"`, Simulate Match, which compares two alliances (turned on by `"simulateMatch"`).          |
+| `"module"`     | Which kind of module; see [Modules](#modules), or an extension module a programmer added.                                                  |
+| `"name"`       | The title shown above it.                                                                                                                  |
+| `"position"`   | On a team's page, `"main"` (the wide left column) or `"side"` (the narrow right column).                                                   |
+| `"options"`    | What it shows; different for each kind of module.                                                                                          |
+| `"separate"`   | Optional, and changes nothing: v5 used it to keep a module on the page of a team with no scouting data, and v6 lists only teams with data. |
+| `"wholeMatch"` | Optional, match page: `true` gives the module both alliances at once, for a module that compares them, such as the chance of winning.      |
 
 Modules appear in the order they are listed.
 

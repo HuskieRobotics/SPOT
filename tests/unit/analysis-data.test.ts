@@ -131,7 +131,7 @@ beforeEach(() => {
   tba.asked = [];
 });
 
-describe("SEC-1, SEC-3, DV-12b, AN-11a: anyone may list the events, by code", () => {
+describe("SEC-1, SEC-3, DV-12b, AN-3, AN-11a: anyone may list the events, by code", () => {
   it("lists every event, newest code first, with no join code, saying which is active", async () => {
     const r = await get(eventsRoute, "/api/analysis/events");
     expect(r.status).toBe(200);

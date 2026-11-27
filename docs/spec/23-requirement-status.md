@@ -112,7 +112,7 @@ quotes the test's name.
 | TR-7    | Done       | `engine`                                                                                                                                                                        |
 | TR-8    | Done       | `engine`                                                                                                                                                                        |
 | TR-9    | Done       | `engine`, `tba-enrichment`                                                                                                                                                      |
-| TR-10   | Done       | `engine`, `config-check` (CC-4)                                                                                                                                                 |
+| TR-10   | Done       | `engine`, `config-check` (CC-4); the dashboard lists the problems, in the browser test `tests/e2e/analysis.spec.ts`                                                             |
 | TR-11   | Done       | `arithmetic`                                                                                                                                                                    |
 | TR-12   | Done       | `aggregation`; rule `average-keys-2026`                                                                                                                                         |
 | TR-13   | Divergence | `action-sequence`; rule `cycles-2026` (F-26)                                                                                                                                    |
@@ -151,19 +151,19 @@ quotes the test's name.
 
 ### Document 21: data model v2 (Phase 0, which the engine reads)
 
-| Id                    | Status | Where                                                                                                                                                      |
-| --------------------- | ------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| DV-1                  | Done   | `data-schema`, `migrate`, `phase`; rule `action-period-fields`                                                                                             |
-| DV-2                  | Done   | `data-schema`, `engine` (BL-31)                                                                                                                            |
-| DV-3                  | Done   | `data-schema`, `team`, `mongo`                                                                                                                             |
-| DV-4                  | Done   | `data-schema`, `migrate`, `sign-in` (signing in by student ID, Phase 2)                                                                                    |
-| DV-5, DV-6            | Done   | `data-schema`, `migrate`                                                                                                                                   |
-| DV-7                  | Done   | `data-schema` (the fields exist; Phase 2 and later fill them)                                                                                              |
-| DV-8                  | Done   | `data-schema`, `migrate`                                                                                                                                   |
-| DV-9                  | Done   | `migrate` ("splits an event code"); the join code gates writes in `submission` (Phase 2)                                                                   |
-| DV-10                 | Done   | `engine` (DM-1b); rules `missing-nan`, `missing-undefined`                                                                                                 |
-| DV-11                 | Done   | `migrate`, `config-convert` (`actionQueue` becomes `actions`)                                                                                              |
-| DV-12, DV-12a, DV-12b | Done   | `admin-page` (Phase 2): the settings document holds the active event (DV-13), chosen and shown by its code. The analysis page's event switching is Phase 3 |
+| Id                    | Status | Where                                                                                                                                                                                                            |
+| --------------------- | ------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| DV-1                  | Done   | `data-schema`, `migrate`, `phase`; rule `action-period-fields`                                                                                                                                                   |
+| DV-2                  | Done   | `data-schema`, `engine` (BL-31)                                                                                                                                                                                  |
+| DV-3                  | Done   | `data-schema`, `team`, `mongo`                                                                                                                                                                                   |
+| DV-4                  | Done   | `data-schema`, `migrate`, `sign-in` (signing in by student ID, Phase 2)                                                                                                                                          |
+| DV-5, DV-6            | Done   | `data-schema`, `migrate`                                                                                                                                                                                         |
+| DV-7                  | Done   | `data-schema` (the fields exist; Phase 2 and later fill them)                                                                                                                                                    |
+| DV-8                  | Done   | `data-schema`, `migrate`                                                                                                                                                                                         |
+| DV-9                  | Done   | `migrate` ("splits an event code"); the join code gates writes in `submission` (Phase 2)                                                                                                                         |
+| DV-10                 | Done   | `engine` (DM-1b); rules `missing-nan`, `missing-undefined`                                                                                                                                                       |
+| DV-11                 | Done   | `migrate`, `config-convert` (`actionQueue` becomes `actions`)                                                                                                                                                    |
+| DV-12, DV-12a, DV-12b | Done   | `admin-page` (Phase 2): the settings document holds the active event (DV-13), chosen and shown by its code. The analysis page lists the events by code and opens the active one first (`analysis-data`, Phase 3) |
 
 ### Document 03: data model and the analysis dataset
 
@@ -204,33 +204,33 @@ quotes the test's name.
 
 ### Document 12: tests, decisions, defects and quirks
 
-| Id   | Status     | Where                                                                                                                                                                                                                              |
-| ---- | ---------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| T-1  | Done       | `.github/workflows/ci.yml`: lint, typecheck, unit tests, build and end-to-end tests on every pull request                                                                                                                          |
-| T-2  | Done       | Phase 1: every transformer, `getPath` and `setPath`, TBA enrichment and OPRs. Phase 2: action ids and undo in `scouting-session`, QR in `qr`, assignment in `registry`, schedules in `schedule`. Filter Teams and CSV are Phase 3. |
-| T-3  | Done       | `config-check`, `config-check-generated`, `config-convert`, `config-active`                                                                                                                                                        |
-| T-4  | Done       | `oracle-compare`, `oracle-golden`, `synthetic`; in the browser, `tests/e2e/oracle.spec.ts` (#392): what the team view shows is the golden output, through the reviewed divergences                                                 |
-| T-9  | Done       | Recorded TBA responses in `tools/oracle/`; no test calls TBA. The browser tests' server answers TBA from them (#363)                                                                                                               |
-| D-1  | Done       | A versioned successor with a converter (document 20)                                                                                                                                                                               |
-| D-2  | Done       | Game constants are configuration (CS-4, CS-9, CS-12, CS-13). The scouting client reads them (Phase 2); the analysis client is Phase 3.                                                                                             |
-| D-5  | Done       | One pipeline implementation that also runs in the browser (TR-9). The server's calls to itself go with Phases 2 and 3 (#90).                                                                                                       |
-| D-7  | Done       | As DM-1a                                                                                                                                                                                                                           |
-| D-7a | Done       | As DM-1b                                                                                                                                                                                                                           |
-| D-8  | Done       | ES modules and explicit registration (TR-9, TR-14, ADR 0005)                                                                                                                                                                       |
-| F-2  | Done       | `aggregation` ("F-2: the tmp variant works")                                                                                                                                                                                       |
-| F-3  | Done       | `engine`, `action-sequence`                                                                                                                                                                                                        |
-| F-4  | Divergence | For analysis: derived ids (CS-5) and TBA ids from `knownIds` (DM-11b); rule `counts-catalog-ids-2026`. The QR code carries the button and its period (CS-14, #358), so no id list can drift.                                       |
-| F-11 | Done       | Gone: v6 has no `analysis-transformers.json`                                                                                                                                                                                       |
-| F-19 | Done       | In configuration, as D-2                                                                                                                                                                                                           |
-| F-24 | Divergence | `arithmetic`; rule `ratio-falsy-divbyzero-2025`                                                                                                                                                                                    |
-| F-25 | Divergence | `arithmetic`, `config-check`; rule `ratio-misplaced-divbyzero-2025`                                                                                                                                                                |
-| F-26 | Divergence | As TR-13                                                                                                                                                                                                                           |
-| F-27 | Done       | `config-check-generated` (CC-10), `config-preview` (MO-3, MO-4), `modules` (#384), `chart-modules` (#385)                                                                                                                          |
-| F-28 | Divergence | As TR-15                                                                                                                                                                                                                           |
-| F-29 | Divergence | Fixed in the active 2026 files (#392): `config-active` (`edit2026`), `config-check`; rules `attempt-climb-2026`, `opr-auto-fuel-2026`                                                                                              |
-| Q-1  | Replaced   | by CS-16                                                                                                                                                                                                                           |
-| Q-3  | Done       | As DM-3                                                                                                                                                                                                                            |
-| Q-4  | Done       | `count-actions` ("all: counts ids the configuration does not know"), as Q-4 now says                                                                                                                                               |
+| Id   | Status     | Where                                                                                                                                                                                                                                                   |
+| ---- | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| T-1  | Done       | `.github/workflows/ci.yml`: lint, typecheck, unit tests, build and end-to-end tests on every pull request                                                                                                                                               |
+| T-2  | Done       | Phase 1: every transformer, `getPath` and `setPath`, TBA enrichment and OPRs. Phase 2: action ids and undo in `scouting-session`, QR in `qr`, assignment in `registry`, schedules in `schedule`. Phase 3: Filter Teams in `filter-teams`, CSV in `csv`. |
+| T-3  | Done       | `config-check`, `config-check-generated`, `config-convert`, `config-active`                                                                                                                                                                             |
+| T-4  | Done       | `oracle-compare`, `oracle-golden`, `synthetic`; in the browser, `tests/e2e/oracle.spec.ts` (#392): what the team view shows is the golden output, through the reviewed divergences                                                                      |
+| T-9  | Done       | Recorded TBA responses in `tools/oracle/`; no test calls TBA. The browser tests' server answers TBA from them (#363)                                                                                                                                    |
+| D-1  | Done       | A versioned successor with a converter (document 20)                                                                                                                                                                                                    |
+| D-2  | Done       | Game constants are configuration (CS-4, CS-9, CS-12, CS-13). The scouting client (Phase 2) and the analysis page (Phase 3: rating bands, the Simulate Match and Auto Pick flags) read them.                                                             |
+| D-5  | Done       | One pipeline implementation that also runs in the browser (TR-9). The server no longer calls itself (#90): the page reads public routes and runs the pipeline (`analysis-data`, Phase 3)                                                                |
+| D-7  | Done       | As DM-1a                                                                                                                                                                                                                                                |
+| D-7a | Done       | As DM-1b                                                                                                                                                                                                                                                |
+| D-8  | Done       | ES modules and explicit registration (TR-9, TR-14, ADR 0005)                                                                                                                                                                                            |
+| F-2  | Done       | `aggregation` ("F-2: the tmp variant works")                                                                                                                                                                                                            |
+| F-3  | Done       | `engine`, `action-sequence`                                                                                                                                                                                                                             |
+| F-4  | Divergence | For analysis: derived ids (CS-5) and TBA ids from `knownIds` (DM-11b); rule `counts-catalog-ids-2026`. The QR code carries the button and its period (CS-14, #358), so no id list can drift.                                                            |
+| F-11 | Done       | Gone: v6 has no `analysis-transformers.json`                                                                                                                                                                                                            |
+| F-19 | Done       | In configuration, as D-2                                                                                                                                                                                                                                |
+| F-24 | Divergence | `arithmetic`; rule `ratio-falsy-divbyzero-2025`                                                                                                                                                                                                         |
+| F-25 | Divergence | `arithmetic`, `config-check`; rule `ratio-misplaced-divbyzero-2025`                                                                                                                                                                                     |
+| F-26 | Divergence | As TR-13                                                                                                                                                                                                                                                |
+| F-27 | Done       | `config-check-generated` (CC-10), `config-preview` (MO-3, MO-4), `modules` (#384), `chart-modules` (#385), `filter-teams`, `csv`, `win-chance`; every module without data in the browser test `tests/e2e/modules.spec.ts`                               |
+| F-28 | Divergence | As TR-15                                                                                                                                                                                                                                                |
+| F-29 | Divergence | Fixed in the active 2026 files (#392): `config-active` (`edit2026`), `config-check`; rules `attempt-climb-2026`, `opr-auto-fuel-2026`                                                                                                                   |
+| Q-1  | Replaced   | by CS-16                                                                                                                                                                                                                                                |
+| Q-3  | Done       | As DM-3                                                                                                                                                                                                                                                 |
+| Q-4  | Done       | `count-actions` ("all: counts ids the configuration does not know"), as Q-4 now says                                                                                                                                                                    |
 
 ### Document 14: answers that changed Phase 1
 
@@ -458,7 +458,7 @@ feedback link uses the menu's constant instead of a second copy of the address.
 
 | Id                    | Status | Where                                                                                                                                                                                   |
 | --------------------- | ------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| SEC-1                 | Later  | The read path drops private fields (SEC-8); the public dataset route is Phase 3                                                                                                         |
+| SEC-1                 | Done   | `analysis-data`: anyone may read the events, the dataset, TBA's data and the schedule, without scouter ids or join codes (Phase 3)                                                      |
 | SEC-2                 | Done   | `submission`, `transport`, `sign-in`                                                                                                                                                    |
 | SEC-3, SEC-3a, SEC-3b | Done   | `admin-auth`, `db`, `submission`, `sign-in`                                                                                                                                             |
 | SEC-4, SEC-4a         | Done   | `admin-auth`; the browser test `tests/e2e/admin-sign-in.spec.ts`                                                                                                                        |
@@ -488,16 +488,149 @@ feedback link uses the menu's constant instead of a second copy of the address.
 
 ### Documents 02, 17 and the ADRs
 
-| Id       | Status   | Where                                                                                                                                       |
-| -------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
-| NF-1     | Done     | The browser tests scout on a Pixel 7 held sideways. The manifest does not lock the orientation (#43)                                        |
-| NF-2     | Replaced | by SC-5 (v6)                                                                                                                                |
-| NF-3     | Done     | `scouting-clock`                                                                                                                            |
-| NF-5     | Done     | The admin page polls every 2.5 s; in the browser test `tests/e2e/admin-page.spec.ts`, one admin's change shows in the other's view          |
-| NF-6     | Done     | `schedule`, for matches; COPRs are Phase 3                                                                                                  |
-| NF-7     | Done     | The browser test `tests/e2e/offline.spec.ts` (the manifest and its icons); the favicon and Apple touch icon are in `src/app/layout.tsx`     |
-| NF-11    | Done     | For scouting: the registry tests run seven scouters, and the browser tests two phones and two admins. The data volume is Phase 3's to check |
-| W-1      | Done     | #363: the browser test `tests/e2e/acceptance.spec.ts`                                                                                       |
-| ADR 0001 | Done     | `transport`; the browser test `tests/e2e/scouter-stream.spec.ts`. nginx and Cloud Run are tested with their recipes (W-3)                   |
-| ADR 0004 | Done     | As SEC-1 to SEC-10; the merge is Phase 4                                                                                                    |
-| ADR 0006 | Done     | As RT-12a and RT-24 to RT-36                                                                                                                |
+| Id       | Status   | Where                                                                                                                                     |
+| -------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| NF-1     | Done     | The browser tests scout on a Pixel 7 held sideways. The manifest does not lock the orientation (#43)                                      |
+| NF-2     | Replaced | by SC-5 (v6)                                                                                                                              |
+| NF-3     | Done     | `scouting-clock`                                                                                                                          |
+| NF-5     | Done     | The admin page polls every 2.5 s; in the browser test `tests/e2e/admin-page.spec.ts`, one admin's change shows in the other's view        |
+| NF-6     | Done     | `schedule`, for matches; `analysis-data`, for the dashboard's TBA data (Phase 3)                                                          |
+| NF-7     | Done     | The browser test `tests/e2e/offline.spec.ts` (the manifest and its icons); the favicon and Apple touch icon are in `src/app/layout.tsx`   |
+| NF-11    | Done     | For scouting: the registry tests run seven scouters, and the browser tests two phones and two admins. For analysis, see the Phase 3 audit |
+| W-1      | Done     | #363: the browser test `tests/e2e/acceptance.spec.ts`                                                                                     |
+| ADR 0001 | Done     | `transport`; the browser test `tests/e2e/scouter-stream.spec.ts`. nginx and Cloud Run are tested with their recipes (W-3)                 |
+| ADR 0004 | Done     | As SEC-1 to SEC-10; the merge is Phase 4                                                                                                  |
+| ADR 0006 | Done     | As RT-12a and RT-24 to RT-36                                                                                                              |
+
+## Phase 3: analysis dashboard (audited 2026-11-27, #393)
+
+**Scope** (document 17 §3): the team view, every built-in module on Plotly, event switching,
+search, Compare Team Scores, Filter Teams with configurable bands, CSV in the browser, Simulate
+Match and the Auto Pick List behind configuration flags, offline analysis, and extension modules.
+Issues #382 to #393, and five older issues closed through them: #90 and #345 (#382), #209 (#383),
+#232 (#388) and #299 (#389).
+
+**Exit criterion: met** (#392). The browser tests, run in CI with the rest (T-1), draw the
+dashboard on the oracle's two real events, 2025ilch and 2026mnwi, migrated from their v5 exports,
+with their recorded TBA data (T-9). Every built-in module draws with data, says No Data without
+it, and matches a screenshot in light and dark mode on a phone and a desktop
+(`tests/e2e/modules.spec.ts`). The analysis journey of T-7 runs (`tests/e2e/analysis.spec.ts`).
+For three teams at each event, every value the team view's Stats show is the golden output's, or
+a reviewed divergence accepts the difference (T-4, `tests/e2e/oracle.spec.ts`). Gate W-2 is met.
+
+- `npm test`: 963 tests pass.
+- The browser tests: 59 pass, and 4 are skipped by design: two tests that change shared server
+  state run in one project only, and the oracle's numbers are checked on the desktop only.
+- `npm run oracle:compare` matches all four sets entry by entry, through 22 reviewed rules (two
+  added for F-29, #392). `npm run config:check` gives no errors and 8 warnings for the active
+  files, and 6 errors and 6 warnings for `config/seasons/2025`, which stays as v4.2.0 shipped it.
+- **NF-11, the data volume.** The pipeline runs in the browser on one event at a time. On
+  2026mnwi's 413 performances of 48 teams it takes about 0.3 s, migration included, and on
+  2025ilch's 407 of 42 about 0.1 s (Node, the same engine); NF-11 expects about 450 per event.
+  Each event is kept on the device on its own (OF-3), so six events a season ask nothing more.
+
+### What the audit changed
+
+**Spec text that no longer matched what was built:**
+
+1. The README and document 17 §5 now record Phase 3 as complete and Phase 4 as next.
+2. Document 04: CF-14 said "Phase 3"; it is kept, with each module drawn once in the team view
+   and once per alliance in Simulate Match.
+3. Document 07 said analysis would read the schedule's teams in Phase 3. It needs no team list:
+   it lists every team with data, named by TBA (AN-12), and Simulate Match reads the schedule.
+4. Document 18's section on #361 said the analysis page would choose where its data lives;
+   #390 chose the page's storage, as the section below it says.
+5. Document 02: NF-1 said "in Phase 3"; NF-4 and NF-6 gained what v6 does.
+6. Document 11's row for `/analysis` named only the team view; it now names the views and
+   offline use.
+7. Document 22 called the team view "Phase 3".
+8. Document 08: AN-8, AN-25 and AN-27 gained their v6 status, and AN-2's views are listed.
+9. Document 09: the module reference table is v5's, now marked so, and the Grid's colour is
+   drawn over white in both themes (#392).
+10. The Configuration Guide said `separate` keeps a module on the page of a team with no data;
+    in v6 it changes nothing.
+11. Rows above that waited for Phase 3 are updated: DV-12, T-2, D-2, D-5, F-27, TR-10, SEC-1,
+    NF-6 and NF-11.
+
+**Decisions made along the way, checked to be in the spec text:** the manual data hooks dropped
+(document 03 DM-14, #345); where offline analysis keeps its data (document 18, "v6: offline
+analysis"); the Simulate Match and Auto Pick flags (document 08, document 20 CS-13); each event
+read with its season's configuration (document 08, CS-17); the rating bands marked in
+configuration (CS-13); Plotly loaded as its own file (document 09); missing values as empty CSV
+cells (document 08); extension modules and why their files use no hooks (document 09, ADR
+0005); and the 2026 files' fixes (document 12 F-29).
+
+**Rules that were only implied, now written down:**
+
+- Document 08: what the address does when it names an event, a team or a view that isn't there,
+  and that choosing another event drops the team, since a number names another robot there. A
+  browser test checks it.
+- Document 08 and the Configuration Guide: `separate` is accepted and changes nothing.
+- Document 09: any module may be in either view; PerformanceTimePlot given several teams, and a
+  chance of winning with no other alliance, say so instead of drawing.
+- Document 08: the analysis page registers the service worker itself (AN-5).
+
+**Tests:** two new browser tests in `tests/e2e/analysis.spec.ts`: the loading message (AN-4),
+which nothing checked, and the address rules above. AN-3 and NF-4 joined the names of the tests
+that check them, and the offline browser test now names AN-5 and NF-4. Found along the way and
+fixed in Phase 3: a race that let two requests at once both read TBA (#405), and a schema that
+failed to compile when the modules file was checked before any pipeline file (#392).
+
+**Gaps, each moved on purpose:**
+
+- **AN-8**, records scanned on a device shown in its analysis before they reach the server, goes
+  with the QR scanner (OF-4, Phase 4).
+- **AN-27**, the DEMO label, comes with demo mode (#374, Phase 4).
+- **#44, analysis portrait styles** (Phase 5), looks met: the dashboard is laid out for phones
+  held upright, and its browser tests and screenshots run on a Pixel 7 held upright. It stays
+  open for the maintainer to close.
+- **BL-7, the accessibility pass**, is Phase 5. Each chart already has a table a screen reader
+  reads, and the browser tests find the dashboard's controls by their names.
+- **The scanner's part of OF-9 and T-7** is Phase 4.
+
+### Document 08: the analysis dashboard
+
+| Id              | Status | Where                                                                                                                |
+| --------------- | ------ | -------------------------------------------------------------------------------------------------------------------- |
+| AN-1, AN-2      | Done   | `analysis-dashboard`; the browser test `tests/e2e/analysis.spec.ts`                                                  |
+| AN-3            | Done   | `analysis-data`; the browser test `tests/e2e/analysis.spec.ts`                                                       |
+| AN-4            | Done   | The browser test `tests/e2e/analysis.spec.ts`: a loading message, then the event                                     |
+| AN-5            | Done   | The browser test `tests/e2e/offline.spec.ts`, which opens the analysis page first                                    |
+| AN-6            | Done   | `analysis-data`                                                                                                      |
+| AN-8            | Later  | The QR scanner, Phase 4 (OF-4)                                                                                       |
+| AN-11a          | Done   | `analysis-data`; the browser test `tests/e2e/analysis.spec.ts`                                                       |
+| AN-12           | Done   | `analysis-data`, `analysis-dashboard`                                                                                |
+| AN-13           | Done   | `analysis-dashboard`; the browser test `tests/e2e/analysis.spec.ts`                                                  |
+| AN-14, AN-15    | Done   | `analysis-dashboard`; the browser tests `tests/e2e/analysis.spec.ts` and `tests/e2e/modules.spec.ts`                 |
+| AN-16 to AN-18  | Done   | `filter-teams` (Compare's values and bubbles); the browser test `tests/e2e/analysis.spec.ts`                         |
+| AN-18a          | Done   | `analysis-data`, `analysis-dashboard`                                                                                |
+| AN-19 to AN-21a | Done   | `filter-teams`; the browser test `tests/e2e/analysis.spec.ts`                                                        |
+| AN-22           | Done   | The browser test `tests/e2e/analysis.spec.ts`: a card per team, which opens its view                                 |
+| AN-23           | Done   | `analysis-data` (the schedule), `win-chance`; the browser test `tests/e2e/analysis.spec.ts`                          |
+| AN-24           | Done   | `win-chance`; the browser test `tests/e2e/analysis.spec.ts`                                                          |
+| AN-26, AN-26b   | Done   | `csv`; the browser test `tests/e2e/analysis.spec.ts`                                                                 |
+| AN-27           | Later  | Demo mode (#374)                                                                                                     |
+| CS-17           | Done   | `analysis-data`, `config-load`: the analysis files with their findings, and each event read with its season's (#383) |
+| DV-19           | Done   | `analysis-data`, `data-schema`                                                                                       |
+| BL-208, A-12    | Done   | As AN-18a                                                                                                            |
+| BL-232, A-11    | Done   | As AN-26a                                                                                                            |
+| BL-299, A-6     | Done   | As AN-23 and AN-24                                                                                                   |
+| A-36, A-37      | Done   | As AN-11a and AN-12                                                                                                  |
+
+### Document 09: modules
+
+| Id          | Status | Where                                                                                                                      |
+| ----------- | ------ | -------------------------------------------------------------------------------------------------------------------------- |
+| MO-1, MO-2  | Done   | `modules`, `extension-modules`; every built-in module in the browser test `tests/e2e/modules.spec.ts`                      |
+| MO-3        | Done   | `modules`, `chart-modules`                                                                                                 |
+| MO-4, MO-4a | Done   | `modules`, `config-preview`                                                                                                |
+| MO-5        | Done   | `chart-modules`; each chart in light and dark mode in the browser tests `tests/e2e/analysis.spec.ts` and `modules.spec.ts` |
+| A-20        | Done   | `heatmap`; the browser test `tests/e2e/analysis.spec.ts`                                                                   |
+| F-18        | Done   | `modules`, `chart-modules`, `heatmap`, `win-chance`                                                                        |
+
+### Documents 02, 17 and 18
+
+| Id   | Status | Where                                                                                                            |
+| ---- | ------ | ---------------------------------------------------------------------------------------------------------------- |
+| NF-4 | Done   | `analysis-kept`; the browser test `tests/e2e/offline.spec.ts`: two events viewed online, both open offline       |
+| W-2  | Done   | #392: the browser tests `tests/e2e/modules.spec.ts`, `tests/e2e/oracle.spec.ts` and `tests/e2e/analysis.spec.ts` |

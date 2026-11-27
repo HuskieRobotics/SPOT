@@ -23,7 +23,9 @@
   `endGame*<slot>` score-breakdown keys (`id = "<key minus slot>_<value>"`, `ts = 0`). Missing
   breakdowns are skipped. v6: the prefixes, their phases and the ids started at 0 are configuration;
   see document 03 DM-11a to DM-11c and DM-13a (#315).
-- **AN-8** Merge QR-cached TMPs from `localStorage.teamMatchPerformances`.
+- **AN-8** Merge QR-cached TMPs from `localStorage.teamMatchPerformances`. **v6:** the
+  dashboard reads only what the server holds. A scanned QR code reaches it through the QR scanner
+  (Phase 4, OF-4), which decides whether records it holds offline also show on its own device.
 - **AN-9** Create `teams[robotNumber] = {}` for every TMP; attach `opr.<name>` for each
   configured OPR string from the COPR map.
 - **AN-10** Load `/config/analysis-pipeline.json`, obtain transformers via `getTransformers()`
@@ -55,8 +57,10 @@ TBA enrichment and the pipeline on it (TR-9), so the server never calls its own 
 - **AN-12, A-37** The team list is every team with data, in team order, with TBA's nickname
   when TBA knows the team (`src/analysis/teams.ts`). A team TBA doesn't know, such as a B robot,
   is listed by its number.
-- **OF-3 (#390)** The dashboard keeps what these routes answer on the device, under each event,
-  and opens an event viewed online with no connection (document 18, "v6: offline analysis").
+- **OF-3, AN-5, NF-4 (#390)** The dashboard keeps what these routes answer on the device, under
+  each event, and opens an event viewed online with no connection, switching between such events
+  too (document 18, "v6: offline analysis"). The analysis page registers the service worker
+  itself, so a device that never opens the scouting page works offline as well.
 
 ## Team list and team view
 
@@ -82,14 +86,22 @@ TypeScript tested without a page (`src/analysis/dashboard.ts`, `search.ts`, `tea
 `analysis-dashboard` and `tests/e2e/analysis.spec.ts`). Decided 2026-11-26:
 
 - **AN-1, AN-2, AN-4** A header with the logo, "SPOT Analysis" and the event; a team list with
-  its search; and a welcome view or one team's view. The welcome view gives the event, how many
+  its search, under the views (Compare Team Scores, Filter Teams, Simulate Match and Auto Pick
+  List when the season turns them on, and Download CSV); and the event's page (the welcome view),
+  one team's view, or one of the views. The welcome view gives the event, how many
   scouting records and teams it has, and what is wrong with the analysis configuration. A loading
   message shows while data arrives. At 1100 px or narrower, as in v5, the team list opens from a
   **Teams** button and takes the screen; choosing a team closes it.
 - **AN-3, AN-11a, DV-12b, #209** A standard select lists the events by code, the active one
   marked "scouting now" and opened first. The address keeps the event and the team
-  (`/analysis?event=2025ilch_official&team=3061`), so a reload or a shared link opens the same
-  view.
+  (`/analysis?event=2025ilch_official&team=3061`), or the event and a view (`&view=compare`,
+  `filter`, `simulate` or `pick`), so a reload or a shared link opens the same view.
+- **The address, when it names what is not there** (written down in the Phase 3 audit, #393). An
+  event no one created opens the active event, else the newest, with no team or view. A team with
+  no data at the event, or a view its season leaves off (AN-23, AN-24), opens the event's page.
+  Choosing another event opens its page: a team number names another robot at another event. With
+  no events at all, the page says an admin creates one on the admin page; when an event can't be
+  loaded, it says why, with **Try again**.
 - **CS-17: an event's season.** Each event is read with the configuration of the season named
   for its year (`config/seasons/2025` for 2025ilch), or with the active one when there is no such
   folder. v5 had one configuration at a time, so a past season's event read with the new game's
@@ -106,7 +118,8 @@ TypeScript tested without a page (`src/analysis/dashboard.ts`, `search.ts`, `tea
   SPOT rather than added as a dependency.
 - **AN-14, AN-15** The team view shows the team modules in a main column and, when a module asks
   for it, a side column. v5 hid a team's modules when the team had no data, but v6 lists only
-  teams with data, so that rule has nothing to hide. Every built-in module is drawn: the text
+  teams with data, so that rule has nothing to hide, and a module's `separate`, which kept it on
+  such a team's page, is accepted and changes nothing. Every built-in module is drawn: the text
   modules (#384), the charts (#385) and the heatmap (#386). A module whose options config:check
   finds errors in says so instead of drawing, and a name that is no module says so too.
 - **AN-18a, RT-34, RT-36** The team view says how many of its matches are flagged for review or
@@ -227,7 +240,7 @@ leaves off has no button, and an address naming it opens the event.
 
 ## CSV export (v5: `GET /analysis/api/csv`, server side; v6: client-side, ADR 0005)
 
-- **AN-25** Re-runs the pipeline on the server (dataset fetched from its own endpoint **plus**
+- **AN-25** (v5; **v6: replaced** by AN-26a) Re-runs the pipeline on the server (dataset fetched from its own endpoint **plus**
   the same TMPs queried again from MongoDB, so every TMP is duplicated before transformers;
   `removeDuplicates` in the default pipeline collapses them by timestamp).
 - **AN-26** Columns: `Team #`, then for the union of keys across teams with data:
@@ -262,4 +275,5 @@ dashboard's sidebar. The file is named for the event (`2026mnwi_official.csv`).
 
 ## Demo label
 
-- **AN-27** `/analysis/api/isDemo` controls a large "DEMO" label on the welcome view.
+- **AN-27** `/analysis/api/isDemo` controls a large "DEMO" label on the welcome view. **v6:**
+  comes with demo mode (#374, Phase 4).
