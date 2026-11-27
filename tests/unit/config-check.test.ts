@@ -111,8 +111,8 @@ describe("T-3: the archived 2025 configuration", () => {
       ["error", 'module 11 (team Stats "Team Stats") › options.list › item 14 › path'],
       ["error", 'module 11 (team Stats "Team Stats") › options.list › item 15 › path'],
       ["error", 'module 11 (team Stats "Team Stats") › options.list › item 16 › path'],
-      ["error", 'module 16 (match ColumnDisplay "Barge Points") › options.path'],
-      ["error", 'module 18 (match Stats "Alliance Stats") › options.list › item 3 › path'],
+      ["error", 'module 17 (match ColumnDisplay "Barge Points") › options.path'],
+      ["error", 'module 19 (match Stats "Alliance Stats") › options.list › item 3 › path'],
     ]);
     // "Missed Coral" read the average of a value only the team total had; the v4.2.0 golden output
     // has no averages.missCoral and no avgEndgamePoints either.
@@ -401,7 +401,7 @@ describe("CC-5: ids that options name", () => {
       ],
       [
         "error",
-        'module 19 (team HeatmapScatterPlot "Shots") › options.actionGroups › item 1 › actions',
+        'module 20 (team HeatmapScatterPlot "Shots") › options.actionGroups › item 1 › actions',
         '"teleopL5" is not a button id in match-scouting.json.',
         'Did you mean "teleopl4"?',
       ],

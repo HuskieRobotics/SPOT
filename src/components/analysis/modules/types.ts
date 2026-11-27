@@ -10,6 +10,11 @@ export interface ModuleProps {
   module: ModuleEntry;
   /** One team in the team view; an alliance in Simulate Match (#389). */
   teams: readonly TeamKey[];
+  /**
+   * The other alliance, for a `wholeMatch` module in Simulate Match (the chance of winning);
+   * absent elsewhere.
+   */
+  opponents?: readonly TeamKey[];
   dataset: Dataset;
   matchScouting: MatchScoutingConfig;
 }

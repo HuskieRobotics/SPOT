@@ -114,7 +114,11 @@ File: `analysis-modules.json` ([Analysis modules](analysis-modules.md)).
       `aggregatedActions`, the buttons with positions, and the field picture (`"imgPath"`): the
       picture scouters tap, or a picture of half the field with `"foldHalfField"`.
       [HeatmapScatterPlot](analysis-modules.md#heatmapscatterplot-where-on-the-field)
-- [ ] **Match page modules**, if the match page is turned on for this game.
+- [ ] **Simulate Match and the Auto Pick List**: decide whether they suit the game, and set
+      `"simulateMatch"` and `"autoPickList"`. Both need `averageScores.total` and
+      `standardDeviation` from the pipeline. [Simulate Match and the Auto Pick List](analysis-modules.md#simulate-match-and-the-auto-pick-list)
+- [ ] **Match page modules**, if Simulate Match is turned on: the `"match"` modules, and a chance
+      of winning.
 - [ ] **Filter Teams bands** (`"filterTeams"` → `"ratingBands"`): match the game's rating scale,
       with `"rating": true` on each band of that scale, and OPR ranges that suit the new game's
       scores. [Filter Teams](analysis-modules.md#filter-teams)

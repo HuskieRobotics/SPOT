@@ -11,6 +11,7 @@ import * as analysisModulesRoute from "@/app/api/config/analysis-modules/route";
 import * as analysisPipelineRoute from "@/app/api/config/analysis-pipeline/route";
 import * as datasetRoute from "@/app/api/analysis/dataset/route";
 import * as eventsRoute from "@/app/api/analysis/events/route";
+import * as scheduleRoute from "@/app/api/analysis/schedule/route";
 import * as tbaRoute from "@/app/api/analysis/tba/route";
 import { buildEnrichedDataset } from "@/analysis/enrichment/tba";
 import { teamList } from "@/analysis/teams";
@@ -29,6 +30,7 @@ import {
 import { ensureCollections } from "@/db/collections";
 import { createEvent } from "@/db/events";
 import { insertPerformance } from "@/db/performances";
+import { updateSchedule } from "@/db/schedules";
 import { forgetCachedSettings, updateSettings } from "@/db/settings";
 import { getTbaData } from "@/db/tba-data";
 import { seasonFor } from "@/public-data";
@@ -194,6 +196,68 @@ describe("AN-6, SEC-1, SEC-8: an event's scouting data", () => {
   it("D-5, #90: the server reads MongoDB only; it never asks TBA or itself for the dataset", async () => {
     await get(datasetRoute, "/api/analysis/dataset");
     expect(tba.asked).toEqual([]);
+  });
+});
+
+describe("AN-11, AN-23: an event's matches, for Simulate Match (#389)", () => {
+  it("anyone may read any event's matches, typed ones in place of TBA's for their level", async () => {
+    await updateSchedule(db, ilch._id, {
+      tba: {
+        fetchedAt: 1,
+        matches: [
+          {
+            level: "qual",
+            number: 1,
+            key: "2025ilch_qm1",
+            red: ["1", "2", "3"],
+            blue: ["4", "5", "6"],
+          },
+          {
+            level: "playoff",
+            number: 1,
+            key: "2025ilch_sf1m1",
+            red: ["7", "8", "9"],
+            blue: ["10", "11", null],
+          },
+        ],
+      },
+      manual: [
+        {
+          level: "qual",
+          number: 1,
+          key: "manual_qual_1",
+          red: ["254", null, null],
+          blue: ["3061", null, null],
+          locked: true,
+        },
+      ],
+    });
+    const r = await get(scheduleRoute, "/api/analysis/schedule?event=2025ilch_official");
+    expect(r.status).toBe(200);
+    expect(r.json.event).toMatchObject({ code: "2025ilch_official" });
+    expect(r.json.matches).toEqual([
+      {
+        level: "qual",
+        number: 1,
+        key: "manual_qual_1",
+        red: ["254", null, null],
+        blue: ["3061", null, null],
+      },
+      {
+        level: "playoff",
+        number: 1,
+        key: "2025ilch_sf1m1",
+        red: ["7", "8", "9"],
+        blue: ["10", "11", null],
+      },
+    ]);
+    expect(tba.asked).toEqual([]);
+  });
+
+  it("an event with no schedule has no matches; an unknown code is refused", async () => {
+    expect((await get(scheduleRoute, "/api/analysis/schedule")).json.matches).toEqual([]);
+    const r = await get(scheduleRoute, "/api/analysis/schedule?event=2026xxxx_official");
+    expect(r.status).toBe(404);
   });
 });
 

@@ -1,6 +1,8 @@
 {
   "$schema": "../../../src/config/schema/analysis-modules.schema.json",
   "version": 2,
+  "simulateMatch": true,
+  "autoPickList": true,
   "modules": [
     {
       "view": "team",
@@ -362,6 +364,17 @@
         ]
       },
       "position": "side"
+    },
+    {
+      "view": "match",
+      "module": "SingleDisplay",
+      "name": "Chance of Winning",
+      "wholeMatch": true,
+      "options": {
+        "aggrMethod": "percentChanceOfWinning",
+        "decimals": 1
+      },
+      "position": "main"
     },
     {
       "view": "match",

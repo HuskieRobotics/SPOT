@@ -8,10 +8,15 @@ which values from [the analysis pipeline](analysis-pipeline.md) it shows.
 {
   "$schema": "../../../src/config/schema/analysis-modules.schema.json",
   "version": 2,
+  "simulateMatch": true,
+  "autoPickList": true,
   "modules": [ ...modules... ],
   "filterTeams": { "ratingBands": [ ... ] }
 }
 ```
+
+`"simulateMatch"` and `"autoPickList"` turn on two pages; see
+[Simulate Match and the Auto Pick List](#simulate-match-and-the-auto-pick-list).
 
 The examples come from `config/seasons/2025/analysis-modules.json`.
 
@@ -35,15 +40,15 @@ The examples come from `config/seasons/2025/analysis-modules.json`.
     },
 ```
 
-| Name           | Meaning                                                                                                                                               |
-| -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `"view"`       | Which page: `"team"`, a team's page, or `"match"`, the match page that compares two alliances (turned off in 2026, expected back for a typical game). |
-| `"module"`     | Which kind of module; see [Modules](#modules).                                                                                                        |
-| `"name"`       | The title shown above it.                                                                                                                             |
-| `"position"`   | On a team's page, `"main"` (the wide left column) or `"side"` (the narrow right column).                                                              |
-| `"options"`    | What it shows; different for each kind of module.                                                                                                     |
-| `"separate"`   | Optional: `true` keeps the module on a team's page even when the team has no scouting data.                                                           |
-| `"wholeMatch"` | Optional, match page: `true` gives the module both alliances at once, for a module that compares them, such as the chance of winning.                 |
+| Name           | Meaning                                                                                                                               |
+| -------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| `"view"`       | Which page: `"team"`, a team's page, or `"match"`, Simulate Match, which compares two alliances (turned on by `"simulateMatch"`).     |
+| `"module"`     | Which kind of module; see [Modules](#modules).                                                                                        |
+| `"name"`       | The title shown above it.                                                                                                             |
+| `"position"`   | On a team's page, `"main"` (the wide left column) or `"side"` (the narrow right column).                                              |
+| `"options"`    | What it shows; different for each kind of module.                                                                                     |
+| `"separate"`   | Optional: `true` keeps the module on a team's page even when the team has no scouting data.                                           |
+| `"wholeMatch"` | Optional, match page: `true` gives the module both alliances at once, for a module that compares them, such as the chance of winning. |
 
 Modules appear in the order they are listed.
 
@@ -251,6 +256,22 @@ A grid of cells, each colored more strongly the larger its value is between `"mi
 ```
 
 A heading line between groups of modules.
+
+## Simulate Match and the Auto Pick List
+
+Two pages that suit a game where a team's points predict its matches, as 2025's did. 2026 rated
+robots instead of counting game pieces, so its configuration leaves them off. Each is off unless
+you turn it on:
+
+| Field             | Page                                                                                                                                                                                                                   |
+| ----------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `"simulateMatch"` | **Simulate Match**: choose a match from the schedule, or up to three red and three blue teams, and the `"match"` modules show each alliance side by side.                                                              |
+| `"autoPickList"`  | **Auto Pick List**: every team ranked by its average chance of beating each other team, one on one, from its `averageScores.total` (its average match score) and its `standardDeviation` (how much that score varies). |
+
+Both read the chance of winning from those two team values, which the pipeline must write:
+`config:check` says so if it doesn't. A team without `averageScores.total` is left out of the
+list. The chance of winning in Simulate Match is a `SingleDisplay` with
+`"aggrMethod": "percentChanceOfWinning"` and `"wholeMatch": true`.
 
 ## Filter Teams
 

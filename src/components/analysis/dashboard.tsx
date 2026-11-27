@@ -5,8 +5,8 @@
  * event, a sidebar with the team list and its search, and a welcome view or one team's view.
  *
  * The address keeps the event and the team (`/analysis?event=2026mnwi_official&team=3061`), or
- * the view across teams (`&view=compare` or `&view=filter`, #387), so a link or a reload opens the
- * same view. On a narrow screen (1100 px or less, as in v5) the team list takes the screen when
+ * the view across teams (`&view=compare`, `filter`, `simulate` or `pick`, #387, #389), so a link
+ * or a reload opens the same view. On a narrow screen (1100 px or less, as in v5) the team list takes the screen when
  * opened, and choosing a team or a view closes it.
  */
 import Image from "next/image";
@@ -17,18 +17,27 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import type { EventSummary } from "@/public-data";
 import { CompareView } from "./compare-view";
+import { AutoPickView } from "./auto-pick-view";
 import { loadEvent, loadEvents, type LoadedEvent } from "./data";
 import { FilterView } from "./filter-view";
 import { Problems, TbaNotice } from "./notices";
+import { SimulateView } from "./simulate-view";
 import { TeamView } from "./team-view";
 
-/** A view across the event's teams (#387), or null for the event or a team. */
-type View = "compare" | "filter";
-const VIEWS: { view: View; name: string }[] = [
+/**
+ * A view across the event's teams (#387, #389), or null for the event or a team. Simulate Match
+ * and the Auto Pick List show only when the season's analysis-modules.json turns them on.
+ */
+type View = "compare" | "filter" | "simulate" | "pick";
+const VIEWS: { view: View; name: string; on?: (loaded: LoadedEvent) => boolean }[] = [
+  { view: "simulate", name: "Simulate Match", on: (l) => l.modules.simulateMatch === true },
+  { view: "pick", name: "Auto Pick List", on: (l) => l.modules.autoPickList === true },
   { view: "compare", name: "Compare Team Scores" },
   { view: "filter", name: "Filter Teams" },
 ];
-const isView = (v: string | null): v is View => v === "compare" || v === "filter";
+const isView = (v: string | null): v is View => VIEWS.some((x) => x.view === v);
+const viewOn = (view: View | null, loaded: LoadedEvent | null) =>
+  view !== null && !!loaded && (VIEWS.find((v) => v.view === view)?.on?.(loaded) ?? true);
 
 type State =
   | { kind: "loading"; what: string }
@@ -238,7 +247,7 @@ export function Dashboard() {
           )}
         >
           <nav aria-label="Views" className="flex flex-col">
-            {VIEWS.map((v) => (
+            {VIEWS.filter((v) => !v.on || (loaded && v.on(loaded))).map((v) => (
               <button
                 key={v.view}
                 type="button"
@@ -324,6 +333,12 @@ export function Dashboard() {
               <TbaNotice tba={loaded.tba} />
               {selected ? (
                 <TeamView loaded={loaded} team={selected} />
+              ) : !viewOn(view, loaded) ? (
+                <Welcome loaded={loaded} />
+              ) : view === "simulate" ? (
+                <SimulateView key={loaded.event.code} loaded={loaded} />
+              ) : view === "pick" ? (
+                <AutoPickView key={loaded.event.code} loaded={loaded} onOpenTeam={chooseTeam} />
               ) : view === "compare" ? (
                 <CompareView key={loaded.event.code} loaded={loaded} />
               ) : view === "filter" ? (

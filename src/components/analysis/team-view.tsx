@@ -13,7 +13,7 @@ import type { LoadedEvent } from "./data";
 import { AnalysisModule } from "./modules";
 
 /** Indexes of the modules whose options config:check finds errors in (TR-10). */
-function brokenModules(loaded: LoadedEvent): Set<number> {
+export function brokenModules(loaded: LoadedEvent): Set<number> {
   return new Set(
     loaded.findings
       .filter((f) => f.file === "analysis-modules" && f.severity === "error")

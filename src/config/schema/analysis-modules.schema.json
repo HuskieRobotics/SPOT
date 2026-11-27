@@ -9,6 +9,14 @@
   "properties": {
     "$schema": { "type": "string" },
     "version": { "const": 2 },
+    "simulateMatch": {
+      "type": "boolean",
+      "description": "Turn on Simulate Match (docs/spec/08 AN-23): choose a match or six teams, and the match-view modules show each alliance. Off when left out."
+    },
+    "autoPickList": {
+      "type": "boolean",
+      "description": "Turn on the Auto Pick List (docs/spec/08 AN-24): teams ranked by their average chance of beating each other team, from averageScores.total and standardDeviation. Off when left out."
+    },
     "modules": { "type": "array", "items": { "$ref": "#/$defs/module" } },
     "filterTeams": {
       "type": "object",
