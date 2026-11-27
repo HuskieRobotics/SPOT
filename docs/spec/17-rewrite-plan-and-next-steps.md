@@ -289,7 +289,7 @@ scouted an event in parallel with v5 without losing data.
 ## 5. Status and next steps
 
 Last updated 2026-11-27. **Phases 0 to 3 are complete, and so are gates K, W-1 and W-2.
-Phase 4 is next.** Phase 0 items are numbered as in section 2.
+Phase 4 has started** (#410 to #418). Phase 0 items are numbered as in section 2.
 
 | #   | Phase 0 item                       | Status                                                                                                                                                                                                                                                                                                                                   |
 | --- | ---------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -364,10 +364,24 @@ tested or moved to a later phase on purpose, and document 23 records the audit. 
 AN-8, records a device has scanned shown in its own analysis, goes with the QR scanner, and
 AN-27's DEMO label with demo mode, both in Phase 4.
 
-Recommended order from here, toward **gate W** (about 2027-02-20): the event-critical part of
-phase 4 (W-3: the EC2 recipe, the QR scanner, the edit page's flag and delete), about six weeks
-after kickoff. Break phase 4 into issues on its milestone when it starts, as Phases 1, 2 and 3
-were.
+**Phase 4** was broken into issues #410 to #418 on the "v6 Phase 4" milestone (2026-11-27),
+with demo mode (#374) placed among them. In build order:
+
+1. the edit page's records, with flag and delete (#410);
+2. the QR scanner, online and offline (#411);
+3. the EC2 recipe, with a health check and a clean stop (#412);
+4. the settings page and first run (#413);
+5. the rest of the edit page: unscouted robots, merging scouters, and corrections (#414);
+6. the Cloud Run recipe (#415);
+7. the migration written to MongoDB and run against v5's database (#416);
+8. demo mode (#374);
+9. the acceptance test of the exit criterion (#417);
+10. the audit (#418).
+
+Gate W-3 (about 2027-02-20) is the first three. Settings come from environment variables until
+#413, and the rest can follow Week 0. The staging and demo instances need the team's AWS and
+Google Cloud accounts, so the maintainer deploys them from the recipes (#412, #415, #417).
+#218 closes through #374.
 
 **Demo mode (#374)** is in phase 4 but not in gate W-3: Team 3061's events don't need it, but
 other teams need it to evaluate SPOT without installing anything (document 01). It comes after
