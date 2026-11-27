@@ -84,7 +84,8 @@ also uses. Each ends with what v6 does (audited in document 23).
 - **F-19** Hard-coded 2026 game constants in the scouting client: `autoPhaseEndTime = 140000`,
   `endgameTime = 30000`, `shiftSwitchInterval = 25000`, shift button ids, `AZone`/`OAZone`
   ids, A-Stop detection, and the half-field coordinate transform in `HeatmapScatterPlot`.
-  These violate principle P1 and should move into configuration.
+  These violate principle P1 and should move into configuration. **v6:** the fold is the
+  heatmap's `coordinateTransform` option (A-20, #386).
 
 - **F-20** The scouter registry is keyed by **connection**, not identity: every socket
   connection pushes a new `Scouter` whose `timestamp` is the admin UI key, and nothing looks

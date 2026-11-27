@@ -3,7 +3,7 @@
 /**
  * One team's view (#383; docs/spec/08 AN-14, AN-15, AN-18a): the team, what its data says about
  * itself, and the team-view modules in a main column and, when a module asks for one, a side
- * column. A module not drawn yet (HeatmapScatterPlot, #386) shows its name and the values it reads.
+ * column.
  */
 import { teamNotes, teamViewModules } from "@/analysis/dashboard";
 import type { ListedTeam } from "@/analysis/teams";
@@ -32,6 +32,7 @@ export function TeamView({ loaded, team }: { loaded: LoadedEvent; team: ListedTe
       module={m}
       teams={[team.team]}
       dataset={loaded.analysis.dataset}
+      matchScouting={loaded.matchScouting}
       broken={broken.has(loaded.modules.modules.indexOf(m))}
     />
   );

@@ -11,7 +11,7 @@
  *
  * The values are also in a table only a screen reader reads, since the chart itself is a picture.
  */
-import { useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore, type CSSProperties } from "react";
 import type { Config, Data, Layout } from "plotly.js-dist-min";
 import { currentTheme, subscribeTheme, type Theme } from "@/lib/theme";
 import { cn } from "@/lib/utils";
@@ -103,11 +103,14 @@ export function Plot({
   figure,
   label,
   className,
+  style,
 }: {
   figure: Figure;
   /** What the chart shows, for a screen reader. */
   label: string;
   className?: string;
+  /** A height of the chart's own, such as one that follows a picture's shape. */
+  style?: CSSProperties;
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const theme = useSyncExternalStore(subscribeTheme, currentTheme, lightOnServer);
@@ -145,7 +148,15 @@ export function Plot({
         The chart could not load. It needs a connection the first time.
       </p>
     );
-  return <div ref={ref} role="img" aria-label={label} className={cn("h-80 w-full", className)} />;
+  return (
+    <div
+      ref={ref}
+      role="img"
+      aria-label={label}
+      className={cn("h-80 w-full", className)}
+      style={style}
+    />
+  );
 }
 
 /** A chart's values as a table only a screen reader reads. */

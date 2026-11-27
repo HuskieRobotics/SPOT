@@ -155,3 +155,44 @@ test("#385 MO-5, F-27: the chart modules draw an event's data in light and dark 
     }
   }
 });
+
+test("#386, A-20, SC-28: the heatmap draws a team's shooting positions on the field", async ({
+  page,
+}) => {
+  // From the v5 export: 3061's teleop and endgame Start Shooting taps at 2026mnwi that the
+  // half-field fold keeps (the middle third is left out). v5 named the period in the id.
+  const event = (
+    read("tools/oracle/fixtures/db/2026Rebuilt.events.json") as {
+      code: string;
+      _id: { $oid: string };
+    }[]
+  ).find((e) => e.code === "2026mnwi_official")!._id.$oid;
+  const kept = (
+    read("tools/oracle/fixtures/db/2026Rebuilt.teamMatchPerformances.json") as {
+      eventNumber: { $oid: string };
+      robotNumber: number;
+      actionQueue: { id: string; other?: { pos?: { x: number } } }[];
+    }[]
+  )
+    .filter((p) => p.eventNumber.$oid === event && p.robotNumber === 3061)
+    .flatMap((p) => p.actionQueue)
+    .filter((a) => a.id.endsWith("StartShooting") && !a.id.startsWith("auto"))
+    .filter((a) => a.other?.pos && (a.other.pos.x < 30.5 || a.other.pos.x > 69.5)).length;
+  expect(kept).toBeGreaterThan(10);
+
+  await page.goto("/analysis?event=2026mnwi_official&team=3061");
+  const heatmap = page.getByRole("region", { name: "Teleop Shooting Heatmap", exact: true });
+  await expect(heatmap.locator('[data-drawn="light"]')).toBeVisible();
+  // The configuration's field picture, behind a marker per position.
+  const pictures = await heatmap
+    .locator("image")
+    .evaluateAll((images) =>
+      images.map((i) => i.getAttribute("xlink:href") ?? i.getAttribute("href")),
+    );
+  expect(pictures).toEqual(["/img/half-field.svg"]);
+  await expect(heatmap.locator("g.trace.scatter path.point")).toHaveCount(kept);
+  await expect(heatmap.getByRole("table")).toContainText(String(kept));
+  await expect(
+    heatmap.getByRole("img", { name: "Teleop Shooting Heatmap: Teleop Start Shooting" }),
+  ).toBeVisible();
+});
