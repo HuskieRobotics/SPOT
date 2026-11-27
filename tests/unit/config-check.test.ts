@@ -393,10 +393,11 @@ describe("CC-5: ids that options name", () => {
       });
     });
     expect(found.map((f) => [f.severity, f.where, f.message, f.hint])).toEqual([
+      // An error since #391: a module is built in or registered, as an executable is (#362).
       [
-        "warning",
+        "error",
         'module 1 (team PerformanceTimePlots "Performance By Each Match") › module',
-        '"PerformanceTimePlots" is not a built-in module, so the dashboard shows it only if an extension provides it.',
+        'There is no module "PerformanceTimePlots".',
         'Did you mean "PerformanceTimePlot"?',
       ],
       [

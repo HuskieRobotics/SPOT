@@ -43,7 +43,7 @@ The examples come from `config/seasons/2025/analysis-modules.json`.
 | Name           | Meaning                                                                                                                               |
 | -------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
 | `"view"`       | Which page: `"team"`, a team's page, or `"match"`, Simulate Match, which compares two alliances (turned on by `"simulateMatch"`).     |
-| `"module"`     | Which kind of module; see [Modules](#modules).                                                                                        |
+| `"module"`     | Which kind of module; see [Modules](#modules), or an extension module a programmer added.                                             |
 | `"name"`       | The title shown above it.                                                                                                             |
 | `"position"`   | On a team's page, `"main"` (the wide left column) or `"side"` (the narrow right column).                                              |
 | `"options"`    | What it shows; different for each kind of module.                                                                                     |
@@ -256,6 +256,10 @@ A grid of cells, each colored more strongly the larger its value is between `"mi
 ```
 
 A heading line between groups of modules.
+
+A programmer can add modules ([Writing an extension module](../extension-modules.md)).
+`config:check` reports a module that is neither built in nor added, with the closest name, and
+checks an added module's options.
 
 ## Simulate Match and the Auto Pick List
 

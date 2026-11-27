@@ -16,6 +16,7 @@
  * the report; the report says which checks were skipped. Pure: the caller reads the files, so the
  * same check can run in the browser.
  */
+import type { ModuleSet } from "@/components/analysis/extension-modules";
 import type { TransformerRegistry } from "@/analysis/engine";
 import { createRegistry } from "@/analysis/transformers";
 import type { ExecutableSet } from "@/scouting/executables";
@@ -36,6 +37,8 @@ export interface CheckOptions {
   registry?: TransformerRegistry;
   /** The extension executables buttons may name; the app's by default (#362). */
   executables?: ExecutableSet;
+  /** The extension modules entries may name; the app's by default (#391). */
+  modules?: ModuleSet;
   /** Run the pipeline on generated matches (CC-9 to CC-12); default true. */
   generated?: boolean;
 }
@@ -150,6 +153,7 @@ export function checkConfiguration(
       ms,
       pipeline: valid["analysis-pipeline"] ? (pipelineDoc ?? null) : null,
       report,
+      extensions: options.modules,
     });
   }
 
@@ -168,6 +172,7 @@ export function checkConfiguration(
         enrichmentValid,
         modules: Array.isArray(modulesDoc?.modules) ? (modulesDoc ?? null) : null,
         badModules,
+        extensions: options.modules,
         registry,
         report,
       });

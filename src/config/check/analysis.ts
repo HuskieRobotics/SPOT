@@ -5,6 +5,7 @@
  */
 import { unknownTransformerHint, type TransformerRegistry } from "@/analysis/engine";
 import { groupKeys, PRE_MATCH } from "@/analysis/transformers/periods";
+import { appModules, type ModuleSet } from "@/components/analysis/extension-modules";
 import { actionButtonIds } from "../knownActionIds";
 import type { AnalysisModulesConfig, AnalysisPipelineConfig, MatchScoutingConfig } from "../types";
 import { keysFromPointer, type Key } from "./json";
@@ -17,6 +18,7 @@ import {
   type Reference,
 } from "./references";
 import type { Reporter } from "./report";
+import { validateModuleOptions } from "./extension-modules";
 import { nearHint } from "./scouting";
 import type { ConfigKind } from "../validate";
 
@@ -398,6 +400,8 @@ export interface ModulesCheck {
   ms: MatchScoutingConfig | null;
   pipeline: AnalysisPipelineConfig | null;
   report: Reporter;
+  /** The extension modules entries may name; the app's by default (#391). */
+  extensions?: ModuleSet;
 }
 
 const BUILT_IN_MODULES = builtInModules();
@@ -408,27 +412,53 @@ export function checkModulesFile({
   ms,
   pipeline,
   report,
+  extensions = appModules(),
 }: ModulesCheck): void {
   const catalog = ms ? new ActionCatalog(ms, pipeline) : null;
   modules.modules.forEach((m, i) => {
     if (badModules.has(i)) return;
     const keys: Key[] = ["modules", i];
-    if (!BUILT_IN_MODULES.includes(m.module)) {
-      report.warning(
+    if (BUILT_IN_MODULES.includes(m.module)) {
+      if (!catalog) return;
+      const refs = findReferences(
+        m.options,
+        moduleOptionsSchema(m.module),
+        [...keys, "options"],
+        modulesRoot,
+      );
+      reportActions(MODULES, modules, refs, catalog, report);
+      return;
+    }
+    // An extension module (ADR 0005, #391): registered, and its options as its schema says.
+    const extension = extensions.get(m.module);
+    if (!extension) {
+      report.error(
         MODULES,
         [...keys, "module"],
-        `"${m.module}" is not a built-in module, so the dashboard shows it only if an extension provides it.`,
-        nearHint(m.module, BUILT_IN_MODULES, "built-in module"),
+        `There is no module "${m.module}".`,
+        nearHint(m.module, [...BUILT_IN_MODULES, ...extensions.keys()], "module"),
       );
       return;
     }
-    if (!catalog) return;
-    const refs = findReferences(
-      m.options,
-      moduleOptionsSchema(m.module),
-      [...keys, "options"],
-      modulesRoot,
-    );
+    let issues;
+    try {
+      issues = validateModuleOptions(extension, m.options);
+    } catch (error) {
+      report.error(
+        MODULES,
+        [...keys, "module"],
+        error instanceof Error ? error.message : String(error),
+        "This is a bug in the module's code, not in the configuration. Ask whoever wrote the extension to fix it.",
+      );
+      return;
+    }
+    for (const issue of issues) {
+      const at: Key[] = [...keys, "options", ...keysFromPointer(m.options, issue.pointer ?? "")];
+      if (issue.property && issue.message.startsWith("unknown")) at.push(issue.property);
+      report.error(MODULES, at, issue.message, `${m.module}: ${extension.summary}.`);
+    }
+    if (!catalog || issues.length > 0) return;
+    const refs = findReferences(m.options, extension.optionsSchema, [...keys, "options"]);
     reportActions(MODULES, modules, refs, catalog, report);
   });
 }

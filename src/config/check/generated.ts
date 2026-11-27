@@ -19,6 +19,7 @@
  * The walk presses buttons at random within the rules, not the way a robot plays, so these are
  * likely mistakes rather than proof; a value that only real matches reveal is not reported.
  */
+import { appModules, type ModuleSet } from "@/components/analysis/extension-modules";
 import {
   observePathReads,
   type Dataset,
@@ -88,6 +89,8 @@ export interface GeneratedCheck {
   /** The modules file, when it passed its schema. */
   modules: AnalysisModulesConfig | null;
   badModules: ReadonlySet<number>;
+  /** The extension modules, whose own schemas say which options are paths (#391). */
+  extensions?: ModuleSet;
   registry: TransformerRegistry;
   report: Reporter;
 }
@@ -377,7 +380,9 @@ export function checkOnGeneratedMatches(check: GeneratedCheck): GeneratedSummary
   for (const i of unproduced) flagged.add(i);
 
   // CC-10: what modules show.
-  const moduleRefs = modules ? collectModuleRefs(modules, flaggedModules) : [];
+  const moduleRefs = modules
+    ? collectModuleRefs(modules, flaggedModules, check.extensions ?? appModules())
+    : [];
   const missingModulePaths = new Set<string>();
   for (const { ref, implicit } of moduleRefs) {
     if (ref.kind === "itemPath") continue;
@@ -803,14 +808,25 @@ interface ModuleRef {
   implicit?: string;
 }
 
-function collectModuleRefs(modules: AnalysisModulesConfig, skip: ReadonlySet<number>): ModuleRef[] {
+function collectModuleRefs(
+  modules: AnalysisModulesConfig,
+  skip: ReadonlySet<number>,
+  extensions: ModuleSet,
+): ModuleRef[] {
   const out: ModuleRef[] = [];
   modules.modules.forEach((m, i) => {
     if (skip.has(i)) return;
-    const schema = moduleOptionsSchema(m.module);
+    // A built-in's schema is part of the modules schema; an extension's is its own root (#391).
+    const builtIn = moduleOptionsSchema(m.module);
+    const schema = builtIn ?? extensions.get(m.module)?.optionsSchema;
     if (!schema) return;
     const keys: Key[] = ["modules", i, "options"];
-    for (const ref of findReferences(m.options, schema, keys, modulesRoot)) {
+    for (const ref of findReferences(
+      m.options,
+      schema,
+      keys,
+      builtIn ? modulesRoot : (schema as Record<string, unknown>),
+    )) {
       if (ref.kind !== "path" && ref.kind !== "performancePath" && ref.kind !== "itemPath")
         continue;
       const parent = valueAt(m.options, ref.keys.slice(3, -1).join(".")) as

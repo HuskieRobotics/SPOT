@@ -192,7 +192,8 @@ Decided 2026-11-26:
 
 - **MO-1, MO-2** A module is a component given its entry, the teams shown and the dataset. The
   registry in `src/components/analysis/modules/index.tsx` replaces v5's folder discovery; it lists
-  every built-in module the schema names (a test checks), and extension modules join it in #391.
+  every built-in module the schema names (a test checks), and extension modules join it (#391,
+  below).
 - **MO-3** Several teams (an alliance in Simulate Match, #389) are combined over the teams that
   have a value: summed with `aggrMethod: "sum"`, else averaged, and No Data when none has. v5
   counted a missing value as 0, pulling an alliance's average down (F-27).
@@ -205,6 +206,32 @@ Decided 2026-11-26:
 - **SingleDisplay** is never ranked, as in v5. Its `percentChanceOfWinning` compares two
   alliances, so it is drawn by Simulate Match (#389).
 - **F-18** Nothing a module computes changes the teams or the dataset it is given.
+
+### v6: extension modules (#391)
+
+A team adds a module as it adds a transformer (TR-14) or an executable (SC-38): one file in
+`src/components/analysis/extensions/` plus one export line in the index there, with a JSON Schema
+for its options (ADR 0005). The guide is `docs/extension-modules.md`; the worked example,
+`examples/percentile.tsx`, is not registered. Decided 2026-11-27:
+
+- **The module** (`src/components/analysis/extension-api.ts`) has a `name` (letters and digits,
+  not a built-in's), a `summary`, an `optionsSchema` and a `component`. The component draws what
+  goes under the card's heading from the entry's options, the teams, the dataset and the season's
+  match-scouting configuration; the dashboard draws the card around it, and a note in its place
+  when it throws.
+- **No hooks and no `"use client"`** in a module's file. config:check reads every module's name
+  and schema, also in the server's configuration routes (CS-17), which Next.js builds as server
+  components: a hook there is a build error, and a `"use client"` file is an empty reference. A
+  module draws with plain elements and the dashboard's own client components; state of its own
+  goes in a second, `"use client"` file. A test checks the files the server reads.
+- **The registry** (`extension-modules.ts`) holds the built-in names (equal to the schema's, a
+  test checks) and the registered extensions. It refuses a name no entry could use, a built-in's
+  name, and a name registered twice.
+- **config:check (CC-5, CC-10).** A module that is neither built in nor registered is an error,
+  with the closest name, as an unknown executable is. An extension's options are checked against
+  its schema, with Ajv kept out of the browser (`src/config/check/extension-modules.ts`). A
+  schema that does not compile is reported as a bug in the module's code. `modulesDef("path")`
+  in a schema makes config:check check the path as for a built-in module.
 
 ### v6: the chart modules (#385)
 

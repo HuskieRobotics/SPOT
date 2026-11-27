@@ -4,7 +4,8 @@ This guide is for programmers. Most games need no code: the built-in executables
 [Match scouting guide](configuration-guide/match-scouting.md#executables-what-else-a-button-does)
 switch screens, set variables, capture field positions, highlight and hide buttons, and record an
 action more than once. Write an extension only when no combination of them does what a button
-needs. For a new analysis value, see [Writing an extension transformer](extension-transformers.md).
+needs. For a new analysis value, see [Writing an extension transformer](extension-transformers.md); for a
+new card on the dashboard, [Writing an extension module](extension-modules.md).
 
 An extension is a TypeScript file plus one line in an index file. It is part of the app's build,
 so adding or changing one means rebuilding and redeploying; nothing is installed while the app

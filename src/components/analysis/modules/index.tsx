@@ -1,12 +1,14 @@
 "use client";
 
 /**
- * The modules the dashboard can draw, by name (#384 to #386; docs/spec/09; MO-2 is replaced by
- * this registry). A name that is not a built-in module is an extension module, which come in
- * #391.
+ * The modules the dashboard can draw, by name (#384 to #386, #391; docs/spec/09; MO-2 is replaced
+ * by this registry): the built-in modules here, and the extension modules registered in
+ * `src/components/analysis/extensions/` (`extension-modules.ts`).
  */
-import type { ComponentType } from "react";
+import { Component, type ComponentType, type ReactNode } from "react";
 import type { ModuleEntry } from "@/config/types";
+import type { ExtensionModule } from "../extension-api";
+import { appModules } from "../extension-modules";
 import { Bar } from "./bar";
 import { ColumnDisplay } from "./column-display";
 import { Divider } from "./divider";
@@ -44,12 +46,48 @@ function Note({ module, children }: { module: ModuleEntry; children: React.React
   );
 }
 
+/** An extension's drawing that throws shows a note in its place, not a broken dashboard. */
+class Contained extends Component<{ name: string; children: ReactNode }, { error: string | null }> {
+  state = { error: null as string | null };
+  static getDerivedStateFromError(error: unknown) {
+    return { error: error instanceof Error ? error.message : String(error) };
+  }
+  componentDidCatch(error: unknown) {
+    console.error(`The extension module "${this.props.name}" failed:`, error);
+  }
+  render() {
+    return this.state.error === null ? (
+      this.props.children
+    ) : (
+      <p className="text-muted-foreground text-center text-sm" data-testid="module-failed">
+        This module could not be drawn: {this.state.error}
+      </p>
+    );
+  }
+}
+
+function Extension({ extension, ...props }: ModuleProps & { extension: ExtensionModule }) {
+  const Drawing = extension.component;
+  return (
+    <ModuleFrame module={props.module}>
+      <Contained name={extension.name}>
+        <Drawing {...props} options={props.module.options} />
+      </Contained>
+    </ModuleFrame>
+  );
+}
+
 /**
  * Draw one module. `broken` is set when config:check found errors in its options: the module is
  * not drawn, and the configuration problems say why (TR-10).
  */
 export function AnalysisModule(props: ModuleProps & { broken?: boolean }) {
-  const { module, broken } = props;
+  const { module, broken, ...rest } = props;
+  const Drawn = Object.hasOwn(BUILT_IN_MODULES, module.module)
+    ? BUILT_IN_MODULES[module.module]
+    : undefined;
+  const extension = Drawn ? undefined : appModules().get(module.module);
+  if (!Drawn && !extension) return <Note module={module}>There is no {module.module} module.</Note>;
   if (broken)
     return (
       <Note module={module}>
@@ -57,9 +95,6 @@ export function AnalysisModule(props: ModuleProps & { broken?: boolean }) {
         problems.
       </Note>
     );
-  const Drawn = Object.hasOwn(BUILT_IN_MODULES, module.module)
-    ? BUILT_IN_MODULES[module.module]
-    : undefined;
-  if (!Drawn) return <Note module={module}>There is no {module.module} module.</Note>;
-  return <Drawn {...props} />;
+  if (extension) return <Extension module={module} {...rest} extension={extension} />;
+  return Drawn ? <Drawn module={module} {...rest} /> : null;
 }
