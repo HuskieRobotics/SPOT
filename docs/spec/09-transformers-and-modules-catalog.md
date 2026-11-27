@@ -202,7 +202,13 @@ Decided 2026-11-26:
   in the accent colour, 25 % green, 50 % orange.
 - **Grid** Each cell is summed over the teams, on its colour with an alpha from 30 at `min` to 255
   at `max`, rounded down as in v5. The alpha stays between 30 and 255, and `min` and `max` default
-  to 0 and the largest cell's value: v5's colour broke below `min` or without them.
+  to 0 and the largest cell's value: v5's colour broke below `min` or without them. The colour is
+  laid over white in both themes, as v5 drew it, so a faint cell's black text reads on the dark
+  card too (#392).
+- **Either view** (written down in the Phase 3 audit, #393). Any module may be in the team view or
+  the match view; the schema does not tie a module to one. In the team view a module is given one
+  team. PerformanceTimePlot given several teams, and a chance of winning given no other alliance,
+  say so instead of drawing.
 - **SingleDisplay** is never ranked, as in v5. Its `percentChanceOfWinning` compares two
   alliances, so it is drawn by Simulate Match (#389).
 - **F-18** Nothing a module computes changes the teams or the dataset it is given.
@@ -303,6 +309,10 @@ HeatmapScatterPlot draws on Plotly like the charts, from positions computed by p
   numbers mean nothing to a viewer.
 
 ## Module reference
+
+This is v5's reference, kept as history. Where v6 differs, the sections above say so; the options
+are those of `src/config/schema/analysis-modules.schema.json`, and the Configuration Guide's
+analysis-modules chapter describes them for students.
 
 | module                                                                                                | views              | options                                                                                                                                                                                                                                                                                                                     | Rendering                                                                                                                                                                                                                                                                                                                                                             |
 | ----------------------------------------------------------------------------------------------------- | ------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |

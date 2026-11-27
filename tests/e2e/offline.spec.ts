@@ -207,7 +207,7 @@ test("SC-5: SPOT is installable, and offers to install once per device", async (
   await expect(dialog).toHaveCount(0);
 });
 
-test("T-8, OF-3, OF-5, OF-9: every event viewed online opens offline, saying so (#390)", async ({
+test("T-8, AN-5, NF-4, OF-3, OF-5, OF-9: every event viewed online opens offline, saying so (#390)", async ({
   page,
   context,
 }) => {

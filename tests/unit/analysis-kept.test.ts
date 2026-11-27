@@ -116,7 +116,7 @@ afterEach(() => {
   vi.unstubAllGlobals();
 });
 
-describe("OF-3, OF-5: every event viewed online opens offline", () => {
+describe("OF-3, OF-5, NF-4: every event viewed online opens offline", () => {
   it("online, the server's answer, kept under the event; offline, the kept copy, saying so", async () => {
     const online = await loadEvent(ilch, store);
     if (!online.ok) throw new Error(online.message);

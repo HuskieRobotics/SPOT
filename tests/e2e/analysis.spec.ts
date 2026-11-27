@@ -92,6 +92,39 @@ test("AN-1 to AN-4, AN-11a to AN-15, SEC-8: choose an event, find a team, open i
   await expect(page.locator("body")).not.toContainText("CharlotteCao");
 });
 
+test("AN-3, #393: an address naming what isn't there opens an event's page", async ({ page }) => {
+  const event = page.getByLabel("Event", { exact: true });
+  // An event no one created: the active one, with no team.
+  await page.goto("/analysis?event=2024nope_official&team=3061");
+  await expect(page.getByRole("heading", { name: "2026mnwi_e2e" })).toBeVisible();
+  await expect(event).toHaveValue("2026mnwi_e2e");
+  // A team with no data at the event: the event's page.
+  await page.goto("/analysis?event=2025ilch_official&team=9999");
+  await expect(page.getByRole("heading", { name: "2025ilch_official" })).toBeVisible();
+  await expect(page.getByTestId("event-summary")).toBeVisible();
+  // Choosing another event from a team's view opens that event's page: the number names another
+  // robot there.
+  await page.goto("/analysis?event=2025ilch_official&team=3061");
+  await expect(page.getByRole("heading", { name: "Team 3061 · Huskie Robotics" })).toBeVisible();
+  await event.selectOption("2026mnwi_official");
+  await expect(page.getByRole("heading", { name: "2026mnwi_official" })).toBeVisible();
+  await expect(page).toHaveURL(/\/analysis\?event=2026mnwi_official$/);
+});
+
+test("AN-4: a loading message shows while an event's data arrives", async ({ page }) => {
+  // Hold the dataset back a moment, so the message can be seen before the event.
+  await page.route(/\/api\/analysis\/dataset\?/, async (route) => {
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    await route.continue();
+  });
+  await page.goto("/analysis?event=2025ilch_official");
+  await expect(
+    page.getByRole("status").filter({ hasText: "Loading 2025ilch_official…" }),
+  ).toBeVisible();
+  await expect(page.getByRole("heading", { name: "2025ilch_official" })).toBeVisible();
+  await expect(page.getByRole("status").filter({ hasText: "Loading" })).toHaveCount(0);
+});
+
 test("TR-10: a mistake in the season's files is shown to an admin, and the page still works", async ({
   page,
 }) => {

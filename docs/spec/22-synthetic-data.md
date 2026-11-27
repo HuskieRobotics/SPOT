@@ -150,8 +150,8 @@ expects it. Magnitudes are not realistic; 2025's "Leave" exceeds 100% because th
 the leave button more than once a match.
 
 **Decided 2026-11-20 (#318): the terminal preview is enough.** No preview page is built before
-kickoff. If a page is wanted later, the cheapest one is a "generated event" option in the Phase 3
-team view (gate W-2): that view renders every module from a dataset in the browser with the same
+kickoff. If a page is wanted later, the cheapest one is a "generated event" option in the
+dashboard's team view (built in Phase 3): that view renders every module from a dataset in the browser with the same
 engine (ADR 0005), and the generator and the preview are pure TypeScript, so it would show the
 real modules with nothing new to maintain.
 

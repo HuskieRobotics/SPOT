@@ -288,9 +288,8 @@ scouted an event in parallel with v5 without losing data.
 
 ## 5. Status and next steps
 
-Last updated 2026-11-27. **Phases 0, 1 and 2 are complete, and so are gates K, W-1 and W-2.
-Phase 3's exit criterion is met, and its audit (#393) is next.** Phase 0 items are numbered as in
-section 2.
+Last updated 2026-11-27. **Phases 0 to 3 are complete, and so are gates K, W-1 and W-2.
+Phase 4 is next.** Phase 0 items are numbered as in section 2.
 
 | #   | Phase 0 item                       | Status                                                                                                                                                                                                                                                                                                                                   |
 | --- | ---------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -360,9 +359,15 @@ are fixed, so every 2026 module shows data (document 12 F-29). Gate W-2 asked fo
 2027 configuration uses; it is met because every built-in module is tested, whichever the 2027
 files choose.
 
-Recommended order from here, toward **gate W** (about 2027-02-20): the Phase 3 audit (#393),
-then the event-critical part of phase 4 (W-3), about six weeks after kickoff. Break each phase
-into issues on its milestone when it starts, as Phases 1, 2 and 3 were.
+**Phase 3 is complete** (audited 2026-11-27, #393): every requirement it owns is built and
+tested or moved to a later phase on purpose, and document 23 records the audit. Two are moved:
+AN-8, records a device has scanned shown in its own analysis, goes with the QR scanner, and
+AN-27's DEMO label with demo mode, both in Phase 4.
+
+Recommended order from here, toward **gate W** (about 2027-02-20): the event-critical part of
+phase 4 (W-3: the EC2 recipe, the QR scanner, the edit page's flag and delete), about six weeks
+after kickoff. Break phase 4 into issues on its milestone when it starts, as Phases 1, 2 and 3
+were.
 
 **Demo mode (#374)** is in phase 4 but not in gate W-3: Team 3061's events don't need it, but
 other teams need it to evaluate SPOT without installing anything (document 01). It comes after
