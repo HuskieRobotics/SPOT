@@ -15,6 +15,11 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 1 : 0,
   reporter: process.env.CI ? [["github"], ["html", { open: "never" }]] : "list",
+  // Screenshots (#392, tests/e2e/modules.spec.ts) are compared on Linux only, where CI runs:
+  // macOS and Windows draw the same text a little differently. One per project, committed under
+  // tests/e2e/__screenshots__; a run writes one that is missing, and CI uploads it (README.md).
+  snapshotPathTemplate: "{testDir}/__screenshots__/{testFileName}/{arg}-{projectName}{ext}",
+  ignoreSnapshots: process.platform !== "linux",
   use: {
     baseURL: `http://localhost:${port}`,
     trace: "on-first-retry",

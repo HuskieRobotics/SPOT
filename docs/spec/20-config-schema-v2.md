@@ -271,7 +271,8 @@ a composite id was simply the button id.
    - A heatmap action group takes the same period filters, and its labels are per button.
    - Anything that is not a prefix plus a button stays as written, so a v5 mistake stays visible:
      `attemptClimb` (the button is `AttemptClimb`) and the module path `counts.endgameFall` (the
-     button is `fall`). config:check reports both (§4).
+     button is `fall`). config:check reports both (§4), and the active files fix them by hand
+     (#392, docs/spec/12 F-29).
 6. The QR payload encodes a button index plus the action's period instead of an index into the
    composite list (CS-14 revised; built in #358, document 03 DM-15d).
 
@@ -455,22 +456,28 @@ teams with no `ifNone`. At 2025ilch, 5 of 42 teams never completed a coral cycle
 of that ranking. The archived files stay as converted, because they are an oracle input that a
 drift test pins to the converter (`config/seasons/README.md`).
 
-The active 2026 set, in native form since #320, has one error and four warnings in its files.
-The error is the `attemptClimb` entry of §2.2: `"attemptClimb" is not a button id … Did you mean
-"AttemptClimb"?`. The native configuration keeps it on purpose, so it reproduces v5's null and
-config:check reports it. The four warnings are buttons whose `gridArea` reaches column line 14 of
-an 11-column grid. Run on generated matches, the set shows 10 more errors and four warnings:
+The active 2026 set, in native form since #320, had one error and four warnings in its files.
+The error was the `attemptClimb` entry of §2.2: `"attemptClimb" is not a button id … Did you mean
+"AttemptClimb"?`. The four warnings are buttons whose `gridArea` reaches column line 14 of an
+11-column grid. Run on generated matches, the set showed 10 more errors and four warnings:
 
-- 10 errors are module paths. `counts.endgameFall` ("Attempted Climb Level") names a catalog id
+- 10 errors were module paths. `counts.endgameFall` ("Attempted Climb Level") names a catalog id
   that is a misspelling of the button `fall`, so v5 always showed 0 there. `opr.Hub Auto Fuel
 Count` was never among the 2026 OPR strings. Eight read `averageScores.auto`, `teleop`,
-  `endgame` and `total`, which 2026 never computed; they are in the match view, which was
+  `endgame` and `total`, which 2026 never computed; they were in the match view, which was
   disabled that season.
 - One warning is five rating counts in the transition and the first inactive shift, such as
   `counts.transition.RatingDefense1`, that are 0 in every generated match although rating
   entries read them.
 - Three warnings are rankings without `ifNone`: shooting and auto shooting cycle times, and the
   averaged ratings.
+
+**Fixed in #392 (docs/spec/12 F-29).** The active files name the button `AttemptClimb`, read
+`counts.endgame.fall`, ask TBA for `Hub Auto Fuel Count`, and have no match view (Simulate Match
+is off for 2026, and its chance of winning needs `averageScores.total`). config:check reports no
+errors in them and eight warnings, the four above and the four in the files; they stay, as each is
+understood. The drift test applies these edits to the converter's output (`edit2026` in
+`config-active.test.ts`), so the converter is still pinned, and the v1 files keep what v5 ran.
 
 Before #320 the files had 16 errors, all v5 composite ids in options, and the generated matches
 added 55 pipeline paths and 6 module paths ending in v5 ids.
@@ -488,14 +495,14 @@ Running the converted older seasons also found real defects:
 
 ## 5. Tests (T-3)
 
-| Test file                                   | Guarantees                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
-| ------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `tests/unit/config-v2-schema.test.ts`       | Schemas compile in Ajv strict mode; minimal documents validate; v1 documents, wrong `version`, seconds, unknown properties, unknown transformer/module options and bad executables are rejected with path + message; extension transformers/modules/executables pass.                                                                                                                                                                                                               |
-| `tests/unit/config-convert.test.ts`         | Every archived season set in `config/v1` (2022, 2023, 2023v1, 2024, 2024v2, 2025, 2025v2, 2025 at v4.2.0, 2026) converts to valid v2 with resolvable layer references; the converted 2026 config derives every action id the 2026 oracle found in real data except the TBA `_None` ids (which are enrichment output, not scouting ids); catalog removed; renames applied.                                                                                                           |
-| `tests/unit/config-active.test.ts`          | `config/*.json` validate; they equal the converter output (drift check, delete when hand-editing starts); the derived id count fits the QR id field.                                                                                                                                                                                                                                                                                                                                |
-| `tests/unit/config-v1.test.ts`              | Converter inputs still parse (unchanged).                                                                                                                                                                                                                                                                                                                                                                                                                                           |
-| `tests/unit/config-check.test.ts`           | Each class of config:check finding in the files (CC-1 to CC-8) on a small change to the 2025 or 2026 configuration; the 2025 files have no errors, and run on generated matches show the six module paths and three rankings v4.2.0 shipped; the 2026 set reports the `attemptClimb` entry; every converted v1 season gives a report whose findings all have a line and read without `undefined`, and the real defects above; the CLI exits 0 with warnings only and 1 with errors. |
-| `tests/unit/config-check-generated.test.ts` | CC-9 to CC-12 on small changes to 2025 (2026 for v5 paths and the heatmap): a typo, an entry run too early, a value of the wrong kind, `actionQueue`, an entry that fails; module paths of each kind, RadarChart `"none"`, win probability; an empty value reported once where it starts, and only when used; a ranking without `ifNone` or `divByZero`, and that a worst value or `null` on purpose silences it.                                                                   |
+| Test file                                   | Guarantees                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+| ------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `tests/unit/config-v2-schema.test.ts`       | Schemas compile in Ajv strict mode; minimal documents validate; v1 documents, wrong `version`, seconds, unknown properties, unknown transformer/module options and bad executables are rejected with path + message; extension transformers/modules/executables pass.                                                                                                                                                                                                                                             |
+| `tests/unit/config-convert.test.ts`         | Every archived season set in `config/v1` (2022, 2023, 2023v1, 2024, 2024v2, 2025, 2025v2, 2025 at v4.2.0, 2026) converts to valid v2 with resolvable layer references; the converted 2026 config derives every action id the 2026 oracle found in real data except the TBA `_None` ids (which are enrichment output, not scouting ids); catalog removed; renames applied.                                                                                                                                         |
+| `tests/unit/config-active.test.ts`          | `config/*.json` validate; they equal the converter output plus the edits made by hand (2025's Simulate Match, 2026's fixes of F-29), so a converter change cannot drift; the derived id count fits the QR id field.                                                                                                                                                                                                                                                                                               |
+| `tests/unit/config-v1.test.ts`              | Converter inputs still parse (unchanged).                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| `tests/unit/config-check.test.ts`           | Each class of config:check finding in the files (CC-1 to CC-8) on a small change to the 2025 or 2026 configuration; the 2025 files have no errors, and run on generated matches show the six module paths and three rankings v4.2.0 shipped; the 2026 files have no errors, and v5's `attemptClimb` put back is reported; every converted v1 season gives a report whose findings all have a line and read without `undefined`, and the real defects above; the CLI exits 0 with warnings only and 1 with errors. |
+| `tests/unit/config-check-generated.test.ts` | CC-9 to CC-12 on small changes to 2025 (2026 for v5 paths and the heatmap): a typo, an entry run too early, a value of the wrong kind, `actionQueue`, an entry that fails; module paths of each kind, RadarChart `"none"`, win probability; an empty value reported once where it starts, and only when used; a ranking without `ifNone` or `divByZero`, and that a worst value or `null` on purpose silences it.                                                                                                 |
 
 Oracle cross-check result: of the 32 ids the v5 pipeline could not explain for 2026mnwi
 (document 17 §2.2), 30 are derivable from the v2 config with no catalog (`activeShift3*`,

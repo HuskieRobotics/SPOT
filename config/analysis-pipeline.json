@@ -22,7 +22,12 @@
           "endGameTowerRobot_Level3"
         ]
       },
-      "componentOprs": ["Hub Total Fuel Count", "minorFoulCount", "majorFoulCount"]
+      "componentOprs": [
+        "Hub Total Fuel Count",
+        "Hub Auto Fuel Count",
+        "minorFoulCount",
+        "majorFoulCount"
+      ]
     }
   },
   "pipeline": [
@@ -118,7 +123,7 @@
       "name": "actionTime",
       "outputPath": "actionTimes.attemptClimb",
       "options": {
-        "actionId": ["attemptClimb"]
+        "actionId": ["AttemptClimb"]
       }
     },
     {

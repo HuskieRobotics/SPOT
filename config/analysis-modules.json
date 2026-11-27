@@ -227,7 +227,7 @@
         "bars": [
           {
             "name": "Fall",
-            "path": "counts.endgameFall"
+            "path": "counts.endgame.fall"
           },
           {
             "name": "L1",
@@ -411,84 +411,6 @@
         ]
       },
       "position": "side"
-    },
-    {
-      "view": "match",
-      "module": "ColumnDisplay",
-      "name": "Auto Climb Points",
-      "options": {
-        "path": "averageScores.auto",
-        "sort": 1,
-        "decimals": 2
-      },
-      "position": "main"
-    },
-    {
-      "view": "match",
-      "module": "ColumnDisplay",
-      "name": "Teleop Points",
-      "options": {
-        "path": "averageScores.teleop",
-        "sort": 1,
-        "decimals": 2
-      },
-      "position": "main"
-    },
-    {
-      "view": "match",
-      "module": "ColumnDisplay",
-      "name": "Endgame Points",
-      "options": {
-        "path": "averageScores.endgame",
-        "sort": 1,
-        "decimals": 2
-      },
-      "position": "main"
-    },
-    {
-      "view": "match",
-      "module": "ColumnDisplay",
-      "name": "Total Points",
-      "options": {
-        "path": "averageScores.total",
-        "sort": 1,
-        "decimals": 2
-      },
-      "position": "main"
-    },
-    {
-      "view": "match",
-      "module": "Stats",
-      "name": "Alliance Stats",
-      "options": {
-        "list": [
-          {
-            "name": "Expected Auto Points",
-            "path": "averageScores.auto",
-            "decimals": 2,
-            "aggrMethod": "sum"
-          },
-          {
-            "name": "Expected Teleop Points",
-            "path": "averageScores.teleop",
-            "decimals": 2,
-            "aggrMethod": "sum"
-          },
-          {
-            "name": "Expected Endgame Points",
-            "path": "averageScores.endgame",
-            "decimals": 2,
-            "aggrMethod": "sum"
-          },
-          {
-            "name": "Expected Score",
-            "path": "averageScores.total",
-            "decimals": 2,
-            "aggrMethod": "sum"
-          }
-        ]
-      },
-      "position": "main"
     }
   ],
   "filterTeams": {

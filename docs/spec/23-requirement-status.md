@@ -209,7 +209,7 @@ quotes the test's name.
 | T-1  | Done       | `.github/workflows/ci.yml`: lint, typecheck, unit tests, build and end-to-end tests on every pull request                                                                                                                          |
 | T-2  | Done       | Phase 1: every transformer, `getPath` and `setPath`, TBA enrichment and OPRs. Phase 2: action ids and undo in `scouting-session`, QR in `qr`, assignment in `registry`, schedules in `schedule`. Filter Teams and CSV are Phase 3. |
 | T-3  | Done       | `config-check`, `config-check-generated`, `config-convert`, `config-active`                                                                                                                                                        |
-| T-4  | Done       | `oracle-compare`, `oracle-golden`, `synthetic`                                                                                                                                                                                     |
+| T-4  | Done       | `oracle-compare`, `oracle-golden`, `synthetic`; in the browser, `tests/e2e/oracle.spec.ts` (#392): what the team view shows is the golden output, through the reviewed divergences                                                 |
 | T-9  | Done       | Recorded TBA responses in `tools/oracle/`; no test calls TBA. The browser tests' server answers TBA from them (#363)                                                                                                               |
 | D-1  | Done       | A versioned successor with a converter (document 20)                                                                                                                                                                               |
 | D-2  | Done       | Game constants are configuration (CS-4, CS-9, CS-12, CS-13). The scouting client reads them (Phase 2); the analysis client is Phase 3.                                                                                             |
@@ -227,6 +227,7 @@ quotes the test's name.
 | F-26 | Divergence | As TR-13                                                                                                                                                                                                                           |
 | F-27 | Done       | `config-check-generated` (CC-10), `config-preview` (MO-3, MO-4), `modules` (#384), `chart-modules` (#385)                                                                                                                          |
 | F-28 | Divergence | As TR-15                                                                                                                                                                                                                           |
+| F-29 | Divergence | Fixed in the active 2026 files (#392): `config-active` (`edit2026`), `config-check`; rules `attempt-climb-2026`, `opr-auto-fuel-2026`                                                                                              |
 | Q-1  | Replaced   | by CS-16                                                                                                                                                                                                                           |
 | Q-3  | Done       | As DM-3                                                                                                                                                                                                                            |
 | Q-4  | Done       | `count-actions` ("all: counts ids the configuration does not know"), as Q-4 now says                                                                                                                                               |
@@ -455,35 +456,35 @@ feedback link uses the menu's constant instead of a second copy of the address.
 
 ### Document 12: security, tests and defects
 
-| Id                    | Status | Where                                                                                                                                             |
-| --------------------- | ------ | ------------------------------------------------------------------------------------------------------------------------------------------------- |
-| SEC-1                 | Later  | The read path drops private fields (SEC-8); the public dataset route is Phase 3                                                                   |
-| SEC-2                 | Done   | `submission`, `transport`, `sign-in`                                                                                                              |
-| SEC-3, SEC-3a, SEC-3b | Done   | `admin-auth`, `db`, `submission`, `sign-in`                                                                                                       |
-| SEC-4, SEC-4a         | Done   | `admin-auth`; the browser test `tests/e2e/admin-sign-in.spec.ts`                                                                                  |
-| SEC-5                 | Done   | `admin-auth`, for Phase 2's actions (events, the schedule, the registry, settings, the roster). The rest are Phase 4, and demo mode is #374       |
-| SEC-5a                | Done   | `admin-auth`                                                                                                                                      |
-| SEC-6                 | Done   | `db`, `sign-in`. Aliases and the merge are Phase 4 (SEC-6a)                                                                                       |
-| SEC-6a                | Done   | `admin-page`: correcting a name                                                                                                                   |
-| SEC-7, SEC-7a         | Done   | `sign-in`                                                                                                                                         |
-| SEC-8, SEC-8a         | Done   | `db`, `sign-in`                                                                                                                                   |
-| SEC-9                 | Done   | `admin-auth`, `submission`                                                                                                                        |
-| SEC-10                | Done   | By design: nothing to build (ADR 0004)                                                                                                            |
-| T-5                   | Done   | `db`, `admin-auth`, `sign-in`, `schedule`, `submission`: every route under `src/app/api/` is called by a unit test, against the in-memory MongoDB |
-| T-6                   | Done   | `registry`, `transport`                                                                                                                           |
-| T-6a                  | Done   | `registry`, `submission`, `transport`; the browser test `tests/e2e/acceptance.spec.ts`                                                            |
-| T-7                   | Done   | For Phase 2's journeys, as T-7 now says; the others follow with Phases 3 and 4                                                                    |
-| T-8                   | Done   | `offline`, for the scouting client and the analysis page (#390)                                                                                   |
-| T-10                  | Done   | `executables`; for the built-in executables, as SC-24                                                                                             |
-| Q-2                   | Done   | As SC-23 and SC-24 (v6)                                                                                                                           |
-| F-1                   | Done   | `scouting-session`                                                                                                                                |
-| F-5                   | Done   | `qr`: a 12-character nonce, about 62 bits (DV-18)                                                                                                 |
-| F-8 to F-10           | Done   | Gone with v5's socket handlers: demo mode is #374, nothing is pruned (RT-29), and every device action has a route (ADR 0001)                      |
-| F-12                  | Done   | `schedule`                                                                                                                                        |
-| F-13                  | Done   | Google sign-in is dropped                                                                                                                         |
-| F-16                  | Done   | As OF-6                                                                                                                                           |
-| F-17, F-23            | Done   | `scouting-client`                                                                                                                                 |
-| F-20 to F-22          | Done   | `registry`                                                                                                                                        |
+| Id                    | Status | Where                                                                                                                                                                                   |
+| --------------------- | ------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| SEC-1                 | Later  | The read path drops private fields (SEC-8); the public dataset route is Phase 3                                                                                                         |
+| SEC-2                 | Done   | `submission`, `transport`, `sign-in`                                                                                                                                                    |
+| SEC-3, SEC-3a, SEC-3b | Done   | `admin-auth`, `db`, `submission`, `sign-in`                                                                                                                                             |
+| SEC-4, SEC-4a         | Done   | `admin-auth`; the browser test `tests/e2e/admin-sign-in.spec.ts`                                                                                                                        |
+| SEC-5                 | Done   | `admin-auth`, for Phase 2's actions (events, the schedule, the registry, settings, the roster). The rest are Phase 4, and demo mode is #374                                             |
+| SEC-5a                | Done   | `admin-auth`                                                                                                                                                                            |
+| SEC-6                 | Done   | `db`, `sign-in`. Aliases and the merge are Phase 4 (SEC-6a)                                                                                                                             |
+| SEC-6a                | Done   | `admin-page`: correcting a name                                                                                                                                                         |
+| SEC-7, SEC-7a         | Done   | `sign-in`                                                                                                                                                                               |
+| SEC-8, SEC-8a         | Done   | `db`, `sign-in`                                                                                                                                                                         |
+| SEC-9                 | Done   | `admin-auth`, `submission`                                                                                                                                                              |
+| SEC-10                | Done   | By design: nothing to build (ADR 0004)                                                                                                                                                  |
+| T-5                   | Done   | `db`, `admin-auth`, `sign-in`, `schedule`, `submission`: every route under `src/app/api/` is called by a unit test, against the in-memory MongoDB                                       |
+| T-6                   | Done   | `registry`, `transport`                                                                                                                                                                 |
+| T-6a                  | Done   | `registry`, `submission`, `transport`; the browser test `tests/e2e/acceptance.spec.ts`                                                                                                  |
+| T-7                   | Done   | For Phase 2's journeys and the analysis journey (`tests/e2e/analysis.spec.ts`, #383, #387; `tests/e2e/modules.spec.ts`, #392); the scanner, edit and setup journeys follow with Phase 4 |
+| T-8                   | Done   | `offline`, for the scouting client and the analysis page (#390)                                                                                                                         |
+| T-10                  | Done   | `executables`; for the built-in executables, as SC-24                                                                                                                                   |
+| Q-2                   | Done   | As SC-23 and SC-24 (v6)                                                                                                                                                                 |
+| F-1                   | Done   | `scouting-session`                                                                                                                                                                      |
+| F-5                   | Done   | `qr`: a 12-character nonce, about 62 bits (DV-18)                                                                                                                                       |
+| F-8 to F-10           | Done   | Gone with v5's socket handlers: demo mode is #374, nothing is pruned (RT-29), and every device action has a route (ADR 0001)                                                            |
+| F-12                  | Done   | `schedule`                                                                                                                                                                              |
+| F-13                  | Done   | Google sign-in is dropped                                                                                                                                                               |
+| F-16                  | Done   | As OF-6                                                                                                                                                                                 |
+| F-17, F-23            | Done   | `scouting-client`                                                                                                                                                                       |
+| F-20 to F-22          | Done   | `registry`                                                                                                                                                                              |
 
 ### Documents 02, 17 and the ADRs
 

@@ -43,3 +43,12 @@ jobs:
           name: playwright-report
           path: playwright-report
           retention-days: 7
+      # A module screenshot that is missing is written by the run, which fails (#392). Download
+      # this into tests/e2e/__screenshots__ and commit it (README.md, "Screenshots").
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: screenshots
+          path: tests/e2e/__screenshots__
+          if-no-files-found: ignore
+          retention-days: 7

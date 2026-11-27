@@ -105,6 +105,11 @@ Match view (dormant): `ColumnDisplay` for `averageScores.auto/teleop/endgame/tot
 `Stats` "Alliance Stats" summing the same — these paths are **not** produced by the 2026
 pipeline, which is consistent with the match view being disabled.
 
+**v6 (#392, document 12 F-29).** Four of these named things that did not exist, and the active
+files fix them: the `actionTime` entry asks for the button `AttemptClimb`, the Fall bar reads
+`counts.endgame.fall`, `Hub Auto Fuel Count` is among the component OPRs, and the dormant match
+view is gone.
+
 ## Archived configurations worth preserving as fixtures
 
 - 2022 (Rapid React): `position` and `hide` executables, `actionTimeFilter`, `map`,

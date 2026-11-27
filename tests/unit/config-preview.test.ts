@@ -174,8 +174,10 @@ describe("K-3: the 2026 preview", () => {
       writer: "TBA enrichment (componentOprs)",
       idle: "0.00",
     });
-    // Never configured as a component OPR (docs/spec/20 §4).
-    expect(item(preview, "Auto Fuel OPR")).toMatchObject({ writer: null });
+    // v5 never asked TBA for it; the active files do since #392 (docs/spec/12 F-29).
+    expect(item(preview, "Auto Fuel OPR")).toMatchObject({
+      writer: "TBA enrichment (componentOprs)",
+    });
   });
 
   it("describes a list by its length, and a heatmap by its positions", () => {

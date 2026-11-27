@@ -24,7 +24,9 @@ export function Grid({ module, teams, dataset }: ModuleProps) {
             className="flex items-center justify-center rounded text-sm font-medium text-black"
             style={{
               gridArea: `${c.y} / ${c.x} / ${c.y + 1} / ${c.x + 1}`,
-              backgroundColor: c.color,
+              // The colour over white, as v5 drew it, in dark mode too: over the dark card a faint
+              // cell was dark, and its black text could not be read (#392).
+              background: `linear-gradient(${c.color}, ${c.color}), #fff`,
             }}
           >
             {c.text}

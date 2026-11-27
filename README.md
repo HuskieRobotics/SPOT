@@ -40,6 +40,24 @@ npm run dev        # http://localhost:3000
 Quality gates: `npm run lint`, `npm run typecheck`, `npm test`, `npm run build`,
 `npm run test:e2e` (Playwright, Chromium).
 
+### Screenshots
+
+`tests/e2e/modules.spec.ts` compares every analysis module with a screenshot, in light and dark
+mode, on a phone and a desktop (#392). The screenshots are taken on Linux, where CI runs, because
+macOS and Windows draw text a little differently; on those systems the comparison is skipped and
+the rest of the test still runs. They are committed under `tests/e2e/__screenshots__/`.
+
+When a change is meant to alter how a module looks:
+
+1. Delete the screenshots it changes from `tests/e2e/__screenshots__/modules.spec.ts/`, and push.
+2. CI writes the missing screenshots and fails, saying which. Look at them in the run's
+   `screenshots` artifact, or download them with
+   `gh run download <run id> -n screenshots -D tests/e2e/__screenshots__`.
+3. If they look right, commit them; the next run passes.
+
+A screenshot that differs without a change meant to alter it is a bug: the run's
+`playwright-report` artifact shows the expected image, the actual one and their difference.
+
 ### From VS Code's Run and Debug list
 
 `.vscode/launch.json` puts these commands in VS Code's **Run and Debug** list (Ctrl+Shift+D), so

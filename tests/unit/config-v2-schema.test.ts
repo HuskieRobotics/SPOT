@@ -4,7 +4,8 @@
  * and produce readable errors for the mistakes people make when editing JSON by hand.
  */
 import { describe, expect, it } from "vitest";
-import { getValidator, validateConfig, type ConfigKind } from "@/config/validate";
+import { getValidator, schemas, validateConfig, type ConfigKind } from "@/config/validate";
+import { createSchemaSet } from "@/lib/json-schema";
 import type {
   AnalysisModulesConfig,
   AnalysisPipelineConfig,
@@ -108,6 +109,13 @@ describe("v2 configuration schemas", () => {
       expect(() => getValidator(kind)).not.toThrow();
     });
   }
+
+  it("each schema compiles first, in a fresh set: the modules schema reads the pipeline's (#392)", () => {
+    // The heatmap's period filters are the pipeline schema's; validating analysis-modules.json
+    // before any pipeline once failed with "can't resolve reference".
+    for (const kind of kinds)
+      expect(() => createSchemaSet<ConfigKind>(schemas).getValidator(kind)).not.toThrow();
+  });
 
   it("accepts minimal valid documents", () => {
     expect(validateConfig("match-scouting", minimalMatchScouting())).toEqual({
