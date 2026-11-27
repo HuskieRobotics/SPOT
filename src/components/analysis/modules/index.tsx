@@ -1,16 +1,20 @@
 "use client";
 
 /**
- * The modules the dashboard can draw, by name (#384; docs/spec/09; MO-2 is replaced by this
- * registry). A built-in module not drawn yet shows what it will read (#385, #386); a name that is
- * not a built-in module is an extension module, which come in #391.
+ * The modules the dashboard can draw, by name (#384, #385; docs/spec/09; MO-2 is replaced by this
+ * registry). A built-in module not drawn yet shows what it will read (HeatmapScatterPlot, #386); a
+ * name that is not a built-in module is an extension module, which come in #391.
  */
 import type { ComponentType } from "react";
 import type { ModuleEntry } from "@/config/types";
+import { Bar } from "./bar";
 import { ColumnDisplay } from "./column-display";
 import { Divider } from "./divider";
 import { ModuleFrame } from "./frame";
 import { Grid } from "./grid";
+import { PerformanceTimePlot } from "./performance-time-plot";
+import { Pie } from "./pie";
+import { RadarChart } from "./radar-chart";
 import { SingleDisplay } from "./single-display";
 import { Stats } from "./stats";
 import type { ModuleProps } from "./types";
@@ -19,14 +23,14 @@ export type { ModuleProps } from "./types";
 
 /** Every built-in module (analysis-modules.schema.json; a test checks), drawn or not yet. */
 export const BUILT_IN_MODULES: Record<string, ComponentType<ModuleProps> | null> = {
-  Bar: null,
+  Bar,
   ColumnDisplay,
   Divider,
   Grid,
   HeatmapScatterPlot: null,
-  PerformanceTimePlot: null,
-  Pie: null,
-  RadarChart: null,
+  PerformanceTimePlot,
+  Pie,
+  RadarChart,
   SingleDisplay,
   Stats,
 };

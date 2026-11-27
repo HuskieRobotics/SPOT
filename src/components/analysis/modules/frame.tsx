@@ -48,6 +48,15 @@ export function RankBadge({ rank }: { rank: NonNullable<Shown["rank"]> }) {
   );
 }
 
+/** A chart with nothing to draw (#385): No Data, in place of empty axes. */
+export function NoChart() {
+  return (
+    <p className="text-muted-foreground py-8 text-center italic" data-testid="no-data">
+      {NO_DATA}
+    </p>
+  );
+}
+
 /** A value, or No Data shown as such (F-27). */
 export function Value({ shown }: { shown: Shown }) {
   return (

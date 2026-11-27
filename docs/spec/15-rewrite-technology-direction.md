@@ -200,6 +200,9 @@ modules,executables}/` at runtime and serves them as plain scripts registered on
   (~3 MB). The modules use `histogram2dcontour`, `scatterpolar`, layout images, and theme
   colors read from CSS variables; keep Plotly unless a replacement covers those, and read
   theme colors from the shadcn CSS variables instead.
+  **v6 (#385):** `plotly.js-dist-min` 4, the full bundle (4.7 MB, 1.5 MB compressed), loaded with
+  `import()` when a chart is first drawn; the dashboard itself is client-only already. See
+  document 09, "v6: the chart modules".
 - **Mongoose connection handling.** Use the cached global connection pattern for route
   handlers; avoid connecting per request.
 - **Auth.** Replace the raw `Authorization: <code>` header with a cookie set after entering the

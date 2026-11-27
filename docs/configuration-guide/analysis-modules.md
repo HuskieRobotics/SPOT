@@ -108,6 +108,10 @@ them.
 One line per item of `"list"`: its `"name"`, its value, and its rank when it has `"sort"`. Each
 line takes the [number options](#showing-a-number). Usually in the side column.
 
+The charts (Bar, Pie, PerformanceTimePlot and RadarChart) use the page's colours, in light and
+dark mode. A chart with nothing to show, because no value it names has data yet, says "No Data"
+instead of drawing empty axes.
+
 ### Bar: a bar chart
 
 ```json
@@ -115,7 +119,8 @@ line takes the [number options](#showing-a-number). Usually in the side column.
       "options": { "bars": [{ "name": "Level 1", "path": "counts.scoreL1" }, ...] }
 ```
 
-One bar per item of `"bars"`.
+One bar per item of `"bars"`. On the match page, `"aggrMethod"` combines an alliance's robots
+as for [numbers](#showing-a-number).
 
 ### Pie: a pie chart
 
@@ -129,8 +134,9 @@ One bar per item of `"bars"`.
       }
 ```
 
-One slice per item of `"slices"`, sized by its value. Optional `"unit"` and `"decimals"` (2 if
-left out) format the numbers on the slices.
+One slice per item of `"slices"`, sized by its value; a value below 0 has no slice. Each slice
+shows its number, rounded to at most 2 decimal places, or to exactly `"decimals"` places when you
+give it, followed by `"unit"` if you give one.
 
 ### PerformanceTimePlot: a value over a team's matches
 
@@ -188,9 +194,14 @@ Shows where on the field a team's actions happened, from the spots scouters tapp
       }
 ```
 
-`"sections"` are the spokes. Each line gives a value for each spoke, by the spoke's name; use
-`"path": "none"` for a spoke the line has no value for. Repeat the first spoke at the end, as
-here, so the shape closes. Team page only.
+`"sections"` are the spokes. Each line gives a value for each spoke, **in the same order as
+`"sections"`**: the first time is the first spoke's, and so on. A time's `"name"` is only a
+reminder of which spoke it is. Use `"path": "none"` for a spoke the line has no value for: it
+counts as 0. The scale runs from 0 to 4, or to the largest value when one is above 4. Team page
+only.
+
+The shape closes by itself. Older configurations repeat the first spoke at the end, as here,
+which v5 needed; that still works, and you can leave it out.
 
 ### ColumnDisplay: one column per robot (match page)
 

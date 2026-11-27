@@ -13,6 +13,13 @@ export function currentTheme(): Theme {
   return document.documentElement.classList.contains("dark") ? "dark" : "light";
 }
 
+/** Calls `onChange` when the theme changes, for `useSyncExternalStore`; returns the unsubscribe. */
+export function subscribeTheme(onChange: () => void): () => void {
+  const observer = new MutationObserver(onChange);
+  observer.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
+  return () => observer.disconnect();
+}
+
 export function setTheme(theme: Theme) {
   document.documentElement.classList.toggle("dark", theme === "dark");
   try {

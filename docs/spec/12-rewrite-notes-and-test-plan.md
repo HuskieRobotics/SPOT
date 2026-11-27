@@ -79,7 +79,8 @@ also uses. Each ends with what v6 does (audited in document 23).
   offline.
 - **F-18** `SingleDisplay.formatData` with `wholeMatch` mutates the shared `alliances` array via
   `push("|")` in `setMatchModules`. **v6:** a module's values are plain functions of the teams and
-  the dataset that change neither (`src/analysis/modules/values.ts`, #384), tested in `modules`.
+  the dataset that change neither (`src/analysis/modules/values.ts`, #384, and `charts.ts`,
+  #385), tested in `modules` and `chart-modules`.
 - **F-19** Hard-coded 2026 game constants in the scouting client: `autoPhaseEndTime = 140000`,
   `endgameTime = 30000`, `shiftSwitchInterval = 25000`, shift button ids, `AZone`/`OAZone`
   ids, A-Stop detection, and the half-field coordinate transform in `HeatmapScatterPlot`.

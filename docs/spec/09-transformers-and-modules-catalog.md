@@ -182,7 +182,7 @@ file. In v6 the engine enforces the dataset rule (TR-7), an options schema repla
   is No Data, not 0 (F-27). Ties share a rank: two teams with the best value are both #1, and the
   next is #3. The rank is among every team at the event with a value.
 - **MO-5** Plotly modules call `getCssVar` for theme colors, use font Cairo, title size 32,
-  `responsive: true`, and remove the zoom/pan mode-bar buttons.
+  `responsive: true`, and remove the zoom/pan mode-bar buttons. v6: see the chart modules below.
 
 ### v6: the text modules (#384)
 
@@ -205,6 +205,41 @@ Decided 2026-11-26:
 - **SingleDisplay** is never ranked, as in v5. Its `percentChanceOfWinning` compares two
   alliances, so it is drawn by Simulate Match (#389).
 - **F-18** Nothing a module computes changes the teams or the dataset it is given.
+
+### v6: the chart modules (#385)
+
+Bar, Pie, PerformanceTimePlot and RadarChart draw on Plotly (`plotly.js-dist-min` 4), from values
+computed by plain functions (`src/analysis/modules/charts.ts`, tested in `chart-modules`). Every
+chart is drawn by one component, `src/components/analysis/modules/plot.tsx`. Decided 2026-11-26:
+
+- **Loading** Plotly is the full bundle, 4.7 MB (1.5 MB compressed), bundled by Next.js as its
+  own file and loaded with `import()` when a chart is first drawn (OF-6: no CDN). A page with no
+  chart never downloads it. Plotly's partial bundles leave out either `scatterpolar` or
+  `histogram2dcontour`, and building a smaller one needs the 98 MB source package.
+- **MO-5** A chart names the theme's colours as CSS variables (`var(--primary)`, `var(--card)`,
+  `var(--chart-1)` to `var(--chart-5)`), read when it is drawn, and is drawn again when the theme
+  changes. The font is the page's (Cairo). The module's name is its card's heading, as for the
+  text modules, rather than a Plotly title. There is no zoom or pan, and dragging scrolls the
+  page; Plotly's toolbar is hidden too, since on a phone it stays over the chart.
+- **No Data** A chart with nothing to draw says No Data instead of drawing empty axes: every bar
+  or line point missing, every slice empty, or a radar with no team value ("none" alone does not
+  count). A value of 0 is drawn.
+- **MO-3, F-27** Bar and Pie combine several teams as the text modules do, over the teams that
+  have a value. A missing bar or line point is a gap, not 0. A radar point with no value is
+  skipped and the line joins its neighbours; `"none"` is 0, as in v5.
+- **Bar** in the accent colour (`--primary`, v5's `#30a2ff` in light mode).
+- **Pie** as v5: a ring (`hole: 0.4`), negative values and No Data as empty slices. Each slice
+  shows its value with `decimals` and `unit`; without `decimals`, at most two places, where v5
+  showed Plotly's own rounding when there was no `unit`.
+- **PerformanceTimePlot** orders the team's matches by match, qualifications before playoffs
+  (TR-6, DV-17), along the axis as "Q12", "P5", "F2", and as "Qual 12" in the hover. Several teams
+  show a note instead of the chart, where v5 threw.
+- **RadarChart** matches a line's `times` to `sections` by position, as v5 did. It closes each
+  line by itself, so the first section need not be repeated last; a configuration that repeats
+  it is drawn the same. The radial axis runs from 0 to 4, v5's range, or to the largest value
+  above 4, which v5 cut off. With several teams, a line per team per entry, named by team.
+- **Accessibility** Each chart is an image named after the module, and its values are in a table
+  only a screen reader reads, which the browser test reads too.
 
 ## Module reference
 

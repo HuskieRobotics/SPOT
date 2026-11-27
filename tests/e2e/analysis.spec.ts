@@ -95,3 +95,63 @@ test("AN-1 to AN-4, AN-11a to AN-15, SEC-8: choose an event, find a team, open i
   await page.getByTestId("problems").locator("summary").click();
   await expect(page.getByTestId("problems")).toContainText('"attemptClimb" is not a button id');
 });
+
+// #385, MO-5: the chart modules, drawn by Plotly, in the theme's colours.
+type Entry = { view: string; module: string; name: string };
+const charts = (dir: string) =>
+  (read(`${dir}/analysis-modules.json`) as { modules: Entry[] }).modules.filter(
+    (m) =>
+      m.view === "team" && ["Bar", "Pie", "PerformanceTimePlot", "RadarChart"].includes(m.module),
+  );
+
+test("#385 MO-5, F-27: the chart modules draw an event's data in light and dark mode", async ({
+  page,
+}) => {
+  const paper = (region: ReturnType<typeof page.getByRole>) =>
+    region
+      .locator("svg.main-svg")
+      .first()
+      .evaluate((svg) => getComputedStyle(svg).backgroundColor);
+
+  // 2026mnwi has one of each, the radar too.
+  await page.goto("/analysis?event=2026mnwi_official&team=3061");
+  const mnwi = charts("config");
+  expect(new Set(mnwi.map((m) => m.module)).size).toBe(4);
+  for (const m of mnwi) {
+    const region = page.getByRole("region", { name: m.name, exact: true });
+    await expect(region.locator('[data-drawn="light"]')).toBeVisible();
+    // The card's colour (#fefefe), not Plotly's white.
+    expect(await paper(region)).toBe("rgb(254, 254, 254)");
+    // What the chart shows, in a table a screen reader reads.
+    await expect(region.getByRole("table", { name: m.name, exact: true })).toBeAttached();
+  }
+  // TR-6, DV-17: a row per match, in match order.
+  const matches = page
+    .getByRole("table", { name: mnwi.find((m) => m.module === "PerformanceTimePlot")!.name })
+    .locator("tbody th");
+  const labels = await matches.allTextContents();
+  expect(labels.length).toBeGreaterThan(1);
+  const numbers = labels.map((l) => Number(/^Qual (\d+)$/.exec(l)?.[1]));
+  expect(numbers).toEqual([...numbers].sort((a, b) => a - b));
+
+  // The theme changes: each chart is drawn again, in the dark card's colour (#232323).
+  await page.evaluate(() => document.documentElement.classList.add("dark"));
+  for (const m of mnwi) {
+    const region = page.getByRole("region", { name: m.name, exact: true });
+    await expect(region.locator('[data-drawn="dark"]')).toBeVisible();
+    expect(await paper(region)).toBe("rgb(35, 35, 35)");
+  }
+
+  // 2025ilch: every chart of 3061's is drawn but one with nothing in it, which says No Data.
+  await page.goto("/analysis?event=2025ilch_official&team=3061");
+  const empty = "Auto Algae Scored Distribution";
+  for (const m of charts("config/seasons/2025")) {
+    const region = page.getByRole("region", { name: m.name, exact: true });
+    if (m.name === empty) {
+      await expect(region.getByTestId("no-data")).toHaveText("No Data");
+      await expect(region.locator("svg.main-svg")).toHaveCount(0);
+    } else {
+      await expect(region.locator("[data-drawn]")).toBeVisible();
+    }
+  }
+});
