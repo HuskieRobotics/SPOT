@@ -27,7 +27,11 @@
               "kind": { "enum": ["exact", "min", "range", "negative"] },
               "value": { "type": "number" },
               "min": { "type": "number" },
-              "max": { "type": "number" }
+              "max": { "type": "number" },
+              "rating": {
+                "type": "boolean",
+                "description": "A band on the rating scale. Picking only rating bands shows the teams whose every positive average is at least the highest band picked; other bands show teams with any value in the band."
+              }
             }
           }
         }

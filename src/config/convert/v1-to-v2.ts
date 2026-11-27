@@ -721,10 +721,10 @@ function nativeIdsFor(
 
 /** Filter Teams bands hard-coded in the v5 client (docs/spec/08 AN-19/AN-21). */
 export const DEFAULT_RATING_BANDS: RatingBand[] = [
-  { id: "Rating4", label: "Rating4", kind: "exact", value: 4 },
-  { id: "Rating3", label: "Rating3", kind: "min", value: 3 },
-  { id: "Rating2", label: "Rating2", kind: "min", value: 2 },
-  { id: "Rating1", label: "Rating1", kind: "min", value: 1 },
+  { id: "Rating4", label: "Rating4", kind: "exact", value: 4, rating: true },
+  { id: "Rating3", label: "Rating3", kind: "min", value: 3, rating: true },
+  { id: "Rating2", label: "Rating2", kind: "min", value: 2, rating: true },
+  { id: "Rating1", label: "Rating1", kind: "min", value: 1, rating: true },
   { id: "eliteOPR", label: "Elite OPR (250+)", kind: "min", value: 250 },
   { id: "strongOPR", label: "Strong OPR (151-250)", kind: "range", min: 151, max: 250 },
   { id: "decentOPR", label: "Decent OPR (101-150)", kind: "range", min: 101, max: 150 },

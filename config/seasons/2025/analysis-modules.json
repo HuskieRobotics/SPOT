@@ -473,25 +473,29 @@
         "id": "Rating4",
         "label": "Rating4",
         "kind": "exact",
-        "value": 4
+        "value": 4,
+        "rating": true
       },
       {
         "id": "Rating3",
         "label": "Rating3",
         "kind": "min",
-        "value": 3
+        "value": 3,
+        "rating": true
       },
       {
         "id": "Rating2",
         "label": "Rating2",
         "kind": "min",
-        "value": 2
+        "value": 2,
+        "rating": true
       },
       {
         "id": "Rating1",
         "label": "Rating1",
         "kind": "min",
-        "value": 1
+        "value": 1,
+        "rating": true
       },
       {
         "id": "eliteOPR",

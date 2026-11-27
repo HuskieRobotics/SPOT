@@ -136,7 +136,7 @@ quotes the test's name.
 | CS-10         | Done     | `config-v2-schema`, `engine`, `arithmetic`, `count-actions`                                                                             |
 | CS-11         | Done     | `config-convert`; `config-check` (CC-2, F-25)                                                                                           |
 | CS-12         | Done     | `config-convert`, `tba-enrichment`, `config-check` (CC-6)                                                                               |
-| CS-13         | Done     | `config-v2-schema`. The modules that read these options are Phase 3.                                                                    |
+| CS-13         | Done     | `config-v2-schema`; the modules read them (#384 to #387).                                                                               |
 | CS-14         | Done     | `qr` (#358): a button index and its period (CS-16), the layout derived from match-scouting.json (DM-15d); CC-7 checks a long match fits |
 | CS-15         | Done     | By design: no settings file and no schema for one (ADR 0003)                                                                            |
 | CS-16         | Done     | `count-actions`, `config-convert`, `oracle-compare`; rules `action-period-fields`, `counts-every-period-2026`                           |
@@ -238,7 +238,7 @@ quotes the test's name.
 | A-1, A-3   | Done     | JSON configuration for students, and the documented pipeline structure: `docs/configuration-guide/` (K-4) |
 | A-5, A-49  | Done     | ADR 0005, TR-14                                                                                           |
 | A-13       | Done     | As DM-14: dropped                                                                                         |
-| A-14       | Done     | CS-13 (the bands); the page is Phase 3                                                                    |
+| A-14       | Done     | CS-13 (the bands); `filter-teams` (#387)                                                                  |
 | A-22, A-23 | Done     | CS-16, CS-5                                                                                               |
 | A-34       | Done     | CS-12                                                                                                     |
 | A-38       | Replaced | by TR-15                                                                                                  |

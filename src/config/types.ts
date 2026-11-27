@@ -205,6 +205,8 @@ export interface RatingBand {
   value?: number;
   min?: number;
   max?: number;
+  /** A band on the rating scale (Filter Teams, AN-21): see `src/analysis/filter-teams.ts`. */
+  rating?: boolean;
 }
 
 export interface AnalysisModulesConfig {

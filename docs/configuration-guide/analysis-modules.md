@@ -261,8 +261,8 @@ bands, such as "rated 3 or more" or "OPR from 151 to 250", and sees the teams th
 ```json
   "filterTeams": {
     "ratingBands": [
-      { "id": "Rating4", "label": "Rating4", "kind": "exact", "value": 4 },
-      { "id": "Rating3", "label": "Rating3", "kind": "min", "value": 3 },
+      { "id": "Rating4", "label": "Rating4", "kind": "exact", "value": 4, "rating": true },
+      { "id": "Rating3", "label": "Rating3", "kind": "min", "value": 3, "rating": true },
       { "id": "strongOPR", "label": "Strong OPR (151-250)", "kind": "range", "min": 151, "max": 250 },
       { "id": "negativeOPR", "label": "Negative OPR", "kind": "negative" }
     ]
@@ -276,5 +276,17 @@ bands, such as "rated 3 or more" or "OPR from 151 to 250", and sees the teams th
 | `"range"`    | between `"min"` and `"max"`.       |
 | `"negative"` | below 0.                           |
 
-The bands a converted configuration starts with are the ones SPOT has always had; change them if
-a game rates on a different scale.
+`"rating": true` marks a band on the game's rating scale, as Rating1 to Rating4 are. It changes
+what picking bands does:
+
+- **Only rating bands picked:** the teams whose every rating is at least the highest band
+  picked. Rating3 shows the teams rated 3 or better at everything they do (every positive
+  `averageScores` value).
+- **Any other bands picked:** the teams with any value (average or OPR) in any band picked.
+- **Values picked as well:** the teams whose every value picked is above 0 and in a band picked.
+
+The bands a converted configuration starts with are the ones SPOT has always had, with Rating1 to
+Rating4 marked; change them if a game rates on a different scale.
+
+The Compare Team Scores page needs no configuration: it offers every `averageScores` value and
+component OPR.

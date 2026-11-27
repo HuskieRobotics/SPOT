@@ -15,7 +15,7 @@ document 23):
 | ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------ |
 | CF-1, CF-2, CF-4 (`config.json`)           | No `config.json`: secrets come from the environment and settings from MongoDB (ADR 0003, CS-15); the active event is `activeEventId` (DV-12).    |
 | CF-3 (`TBA_OPR_STRINGS`)                   | `enrichment.tba.componentOprs` in the pipeline file (CS-12, DM-13a).                                                                             |
-| CF-3a (Filter Teams bands)                 | `filterTeams.ratingBands` in the modules file (CS-13). The page that uses them is Phase 3.                                                       |
+| CF-3a (Filter Teams bands)                 | `filterTeams.ratingBands` in the modules file (CS-13), used by Filter Teams (#387).                                                              |
 | CF-5 (`timeTransitions`)                   | `timing.phases`, their `segments` and `pauseMs` (CS-1, CS-2, CS-4).                                                                              |
 | CF-6 (`minOfQueueLength`)                  | `rules.undo.minQueueLength` (CS-9).                                                                                                              |
 | CF-7, CF-9b (button fields and classes)    | Colors instead of classes (CS-8) and typed executables (CS-7).                                                                                   |
