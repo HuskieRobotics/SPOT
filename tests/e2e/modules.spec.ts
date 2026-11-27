@@ -72,6 +72,9 @@ test("MO-1, F-27, #392: every module draws 3061's data, and says No Data where t
 
 for (const theme of ["light", "dark"] as const) {
   test(`#392: every module looks as it did, in ${theme} mode`, async ({ page }) => {
+    // Tall enough that no card is scrolled to: in phone emulation on Linux, a card scrolled into
+    // view was captured about 22 px too high. The width, and so the layout, stays the phone's.
+    await page.setViewportSize({ width: page.viewportSize()!.width, height: 6000 });
     await serveEveryModule(page);
     if (theme === "dark") await page.evaluate(() => document.documentElement.classList.add("dark"));
     for (const name of WITH_DATA) {
