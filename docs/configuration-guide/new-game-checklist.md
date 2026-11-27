@@ -121,7 +121,9 @@ File: `analysis-modules.json` ([Analysis modules](analysis-modules.md)).
       of winning.
 - [ ] **Filter Teams bands** (`"filterTeams"` → `"ratingBands"`): match the game's rating scale,
       with `"rating": true` on each band of that scale, and OPR ranges that suit the new game's
-      scores. [Filter Teams](analysis-modules.md#filter-teams)
+      scores. A game scouted without ratings has no rating bands; copied from 2025, the bands
+      are points sized to 2025's scores, so resize them once the new game's scores are known.
+      [Filter Teams](analysis-modules.md#filter-teams)
 - [ ] _Check:_ `config:check` (every path a module shows exists); `config:preview` (each line
       varies, has the right unit, and lands where its module expects it; don't judge the size
       of made-up numbers); `config:preview -- config --team 3061` (one team's page, with

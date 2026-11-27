@@ -483,64 +483,22 @@
   "filterTeams": {
     "ratingBands": [
       {
-        "id": "Rating4",
-        "label": "Rating4",
-        "kind": "exact",
-        "value": 4,
-        "rating": true
-      },
-      {
-        "id": "Rating3",
-        "label": "Rating3",
+        "id": "points60",
+        "label": "60+ points",
         "kind": "min",
-        "value": 3,
-        "rating": true
+        "value": 60
       },
       {
-        "id": "Rating2",
-        "label": "Rating2",
+        "id": "points40",
+        "label": "40+ points",
         "kind": "min",
-        "value": 2,
-        "rating": true
+        "value": 40
       },
       {
-        "id": "Rating1",
-        "label": "Rating1",
+        "id": "points20",
+        "label": "20+ points",
         "kind": "min",
-        "value": 1,
-        "rating": true
-      },
-      {
-        "id": "eliteOPR",
-        "label": "Elite OPR (250+)",
-        "kind": "min",
-        "value": 250
-      },
-      {
-        "id": "strongOPR",
-        "label": "Strong OPR (151-250)",
-        "kind": "range",
-        "min": 151,
-        "max": 250
-      },
-      {
-        "id": "decentOPR",
-        "label": "Decent OPR (101-150)",
-        "kind": "range",
-        "min": 101,
-        "max": 150
-      },
-      {
-        "id": "lowOPR",
-        "label": "Low OPR (0-100)",
-        "kind": "range",
-        "min": 0,
-        "max": 100
-      },
-      {
-        "id": "negativeOPR",
-        "label": "Negative OPR",
-        "kind": "negative"
+        "value": 20
       }
     ]
   }

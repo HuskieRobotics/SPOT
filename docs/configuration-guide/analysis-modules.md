@@ -310,8 +310,28 @@ what picking bands does:
 - **Any other bands picked:** the teams with any value (average or OPR) in any band picked.
 - **Values picked as well:** the teams whose every value picked is above 0 and in a band picked.
 
-The bands a converted configuration starts with are the ones SPOT has always had, with Rating1 to
-Rating4 marked; change them if a game rates on a different scale.
+The bands a converted configuration starts with are the ones v5 had for 2026, with Rating1 to
+Rating4 marked; change them if a game rates on a different scale, and size the OPR ranges to the
+game's scores.
+
+A game scouted without ratings needs no rating bands. 2025 has none: its bands are points, sized
+to its teams' average totals, which at 2025ilch ran from 2 to 86:
+
+```json
+  "filterTeams": {
+    "ratingBands": [
+      { "id": "points60", "label": "60+ points", "kind": "min", "value": 60 },
+      { "id": "points40", "label": "40+ points", "kind": "min", "value": 40 },
+      { "id": "points20", "label": "20+ points", "kind": "min", "value": 20 }
+    ]
+  }
+```
+
+`"min"` bands like these work whether or not a value is picked. With Total picked, "40+ points"
+shows the teams whose average total is at least 40. With nothing picked, it shows the teams with
+any average of at least 40, and as a team's total is its largest average, those are the same
+teams. A `"range"` band, such as "0 to 20", is best used with a value picked: with none, it
+matches nearly every team, because nearly every team has some small average.
 
 The Compare Team Scores page needs no configuration: it offers every `averageScores` value and
 component OPR.

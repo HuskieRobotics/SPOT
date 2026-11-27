@@ -239,7 +239,7 @@ quotes the test's name.
 | A-1, A-3   | Done     | JSON configuration for students, and the documented pipeline structure: `docs/configuration-guide/` (K-4) |
 | A-5, A-49  | Done     | ADR 0005, TR-14                                                                                           |
 | A-13       | Done     | As DM-14: dropped                                                                                         |
-| A-14       | Done     | CS-13 (the bands); `filter-teams` (#387)                                                                  |
+| A-14       | Done     | CS-13 (the bands); `filter-teams` (#387); 2025's in points (#408)                                         |
 | A-22, A-23 | Done     | CS-16, CS-5                                                                                               |
 | A-34       | Done     | CS-12                                                                                                     |
 | A-38       | Replaced | by TR-15                                                                                                  |
@@ -604,7 +604,7 @@ failed to compile when the modules file was checked before any pipeline file (#3
 | AN-14, AN-15    | Done   | `analysis-dashboard`; the browser tests `tests/e2e/analysis.spec.ts` and `tests/e2e/modules.spec.ts`                 |
 | AN-16 to AN-18  | Done   | `filter-teams` (Compare's values and bubbles); the browser test `tests/e2e/analysis.spec.ts`                         |
 | AN-18a          | Done   | `analysis-data`, `analysis-dashboard`                                                                                |
-| AN-19 to AN-21a | Done   | `filter-teams`; the browser test `tests/e2e/analysis.spec.ts`                                                        |
+| AN-19 to AN-21a | Done   | `filter-teams` (#408: 2025's bands); the browser test `tests/e2e/analysis.spec.ts`                                   |
 | AN-22           | Done   | The browser test `tests/e2e/analysis.spec.ts`: a card per team, which opens its view                                 |
 | AN-23           | Done   | `analysis-data` (the schedule), `win-chance`; the browser test `tests/e2e/analysis.spec.ts`                          |
 | AN-24           | Done   | `win-chance`; the browser test `tests/e2e/analysis.spec.ts`                                                          |

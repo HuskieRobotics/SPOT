@@ -42,7 +42,7 @@ interface ConfigSet {
 /**
  * 2025 as a worked example of Simulate Match and the Auto Pick List (#389): v4.2.0 shipped it with
  * both on (v5 turned them off in its code for 2026), and the chance of winning, which the 2023
- * configurations had, leads its match-view modules.
+ * configurations had, leads its match-view modules. Its Filter Teams bands are points (#408).
  */
 const CHANCE_OF_WINNING = {
   view: "match",
@@ -52,6 +52,15 @@ const CHANCE_OF_WINNING = {
   options: { aggrMethod: "percentChanceOfWinning", decimals: 1 },
   position: "main",
 };
+/**
+ * Filter Teams bands sized to 2025's points (#408): the converter gives every season the bands
+ * v5 wrote for 2026's ratings and fuel OPRs, and 2025 was scouted without ratings or OPRs.
+ */
+const POINT_BANDS_2025 = [
+  { id: "points60", label: "60+ points", kind: "min", value: 60 },
+  { id: "points40", label: "40+ points", kind: "min", value: 40 },
+  { id: "points20", label: "20+ points", kind: "min", value: 20 },
+];
 function edit2025(kind: ConfigKind, converted: Record<string, unknown>) {
   if (kind !== "analysis-modules") return converted;
   const modules = [...(converted.modules as { view: string }[])];
@@ -60,7 +69,13 @@ function edit2025(kind: ConfigKind, converted: Record<string, unknown>) {
     0,
     CHANCE_OF_WINNING,
   );
-  return { ...converted, simulateMatch: true, autoPickList: true, modules };
+  return {
+    ...converted,
+    simulateMatch: true,
+    autoPickList: true,
+    modules,
+    filterTeams: { ratingBands: POINT_BANDS_2025 },
+  };
 }
 
 /**

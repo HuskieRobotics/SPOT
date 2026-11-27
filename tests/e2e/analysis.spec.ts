@@ -312,6 +312,25 @@ test("#387 AN-16 to AN-22, T-7: compare an event's teams, and filter them", asyn
   await expect(page).toHaveURL(/&team=\d+$/);
 });
 
+test("#408 AN-21a: an event's bands are its season's, 2025's in points", async ({ page }) => {
+  await page.goto("/analysis?event=2025ilch_official&view=filter");
+  const count = page.getByTestId("filter-count");
+  await expect(count).toHaveText(/^All \d+ teams\.$/);
+  const all = Number(/(\d+)/.exec((await count.textContent()) ?? "")?.[1]);
+  await page.getByRole("button", { name: "Band" }).click();
+  await expect(page.getByRole("group", { name: "Band" }).locator("label")).toHaveText([
+    "60+ points",
+    "40+ points",
+    "20+ points",
+  ]);
+  await page.getByRole("checkbox", { name: "40+ points" }).check();
+  await page.keyboard.press("Escape");
+  await expect(count).toHaveText(new RegExp(`^\\d+ of ${all} teams match\\.$`));
+  const matching = Number(/^(\d+) of/.exec((await count.textContent()) ?? "")?.[1]);
+  expect(matching).toBeGreaterThan(0);
+  expect(matching).toBeLessThan(all);
+});
+
 /** The rows of a CSV file, each a list of fields (RFC 4180: quoted fields, doubled quotes). */
 function parseCsv(text: string): string[][] {
   const rows: string[][] = [];

@@ -185,6 +185,10 @@ TypeScript tested without a page (`src/analysis/dashboard.ts`, `search.ts`, `tea
   rating bands uses the every-rating rule, with the highest band's lowest value as the
   threshold; any other choice of bands uses the any-value rule. As in v5, that rule checks every
   band against every value, averages and OPRs alike, so an average of 0 is in "Low OPR (0-100)".
+- **AN-21a** v5's bands were written for 2026 (v5 #279; v4.2.0 had no Filter Teams), and the
+  converter gives every season them. 2025 was scouted without ratings and asks TBA for no OPRs,
+  so its archived configuration has no rating bands and three point bands instead, "60+", "40+"
+  and "20+ points", `"min"` bands on its averages (decided 2026-11-27, #408).
 - **AN-19, AN-20** The lists are "Value" (every team's averages and OPRs, by name, as in
   Compare) and "Band" (the configuration's, in its order). One opens at a time, and a click
   outside or Escape closes it. Each pick is a chip whose × removes it.

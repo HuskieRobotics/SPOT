@@ -6,11 +6,13 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { bubbles, compareChoices, CONSTANT } from "@/analysis/compare";
-import type { Dataset } from "@/analysis/engine";
+import { getPath, type Dataset } from "@/analysis/engine";
 import { filterChoices, filterTeams, inBand, teamMatches } from "@/analysis/filter-teams";
 import { valueLabel, words } from "@/analysis/labels";
 import { DEFAULT_RATING_BANDS } from "@/config/convert/v1-to-v2";
 import type { AnalysisModulesConfig, RatingBand } from "@/config/types";
+import { runGoldenSet } from "../../tools/oracle/compare";
+import { goldenSets } from "../../tools/oracle/sets";
 
 const band = (id: string) => DEFAULT_RATING_BANDS.find((b) => b.id === id)!;
 const [rating4, rating3, rating2] = ["Rating4", "Rating3", "Rating2"].map(band);
@@ -31,6 +33,9 @@ const dataset = {
 } as unknown as Dataset;
 const all = Object.keys(dataset.teams);
 const match = (values: string[], bands: RatingBand[]) => filterTeams(dataset, all, values, bands);
+const bandsIn = (file: string) =>
+  (JSON.parse(readFileSync(file, "utf8")) as AnalysisModulesConfig).filterTeams.ratingBands;
+const rated = (bands: RatingBand[]) => bands.filter((b) => b.rating).map((b) => b.id);
 
 describe("AN-21: which teams match", () => {
   it("nothing picked: every team", () => {
@@ -96,17 +101,33 @@ describe("A-14, AN-21a: the bands are configuration", () => {
     expect(match([], [{ ...renamed, rating: undefined }])).toEqual(["111", "254", "9999"]);
   });
 
-  it("the converter and both seasons mark Rating1 to Rating4, and only them", () => {
-    const rated = (bands: RatingBand[]) => bands.filter((b) => b.rating).map((b) => b.id);
+  it("the converter and 2026 mark Rating1 to Rating4, and only them", () => {
     const ratings = ["Rating4", "Rating3", "Rating2", "Rating1"];
     expect(rated(DEFAULT_RATING_BANDS)).toEqual(ratings);
-    for (const file of [
-      "config/analysis-modules.json",
-      "config/seasons/2025/analysis-modules.json",
-    ]) {
-      const config = JSON.parse(readFileSync(file, "utf8")) as AnalysisModulesConfig;
-      expect(rated(config.filterTeams.ratingBands)).toEqual(ratings);
-    }
+    expect(rated(bandsIn("config/analysis-modules.json"))).toEqual(ratings);
+  });
+
+  it("#408: 2025, scouted without ratings or OPRs, has point bands that sort 2025ilch's teams", () => {
+    const bands = bandsIn("config/seasons/2025/analysis-modules.json");
+    expect(rated(bands)).toEqual([]);
+    // The event as the analysis page reads it: without the re-scouts v4.2.0 counted twice.
+    const set = goldenSets.find((s) => s.name === "2025ilch_official-v4.2.0")!;
+    const { dataset: ilch } = runGoldenSet({ ...set, includeSuperseded: false });
+    const teams = Object.keys(ilch.teams);
+    const matched = bands.map((b) => {
+      const atLeast = teams.filter(
+        (t) => Number(getPath(ilch.teams[t], "averageScores.total", null)) >= b.value!,
+      );
+      // A team's total is its largest average, so a band picks the same teams with or without
+      // Total picked.
+      expect(filterTeams(ilch, teams, ["total"], [b])).toEqual(atLeast);
+      expect(filterTeams(ilch, teams, [], [b])).toEqual(atLeast);
+      return atLeast.length;
+    });
+    // Each band, from the highest, holds more teams, and none holds them all.
+    expect(matched[0]).toBeGreaterThan(0);
+    matched.slice(1).forEach((n, i) => expect(n).toBeGreaterThan(matched[i]));
+    expect(matched.at(-1)).toBeLessThan(teams.length);
   });
 });
 
