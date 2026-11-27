@@ -422,17 +422,17 @@ feedback link uses the menu's constant instead of a second copy of the address.
 
 ### Document 18: offline, for scouting
 
-| Id   | Status | Where                                                                                                                        |
-| ---- | ------ | ---------------------------------------------------------------------------------------------------------------------------- |
-| OF-1 | Done   | `scouting-client`, `sign-in`, `offline`; the browser test `tests/e2e/offline.spec.ts`                                        |
-| OF-2 | Done   | `submission`; the browser test `tests/e2e/scouting-client.spec.ts`                                                           |
-| OF-3 | Later  | The analysis page, Phase 3                                                                                                   |
-| OF-4 | Later  | The QR scanner, Phase 4                                                                                                      |
-| OF-5 | Done   | `offline`, for the scouting client, as reworded in #377                                                                      |
-| OF-6 | Done   | `offline`; the browser test `tests/e2e/offline.spec.ts`                                                                      |
-| OF-7 | Done   | `scouting-client`, `offline`, `schedule`                                                                                     |
-| OF-8 | Done   | `offline`, `config-load`; the browser test `tests/e2e/offline.spec.ts`                                                       |
-| OF-9 | Done   | For the scouting client: the browser test `tests/e2e/offline.spec.ts`. The analysis and scanner pages join in Phases 3 and 4 |
+| Id   | Status | Where                                                                                                                         |
+| ---- | ------ | ----------------------------------------------------------------------------------------------------------------------------- |
+| OF-1 | Done   | `scouting-client`, `sign-in`, `offline`; the browser test `tests/e2e/offline.spec.ts`                                         |
+| OF-2 | Done   | `submission`; the browser test `tests/e2e/scouting-client.spec.ts`                                                            |
+| OF-3 | Done   | `analysis-kept`; the browser test `tests/e2e/offline.spec.ts` (#390)                                                          |
+| OF-4 | Later  | The QR scanner, Phase 4                                                                                                       |
+| OF-5 | Done   | `offline`, for the scouting client, as reworded in #377                                                                       |
+| OF-6 | Done   | `offline`; the browser test `tests/e2e/offline.spec.ts`                                                                       |
+| OF-7 | Done   | `scouting-client`, `offline`, `schedule`                                                                                      |
+| OF-8 | Done   | `offline`, `config-load`; the browser test `tests/e2e/offline.spec.ts`                                                        |
+| OF-9 | Done   | The browser test `tests/e2e/offline.spec.ts`: the scouting client, and the analysis page (#390). The scanner joins in Phase 4 |
 
 ### Document 21: what the server keeps
 
@@ -473,7 +473,7 @@ feedback link uses the menu's constant instead of a second copy of the address.
 | T-6                   | Done   | `registry`, `transport`                                                                                                                           |
 | T-6a                  | Done   | `registry`, `submission`, `transport`; the browser test `tests/e2e/acceptance.spec.ts`                                                            |
 | T-7                   | Done   | For Phase 2's journeys, as T-7 now says; the others follow with Phases 3 and 4                                                                    |
-| T-8                   | Done   | `offline`, for the scouting client; the analysis page joins in Phase 3                                                                            |
+| T-8                   | Done   | `offline`, for the scouting client and the analysis page (#390)                                                                                   |
 | T-10                  | Done   | `executables`; for the built-in executables, as SC-24                                                                                             |
 | Q-2                   | Done   | As SC-23 and SC-24 (v6)                                                                                                                           |
 | F-1                   | Done   | `scouting-session`                                                                                                                                |

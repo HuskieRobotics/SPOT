@@ -19,8 +19,9 @@ import type { EventSummary } from "@/public-data";
 import { CompareView } from "./compare-view";
 import { AutoPickView } from "./auto-pick-view";
 import { loadEvent, loadEvents, type LoadedEvent } from "./data";
+import { keptStore } from "./kept";
 import { FilterView } from "./filter-view";
-import { Problems, TbaNotice } from "./notices";
+import { KeptNotice, Problems, TbaNotice } from "./notices";
 import { SimulateView } from "./simulate-view";
 import { TeamView } from "./team-view";
 
@@ -118,7 +119,7 @@ export function Dashboard() {
       setTeam(keepTeam);
       setView(keepTeam ? null : keepView);
       writeAddress(event.code, keepTeam, keepView);
-      const result = await loadEvent(event);
+      const result = await loadEvent(event, await keptStore());
       if (ask !== asked.current) return;
       setState(
         result.ok
@@ -140,12 +141,11 @@ export function Dashboard() {
         setState({ kind: "error", message: result.message, again: null });
         return;
       }
-      setEvents(result.value);
+      const events = result.value.events;
+      setEvents(events);
       const wanted = readAddress();
       const event =
-        result.value.find((e) => e.code === wanted.event) ??
-        result.value.find((e) => e.active) ??
-        result.value[0];
+        events.find((e) => e.code === wanted.event) ?? events.find((e) => e.active) ?? events[0];
       if (!event) {
         setState({
           kind: "error",
@@ -162,9 +162,11 @@ export function Dashboard() {
 
   useEffect(() => {
     let cancelled = false;
-    void loadEvents().then((result) => {
-      if (!cancelled) chooseEvent(result);
-    });
+    void keptStore()
+      .then(loadEvents)
+      .then((result) => {
+        if (!cancelled) chooseEvent(result);
+      });
     return () => {
       cancelled = true;
     };
@@ -321,7 +323,7 @@ export function Dashboard() {
                 onClick={() =>
                   state.again
                     ? void open(state.again.event, state.again.team, state.again.view)
-                    : void loadEvents().then(chooseEvent)
+                    : void keptStore().then(loadEvents).then(chooseEvent)
                 }
               >
                 Try again
@@ -330,6 +332,7 @@ export function Dashboard() {
           )}
           {loaded && (
             <>
+              <KeptNotice kept={loaded.kept} />
               <TbaNotice tba={loaded.tba} />
               {selected ? (
                 <TeamView loaded={loaded} team={selected} />

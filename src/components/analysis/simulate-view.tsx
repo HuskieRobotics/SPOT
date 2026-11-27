@@ -9,11 +9,11 @@
  * choosing a team clears the match. An alliance with no team chosen shows no modules. v5 changed
  * the alliances it was given when it added the other alliance (F-18); nothing here does.
  */
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import type { TeamKey } from "@/data/team";
 import { matchLabel } from "@/schedule/labels";
 import { cn } from "@/lib/utils";
-import { loadSchedule, type LoadedEvent, type ScheduleMatch } from "./data";
+import type { LoadedEvent, ScheduleMatch } from "./data";
 import { AnalysisModule } from "./modules";
 import { brokenModules } from "./team-view";
 
@@ -74,25 +74,13 @@ function AllianceColumn({
 
 export function SimulateView({ loaded }: { loaded: LoadedEvent }) {
   const { teams } = loaded.analysis;
-  const [schedule, setSchedule] = useState<ScheduleMatch[] | null>(null);
-  const [scheduleError, setScheduleError] = useState<string | null>(null);
+  // Read with the event, and kept with it for offline use (#390).
+  const { schedule } = loaded;
   const [match, setMatch] = useState("");
   const [chosen, setChosen] = useState<Record<Side, (TeamKey | "")[]>>({
     red: EMPTY,
     blue: EMPTY,
   });
-
-  useEffect(() => {
-    let cancelled = false;
-    void loadSchedule(loaded.event).then((result) => {
-      if (cancelled) return;
-      if (result.ok) setSchedule(result.value);
-      else setScheduleError(result.message);
-    });
-    return () => {
-      cancelled = true;
-    };
-  }, [loaded.event]);
 
   const known = new Set(teams.map((t) => t.team));
   const label = (m: ScheduleMatch) => matchLabel(m.level, m.number, m.key);
@@ -128,9 +116,7 @@ export function SimulateView({ loaded }: { loaded: LoadedEvent }) {
           >
             <option value="">
               {schedule === null
-                ? scheduleError
-                  ? "Matches could not be loaded"
-                  : "Loading…"
+                ? "Matches could not be loaded"
                 : schedule.length === 0
                   ? "No schedule yet"
                   : "Choose a match"}
@@ -169,8 +155,10 @@ export function SimulateView({ loaded }: { loaded: LoadedEvent }) {
           </fieldset>
         ))}
       </div>
-      {scheduleError && (
-        <p className="text-muted-foreground text-sm">{scheduleError} Choose the teams instead.</p>
+      {schedule === null && (
+        <p className="text-muted-foreground text-sm">
+          The event&apos;s matches could not be loaded. Choose the teams instead.
+        </p>
       )}
       <div className="grid gap-4 md:grid-cols-2">
         {SIDES.map((side) => (

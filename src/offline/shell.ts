@@ -13,8 +13,8 @@ import { readdirSync, readFileSync } from "node:fs";
 import { extname, join, relative, sep } from "node:path";
 import type { Shell } from "./service-worker";
 
-/** Pages that open with no connection. The analysis and scanner pages join in Phases 3 and 4. */
-export const OFFLINE_PAGES = ["/"];
+/** Pages that open with no connection: the scouting client and the analysis dashboard (#390). The scanner joins in Phase 4. */
+export const OFFLINE_PAGES = ["/", "/analysis"];
 
 /** How long a page waits for the network before the cached copy (OF-7). */
 export const PAGE_TIMEOUT_MS = 4_000;

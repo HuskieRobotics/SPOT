@@ -23,6 +23,7 @@ import { Button } from "@/components/ui/button";
 import type { MatchScoutingConfig } from "@/config/types";
 import { newNonce } from "@/data/nonce";
 import { cn } from "@/lib/utils";
+import { forgetKept } from "@/components/analysis/kept";
 import { registerServiceWorker } from "@/offline/register";
 import { call, httpApi } from "@/scouter/api";
 import { Connection, type ConnectionStatus } from "@/scouter/connection";
@@ -479,6 +480,7 @@ export function ScoutingApp() {
   async function reset() {
     store.reset();
     await (await openRecords()).clear();
+    await forgetKept(); // the analysis dashboard's kept events (#390)
     try {
       for (const key of await caches.keys()) await caches.delete(key);
       for (const r of (await navigator.serviceWorker?.getRegistrations()) ?? [])
@@ -689,7 +691,7 @@ export function ScoutingApp() {
         >
           <p>
             This removes everything SPOT keeps on this device: who is signed in, the join code, the
-            roster and the scouting configuration.
+            roster, the scouting configuration and the events kept for analysis.
           </p>
           {unsent > 0 && (
             <p className={cn("mt-2 font-semibold", "text-destructive")}>

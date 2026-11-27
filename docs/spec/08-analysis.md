@@ -50,9 +50,13 @@ TBA enrichment and the pipeline on it (TR-9), so the server never calls its own 
   with a version as the `ETag`, and what `config:check` finds in them. A file is refused only
   when it can't be used at all (not JSON, or no list of entries): one bad entry must not take the
   dashboard down, and the engine skips a bad entry itself (TR-10).
+- **AN-11, AN-23** `GET /api/analysis/schedule?event=<code>`: the event's matches, for
+  Simulate Match (#389).
 - **AN-12, A-37** The team list is every team with data, in team order, with TBA's nickname
   when TBA knows the team (`src/analysis/teams.ts`). A team TBA doesn't know, such as a B robot,
   is listed by its number.
+- **OF-3 (#390)** The dashboard keeps what these routes answer on the device, under each event,
+  and opens an event viewed online with no connection (document 18, "v6: offline analysis").
 
 ## Team list and team view
 
