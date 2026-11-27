@@ -336,7 +336,12 @@ describe("AN-6, AN-9, AN-12, NF-6, F-6, T-9: an event's TBA data", () => {
   it("two requests at once share one read of TBA", async () => {
     const kept = (await getTbaData(db, ilch._id))!;
     const later = kept.fetchedAt + TBA_DATA_STALE_MS;
-    await Promise.all([tbaDataFor(db, ilch, { now: later }), tbaDataFor(db, ilch, { now: later })]);
+    // The second joins the first before either reads the kept copy, so a slow database cannot
+    // let it miss the first's read of TBA (CI failed on this twice).
+    const first = tbaDataFor(db, ilch, { now: later });
+    const second = tbaDataFor(db, ilch, { now: later });
+    expect(second).toBe(first);
+    await Promise.all([first, second]);
     expect(tba.asked).toHaveLength(3);
   });
 });

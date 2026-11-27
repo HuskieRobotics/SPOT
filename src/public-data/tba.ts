@@ -105,46 +105,49 @@ async function readTba(event: SpotEvent, apiKey: string | undefined, fetchImpl: 
   };
 }
 
+/**
+ * The answer being worked out for each event. A request joins it before anything is awaited, so
+ * requests that arrive together share one read of the kept copy and at most one read of TBA; were
+ * the kept copy read first, a slow database could let a second request miss the first's read of
+ * TBA and start its own.
+ */
 const reading = new Map<string, Promise<TbaView>>();
 
 /** The event's TBA data: the kept copy when it is fresh, else read again (NF-6). */
-export async function tbaDataFor(
+export function tbaDataFor(db: Db, event: SpotEvent, options: TbaOptions = {}): Promise<TbaView> {
+  const pending = reading.get(event._id);
+  if (pending) return pending;
+  const read = answer(db, event, options).finally(() => reading.delete(event._id));
+  reading.set(event._id, read);
+  return read;
+}
+
+async function answer(
   db: Db,
   event: SpotEvent,
   {
     now = Date.now(),
     fetchImpl = fetch,
     apiKey = process.env.TBA_API_KEY || undefined,
-  }: TbaOptions = {},
+  }: TbaOptions,
 ): Promise<TbaView> {
   const kept = await getTbaData(db, event._id, event.tenantId);
   const view = (d: TbaData | null) =>
     d && { matches: d.matches, coprs: d.coprs, teams: d.teams, fetchedAt: d.fetchedAt };
   if (kept && now - kept.fetchedAt < TBA_DATA_STALE_MS) return { data: view(kept), error: null };
-
-  const pending = reading.get(event._id);
-  if (pending) return pending;
-  const read = (async (): Promise<TbaView> => {
-    try {
-      const fresh: TbaData = {
-        _id: event._id,
-        tenantId: event.tenantId,
-        eventId: event._id,
-        tbaKey: event.tbaKey,
-        ...(await readTba(event, apiKey, fetchImpl)),
-        fetchedAt: now,
-      };
-      await saveTbaData(db, fresh);
-      return { data: view(fresh), error: null };
-    } catch (error) {
-      if (!(error instanceof TbaError)) throw error;
-      return { data: view(kept), error: MESSAGES[error.reason](event.tbaKey) };
-    }
-  })();
-  reading.set(event._id, read);
   try {
-    return await read;
-  } finally {
-    reading.delete(event._id);
+    const fresh: TbaData = {
+      _id: event._id,
+      tenantId: event.tenantId,
+      eventId: event._id,
+      tbaKey: event.tbaKey,
+      ...(await readTba(event, apiKey, fetchImpl)),
+      fetchedAt: now,
+    };
+    await saveTbaData(db, fresh);
+    return { data: view(fresh), error: null };
+  } catch (error) {
+    if (!(error instanceof TbaError)) throw error;
+    return { data: view(kept), error: MESSAGES[error.reason](event.tbaKey) };
   }
 }
