@@ -17,11 +17,15 @@ export interface RosterEntry {
   name: string;
 }
 
-export async function adminFetch<T>(path: string, body?: object): Promise<AdminReply<T>> {
+export async function adminFetch<T>(
+  path: string,
+  body?: object,
+  method: "GET" | "POST" | "DELETE" = body ? "POST" : "GET",
+): Promise<AdminReply<T>> {
   let response: Response;
   try {
     response = await fetch(path, {
-      method: body ? "POST" : "GET",
+      method,
       headers: body ? { "content-type": "application/json" } : undefined,
       body: body ? JSON.stringify(body) : undefined,
       cache: "no-store",

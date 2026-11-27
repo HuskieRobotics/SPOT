@@ -15,6 +15,7 @@ import {
   performanceByNonce,
   robotPerformances,
   updatePerformance,
+  wasDeleted,
 } from "@/db/performances";
 import { validateDocument } from "@/data/validate";
 import {
@@ -43,8 +44,8 @@ export interface SubmitOptions {
 
 const store = globalThis as typeof globalThis & { __spotSubmissions?: Promise<unknown> };
 
-/** Run after every earlier submission in this process. */
-function serial<T>(task: () => Promise<T>): Promise<T> {
+/** Run after every earlier submission, and every admin edit (#410), in this process. */
+export function serial<T>(task: () => Promise<T>): Promise<T> {
   const run = (store.__spotSubmissions ?? Promise.resolve()).then(task, task);
   store.__spotSubmissions = run.catch(() => undefined);
   return run;
@@ -117,7 +118,12 @@ async function submitOne(
     );
 
   return serial(async () => {
-    if (await performanceByNonce(db, event._id, nonce, tenantId)) return result("duplicate");
+    // A record already stored, or one an admin deleted (DV-20), is not stored again.
+    if (
+      (await performanceByNonce(db, event._id, nonce, tenantId)) ||
+      (await wasDeleted(db, event._id, nonce, tenantId))
+    )
+      return result("duplicate");
     const assignment = await options.assignmentOf(doc.level, doc.matchNumber, doc.team);
     doc.coverage = coverageOf(doc.coverage, doc.scouterId, assignment);
     try {

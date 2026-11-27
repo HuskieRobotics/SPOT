@@ -241,24 +241,27 @@ document 05. Tests: `tests/unit/submission.test.ts` (T-5, T-6a) and the RT-35 ca
 - **By the event it was scouted at.** A request names the record's event and carries that event's
   join code (SEC-2), so a device that syncs after the admin moved to the next event still files
   its matches where they belong. No event id means the active event.
-- **Stored once per nonce** (DV-18), looked up across superseded records too; a copy scanned from
-  the QR code first makes the synced one a duplicate.
+- **Stored once per nonce** (DV-18), looked up across superseded records too, and across the
+  records an admin deleted (DV-20, #410); a copy scanned from the QR code first makes the synced
+  one a duplicate.
 - **RT-14a, RT-35** When a record arrives, the robot's current records for that match are
   settled: the latest `submittedAt` wins, except that a scouter released from the robot loses to
   whoever held it at the end. Only current records are weighed, so an admin's promotion of a
-  superseded record (Phase 4) stands until a new record arrives. The history comes from the
+  superseded record on the edit page (#410) stands until a record submitted after it arrives.
+  When an admin deletes the record that counts, the same rules pick one of those left. The history comes from the
   registry for the active event, which the database may not have caught up with.
 - **RT-34** Coverage is `partial` when the device ended the match early, or when the scouter took
   the robot after the match started.
 - **RT-36** A replacement's record is flagged (`source: "machine"`) when they joined mid-match,
   or when the released scouter's record exists too, whichever arrives first. A flag already set
-  is never overwritten. The flag is public, so the reason says "replacement" and names no one
+  is never overwritten, and neither is a flag an admin cleared (`flagged: false`, source
+  `"human"`, #410). The flag is public, so the reason says "replacement" and names no one
   (SEC-8); the edit page shows who from the records' scouter ids.
 - **The device's clock decides "latest"** (RT-14a): `submittedAt` is when the scouter pressed
   Submit, read from the device. A phone whose clock is far wrong could win or lose against a
   re-scout it should not. This is accepted (written down by the Phase 2 audit, #364): phones set
   their clocks from the network, and the other record is kept, for an admin to promote on the
-  edit page (RT-35, Phase 4).
+  edit page (RT-35, #410).
 - **One at a time.** Arrivals are handled in order in the process, like the registry's events,
   so two records for one robot are never settled at once.
 

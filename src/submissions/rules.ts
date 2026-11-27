@@ -11,7 +11,11 @@
  *   the released scouter sent a record too. A clean substitution before the start is not.
  *
  * Losers are kept, marked `superseded` (DV-7), and only records still current are weighed, so an
- * admin who promotes a superseded record (Phase 4) is not overruled until a new record arrives.
+ * admin who promotes a superseded record (#410) is not overruled until a new record arrives.
+ *
+ * An admin's edits (#410, document 07): deleting the record that counts lets the rules pick again
+ * from those left (`afterDelete`); promoting makes one record the one that counts (`promote`); and
+ * a flag an admin set or cleared is never changed by a rule.
  */
 import type { Assignment, Coverage, Flag } from "@/data/types";
 import { holderAtEnd, wasReplacement } from "@/sessions/registry";
@@ -102,10 +106,33 @@ export function resolve(
   for (const r of all) {
     const change: Partial<Pick<RobotRecord, "superseded" | "flag">> = {};
     if (!r.superseded && win && r._id !== win._id) change.superseded = true;
-    // Never over a flag already set, by an admin or by an earlier arrival.
-    const reason = r.flag.flagged ? null : replacementReason(r.scouterId, assignment, all);
+    // Never over a flag already set, by an admin or by an earlier arrival, nor over an admin's
+    // decision to clear one.
+    const decided = r.flag.flagged || r.flag.source === "human";
+    const reason = decided ? null : replacementReason(r.scouterId, assignment, all);
     if (reason) change.flag = { flagged: true, reason, source: "machine", at: now };
     if (Object.keys(change).length > 0) changes.set(r._id, change);
+  }
+  return changes;
+}
+
+type Change = Map<string, Partial<Pick<RobotRecord, "superseded">>>;
+
+/**
+ * After an admin deletes a record (AD-15): when none of the records left counts, the rules pick
+ * one of them, as if it had arrived alone with the others superseded.
+ */
+export function afterDelete(left: readonly RobotRecord[], assignment: Assignment | null): Change {
+  if (left.length === 0 || left.some((r) => !r.superseded)) return new Map();
+  return new Map([[winner(left, assignment)._id, { superseded: false }]]);
+}
+
+/** An admin makes one record the one that counts (RT-35's promotion); the others are superseded. */
+export function promote(all: readonly RobotRecord[], id: string): Change {
+  const changes: Change = new Map();
+  for (const r of all) {
+    if (r._id === id && r.superseded) changes.set(r._id, { superseded: false });
+    if (r._id !== id && !r.superseded) changes.set(r._id, { superseded: true });
   }
   return changes;
 }

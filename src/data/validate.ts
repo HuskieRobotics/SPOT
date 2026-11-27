@@ -22,7 +22,8 @@ export type DocumentKind =
   | "schedule"
   | "scouter-session"
   | "assignment"
-  | "tba-data";
+  | "tba-data"
+  | "deleted-performance";
 
 export const DOCUMENT_KINDS: readonly DocumentKind[] = [
   "team-match-performance",
@@ -33,7 +34,29 @@ export const DOCUMENT_KINDS: readonly DocumentKind[] = [
   "scouter-session",
   "assignment",
   "tba-data",
+  "deleted-performance",
 ];
+
+/**
+ * A deleted record (DV-20, #410) is the record as it was, with when it was deleted: the
+ * performance schema with one more field, so the two cannot drift apart.
+ */
+const deletedPerformanceSchema = {
+  ...teamMatchPerformanceSchema,
+  $id: "https://spot.team3061.org/schema/v2/deleted-performance.schema.json",
+  title: "SPOT deleted team match performance (data model v2)",
+  description:
+    "A record an admin deleted, kept apart so its nonce still marks a copy sent again as a duplicate (DV-20).",
+  required: [...teamMatchPerformanceSchema.required, "deletedAt"],
+  properties: {
+    ...teamMatchPerformanceSchema.properties,
+    deletedAt: {
+      type: "integer",
+      minimum: 0,
+      description: "When an admin deleted it, epoch milliseconds.",
+    },
+  },
+};
 
 export const dataSchemas = {
   "team-match-performance": teamMatchPerformanceSchema,
@@ -44,6 +67,7 @@ export const dataSchemas = {
   "scouter-session": scouterSessionSchema,
   assignment: assignmentSchema,
   "tba-data": tbaDataSchema,
+  "deleted-performance": deletedPerformanceSchema,
 } as const;
 
 /** Collection each document kind lives in. */
@@ -56,6 +80,7 @@ export const COLLECTIONS: Record<DocumentKind, string> = {
   "scouter-session": "scouterSessions",
   assignment: "assignments",
   "tba-data": "tbaData",
+  "deleted-performance": "deletedPerformances",
 };
 
 const set = createSchemaSet<DocumentKind>(dataSchemas);

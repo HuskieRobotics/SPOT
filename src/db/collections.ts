@@ -34,6 +34,8 @@ export const INDEXES: Record<DocumentKind, IndexDescription[]> = {
   "scouter-session": [{ name: "event", key: { tenantId: 1, eventId: 1 } }],
   assignment: [{ name: "event_match", key: { tenantId: 1, eventId: 1, matchNumber: 1 } }],
   "tba-data": [],
+  // A copy of a deleted record sent again is a duplicate (DV-20): looked up by nonce.
+  "deleted-performance": [{ name: "event_nonce", key: { tenantId: 1, eventId: 1, nonce: 1 } }],
 };
 
 export function validatorFor(kind: DocumentKind) {

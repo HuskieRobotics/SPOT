@@ -107,6 +107,39 @@ project, run after the others, because it drives the registry every test shares)
 - **AD-17** QR-cached TMPs in localStorage are read but **not** merged (merge line commented
   out).
 
+**v6 (#410, decided 2026-11-27).** The edit page is `/admin/edit`, behind the admin password
+(SEC-5), and its actions are route handlers under `/api/admin/performances` (SEC-5a, document
+11). It replaces AD-10 to AD-15:
+
+- **AD-10, AD-11** It opens on the active event, and any event can be chosen. Every record is
+  listed, newest first, and filtered by part of a scouter's name or student ID, a match number
+  (Qual 12 and Playoff 12 both match "12"), and a team as an admin types it (`3061`, `frc3061`,
+  `2338b`).
+- **AD-12** Each record shows the match by its name ("Qual 12", "Final 2"), the team, its alliance
+  from the event's schedule (the left edge red or blue, and the word), the scouter's name (or the
+  id of a scouter not on the roster, such as a migrated v5 name), and when it was submitted. It
+  also says when it was scanned from a QR code or imported, when it covers only part of the match
+  (RT-34), and when another record for the robot replaced it (superseded, RT-14a, RT-35).
+  Superseded records are shown, so an admin can see why one was replaced and promote it.
+- **AD-13** The actions are read when a record is opened, not with the list, so a phone at an event
+  loads a few hundred rows, not every press: each action in order, then a count of each.
+- **AD-13a, AD-14** **Flag** asks for an optional reason. The flag is public, as every flag is, so
+  the page says not to name a scouter (SEC-8); analysis counts flagged records on the team's page
+  (AN-18a). A machine flag (RT-36) says it was set automatically. **Clear flag** keeps the record
+  marked as an admin's decision (`flagged: false`, source `"human"`), so no rule flags it again
+  (document 06). Each edit waits for the server and then reads the list again (v5 toggled first and
+  rolled back), because one record's edit can change which of the robot's others counts.
+- **AD-15** **Delete** asks first, naming the match, team and scouter. The record moves to
+  `deletedPerformances` (DV-20), so a phone that still holds it, or its QR code scanned later, is
+  answered "duplicate" and it does not come back. If it was the record analysis used, the rules
+  pick one of the robot's others (RT-14a, RT-35).
+- **RT-35's promotion** **Use this record** on a superseded record makes it the one analysis uses,
+  and supersedes the one that was. It stands until a record submitted after it arrives.
+- **AD-16, SEC-6a** Unscouted robots, merging scouters, and correcting a record's team or match are
+  #414. **AD-17** goes with the QR scanner (#411).
+
+Tests: `tests/unit/edit-page.test.ts`, `tests/e2e/edit-page.spec.ts`.
+
 ## QR Scanner page (`/qrscanner`)
 
 - **AD-18** On load, if `localStorage.teamMatchPerformances` exists, POST the parsed array to

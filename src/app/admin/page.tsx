@@ -23,6 +23,9 @@ export default function AdminPage() {
           <Link href="/admin/schedule" className="text-primary underline-offset-4 hover:underline">
             Match schedule
           </Link>
+          <Link href="/admin/edit" className="text-primary underline-offset-4 hover:underline">
+            Edit data
+          </Link>
           <SignOutButton />
         </nav>
       </header>
