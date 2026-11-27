@@ -23,6 +23,12 @@ const ilchModules = (
   }
 ).modules.filter((m) => m.view === "team");
 
+const ilchStats = (
+  read("config/seasons/2025/analysis-modules.json") as {
+    modules: { module: string; name: string; options: { list: unknown[] } }[];
+  }
+).modules.find((m) => m.module === "Stats")!;
+
 test("AN-1 to AN-4, AN-11a to AN-15, SEC-8: choose an event, find a team, open it, and reload", async ({
   page,
 }) => {
@@ -64,6 +70,16 @@ test("AN-1 to AN-4, AN-11a to AN-15, SEC-8: choose an event, find a team, open i
     ilchModules.length - main,
   );
   await expect(page).toHaveURL(/\?event=2025ilch_official&team=3061$/);
+
+  // #384, MO-3, MO-4: the Stats module, a line per stat, ranked among the event's teams.
+  const stats = page.getByRole("region", { name: ilchStats.name });
+  await expect(stats.getByRole("listitem")).toHaveCount(ilchStats.options.list.length);
+  await expect(
+    stats
+      .getByRole("listitem")
+      .filter({ hasText: /^#\d+ / })
+      .first(),
+  ).toBeVisible();
 
   // A reload opens the same event and team.
   await page.reload();

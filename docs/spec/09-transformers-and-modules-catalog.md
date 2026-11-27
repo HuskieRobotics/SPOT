@@ -184,6 +184,28 @@ file. In v6 the engine enforces the dataset rule (TR-7), an options schema repla
 - **MO-5** Plotly modules call `getCssVar` for theme colors, use font Cairo, title size 32,
   `responsive: true`, and remove the zoom/pan mode-bar buttons.
 
+### v6: the text modules (#384)
+
+The dashboard draws each module as a React component (`src/components/analysis/modules/`), from
+values computed by plain functions (`src/analysis/modules/values.ts`, tested in `modules`).
+Decided 2026-11-26:
+
+- **MO-1, MO-2** A module is a component given its entry, the teams shown and the dataset. The
+  registry in `src/components/analysis/modules/index.tsx` replaces v5's folder discovery; it lists
+  every built-in module the schema names (a test checks), and extension modules join it in #391.
+- **MO-3** Several teams (an alliance in Simulate Match, #389) are combined over the teams that
+  have a value: summed with `aggrMethod: "sum"`, else averaged, and No Data when none has. v5
+  counted a missing value as 0, pulling an alliance's average down (F-27).
+- **MO-4, MO-4a** A rank badge shows when `sort` is set and one team is shown, among every team at
+  the event with a value; ties share a rank. Its colour keeps v5's bands and rounding: the top 5 %
+  in the accent colour, 25 % green, 50 % orange.
+- **Grid** Each cell is summed over the teams, on its colour with an alpha from 30 at `min` to 255
+  at `max`, rounded down as in v5. The alpha stays between 30 and 255, and `min` and `max` default
+  to 0 and the largest cell's value: v5's colour broke below `min` or without them.
+- **SingleDisplay** is never ranked, as in v5. Its `percentChanceOfWinning` compares two
+  alliances, so it is drawn by Simulate Match (#389).
+- **F-18** Nothing a module computes changes the teams or the dataset it is given.
+
 ## Module reference
 
 | module                                                                                  | views              | options                                                                                                                                                                                                                                                                                                                     | Rendering                                                                                                                                                                                                                                                                                                                                                             |

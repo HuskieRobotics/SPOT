@@ -102,8 +102,9 @@ TypeScript tested without a page (`src/analysis/dashboard.ts`, `search.ts`, `tea
   SPOT rather than added as a dependency.
 - **AN-14, AN-15** The team view shows the team modules in a main column and, when a module asks
   for it, a side column. v5 hid a team's modules when the team had no data, but v6 lists only
-  teams with data, so that rule has nothing to hide. Until the modules are built (#384 to #386),
-  each shows its name and the values it reads.
+  teams with data, so that rule has nothing to hide. The text modules are drawn (#384); until
+  the charts are (#385, #386), each shows its name and the values it reads. A module whose
+  options config:check finds errors in says so instead of drawing.
 - **AN-18a, RT-34, RT-36** The team view says how many of its matches are flagged for review or
   cover only part of the match.
 - The scouting client's menu and the admin page link to the dashboard.
