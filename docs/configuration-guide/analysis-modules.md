@@ -152,6 +152,8 @@ each match** (what a `"tmp"` entry writes), not team values. Team page only.
 
 Shows where on the field a team's actions happened, from the spots scouters tapped (a
 `position` executable on the button, see [Match scouting](match-scouting.md#executables-what-else-a-button-does)).
+A dot for each spot, a color for each button, and a heat layer over the group's spots. A spot
+reads the same way whichever way round the field was shown to the scouter.
 
 ```json
       "module": "HeatmapScatterPlot",
@@ -165,14 +167,14 @@ Shows where on the field a team's actions happened, from the spots scouters tapp
       }
 ```
 
-| Option                    | Meaning                                                                                                                                                                                 |
-| ------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `"aggregatedActionsPath"` | A team value holding every action of every match: add a team entry `{ "type": "team", "name": "aggregateArray", "outputPath": "aggregatedActions", "options": { "path": "actions" } }`. |
-| `"coordinatePath"`        | Where the spot is stored on each action: `"other.pos"`.                                                                                                                                 |
-| `"actionGroups"`          | The groups a viewer can switch between. Each names button ids, and optionally [period filters](periods.md) to keep only some periods. The heat layer shows the first group.             |
-| `"actionLabels"`          | The name to show for each button id.                                                                                                                                                    |
-| `"imgPath"`               | The field picture, inside the `public/` folder.                                                                                                                                         |
-| `"coordinateTransform"`   | `"none"`, or `"foldHalfField"` to fold both ends of the field onto one half, as 2026 did.                                                                                               |
+| Option                    | Meaning                                                                                                                                                                                                                                                                                                                                                           |
+| ------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `"aggregatedActionsPath"` | A team value holding every action of every match: add a team entry `{ "type": "team", "name": "aggregateArray", "outputPath": "aggregatedActions", "options": { "path": "actions" } }`.                                                                                                                                                                           |
+| `"coordinatePath"`        | Where the spot is stored on each action: `"other.pos"`.                                                                                                                                                                                                                                                                                                           |
+| `"actionGroups"`          | The groups a viewer can switch between, with a button for each when there are several; the first shows first. Each names button ids, and optionally [period filters](periods.md) to keep only some periods.                                                                                                                                                       |
+| `"actionLabels"`          | The name to show for each button id. A button id with no name here shows its id.                                                                                                                                                                                                                                                                                  |
+| `"imgPath"`               | The field picture, inside the `public/` folder. With `"none"`, use the picture scouters tap (`"rules"` → `"fieldMap"` → `"image"` in match-scouting.json), so each spot lands where it was tapped.                                                                                                                                                                |
+| `"coordinateTransform"`   | `"none"` (or leave it out) draws each spot where it was tapped. `"foldHalfField"`, as 2026 did, shows both alliance zones on a picture of one end of the field: the far end is turned round onto the near end, so each driver's left stays left (it is turned, not mirrored). Spots in the middle third of the field's length, 2026's neutral zone, are left out. |
 
 ### RadarChart: several values on one spider chart
 

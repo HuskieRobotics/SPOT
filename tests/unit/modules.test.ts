@@ -168,11 +168,8 @@ describe("the module registry (MO-2 is replaced)", () => {
     expect(Object.keys(BUILT_IN_MODULES).sort()).toEqual(builtInModules().sort());
   });
 
-  it("the text and chart modules are drawn; the heatmap follows (#386)", () => {
-    const waiting = Object.entries(BUILT_IN_MODULES)
-      .filter(([, c]) => c === null)
-      .map(([n]) => n);
-    expect(waiting).toEqual(["HeatmapScatterPlot"]);
+  it("a name every object has, such as toString, is not a module", () => {
+    expect(Object.hasOwn(BUILT_IN_MODULES, "toString")).toBe(false);
   });
 
   it("every stat of the 2025 and 2026 configurations shows as display.ts formats it", () => {

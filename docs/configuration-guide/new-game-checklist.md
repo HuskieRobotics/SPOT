@@ -111,9 +111,9 @@ File: `analysis-modules.json` ([Analysis modules](analysis-modules.md)).
 - [ ] **Format and rank** each number: `"multiplier"`, `"decimals"`, `"unit"`, and `"sort"` for
       a ranking. [Showing a number](analysis-modules.md#showing-a-number)
 - [ ] **Heatmap**, if you have one: a team `aggregateArray` of `actions` into
-      `aggregatedActions`, the buttons with positions, and the field picture.
+      `aggregatedActions`, the buttons with positions, and the field picture (`"imgPath"`): the
+      picture scouters tap, or a picture of half the field with `"foldHalfField"`.
       [HeatmapScatterPlot](analysis-modules.md#heatmapscatterplot-where-on-the-field)
-- [ ] **Radar charts**: repeat the first section at the end, so the shape closes.
 - [ ] **Match page modules**, if the match page is turned on for this game.
 - [ ] **Filter Teams bands** (`"filterTeams"` → `"ratingBands"`): match the game's rating scale,
       and OPR ranges that suit the new game's scores. [Filter Teams](analysis-modules.md#filter-teams)

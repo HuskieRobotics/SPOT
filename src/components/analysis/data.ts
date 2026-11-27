@@ -22,6 +22,7 @@ export interface LoadedEvent {
   performances: PublicPerformance[];
   analysis: Analysis;
   modules: AnalysisModulesConfig;
+  matchScouting: MatchScoutingConfig;
   /** What config:check finds in the season's two analysis files. */
   findings: Finding[];
   tba: { error: string | null; fetchedAt: number | null };
@@ -93,6 +94,7 @@ export async function loadEvent(event: EventSummary): Promise<Loaded<LoadedEvent
       performances: dataset.value.performances,
       analysis,
       modules: modules.value.config,
+      matchScouting: matchScouting.value.config,
       findings: [...(pipeline.value.findings ?? []), ...(modules.value.findings ?? [])],
       tba: { error: tbaError, fetchedAt: tbaData?.fetchedAt ?? null },
     },
