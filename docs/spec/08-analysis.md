@@ -211,6 +211,22 @@ was largely qualitative; expected to return for a typical game.
 - **AN-26b** **[SEC-8]** Neither the CSV nor any public analysis view may include scouter
   information: no name, no id, no initials.
 
+**v6 (#388, decided 2026-11-27):** `src/analysis/csv.ts`, from **Download CSV** in the
+dashboard's sidebar. The file is named for the event (`2026mnwi_official.csv`).
+
+- **AN-26** v5's columns, for every key any team has, in the order the teams have them. v6
+  counts each action per period, so `averages` nests, and each value inside gets its own column
+  named by its path (`auto.StartShooting Average`). 2026mnwi's file has 793 columns. 477 of them
+  are 0 or empty for every team, such as an action counted in a period where it can't happen.
+  They stay, so the file holds every value the dataset has.
+- **Missing values** are empty cells, as the page shows No Data (F-27). v5 wrote 0, which a
+  spreadsheet can't tell from a real 0, and which counted in a column's average.
+- **Quoting** A field holding a comma, a quote or a line break is quoted, quotes doubled
+  (RFC 4180); v5 quoted nothing. A header starting with `=`, `+`, `-` or `@` gets a `'` first,
+  so a spreadsheet never reads a key (some come from TBA) as a formula. Lines end in CRLF.
+- **AN-26b** Only team values are written, never a performance, so no scouter appears. A team
+  missing one of the groups gets empty cells, where v5's route failed.
+
 ## Demo label
 
 - **AN-27** `/analysis/api/isDemo` controls a large "DEMO" label on the welcome view.
