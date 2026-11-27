@@ -43,7 +43,10 @@ export interface Flag {
   flagged: boolean;
   /** Why, in words a person will read on the edit page. Null when not flagged. */
   reason: string | null;
-  /** Who flagged it. "machine" is a rule such as RT-36; "human" is an admin. */
+  /**
+   * Who flagged it. "machine" is a rule such as RT-36; "human" is an admin. An admin who clears a
+   * flag leaves `flagged: false` with source "human", so no rule flags the record again (#410).
+   */
   source: "human" | "machine" | null;
   /** Epoch milliseconds. */
   at: number | null;
@@ -101,6 +104,14 @@ export interface TeamMatchPerformance {
   /** Qualitative tags chosen at match end (BL-193). */
   tags: string[];
   actions: Action[];
+}
+
+/**
+ * A record an admin deleted (DV-20, #410): the record as it was, and when. Kept apart, so no read
+ * of performances has to leave it out, and its nonce still makes a copy sent again a duplicate.
+ */
+export interface DeletedPerformance extends TeamMatchPerformance {
+  deletedAt: number;
 }
 
 export interface SpotEvent {

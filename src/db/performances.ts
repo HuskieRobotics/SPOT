@@ -8,6 +8,7 @@ import { assertValidDocument, COLLECTIONS } from "@/data/validate";
 import {
   DEFAULT_TENANT,
   PRIVATE_PERFORMANCE_FIELDS,
+  type DeletedPerformance,
   type MatchLevel,
   type ObjectIdHex,
   type PublicPerformance,
@@ -47,6 +48,64 @@ export async function adminPerformances(
   return performanceCollection(db)
     .find({ tenantId, eventId }, { sort: { matchNumber: 1, team: 1 } })
     .toArray();
+}
+
+/** An event's records for the edit page (#410, SEC-5): with the scouter, without the actions. */
+export type PerformanceSummary = Omit<TeamMatchPerformance, "actions"> & { actionCount: number };
+
+export async function adminPerformanceSummaries(
+  db: Db,
+  eventId: ObjectIdHex,
+  tenantId: TenantId = DEFAULT_TENANT,
+): Promise<PerformanceSummary[]> {
+  return performanceCollection(db)
+    .aggregate<PerformanceSummary>([
+      { $match: { tenantId, eventId } },
+      { $set: { actionCount: { $size: "$actions" } } },
+      { $unset: "actions" },
+      { $sort: { submittedAt: -1, _id: 1 } },
+    ])
+    .toArray();
+}
+
+/** One record, for an admin (SEC-5). */
+export async function getPerformance(
+  db: Db,
+  id: ObjectIdHex,
+  tenantId: TenantId = DEFAULT_TENANT,
+): Promise<TeamMatchPerformance | null> {
+  return performanceCollection(db).findOne({ _id: id, tenantId });
+}
+
+export function deletedCollection(db: Db) {
+  return db.collection<DeletedPerformance>(COLLECTIONS["deleted-performance"]);
+}
+
+/**
+ * Delete a record (AD-15, DV-20): it is kept, whole, in `deletedPerformances`, then removed. Run
+ * again after a failure between the two, it finishes the job.
+ */
+export async function moveToDeleted(db: Db, record: TeamMatchPerformance, deletedAt: number) {
+  const deleted: DeletedPerformance = { ...record, deletedAt };
+  assertValidDocument("deleted-performance", deleted);
+  await deletedCollection(db).replaceOne(
+    { _id: record._id, tenantId: record.tenantId },
+    { ...deleted },
+    { upsert: true },
+  );
+  await performanceCollection(db).deleteOne({ _id: record._id, tenantId: record.tenantId });
+}
+
+/** Whether a record with this nonce was deleted at the event (DV-20). */
+export async function wasDeleted(
+  db: Db,
+  eventId: ObjectIdHex,
+  nonce: string,
+  tenantId: TenantId = DEFAULT_TENANT,
+): Promise<boolean> {
+  return (
+    (await deletedCollection(db).countDocuments({ tenantId, eventId, nonce }, { limit: 1 })) > 0
+  );
 }
 
 /** The stored record with this nonce, superseded or not (DV-18: a record arrives once). */

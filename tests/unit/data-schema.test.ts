@@ -239,4 +239,17 @@ describe("document schemas", () => {
     };
     expect(validateDocument("team-match-performance", p).issues).toEqual([]);
   });
+
+  it("DV-6, #410: accepts a flag an admin cleared, which no rule sets again", () => {
+    const p = performance();
+    p.flag = { flagged: false, reason: null, source: "human", at: 1772809355374 };
+    expect(validateDocument("team-match-performance", p).issues).toEqual([]);
+  });
+
+  it("DV-20: a deleted record is the record as it was, with when it was deleted", () => {
+    const deleted = { ...performance(), deletedAt: 1772809355374 };
+    expect(validateDocument("deleted-performance", deleted).issues).toEqual([]);
+    expect(validateDocument("deleted-performance", performance()).ok).toBe(false);
+    expect(validateDocument("deleted-performance", { ...deleted, team: 3061 }).ok).toBe(false);
+  });
 });
