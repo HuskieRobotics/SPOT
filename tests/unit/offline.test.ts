@@ -47,12 +47,14 @@ describe("OF-5, OF-6: the shell is the build's own files", () => {
         "/_next/static/chunks/0a1b.js",
         "/_next/static/chunks/0c2d.css",
         "/_next/static/media/cairo.p.woff2",
+        "/analysis",
         "/icons/android-chrome-192x192.png",
         "/img/Field%20Map%202027.png",
         "/img/field.svg",
         "/manifest.webmanifest",
       ],
-      pages: ["/"],
+      // The scouting client, and the analysis dashboard (#390, OF-3).
+      pages: ["/", "/analysis"],
       timeoutMs: 4_000,
     });
   });

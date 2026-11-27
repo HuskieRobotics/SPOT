@@ -5,7 +5,27 @@
  * problems config:check finds in the season's analysis files and the pipeline meets as it runs
  * (TR-10), for an admin to fix. A problem never hides the dashboard: a bad entry is skipped.
  */
-import type { LoadedEvent } from "./data";
+import type { Kept, LoadedEvent } from "./data";
+
+/**
+ * OF-3, OF-7 (#390): the event shown is a copy kept on this device, from when, and why the
+ * server's answer is not shown.
+ */
+export function KeptNotice({ kept }: { kept: Kept | null }) {
+  if (!kept) return null;
+  const when = new Date(kept.savedAt).toLocaleString();
+  return (
+    <p
+      role="status"
+      data-testid="kept-notice"
+      className="bg-muted rounded-md border-l-4 border-l-amber-500 px-3 py-2 text-sm font-medium"
+    >
+      {kept.reason === null
+        ? `Offline, showing data from ${when}.`
+        : `${kept.reason} Showing data from ${when}.`}
+    </p>
+  );
+}
 
 export function TbaNotice({ tba }: { tba: LoadedEvent["tba"] }) {
   if (!tba.error) return null;

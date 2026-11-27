@@ -206,3 +206,49 @@ test("SC-5: SPOT is installable, and offers to install once per device", async (
   await offer();
   await expect(dialog).toHaveCount(0);
 });
+
+test("T-8, OF-3, OF-5, OF-9: every event viewed online opens offline, saying so (#390)", async ({
+  page,
+  context,
+}) => {
+  const event = page.getByLabel("Event", { exact: true });
+  const notice = page.getByTestId("kept-notice");
+
+  // Online: two events viewed, one with a team's charts. The page is the server's: no notice.
+  await page.goto("/analysis?event=2025ilch_official&team=3061");
+  await expect(page.getByRole("heading", { name: "Team 3061 · Huskie Robotics" })).toBeVisible();
+  await kept(page);
+  await event.selectOption("2026mnwi_official");
+  await expect(page.getByRole("heading", { name: "2026mnwi_official" })).toBeVisible();
+  await expect(notice).toHaveCount(0);
+
+  // No server: the page comes from the service worker, the event from the device, saying so.
+  await context.setOffline(true);
+  const reloaded = await page.reload();
+  expect(reloaded?.fromServiceWorker()).toBe(true);
+  await expect(page.getByRole("heading", { name: "2026mnwi_official" })).toBeVisible();
+  await expect(notice).toHaveText(/^Offline, showing data from .+\.$/);
+
+  // The other event viewed online, a team and its charts: Plotly is in the worker's cache.
+  await event.selectOption("2025ilch_official");
+  await expect(page.getByRole("heading", { name: "2025ilch_official" })).toBeVisible();
+  await expect(notice).toBeVisible();
+  await page.goto("/analysis?event=2025ilch_official&team=3061");
+  await expect(page.getByRole("heading", { name: "Team 3061 · Huskie Robotics" })).toBeVisible();
+  await expect(notice).toBeVisible();
+  await expect(page.locator("[data-drawn]").first()).toBeVisible();
+
+  // An event never viewed on this device says so, and does not wait.
+  await event.selectOption("2026mnwi_e2e");
+  await expect(
+    page
+      .getByRole("alert")
+      .filter({ hasText: "No connection, and 2026mnwi_e2e has not been opened on this device" }),
+  ).toBeVisible();
+
+  // Back online, the server's data again, with no notice.
+  await context.setOffline(false);
+  await event.selectOption("2026mnwi_official");
+  await expect(page.getByRole("heading", { name: "2026mnwi_official" })).toBeVisible();
+  await expect(notice).toHaveCount(0);
+});

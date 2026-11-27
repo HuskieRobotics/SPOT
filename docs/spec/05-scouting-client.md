@@ -456,7 +456,8 @@ Decided 2026-11-25. The tests are `tests/unit/offline.test.ts` and `tests/e2e/of
 - **OF-5, OF-8** The scouting client keeps its own data in the device's storage, not in the
   worker's cache: the configuration (revalidated by `ETag` on every online load), the roster,
   the schedule and the settings. A configuration change therefore reaches a device on its next
-  online load, and Reset app data clears the worker and its caches too.
+  online load, and Reset app data clears the worker and its caches too, and the events the
+  analysis dashboard kept (#390).
 - **SC-5** On browsers that offer installation (Chrome and Edge), the landing or waiting page
   asks **Install SPOT?** once per device, never during a match. Safari users add it from the
   Share menu.

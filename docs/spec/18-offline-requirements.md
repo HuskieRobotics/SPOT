@@ -133,6 +133,37 @@ built (document 05, "v6: offline").
   from a screenshot with a decoder, then checks that the match is stored once after
   reconnecting and that a stale configuration is replaced on the next online load.
 
+**v6: offline analysis (#390).** OF-3 and the analysis part of OF-5, OF-7 and OF-9 are built.
+
+- **The page.** `/analysis` is in `OFFLINE_PAGES`, so the worker keeps it and answers it from
+  the network first, then from its copy, whatever the address's `?event=` and `&team=`. The
+  analysis page registers the worker too, so a device that never opens the scouting page still
+  gets it. Plotly, the field pictures and the fonts are built files or images, which the worker
+  keeps already.
+- **Where the data lives (decided 2026-11-27).** The page keeps it, in IndexedDB, as the
+  scouting client does; the worker still answers no `/api/` request. Each event viewed online is
+  kept under its code, in a database of its own, `spot-analysis`
+  (`src/components/analysis/kept.ts`). It holds the event's inputs: its performances, TBA data,
+  three configuration files with their findings, and schedule. The page runs the pipeline on a
+  kept copy as on a fresh one. The list of events is kept too. Several events outgrow
+  `localStorage`; a browser that refuses IndexedDB keeps them for the page's life only.
+- **Network first.** Every load asks the server first, so an edit is never hidden by an old
+  copy, and a fresh answer replaces the copy. When a required input can't be read (no
+  connection, or the server refuses it), the kept copy is shown. TBA's data and the schedule may
+  fail on their own: the kept ones stand in, and TBA's notice says why.
+- **OF-3, OF-7 notice.** A kept copy shows "Offline, showing data from <time>" for the event
+  shown. When the server answered but refused, it shows the server's message and the time
+  instead.
+- **Graceful failure.** An event never viewed on the device fails at once with "No connection,
+  and <event> has not been opened on this device while online", and a Try again button.
+  Refreshing TBA's data with no connection shows the kept data.
+- **Reset app data** in the scouting menu forgets the kept events too.
+- **OF-9 test.** `tests/e2e/offline.spec.ts` views two events online, one with a team's charts,
+  then goes offline and reloads. It sees both with the notice, draws a team's charts with Plotly
+  from the worker's cache, and finds that an event never viewed says so. Back online, the server's
+  data returns with no notice. Unit tests (`analysis-kept`) cover the same rules without a
+  browser.
+
 ## Implications for the technology direction (document 15)
 
 - The transport choice is unaffected: polling and SSE both degrade to "disconnected" and the
