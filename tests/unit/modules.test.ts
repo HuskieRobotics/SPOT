@@ -168,11 +168,11 @@ describe("the module registry (MO-2 is replaced)", () => {
     expect(Object.keys(BUILT_IN_MODULES).sort()).toEqual(builtInModules().sort());
   });
 
-  it("the five text modules are drawn; the charts follow (#385, #386)", () => {
-    const drawn = Object.entries(BUILT_IN_MODULES)
-      .filter(([, c]) => c !== null)
+  it("the text and chart modules are drawn; the heatmap follows (#386)", () => {
+    const waiting = Object.entries(BUILT_IN_MODULES)
+      .filter(([, c]) => c === null)
       .map(([n]) => n);
-    expect(drawn.sort()).toEqual(["ColumnDisplay", "Divider", "Grid", "SingleDisplay", "Stats"]);
+    expect(waiting).toEqual(["HeatmapScatterPlot"]);
   });
 
   it("every stat of the 2025 and 2026 configurations shows as display.ts formats it", () => {

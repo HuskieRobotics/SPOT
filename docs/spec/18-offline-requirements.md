@@ -122,7 +122,12 @@ built (document 05, "v6: offline").
   analysis page (Phase 3), which adds its page to `OFFLINE_PAGES` in `src/offline/shell.ts`
   and chooses between the page's storage and a worker rule for its data. The scanner (OF-4,
   Phase 4) does the same.
-- **OF-6** Fonts are self-hosted by `next/font` at build time; icons are bundled.
+- **OF-6** Fonts are self-hosted by `next/font` at build time; icons are bundled. Plotly (#385)
+  is bundled too, as its own 4.7 MB file that only a chart loads. The worker keeps every built
+  file, so it keeps Plotly as well, ready for offline analysis (#390). **Decided 2026-11-26:**
+  scouting phones keep it too (1.5 MB compressed, once per build). Scouters rarely open the
+  analysis pages, but the build gives Plotly's file a hashed name with nothing in it to tell it
+  apart, and leaving it out would mean serving Plotly outside the build: not worth it.
 - **OF-9 test.** `tests/e2e/offline.spec.ts` loads online once, goes offline (the worker's own
   network included), reloads, signs in and scouts a typed 2026 match. It reads the QR code back
   from a screenshot with a decoder, then checks that the match is stored once after
