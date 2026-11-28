@@ -469,8 +469,11 @@ that a new feature can be verified not to break existing behavior. Requirements:
   teams (#387). `tests/e2e/modules.spec.ts` (#392) draws every built-in module on the real 2026
   event, with data and with none (No Data), and compares each with a screenshot in light and dark
   mode on a phone and a desktop; the screenshots are taken on Linux, where CI runs (README.md,
-  "Screenshots"). Scanning the code on the scanner page, and the edit and setup journeys, follow
-  with Phase 4.
+  "Screenshots"). The edit journey is built (#410): `tests/e2e/edit-page.spec.ts` flags,
+  promotes and deletes records. The scanner journey is built (#411): `tests/e2e/scanner.spec.ts`
+  scans a code from the camera (Chromium's fake camera playing a video of a real code) and from
+  photos, sends it, undoes it, and keeps codes scanned with no connection. The setup journey
+  follows with Phase 4 (#413).
 - **T-8** Offline behavior is tested by loading the app, going offline in the browser
   harness, and asserting the scouting and analysis pages still function from cache. v6:
   `tests/e2e/offline.spec.ts` (#361) does so for the scouting client, reading its QR code back

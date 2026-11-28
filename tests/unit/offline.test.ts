@@ -55,6 +55,8 @@ describe("OF-5, OF-6: the shell is the build's own files", () => {
       ],
       // The scouting client, and the analysis dashboard (#390, OF-3).
       pages: ["/", "/analysis"],
+      // The QR scanner, kept when opened online (#411, OF-4).
+      visited: ["/admin/scanner"],
       timeoutMs: 4_000,
     });
   });
@@ -72,9 +74,13 @@ describe("OF-5, OF-6: the shell is the build's own files", () => {
 // ------------------------------------------------------------------------- how it answers
 
 /** A request as the browser hands one to the worker; Node's `Request` refuses `navigate`. */
-function request(path: string, init: { mode?: string; method?: string } = {}): Request {
+function request(
+  path: string,
+  init: { mode?: string; method?: string; headers?: Record<string, string> } = {},
+): Request {
   const url = new URL(path, ORIGIN).href;
-  return { url, mode: init.mode ?? "cors", method: init.method ?? "GET" } as Request;
+  const headers = new Headers(init.headers);
+  return { url, mode: init.mode ?? "cors", method: init.method ?? "GET", headers } as Request;
 }
 
 class FakeRequest {
@@ -108,15 +114,25 @@ class FakeCache {
 
 /** A worker scope with a network that can be cut off or slowed, running `/sw.js`'s text. */
 function worker(shell: Shell) {
-  const network = { online: true, slowMs: 0, build: shell.build, fetched: [] as string[] };
+  const network = {
+    online: true,
+    slowMs: 0,
+    build: shell.build,
+    signedOut: false,
+    fetched: [] as string[],
+  };
   const fetch = async (r: { url: string; init?: { cache?: string } }) => {
     network.fetched.push(new URL(r.url).pathname + (r.init?.cache ? ` (${r.init.cache})` : ""));
     if (network.slowMs) await new Promise((resolve) => setTimeout(resolve, network.slowMs));
     if (!network.online) throw new TypeError("Failed to fetch");
     const path = new URL(r.url).pathname;
-    return new Response(`${path} from build ${network.build}`, {
+    const response = new Response(`${path} from build ${network.build}`, {
       status: path.includes("missing") ? 404 : 200,
     });
+    // Signed out, proxy sends an admin page to the sign-in page, which fetch follows.
+    if (network.signedOut && path.startsWith("/admin"))
+      Object.defineProperty(response, "redirected", { value: true });
+    return response;
   };
   const caches = new Map<string, FakeCache>();
   const storage = {
@@ -159,6 +175,7 @@ const SHELL: Shell = {
   build: "b2",
   urls: ["/", "/_next/static/chunks/app.js", "/img/field.svg", "/manifest.webmanifest"],
   pages: ["/"],
+  visited: ["/admin/scanner"],
   timeoutMs: 30,
 };
 
@@ -225,6 +242,41 @@ describe("OF-1, OF-7, OF-8: how the service worker answers", () => {
     w.network.online = false;
     expect(await w.get(request("/_next/static/chunks/new.js"))).toBe(
       "/_next/static/chunks/new.js from build b3",
+    );
+  });
+
+  it("OF-4, #411: the scanner is kept when opened online, not at install, and opens offline", async () => {
+    const w = worker(SHELL);
+    await w.lifecycle("install");
+    expect(w.network.fetched).not.toContain("/admin/scanner (reload)");
+    // Signed out, the page is the sign-in page it was sent to: never kept.
+    w.network.signedOut = true;
+    await w.get(request("/admin/scanner", { mode: "navigate" }));
+    w.network.online = false;
+    await expect(w.get(request("/admin/scanner", { mode: "navigate" }))).rejects.toThrow();
+    // Opened online by a signed-in admin, it is kept, and opens with no connection.
+    w.network.online = true;
+    w.network.signedOut = false;
+    expect(await w.get(request("/admin/scanner", { mode: "navigate" }))).toBe(
+      "/admin/scanner from build b2",
+    );
+    w.network.online = false;
+    expect(await w.get(request("/admin/scanner?x=1", { mode: "navigate" }))).toBe(
+      "/admin/scanner from build b2",
+    );
+  });
+
+  it("OF-4, #411: the first time, the page asks to be kept once the worker controls it", async () => {
+    const w = worker(SHELL);
+    await w.lifecycle("install");
+    // Any other request for the page is the browser's, as for every other non-navigation.
+    expect(await w.get(request("/admin/scanner"))).toBeNull();
+    const keep = { headers: { "X-SPOT-Keep-Page": "1" } };
+    expect(await w.get(request("/admin/scanner", keep))).toBe("/admin/scanner from build b2");
+    expect(await w.get(request("/admin", keep))).toBeNull(); // only the pages that ask
+    w.network.online = false;
+    expect(await w.get(request("/admin/scanner", { mode: "navigate" }))).toBe(
+      "/admin/scanner from build b2",
     );
   });
 

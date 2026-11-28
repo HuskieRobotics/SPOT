@@ -21,7 +21,7 @@ import { AutoPickView } from "./auto-pick-view";
 import { loadEvent, loadEvents, type LoadedEvent } from "./data";
 import { keptStore } from "./kept";
 import { FilterView } from "./filter-view";
-import { KeptNotice, Problems, TbaNotice } from "./notices";
+import { KeptNotice, Problems, TbaNotice, UnsentNotice } from "./notices";
 import { SimulateView } from "./simulate-view";
 import { TeamView } from "./team-view";
 
@@ -333,6 +333,7 @@ export function Dashboard() {
           {loaded && (
             <>
               <KeptNotice kept={loaded.kept} />
+              <UnsentNotice unsent={loaded.unsent} />
               <TbaNotice tba={loaded.tba} />
               {selected ? (
                 <TeamView loaded={loaded} team={selected} />

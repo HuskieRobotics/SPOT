@@ -27,6 +27,22 @@ export function KeptNotice({ kept }: { kept: Kept | null }) {
   );
 }
 
+/** AN-8 (#411): the event includes matches this device scanned and has not sent yet. */
+export function UnsentNotice({ unsent }: { unsent: number }) {
+  if (unsent === 0) return null;
+  return (
+    <p
+      role="status"
+      data-testid="unsent-notice"
+      className="bg-muted rounded-md border-l-4 border-l-amber-500 px-3 py-2 text-sm font-medium"
+    >
+      {unsent === 1
+        ? "Includes 1 match this device scanned from a QR code and has not sent to the server yet."
+        : `Includes ${unsent} matches this device scanned from QR codes and has not sent to the server yet.`}
+    </p>
+  );
+}
+
 export function TbaNotice({ tba }: { tba: LoadedEvent["tba"] }) {
   if (!tba.error) return null;
   const when = tba.fetchedAt

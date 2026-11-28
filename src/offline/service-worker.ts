@@ -9,6 +9,11 @@
  * - **A page** in `shell.pages` comes from the network while it answers within
  *   `shell.timeoutMs`, so an online load always gets the newest build, and from the cache
  *   otherwise (OF-7). Its query string is ignored: `/?join=K7QF2M` is `/`.
+ * - **A page in `shell.visited`** (the QR scanner, #411) is answered the same way, but is kept
+ *   when it is opened online, not at install: it is an admin page, which only the admin's session
+ *   can fetch, so install would get the sign-in page instead. A redirect is never kept. The
+ *   first time it opens, this worker does not control it yet, so the page asks for itself again
+ *   once it does, with the header `X-SPOT-Keep-Page` (`keepPage` in `register.ts`).
  * - **A built file or an image** comes from the cache, and from the network when it is not
  *   there (a build newer than this worker's).
  * - **Everything else** (the API, the event stream, other pages) is left to the browser. The
@@ -29,6 +34,8 @@ export interface Shell {
   urls: string[];
   /** Pages answered from the network first, then from the cache. */
   pages: string[];
+  /** Pages answered the same way, kept when opened online rather than at install (#411). */
+  visited: string[];
   /** How long a page waits for the network before the cached copy (OF-7). */
   timeoutMs: number;
 }
@@ -87,20 +94,34 @@ export function serviceWorker(sw: WorkerScope, shell: Shell): void {
     if (url.origin !== sw.location.origin) return;
     if (request.mode === "navigate") {
       if (shell.pages.includes(url.pathname)) event.respondWith(page(request, url.pathname));
+      else if (shell.visited.includes(url.pathname))
+        event.respondWith(page(request, url.pathname, true));
+      return;
+    }
+    // The page asks, the first time it opens, before this worker controlled it (`keepPage`).
+    if (shell.visited.includes(url.pathname) && request.headers?.get("X-SPOT-Keep-Page") === "1") {
+      event.respondWith(page(request, url.pathname, true));
       return;
     }
     if (cached.has(url.pathname) || url.pathname.startsWith("/_next/static/"))
       event.respondWith(file(request, url.pathname));
   });
 
-  /** The network if it answers in time, else the copy from install (OF-7). */
-  async function page(request: Request, path: string): Promise<Response> {
+  /**
+   * The network if it answers in time, else the copy kept at install (OF-7), or, with `keep`, the
+   * copy kept when the page last opened online.
+   */
+  async function page(request: Request, path: string, keep = false): Promise<Response> {
     const network = sw.fetch(request);
     network.catch(() => undefined); // answered below, or not needed
     const late = new Promise<null>((resolve) => setTimeout(() => resolve(null), shell.timeoutMs));
     try {
       const response = await Promise.race([network, late]);
-      if (response) return response;
+      if (response) {
+        if (keep && response.ok && !response.redirected)
+          await (await sw.caches.open(name)).put(path, response.clone()).catch(() => undefined);
+        return response;
+      }
     } catch {
       // No connection: the cached copy.
     }
