@@ -26,6 +26,9 @@ export default function AdminPage() {
           <Link href="/admin/edit" className="text-primary underline-offset-4 hover:underline">
             Edit data
           </Link>
+          <Link href="/admin/scanner" className="text-primary underline-offset-4 hover:underline">
+            QR scanner
+          </Link>
           <SignOutButton />
         </nav>
       </header>

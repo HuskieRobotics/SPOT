@@ -143,7 +143,7 @@ async function submitOne(
     );
     for (const [id, change] of resolve(all, assignment, now()))
       await updatePerformance(db, id, change, tenantId);
-    return result("stored");
+    return { ...result("stored"), id: doc._id };
   });
 }
 

@@ -267,8 +267,8 @@ Bit layout (all big-endian binary strings, packed into bytes then base64):
 
 ### v6 payload (#358, decided 2026-11-24)
 
-The v6 code replaces the layout above. It is read by `src/qr/codec.ts`; the scanner page is
-Phase 4.
+The v6 code replaces the layout above. It is read by `src/qr/codec.ts`, on the scanner page
+(`/admin/scanner`, #411; document 07).
 
 - **DM-15d** **The layout is derived from `match-scouting.json`; there is no `qr.json`**
   (maintainer, 2026-11-24). An action is a **button number**, the number of the **period** it was

@@ -241,6 +241,7 @@ document 05. Tests: `tests/unit/submission.test.ts` (T-5, T-6a) and the RT-35 ca
 - **By the event it was scouted at.** A request names the record's event and carries that event's
   join code (SEC-2), so a device that syncs after the admin moved to the next event still files
   its matches where they belong. No event id means the active event.
+- **Each stored record's id comes back** with its result (#411), so the QR scanner can undo a scan.
 - **Stored once per nonce** (DV-18), looked up across superseded records too, and across the
   records an admin deleted (DV-20, #410); a copy scanned from the QR code first makes the synced
   one a duplicate.

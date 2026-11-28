@@ -23,9 +23,13 @@
   `endGame*<slot>` score-breakdown keys (`id = "<key minus slot>_<value>"`, `ts = 0`). Missing
   breakdowns are skipped. v6: the prefixes, their phases and the ids started at 0 are configuration;
   see document 03 DM-11a to DM-11c and DM-13a (#315).
-- **AN-8** Merge QR-cached TMPs from `localStorage.teamMatchPerformances`. **v6:** the
-  dashboard reads only what the server holds. A scanned QR code reaches it through the QR scanner
-  (Phase 4, OF-4), which decides whether records it holds offline also show on its own device.
+- **AN-8** Merge QR-cached TMPs from `localStorage.teamMatchPerformances`. **v6 (#411, decided
+  2026-11-27, maintainer):** records the QR scanner holds on its device, not yet sent, show in
+  that device's analysis too: rare, but at an event with no connection at all, it is the only
+  place scanned matches can be seen. A record the server already has (same nonce) is not added
+  twice, and when the server has a current record for the same robot and match, the later
+  submitted one counts (RT-14a; the device cannot apply RT-35, which needs the registry). The
+  page says how many it includes. `withUnsent` in `src/scanner/scan.ts`.
 - **AN-9** Create `teams[robotNumber] = {}` for every TMP; attach `opr.<name>` for each
   configured OPR string from the COPR map.
 - **AN-10** Load `/config/analysis-pipeline.json`, obtain transformers via `getTransformers()`

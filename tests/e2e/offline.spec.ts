@@ -252,3 +252,28 @@ test("T-8, AN-5, NF-4, OF-3, OF-5, OF-9: every event viewed online opens offline
   await expect(page.getByRole("heading", { name: "2026mnwi_official" })).toBeVisible();
   await expect(notice).toHaveCount(0);
 });
+
+test("T-8, OF-4, OF-5, OF-9: the QR scanner opens offline once it has opened online (#411)", async ({
+  page,
+  context,
+}) => {
+  // Opened online once, by a signed-in admin. The first time, the worker does not control the
+  // page yet, so the page asks it to keep a copy once it does (`keepPage`).
+  await page.goto("/admin/scanner");
+  await page.getByLabel("Admin password").fill(E2E_ADMIN_PASSWORD);
+  await page.getByRole("button", { name: "Sign in" }).click();
+  await expect(page.getByRole("heading", { name: "QR scanner" })).toBeVisible();
+  await kept(page);
+  await page.waitForFunction(async () => (await caches.match("/admin/scanner")) !== undefined);
+
+  // No server: the page and what it needs to read codes come from the device.
+  await context.setOffline(true);
+  const reloaded = await page.reload();
+  expect(reloaded?.fromServiceWorker()).toBe(true);
+  await expect(page.getByRole("heading", { name: "QR scanner" })).toBeVisible();
+  await expect(
+    page.getByText(/^No connection: reading codes with the events and configuration kept from/),
+  ).toBeVisible();
+  await expect(page.getByRole("button", { name: "Start camera" })).toBeVisible();
+  await context.setOffline(false);
+});

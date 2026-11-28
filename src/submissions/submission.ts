@@ -30,6 +30,8 @@ export interface SubmissionResult {
   status: SubmissionStatus;
   /** Why an invalid record was refused, in words for whoever reads the pending list. */
   message?: string;
+  /** The stored record's id, when this request stored it: the scanner's undo deletes it (#411). */
+  id?: string;
 }
 
 /** The most records one request carries; a device sends more in several requests. */

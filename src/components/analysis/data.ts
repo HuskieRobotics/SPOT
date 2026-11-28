@@ -17,6 +17,8 @@ import type {
 } from "@/config/types";
 import type { PublicPerformance } from "@/data/types";
 import type { EventSummary } from "@/public-data";
+import { withUnsent, type ScannedRecord } from "@/scanner/scan";
+import { unsentScans } from "@/scanner/store";
 import { call, type Reply } from "@/scouter/api";
 import type { EventInputs, KeptStore, ScheduleMatch, TbaInput } from "./kept";
 
@@ -46,6 +48,8 @@ export interface LoadedEvent {
   schedule: ScheduleMatch[] | null;
   /** Set when this is a copy kept on the device (OF-3). */
   kept: Kept | null;
+  /** Records this device scanned from QR codes and has not sent yet, shown with the rest (AN-8). */
+  unsent: number;
 }
 
 export type Loaded<T> = { ok: true; value: T } | { ok: false; message: string };
@@ -157,10 +161,14 @@ async function fetchInputs(event: EventSummary): Promise<Fetched> {
 /** The dashboard's view of an event from its inputs: the pipeline runs here (TR-9). */
 function build(
   event: EventSummary,
-  inputs: EventInputs,
+  given: EventInputs,
   tbaError: string | null,
   kept: Kept | null,
+  scans: readonly ScannedRecord[],
 ): Loaded<LoadedEvent> {
+  // AN-8 (#411): the matches this device scanned and has not sent count as if the server had them.
+  const { performances, added } = withUnsent(given.performances, scans);
+  const inputs = { ...given, performances };
   let analysis: Analysis;
   try {
     analysis = runAnalysis({
@@ -187,6 +195,7 @@ function build(
       tba: { error: tbaError, fetchedAt: inputs.tba?.fetchedAt ?? null },
       schedule: inputs.schedule,
       kept,
+      unsent: added,
     },
   };
 }
@@ -195,9 +204,13 @@ function build(
 export async function loadEvent(
   event: EventSummary,
   store: KeptStore,
+  scanned: (eventCode: string) => Promise<ScannedRecord[]> = unsentScans,
 ): Promise<Loaded<LoadedEvent>> {
-  const fetched = await fetchInputs(event);
-  const copy = await store.event(event.code).catch(() => null);
+  const [fetched, copy, scans] = await Promise.all([
+    fetchInputs(event),
+    store.event(event.code).catch(() => null),
+    scanned(event.code).catch(() => []),
+  ]);
   if (!fetched.ok) {
     if (!copy)
       return {
@@ -211,6 +224,7 @@ export async function loadEvent(
       copy.inputs,
       copy.inputs.tba ? null : "TBA's data is not on this device.",
       { savedAt: copy.savedAt, reason: fetched.reply.offline ? null : fetched.message },
+      scans,
     );
   }
   // TBA's data and the schedule from the server, else the kept ones.
@@ -223,5 +237,5 @@ export async function loadEvent(
   await keep(() =>
     store.putEvent({ code: event.code, savedAt: Date.now(), summary: event, inputs }),
   );
-  return build(event, inputs, tba.ok ? tba.value.error : failure(tba, "TBA's data"), null);
+  return build(event, inputs, tba.ok ? tba.value.error : failure(tba, "TBA's data"), null, scans);
 }

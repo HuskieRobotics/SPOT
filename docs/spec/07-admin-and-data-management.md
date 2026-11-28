@@ -136,7 +136,7 @@ project, run after the others, because it drives the registry every test shares)
 - **RT-35's promotion** **Use this record** on a superseded record makes it the one analysis uses,
   and supersedes the one that was. It stands until a record submitted after it arrives.
 - **AD-16, SEC-6a** Unscouted robots, merging scouters, and correcting a record's team or match are
-  #414. **AD-17** goes with the QR scanner (#411).
+  #414. **AD-17** is replaced by the QR scanner's AN-8 (#411, below).
 
 Tests: `tests/unit/edit-page.test.ts`, `tests/e2e/edit-page.spec.ts`.
 
@@ -158,6 +158,38 @@ Tests: `tests/unit/edit-page.test.ts`, `tests/e2e/edit-page.spec.ts`.
 - **AD-21** Server `sync` de-dup: a synced TMP is skipped if an existing TMP has the same
   robot, event, match number, and an action queue of the same length whose ids match
   position-by-position.
+
+**v6 (#411, decided 2026-11-27).** The QR scanner is `/admin/scanner`, behind the admin password
+(SEC-5): the admin session authorizes what it sends, so it needs no join code. It replaces AD-18 to
+AD-21:
+
+- **AD-19** **Start camera** reads the camera several times a second, with a choice of camera once
+  the browser allows one; **Scan a photo** reads a picture, for a page without HTTPS, a blocked
+  camera, or a laptop without one. Codes are read in the browser with `jsqr` (decided 2026-11-27,
+  maintainer: it works in every browser, iOS Safari included, which has no `BarcodeDetector`), so
+  scanning needs no connection. The camera reads a code once, however long it stays in view; a
+  photo is read every time.
+- A code is read with the season whose layout fingerprint it carries (DM-15a), from every event's
+  season the scanner has kept (document 18), and filed at the event it names. Before anything is
+  sent, the page shows the match, the team, the event, when it was submitted, whether it covers
+  the whole match, and its actions with the match clock's time. A scanned record names no scouter
+  (DV-5). A code from another format or configuration, a damaged one, or one from an event this
+  server lacks is refused with the reason.
+- **AD-20, AD-21** **Send** keeps the record on the device and sends it through the same rules as
+  a phone's (#360): stored once per nonce, so a code scanned twice, or scanned and also synced by
+  its phone, is one record (v5 compared action ids instead); re-scouts are settled (RT-14a, RT-35).
+  The page says whether it was stored, was already on the server (or deleted by an admin), or
+  was refused.
+- **AD-18, OF-4** With no connection the record stays on the device and is sent when the
+  connection returns; **Not sent** lists what waits, with any refusal's reason, **Send now**, and
+  **Discard** for one an admin decides to drop (document 18).
+- **SEC-5** **Undo last scan**: before it is sent, the record is dropped; once stored, it is
+  deleted as the edit page deletes (AD-15, DV-20), after asking; when the scan stored nothing (the
+  server had it), there is nothing to undo.
+- **AN-8** What it holds and has not sent shows in that device's analysis (document 08).
+
+Tests: `tests/unit/scanner.test.ts`, `tests/e2e/scanner.spec.ts`, and the scanner's offline test
+in `tests/e2e/offline.spec.ts`.
 
 ## Manual Schedule page (`/schedule`)
 

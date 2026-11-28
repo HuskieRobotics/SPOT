@@ -119,8 +119,8 @@ built (document 05, "v6: offline").
   worker, which never answers an `/api/` request. The page knows when a read failed and when
   its copy was taken, a copy is stored with its event, and a match keeps the configuration it
   was scouted with. The analysis page's network-first data and per-event copies (OF-3) chose
-  the page's storage too (#390, "v6: offline analysis" below). The scanner (OF-4, Phase 4)
-  chooses for its own data.
+  the page's storage too (#390, "v6: offline analysis" below), and so did the QR scanner (#411,
+  "v6: the QR scanner" below).
 - **OF-6** Fonts are self-hosted by `next/font` at build time; icons are bundled. Plotly (#385)
   is bundled too, as its own 4.7 MB file that only a chart loads. The worker keeps every built
   file, so it keeps Plotly as well, ready for offline analysis (#390). **Decided 2026-11-26:**
@@ -162,6 +162,27 @@ built (document 05, "v6: offline").
   from the worker's cache, and finds that an event never viewed says so. Back online, the server's
   data returns with no notice. Unit tests (`analysis-kept`) cover the same rules without a
   browser.
+
+**v6: the QR scanner (#411).** OF-4 and the scanner part of OF-5 and OF-9 are built.
+
+- **OF-4** The scanner keeps every record it scans in the device's IndexedDB (`spot-scanner`)
+  until the server has it, stored or already there; one the server refuses stays, with the reason,
+  for an admin to read or discard. It sends what it holds when it opens, when the connection
+  returns, every 15 seconds, and on **Send now**. Duplicates are found by nonce on the server
+  (DV-18), including records an admin deleted (DV-20), so a code scanned twice, or scanned and
+  also synced by its phone, is stored once.
+- **What it reads codes with** (OF-5): every event and each event's season's
+  `match-scouting.json`, from `/api/admin/scanner`, kept on the device. A code is read with the
+  season whose layout fingerprint it carries (DM-15a), so a phone that scouted an event of an
+  earlier season is read rightly.
+- **The page itself** is an admin page, so the service worker cannot fetch it at install without
+  the admin's session. It keeps it when it opens online instead (`VISITED_PAGES` in
+  `src/offline/shell.ts`), never a redirect to the sign-in page; the first time, before the worker
+  controls the page, the page asks for itself again once it does (`keepPage`).
+- **AN-8** Its unsent records show in that device's analysis (document 08).
+- **OF-9** `tests/e2e/offline.spec.ts` opens the scanner online, then reloads it with no
+  connection; `tests/e2e/scanner.spec.ts` scans with the server unreachable and with no connection,
+  and sees the records sent when it returns.
 
 ## Implications for the technology direction (document 15)
 

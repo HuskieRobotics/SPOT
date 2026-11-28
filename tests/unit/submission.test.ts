@@ -196,7 +196,9 @@ describe("T-5: the submission route", () => {
     const s = submission();
     const first = await post({ eventId: event._id, records: [s] });
     expect(first.status).toBe(200);
-    expect(first.json.results).toEqual([{ nonce: s.nonce, status: "stored" }]);
+    const docs0 = await stored();
+    // A stored record's id comes back, for the scanner's undo (#411).
+    expect(first.json.results).toEqual([{ nonce: s.nonce, status: "stored", id: docs0[0]._id }]);
     const again = await post({ eventId: event._id, records: [s, s] });
     expect(again.json.results).toEqual([
       { nonce: s.nonce, status: "duplicate" },
@@ -271,7 +273,9 @@ describe("T-5: the submission route", () => {
   it("files a late sync at the event it was scouted at, with that event's code", async () => {
     const s = submission();
     const r = await post({ eventId: other._id, records: [s] }, other.joinCode);
-    expect(r.json.results).toEqual([{ nonce: s.nonce, status: "stored" }]);
+    expect(r.json.results).toEqual([
+      { nonce: s.nonce, status: "stored", id: (await stored())[0]._id },
+    ]);
     expect((await stored())[0].eventId).toBe(other._id);
     // No event id: the active one.
     const t = submission();

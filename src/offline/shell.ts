@@ -7,14 +7,21 @@
  *   self-hosted fonts (OF-6). Their names change with their contents.
  * - Every image in `public/`, such as the field map a season's configuration names. A new
  *   season's image put in `public/img/` is kept with no other change. Videos are left out.
- * - The web app manifest, and the pages that open offline.
+ * - The web app manifest, and the pages that open offline. The scanner page is kept when it is
+ *   first opened online instead (`VISITED_PAGES`).
  */
 import { readdirSync, readFileSync } from "node:fs";
 import { extname, join, relative, sep } from "node:path";
 import type { Shell } from "./service-worker";
 
-/** Pages that open with no connection: the scouting client and the analysis dashboard (#390). The scanner joins in Phase 4. */
+/** Pages that open with no connection: the scouting client and the analysis dashboard (#390). */
 export const OFFLINE_PAGES = ["/", "/analysis"];
+
+/**
+ * Pages that open with no connection once opened online (#411): the QR scanner, an admin page
+ * the service worker cannot fetch at install without the admin's session.
+ */
+export const VISITED_PAGES = ["/admin/scanner"];
 
 /** How long a page waits for the network before the cached copy (OF-7). */
 export const PAGE_TIMEOUT_MS = 4_000;
@@ -60,6 +67,7 @@ export function readShell(root: string = process.cwd()): Shell | null {
     build,
     urls: [...new Set(urls)].sort(),
     pages: OFFLINE_PAGES,
+    visited: VISITED_PAGES,
     timeoutMs: PAGE_TIMEOUT_MS,
   };
 }
