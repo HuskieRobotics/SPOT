@@ -15,6 +15,15 @@ export const HEARTBEAT_MS = 20_000;
 /** How long the browser waits before reconnecting a dropped stream (`retry:`). */
 export const RETRY_MS = 3_000;
 
+/** A stream's headers: the scouters' streams and the setup check send the same (#412). */
+export const STREAM_HEADERS = {
+  "content-type": "text/event-stream; charset=utf-8",
+  "cache-control": "no-cache, no-transform",
+  connection: "keep-alive",
+  // nginx: do not buffer the stream (docs/spec/15, condition 5).
+  "x-accel-buffering": "no",
+};
+
 export function sseEvent(event: string, data: unknown): Uint8Array {
   return encoder.encode(`event: ${event}\ndata: ${JSON.stringify(data)}\n\n`);
 }
@@ -107,6 +116,14 @@ export class Hub {
         c.write(sseEvent("signed-out", { kind: "signed-out" }));
         c.close();
       }
+  }
+
+  /**
+   * End every stream without signing anyone out (#412): the server is stopping, and each device
+   * reconnects to the next process within seconds (`retry`), keeping its scouter signed in.
+   */
+  closeAll() {
+    for (const set of [...this.byScouter.values()]) for (const c of [...set]) c.close();
   }
 
   signOutAll() {

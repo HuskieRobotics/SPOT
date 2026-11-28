@@ -108,6 +108,46 @@ may require manual steps. **[A-15]** Restart-to-apply is acceptable but hot relo
 **[A-32]** The maintainer asks for a recommendation on a more secure yet easy first-run
 workflow; see document 12, "Resolved decisions", R-32.
 
+**v6: the EC2 recipe (#412, decided 2026-11-27).** `deploy/aws/README.md` takes a student from
+an empty AWS account to SPOT on HTTPS. It replaces ST-12 for EC2; ST-13 and ST-14 are the Cloud
+Run recipe (#415).
+
+- **pm2** runs SPOT (maintainer, 2026-11-27: the team already uses it), from
+  `deploy/aws/ecosystem.config.cjs`:
+  - one process in fork mode, because the registry lives in its memory (AR-21);
+  - bound to 127.0.0.1, so only nginx reaches it;
+  - secrets read by Node's `--env-file` from `/srv/spot/shared/spot.env`, outside every release
+    (ADR 0003).
+- **Stopping cleanly** (DV-15, DV-16). On SIGINT or SIGTERM, Next's own handler waits for every
+  open connection to close, and a scouter's stream never closes on its own. So pm2, which kills a
+  process 1.6 s after SIGINT unless told otherwise, would kill SPOT before the registry's last
+  changes were saved. The recipe therefore sets `NEXT_MANUAL_SIG_HANDLE=true` and `kill_timeout`
+  10 s, and `src/instrumentation.ts` installs `src/server/shutdown.ts`. On the signal, it closes
+  the streams without signing anyone out, saves the registry within 8 s, and exits. Phones
+  reconnect to the next process by themselves. Requests in flight are cut off, and every client
+  sends again (OF-2).
+- **Releases.** `deploy/aws/update.sh` builds each version in its own folder,
+  `/srv/spot/releases/<date>-<commit>`, while the running one serves. It then switches the link
+  `/srv/spot/current` and restarts. If the new build doesn't answer `/api/health` within two
+  minutes, it goes back by itself. `rollback.sh` goes back by hand. The newest three releases are
+  kept. The season's configuration files are part of the release (CS-17), so a configuration
+  change goes through the repository.
+- **nginx** (`deploy/aws/nginx/spot.conf`):
+  - HTTPS from certbot, with HTTP sent to HTTPS;
+  - the scouters' streams unbuffered, with an hour's read timeout (ADR 0001);
+  - `X-Forwarded-Proto` on every request, for the admin cookie's `Secure` flag (SEC-4a). No
+    location sets a header of its own, which in nginx would drop the server's.
+- **`GET /api/health`** says whether SPOT and its database answer, and which build is running.
+- **`npm run deploy:check -- <address>`** checks a server through its real proxy. A test stream,
+  `/api/scouter/stream/check`, goes through the same proxy location as the scouters' streams. The
+  check fails, saying what to fix, when:
+  - the health check doesn't answer;
+  - HTTP isn't sent to HTTPS;
+  - the stream is buffered, or cut off within 70 s by quiet gaps of 25 s;
+  - with the admin password in the environment, the admin cookie isn't `Secure`.
+
+Tests: `tests/unit/deploy.test.ts`, and the shutdown test in `tests/unit/transport.test.ts`.
+
 ## Other documented hosting paths (Quickstart) — **[A-44] no longer supported**
 
 - Glitch import from GitHub (auto-installs and runs; complete setup form).

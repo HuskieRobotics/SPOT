@@ -92,8 +92,11 @@ the default terminal on many school computers, refuses it. Commands with other a
 
 ## Deployment targets
 
-AWS EC2 (Team 3061) and Google Cloud (other teams). Recipes live under `deploy/`; the app is
-cloud-neutral and runs as plain Node (`npm run build && npm start`), no Docker required.
+AWS EC2 (Team 3061) and Google Cloud (other teams). The app is cloud-neutral and runs as plain
+Node (`npm run build && npm start`), no Docker required. The EC2 recipe is
+[`deploy/aws/README.md`](deploy/aws/README.md): pm2, nginx with HTTPS, one command to update and
+one to go back. The Cloud Run recipe follows (#415). Check any deployed server with
+`npm run deploy:check -- https://<its address>`.
 
 ## Contributing
 

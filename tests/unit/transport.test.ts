@@ -356,6 +356,23 @@ describe("the runtime, directly", () => {
     await runtime.flush();
   });
 
+  it("DV-15, #412: stopping ends every stream without signing anyone out, and saves the registry", async () => {
+    const runtime = new Runtime({ db });
+    const d = new Device("300002");
+    await runtime.signIn(d.scouterId, d.deviceId, joinCode, `Scouter ${d.scouterId}`);
+    const r = await runtime.openStream(d.scouterId, d.deviceId, new AbortController().signal);
+    const reader = new StreamReader(r.body!);
+    await reader.next();
+    await runtime.shutdown();
+    const after: string[] = [];
+    for (let e = await reader.next(1000); e; e = await reader.next(1000)) after.push(e.event);
+    expect(reader.done).toBe(true);
+    // The device reconnects to the next process, still signed in.
+    expect(after).not.toContain("signed-out");
+    const saved = await sessionCollection(db).findOne({ scouterId: d.scouterId });
+    expect(saved?.deviceId).toBe(d.deviceId);
+  });
+
   it("DV-15: after a restart, scouters are disconnected and keep their robots", async () => {
     const before = new Runtime({ db });
     for (const id of ["400001", "400002"])
