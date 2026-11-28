@@ -119,8 +119,8 @@ spec should not make sub-second push a hard requirement.
   it on **Google Cloud** (Cloud Run as today, or a VM). The rewrite must therefore be
   **cloud-neutral**: no dependency on a provider-specific service for core function.
 - Consequences for the realtime choice above:
-  - EC2 is the easiest possible target for SSE: one Node process (`next start` under pm2 or
-    systemd) behind nginx or an ALB, no request-duration cap (ALB idle timeout defaults to
+  - EC2 is the easiest possible target for SSE: one Node process (`next start` under pm2,
+    decided 2026-11-27, #412) behind nginx or an ALB, no request-duration cap (ALB idle timeout defaults to
     60 s and should be raised or covered by the heartbeat), one instance owning the in-memory
     registry. Conditions 4 and 5 are satisfied by default.
   - Cloud Run remains supported with `max-instances 1`; the stream-cut-every-timeout behavior
@@ -137,7 +137,7 @@ spec should not make sub-second push a hard requirement.
     document the single-instance requirement rather than adding Redis.
 - Delivery artifact (**revised 2026-09-17: no Docker**): plain Node, `npm run build && next
 start`. Docker adds complexity for student developers and is hard to install on school
-  computers, which all have Node 24. EC2 runs Node under pm2/systemd behind nginx; Cloud Run
+  computers, which all have Node 24. EC2 runs Node under pm2 behind nginx (`deploy/aws`, #412); Cloud Run
   deploys from source with buildpacks (`gcloud run deploy --source .`) so no local Docker is
   needed. Provide both a `deploy/aws` and a `deploy/gcp` recipe; keep MongoDB Atlas as the
   recommended database for both so the database is not cloud-specific either.
@@ -249,21 +249,21 @@ modules,executables}/` at runtime and serves them as plain scripts registered on
 
 ## Part 4 — Summary of spec changes this direction would trigger
 
-| Spec item                       | Change if this stack is adopted                                                                                 |
-| ------------------------------- | --------------------------------------------------------------------------------------------------------------- |
-| AR-5 self-HTTP calls            | removed; direct calls                                                                                           |
-| AR-6 to AR-9 generated bundles  | replaced by build-time registries                                                                               |
-| AR-11 to AR-13 service worker   | injected-manifest PWA, no CDN precache                                                                          |
-| AR-17 theming                   | shadcn tokens, `class` dark mode, same persistence                                                              |
-| AR-18 to AR-20 security         | cookie session + middleware; write endpoints protected                                                          |
-| AR-21 single instance           | still required unless registry moves to a shared store                                                          |
-| AR-22 writable config dir       | replaced by DB-stored settings + env secrets (cloud-neutral); no `process.exit()` restart                       |
-| ST-12 to ST-14 deployment       | Plain Node (no Docker): `deploy/aws` (EC2: pm2/systemd, nginx) and `deploy/gcp` (Cloud Run from source) recipes |
-| RT-1 to RT-8 socket protocol    | SSE stream + three POST endpoints, session id, heartbeat, resync-on-reconnect                                   |
-| NF-5 admin polling              | optionally SSE broadcast                                                                                        |
-| CF-7 button `class`             | legacy class CSS, safelist map, or schema change with converter                                                 |
-| ST-7 to ST-9 setup save/restart | save to DB, apply live                                                                                          |
-| Document 14                     | add questions I-1 to I-3 (hosting target, extension model, sub-second push)                                     |
+| Spec item                       | Change if this stack is adopted                                                                               |
+| ------------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| AR-5 self-HTTP calls            | removed; direct calls                                                                                         |
+| AR-6 to AR-9 generated bundles  | replaced by build-time registries                                                                             |
+| AR-11 to AR-13 service worker   | injected-manifest PWA, no CDN precache                                                                        |
+| AR-17 theming                   | shadcn tokens, `class` dark mode, same persistence                                                            |
+| AR-18 to AR-20 security         | cookie session + middleware; write endpoints protected                                                        |
+| AR-21 single instance           | still required unless registry moves to a shared store                                                        |
+| AR-22 writable config dir       | replaced by DB-stored settings + env secrets (cloud-neutral); no `process.exit()` restart                     |
+| ST-12 to ST-14 deployment       | Plain Node (no Docker): `deploy/aws` (EC2: pm2, nginx; #412) and `deploy/gcp` (Cloud Run from source) recipes |
+| RT-1 to RT-8 socket protocol    | SSE stream + three POST endpoints, session id, heartbeat, resync-on-reconnect                                 |
+| NF-5 admin polling              | optionally SSE broadcast                                                                                      |
+| CF-7 button `class`             | legacy class CSS, safelist map, or schema change with converter                                               |
+| ST-7 to ST-9 setup save/restart | save to DB, apply live                                                                                        |
+| Document 14                     | add questions I-1 to I-3 (hosting target, extension model, sub-second push)                                   |
 
 ## Recommendation
 

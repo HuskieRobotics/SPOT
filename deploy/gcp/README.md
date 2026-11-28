@@ -17,3 +17,7 @@ streaming responses (SSE, ADR 0001).
 timeout (300 s by default) and the browser reconnects 3 s later, which the stream absorbs: every
 reconnect starts with the scouter's state. Raise the timeout (up to 3600 s) to reconnect less
 often, and keep `max-instances 1`, because one process owns the registry (AR-21).
+
+For the recipe (#415): set `NEXT_MANUAL_SIG_HANDLE=true` in the service's environment. Cloud Run
+sends SIGTERM and waits 10 s before stopping an instance, and SPOT saves the registry in that time
+(`src/server/shutdown.ts`; `deploy/README.md`). Check the service with `npm run deploy:check`.

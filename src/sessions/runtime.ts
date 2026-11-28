@@ -37,7 +37,7 @@ import {
 } from "@/data/types";
 import type { TeamKey } from "@/data/team";
 import { matchLabel } from "@/schedule/labels";
-import { Hub, HEARTBEAT_MS, type Connection } from "./hub";
+import { Hub, HEARTBEAT_MS, STREAM_HEADERS, type Connection } from "./hub";
 import {
   apply,
   deviceView,
@@ -291,15 +291,7 @@ export class Runtime {
     });
     if (signal.aborted) connection?.close();
     else signal.addEventListener("abort", () => connection?.close(), { once: true });
-    return new Response(opened, {
-      headers: {
-        "content-type": "text/event-stream; charset=utf-8",
-        "cache-control": "no-cache, no-transform",
-        connection: "keep-alive",
-        // nginx: do not buffer the stream (docs/spec/15, condition 5).
-        "x-accel-buffering": "no",
-      },
-    });
+    return new Response(opened, { headers: STREAM_HEADERS });
   }
 
   // ----------------------------------------------------------------- admins
@@ -439,6 +431,16 @@ export class Runtime {
   async flush(): Promise<void> {
     await this.serial(async () => undefined);
     await Promise.all([this.sessions.flush(), this.assignments.flush()]);
+  }
+
+  /**
+   * The server is stopping (#412, `src/server/shutdown.ts`): end every stream, so devices
+   * reconnect to the next process, then save the registry, so a restart during an event loses no
+   * assignment (DV-15, DV-16).
+   */
+  async shutdown(): Promise<void> {
+    this.hub.closeAll();
+    await this.flush();
   }
 }
 

@@ -18,6 +18,7 @@
     "config:check": "tsx scripts/config-check.ts",
     "config:convert": "tsx scripts/convert-config.ts",
     "config:preview": "tsx scripts/config-preview.ts",
+    "deploy:check": "tsx scripts/check-deploy.ts",
     "migrate": "tsx scripts/migrate-data.ts",
     "generate": "tsx scripts/generate-data.ts"
   },

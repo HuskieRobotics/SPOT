@@ -491,19 +491,20 @@ feedback link uses the menu's constant instead of a second copy of the address.
 
 ### Documents 02, 17 and the ADRs
 
-| Id       | Status   | Where                                                                                                                                     |
-| -------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| NF-1     | Done     | The browser tests scout on a Pixel 7 held sideways. The manifest does not lock the orientation (#43)                                      |
-| NF-2     | Replaced | by SC-5 (v6)                                                                                                                              |
-| NF-3     | Done     | `scouting-clock`                                                                                                                          |
-| NF-5     | Done     | The admin page polls every 2.5 s; in the browser test `tests/e2e/admin-page.spec.ts`, one admin's change shows in the other's view        |
-| NF-6     | Done     | `schedule`, for matches; `analysis-data`, for the dashboard's TBA data (Phase 3)                                                          |
-| NF-7     | Done     | The browser test `tests/e2e/offline.spec.ts` (the manifest and its icons); the favicon and Apple touch icon are in `src/app/layout.tsx`   |
-| NF-11    | Done     | For scouting: the registry tests run seven scouters, and the browser tests two phones and two admins. For analysis, see the Phase 3 audit |
-| W-1      | Done     | #363: the browser test `tests/e2e/acceptance.spec.ts`                                                                                     |
-| ADR 0001 | Done     | `transport`; the browser test `tests/e2e/scouter-stream.spec.ts`. nginx and Cloud Run are tested with their recipes (W-3)                 |
-| ADR 0004 | Done     | As SEC-1 to SEC-10; the merge is Phase 4                                                                                                  |
-| ADR 0006 | Done     | As RT-12a and RT-24 to RT-36                                                                                                              |
+| Id       | Status   | Where                                                                                                                                                                                                                                        |
+| -------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| NF-1     | Done     | The browser tests scout on a Pixel 7 held sideways. The manifest does not lock the orientation (#43)                                                                                                                                         |
+| NF-2     | Replaced | by SC-5 (v6)                                                                                                                                                                                                                                 |
+| NF-3     | Done     | `scouting-clock`                                                                                                                                                                                                                             |
+| NF-5     | Done     | The admin page polls every 2.5 s; in the browser test `tests/e2e/admin-page.spec.ts`, one admin's change shows in the other's view                                                                                                           |
+| NF-6     | Done     | `schedule`, for matches; `analysis-data`, for the dashboard's TBA data (Phase 3)                                                                                                                                                             |
+| NF-7     | Done     | The browser test `tests/e2e/offline.spec.ts` (the manifest and its icons); the favicon and Apple touch icon are in `src/app/layout.tsx`                                                                                                      |
+| NF-11    | Done     | For scouting: the registry tests run seven scouters, and the browser tests two phones and two admins. For analysis, see the Phase 3 audit                                                                                                    |
+| W-1      | Done     | #363: the browser test `tests/e2e/acceptance.spec.ts`                                                                                                                                                                                        |
+| ADR 0001 | Done     | `transport`; the browser test `tests/e2e/scouter-stream.spec.ts`; `deploy` for nginx's settings and `npm run deploy:check`, which tests a server through its proxy (#412). Run against the staging server with #417, and Cloud Run with #415 |
+| ADR 0002 | Done     | `deploy`: the EC2 recipe, `deploy/aws/README.md`, under pm2 (#412). The Cloud Run recipe is #415                                                                                                                                             |
+| ADR 0004 | Done     | As SEC-1 to SEC-10; the merge is Phase 4                                                                                                                                                                                                     |
+| ADR 0006 | Done     | As RT-12a and RT-24 to RT-36                                                                                                                                                                                                                 |
 
 ## Phase 3: analysis dashboard (audited 2026-11-27, #393)
 
